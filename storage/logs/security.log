@@ -1,0 +1,27 @@
+03/04/2024 05:24:14 admin.php=>MakeLeftBlock(theme skin) by AID : Root           IP=>::1   
+03/04/2024 05:25:47 admin.php=>MakeLeftBlock(skin 2) by AID : Root               IP=>::1   
+03/04/2024 05:29:41 admin.php=>ChangeLeftBlock(theme skin - 13) by AID : Root    IP=>::1   
+03/04/2024 05:29:57 admin.php=>ChangeLeftBlock(theme skin - 13) by AID : Root    IP=>::1   
+03/04/2024 05:30:08 admin.php=>ChangeLeftBlock(skin 2 - 14) by AID : Root        IP=>::1   
+03/04/2024 05:40:36 admin.php=>DeleteLeftBlock(14) by AID : Root                 IP=>::1   
+03/04/2024 05:40:58 admin.php=>ChangeLeftBlock(theme skin - 13) by AID : Root    IP=>::1   
+03/04/2024 05:47:52 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
+03/04/2024 09:05:12 admin.php=>UpdateUser(2, user) by AID : Root                 IP=>::1   
+03/04/2024 21:05:01 admin.php=>ChangeAdminBlock() by AID : Root                  IP=>::1   
+03/04/2024 21:05:41 admin.php=>ChangeAdminBlock() by AID : Root                  IP=>::1   
+03/04/2024 21:08:36 admin.php=>ChangeMainBlock(Menu) by AID : Root               IP=>::1   
+03/04/2024 21:09:35 admin.php=>ChangeLeftBlock(Un Bloc ... - 1) by AID : Root    IP=>::1   
+03/04/2024 21:10:14 admin.php=>ChangeLeftBlock(Carte - 12) by AID : Root         IP=>::1   
+03/04/2024 21:10:50 admin.php=>ChangeLeftBlock(Menu - 2) by AID : Root           IP=>::1   
+03/04/2024 21:11:33 admin.php=>ChangeLeftBlock(Sondage - 11) by AID : Root       IP=>::1   
+03/04/2024 21:12:13 admin.php=>ChangeRightBlock(Un Bloc ... - 1) by AID : Root   IP=>::1   
+03/04/2024 21:12:58 admin.php=>ChangeLeftBlock(Administration - 7) by AID : Root IP=>::1   
+03/04/2024 21:13:41 admin.php=>ChangeLeftBlock(Message à un membre - 3) by AID : Root IP=>::1   
+03/04/2024 21:14:20 admin.php=>ChangeLeftBlock(Forums Infos - 5) by AID : Root   IP=>::1   
+03/04/2024 21:15:06 admin.php=>ChangeLeftBlock(Les plus téléchargés] - 6) by AID : Root IP=>::1   
+03/04/2024 21:15:52 admin.php=>ChangeLeftBlock(Activité du Site - 10) by AID : Root IP=>::1   
+03/04/2024 21:16:33 admin.php=>ChangeLeftBlock(Grands Titres de sites de News] - 9) by AID : Root IP=>::1   
+03/04/2024 21:17:09 admin.php=>ChangeLeftBlock(Ephémérides - 8) by AID : Root  IP=>::1   
+03/04/2024 21:45:11 admin.php=>MakeLeftBlock(Languages) by AID : Root            IP=>::1   
+03/04/2024 21:45:55 admin.php=>ChangeLeftBlock(Languages - 15) by AID : Root     IP=>::1   
+03/04/2024 21:47:23 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
