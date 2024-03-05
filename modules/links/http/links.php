@@ -18,7 +18,7 @@ if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script
 
 global $links_DB, $NPDS_Prefix;
 
-include_once("modules/$ModPath/links.conf.php");
+include_once("modules/$ModPath/config/links.conf.php");
 if ($links_DB=='') $links_DB=$NPDS_Prefix;
 
 function menu() {
@@ -110,7 +110,7 @@ function autorise_mod($lid,$aff) {
 
 function index() {
    global $ModPath, $ModStart, $links_DB;
-   include ("modules/$ModPath/links.conf.php");
+   include ("modules/$ModPath/config/links.conf.php");
    include("themes/default/header.php");
    // Include cache manager
    global $SuperCache;
@@ -123,7 +123,7 @@ function index() {
       $mainlink = 'in_l';
       menu($mainlink);
 
-      $filen="modules/$ModPath/links.ban_01.php";
+      $filen="modules/$ModPath/http/links.ban_01.php";
       if (file_exists($filen)) {include($filen);}
 
       echo '
@@ -241,7 +241,7 @@ function viewlink($cid, $min, $orderby, $show) {
 
       settype($affsouscat,'string');
 
-      $filen="modules/$ModPath/links.ban_02.php";
+      $filen="modules/$ModPath/http/links.ban_02.php";
       if (file_exists($filen)) {include($filen);}
       $result=sql_query("SELECT title FROM ".$links_DB."links_categories WHERE cid='$cid'");
       list($title) = sql_fetch_row($result);
@@ -272,7 +272,7 @@ function viewlink($cid, $min, $orderby, $show) {
       $totalselectedlinks = sql_num_rows($fullcountresult);
       echo "<br />\n";
       $link_fiche_detail='';
-      include_once("modules/$ModPath/links-view.php");
+      include_once("modules/$ModPath/http/links-view.php");
 
       $orderby = convertorderbyout($orderby);
       //Calculates how many pages exist.  Which page one should be on, etc...
@@ -321,7 +321,7 @@ function viewslink($sid, $min, $orderby, $show) {
       $cache_obj = new SuperCacheEmpty();
    if (($cache_obj->genereting_output==1) or ($cache_obj->genereting_output==-1) or (!$SuperCache)) {
       mainheader();
-      $filen="modules/$ModPath/links.ban_03.php";
+      $filen="modules/$ModPath/http/links.ban_03.php";
       if (file_exists($filen)) include($filen);
 
       if (!isset($max)) $max=$min+$perpage;
@@ -343,7 +343,7 @@ function viewslink($sid, $min, $orderby, $show) {
       $totalselectedlinks = sql_num_rows($fullcountresult);
       echo "<br />\n";
       $link_fiche_detail='';
-      include_once("modules/$ModPath/links-view.php");
+      include_once("modules/$ModPath/http/links-view.php");
 
       $orderby = convertorderbyout($orderby);
 
@@ -381,7 +381,7 @@ function fiche_detail ($Xlid) {
       $browse_key=$Xlid;
       $link_fiche_detail="fiche_detail";
       $inter='cid';
-      include ("modules/sform/links/link_detail.php");
+      include ("modules/$ModPath/support/sform/link_detail.php");
    }
    if ($SuperCache)
       $cache_obj->endCachingPage();
@@ -510,23 +510,23 @@ switch ($op) {
       menu($mainlink);
    break;
    case 'AddLink':
-      include_once("modules/$ModPath/links-1.php");
+      include_once("modules/$ModPath/http/links-1.php");
       AddLink();
    break;
    case 'Add':
-      include_once("modules/$ModPath/links-1.php");
+      include_once("modules/$ModPath/http/links-1.php");
       settype($asb_question,'string');
       settype($asb_reponse,'string');
 
       Add($title, $url, $name, $cat, $xtext, $email, $topicL, $asb_question, $asb_reponse);
    break;
    case 'NewLinks':
-      include_once("modules/$ModPath/links-2.php");
+      include_once("modules/$ModPath/http/links-2.php");
       if (!isset($newlinkshowdays)) {$newlinkshowdays = 7;}
       NewLinks($newlinkshowdays);
    break;
    case 'NewLinksDate':
-      include_once("modules/$ModPath/links-2.php");
+      include_once("modules/$ModPath/http/links-2.php");
       NewLinksDate($selectdate);
    break;
    case 'viewlink':
@@ -542,27 +542,27 @@ switch ($op) {
       viewslink($sid, $min, $orderby, $show);
    break;
    case 'brokenlink':
-   include_once("modules/$ModPath/links-3.php");
+   include_once("modules/$ModPath/http/links-3.php");
       brokenlink($lid);
    break;
    case 'brokenlinkS':
-   include_once("modules/$ModPath/links-3.php");
+   include_once("modules/$ModPath/http/links-3.php");
       brokenlinkS($lid, $modifysubmitter);
    break;
    case 'modifylinkrequest':
-      include_once("modules/$ModPath/links-3.php");
+      include_once("modules/$ModPath/http/links-3.php");
       settype($modifylinkrequest_adv_infos,'string');
       modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author);
    break;
    case 'modifylinkrequestS':
-   include_once("modules/$ModPath/links-3.php");
+   include_once("modules/$ModPath/http/links-3.php");
       modifylinkrequestS($lid, $cat, $title, $url, $xtext, $modifysubmitter, $topicL);
    break;
    case 'visit':
       visit($lid);
    break;
    case 'search':
-      include_once("modules/$ModPath/links-1.php");
+      include_once("modules/$ModPath/http/links-1.php");
       $offset=10;
       if (!isset($min)) $min=0;
       if (!isset($max)) $max=$min+$offset;

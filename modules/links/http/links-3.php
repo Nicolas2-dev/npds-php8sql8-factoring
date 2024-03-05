@@ -112,7 +112,7 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author) {
       </div>
    </form>';
       $browse_key=$lid;
-      include ("modules/sform/$ModPath/link_maj.php");
+      include ("modules/$ModPath/support/sform/link_maj.php");
       adminfoot('fv','','','nodiv');
       include("themes/default/footer.php");
    } else

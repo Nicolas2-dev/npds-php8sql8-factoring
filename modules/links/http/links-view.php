@@ -89,7 +89,7 @@ global $NPDS_Prefix;
                <a class="me-3" href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=brokenlink&amp;lid='.$lid.'" title="'.translate("Rapporter un lien rompu").'" data-bs-toggle="tooltip"><i class="fas fa-unlink fa-lg"></i></a>';
          // Advance infos via the class sform.php
          $browse_key=$lid;
-         include ("modules/sform/$ModPath/link_detail.php");
+         include ("modules/$ModPath/support/sform/link_detail.php");
          detecteditorial($lid, urlencode($title));
          echo '
                <a class="me-3" href="print.php?DB='.$links_DB.'&amp;lid='.$lid.'" title="'.translate("Page spéciale pour impression").'" data-bs-toggle="tooltip"><i class="fa fa-print fa-lg"></i></a>';

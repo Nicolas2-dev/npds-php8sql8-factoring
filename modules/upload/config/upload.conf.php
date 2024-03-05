@@ -29,10 +29,10 @@ $autorise_upload_p = "true";
 $racine = '';
 
 // Répertoire de téléchargement (avec le / terminal)
-$rep_upload = $racine.'/modules/upload/upload/';
+$rep_upload = $racine.'/modules/upload/storage/upload/';
 
 // Répertoire de stockage des fichiers temporaires (avec le / terminal)
-$rep_cache = $racine.'/modules/upload/tmp/';
+$rep_cache = $racine.'/modules/upload/storage/tmp/';
 
 // Répertoire/fichier de stockage de la log de téléchargement (par défaut /storage/logs/security.log)
 $rep_log = $racine.'/storage/logs/security.log';

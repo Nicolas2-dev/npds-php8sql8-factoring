@@ -12,7 +12,7 @@
 if (!stristr($_SERVER['PHP_SELF'],'modules.php')) die();
 
 global $ModPath, $ModStart, $language, $Default_Theme, $Default_Skin, $NPDS_Key;
-include ("modules/$ModPath/language/f-manager-$language.php");
+include ("modules/$ModPath/language/$language/language.php");
 include ("modules/$ModPath/library/navigator.php");
 
 if (isset($user)) {

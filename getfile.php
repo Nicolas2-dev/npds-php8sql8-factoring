@@ -51,7 +51,7 @@ switch($apli) {
                   $fic="$att_id/$att_name";
                break;
             }
-            include ("modules/upload/language/upload.lang-$language.php");
+            include ("modules/upload/language/$language/language.php");
             include ("modules/upload/http/include/mimetypes.php");
             $suffix=strtoLower(substr(strrchr( $att_name, '.' ),1));
             if (isset($type))

@@ -16,11 +16,11 @@ if (!function_exists("Mysql_Connexion"))
    die();
 include('functions.php');
 include('auth.php');
-include('modules/geoloc/geoloc_locip.php');
+include('modules/geoloc/http/geoloc_locip.php');
 
 filtre_module($file_name);
-if (file_exists("modules/comments/$file_name.conf.php"))
-   include ("modules/comments/$file_name.conf.php");
+if (file_exists("modules/comments/config/$file_name.conf.php"))
+   include ("modules/comments/config/$file_name.conf.php");
 else
    die();
 

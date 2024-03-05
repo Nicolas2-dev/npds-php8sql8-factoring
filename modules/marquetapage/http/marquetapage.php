@@ -50,8 +50,8 @@ function marquetapage() {
    global $cookie;
    if ($cookie[0]!='') {
       global $REQUEST_URI, $title, $post, $NPDS_Prefix;
-      if ($ibid=theme_image("modules/add.gif")) {$add=$ibid;} else {$add="modules/marquetapage/add.gif";}
-      if ($ibid=theme_image("modules/addj.gif")) {$addj=$ibid;} else {$addj="modules/marquetapage/addj.gif";}
+      if ($ibid=theme_image("modules/add.gif")) {$add=$ibid;} else {$add="modules/marquetapage/assets/images/add.gif";}
+      if ($ibid=theme_image("modules/addj.gif")) {$addj=$ibid;} else {$addj="modules/marquetapage/assets/images/addj.gif";}
       $result=sql_query("SELECT uri, topic FROM ".$NPDS_Prefix."marquetapage WHERE uid='$cookie[0]' ORDER BY topic ASC");
       $content='';
       if (sql_num_rows($result)) {

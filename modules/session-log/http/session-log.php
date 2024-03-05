@@ -35,7 +35,7 @@ $FileSecure = $DOCUMENTROOT.$racine.'/storage/logs/security.log';
 $FileUpload = $DOCUMENTROOT.$rep_log;
 $RepTempFil = $DOCUMENT_ROOT.$rep_cache;
 
-include ("modules/$ModPath/lang/session-log-$language.php");
+include ("modules/$ModPath/language/$language/language.php");
 $ThisFile="admin.php?op=Extend-Admin-SubModule&amp;ModPath=".$ModPath."&amp;ModStart=".$ModStart;
 $f_titre = SessionLog_translate("Gestion des Logs");
 settype($subop,'string');

@@ -26,7 +26,7 @@ admindroits($aid,$f_meta_nom);
 $hlpfile='manuels/'.$language.'/upload.html';
 
 global $language;
-include("modules/upload/lang/upload.lang-$language.php");
+include("modules/upload/language/$language/language.php");
 
 function upConfigure($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg) {
    global $hlpfile, $filemanager,$f_meta_nom, $f_titre, $adminimg;

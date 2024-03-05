@@ -19,8 +19,8 @@ include('functions.php');
 include('auth.php');
 
 filtre_module($file_name);
-if (file_exists("modules/comments/$file_name.conf.php"))
-   include ("modules/comments/$file_name.conf.php");
+if (file_exists("modules/comments/config/$file_name.conf.php"))
+   include ("modules/comments/config/$file_name.conf.php");
 else
    die();
 if (isset($cancel))
@@ -92,7 +92,7 @@ if (isset($submitS)) {
       }
 
       if ($formulaire!='')
-         include ("modules/comments/view/sform/comments_extender.php");
+         include ("modules/comments/support/sform/comments_extender.php");
 
       if ($allow_html == 0 || isset($html)) $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,cur_charset);
       if (isset($sig) && $userdata['uid'] != 1) $message .= ' [addsig]';
@@ -101,7 +101,7 @@ if (isset($submitS)) {
       $message = make_clickable($message);
       $message = removeHack($message);
       $image_subject='';
-      $message = addslashes(dataimagetofileurl($message,'modules/upload/upload/co'));
+      $message = addslashes(dataimagetofileurl($message,'modules/upload/storage/upload/co'));
       $time = date("Y-m-d H:i:s",time()+((integer)$gmt*3600));
       $sql = "INSERT INTO ".$NPDS_Prefix."posts (post_idH, topic_id, image, forum_id, poster_id, post_text, post_time, poster_ip, poster_dns) VALUES ('0', '$topic', '$image_subject', '$forum', '".$userdata['uid']."', '$message', '$time', '$poster_ip', '$hostname')";
       if (!$result = sql_query($sql))
@@ -206,7 +206,7 @@ if (isset($submitS)) {
         
       if ($formulaire!='') {
          echo'<div class="col">';
-         include ("modules/comments/view/sform/comments_extender.php");
+         include ("modules/comments/support/sform/comments_extender.php");
          echo'</div></div>';
       } else {
          if ($allow_bbcode)

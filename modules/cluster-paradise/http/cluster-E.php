@@ -15,8 +15,8 @@ function V_secur_cluster($Xkey) {
    global $ModPath;
    $ModPath=str_replace('..','',$ModPath);
    $trouve=false;
-   if (file_exists("modules/$ModPath/data-cluster-E.php")) {
-      include("modules/$ModPath/data-cluster-E.php");
+   if (file_exists("modules/$ModPath/config/data-cluster-E.php")) {
+      include("modules/$ModPath/config/data-cluster-E.php");
       $cpt=0;
       while (each($part) and !$trouve) {
          if (md5($part[$cpt]["WWW"].$part[$cpt]["KEY"])==decryptK($Xkey,$part[$cpt]["KEY"]))
@@ -71,8 +71,8 @@ if ($tmp=V_secur_cluster($key)) {
             $result = sql_query("INSERT INTO ".$NPDS_Prefix."stories VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '0', '0', '$topicid', '$author', '$notes', '$ihome', '0', '$date_finval','$epur')");
             Ecr_Log("security", "Cluster Paradise : insert_stories ($subject - $date_finval) by AID : $aid", "");
             // Réseaux sociaux
-            if (file_exists('modules/npds_twi/npds_to_twi.php')) {include ('modules/npds_twi/npds_to_twi.php');}
-            if (file_exists('modules/npds_fbk/npds_to_fbk.php')) {include ('modules/npds_twi/npds_to_fbk.php');}
+            if (file_exists('modules/npds_twi/http/npds_to_twi.php')) {include ('modules/npds_twi/http/npds_to_twi.php');}
+            if (file_exists('modules/npds_fbk/http/npds_to_fbk.php')) {include ('modules/npds_twi/http/npds_to_fbk.php');}
             // Réseaux sociaux
          } else {
             $result = sql_query("INSERT INTO ".$NPDS_Prefix."autonews VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '$topicid', '$author', '$notes', '$ihome','$date_debval','$date_finval','$epur')");

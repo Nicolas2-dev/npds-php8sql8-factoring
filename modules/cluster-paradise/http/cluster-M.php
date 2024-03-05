@@ -12,8 +12,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 function FindPartners_secur_cluster() {
-   if (file_exists("modules/cluster-paradise/data-cluster-M.php")) {
-      include("modules/cluster-paradise/data-cluster-M.php");
+   if (file_exists("modules/cluster-paradise/config/data-cluster-M.php")) {
+      include("modules/cluster-paradise/config/data-cluster-M.php");
       $cpt=1;
       $part_cpt=0;
       while (each($part)) {
@@ -36,15 +36,15 @@ function FindPartners_secur_cluster() {
 }
 
 function key_secur_cluster() {
-   if (file_exists("modules/cluster-paradise/data-cluster-M.php")) {
-      include("modules/cluster-paradise/data-cluster-M.php");
+   if (file_exists("modules/cluster-paradise/config/data-cluster-M.php")) {
+      include("modules/cluster-paradise/config/data-cluster-M.php");
       return (md5($part[0]["WWW"].$part[0]["KEY"]));
    }
 }
 
 function L_encrypt($txt) {
-   if (file_exists("modules/cluster-paradise/data-cluster-M.php")) {
-      include("modules/cluster-paradise/data-cluster-M.php");
+   if (file_exists("modules/cluster-paradise/config/data-cluster-M.php")) {
+      include("modules/cluster-paradise/config/data-cluster-M.php");
       $key=$part[0]["KEY"];
    }
    return (encryptK($txt, $key));

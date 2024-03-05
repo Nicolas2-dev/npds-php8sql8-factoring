@@ -26,7 +26,7 @@ header("Cache-Control: post-check=0, pre-chek=0", false);
 header("Pragma: no-cache");
 // For IE cache control
 
-$fp=fopen("locks/$verrou_page-vgp-$verrou_groupe.txt",'w');
+$fp=fopen("storage/locks/$verrou_page-vgp-$verrou_groupe.txt",'w');
 fwrite($fp,$verrou_user);
 fclose($fp);
 ?>

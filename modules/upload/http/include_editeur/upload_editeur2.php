@@ -15,7 +15,7 @@ if (!stristr($_SERVER['PHP_SELF'],'modules.php')) die();
 /*****************************************************/
 /* Include et definition                             */
 /*****************************************************/
-   include_once("modules/upload/language/upload.lang-$language.php");
+   include_once("modules/upload/language/$language/language.php");
    include_once("modules/upload/http/include_editeur/upload.conf.editeur.php");
 
 /*****************************************************/

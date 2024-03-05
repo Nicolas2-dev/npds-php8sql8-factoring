@@ -27,7 +27,7 @@ global $cookie, $language;
 $userdata = get_userdata_from_id($cookie[0]);
 
 $ModStart='reseaux-sociaux';
-include ("modules/$ModPath/language/rs-$language.php");
+include ("modules/$ModPath/language/$language/language.php");
 
 function ListReseaux($ModPath, $ModStart) {
    global $userdata;

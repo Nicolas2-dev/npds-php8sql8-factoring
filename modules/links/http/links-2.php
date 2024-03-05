@@ -20,14 +20,14 @@ function NewLinksDate($selectdate) {
    $dateDB = (date("d-M-Y", $selectdate));
    include("themes/default/header.php");
    mainheader('nl');
-   $filen="modules/$ModPath/links.ban_01.php";
+   $filen="modules/$ModPath/http/links.ban_01.php";
    if (file_exists($filen)) {include($filen);}
    $newlinkDB = Date("Y-m-d", $selectdate);
    $result = sql_query("SELECT lid FROM ".$links_DB."links_links WHERE date LIKE '%$newlinkDB%'");
    $totallinks = sql_num_rows($result);
    $result=sql_query("SELECT lid, url, title, description, date, hits, topicid_card, cid, sid FROM ".$links_DB."links_links WHERE date LIKE '%$newlinkDB%' ORDER BY title ASC");
    $link_fiche_detail='';
-   include_once("modules/$ModPath/links-view.php");
+   include_once("modules/$ModPath/http/links-view.php");
    include("themes/default/footer.php");
 }
 

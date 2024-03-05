@@ -16,7 +16,7 @@ $f_meta_nom ='setban';
 //==> controle droit
 admindroits($aid,$f_meta_nom);
 //<== controle droit
-include ("modules/$ModPath/lang/ipban.lang-$language.php");
+include ("modules/$ModPath/language/$language/language.php");
 $f_titre = ipban_translate("Administration de l'IpBan");
 settype($hlpfile,'string');
 $hlpfile='manuels/'.$language.'/ipban.html';

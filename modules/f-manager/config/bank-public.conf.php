@@ -50,7 +50,7 @@
 // ----------------
    // Vous pouvez limiter la navigation à un sous-répertoire se trouvant sous la racine de votre site
    // => $basedir_fma=$racine_fma."/static";
-   $basedir_fma=$racine_fma."/modules/upload/upload";
+   $basedir_fma=$racine_fma."/modules/upload/storage/upload";
 
    // $dirlimit_fma permet de contrôler la navigation dans des sous-répertoires
    // CETTE LIMITE s'etend à tout le système de fichier !!

@@ -30,8 +30,8 @@ $hlpfile='/manuels/'.$language.'/mod-archive-stories.html';
 
 function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg) {
    global $hlpfile;
-   if (file_exists("modules/$ModPath/archive-stories.conf.php"))
-      include ("modules/$ModPath/archive-stories.conf.php");
+   if (file_exists("modules/$ModPath/config/archive-stories.conf.php"))
+      include ("modules/$ModPath/config/archive-stories.conf.php");
       GraphicAdmin($hlpfile);
       adminhead($f_meta_nom, $f_titre, $adminimg);
    echo'
@@ -110,7 +110,7 @@ function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
 }
 
 function SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPath, $ModStart) {
-   $file = fopen("modules/$ModPath/archive-stories.conf.php", "w");
+   $file = fopen("modules/$ModPath/config/archive-stories.conf.php", "w");
    $content = "<?php \n";
    $content .= "/************************************************************************/\n";
    $content .= "/* DUNE by NPDS                                                         */\n";
@@ -141,7 +141,7 @@ function SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPa
    $content .= "?>";
    fwrite($file, $content);
    fclose($file);
-   @chmod("modules/$ModPath/archive-stories.conf.php",0666);
+   @chmod("modules/$ModPath/config/archive-stories.conf.php",0666);
 
    $file = fopen("modules/$ModPath/config/cache.timings.php", "w");
    $content = "<?php \n";

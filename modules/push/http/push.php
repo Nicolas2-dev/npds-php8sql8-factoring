@@ -16,7 +16,7 @@ if (!function_exists("Mysql_Connexion")) {
    include ("mainfile.php");
 }
 
-include("modules/push/language/push-lang-$language.php");
+include("modules/push/language/$language/language.php");
 include("push.conf.php");
 
 function push_menu() {

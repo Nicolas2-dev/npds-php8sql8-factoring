@@ -48,8 +48,8 @@
             Access_Error();
          $rep_upload_editeur = $user_dir."/";
       } else {
-         $rep_upload_editeur = $racine."/modules/upload/upload/";
-         $path_upload_editeur = "modules/upload/upload/";
+         $rep_upload_editeur = $racine."/modules/upload/assets/images/upload/";
+         $path_upload_editeur = "modules/upload/assets/images/upload/";
       }
    }
 

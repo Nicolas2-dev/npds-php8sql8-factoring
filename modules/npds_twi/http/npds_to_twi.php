@@ -22,8 +22,8 @@ if (!isset($sid)) {
 }
 
 if ($npds_twi===1) {
-   require_once('modules/npds_twi/include/ab-twitteroauth/twitteroauth/twitteroauth.php');
-   require_once('modules/npds_twi/twi_conf.php');
+   require_once('modules/npds_twi/library/twitteroauth/twitteroauth.php');
+   require_once('modules/npds_twi/config/twi_conf.php');
    /*Crée un objet TwitterOauth*/
    $connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret);
    $connection->host = "https://api.twitter.com/1.1/";
@@ -39,13 +39,13 @@ if ($npds_twi===1) {
       /* préparation du contenu du tweet */
       $subj_twi=strip_tags($subject);
       if(cur_charset!=='utf-8')
-      $subj_twi=utf8_encode ($subj_twi);
+      //$subj_twi=utf8_encode ($subj_twi);
       $subj_twi=preg_replace ( "#''#", '\'', $subj_twi);
       $subj_twi=html_entity_decode ($subj_twi);
       $text_twi=strip_tags($hometext);
       $text_twi=html_entity_decode ($text_twi);
       if(cur_charset!=='utf-8')
-      $text_twi=utf8_encode ($text_twi);
+      //$text_twi=utf8_encode ($text_twi);
       $text_twi=preg_replace ( "#''#", '\'', $text_twi);
       $text_twi=preg_replace ( "#yt_video\(([^,]*),([^,]*),([^\)]*)\)#", 'Voir la vidéo...', $text_twi);
 

@@ -18,7 +18,7 @@
 $ModPath='geoloc';
 global $nuke_url;
 $content = '';
-include('modules/'.$ModPath.'/geoloc.conf');
+include('modules/'.$ModPath.'/config/geoloc.conf');
 $source_fond='';
 switch ($cartyp_b) {
    case 'OSM':

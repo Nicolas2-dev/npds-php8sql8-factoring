@@ -13,10 +13,10 @@ if (!stristr($_SERVER['PHP_SELF'],"modules.php")) die();
 
 global $ModPath, $ModStart, $language, $Default_Theme, $Default_Skin, $NPDS_Key, $NPDS_Prefix;
 
-if (file_exists("modules/$ModPath/language/f-manager-$language.php"))
-   include ("modules/$ModPath/language/f-manager-$language.php");
+if (file_exists("modules/$ModPath/language/$language/language.php"))
+   include ("modules/$ModPath/language/$language/language.php");
 else
-   include ("modules/$ModPath/language/f-manager-english.php");
+   include ("modules/$ModPath/language/en/language.php");
 
 include ("modules/$ModPath/library/navigator.php");
 
@@ -246,7 +246,7 @@ switch ($op) {
       if ($ficcmd_fma[0]) {
          if ($userfile!='none') {
             global $language;
-            include_once("modules/upload/language//upload.lang-$language.php");
+            include_once("modules/upload/language/$language/language.php");
             include_once("modules/upload/library/clsUpload.php");
             $upload = new Upload();
             $filename = trim($upload->getFileName("userfile"));

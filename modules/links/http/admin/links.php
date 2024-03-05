@@ -19,10 +19,10 @@ if (!stristr($_SERVER['PHP_SELF'],"modules.php")) Access_Error();
 global $language, $links_DB, $NPDS_Prefix;
 
 $pos = strpos($ModPath, '/admin');
-include_once('modules/'.substr($ModPath,0,$pos).'/links.conf.php');
+include_once('modules/'.substr($ModPath,0,$pos).'/config/links.conf.php');
 if ($links_DB=='')
    $links_DB=$NPDS_Prefix;
-$hlpfile = "modules/".substr($ModPath,0,$pos)."/manual/$language/mod-weblinks.html";
+$hlpfile = "modules/".substr($ModPath,0,$pos)."/view/manuels/$language/mod-weblinks.html";
 
 if(autorisation(-127)) {
    $result = sql_query("SELECT radminsuper FROM ".$NPDS_Prefix."authors WHERE aid='$aid'");
@@ -654,7 +654,7 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos) {
        echo '<hr />';
        $pos = strpos($ModPath, '/admin');
        $browse_key=$lid;
-       include ("modules/sform/".substr($ModPath,0,$pos)."/link_maj.php");
+       include ("modules/".substr($ModPath,0,$pos)."/support/sform/link_maj.php");
    }
    include("themes/default/footer.php");;
 }
@@ -675,7 +675,7 @@ function LinksDelLink($lid) {
    global $ModPath, $ModStart, $links_DB;
    $pos = strpos($ModPath, '/admin');
    $modifylinkrequest_adv_infos='Supprimer_MySql';
-   include_once("modules/sform/".substr($ModPath,0,$pos)."/link_maj.php");
+   include_once("modules/".substr($ModPath,0,$pos)."/support/sform/link_maj.php");
    // Cette fonction fait partie du formulaire de SFROM !
    Supprimer_function($lid);
    sql_query("DELETE FROM ".$links_DB."links_editorials WHERE linkid='$lid'");
@@ -834,7 +834,7 @@ function LinksDelCat($cid, $sid, $sub, $ok=0) {
    if ($ok==1) {
       $pos = strpos($ModPath, "/admin");
       $modifylinkrequest_adv_infos="Supprimer_MySql";
-      include_once("modules/sform/".substr($ModPath,0,$pos)."/link_maj.php");
+      include_once("modules/".substr($ModPath,0,$pos)."/support/sform/link_maj.php");
       if ($sub>0) {
          $result=sql_query("SELECT lid FROM ".$links_DB."links_links WHERE sid='$sid'");
          while (list($lid)=sql_fetch_row($result)) {

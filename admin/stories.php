@@ -712,12 +712,12 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
       if ($subscribe)
          subscribe_mail("topic",$topic,'',$subject,'');
       // Cluster Paradise
-      if (file_exists("modules/cluster-paradise/cluster-activate.php")) include ("modules/cluster-paradise/cluster-activate.php");
-      if (file_exists("modules/cluster-paradise/cluster-M.php")) include ("modules/cluster-paradise/cluster-M.php");
+      if (file_exists("modules/cluster-paradise/config/cluster-activate.php")) include ("modules/cluster-paradise/config/cluster-activate.php");
+      if (file_exists("modules/cluster-paradise/http/cluster-M.php")) include ("modules/cluster-paradise/http/cluster-M.php");
       // Cluster Paradise
       // Réseaux sociaux
-      if (file_exists('modules/npds_twi/npds_to_twi.php')) include ('modules/npds_twi/npds_to_twi.php');
-      if (file_exists('modules/npds_fbk/npds_to_fbk.php')) include ('modules/npds_twi/npds_to_fbk.php');
+      if (file_exists('modules/npds_twi/http/npds_to_twi.php')) include ('modules/npds_twi/http/npds_to_twi.php');
+      if (file_exists('modules/npds_fbk/http/npds_to_fbk.php')) include ('modules/npds_twi/http/npds_to_fbk.php');
       // Réseaux sociaux
    }
    redirect_url("admin.php?");
@@ -999,12 +999,12 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
        ultramode();
     }
     // Cluster Paradise
-    if (file_exists("modules/cluster-paradise/cluster-activate.php")) {include ("modules/cluster-paradise/cluster-activate.php");}
-    if (file_exists("modules/cluster-paradise/cluster-M.php")) {include ("modules/cluster-paradise/cluster-M.php");}
+    if (file_exists("modules/cluster-paradise/config/cluster-activate.php")) {include ("modules/cluster-paradise/config/cluster-activate.php");}
+    if (file_exists("modules/cluster-paradise/http/cluster-M.php")) {include ("modules/cluster-paradise/http/cluster-M.php");}
     // Cluster Paradise
     // Réseaux sociaux
-       if (file_exists('modules/npds_twi/npds_to_twi.php')) {include ('modules/npds_twi/npds_to_twi.php');}
-       if (file_exists('modules/npds_fbk/npds_to_fbk.php')) {include ('modules/npds_twi/npds_to_fbk.php');}
+       if (file_exists('modules/npds_twi/http/npds_to_twi.php')) {include ('modules/npds_twi/http/npds_to_twi.php');}
+       if (file_exists('modules/npds_fbk/http/npds_to_fbk.php')) {include ('modules/npds_twi/http/npds_to_fbk.php');}
     // Réseaux sociaux
     redirect_url("admin.php?op=EditStory&sid=$sid");
 }

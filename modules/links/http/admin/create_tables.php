@@ -16,7 +16,7 @@ if (!stristr($_SERVER['PHP_SELF'],'modules.php')) Access_Error();
 
 global $ModPath, $ModStart, $NPDS_Prefix;
 $pos = strpos($ModPath, '/admin');
-global $links_DB; include_once('modules/'.substr($ModPath,0,$pos).'/links.conf.php');
+global $links_DB; include_once('modules/'.substr($ModPath,0,$pos).'/config/links.conf.php');
 if ($links_DB=='')
    $links_DB = $NPDS_Prefix;
 

@@ -12,6 +12,6 @@
 if (!function_exists("Mysql_Connexion"))
    include ("mainfile.php");
 include("themes/default/header.php");
-include_once('modules/sform/contact/contact.php');
+include_once('modules/contact/support/sform/contact.php');
 include("themes/default/footer.php");;
 ?>

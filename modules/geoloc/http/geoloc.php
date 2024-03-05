@@ -28,8 +28,8 @@ if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script
 
 //function geoloc() {
 global $pdst, $language, $title;
-include ('modules/'.$ModPath.'/geoloc.conf');
-include_once('modules/'.$ModPath.'/lang/geoloc.lang-'.$language.'.php');
+include ('modules/'.$ModPath.'/config/geoloc.conf');
+include_once('modules/'.$ModPath.'/language/'.$language.'language.php');
 
 $infooo='';
 $js_dragtrue ='';

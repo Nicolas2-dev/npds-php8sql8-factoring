@@ -11,7 +11,7 @@
 /************************************************************************/
 /* Dont modify this file is you dont know what you make                 */
 /************************************************************************/
-include_once("modules/sform/sform.php");
+include_once("library/sform/sform.php");
 
 global $m;
 $m=new form_handler();
@@ -24,7 +24,7 @@ $m->add_submit_value("submitS");
 $m->add_url("modules.php");
 
 /************************************************/
-include("modules/comments/$formulaire");
+include("modules/comments/support/sform/$formulaire");
 /************************************************/
 
 if( !isset($GLOBALS["submitS"]) )

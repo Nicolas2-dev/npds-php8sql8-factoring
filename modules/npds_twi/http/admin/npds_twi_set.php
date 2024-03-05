@@ -16,7 +16,7 @@
 
 if (!function_exists('admindroits'))
    include($_SERVER['DOCUMENT_ROOT'].'/admin/die.php');
-include ('modules/'.$ModPath.'/lang/twi.lang-'.$language.'.php');
+include ('modules/'.$ModPath.'/language/'.$language.'/language.php');
 $f_meta_nom ='npds_twi';
 $f_titre='npds_twitter';
 //==> controle droit
@@ -41,9 +41,9 @@ global $adminimg;
 
 function Configuretwi($subop, $ModPath, $ModStart, $class_sty_2, $npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $tbox_width, $tbox_height) {
    global $language;
-   if (file_exists('modules/'.$ModPath.'/twi_conf.php'))
-      include ('modules/'.$ModPath.'/twi_conf.php');
-      $hlpfile = 'modules/'.$ModPath.'/doc/admtwi-'.$language.'.html';
+   if (file_exists('modules/'.$ModPath.'/config/twi_conf.php'))
+      include ('modules/'.$ModPath.'/config/twi_conf.php');
+      $hlpfile = 'modules/'.$ModPath.'/view/manuels/'.$language.'/manuel.html';
 
    global $f_meta_nom, $f_titre, $adminimg, $npds_twi;
    $checkarti_y='';$checkarti_n='';$checkpost_y='';$checkpost_n='';$urshort_mr='';$urshort_ft='';$urshort_c='';
@@ -175,7 +175,7 @@ function Configuretwi($subop, $ModPath, $ModStart, $class_sty_2, $npds_twi_arti,
 function SaveSettwi($npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $tbox_width, $tbox_height, $class_sty_1, $class_sty_2, $ModPath, $ModStart) {
 
    //==> modifie le fichier de configuration
-   $file_conf = fopen("modules/$ModPath/twi_conf.php", "w+");
+   $file_conf = fopen("modules/$ModPath/config/twi_conf.php", "w+");
    $content = "<?php \n";
    $content .= "/************************************************************************/\n";
    $content .= "/* DUNE by NPDS                                                         */\n";
@@ -215,8 +215,8 @@ function SaveSettwi($npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer
 
   //==> modifie le fichier controleur
   $file_controleur='';
-  //     if (file_exists('modules/'.$ModPath.'/twi_conf.php'))
-  //   include ('modules/'.$ModPath.'/twi_conf.php');
+  //     if (file_exists('modules/'.$ModPath.'/config/twi_conf.php'))
+  //   include ('modules/'.$ModPath.'/config/twi_conf.php');
   if ($npds_twi_urshort<>1) {
      $file_controleur = fopen("s.php", "w+");
      $content = "<?php \n";

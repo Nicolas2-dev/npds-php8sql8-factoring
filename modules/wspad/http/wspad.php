@@ -28,7 +28,7 @@ global $title, $language, $NPDS_Prefix, $user, $admin, $nuke_url;
 if (file_exists("modules/$ModPath/pages.php"))
    include ("modules/$ModPath/pages.php");
 
-include_once("modules/$ModPath/lang/$language.php");
+include_once("modules/$ModPath/language/$language/language.php");
 include_once("modules/$ModPath/config.php");
 
 // limite l'utilisation aux membres et admin
@@ -113,7 +113,7 @@ function Liste_Page() {
          // Supression des verrous de mon groupe
          clearstatcache();
          $refresh=15;
-         $filename="modules/$ModPath/locks/$page-vgp-$groupe.txt";
+         $filename="modules/$ModPath/storage/locks/$page-vgp-$groupe.txt";
          if (file_exists($filename)) {
             if ((time()-$refresh)>filemtime($filename)) {
                sql_query("UPDATE ".$NPDS_Prefix."wspad SET verrou='' WHERE page='$page' AND member='$groupe'");
@@ -284,7 +284,7 @@ function Page($page, $ranq) {
    </script>";
 
    // Analyse des verrous
-   $filename="modules/$ModPath/locks/$page-vgp-$groupe.txt";
+   $filename="modules/$ModPath/storage/locks/$page-vgp-$groupe.txt";
    $refresh=15;
    clearstatcache();
    if (file_exists($filename)) {
@@ -366,7 +366,7 @@ switch($op) {
      $row=sql_fetch_assoc(sql_query("SELECT MAX(ranq) AS ranq FROM ".$NPDS_Prefix."wspad WHERE page='$page' AND member='$groupe'"));
      $result = sql_query("INSERT INTO ".$NPDS_Prefix."wspad VALUES ('0', '$page', '$content', '".time()."', '$auteur', '".($row['ranq']+1)."', '$groupe','')");
      sql_query("UPDATE ".$NPDS_Prefix."wspad SET verrou='' WHERE verrou='$auteur'");
-     @unlink("modules/$ModPath/locks/$page-vgp-$groupe.txt");
+     @unlink("modules/$ModPath/storage/locks/$page-vgp-$groupe.txt");
      $mess=wspad_trans("révision")." ".($row['ranq']+1)." ".wspad_trans("sauvegardée");
   break;
   case "supp":
@@ -377,14 +377,14 @@ switch($op) {
   case "suppdoc":
      settype($member, 'integer');
      $result = sql_query("DELETE FROM ".$NPDS_Prefix."wspad WHERE page='$page' AND member='$member'");
-     @unlink("modules/$ModPath/locks/$page-vgp-$groupe.txt");
+     @unlink("modules/$ModPath/storage/locks/$page-vgp-$groupe.txt");
   break;
   case "renomer":
      // Filtre les caractères interdits dans les noms de pages
      $newpage=preg_replace('#[^a-zA-Z0-9\\s\\_\\.\\-]#i','_', removeHack(stripslashes(urldecode($newpage))));
      settype($member, 'integer');
      $result = sql_query("UPDATE ".$NPDS_Prefix."wspad SET page='$newpage', verrou='' WHERE page='$page' AND member='$member'");
-     @unlink("modules/$ModPath/locks/$page-vgp-$groupe.txt");
+     @unlink("modules/$ModPath/storage/locks/$page-vgp-$groupe.txt");
   break;
   case "conv_new":
      $row = sql_fetch_assoc(sql_query("SELECT content FROM ".$NPDS_Prefix."wspad WHERE page='$page' AND member='$groupe' AND ranq='$ranq'"));

@@ -17,7 +17,7 @@ if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script
    die();
 
 global $language, $NPDS_Prefix, $Default_Theme, $Default_Skin, $user;
-include_once("modules/$ModPath/lang/$language.php");
+include_once("modules/$ModPath/language/$language/language.php");
 // For More security
 
 if (isset($user) and $user!='') {
