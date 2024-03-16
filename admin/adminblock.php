@@ -13,26 +13,39 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\support\str;
+
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'ablock';
 $f_titre = adm_translate("Bloc Administration");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language;
 $hlpfile = "manuels/$language/adminblock.html";
 
 function ablock()
 {
     global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     echo '
         <hr />
         <h3 class="mb-3">' . adm_translate("Editer le Bloc Administration") . '</h3>';
+
     $result = sql_query("SELECT title, content FROM " . $NPDS_Prefix . "block WHERE id=2");
+
     if (sql_num_rows($result) > 0) {
         while (list($title, $content) = sql_fetch_row($result)) {
             echo '
@@ -49,22 +62,28 @@ function ablock()
                 <input type="hidden" name="op" value="changeablock" />
                 <button class="btn btn-primary btn-block" type="submit">' . adm_translate("Valider") . '</button>
             </form>';
+
             $arg1 = '
     var formulid = ["adminblock"];
     inpandfieldlen("title",1000);';
         }
     }
-    adminfoot('fv', '', $arg1, '');
+
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function changeablock($title, $content)
 {
     global $NPDS_Prefix;
-    $title = stripslashes(FixQuotes($title));
-    $content = stripslashes(FixQuotes($content));
+
+    $title = stripslashes(str::FixQuotes($title));
+    $content = stripslashes(str::FixQuotes($content));
+
     sql_query("UPDATE " . $NPDS_Prefix . "block SET title='$title', content='$content' WHERE id='2'");
+
     global $aid;
-    Ecr_Log('security', "ChangeAdminBlock() by AID : $aid", '');
+    logs::Ecr_Log('security', "ChangeAdminBlock() by AID : $aid", '');
+
     Header("Location: admin.php?op=adminMain");
 }
 
@@ -72,6 +91,7 @@ switch ($op) {
     case 'ablock':
         ablock();
         break;
+
     case 'changeablock':
         changeablock($title, $content);
         break;

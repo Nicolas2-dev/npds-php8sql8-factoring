@@ -16,6 +16,7 @@
 /*  Revision : 2006-01-28 Version: 1.3 / .common support by Dev         */
 /*  Revision : 2009-03-12 Version: 1.4 / clean_limit mods by Dev        */
 /************************************************************************/
+global $CACHE_CONFIG;
 
 // Be sure that apache user have the permission to Read/Write/Delete in the Dir
 $CACHE_CONFIG['data_dir'] = 'storage/cache/';
@@ -45,3 +46,4 @@ $CACHE_CONFIG['clean_limit'] = 300;
 // Same standard cache (not the functions for members) for anonymous and members
 // 0 no - 1 Yes
 $CACHE_CONFIG['non_differentiate'] = 0;
+

@@ -134,7 +134,7 @@ function write_review()
     adminfoot('fv', '', $arg1, 'foo');
 }
 
-function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, $url_title, $hits, $id)
+function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, $url_title, $hits, ?int $id)
 {
     global $admin, $short_review;
 
@@ -677,7 +677,7 @@ function del_review($id_del)
 
 settype($op, 'string');
 settype($hits, 'integer');
-//settype($id,'integer');
+settype($id,'integer');
 settype($cover, 'string');
 settype($asb_question, 'string');
 settype($asb_reponse, 'string');

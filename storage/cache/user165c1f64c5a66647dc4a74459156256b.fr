@@ -1,0 +1,162 @@
+<div class="card mb-3 border-0">
+   <div class="row g-0">
+      <div class="col bg-primary text-white lead  d-flex align-items-center">
+         <span class="my-3 ms-2" style="font-size:3vw; writing-mode: vertical-rl;text-orientation: upright;">EDITORIAL</span>
+      </div>
+      <div class="col-11 ps-2">
+         <p><img class="img-fluid" style="display: block; margin-left: auto; margin-right: auto;" src="assets/images/banners/ban_rev_16.png" alt="REvolution 2016"></p>
+<p>Au delà de la gestion de contenu 'classique', <a href="http://www.npds.org" target="_blank" title="www.npds.org">NPDS</a> met en oeuvre un ensemble de fonctions spécifiquement dédiées à la gestion de Communauté et de groupes de travail collaboratif.&nbsp;<br>Il s'agit d'un&nbsp;<span class="text-danger"><span>C</span></span>ontent &amp;&nbsp;<span class="text-danger"><span>C</span></span>ommunity&nbsp;<span class="text-danger"><span>M</span></span>anagement&nbsp;<span class="text-danger"><span>S</span></span>ystem (CCMS) robuste, sécurisé, complet, performant et parlant vraiment français.</p>
+<p style="text-align: center;"><span>Gérez votre Communauté d'utilisateurs, vos groupes de travail collaboratif, publiez, gérez et organisez<br>votre contenu dynamique !</span></p>
+<p>Libre (Open-Source) et gratuit, <a href="http://www.npds.org" target="_blank" title="www.npds.org">NPDS</a> est personnalisable grâce à de nombreux thèmes et modules et ne requiert que quelques compétences de base - essentiellement - issues des technologies du web.&nbsp;<br><span>Ses points forts&nbsp;</span>: sa richesse fonctionnelle, sa sécurité, sa rapidité, sa facilité de mise en œuvre et la qualité, la stabilité et la fiabilité de son fonctionnement.</p>
+<p>&nbsp;</p>
+<p style="text-align: left;"><span>Revolution 16 apporte :&nbsp;</span></p>
+<ul>
+<li style="text-align: left;"><span>le responsive design dans tous les secteurs du portail,&nbsp;</span></li>
+<li style="text-align: left;"><span>une nouvelle administration interface et fonctionnement permettant une gestion des droits sur les fonctions,</span></li>
+<li style="text-align: left;"><span>une stabilité de fonctionnement record ainsi que de nombreuses corrections et améliorations -&nbsp;</span>le détail des travaux réalisés pour cette nouvelle version dans le fichier&nbsp;<a title="Changelog REvolution 13" href="static.php?op=changelog-rev16.txt&amp;npds=0&amp;nl=1">changelog-rev16.txt</a></li>
+</ul>
+<p><span>Après&nbsp;l'installation Automatique de&nbsp;<a title="www.npds.org" href="http://www.npds.org" target="_blank">NPDS</a>&nbsp;REvolution 16 :</span></p>
+<ul>
+<li>Vérifier que vous avez bien sous la racine un fichier vide nommé&nbsp;<em>IZ-Xinstall.ok</em>. Vous pouvez supprimer ce fichier qui indique que l'opération d'installation s'est bien déroulée.</li>
+<li>Utilisateur par défaut : Identifiant : user / mot de passe : user</li>
+</ul>
+<p><span>Après&nbsp;l'installation Manuelle de&nbsp;<a title="www.npds.org" href="http://www.npds.org" target="_blank">NPDS</a>&nbsp;REvolution 16 :</span></p>
+<ul>
+<li>Administrateur par défaut : Identifiant :&nbsp;<span>R</span>oot / mot de passe :&nbsp;<span>P</span>assword. vous devez changer ce mot de passe rapidement.</li>
+<li>Utilisateur par défaut : Identifiant : user / mot de passe : user</li>
+</ul>
+<p></p> 
+      </div>
+   </div>
+</div><div class="card mb-3">
+   <div class="card-img-top n-sujetsize"> <a href="search.php?query=&amp;topic=2"><img class="img-fluid" src="assets/images/topics/modules.gif" alt="Rechercher dans : modules" title="Rechercher dans : modules<hr />Modules" data-bs-toggle="tooltip" data-bs-html="true" /></a> </div>
+   <div class="card-body">
+      <h3 class="card-title">  cvbncvbn </h3>
+      <div class="card-text article_texte"> <p>cvbncvn</p> </div>
+      <hr />
+      <p class="card-text"><small class="text-muted">
+    <div class="dropdown d-inline-block me-4 dropend">
+        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+            <img class=" btn-outline-primary img-fluid n-ava-40 me-0" src="assets/images/forum/avatar/014.gif" alt="user" />
+        </a>
+        <ul class="dropdown-menu bg-light">
+            <li><span class="dropdown-item-text text-center py-0 my-0"><img class="btn-outline-primary img-thumbnail img-fluid n-ava-64 me-2" src="assets/images/forum/avatar/014.gif" alt="user" loading="lazy" /></span></li>
+            <li><h6 class="dropdown-header text-center py-0 my-0">user</h6></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-center text-md-start" href="user.php?op=userinfo&amp;uname=user" target="_blank" title="Profil" ><i class="fa fa-lg fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Profil</span></a></li><li><a class="dropdown-item text-center text-md-start" href="powerpack.php?op=instant_message&amp;to_userid=user" title="Envoyer un message interne" ><i class="far fa-lg fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Message</span></a></li><li><a class="dropdown-item text-center text-md-start" href="http://www.userland.com" target="_blank" title="Visiter ce site web"><i class="fas fa-external-link-alt fa-lg align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Visiter ce site web</span></a></li><li><a class="dropdown-item text-center text-md-start" href="minisite.php?op=user" target="_blank" target="_blank" title="Visitez le minisite" ><i class="fa fa-lg fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Visitez le minisite</span></a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><div class="mx-auto text-center" style="max-width:170px;"></div>
+        </ul>
+    </div><a href="user.php?op=userinfo&amp;uname=user">user</a> Publi&eacute; le : Samedi 16 mars 2024 @ 05:18:18 </small></p>
+
+   </div>
+   <div class="card-footer pied_art">
+      <div class="row">
+         <div class="col-sm-6"> <a href="article.php?sid=10" >Lire la suite...</a> <small class="text-muted">5 caract&egrave;res de plus</small></div>
+         <div class="col-sm-6 text-end"><a href="print.php?sid=10" class="me-3" title="Page sp&eacute;ciale pour impression" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp; <a href="friend.php?op=FriendSend&amp;sid=10" class="me-3" title="Envoyer cet article &agrave; un ami" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a> <span class="badge rounded-pill bg-secondary">0</span> <a href="article.php?sid=10" class="me-3"><i class="far fa-comment fa-lg" title="Commentaires ?" data-bs-toggle="tooltip"></i></a></div>
+      </div>
+   </div>
+</div><div class="card mb-3">
+   <div class="card-img-top n-sujetsize"> <a href="search.php?query=&amp;topic=2"><img class="img-fluid" src="assets/images/topics/modules.gif" alt="Rechercher dans : modules" title="Rechercher dans : modules<hr />Modules" data-bs-toggle="tooltip" data-bs-html="true" /></a> </div>
+   <div class="card-body">
+      <h3 class="card-title">  qdQDS </h3>
+      <div class="card-text article_texte"> <p>qdsQDS</p> </div>
+      <hr />
+      <p class="card-text"><small class="text-muted"><a href="user.php?op=userinfo&amp;uname=Root">Root</a> Publi&eacute; le : Jeudi 07 mars 2024 @ 03:29:45 </small></p>
+
+   </div>
+   <div class="card-footer pied_art">
+      <div class="row">
+         <div class="col-sm-6"> <a href="article.php?sid=9" >Lire la suite...</a> <small class="text-muted">7 caract&egrave;res de plus</small></div>
+         <div class="col-sm-6 text-end"><a href="print.php?sid=9" class="me-3" title="Page sp&eacute;ciale pour impression" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp; <a href="friend.php?op=FriendSend&amp;sid=9" class="me-3" title="Envoyer cet article &agrave; un ami" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a> <span class="badge rounded-pill bg-secondary">0</span> <a href="article.php?sid=9" class="me-3"><i class="far fa-comment fa-lg" title="Commentaires ?" data-bs-toggle="tooltip"></i></a></div>
+      </div>
+   </div>
+</div><div class="card mb-3">
+   <div class="card-img-top n-sujetsize"> <a href="search.php?query=&amp;topic=2"><img class="img-fluid" src="assets/images/topics/modules.gif" alt="Rechercher dans : modules" title="Rechercher dans : modules<hr />Modules" data-bs-toggle="tooltip" data-bs-html="true" /></a> </div>
+   <div class="card-body">
+      <h3 class="card-title">  dqsQSQd </h3>
+      <div class="card-text article_texte"> <p>qdsqQ</p> </div>
+      <hr />
+      <p class="card-text"><small class="text-muted"><a href="user.php?op=userinfo&amp;uname=Root">Root</a> Publi&eacute; le : Jeudi 07 mars 2024 @ 03:29:32 </small></p>
+
+   </div>
+   <div class="card-footer pied_art">
+      <div class="row">
+         <div class="col-sm-6"> <a href="article.php?sid=8" >Lire la suite...</a> <small class="text-muted">8 caract&egrave;res de plus</small></div>
+         <div class="col-sm-6 text-end"><a href="print.php?sid=8" class="me-3" title="Page sp&eacute;ciale pour impression" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp; <a href="friend.php?op=FriendSend&amp;sid=8" class="me-3" title="Envoyer cet article &agrave; un ami" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a> <span class="badge rounded-pill bg-secondary">1</span> <a href="article.php?sid=8" class="me-3"><i class="far fa-comment fa-lg" title="Commentaire" data-bs-toggle="tooltip"></i></a></div>
+      </div>
+   </div>
+</div><div class="card mb-3">
+   <div class="card-img-top n-sujetsize"> <a href="search.php?query=&amp;topic=2"><img class="img-fluid" src="assets/images/topics/modules.gif" alt="Rechercher dans : modules" title="Rechercher dans : modules<hr />Modules" data-bs-toggle="tooltip" data-bs-html="true" /></a> </div>
+   <div class="card-body">
+      <h3 class="card-title">  qdqs </h3>
+      <div class="card-text article_texte"> <p>QDSQsqS</p> </div>
+      <hr />
+      <p class="card-text"><small class="text-muted"><a href="user.php?op=userinfo&amp;uname=Root">Root</a> Publi&eacute; le : Jeudi 07 mars 2024 @ 03:28:58 </small></p>
+
+   </div>
+   <div class="card-footer pied_art">
+      <div class="row">
+         <div class="col-sm-6"> <a href="article.php?sid=7" >Lire la suite...</a> <small class="text-muted">7 caract&egrave;res de plus</small></div>
+         <div class="col-sm-6 text-end"><a href="print.php?sid=7" class="me-3" title="Page sp&eacute;ciale pour impression" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp; <a href="friend.php?op=FriendSend&amp;sid=7" class="me-3" title="Envoyer cet article &agrave; un ami" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a> <span class="badge rounded-pill bg-secondary">0</span> <a href="article.php?sid=7" class="me-3"><i class="far fa-comment fa-lg" title="Commentaires ?" data-bs-toggle="tooltip"></i></a></div>
+      </div>
+   </div>
+</div><div class="card mb-3">
+   <div class="card-img-top n-sujetsize"> <a href="search.php?query=&amp;topic=2"><img class="img-fluid" src="assets/images/topics/modules.gif" alt="Rechercher dans : modules" title="Rechercher dans : modules<hr />Modules" data-bs-toggle="tooltip" data-bs-html="true" /></a> </div>
+   <div class="card-body">
+      <h3 class="card-title">  dfqsdqsf </h3>
+      <div class="card-text article_texte"> <p>qsdqQDS</p> </div>
+      <hr />
+      <p class="card-text"><small class="text-muted"><a href="user.php?op=userinfo&amp;uname=Root">Root</a> Publi&eacute; le : Jeudi 07 mars 2024 @ 03:28:42 </small></p>
+
+   </div>
+   <div class="card-footer pied_art">
+      <div class="row">
+         <div class="col-sm-6"> <a href="article.php?sid=6" >Lire la suite...</a> <small class="text-muted">6 caract&egrave;res de plus</small></div>
+         <div class="col-sm-6 text-end"><a href="print.php?sid=6" class="me-3" title="Page sp&eacute;ciale pour impression" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp; <a href="friend.php?op=FriendSend&amp;sid=6" class="me-3" title="Envoyer cet article &agrave; un ami" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a> <span class="badge rounded-pill bg-secondary">0</span> <a href="article.php?sid=6" class="me-3"><i class="far fa-comment fa-lg" title="Commentaires ?" data-bs-toggle="tooltip"></i></a></div>
+      </div>
+   </div>
+</div><div class="card mb-3">
+   <div class="card-img-top n-sujetsize"> <a href="search.php?query=&amp;topic=2"><img class="img-fluid" src="assets/images/topics/modules.gif" alt="Rechercher dans : modules" title="Rechercher dans : modules<hr />Modules" data-bs-toggle="tooltip" data-bs-html="true" /></a> </div>
+   <div class="card-body">
+      <h3 class="card-title">  qsdfqsdf </h3>
+      <div class="card-text article_texte"> <p>fQFqdsQDS</p> </div>
+      <hr />
+      <p class="card-text"><small class="text-muted"><a href="user.php?op=userinfo&amp;uname=Visiteur">Visiteur</a> Publi&eacute; le : Jeudi 07 mars 2024 @ 03:16:19 </small></p>
+
+   </div>
+   <div class="card-footer pied_art">
+      <div class="row">
+         <div class="col-sm-6"> <a href="article.php?sid=5" >Lire la suite...</a> <small class="text-muted">5 caract&egrave;res de plus</small></div>
+         <div class="col-sm-6 text-end"><a href="print.php?sid=5" class="me-3" title="Page sp&eacute;ciale pour impression" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp; <a href="friend.php?op=FriendSend&amp;sid=5" class="me-3" title="Envoyer cet article &agrave; un ami" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a> <span class="badge rounded-pill bg-secondary">0</span> <a href="article.php?sid=5" class="me-3"><i class="far fa-comment fa-lg" title="Commentaires ?" data-bs-toggle="tooltip"></i></a></div>
+      </div>
+   </div>
+</div><div class="card mb-3">
+   <div class="card-img-top n-sujetsize"> <a href="search.php?query=&amp;topic=3"><img class="img-fluid" src="assets/images/topics/styles.gif" alt="Rechercher dans : styles" title="Rechercher dans : styles<hr />Styles" data-bs-toggle="tooltip" data-bs-html="true" /></a> </div>
+   <div class="card-body">
+      <h3 class="card-title">  Les th&egrave;mes de <a href="http://www.npds.org" target="_blank" title="www.npds.org">NPDS</a> </h3>
+      <div class="card-text article_texte"> <p style="text-align: left;"><a href="http://www.npds.org" target="_blank" title="www.npds.org">NPDS</a> 16.8 dispose de 9 th&egrave;mes graphiques dont 4 skinable (26 skins disponibles *)&nbsp;ce qui donne donc 109 visualisations diff&eacute;rentes du portail (et bien plus encore en utilisant les possibilit&eacute;s de configuration du fichier pages.php) !</p><br /><p style="text-align: left;">* Vous pouvez visualiser ces diff&eacute;rents skins ici &nbsp;<a href="/themes/_skins/default"><span class="fa fa-paint-brush fa-2x">&nbsp;</span></a></p><br /><p>Vous pouvez aussi visiter <a title="Tous les THEMES pour NPDS" href="http://styles.npds.org/" target="_blank" rel="noopener">http://styles.npds.org</a>, bien que non &agrave; jour ce site avec plus de 100 th&egrave;mes disponibles pour les versions inf&eacute;rieures &agrave; 16 vous permettra certainement de trouver des id&eacute;es, conseils et tutoriels encore utiles pour cr&eacute;er votre propre th&egrave;me.</p> </div>
+      <hr />
+      <p class="card-text"><small class="text-muted">
+    <div class="dropdown d-inline-block me-4 dropend">
+        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+            <img class=" btn-outline-primary img-fluid n-ava-40 me-0" src="assets/images/forum/avatar/014.gif" alt="user" />
+        </a>
+        <ul class="dropdown-menu bg-light">
+            <li><span class="dropdown-item-text text-center py-0 my-0"><img class="btn-outline-primary img-thumbnail img-fluid n-ava-64 me-2" src="assets/images/forum/avatar/014.gif" alt="user" loading="lazy" /></span></li>
+            <li><h6 class="dropdown-header text-center py-0 my-0">user</h6></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-center text-md-start" href="user.php?op=userinfo&amp;uname=user" target="_blank" title="Profil" ><i class="fa fa-lg fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Profil</span></a></li><li><a class="dropdown-item text-center text-md-start" href="powerpack.php?op=instant_message&amp;to_userid=user" title="Envoyer un message interne" ><i class="far fa-lg fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Message</span></a></li><li><a class="dropdown-item text-center text-md-start" href="http://www.userland.com" target="_blank" title="Visiter ce site web"><i class="fas fa-external-link-alt fa-lg align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Visiter ce site web</span></a></li><li><a class="dropdown-item text-center text-md-start" href="minisite.php?op=user" target="_blank" target="_blank" title="Visitez le minisite" ><i class="fa fa-lg fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">Visitez le minisite</span></a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><div class="mx-auto text-center" style="max-width:170px;"></div>
+        </ul>
+    </div><a href="user.php?op=userinfo&amp;uname=user">user</a> Publi&eacute; le : Mardi 28 f&eacute;vrier 2023 @ 18:59:36 </small></p>
+
+   </div>
+   <div class="card-footer pied_art">
+      <div class="row">
+         <div class="col-sm-6"> <small class="text-muted"></small></div>
+         <div class="col-sm-6 text-end"><a href="print.php?sid=4" class="me-3" title="Page sp&eacute;ciale pour impression" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp; <a href="friend.php?op=FriendSend&amp;sid=4" class="me-3" title="Envoyer cet article &agrave; un ami" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a> <span class="badge rounded-pill bg-secondary">0</span> <a href="article.php?sid=4" class="me-3"><i class="far fa-comment fa-lg" title="Commentaires ?" data-bs-toggle="tooltip"></i></a></div>
+      </div>
+   </div>
+</div>

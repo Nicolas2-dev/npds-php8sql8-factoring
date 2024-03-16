@@ -4,7 +4,7 @@
 /* DUNE by NPDS - admin prototype                                       */
 /* ===========================                                          */
 /*                                                                      */
-/* Manage the EDITO (storage/static/edito.txt) of your web site                 */
+/* Manage the EDITO (storage/static/edito.txt) of your web site         */
 /*                                                                      */
 /* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
 /*                                                                      */
@@ -12,23 +12,37 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-if (!function_exists('admindroits'))
+
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\routing\url;
+use npds\system\support\editeur;
+
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'edito';
 $f_titre = adm_translate("Edito");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language;
 $hlpfile = "manuels/$language/edito.html";
 
 function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
 {
     global $hlpfile, $language, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     echo '<hr />';
+
     if ($contents == '') {
         echo '
         <form id="fad_edi_choix" action="admin.php?op=Edito_load" method="post">
@@ -43,17 +57,23 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
                 </div>
             </fieldset>
         </form>';
-        adminfoot('', '', '', '');
+
+        css::adminfoot('', '', '', '');
+
     } else {
         if ($edito_type == 'G')
             $edito_typeL = ' ' . adm_translate("Anonyme");
         elseif ($edito_type == 'M')
-            $edito_typeL = ' ' . adm_translate("Membre");;
+            $edito_typeL = ' ' . adm_translate("Membre");
+
         if (strpos($contents, '[/jour]') > 0) {
             $contentJ = substr($contents, strpos($contents, '[jour]') + 6, strpos($contents, '[/jour]') - 6);
             $contentN = substr($contents, strpos($contents, '[nuit]') + 6, strpos($contents, '[/nuit]') - 19 - strlen($contentJ));
         }
-        if (!$contentJ and !$contentN and !strpos($contents, '[/jour]')) $contentJ = $contents;
+
+        if (!$contentJ and !$contentN and !strpos($contents, '[/jour]')) 
+            $contentJ = $contents;
+
         echo '
         <form id="admineditomod" action="admin.php" method="post" name="adminForm">
             <fieldset>
@@ -62,19 +82,27 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
                 <label class="col-form-label col-sm-12" for="XeditoJ">' . adm_translate("Le jour") . '</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" name="XeditoJ" rows="20" >';
+
         echo htmlspecialchars($contentJ, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8');
+
         echo '</textarea>
                 </div>
             </div>';
-        echo aff_editeur('XeditoJ', '');
+
+        echo editeur::aff_editeur('XeditoJ', '');
+
         echo '
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="XeditoN">' . adm_translate("La nuit") . '</label>';
-        echo aff_editeur('XeditoN', '');
+
+        echo editeur::aff_editeur('XeditoN', '');
+
         echo '
                 <div class="col-sm-12">
                 <textarea class="tin form-control" name="XeditoN" rows="20">';
+
         echo htmlspecialchars($contentN, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8');
+
         echo '</textarea>
                 </div>
             </div>
@@ -114,9 +142,11 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
         </div>
         </fieldset>
         </form>';
+
         $arg1 = '
     var formulid = ["admineditomod"];
     ';
+
         $fv_parametres = '
         aff_jours: {
         validators: {
@@ -126,7 +156,8 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
         }
     },
     ';
-        adminfoot('fv', $fv_parametres, $arg1, '');
+
+        css::adminfoot('fv', $fv_parametres, $arg1, '');
     }
 }
 
@@ -135,6 +166,7 @@ function edito_mod_save($edito_type, $XeditoJ, $XeditoN, $aff_jours, $aff_jour, 
     if ($aff_jours <= 0) {
         $aff_jours = '999';
     }
+
     if ($edito_type == 'G') {
         $fp = fopen("storage/static/edito.txt", "w");
         fputs($fp, "[jour]" . str_replace('&quot;', '"', stripslashes($XeditoJ)) . '[/jour][nuit]' . str_replace('&quot;', '"', stripslashes($XeditoN)) . '[/nuit]');
@@ -152,48 +184,59 @@ function edito_mod_save($edito_type, $XeditoJ, $XeditoN, $aff_jours, $aff_jour, 
         fputs($fp, '&aff_date=' . time());
         fclose($fp);
     }
-    global $aid;
-    Ecr_Log('security', "editoSave () by AID : $aid", '');
 
-    redirect_url('admin.php?op=Edito');
+    global $aid;
+    logs::Ecr_Log('security', "editoSave () by AID : $aid", '');
+
+    url::redirect_url('admin.php?op=Edito');
 }
 
 switch ($op) {
     case 'Edito_save':
         edito_mod_save($edito_type, $XeditoJ, $XeditoN, $aff_jours, $aff_jour, $aff_nuit);
         break;
+
     case 'Edito_load':
         if ($edito_type == 'G') {
             if (file_exists('storage/static/edito.txt')) {
                 $fp = fopen('storage/static/edito.txt', 'r');
-                if (filesize('storage/static/edito.txt') > 0)
+                
+                if (filesize('storage/static/edito.txt') > 0) {
                     $Xcontents = fread($fp, filesize('storage/static/edito.txt'));
+                }
                 fclose($fp);
             }
         } elseif ($edito_type == 'M') {
             if (file_exists('storage/static/edito_membres.txt')) {
                 $fp = fopen('storage/static/edito_membres.txt', 'r');
-                if (filesize('storage/static/edito_membres.txt') > 0)
+                
+                if (filesize('storage/static/edito_membres.txt') > 0) {
                     $Xcontents = fread($fp, filesize('storage/static/edito_membres.txt'));
+                }
                 fclose($fp);
             }
         }
+
         $Xcontents = preg_replace('#<!--|/-->#', '', $Xcontents);
-        if ($Xcontents == '')
+
+        if ($Xcontents == '') {
             $Xcontents = 'Edito ...';
-        else {
+        } else {
             $ibid = strstr($Xcontents, 'aff_jours');
             parse_str($ibid, $Xibidout);
         }
-        if ($Xibidout['aff_jours'])
+
+        if ($Xibidout['aff_jours']) {
             $Xcontents = substr($Xcontents, 0, strpos($Xcontents, 'aff_jours'));
-        else {
+        } else {
             $Xibidout['aff_jours'] = 20;
             $Xibidout['aff_jour'] = 'checked="checked"';
             $Xibidout['aff_nuit'] = 'checked="checked"';
         }
+
         edito($edito_type, $Xcontents, $Xibidout['aff_jours'], $Xibidout['aff_jour'], $Xibidout['aff_nuit']);
         break;
+
     default:
         edito('', '', '', '', '');
         break;

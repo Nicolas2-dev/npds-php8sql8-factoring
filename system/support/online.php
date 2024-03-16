@@ -58,7 +58,7 @@ class online
         $result = sql_query("SELECT COUNT(username) AS TheCount, guest FROM " . $NPDS_Prefix . "session GROUP BY guest");
         
         while ($TheResult = sql_fetch_assoc($result)) {
-            if ($TheResult['guest'] == 0){
+            if ($TheResult['guest'] == 0) {
                 $member_online_num = $TheResult['TheCount'];
             } else {
                 $guest_online_num = $TheResult['TheCount'];
@@ -69,7 +69,7 @@ class online
         
         if ($SuperCache) {
             $file = fopen("storage/cache/site_load.log", "w");
-            fwrite($file, $who_online_num);
+            fwrite($file, (string) $who_online_num);
             fclose($file);
         }
 

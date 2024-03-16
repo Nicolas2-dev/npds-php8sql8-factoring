@@ -52,6 +52,29 @@ class cache
     }
 
     /**
+     * [cacheManagerStart description]
+     *
+     * @return  
+     */
+    public static function cacheManagerStart2(): bool
+    {
+        global $SuperCache, $cache_obj;
+
+        if ($SuperCache) {
+            $cache_obj = new cacheManager();
+            $cache_obj->startCachingPage();
+        } else {
+            $cache_obj = new SuperCacheEmpty();
+        }
+
+        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * [cacheManagerEnd description]
      *
      * @return  void

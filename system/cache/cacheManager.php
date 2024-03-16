@@ -22,8 +22,6 @@ declare(strict_types=1);
 
 namespace npds\system\cache;
 
-include_once('config/cache.config.php');
-include_once('config/cache.timings.php');
 
 class cacheManager
 {
@@ -38,16 +36,19 @@ class cacheManager
         global $CACHE_CONFIG;
 
         $this->genereting_output = 0;
+
         if (!empty($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
             $this->request_uri = $_SERVER['REQUEST_URI'];
         } else {
             $this->request_uri = getenv('REQUEST_URI');
         }
+
         if (!empty($_SERVER) && isset($_SERVER['QUERY_STRING'])) {
             $this->query_string = $_SERVER['QUERY_STRING'];
         } else {
             $this->query_string = getenv('QUERY_STRING');
         }
+
         if (!empty($_SERVER) && isset($_SERVER['PHP_SELF'])) {
             $this->php_self = basename($_SERVER['PHP_SELF']);
         } else {
@@ -61,13 +62,10 @@ class cacheManager
                 $this->site_overload = true;
             }
         }
+
         if (($CACHE_CONFIG['run_cleanup'] == 1) and (!$this->site_overload)) {
             $this->cacheCleanup();
         }
-    }
-    public function cacheManager()
-    {
-        self::__construct();
     }
 
     function startCachingPage()
@@ -200,7 +198,7 @@ class cacheManager
         // Cette fonction n'est plus adaptée au nombre de fichiers manipulé par SuperCache
         global $CACHE_CONFIG;
 
-        srand((float)microtime() * 1000000);
+        srand( (int) microtime() * 1000000);
         $num = rand(1, 100);
         if ($num <= $CACHE_CONFIG['cleanup_freq']) {
             $dh = opendir($CACHE_CONFIG['data_dir']);

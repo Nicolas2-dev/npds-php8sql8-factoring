@@ -1,0 +1,13 @@
+
+             <div class="col leftbloc">               <div class="card mb-3">
+                  <h5 class="card-header"> Chat Box </h5>
+                  <div class="card-body">
+                   <a href="user.php?op=userinfo&amp;uname=user">user.</a>&gt;&nbsp;<span>dfgsd </span><br />
+<span class="">::1.</span>&gt;&nbsp;<span>test </span><br />
+<span class="">::1.</span>&gt;&nbsp;<span>coucou </span><br />
+<span class="">::1.</span>&gt;&nbsp;<span>rtddrds </span><br />
+<span class="">::1.</span>&gt;&nbsp;<span>d </span><br />
+<hr /><div><a id="chat_tous" href="javascript:void(0);" onclick="window.open('chat.php?id=0&amp;auto=Xn8BOAM3ADkFJAJkBiFWOA==', 'chat0', 'menubar=no,location=no,directories=no,status=no,copyhistory=no,height=480,width=380,toolbar=no,scrollbars=yes,resizable=yes');" title="Cliquez ici pour entrer" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-comments fa-2x "></i></a></div> 
+                  </div>
+               </div>
+                </div>

@@ -13,9 +13,14 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\fmanager\File;
+use npds\system\fmanager\FileManagement;
+
+
 if (!function_exists("Mysql_Connexion"))
     include('boot/bootstrap.php');
-include_once("library/file.php");
+
+
 include('functions.php');
 
 function geninfo($did, $out_template)

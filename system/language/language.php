@@ -238,7 +238,7 @@ class language
      *
      * @return  string
      */
-    public static function preview_local_langue(string $local_user_language, string $ibid): string
+    public static function preview_local_langue(?string $local_user_language, string $ibid): string
     {
         global $language, $tab_langue;
 

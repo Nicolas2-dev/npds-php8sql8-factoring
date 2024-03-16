@@ -13,76 +13,100 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\news\news;
+use npds\system\auth\users;
+use npds\system\cache\cache;
+use npds\system\theme\theme;
+use npds\system\support\edito;
+
+
 // Modification pour IZ-Xinstall - EBH - JPB & PHR
 if (file_exists("storage/install/IZ-Xinstall.ok")) {
     if (file_exists("install.php") or is_dir("install")) {
         echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-        <head>
-            <title>NPDS IZ-Xinstall - Installation Configuration</title>
-        </head>
-        <body>
-            <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #000000"><br />
-                NPDS IZ-Xinstall - Installation &amp; Configuration
-            </div>
-            <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #ff0000"><br />
-                Vous devez supprimer le r&eacute;pertoire "install" ET le fichier "install.php" avant de poursuivre !<br />
-                You must remove the directory "install" as well as the file "install.php" before continuing!
-            </div>
-        </body>
-    </html>';
+        <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+                <title>NPDS IZ-Xinstall - Installation Configuration</title>
+            </head>
+            <body>
+                <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #000000"><br />
+                    NPDS IZ-Xinstall - Installation &amp; Configuration
+                </div>
+                <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #ff0000"><br />
+                    Vous devez supprimer le r&eacute;pertoire "install" ET le fichier "install.php" avant de poursuivre !<br />
+                    You must remove the directory "install" as well as the file "install.php" before continuing!
+                </div>
+            </body>
+        </html>';
         die();
     }
 } else {
-    if (file_exists("install.php") and is_dir("install"))
+    if (file_exists("install.php") and is_dir("install")) {
         header("location: install.php");
+    }
 }
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
+}
 
 // Redirect for default Start Page of the portal - look at Admin Preferences for choice
 function select_start_page($op)
 {
     global $Start_Page, $index;
-    if (!AutoReg()) {
+
+    if (!users::AutoReg()) {
         global $user;
         unset($user);
     }
-    if (($Start_Page == '') or ($op == "index.php") or ($op == "edito") or ($op == "edito-nonews")) {
+
+    if (($Start_Page == '') 
+    or ($op == "index.php") 
+    or ($op == "edito") 
+    or ($op == "edito-nonews")) {
         $index = 1;
         theindex($op, '', '');
         die('');
-    } else
+    } else {
         Header("Location: $Start_Page");
+    }
 }
-
-
 
 function theindex($op, $catid, $marqeur)
 {
     include("themes/default/header.php");
 
-    // start caching page
-    global $SuperCache;
-    if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->genereting_output == -1) or (!$SuperCache)) {
-        // Appel de la publication de News et la purge automatique
-        automatednews();
+    // start Caching page
+    if (cache::cacheManagerStart2()) {
 
-        global $theme;
-        if (($op == 'newcategory') or ($op == 'newtopic') or ($op == 'newindex') or ($op == 'edito-newindex')) {
-            aff_news($op, $catid, $marqeur);
+        // Appel de la publication de News et la purge automatique
+        news::automatednews();
+
+        if (($op == 'newcategory') 
+        or ($op == 'newtopic') 
+        or ($op == 'newindex') 
+        or ($op == 'edito-newindex')) {
+            news::aff_news($op, $catid, $marqeur);
         } else {
-            if (file_exists("themes/$theme/central.php"))
+            $theme = theme::getTheme();
+
+            if (file_exists("themes/$theme/central.php")) {
                 include("themes/$theme/central.php");
-            else {
-                if (($op == 'edito') or ($op == 'edito-nonews')) aff_edito();
-                if ($op != 'edito-nonews') aff_news($op, $catid, $marqeur);
+            } else {
+                if (($op == 'edito') or ($op == 'edito-nonews')) {
+                    edito::aff_edito();
+                }
+
+                if ($op != 'edito-nonews') {
+                    news::aff_news($op, $catid, $marqeur);
+                }
             }
         }
     }
+    
     // end Caching page
-    cacheManagerEnd();
+    cache::cacheManagerEnd();
+
     include("themes/default/footer.php");
 }
 
@@ -92,14 +116,17 @@ settype($marqeur, 'integer');
 settype($topic, 'integer');
 
 switch ($op) {
+
     case 'newindex':
     case 'edito-newindex':
     case 'newcategory':
         theindex($op, $catid, $marqeur);
         break;
+
     case 'newtopic':
         theindex($op, $topic, $marqeur);
         break;
+
     default:
         select_start_page($op, '');
         break;

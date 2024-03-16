@@ -265,7 +265,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
         if ($type == 'archive') {
             $furl .= '&amp;archive=1';
         }
-        formatTimestamp($tab_sid[$i]['time']);
+        $datetime = formatTimestamp($tab_sid[$i]['time']);
         echo '
                 <tr>
                 <td><span>[' . ($i + 1) . ']</span>&nbsp;' . translate("Contribution de") . ' <a href="user.php?op=userinfo&amp;uname=' . $tab_sid[$i]['informant'] . '">' . $tab_sid[$i]['informant'] . '</a> :<br /><strong><a href="' . $furl . '">' . aff_langue($tab_sid[$i]['title']) . '</a></strong><br /><span>' . translate("Posté par ") . '<a href="' . $tab_sid[$i]['url'] . '" >' . $tab_sid[$i]['aid'] . '</a></span> ' . translate("le") . ' ' . $datetime . '</td>

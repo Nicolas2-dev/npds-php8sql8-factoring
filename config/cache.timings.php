@@ -1,5 +1,4 @@
 <?php
-
 /************************************************************************/
 /* DUNE by NPDS / SUPER-CACHE engine                                    */
 /*                                                                      */
@@ -16,7 +15,7 @@
 #$CACHE_QUERYS['section.php'] = "^offset=(10|20|30)&cat=[0-9]{1,2}"\;
 #$CACHE_QUERYS['news.php']    = "^idn=[0-9]{1,2}"\;
 
-$SuperCache = false;
+$SuperCache = true;
 
 $CACHE_TIMINGS['index.php'] = 300;
 $CACHE_QUERYS['index.php'] = "^";
@@ -41,3 +40,5 @@ $CACHE_QUERYS['memberslist.php'] = "^";
 
 $CACHE_TIMINGS['modules.php'] = 3600;
 $CACHE_QUERYS['modules.php'] = "^";
+
+?>
