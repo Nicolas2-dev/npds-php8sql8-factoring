@@ -1,0 +1,69 @@
+<?php
+
+declare(strict_types=1);
+
+namespace npds\system\feed;
+
+
+/**
+ * An FeedHtmlField describes and generates
+ * a feed, item or image html field (probably a description). Output is
+ * generated based on $truncSize, $syndicateHtml properties.
+ * @author Pascal Van Hecke <library/feed/feedcreator.php@vanhecke.info>
+ * @version 1.6
+ */
+class FeedHtmlField
+{
+    /**
+        * Mandatory attributes of a FeedHtmlField.
+        */
+    var $rawFieldContent;
+
+    /**
+        * Optional attributes of a FeedHtmlField.
+        *
+        */
+    var $truncSize, $syndicateHtml;
+
+    /**
+        * Creates a new instance of FeedHtmlField.
+        * @param  $string: if given, sets the rawFieldContent property
+        */
+
+    public function __construct($parFieldContent)
+    {
+        if ($parFieldContent) {
+            $this->rawFieldContent = $parFieldContent;
+        }
+    }
+
+    public function FeedHtmlField($parFieldContent)
+    {
+        self::__construct($parFieldContent);
+    }
+
+    /**
+        * Creates the right output, depending on $truncSize, $syndicateHtml properties.
+        * @return string the formatted field
+        */
+    function output()
+    {
+        // when field available and syndicated in html we assume
+        // - valid html in $rawFieldContent and we enclose in CDATA tags
+        // - no truncation (truncating risks producing invalid html)
+        if (!$this->rawFieldContent) {
+            $result = "";
+        } elseif ($this->syndicateHtml) {
+            $result = "<![CDATA[" . $this->rawFieldContent . "]]>";
+        } else {
+            if ($this->truncSize and is_int($this->truncSize)) {
+                $fedcreator = new FeedCreator();
+                $result = $fedcreator->iTrunc(htmlspecialchars($this->rawFieldContent, ENT_COMPAT | ENT_HTML401, 'utf-8'), $this->truncSize);
+            } else {
+                $result = htmlspecialchars($this->rawFieldContent, ENT_COMPAT | ENT_HTML401, 'utf-8');
+            }
+        }
+
+        return $result;
+    }
+}

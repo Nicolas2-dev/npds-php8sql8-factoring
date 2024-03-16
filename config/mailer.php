@@ -28,4 +28,3 @@ $smtp_secure = 0;
 $smtp_crypt = "tls";
 # DKIM 1 pour celui du dns 2 pour une génération automatique
 $dkim_auto = 1;
-?>

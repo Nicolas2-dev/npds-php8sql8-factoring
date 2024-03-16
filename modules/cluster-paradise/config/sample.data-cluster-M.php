@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -50,34 +51,33 @@
 /* -------------------------------------------------------------------------------------------------------------*/
 
 // Maitre (vous) 
-$part[0]=array(
-  "WWW"=> "www.npds.org",
-  "KEY"=> "la_clef_de_npds.org",
+$part[0] = array(
+    "WWW" => "www.npds.org",
+    "KEY" => "la_clef_de_npds.org",
 );
 
 // Esclave N°1
-$part[1]=array(
-  "WWW"=> "www.esclave-un.net",
-  "SUBSCRIBE"=> "NEWS",
-  "OP"=> "EXPORT",
-  "FROMTOPICID"=> "5",
-  "TOTOPIC"=> "GNU / GPL",
-  "FROMCATID"=> "",
-  "TOCATEG"=> "",
-  "AUTHOR"=> "NPDS-Cluster",
-  "MEMBER"=> "NPDS"
+$part[1] = array(
+    "WWW" => "www.esclave-un.net",
+    "SUBSCRIBE" => "NEWS",
+    "OP" => "EXPORT",
+    "FROMTOPICID" => "5",
+    "TOTOPIC" => "GNU / GPL",
+    "FROMCATID" => "",
+    "TOCATEG" => "",
+    "AUTHOR" => "NPDS-Cluster",
+    "MEMBER" => "NPDS"
 );
 
 // Esclave N°2
-$part[2]=array(
-  "WWW"=> "www.esclave-deux.net",
-  "SUBSCRIBE"=> "NEWS",
-  "OP"=> "EXPORT",
-  "FROMTOPICID"=> "",
-  "TOTOPIC"=> "",
-  "FROMCATID"=> "",
-  "TOCATEG"=> "",
-  "AUTHOR"=> "NPDS-Cluster",
-  "MEMBER"=> "NPDS"
+$part[2] = array(
+    "WWW" => "www.esclave-deux.net",
+    "SUBSCRIBE" => "NEWS",
+    "OP" => "EXPORT",
+    "FROMTOPICID" => "",
+    "TOTOPIC" => "",
+    "FROMCATID" => "",
+    "TOCATEG" => "",
+    "AUTHOR" => "NPDS-Cluster",
+    "MEMBER" => "NPDS"
 );
-?>

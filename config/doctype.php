@@ -1,4 +1,4 @@
 <?php
+
 if (!defined("doctype"))
-   define ('doctype', "HTML 5.1");
-?>
+    define('doctype', "HTML 5.1");

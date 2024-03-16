@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* Theme for NPDS / Net Portal Dynamic System                           */
 /*======================================================================*/
@@ -16,4 +17,3 @@ $long_chain = '34'; // Nombre de caractères affichés avant troncature pour cer
 // ne pas supprimer cette ligne / Don't remove this line
 require_once('themes/themes-dynamic/theme.php');
 // ne pas supprimer cette ligne / Don't remove this line
-?>

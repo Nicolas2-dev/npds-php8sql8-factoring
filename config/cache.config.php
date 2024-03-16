@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS / SUPER-CACHE engine                                    */
 /*                                                                      */
@@ -44,5 +45,3 @@ $CACHE_CONFIG['clean_limit'] = 300;
 // Same standard cache (not the functions for members) for anonymous and members
 // 0 no - 1 Yes
 $CACHE_CONFIG['non_differentiate'] = 0;
-
-?>

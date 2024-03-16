@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
@@ -30,7 +31,7 @@ $path_adm_module = '';
 $affich = '';
 
 #autodoc $icon: icon pour l'admin : c'est un nom de fichier(sans extension) !! #required SI admin avec interface
-$icon='';
+$icon = '';
 
 #autodoc $list_fich : Modifications de fichiers: Dans le premier tableau, tapez le nom du fichier
 #autodoc et dans le deuxème, A LA MEME POSITION D'INDEX QUE LE PREMIER, tapez le code à insérer dans le fichier.
@@ -44,17 +45,19 @@ $list_fich = array(array(''), array(''));
 #autodoc Syntaxe création de table : 'CREATE TABLE "' ou 'CREATE TABLE IF NOT EXISTS "' <br /> tout les noms de table(s) utilisés doivent être concatené à gauche avec la variable $NPDS_Prefix
 
 global $NPDS_Prefix;
-$sql = array("CREATE TABLE IF NOT EXISTS ".$NPDS_Prefix."blocnotes (
+$sql = array(
+    "CREATE TABLE IF NOT EXISTS " . $NPDS_Prefix . "blocnotes (
 bnid text COLLATE utf8mb4_unicode_ci NOT NULL,
 texte text COLLATE utf8mb4_unicode_ci,
 PRIMARY KEY  (bnid(32))) 
 ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
-"INSERT INTO ".$NPDS_Prefix."metalang VALUES ('!blocnote!', 'function MM_blocnote(\$arg) {\r\n      global \$REQUEST_URI;\r\n      if (!stristr(\$REQUEST_URI,\"admin.php\")) {\r\n         return(@oneblock(\$arg,\"RB\"));\r\n      } else {\r\n         return(\"\");\r\n      }\r\n}',
+    "INSERT INTO " . $NPDS_Prefix . "metalang VALUES ('!blocnote!', 'function MM_blocnote(\$arg) {\r\n      global \$REQUEST_URI;\r\n      if (!stristr(\$REQUEST_URI,\"admin.php\")) {\r\n         return(@oneblock(\$arg,\"RB\"));\r\n      } else {\r\n         return(\"\");\r\n      }\r\n}',
 'meta',
 '-',
 NULL,
 '[fr]Fabrique un blocnote contextuel en lieu et place du meta-mot / syntaxe : !blocnote!ID - ID = Id du bloc de droite dans le gestionnaire de bloc de NPDS[/fr]',
-'0') ON DUPLICATE KEY UPDATE type_meta='meta'");
+'0') ON DUPLICATE KEY UPDATE type_meta='meta'"
+);
 
 #autodoc $blocs = array(array(""), array(""), array(""), array(""), array(""), array(""), array(""), array(""), array(""))
 #autodoc                titre      contenu    membre     groupe     index      rétention  actif      aide       description
@@ -71,4 +74,3 @@ $txtfin = "Pensez &agrave; consulter le fichier modules/bloc-notes/install/insta
 #autodoc $end_link: Lien sur lequel sera redirigé l'utilisateur à la fin de l'install (si laissé vide, redirigé sur index.php)
 #autodoc N'oubliez pas les '\' si vous utilisez des guillemets !!!
 $end_link = '';
-?>

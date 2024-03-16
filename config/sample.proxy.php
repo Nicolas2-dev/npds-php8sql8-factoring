@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -24,10 +25,9 @@
 /************************************************************************/
 
 // Def du proxy pour le grand titre du site de news dont l'ID est 998
-$proxy_url[998]="proxy-npds.org";
-$proxy_port[998]=80;
+$proxy_url[998] = "proxy-npds.org";
+$proxy_port[998] = 80;
 
 // Def du proxy pour le grand titre du site de news dont l'ID est 999
-$proxy_url[999]="proxy-npds.org";
-$proxy_port[999]=8080;
-?>
+$proxy_url[999] = "proxy-npds.org";
+$proxy_port[999] = 8080;

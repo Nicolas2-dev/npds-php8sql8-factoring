@@ -27,6 +27,5 @@ include_once('config/cache.timings.php');
 
 class SuperCacheEmpty
 {
-   var $genereting_output;
+    var $genereting_output;
 }
-

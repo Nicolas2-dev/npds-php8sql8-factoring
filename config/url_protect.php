@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -14,7 +15,7 @@
 // Dont modified these lines if you dont know exactly what you have to do
 /************************************************************************/
 
-$bad_uri_content=array(
+$bad_uri_content = array(
    // To Filter "php WebWorm" and like Santy and other
    "perl",
    "chr(",
@@ -56,6 +57,5 @@ $bad_uri_content=array(
    "history.pushstate("
 );
 $bad_uri_key = array_keys($_SERVER);
-$bad_uri_name = array('GLOBALS','_SERVER','_REQUEST','_GET','_POST','_FILES','_ENV','_COOKIE','_SESSION');
-$badname_in_uri = array_intersect(array_keys($_GET),$bad_uri_name);
-?>
+$bad_uri_name = array('GLOBALS', '_SERVER', '_REQUEST', '_GET', '_POST', '_FILES', '_ENV', '_COOKIE', '_SESSION');
+$badname_in_uri = array_intersect(array_keys($_GET), $bad_uri_name);

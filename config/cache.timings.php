@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS / SUPER-CACHE engine                                    */
 /*                                                                      */
@@ -40,5 +41,3 @@ $CACHE_QUERYS['memberslist.php'] = "^";
 
 $CACHE_TIMINGS['modules.php'] = 3600;
 $CACHE_QUERYS['modules.php'] = "^";
-
-?>

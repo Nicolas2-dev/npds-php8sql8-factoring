@@ -155,7 +155,8 @@ class cache
         $dh = opendir($CACHE_CONFIG['data_dir']);
         
         while (false !== ($filename = readdir($dh))) {
-            if ($filename === '.' or $filename === '..' or $filename === 'ultramode.txt' or $filename === 'net2zone.txt' or $filename === 'sql' or $filename === 'index.html') {
+            //if ($filename === '.' or $filename === '..' or $filename === 'ultramode.txt' or $filename === 'net2zone.txt' or $filename === 'sql' or $filename === 'index.html') {
+            if ($filename === '.' or $filename === '..' or $filename === 'sql' or $filename === 'index.html') {
                 continue;
             }
             

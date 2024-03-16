@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -17,10 +18,9 @@
 /************************************************************************/
 
 // Le système de bannière
-   global $banners;
-   if (($banners) and function_exists("viewbanner")) {
-      echo '<p class="text-center">';
-         viewbanner();
-      echo '</p>';
-   }
-?>
+global $banners;
+if (($banners) and function_exists("viewbanner")) {
+    echo '<p class="text-center">';
+    viewbanner();
+    echo '</p>';
+}

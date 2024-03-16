@@ -25,8 +25,8 @@ class news
     {
         global $NPDS_Prefix, $nuke_url, $storyhome;
 
-        $ultra = "storage/cache/ultramode.txt";
-        $netTOzone = "storage/cache/net2zone.txt";
+        $ultra = "storage/news/ultramode.txt";
+        $netTOzone = "storage/news/net2zone.txt";
 
         $file = fopen("$ultra", "w");
         $file2 = fopen("$netTOzone", "w");

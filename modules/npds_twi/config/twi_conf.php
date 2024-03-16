@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -27,4 +28,3 @@ $tbox_height = ""; // hauteur de la tweet box
 $class_sty_1 = ""; // titre de la page
 $class_sty_2 = ""; // sous-titre de la page
 $npds_twi_versus = "v.1.0";
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS - admin prototype                                       */
 /* ===========================                                          */
@@ -13,12 +14,11 @@
 /************************************************************************/
 
 if (!function_exists('admindroits'))
-   include('die.php');
+    include('die.php');
 
 include("themes/default/header.php");
-   if ($ModPath!='') {
-      if (file_exists("modules/$ModPath/$ModStart.php"))
-         include("modules/$ModPath/$ModStart.php");
-   } else
-      redirect_url(urldecode($ModStart));
-?>
+if ($ModPath != '') {
+    if (file_exists("modules/$ModPath/$ModStart.php"))
+        include("modules/$ModPath/$ModStart.php");
+} else
+    redirect_url(urldecode($ModStart));

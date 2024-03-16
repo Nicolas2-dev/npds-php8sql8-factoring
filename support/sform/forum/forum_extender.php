@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* SFORM Extender for NPDS V Forum .                                    */
 /* ===========================                                          */
@@ -14,10 +15,10 @@
 
 use npds\system\sform\form_handler;
 
-$sform_path='support/sform/';
+$sform_path = 'support/sform/';
 
 global $m;
-$m=new form_handler();
+$m = new form_handler();
 //********************
 $m->add_form_title("Bugs_Report");
 $m->add_form_method("post");
@@ -27,11 +28,10 @@ $m->add_submit_value("submitS");
 $m->add_url("newtopic.php");
 
 /************************************************/
-include($sform_path."forum/$formulaire");
+include($sform_path . "forum/$formulaire");
 /************************************************/
 
 if (!$submitS)
-   echo $m->print_form('');
+    echo $m->print_form('');
 else
-   $message=$m->aff_response('','not_echo','');
-?>
+    $message = $m->aff_response('', 'not_echo', '');

@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -13,33 +14,33 @@
 /************************************************************************/
 
 if (!function_exists("Mysql_Connexion"))
-include ('boot/bootstrap.php');
+    include('boot/bootstrap.php');
 
-function filtre_module($strtmp) {
-   if (strstr($strtmp,'..') ||
-      strstr($strtmp,'..') || 
-      stristr($strtmp,'script') || 
-      stristr($strtmp,'cookie') || 
-      stristr($strtmp,'iframe') || 
-      stristr($strtmp,'applet') || 
-      stristr($strtmp,'object'))
-      stristr($strtmp, 'meta') || 
-      Header("Location: die.php?op=module");
-   else
-      return $strtmp!='' ? true : false;
+function filtre_module($strtmp)
+{
+    if (
+        strstr($strtmp, '..') ||
+        strstr($strtmp, '..') ||
+        stristr($strtmp, 'script') ||
+        stristr($strtmp, 'cookie') ||
+        stristr($strtmp, 'iframe') ||
+        stristr($strtmp, 'applet') ||
+        stristr($strtmp, 'object')
+    )
+        stristr($strtmp, 'meta') ||
+            Header("Location: die.php?op=module");
+    else
+        return $strtmp != '' ? true : false;
 }
 
 if (filtre_module($ModPath) and filtre_module($ModStart)) {
-   if (file_exists("modules/$ModPath/http/$ModStart.php")) {
-      include("modules/$ModPath/http/$ModStart.php");
-      die();
-   } elseif (file_exists("modules/$ModPath/$ModStart.php")) {
-      include("modules/$ModPath/$ModStart.php");
-      die();
-   } else
-      Header("Location: die.php?op=module-exist");
-} 
-else
-   Header("Location: die.php?op=module");
-
-?>
+    if (file_exists("modules/$ModPath/http/$ModStart.php")) {
+        include("modules/$ModPath/http/$ModStart.php");
+        die();
+    } elseif (file_exists("modules/$ModPath/$ModStart.php")) {
+        include("modules/$ModPath/$ModStart.php");
+        die();
+    } else
+        Header("Location: die.php?op=module-exist");
+} else
+    Header("Location: die.php?op=module");

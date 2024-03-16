@@ -19,14 +19,14 @@ function importExternalJavacript()
     $theme = getTheme();
 
     $body_onloadH = '
-    <script type="text/javascript">
-        //<![CDATA[
-            function init() {';
+        <script type="text/javascript">
+            //<![CDATA[
+                function init() {';
 
     $body_onloadF = '
-            }
-        //]]>
-    </script>';
+                }
+            //]]>
+        </script>';
 
     if (file_exists("themes/default/view/include/body_onload.inc")) {
         echo $body_onloadH;
@@ -220,7 +220,7 @@ function themesidebox($title, $content)
     echo $htvar; // modif ji fantôme block
     echo meta_lang(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent));
     echo '
-            </div>'; // modif ji fantôme block
+                </div>'; // modif ji fantôme block
 }
 
 function themedito($content)
@@ -310,7 +310,7 @@ function userpopover($who, $dim, $avpop)
         if (stristr($temp_user['user_avatar'], 'users_private'))
             $imgtmp = $temp_user['user_avatar'];
         else
-      if ($ibid = theme_image('forum/avatar/' . $temp_user['user_avatar'])) {
+        if ($ibid = theme_image('forum/avatar/' . $temp_user['user_avatar'])) {
             $imgtmp = $ibid;
         } else {
             $imgtmp = 'assets/images/forum/avatar/' . $temp_user['user_avatar'];
@@ -321,19 +321,19 @@ function userpopover($who, $dim, $avpop)
             //         '<a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="'.$temp_user['uname'].'" data-bs-content=\'<div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'></i><img data-bs-html="true" class="btn-outline-primary img-thumbnail img-fluid n-ava-'.$dim.' me-2" src="'.$imgtmp.'" alt="'.$temp_user['uname'].'" loading="lazy" /></a>' ;
 
             '
-   <div class="dropdown d-inline-block me-4 dropend">
-      <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-         <img class=" btn-outline-primary img-fluid n-ava-' . $dim . ' me-0" src="' . $imgtmp . '" alt="' . $temp_user['uname'] . '" />
-      </a>
-      <ul class="dropdown-menu bg-light">
-         <li><span class="dropdown-item-text text-center py-0 my-0">' . userpopover($who, 64, 1) . '</span></li>
-         <li><h6 class="dropdown-header text-center py-0 my-0">' . $who . '</h6></li>
-         <li><hr class="dropdown-divider"></li>
-         ' . $useroutils . '
-         <li><hr class="dropdown-divider"></li>
-         <li><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div>
-      </ul>
-   </div>';
+    <div class="dropdown d-inline-block me-4 dropend">
+        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+            <img class=" btn-outline-primary img-fluid n-ava-' . $dim . ' me-0" src="' . $imgtmp . '" alt="' . $temp_user['uname'] . '" />
+        </a>
+        <ul class="dropdown-menu bg-light">
+            <li><span class="dropdown-item-text text-center py-0 my-0">' . userpopover($who, 64, 1) . '</span></li>
+            <li><h6 class="dropdown-header text-center py-0 my-0">' . $who . '</h6></li>
+            <li><hr class="dropdown-divider"></li>
+            ' . $useroutils . '
+            <li><hr class="dropdown-divider"></li>
+            <li><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div>
+        </ul>
+    </div>';
 
         return $userpop;
     }

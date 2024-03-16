@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -17,93 +18,96 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-function entete() {
-   global $langue, $cms_logo, $cms_name, $stage, $Version_Num, $Version_Id, $Version_Sub;
-   echo '<html>
-   <head>
-      <meta charset="utf-8">
-      <title>NPDS IZ-Xinstall - Installation &amp; Configuration</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta http-equiv="content-script-type" content="text/javascript" />
-      <meta http-equiv="content-style-type" content="text/css" />
-      <meta http-equiv="expires" content="0" />
-      <meta http-equiv="pragma" content="no-cache" />
-      <meta http-equiv="identifier-url" content="" />
-      <meta name="author" content="Developpeur, EBH, jpb, phr" />
-      <meta name="owner" content="npds.org" />
-      <meta name="reply-to" content="developpeur@npds.org" />
-      <meta name="language" content="fr" />
-      <meta http-equiv="content-language" content="fr, fr-be, fr-ca, fr-lu, fr-ch" />
-      <meta name="description" content="NPDS IZ-Xinstall" />
-      <meta name="keywords" content="NPDS, Installateur automatique" />
-      <meta name="rating" content="general" />
-      <meta name="distribution" content="global" />
-      <meta name="copyright" content="npds.org 2001-2016" />
-      <meta name="revisit-after" content="15 days" />
-      <meta name="resource-type" content="document" />
-      <meta name="robots" content="none" />
-      <meta name="generator" content="NPDS IZ-Xinstall" />
-      <link rel="stylesheet" href="assets/shared/font-awesome/css/all.min.css" />
-      <link rel="stylesheet" href="assets/shared/bootstrap/dist/css/bootstrap.min.css" />
-      <link rel="stylesheet" href="assets/shared/formvalidation/dist/css/formValidation.min.css">
-      <link rel="stylesheet" href="themes/npds-boost_sk/style/style.css">
-      <script type="text/javascript" src="assets/js/jquery.min.js"></script>
-      <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-   </head>
-   <body>
-      <div class="container-fluid">
-         <div class="my-2">
+function entete()
+{
+    global $langue, $cms_logo, $cms_name, $stage, $Version_Num, $Version_Id, $Version_Sub;
+    echo '<html>
+    <head>
+        <meta charset="utf-8">
+        <title>NPDS IZ-Xinstall - Installation &amp; Configuration</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="content-script-type" content="text/javascript" />
+        <meta http-equiv="content-style-type" content="text/css" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta http-equiv="identifier-url" content="" />
+        <meta name="author" content="Developpeur, EBH, jpb, phr" />
+        <meta name="owner" content="npds.org" />
+        <meta name="reply-to" content="developpeur@npds.org" />
+        <meta name="language" content="fr" />
+        <meta http-equiv="content-language" content="fr, fr-be, fr-ca, fr-lu, fr-ch" />
+        <meta name="description" content="NPDS IZ-Xinstall" />
+        <meta name="keywords" content="NPDS, Installateur automatique" />
+        <meta name="rating" content="general" />
+        <meta name="distribution" content="global" />
+        <meta name="copyright" content="npds.org 2001-2016" />
+        <meta name="revisit-after" content="15 days" />
+        <meta name="resource-type" content="document" />
+        <meta name="robots" content="none" />
+        <meta name="generator" content="NPDS IZ-Xinstall" />
+        <link rel="stylesheet" href="assets/shared/font-awesome/css/all.min.css" />
+        <link rel="stylesheet" href="assets/shared/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/shared/formvalidation/dist/css/formValidation.min.css">
+        <link rel="stylesheet" href="themes/npds-boost_sk/style/style.css">
+        <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="my-2">
+                <div class="row">
+                <div class="col-sm-2 d-none d-sm-inline-block"><img class="img-fluid" src="install/images/header.png" alt="NPDS logo" /></div>
+                <div id="logo_header" class="col-sm-10">
+                    <h1 class="display-4">NPDS<br /><small class="text-muted"><em>installation automatique</em></small></h1>
+                </div>
+                </div>
+                <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6 text-sm-end">' . $Version_Sub . ' ' . $Version_Num . '</div>
+                </div>
+            </div>
+            <hr class="lead" />';
+}
+function pied_depage()
+{
+    global $stage;
+    echo '
+            <div class="col text-center">
+                <hr class="lead" /><a href="http://www.npds.org" target="_blank">NPDS</a> IZ-Xinstall version : 1.2 <i class="fa fa-spinner fa-spin fa-lg fa-fw text-success"></i><span class="visually-hidden">On work...</span>
+            </div>
+        </div>
+    </body>
+    </html>';
+    exit();
+}
+function page_message($chaine)
+{
+    entete();
+    echo '
+    <h2>' . $chaine . '</h2>';
+    pied_depage();
+}
+function menu()
+{
+    global $menu, $langue, $colorst1, $colorst2, $colorst3, $colorst4, $colorst5, $colorst6, $colorst7, $colorst8, $colorst9, $colorst10, $phpver;
+    $menu = '';
+    $menu .= '
             <div class="row">
-               <div class="col-sm-2 d-none d-sm-inline-block"><img class="img-fluid" src="install/images/header.png" alt="NPDS logo" /></div>
-               <div id="logo_header" class="col-sm-10">
-                  <h1 class="display-4">NPDS<br /><small class="text-muted"><em>installation automatique</em></small></h1>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-sm-6"></div>
-               <div class="col-sm-6 text-sm-end">'.$Version_Sub.' '.$Version_Num.'</div>
-            </div>
-         </div>
-         <hr class="lead" />';
+                <div class="col-md-3">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item list-group-item' . $colorst1 . '">' . ins_translate('Langue') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst2 . '">' . ins_translate('Bienvenue') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst3 . '">' . ins_translate('Licence') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst4 . '">' . ins_translate('Vérification des fichiers') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst5 . '">' . ins_translate('Paramètres de connexion') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst6 . '">' . ins_translate('Autres paramètres') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst7 . '">' . ins_translate('Base de données') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst8 . '">' . ins_translate('Compte Admin') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst9 . '">' . ins_translate('Module UPload') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst10 . '">' . ins_translate('Fin') . '</li>
+                    <li class="list-group-item list-group-item-light"><code class="small">Version Php ' . $phpver . '</code></li>
+                </ul>
+                </div>
+                <div class="col-md-9">';
+    return $menu;
 }
-function pied_depage() {
-   global $stage;
-   echo '
-         <div class="col text-center">
-            <hr class="lead" /><a href="http://www.npds.org" target="_blank">NPDS</a> IZ-Xinstall version : 1.2 <i class="fa fa-spinner fa-spin fa-lg fa-fw text-success"></i><span class="visually-hidden">On work...</span>
-         </div>
-      </div>
-   </body>
-</html>';
-   exit();
-}
-function page_message($chaine) {
-   entete();
-   echo '
-   <h2>'.$chaine.'</h2>';
-   pied_depage();
-}
-function menu() {
-   global $menu, $langue, $colorst1, $colorst2, $colorst3, $colorst4, $colorst5, $colorst6, $colorst7, $colorst8, $colorst9, $colorst10,$phpver;
-   $menu='';
-   $menu.= '
-         <div class="row">
-            <div class="col-md-3">
-               <ul class="list-group mb-3">
-                  <li class="list-group-item list-group-item'.$colorst1.'">'.ins_translate('Langue').'</li>
-                  <li class="list-group-item list-group-item'.$colorst2.'">'.ins_translate('Bienvenue').'</li>
-                  <li class="list-group-item list-group-item'.$colorst3.'">'.ins_translate('Licence').'</li>
-                  <li class="list-group-item list-group-item'.$colorst4.'">'.ins_translate('Vérification des fichiers').'</li>
-                  <li class="list-group-item list-group-item'.$colorst5.'">'.ins_translate('Paramètres de connexion').'</li>
-                  <li class="list-group-item list-group-item'.$colorst6.'">'.ins_translate('Autres paramètres').'</li>
-                  <li class="list-group-item list-group-item'.$colorst7.'">'.ins_translate('Base de données').'</li>
-                  <li class="list-group-item list-group-item'.$colorst8.'">'.ins_translate('Compte Admin').'</li>
-                  <li class="list-group-item list-group-item'.$colorst9.'">'.ins_translate('Module UPload').'</li>
-                  <li class="list-group-item list-group-item'.$colorst10.'">'.ins_translate('Fin').'</li>
-                  <li class="list-group-item list-group-item-light"><code class="small">Version Php '.$phpver.'</code></li>
-               </ul>
-            </div>
-            <div class="col-md-9">';
-   return $menu;
-}
-?>

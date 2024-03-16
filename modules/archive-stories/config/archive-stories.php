@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -25,4 +26,3 @@ $arch = 0;
 $arch_titre = "<h2>Les Nouvelles</h2>";
 // Temps de rétention en secondes
 $retcache = 83000;
-?>

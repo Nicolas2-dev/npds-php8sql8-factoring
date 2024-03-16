@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -16,26 +17,26 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-if (!stristr($_SERVER['PHP_SELF'],'install.php')) die();
+if (!stristr($_SERVER['PHP_SELF'], 'install.php')) die();
 
-include ('config/config.php');
-   $pre_tab='';
-   if($NPDS_Prefix!='') 
-      $pre_tab = ins_translate(' Tables préfixées avec : ').'<code class="code">'.$NPDS_Prefix.' </code>.';
+include('config/config.php');
+$pre_tab = '';
+if ($NPDS_Prefix != '')
+    $pre_tab = ins_translate(' Tables préfixées avec : ') . '<code class="code">' . $NPDS_Prefix . ' </code>.';
 
-function etape_6() {
-   global $list_tab, $langue, $stage, $qi, $dbhost, $dbname, $dbuname, $dbpass, $NPDS_Prefix, $pre_tab;
-   $stage = 6;
-   echo '
-               <h3 class="mb-3">'.ins_translate('Base de données').'</h3>
-                  <p id="mess_bd">'.ins_translate('Nous allons maintenant procéder à la création des tables de la base de données ').' (&nbsp;<code class="code">'.$dbname.'</code>&nbsp;) '.ins_translate('sur le serveur d\'hébergement').' (&nbsp;<code class="code">'.$dbhost.'</code>&nbsp;). '.$pre_tab.'<br />'. ins_translate('Si votre base de données comporte déjà des tables, veuillez en faire une sauvegarde avant de poursuivre !').'<br /></p>
-                  <form name="database" method="post" action="install.php">
-                     <input type="hidden" name="langue" value="'.$langue.'" />
-                     <input type="hidden" name="stage" value="'.$stage.'" />
-                     <input type="hidden" name="op" value="write_database" />
-                     <input type="hidden" name="qi" value="'.$qi.'" />
-                     <button type="submit" class="btn btn-success">'.ins_translate('Créer').'</button>
-                  </form>
-               </div>';
+function etape_6()
+{
+    global $list_tab, $langue, $stage, $qi, $dbhost, $dbname, $dbuname, $dbpass, $NPDS_Prefix, $pre_tab;
+    $stage = 6;
+    echo '
+                <h3 class="mb-3">' . ins_translate('Base de données') . '</h3>
+                    <p id="mess_bd">' . ins_translate('Nous allons maintenant procéder à la création des tables de la base de données ') . ' (&nbsp;<code class="code">' . $dbname . '</code>&nbsp;) ' . ins_translate('sur le serveur d\'hébergement') . ' (&nbsp;<code class="code">' . $dbhost . '</code>&nbsp;). ' . $pre_tab . '<br />' . ins_translate('Si votre base de données comporte déjà des tables, veuillez en faire une sauvegarde avant de poursuivre !') . '<br /></p>
+                    <form name="database" method="post" action="install.php">
+                        <input type="hidden" name="langue" value="' . $langue . '" />
+                        <input type="hidden" name="stage" value="' . $stage . '" />
+                        <input type="hidden" name="op" value="write_database" />
+                        <input type="hidden" name="qi" value="' . $qi . '" />
+                        <button type="submit" class="btn btn-success">' . ins_translate('Créer') . '</button>
+                    </form>
+                </div>';
 }
-?>

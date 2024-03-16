@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* SFORM Extender for NPDS USER .                                       */
 /* ===========================                                          */
@@ -14,10 +15,10 @@
 
 use npds\system\sform\form_handler;
 
-$sform_path='support/sform/';
+$sform_path = 'support/sform/';
 
 global $m;
-$m=new form_handler();
+$m = new form_handler();
 //********************
 $m->add_form_title('Register');
 $m->add_form_method('post');
@@ -25,7 +26,6 @@ $m->add_form_check('false');
 $m->add_url('user.php');
 
 /************************************************/
-include($sform_path.'extend-user/aff_formulaire.php');
+include($sform_path . 'extend-user/aff_formulaire.php');
 /************************************************/
 echo $m->aff_response('');
-?>

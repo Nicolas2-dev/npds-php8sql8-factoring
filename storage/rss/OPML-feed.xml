@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generator="FeedCreator 2.0 for NPDS" -->
+<opml xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <head>
+        <title>npds</title>
+    </head>
+    <body>
+    <outline type="rss"  title="qdQDS" text="qdQDS" url="http://www.npds.local/article.php?sid=9"/>
+    <outline type="rss"  title="dqsQSQd" text="dqsQSQd" url="http://www.npds.local/article.php?sid=8"/>
+    <outline type="rss"  title="qdqs" text="qdqs" url="http://www.npds.local/article.php?sid=7"/>
+    </body>
+</opml>

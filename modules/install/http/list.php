@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -17,12 +18,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 $handle = opendir("install/languages");
-while($file = readdir($handle))
-{
-	if((!ereg("[.]",$file)))
-	{
-		$langlist .= "$file ";
-	}
+while ($file = readdir($handle)) {
+    if ((!ereg("[.]", $file))) {
+        $langlist .= "$file ";
+    }
 }
 closedir($handle);
-?>

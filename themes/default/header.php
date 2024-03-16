@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -15,130 +16,133 @@
 use npds\library\pages\pageref;
 
 if (!function_exists("Mysql_Connexion")) {
-   include ('boot/bootstrap.php');
-   die();
+    include('boot/bootstrap.php');
+    die();
 }
 
-function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords) {
-   global $slogan, $Titlesitename, $banners, $Default_Theme, $theme, $gzhandler, $language;
-   global $topic, $hlpfile, $user, $hr, $long_chain;
+function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords)
+{
+    global $slogan, $Titlesitename, $banners, $Default_Theme, $theme, $gzhandler, $language;
+    global $topic, $hlpfile, $user, $hr, $long_chain;
 
-   if ($gzhandler==1) ob_start("ob_gzhandler");
-   include("themes/$tmp_theme/theme.php");
+    if ($gzhandler == 1) ob_start("ob_gzhandler");
+    include("themes/$tmp_theme/theme.php");
 
-   // Meta
-   if (file_exists("storage/meta/meta.php")) {
-      $meta_op='';
-      include ("storage/meta/meta.php");
-   }
+    // Meta
+    if (file_exists("storage/meta/meta.php")) {
+        $meta_op = '';
+        include("storage/meta/meta.php");
+    }
 
-   // Favicon
-   if (file_exists("themes/$tmp_theme/assets/images/favicon.ico"))
-      $favico="themes/$tmp_theme/assets/images/favicon.ico";
-   else
-      $favico='assets/images/favicon.ico';
-   echo '
-<link rel="shortcut icon" href="'.$favico.'" type="image/x-icon" />';
+    // Favicon
+    if (file_exists("themes/$tmp_theme/assets/images/favicon.ico"))
+        $favico = "themes/$tmp_theme/assets/images/favicon.ico";
+    else
+        $favico = 'assets/images/favicon.ico';
+    echo '
+    <link rel="shortcut icon" href="' . $favico . '" type="image/x-icon" />';
 
-   // Syndication RSS & autres
-   global $sitename, $nuke_url;
+    // Syndication RSS & autres
+    global $sitename, $nuke_url;
 
-   // Canonical
-   $scheme = strtolower($_SERVER['REQUEST_SCHEME'] ?? 'http');
-   $host = $_SERVER['HTTP_HOST'];
-   $uri = $_SERVER['REQUEST_URI'];
-   echo '
-<link rel="canonical" href="'.($scheme.'://'.$host.$uri).'" />';
+    // Canonical
+    $scheme = strtolower($_SERVER['REQUEST_SCHEME'] ?? 'http');
+    $host = $_SERVER['HTTP_HOST'];
+    $uri = $_SERVER['REQUEST_URI'];
+    echo '
+    <link rel="canonical" href="' . ($scheme . '://' . $host . $uri) . '" />';
 
-   // humans.txt
-   if (file_exists("humans.txt"))
-      echo '
-<link type="text/plain" rel="author" href="'.$nuke_url.'/humans.txt" />';
+    // humans.txt
+    if (file_exists("humans.txt"))
+        echo '
+    <link type="text/plain" rel="author" href="' . $nuke_url . '/humans.txt" />';
 
-   echo '
-<link href="backend.php?op=RSS0.91" title="'.$sitename.' - RSS 0.91" rel="alternate" type="text/xml" />
-<link href="backend.php?op=RSS1.0" title="'.$sitename.' - RSS 1.0" rel="alternate" type="text/xml" />
-<link href="backend.php?op=RSS2.0" title="'.$sitename.' - RSS 2.0" rel="alternate" type="text/xml" />
-<link href="backend.php?op=ATOM" title="'.$sitename.' - ATOM" rel="alternate" type="application/atom+xml" />
-';
+    echo '
+    <link href="backend.php?op=RSS0.91" title="' . $sitename . ' - RSS 0.91" rel="alternate" type="text/xml" />
+    <link href="backend.php?op=RSS1.0" title="' . $sitename . ' - RSS 1.0" rel="alternate" type="text/xml" />
+    <link href="backend.php?op=RSS2.0" title="' . $sitename . ' - RSS 2.0" rel="alternate" type="text/xml" />
+    <link href="backend.php?op=ATOM" title="' . $sitename . ' - ATOM" rel="alternate" type="application/atom+xml" />
+    ';
 
-   // Tiny_mce
-   if ($tiny_mce_init)
-      echo aff_editeur("tiny_mce", "begin");
+    // Tiny_mce
+    if ($tiny_mce_init)
+        echo aff_editeur("tiny_mce", "begin");
 
-   // include externe JAVASCRIPT file from themes/default/view/include or themes/.../include for functions, codes in the <body onload="..." event...
-   importExternalJavacript();
+    // include externe JAVASCRIPT file from themes/default/view/include or themes/.../include for functions, codes in the <body onload="..." event...
+    importExternalJavacript();
 
-   // include externe file from themes/default/view/include or themes/.../include for functions, codes ... - skin motor
-   if (file_exists("themes/default/view/include/header_head.inc")) {
-      ob_start();
-         include "themes/default/view/include/header_head.inc";
-         $hH = ob_get_contents();
-      ob_end_clean();
+    // include externe file from themes/default/view/include or themes/.../include for functions, codes ... - skin motor
+    if (file_exists("themes/default/view/include/header_head.inc")) {
+        ob_start();
+        include "themes/default/view/include/header_head.inc";
+        $hH = ob_get_contents();
+        ob_end_clean();
 
-      if ($skin != '' and substr($tmp_theme, -3) == "_sk") {
-         $hH = str_replace('assets/shared/bootstrap/dist/css/bootstrap.min.css', 'themes/_skins/'.$skin.'/bootstrap.min.css', $hH);
-         $hH = str_replace('assets/shared/bootstrap/dist/css/extra.css', 'themes/_skins/'.$skin.'/extra.css', $hH);
-      }
-      echo $hH;
-   }
+        if ($skin != '' and substr($tmp_theme, -3) == "_sk") {
+            $hH = str_replace('assets/shared/bootstrap/dist/css/bootstrap.min.css', 'themes/_skins/' . $skin . '/bootstrap.min.css', $hH);
+            $hH = str_replace('assets/shared/bootstrap/dist/css/extra.css', 'themes/_skins/' . $skin . '/extra.css', $hH);
+        }
+        echo $hH;
+    }
 
-   if (file_exists("themes/$tmp_theme/view/include/header_head.inc")) {
-      include ("themes/$tmp_theme/view/include/header_head.inc");
-   }
+    if (file_exists("themes/$tmp_theme/view/include/header_head.inc")) {
+        include("themes/$tmp_theme/view/include/header_head.inc");
+    }
 
-   echo import_css($tmp_theme, $language, '', $css_pages_ref, $css);
+    echo import_css($tmp_theme, $language, '', $css_pages_ref, $css);
 
-   // Mod by Jireck - Chargeur de JS via PAGES.PHP
-   //importPageRefJs($js);
-   // Mod by Jireck - Chargeur de JS via PAGES.PHP
-   // function importPageRefJs($js)
-   // {
-      if ($js) {
-         $theme = getTheme();
-         
-         if (is_array($js)) {
-               foreach ($js as $k => $tab_js) {
-                  if (stristr($tab_js, 'http://') || stristr($tab_js, 'https://')) {
-                     echo '<script type="text/javascript" src="' . $tab_js . '"></script>';
-                  } else {
-                     if (file_exists("themes/$theme/assets/js/$tab_js") and ($tab_js != '')) {
-                           echo '<script type="text/javascript" src="themes/' . $theme . '/assets/js/' . $tab_js . '"></script>';
-                     } elseif (file_exists("$tab_js") and ($tab_js != "")) {
-                           echo '<script type="text/javascript" src="' . $tab_js . '"></script>';
-                     }
-                  }
-               }
-         } else {
-               if (file_exists("themes/$theme/assets/js/$js")) {
-                  echo '<script type="text/javascript" src="themes/' . $theme . '/assets/js/' . $js . '"></script>';
-               } elseif (file_exists("$js")) {
-                  echo '<script type="text/javascript" src="' . $js . '"></script>';
-               }
-         }
-      }
-   //}
+    // Mod by Jireck - Chargeur de JS via PAGES.PHP
+    //importPageRefJs($js);
+    // Mod by Jireck - Chargeur de JS via PAGES.PHP
+    // function importPageRefJs($js)
+    // {
+    if ($js) {
+        $theme = getTheme();
+
+        if (is_array($js)) {
+            foreach ($js as $k => $tab_js) {
+                if (stristr($tab_js, 'http://') || stristr($tab_js, 'https://')) {
+                    echo '<script type="text/javascript" src="' . $tab_js . '"></script>';
+                } else {
+                    if (file_exists("themes/$theme/assets/js/$tab_js") and ($tab_js != '')) {
+                        echo '<script type="text/javascript" src="themes/' . $theme . '/assets/js/' . $tab_js . '"></script>';
+                    } elseif (file_exists("$tab_js") and ($tab_js != "")) {
+                        echo '<script type="text/javascript" src="' . $tab_js . '"></script>';
+                    }
+                }
+            }
+        } else {
+            if (file_exists("themes/$theme/assets/js/$js")) {
+                echo '<script type="text/javascript" src="themes/' . $theme . '/assets/js/' . $js . '"></script>';
+            } elseif (file_exists("$js")) {
+                echo '<script type="text/javascript" src="' . $js . '"></script>';
+            }
+        }
+    }
+    //}
 
 
-   echo '
-   </head>';
+    echo '
+    </head>';
 
-   include("themes/$tmp_theme/header.php");
+    include("themes/$tmp_theme/header.php");
 }
 
-   // -----------------------
-   $header=1;
-   // -----------------------
+// -----------------------
+$header = 1;
+// -----------------------
 
-   // include externe file from themes/default/view/include for functions, codes ...
-   if (file_exists("themes/default/view/include/header_before.inc")) {include ("themes/default/view/include/header_before.inc");}
+// include externe file from themes/default/view/include for functions, codes ...
+if (file_exists("themes/default/view/include/header_before.inc")) {
+    include("themes/default/view/include/header_before.inc");
+}
 
-   // take the right theme location !
-   $tmp_theme = getTheme();
-   $skin = getSkin();
+// take the right theme location !
+$tmp_theme = getTheme();
+$skin = getSkin();
 
-   // include page référence
-   //include('library/pages/pageref.php');
+// include page référence
+//include('library/pages/pageref.php');
 
 
 
@@ -205,22 +209,22 @@ if (array_key_exists($pages_ref, $PAGES)) {
 
     // bloquer l'exécution de la page avec l'attribut run = non
     if ($PAGES[$pages_ref]['run'] == "no") {
-         // si pages_ref === index.php alors site closed
-         if ($pages_ref == "index.php") {
+        // si pages_ref === index.php alors site closed
+        if ($pages_ref == "index.php") {
             $Titlesitename = "NPDS";
-            
+
             if (file_exists("storage/meta/meta.php"))
                 include("storage/meta/meta.php");
 
             if (file_exists("storage/static/webclosed.txt"))
                 include("storage/static/webclosed.txt");
             die();
-        
-         // page bloquer alors redirection sur index   
-         } else
+
+            // page bloquer alors redirection sur index   
+        } else
             header("location: index.php");
 
-   // redirige la page sur une autre url
+        // redirige la page sur une autre url
     } elseif (($PAGES[$pages_ref]['run'] != "yes") and (($PAGES[$pages_ref]['run'] != "")))
         header("location: " . $PAGES[$pages_ref]['run']);
 
@@ -229,17 +233,17 @@ if (array_key_exists($pages_ref, $PAGES)) {
     $tab_page_ref = explode("|", $PAGES[$pages_ref]['title']);
     //var_dump(count($tab_page_ref));
     if (count($tab_page_ref) > 1) {
-        if (strlen($tab_page_ref[1]) > 1){
+        if (strlen($tab_page_ref[1]) > 1) {
             //var_dump('ici');
             $PAGES[$pages_ref]['title'] = $tab_page_ref[1];
             //var_dump($PAGES[$pages_ref]['title']);
-        }else{
+        } else {
             $PAGES[$pages_ref]['title'] = $tab_page_ref[0];
             //var_dump('la');
             //var_dump($PAGES[$pages_ref]['title']);
-         }
+        }
 
-         //var_dump($PAGES[$pages_ref]['title']);
+        //var_dump($PAGES[$pages_ref]['title']);
 
         $PAGES[$pages_ref]['title'] = strip_tags($PAGES[$pages_ref]['title']);
 
@@ -256,9 +260,9 @@ if (array_key_exists($pages_ref, $PAGES)) {
 
     // neutralise le bug en dessous bug #4
     if ($Titlesitename == '') {
-      global $sitename; 
-      $Titlesitename = $sitename;
-   }
+        global $sitename;
+        $Titlesitename = $sitename;
+    }
 
     if ($fin_title == "+")
         $Titlesitename = $TitlesitenameX . " - " . $Titlesitename;
@@ -285,8 +289,8 @@ if (array_key_exists($pages_ref, $PAGES)) {
     if (array_key_exists('meta-description', $PAGES[$pages_ref]) and ($m_description == ''))
         $m_description = aff_langue($PAGES[$pages_ref]['meta-description']);
 
-    
-        // meta keywords
+
+    // meta keywords
     settype($m_keywords, 'string');
     if (array_key_exists('meta-keywords', $PAGES[$pages_ref]) and ($m_keywords == ''))
         $m_keywords = aff_langue($PAGES[$pages_ref]['meta-keywords']);
@@ -348,14 +352,15 @@ if (array_key_exists($pages_ref, $PAGES)) {
 
 
 
-   head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords);
+head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords);
 
-   // Referer update
-   refererUpdate();
+// Referer update
+refererUpdate();
 
-   // Counter update
-   counterUpadate();
+// Counter update
+counterUpadate();
 
-   // include externe file from themes/default/view/include for functions, codes ...
-   if (file_exists("themes/default/view/include/header_after.inc")) {include ("themes/default/view/include/header_after.inc");}
-?>
+// include externe file from themes/default/view/include for functions, codes ...
+if (file_exists("themes/default/view/include/header_after.inc")) {
+    include("themes/default/view/include/header_after.inc");
+}

@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* SFORM Extender for Dune comments.                                    */
 /* ===========================                                          */
@@ -14,7 +15,7 @@
 include_once("library/sform/sform.php");
 
 global $m;
-$m=new form_handler();
+$m = new form_handler();
 //********************
 $m->add_form_title("coolsus");
 $m->add_form_method("post");
@@ -27,8 +28,7 @@ $m->add_url("modules.php");
 include("modules/comments/support/sform/$formulaire");
 /************************************************/
 
-if( !isset($GLOBALS["submitS"]) )
-  echo aff_langue($m->print_form(''));
+if (!isset($GLOBALS["submitS"]))
+    echo aff_langue($m->print_form(''));
 else
-  $message=aff_langue($m->aff_response('',"not_echo",''));
-?>
+    $message = aff_langue($m->aff_response('', "not_echo", ''));

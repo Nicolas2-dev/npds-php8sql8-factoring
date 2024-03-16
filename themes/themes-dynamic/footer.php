@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -10,24 +11,24 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-global $theme; $rep=false;
-settype($ContainerGlobal,'string');
-if (file_exists("themes/".$theme."/view/footer.html"))
-   $rep=$theme;
+global $theme;
+$rep = false;
+settype($ContainerGlobal, 'string');
+if (file_exists("themes/" . $theme . "/view/footer.html"))
+    $rep = $theme;
 elseif (file_exists("themes/default/view/footer.html"))
-   $rep="default";
+    $rep = "default";
 else {
-   echo "footer.html manquant / not find !<br />";
-   die();
+    echo "footer.html manquant / not find !<br />";
+    die();
 }
 
 if ($rep) {
-   ob_start();
-   include("themes/".$rep."/view/footer.html");
-   $Xcontent=ob_get_contents();
-   ob_end_clean();
-   if ($ContainerGlobal)
-    $Xcontent.=$ContainerGlobal;
-   echo meta_lang(aff_langue($Xcontent));
+    ob_start();
+    include("themes/" . $rep . "/view/footer.html");
+    $Xcontent = ob_get_contents();
+    ob_end_clean();
+    if ($ContainerGlobal)
+        $Xcontent .= $ContainerGlobal;
+    echo meta_lang(aff_langue($Xcontent));
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -14,7 +15,7 @@
 /************************************************************************/
 
 // Taille maxi des fichiers en octets
-$max_size = 100000000;// for debug pagetec smartphone
+$max_size = 100000000; // for debug pagetec smartphone
 
 // Si votre variable $DOCUMENT_ROOT n'est pas bonne (notamment en cas de redirection)
 // vous pouvez en spécifier une ici (c'est le chemin physique d'accès à la racine de votre site en partant de / ou C:\)
@@ -29,13 +30,13 @@ $autorise_upload_p = "true";
 $racine = '';
 
 // Répertoire de téléchargement (avec le / terminal)
-$rep_upload = $racine.'/modules/upload/storage/upload/';
+$rep_upload = $racine . '/modules/upload/storage/upload/';
 
 // Répertoire de stockage des fichiers temporaires (avec le / terminal)
-$rep_cache = $racine.'/modules/upload/storage/tmp/';
+$rep_cache = $racine . '/modules/upload/storage/tmp/';
 
 // Répertoire/fichier de stockage de la log de téléchargement (par défaut /storage/logs/security.log)
-$rep_log = $racine.'/storage/logs/security.log';
+$rep_log = $racine . '/storage/logs/security.log';
 
 // URL HTTP de votre site (exemple : http://www.monsite.org)  !
 $url_upload = 'http://localhost';
@@ -44,17 +45,17 @@ $url_upload = 'http://localhost';
 
 global $cookie, $user, $Default_Theme, $theme;
 if (isset($user)) {
-   if ($cookie[9]=='') $cookie[9]=$Default_Theme;
-   if (isset($theme)) $cookie[9]=$theme;
-   $tmp_theme=$cookie[9];
-   if (!$file=@opendir("themes/$cookie[9]")) $tmp_theme=$Default_Theme;
+    if ($cookie[9] == '') $cookie[9] = $Default_Theme;
+    if (isset($theme)) $cookie[9] = $theme;
+    $tmp_theme = $cookie[9];
+    if (!$file = @opendir("themes/$cookie[9]")) $tmp_theme = $Default_Theme;
 } else {
-   $tmp_theme=$Default_Theme;
+    $tmp_theme = $Default_Theme;
 }
 /*
-pour une css dans le theme courant utiliser :
-$url_upload_css = $racine."/themes/".$tmp_theme."/style/style.css";
-*/
+    pour une css dans le theme courant utiliser :
+    $url_upload_css = $racine."/themes/".$tmp_theme."/style/style.css";
+    */
 $url_upload_css = '/assets/shared/bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -65,18 +66,17 @@ $url_upload_css = '/assets/shared/bootstrap/dist/css/bootstrap.min.css';
 // - 2ième position : afficher les images de !mime
 // - 3ième position : afficher les images de la racine du répertoire (celles qui seront téléchargées)
 // - 4ième position : afficher les documents
-$ed_profil="1111";
+$ed_profil = "1111";
 
 // Nombre d'image par ligne dans l'afficheur d'image de l'editeur HTML
-$ed_nb_images=10;
+$ed_nb_images = 10;
 
 // suffix des fichiers autorisés (séparé par un espace)
-$extension_autorise='doc xls pps ppt sxw xls sxi sxd sxg stw rtf txt pdf zip rar tar tgz gif jpg jpeg png swf';
+$extension_autorise = 'doc xls pps ppt sxw xls sxi sxd sxg stw rtf txt pdf zip rar tar tgz gif jpg jpeg png swf';
 
 // Taille maxi en affichage des images dans les banques de l'Editeur HTML
-$width_max=50;
-$height_max=50;
+$width_max = 50;
+$height_max = 50;
 
 // Limite de l'espace disque alloué pour l'upload (en octects)
-$quota=300000000;// for debug pagetec smartphone
-?>
+$quota = 300000000; // for debug pagetec smartphone

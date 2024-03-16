@@ -322,5 +322,3 @@ $NPDS_Key = "65e37a548b995";
 $Version_Num = "v.16.8";
 $Version_Id = "NPDS";
 $Version_Sub = "REvolution";
-
-?>
