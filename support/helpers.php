@@ -859,6 +859,22 @@ function R_spambot($asb_question, $asb_reponse, $message)
     return spam::R_spambot($asb_question, $asb_reponse, $message);
 }
 
+// debug
+
+function vd() {
+    array_map(function($value)
+    {
+       echo '<pre>'.var_dump($value).'</pre>';
+    }, func_get_args());
+}
+ 
+function dd() {
+    array_map(function($value)
+    {
+       echo '<pre>'.var_dump($value).'</pre>';
+    }, func_get_args());
+    die();
+}
 
 // .php
 

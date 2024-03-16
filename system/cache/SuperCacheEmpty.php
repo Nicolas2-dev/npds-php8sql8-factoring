@@ -22,10 +22,24 @@ declare(strict_types=1);
 
 namespace npds\system\cache;
 
-include_once('config/cache.config.php');
-include_once('config/cache.timings.php');
 
 class SuperCacheEmpty
 {
-    var $genereting_output;
+
+    /**
+     * [$genereting_output description]
+     *
+     * @var [type]
+     */
+    public int $genereting_output;
+
+    /**
+     * [__construct description]
+     *
+     */
+    public function __construct()
+    {
+        $this->genereting_output = 0;
+    }
+
 }

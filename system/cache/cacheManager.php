@@ -25,15 +25,66 @@ namespace npds\system\cache;
 
 class cacheManager
 {
-    var $request_uri;
-    var $query_string;
-    var $php_self;
-    var $genereting_output;
-    var $site_overload;
 
+    /**
+     * [$request_uri description]
+     *
+     * @var [type]
+     */
+    private string $request_uri;
+
+    /**
+     * [$query_string description]
+     *
+     * @var [type]
+     */
+    private string $query_string;
+
+    /**
+     * [$php_self description]
+     *
+     * @var [type]
+     */
+    private string $php_self;
+
+    /**
+     * [$genereting_output description]
+     *
+     * @var [type]
+     */
+    public int $genereting_output;
+
+    /**
+     * [$site_overload description]
+     *
+     * @var [type]
+     */
+    private bool $site_overload;
+
+    /**
+     * [$npds_sc description]
+     *
+     * @var bool
+     */
+    private static bool $npds_sc;
+
+    /**
+     * [$instance description]
+     *
+     * @var cacheManager
+     */
+    private static ?cacheManager  $instance = null;
+
+
+    /**
+     * [__construct description]
+     *
+     */
     public function __construct()
     {
         global $CACHE_CONFIG;
+
+        static::$instance = $this;
 
         $this->genereting_output = 0;
 
@@ -56,8 +107,10 @@ class cacheManager
         }
 
         $this->site_overload = false;
+        
         if (file_exists("storage/storage/cache/site_load.log")) {
             $site_load = file("storage/storage/cache/site_load.log");
+            
             if ($site_load[0] >= $CACHE_CONFIG['clean_limit']) {
                 $this->site_overload = true;
             }
@@ -68,17 +121,59 @@ class cacheManager
         }
     }
 
-    function startCachingPage()
+    /**
+     * instance cacheManager
+     *
+     * @return cacheManager
+     */
+    public static function setInstance(): cacheManager
+    {
+        if (static::$instance === null) {
+            static::$instance = new self();
+        }
+
+        return static::$instance;
+    }
+
+    /**
+     * Get singleton instance
+     *
+     * @return cacheManager
+     */
+    public static function getInstance(): cacheManager
+    {
+        return static::$instance;
+    }
+
+    /**
+     * [getNpdsSc description]
+     *
+     * @return  bool
+     */
+    public static function getNpdsSc(): bool
+    {
+        return static::$npds_sc;
+    }
+
+    /**
+     * [startCachingPage description]
+     *
+     * @return  void
+     */
+    function startCachingPage(): void
     {
         global $CACHE_TIMINGS, $CACHE_CONFIG, $CACHE_QUERYS;
-        // if ($CACHE_TIMINGS[$this->php_self] > 0 and ($this->query_string == '' or ereg($CACHE_QUERYS[$this->php_self], $this->query_string)) ) {
+
         if ($CACHE_TIMINGS[$this->php_self] > 0 and ($this->query_string == '' or preg_match("#" . $CACHE_QUERYS[$this->php_self] . "#", $this->query_string))) {
             $cached_page = $this->checkCache($this->request_uri, $CACHE_TIMINGS[$this->php_self]);
+            
             if ($cached_page != '') {
                 echo $cached_page;
-                global $npds_sc;
-                $npds_sc = true;
+
+                static::$npds_sc = true;
+
                 $this->logVisit($this->request_uri, 'HIT');
+                
                 if ($CACHE_CONFIG['exit'] == 1) {
                     exit;
                 }
@@ -93,10 +188,13 @@ class cacheManager
         }
     }
 
-    function endCachingPage()
+    /**
+     * [endCachingPage description]
+     *
+     * @return  void
+     */
+    function endCachingPage(): void
     {
-        global $CACHE_CONFIG;
-
         if ($this->genereting_output == 1) {
             $output = ob_get_contents();
             // if you want to activate rewrite engine
@@ -108,7 +206,15 @@ class cacheManager
         }
     }
 
-    function checkCache($request, $refresh)
+    /**
+     * [checkCache description]
+     *
+     * @param   string  $request  [$request description]
+     * @param   int     $refresh  [$refresh description]
+     *
+     * @return  string
+     */
+    function checkCache(string $request, int $refresh): string
     {
         global $CACHE_CONFIG, $user, $language;
 
@@ -116,33 +222,49 @@ class cacheManager
             if (isset($user) and $user != '') {
                 $cookie = explode(':', base64_decode($user));
                 $cookie = $cookie[1];
-            } else
+            } else {
                 $cookie = '';
+            }
         }
+
         // the .common is used for non differentiate cache page (same page for user and anonymous)
-        if (substr($request, -7) == '.common')
+        if (substr($request, -7) == '.common') {
             $cookie = '';
+        }
 
         $filename = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . $language;
+        
         // Overload
-        if ($this->site_overload)
+        if ($this->site_overload) {
             $refresh = $refresh * 2;
+        }
 
         if (file_exists($filename)) {
             if (filemtime($filename) > time() - $refresh) {
                 if (filesize($filename) > 0) {
                     $data = fread($fp = fopen($filename, 'r'), filesize($filename));
                     fclose($fp);
-                    return ($data);
-                } else
-                    return ('');
-            } else
-                return ('');
-        } else
-            return ('');
+                    return $data;
+                } else {
+                    return '';
+                }
+            } else {
+                return '';
+            }
+        } else {
+            return '';
+        }
     }
 
-    function insertIntoCache($content, $request)
+    /**
+     * [insertIntoCache description]
+     *
+     * @param   string  $content  [$content description]
+     * @param   string  $request  [$request description]
+     *
+     * @return  void
+     */
+    function insertIntoCache(string $content, string $request): void
     {
         global $CACHE_CONFIG, $user, $language;
 
@@ -150,18 +272,22 @@ class cacheManager
             if (isset($user) and $user != '') {
                 $cookie = explode(":", base64_decode($user));
                 $cookie = $cookie[1];
-            } else
+            } else {
                 $cookie = '';
+            }
         }
+
         // the .common is used for non differentiate cache page (same page for user and anonymous)
-        if (substr($request, -7) == '.common')
+        if (substr($request, -7) == '.common') {
             $cookie = '';
+        }
 
         if (substr($request, 0, 5) == 'objet') {
             $request = substr($request, 5);
             $affich = false;
-        } else
+        } else {
             $affich = true;
+        }
 
         $nombre = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . $language;
 
@@ -171,18 +297,30 @@ class cacheManager
             flock($fp, LOCK_UN);
             fclose($fp);
         }
-        if ($affich)
-            echo $content;
 
-        global $npds_sc;
-        $npds_sc = false;
+        if ($affich) {
+            echo $content;
+        }
+
+        static::$npds_sc = false;
     }
 
-    function logVisit($request, $type)
+    /**
+     * [logVisit description]
+     *
+     * @param   string  $request  [$request description]
+     * @param   string  $type     [$type description]
+     *
+     * @return  void
+     */
+    function logVisit(string $request, string $type): void
     {
         global $CACHE_CONFIG;
 
-        if (!$CACHE_CONFIG['save_stats']) return;
+        if (!$CACHE_CONFIG['save_stats']) {
+            return;
+        }
+
         $logfile = $CACHE_CONFIG['data_dir'] . 'stats.log';
         $fp = fopen($logfile, 'a');
         flock($fp, LOCK_EX);
@@ -193,61 +331,86 @@ class cacheManager
         fclose($fp);
     }
 
-    function cacheCleanup()
+    /**
+     * [cacheCleanup description]
+     *
+     * @return  void
+     */
+    function cacheCleanup(): void
     {
         // Cette fonction n'est plus adaptée au nombre de fichiers manipulé par SuperCache
         global $CACHE_CONFIG;
 
         srand( (int) microtime() * 1000000);
         $num = rand(1, 100);
+
         if ($num <= $CACHE_CONFIG['cleanup_freq']) {
             $dh = opendir($CACHE_CONFIG['data_dir']);
             $clean = false;
+            
             // Clean SC directory
             $objet = "SC";
             while (false !== ($filename = readdir($dh))) {
-                if ($filename === '.' or $filename === '..' or $filename === 'sql' or $filename === 'index.html') continue;
+                if ($filename === '.' or $filename === '..' or $filename === 'sql' or $filename === 'index.html') {
+                    continue;
+                }
+
                 if (filemtime($CACHE_CONFIG['data_dir'] . $filename) < time() - $CACHE_CONFIG['max_age']) {
                     @unlink($CACHE_CONFIG['data_dir'] . $filename);
                     $clean = true;
                 }
             }
             closedir($dh);
+
             // Clean SC/SQL directory
             $dh = opendir($CACHE_CONFIG['data_dir'] . "sql/");
             $objet .= "+SQL";
             while (false !== ($filename = readdir($dh))) {
-                if ($filename === '.' or $filename === '..') continue;
+                if ($filename === '.' or $filename === '..') {
+                    continue;
+                }
+
                 if (filemtime($CACHE_CONFIG['data_dir'] . "sql/" . $filename) < time() - $CACHE_CONFIG['max_age']) {
                     @unlink($CACHE_CONFIG['data_dir'] . "sql/" . $filename);
                     $clean = true;
                 }
             }
             closedir($dh);
+
             $fp = fopen($CACHE_CONFIG['data_dir'] . "sql/.htaccess", 'w');
             @fputs($fp, "Deny from All");
             fclose($fp);
 
-            if ($clean)
+            if ($clean) {
                 $this->logVisit($this->request_uri, 'CLEAN ' . $objet);
+            }
         }
     }
 
-    function UsercacheCleanup()
+    /**
+     * [UsercacheCleanup description]
+     *
+     * @return  void
+     */
+    function UsercacheCleanup(): void
     {
-        global $CACHE_CONFIG;
-        global $user;
+        global $CACHE_CONFIG, $user;
+
         if (isset($user)) {
             $cookie = explode(":", base64_decode($user));
         }
 
         $dh = opendir($CACHE_CONFIG['data_dir']);
         while (false !== ($filename = readdir($dh))) {
-            if ($filename === '.' or $filename === '..') continue;
+            if ($filename === '.' or $filename === '..') {
+                continue;
+            }
+            
             // Le fichier appartient-il à l'utilisateur connecté ?
             if (substr($filename, 0, strlen($cookie[1])) == $cookie[1]) {
                 // Le calcul md5 fournit une chaine de 32 chars donc si ce n'est pas 32 c'est que c'est un homonyme ...
                 $filename_final = explode(".", $filename);
+                
                 if (strlen(substr($filename_final[0], strlen($cookie[1]))) == 32) {
                     unlink($CACHE_CONFIG['data_dir'] . $filename);
                 }
@@ -256,14 +419,26 @@ class cacheManager
         closedir($dh);
     }
 
-    function startCachingBlock($Xblock)
+    /**
+     * [startCachingBlock description]
+     *
+     * @param   string  $Xblock  [$Xblock description]
+     *
+     * @return  void
+     */
+    function startCachingBlock(string $Xblock): void
     {
-        global $CACHE_TIMINGS, $CACHE_CONFIG, $CACHE_QUERYS;
+        global $CACHE_TIMINGS, $CACHE_CONFIG;
+
         if ($CACHE_TIMINGS[$Xblock] > 0) {
-            $cached_page = $this->checkCache($Xblock, $CACHE_TIMINGS[$Xblock]);
+            $cached_page = $this->checkCache($Xblock, (int) $CACHE_TIMINGS[$Xblock]);
+            
             if ($cached_page != '') {
                 echo $cached_page;
                 $this->logVisit($Xblock, 'HIT');
+                
+                static::$npds_sc = true;
+
                 if ($CACHE_CONFIG['exit'] == 1) {
                     exit;
                 }
@@ -277,9 +452,16 @@ class cacheManager
             $this->logVisit($Xblock, 'NO-CACHE');
         }
     }
-    function endCachingBlock($Xblock)
+
+    /**
+     * [endCachingBlock description]
+     *
+     * @param   string  $Xblock  [$Xblock description]
+     *
+     * @return  void
+     */
+    function endCachingBlock(string $Xblock): void
     {
-        global $CACHE_CONFIG;
         if ($this->genereting_output == 1) {
             $output = ob_get_contents();
             ob_end_clean();
@@ -287,68 +469,108 @@ class cacheManager
         }
     }
 
-    function CachingQuery($Xquery, $retention)
+    /**
+     * [CachingQuery description]
+     *
+     * @param   string  $Xquery     [$Xquery description]
+     * @param   int     $retention  [$retention description]
+     *
+     * @return  array
+     */
+    function CachingQuery(string $Xquery, int $retention): array
     {
         global $CACHE_CONFIG;
+        
         $filename = $CACHE_CONFIG['data_dir'] . "sql/" . md5($Xquery);
+
         if (file_exists($filename)) {
             if (filemtime($filename) > time() - $retention) {
+                
                 if (filesize($filename) > 0) {
                     $data = fread($fp = fopen($filename, 'r'), filesize($filename));
                     fclose($fp);
                 } else {
-                    return (array());
+                    return array();
                 }
+
                 $no_cache = false;
                 $this->logVisit($Xquery, 'HIT');
-                return (unserialize($data));
-            } else
+
+                return unserialize($data);
+            } else {
                 $no_cache = true;
-        } else
+            }
+        } else {
             $no_cache = true;
+        }
 
         if ($no_cache) {
             $result = @sql_query($Xquery);
             $tab_tmp = array();
+            
             while ($row = sql_fetch_assoc($result)) {
                 $tab_tmp[] = $row;
             }
+
             if ($fp = fopen($filename, 'w')) {
                 flock($fp, LOCK_EX);
                 fwrite($fp, serialize($tab_tmp));
                 flock($fp, LOCK_UN);
                 fclose($fp);
             }
+
             $this->logVisit($Xquery, 'MISS');
-            return ($tab_tmp);
+
+            return $tab_tmp;
         }
     }
 
-    function startCachingObjet($Xobjet)
+    /**
+     * [startCachingObjet description]
+     *
+     * @param   string  $Xobjet  [$Xobjet description]
+     *
+     * @return  string|array
+     */
+    function startCachingObjet(string $Xobjet): string|array 
     {
-        global $CACHE_TIMINGS, $CACHE_CONFIG, $CACHE_QUERYS;
+        global $CACHE_TIMINGS, $CACHE_CONFIG;
+
         if ($CACHE_TIMINGS[$Xobjet] > 0) {
             $cached_page = $this->checkCache($Xobjet, $CACHE_TIMINGS[$Xobjet]);
+            
             if ($cached_page != '') {
                 $this->logVisit($Xobjet, 'HIT');
+                
                 if ($CACHE_CONFIG['exit'] == 1) {
                     exit;
                 }
-                return (unserialize($cached_page));
+
+                return unserialize($cached_page);
             } else {
                 $this->genereting_output = 1;
                 $this->logVisit($Xobjet, 'MISS');
-                return ("");
+
+                return "";
             }
         } else {
             $this->genereting_output = -1;
             $this->logVisit($Xobjet, 'NO-CACHE');
-            return ("");
+
+            return "";
         }
     }
-    function endCachingObjet($Xobjet, $Xtab)
+
+    /**
+     * [endCachingObjet description]
+     *
+     * @param   string  $Xobjet  [$Xobjet description]
+     * @param   array  $Xtab    [$Xtab description]
+     *
+     * @return  void
+     */
+    function endCachingObjet(string $Xobjet, array $Xtab): void
     {
-        global $CACHE_CONFIG;
         if ($this->genereting_output == 1) {
             $this->insertIntoCache(serialize($Xtab), "objet" . $Xobjet);
         }

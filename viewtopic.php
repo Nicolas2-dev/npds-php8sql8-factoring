@@ -1,5 +1,7 @@
 <?php
 
+use npds\system\cache\cache;
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -15,17 +17,17 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\cache\cacheManager;
-use npds\system\cache\SuperCacheEmpty;
+// use npds\system\cache\cacheManager;
+// use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion"))
     include('boot/bootstrap.php');
 
 include('functions.php');
-if ($SuperCache)
-    $cache_obj = new cacheManager();
-else
-    $cache_obj = new SuperCacheEmpty();
+// if ($SuperCache)
+//     $cache_obj = new cacheManager();
+// else
+//     $cache_obj = new SuperCacheEmpty();
 
 include('auth.php');
 global $NPDS_Prefix, $admin, $adminforum;
@@ -567,12 +569,15 @@ if ($forum_access != 9) {
         unset($sec_clef);
     }
 }
-if ($SuperCache) {
-    $cache_clef = "forum-jump-to";
-    $CACHE_TIMINGS[$cache_clef] = 600;
-    $cache_obj->startCachingBlock($cache_clef);
-}
-if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+
+// if ($SuperCache) {
+//     $cache_clef = "forum-jump-to";
+//     $CACHE_TIMINGS[$cache_clef] = 600;
+//     $cache_obj->startCachingBlock($cache_clef);
+// }
+
+// if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+if (cache::cacheManagerStartBlock("forum-jump-to")) {    
     echo '
     <form action="viewforum.php" method="post">
     <div class="mb-3 row">
@@ -601,8 +606,11 @@ if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1
     </form>
     <a name="botofpage"></a>';
 }
-if ($SuperCache)
-    $cache_obj->endCachingBlock($cache_clef);
+
+// if ($SuperCache)
+//     $cache_obj->endCachingBlock($cache_clef);
+cache::cacheManagerEndBlock("forum-jump-to");
+
 
 if ((($Mmod) and ($forum_access != 9)) or ($adminforum == 1)) {
     echo '

@@ -7,10 +7,10 @@ namespace npds\system\cache;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 
+
 class cache
 {
 
- 
     /**
      * Indique le status de SuperCache
      *
@@ -18,10 +18,13 @@ class cache
      */
     public static function SC_infos(): string
     {
-        global $SuperCache, $npds_sc;
+        global $SuperCache;
 
         $infos = '';
         if ($SuperCache) {
+
+            $npds_sc = cacheManager::setInstance()::getNpdsSc();
+            
             if ($npds_sc) {
                 $infos = '<span class="small">' . translate(".:Page >> Super-Cache:.") . '</span>';
             } else {
@@ -58,7 +61,7 @@ class cache
      */
     public static function cacheManagerStart2(): bool
     {
-        global $SuperCache, $cache_obj;
+        global $SuperCache;
 
         if ($SuperCache) {
             $cache_obj = new cacheManager();
@@ -81,10 +84,57 @@ class cache
      */
     public static function cacheManagerEnd(): void
     {
-        global $SuperCache, $cache_obj;
+        global $SuperCache;
         
         if ($SuperCache) {
+            $cache_obj = cacheManager::getInstance();
+
             $cache_obj->endCachingPage();
+        }
+    }
+
+    /**
+     * [cacheManagerStartBlock description]
+     *
+     * @param   string  $cache_clef  [$cache_clef description]
+     *
+     * @return  bool
+     */
+    public static function cacheManagerStartBlock(string $cache_clef): bool
+    {
+        global $SuperCache, $CACHE_TIMINGS;
+
+        if ($SuperCache) {
+            $CACHE_TIMINGS[$cache_clef] = 600;
+
+            $cache_obj = new cacheManager();
+            $cache_obj->startCachingBlock($cache_clef);            
+        } else {
+            $cache_obj = new SuperCacheEmpty();
+        }
+
+        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * [cacheManagerEndBlock description]
+     *
+     * @param   string  $cache_clef  [$cache_clef description]
+     *
+     * @return  void
+     */
+    public static function cacheManagerEndBlock(string $cache_clef): void
+    {
+        global $SuperCache;
+        
+        if ($SuperCache) {
+            $cache_obj = cacheManager::getInstance();
+
+            $cache_obj->endCachingBlock($cache_clef);
         }
     }
 
