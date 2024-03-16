@@ -1,8 +1,0 @@
-
-             <div class="col leftbloc">               <div class="card mb-3">
-                  <h5 class="card-header"> Menu </h5>
-                  <div class="card-body">
-                   <ul class="list-group list-group-flush"><li class="my-2"><a href="modules.php?ModPath=archive-stories&amp;ModStart=archive-stories">Archives</a></li><li class="my-2"><a href="forum.php">Forums</a></li><li class="my-2"><a href="sections.php">Rubriques</a></li><li class="my-2"><a href="topics.php">Sujets actifs</a></li><li class="my-2"><a href="modules.php?ModPath=links&amp;ModStart=links">Liens</a></li><li class="my-2"><a href="download.php">Téléchargements</a></li><li class="my-2"><a href="faq.php">FAQ</a></li><li class="my-2"><a href="static.php?op=statik.txt&amp;npds=1">Page statique</a></li><li class="my-2"><a href="reviews.php">Critiques</a></li><li class="my-2"><a href="memberslist.php">Annuaire</a></li><li class="my-2"><a href="map.php">Plan du site</a></li><li class="my-2"><a href="friend.php">Faire notre pub</a></li><li class="my-2"><a href="user.php">Votre compte</a></li><li class="my-2"><a href="submit.php">Nouvel article</a></li><li class="my-2"><a href="admin.php">Administration</a></li></ul> 
-                  </div>
-               </div>
-                </div>
