@@ -28,8 +28,8 @@ global $Titlesitename;
    $inline_list['0'] = upload_translate("Non");
 
    // Security
-   if (!$allow_upload_forum) Access_Error();
-   if (!autorize()) Access_Error();
+   if (!$allow_upload_forum) Header("Location: die.php");
+   if (!autorize()) Header("Location: die.php");
 
 /*****************************************************/
 /* Entete                                            */

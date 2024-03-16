@@ -119,6 +119,7 @@ $PAGES['index.php']['title']="[fr]Index[/fr][en]Home[/en][es]Index[/es][de]Index
 $PAGES['index.php']['blocs']="0";
 $PAGES['index.php']['run']="yes";
 $PAGES['index.php']['sitemap']="0.8";
+//$PAGES['index.php']['meta-description']="meta a la con avec c'est condition ternere de merde";
 
 $PAGES['user.php']['title']="[fr]Section membre pour personnaliser le site[/fr][en]Your personal page to customize the site [/en][es]Secci&oacute;n para personalizar el sitio[/es][de]Mitglied Abschnitt auf der Website anpassen[/de][zh]&#x4E2A;&#x4EBA;&#x8BBE;&#x7F6E;&#x9875;&#x9762;, &#x5141;&#x8BB8;&#x4F7F;&#x7528;&#x6237;&#x7684;&#x7AD9;&#x70B9;&#x5B9E;&#x73B0;&#x4E2A;&#x4EBA;&#x5316;[/zh]+";
 $PAGES['user.php']['blocs']="0";

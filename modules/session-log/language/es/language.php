@@ -32,6 +32,6 @@ function SessionLog_translate($phrase) {
 
    default: $tmp = "Necesita una traducción [** $phrase **]"; break;
  }
-  return (htmlentities($tmp,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401,cur_charset));
+  return (htmlentities($tmp,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401,'utf-8'));
 }
 ?>

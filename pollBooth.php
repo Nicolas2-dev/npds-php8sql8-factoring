@@ -14,7 +14,7 @@
 /* 2003 by snipe / vote unique, implémentation de la table appli_log    */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 // ----------------------------------------------------------------------------
 // Specified the index and the name of the application for the table appli_log
 $al_id = 1;
@@ -189,7 +189,7 @@ function pollboxbooth($pollID,$pollClose) {
    echo '<div class="card card-body">'.$boxContent.'</div>'; 
 }
 
-function PollMain_aff($pollID) {
+function PollMain_aff() {
    $boxContent = '<p><strong><a href="pollBooth.php">'.translate("Anciens sondages").'</a></strong></p>';
    echo $boxContent;
 }

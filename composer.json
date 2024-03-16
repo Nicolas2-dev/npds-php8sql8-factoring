@@ -1,0 +1,25 @@
+{
+    "name": "nicol/npds_dune-php8sql8",
+    "description": "cms",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "nicolas2",
+            "email": "nicolas.l.devoy@free.fr"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.2.0",
+        "phpmailer/phpmailer": "dev-master",
+        "php81_bc/strftime": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "npds\\": "./"
+        },
+        "files": [
+            "support/helpers.php"
+        ]
+    }
+}

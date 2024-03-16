@@ -14,7 +14,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Access_Error")) die();
-if (!stristr($_SERVER['PHP_SELF'],"modules.php")) Access_Error();
+if (!stristr($_SERVER['PHP_SELF'],"modules.php")) Header("Location: die.php?op=module");;
 
 global $language, $links_DB, $NPDS_Prefix;
 
@@ -28,10 +28,10 @@ if(autorisation(-127)) {
    $result = sql_query("SELECT radminsuper FROM ".$NPDS_Prefix."authors WHERE aid='$aid'");
    list($radminsuper) = sql_fetch_row($result);
    if ($radminsuper!=1) //intégrer les droits nouveau système
-   Access_Error();
+   Header("Location: die.php");
 }
 else
-   Access_Error();
+Header("Location: die.php");
 
 
 function helpwindow() {
@@ -469,7 +469,7 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
       sql_query("DELETE FROM ".$links_DB."links_newlink WHERE lid='$lid'");
       if ($email!='') {
          global $sitename, $nuke_url;
-         $subject = html_entity_decode(translate("Votre lien"),ENT_COMPAT | ENT_HTML401,cur_charset)." : $sitename";
+         $subject = html_entity_decode(translate("Votre lien"),ENT_COMPAT | ENT_HTML401,'utf-8')." : $sitename";
          $message = translate("Bonjour")." $name :\n\n".translate("Nous avons approuvé votre contribution à notre moteur de recherche.")."\n\n".translate("Titre de la page : ")."$title\n".translate("Url de la page : ")."<a href=\"$url\">$url</a>\n".translate("Description : ")."$description\n".translate("Vous pouvez utiliser notre moteur de recherche sur : ")." <a href=\"$nuke_url/modules.php?ModPath=links&ModStart=links\">$nuke_url/modules.php?ModPath=links&ModStart=links</a>\n\n".translate("Merci pour votre contribution")."\n";
          include("signat.php");
          send_email($email, $subject, $message, '', false, 'html', '');

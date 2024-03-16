@@ -12,7 +12,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists('Access_Error')) die();
-if (!stristr($_SERVER['PHP_SELF'],'modules.php')) Access_Error();
+if (!stristr($_SERVER['PHP_SELF'],'modules.php')) Header("Location: die.php?op=module");
 
 global $ModPath, $ModStart, $NPDS_Prefix;
 $pos = strpos($ModPath, '/admin');

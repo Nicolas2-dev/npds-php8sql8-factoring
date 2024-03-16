@@ -10,7 +10,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 include('functions.php');
 
 // Make Member_list Private or not
@@ -51,7 +51,7 @@ function alpha() {
          <label class="col-form-label col-sm-3" for="mblst_search">'.translate("Recherche").'</label>
          <div class="col-sm-9">
             <input class="form-control" type="input" id="mblst_search" name="letter" />
-            <input type="hidden" name="list" value="'.urldecode($list).'" />
+            <input type="hidden" name="list" value="'.urldecode( (string) $list).'" />
             <input type="hidden" name="gr_from_ws" value="'.$gr_from_ws.'" />
          </div>
       </div>
@@ -142,7 +142,7 @@ include("themes/default/header.php");
 $pagesize = $show_user;
 
 if (!isset($letter) or ($letter=='')) $letter = translate("Tous");
-$letter=removeHack(stripslashes(htmlspecialchars($letter,ENT_QUOTES,cur_charset)));
+$letter=removeHack(stripslashes(htmlspecialchars($letter,ENT_QUOTES,'utf-8')));
 if (!isset($sortby)) $sortby = 'uid DESC';
 $sortby=removeHack($sortby);
 if (!isset($page)) $page = 1;

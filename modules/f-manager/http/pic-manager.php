@@ -203,13 +203,13 @@ if ($FmaRep) {
             $fic_minuscptr=0;
             $dir_minuscptr=0;
          } else
-            Access_Error();
+            Header("Location: die.php");
       } else
-         Access_Error();
+         Header("Location: die.php");
    } else
-      Access_Error();
+      Header("Location: die.php");
 } else
-   Access_Error();
+   Header("Location: die.php");
 
 if ($browse!='') {
    $ibid=rawurldecode(decrypt($browse));

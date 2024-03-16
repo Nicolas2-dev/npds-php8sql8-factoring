@@ -12,12 +12,16 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\cache\cacheManager;
+use npds\system\cache\SuperCacheEmpty;
+
 settype($cancel, 'string');
 if ($cancel)
    header("Location: viewforum.php?forum=$forum");
 
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
 include('functions.php');
 if ($SuperCache)
@@ -116,7 +120,7 @@ if ($submitS) {
       }
 /*
       if ($allow_html == 0 || isset($html))
-         $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,cur_charset);
+         $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,'utf-8');
 */
       if (isset($sig) && $userdata['uid'] != 1 && $myrow['forum_type']!=6 && $myrow['forum_type']!=5)
          $message .= " [addsig]";

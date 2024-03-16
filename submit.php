@@ -1,4 +1,6 @@
 <?php
+
+use npds\system\language\language;
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -12,7 +14,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
 include ("publication.php");
 settype($user,'string');
@@ -74,7 +76,10 @@ function defaultDisplay() {
    settype($topic,'string');
    settype($sel,'string');
    while (list($topicid, $topiname, $topics) = sql_fetch_row($toplist)) {
-      if ($topicid==$topic) $sel = 'selected="selected" ';
+      if ($topicid==$topic) {
+         $sel = 'selected="selected" ';
+      }
+
       echo '
                <option '.$sel.' value="'.$topicid.'">';
       if($topics!='') echo aff_langue($topics); else echo $topiname;
@@ -113,8 +118,12 @@ function defaultDisplay() {
 }
 
 function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur) {
-   global $tipath, $NPDS_Prefix, $topictext, $topicimage;
-   $topiclogo = '<span class="badge bg-secondary float-end"><strong>'.aff_langue($topictext).'</strong></span>';
+   global $tipath, $NPDS_Prefix, $topicimage;
+
+   // bug $topictext toujour null pas a la bonne place puisque tu ne recupere jjamais le topictext en provenance de la function defaultDisplay()
+   //bug aff_langue strpos sur valeur null
+   //$topiclogo = '<span class="badge bg-secondary float-end"><strong>'.language::aff_langue($topictext).'</strong></span>';
+   
    include("themes/default/header.php");;
    $story = stripslashes(dataimagetofileurl($story, 'storage/cache/ai'));
    $bodytext = stripslashes(dataimagetofileurl($bodytext, 'storage/cache/ac'));
@@ -136,16 +145,21 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
       $result = sql_query("SELECT topictext, topicimage FROM ".$NPDS_Prefix."topics WHERE topicid='$topic'");
       list($topictext, $topicimage) = sql_fetch_row($result);
    }
+
    if ($topicimage!=='') { 
       if (!$imgtmp=theme_image('topics/'.$topicimage)) {$imgtmp=$tipath.$topicimage;}
       $timage=$imgtmp;
       if (file_exists($imgtmp)) 
       $topiclogo = '<img class="img-fluid n-sujetsize" src="'.$timage.'" align="right" alt="" />';
+      // correction du bug plus haut
+      // ajout du else et ajout de la ligne pour le topictext qui et recuperer plus haut
+   } else {
+      $topiclogo = '<span class="badge bg-secondary float-end"><strong>'.aff_langue($topictext).'</strong></span>';
    }
-
+   
    $storyX=aff_code($story);
    $bodytextX=aff_code($bodytext);
-   themepreview('<h3>'.$subject.$topiclogo.'</h3>','<div class="text-muted">'.$storyX.'</div>', $bodytextX);
+   themepreview('<h3>'.$subject.$topiclogo.'</h3>','<div class="text-muted">'.$storyX.'</div>', $bodytextX, '');
 //    if ($no_img) {
 //       echo '<strong>'.aff_langue($topictext).'</strong>';
 //    }
@@ -167,7 +181,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
    while (list($topicid, $topics) = sql_fetch_row($toplist)) {
       if ($topicid==$topic) { $sel = 'selected="selected" '; }
       echo '
-               <option '.$sel.' value="'.$topicid.'">'.aff_langue($topics).'</option>';
+               <option '.$sel.' value="'.$topicid.'">'.language::aff_langue($topics).'</option>';
       $sel = '';
    }
    echo '

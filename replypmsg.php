@@ -11,8 +11,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\cache\cacheManager;
+use npds\system\cache\SuperCacheEmpty;
+
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
 include('functions.php');
 if ($SuperCache)
@@ -58,7 +62,7 @@ if (isset($user)) {
       if ($message == '')
          forumerror('0019');
 
-      if ($allow_html == 0 || isset($html)) $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,cur_charset);
+      if ($allow_html == 0 || isset($html)) $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,'utf-8');
       if ($sig)
          $message .= '<br /><br />'.$userdata['user_sig'];
       $message = aff_code($message);
@@ -224,7 +228,7 @@ if (isset($user)) {
          <h3>'.translate("Prévisualiser").'</h3>
          <p class="lead">'.StripSlashes($subject).'</p>';
          $Xmessage=$message=StripSlashes($message);
-         if ($allow_html == 0 || isset($html)) $Xmessage = htmlspecialchars($Xmessage,ENT_COMPAT|ENT_HTML401,cur_charset);
+         if ($allow_html == 0 || isset($html)) $Xmessage = htmlspecialchars($Xmessage,ENT_COMPAT|ENT_HTML401,'utf-8');
          if ($sig=='on')
             $Xmessage .= '<div class="n-signature">'.nl2br($userdata['user_sig']).'</div>';
 

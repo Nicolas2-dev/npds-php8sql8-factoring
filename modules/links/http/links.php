@@ -499,7 +499,7 @@ function formatTimestampShort($time) {
    setlocale (LC_TIME, aff_langue($locale));
    preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
    $datetime = strftime("".translate("linksdatestring")."", mktime($datetime[4]+(integer)$gmt,$datetime[5],$datetime[6],$datetime[2],$datetime[3],$datetime[1]));
-   if (cur_charset!='utf-8')
+   if ('utf-8'!='utf-8')
       $datetime = ucfirst($datetime);
    return($datetime);
 }

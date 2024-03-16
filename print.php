@@ -12,7 +12,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
 function PrintPage($oper, $DB, $nl, $sid) {
     global $user, $cookie, $theme, $Default_Theme, $language, $site_logo, $sitename, $datetime, $nuke_url, $Titlesitename, $NPDS_Prefix;
@@ -37,7 +37,7 @@ function PrintPage($oper, $DB, $nl, $sid) {
           $aff=false;
     }
     if ($oper=='links') {
-       $DB=removeHack(stripslashes(htmlentities(urldecode($DB),ENT_NOQUOTES,cur_charset)));
+       $DB=removeHack(stripslashes(htmlentities(urldecode($DB),ENT_NOQUOTES,'utf-8')));
        $result=sql_query("SELECT url, title, description, date FROM ".$DB."links_links WHERE lid='$sid'");
        list($url, $title, $description, $time)=sql_fetch_row($result);
        $title = stripslashes($title); $description = stripslashes($description);
@@ -52,7 +52,7 @@ function PrintPage($oper, $DB, $nl, $sid) {
              if ($DB)
                 $remp=meta_lang(aff_code(aff_langue($remp)));
              if ($nl)
-               $remp=nl2br(str_replace(' ','&nbsp;',htmlentities($remp,ENT_QUOTES,cur_charset)));
+               $remp=nl2br(str_replace(' ','&nbsp;',htmlentities($remp,ENT_QUOTES,'utf-8')));
              $title=$sid;
           } else
              $aff=false;

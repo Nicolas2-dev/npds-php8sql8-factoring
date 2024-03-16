@@ -388,7 +388,7 @@ function BannerEdit($bid) {
          <span class="help-block text-end"><span id="countcar_imageurl"></span></span>
       </div>
       <div class="form-floating mb-3">
-         <input class="form-control" type="text" id="clickurl" name="clickurl" maxlength="320" value="'.htmlentities($clickurl,ENT_QUOTES,cur_charset).'" />
+         <input class="form-control" type="text" id="clickurl" name="clickurl" maxlength="320" value="'.htmlentities($clickurl,ENT_QUOTES,'utf-8').'" />
          <label for="clickurl">'.adm_translate("URL du clic").'</label>
          <span class="help-block text-end"><span id="countcar_clickurl"></span></span>
       </div>

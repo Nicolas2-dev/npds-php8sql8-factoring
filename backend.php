@@ -13,23 +13,6 @@
 /************************************************************************/
 include("mainfile.php");
 
-function convertdateTOtimestamp($myrow) {
-   if (substr($myrow,2,1)=='-') {
-      $day=substr($myrow,0,2);
-      $month=substr($myrow,3,2);
-      $year=substr($myrow,6,4);
-   } else {
-      $day=substr($myrow,8,2);
-      $month=substr($myrow,5,2);
-      $year=substr($myrow,0,4);
-   }
-   $hour=substr($myrow,11,2);
-   $mns=substr($myrow,14,2);
-   $sec=substr($myrow,17,2);
-   $tmst=mktime($hour,$mns,$sec,$month,$day,$year);
-   return ($tmst);
-}
-
 function fab_feed($type,$filename,$timeout) {
    global $sitename,$slogan,$nuke_url,$backend_image,$backend_title,$backend_width,$backend_height,$backend_language,$storyhome;
    include("library/feed/feedcreator.php");
@@ -78,25 +61,25 @@ settype($op,'string');
 $op=strtoupper($op);
 switch ($op) {
     case 'MBOX':
-        fab_feed('MBOX','storage/cache/MBOX-feed',3600);
+        fab_feed('MBOX','storage/rss/MBOX-feed',3600);
         break;
     case 'OPML':
-        fab_feed('OPML','storage/cache/OPML-feed.xml',3600);
+        fab_feed('OPML','storage/rss/OPML-feed.xml',3600);
         break;
     case 'ATOM':
-        fab_feed('ATOM','storage/cache/ATOM-feed.xml',3600);
+        fab_feed('ATOM','storage/rss/ATOM-feed.xml',3600);
         break;
     case 'RSS1.0':
-        fab_feed('RSS1.0','storage/cache/RSS1.0-feed.xml',3600);
+        fab_feed('RSS1.0','storage/rss/RSS1.0-feed.xml',3600);
         break;
     case 'RSS2.0':
-        fab_feed('RSS2.0','storage/cache/RSS2.0-feed.xml',3600);
+        fab_feed('RSS2.0','storage/rss/RSS2.0-feed.xml',3600);
         break;
     case 'RSS0.91':
-        fab_feed('RSS0.91','storage/cache/RSS0.91-feed.xml',3600);
+        fab_feed('RSS0.91','storage/rss/RSS0.91-feed.xml',3600);
         break;
     default:
-        fab_feed('RSS1.0','storage/cache/RSS1.0-feed.xml',3600);
+        fab_feed('RSS1.0','storage/rss/RSS1.0-feed.xml',3600);
         break;
 }
 ?>

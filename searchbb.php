@@ -12,8 +12,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\cache\cacheManager;
+use npds\system\cache\SuperCacheEmpty;
+
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
 include("functions.php");
 $cache_obj = $SuperCache ? new cacheManager() : new SuperCacheEmpty() ;
@@ -40,7 +44,7 @@ function ancre($forum_id,$topic_id,$post_id,$posts_per_page) {
 
 include('themes/default/header.php');
 settype($term,'string');
-   $term = removeHack(stripslashes(htmlspecialchars(urldecode($term),ENT_QUOTES,cur_charset))); // electrobug
+   $term = removeHack(stripslashes(htmlspecialchars(urldecode($term),ENT_QUOTES,'utf-8'))); // electrobug
    echo '
    <h2>'.translate("Rechercher dans").' : Forums</h2>
    <hr />
@@ -157,7 +161,7 @@ settype($term,'string');
          $addquery.=" p.forum_id='$forum' AND f.forum_id='$forum'";
    }
    if (isset($username)&&$username!='') {
-      $username = removeHack(stripslashes(htmlspecialchars(urldecode($username),ENT_QUOTES,cur_charset))); // electrobug
+      $username = removeHack(stripslashes(htmlspecialchars(urldecode($username),ENT_QUOTES,'utf-8'))); // electrobug
       if (!$result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$username'"))
          forumerror('0001');
       list($userid) = sql_fetch_row($result);

@@ -61,7 +61,7 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit) {
             <label class="col-form-label col-sm-12" for="XeditoJ">'.adm_translate("Le jour").'</label>
             <div class="col-sm-12">
                <textarea class="tin form-control" name="XeditoJ" rows="20" >';
-      echo htmlspecialchars($contentJ,ENT_COMPAT|ENT_SUBSTITUTE|ENT_HTML401,cur_charset);
+      echo htmlspecialchars($contentJ,ENT_COMPAT|ENT_SUBSTITUTE|ENT_HTML401,'utf-8');
       echo '</textarea>
             </div>
          </div>';
@@ -73,7 +73,7 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit) {
       echo '
             <div class="col-sm-12">
                <textarea class="tin form-control" name="XeditoN" rows="20">';
-      echo htmlspecialchars($contentN,ENT_COMPAT|ENT_SUBSTITUTE|ENT_HTML401,cur_charset);
+      echo htmlspecialchars($contentN,ENT_COMPAT|ENT_SUBSTITUTE|ENT_HTML401,'utf-8');
       echo '</textarea>
             </div>
          </div>

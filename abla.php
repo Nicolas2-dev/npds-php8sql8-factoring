@@ -14,7 +14,7 @@
 if (!stristr($_SERVER['PHP_SELF'],'admin.php'))
    include("admin/die.php");
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 include("functions.php");
 include("auth.php");
 

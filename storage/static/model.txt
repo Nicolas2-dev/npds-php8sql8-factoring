@@ -10,6 +10,6 @@ if (secur_static("member")) { ?>
 <?php
 } else {                           
    echo "Access Denied / Acc&egrave;s Refus&eacute;";
-   if (cur_charset=="utf-8") echo" / &#x901A;&#x5165;&#x88AB;&#x5426;&#x8BA4;";
+   if ('utf-8'=="utf-8") echo" / &#x901A;&#x5165;&#x88AB;&#x5426;&#x8BA4;";
 }
 ?>

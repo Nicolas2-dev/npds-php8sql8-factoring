@@ -445,7 +445,7 @@ function ConfigSave($xparse,$xsitename,$xnuke_url,$xsite_logo,$xslogan,$xstartda
    fwrite($file, $content);
    fclose($file);
 
-   $file = fopen("library/PHPMailer/PHPmailer.conf.php", "w");
+   $file = fopen("config/mailer.php", "w");
    $content = "<?php\n";
    $content .= "$line";
    $content .= "# DUNE by NPDS : Net Portal Dynamic System\n";

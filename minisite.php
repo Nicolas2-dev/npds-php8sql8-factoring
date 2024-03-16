@@ -10,7 +10,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 include ("functions.php");
 settype($gr_name,'string');
 settype($new_pages,'string');

@@ -203,13 +203,13 @@ if ($FmaRep) {
             $fic_minuscptr=0;
             $dir_minuscptr=0;
          } else
-            Access_Error();
+         Header("Location: die.php");
       } else
-         Access_Error();
+      Header("Location: die.php");
    } else
-      Access_Error();
+   Header("Location: die.php");
 } else
-   Access_Error();
+Header("Location: die.php");
 
 if (isset($browse)) {
    $ibid=rawurldecode(decrypt($browse));
@@ -675,7 +675,7 @@ switch ($op) {
                settype($Fcontent, 'string');
                $edit_file.='
                      <div class="col-12">
-                        <textarea class="tin form-control" id="editfile" name="editfile" rows="18">'.htmlspecialchars($Fcontent,ENT_COMPAT|ENT_HTML401,cur_charset).'</textarea>
+                        <textarea class="tin form-control" id="editfile" name="editfile" rows="18">'.htmlspecialchars($Fcontent,ENT_COMPAT|ENT_HTML401,'utf-8').'</textarea>
                      </div>
                   </div>';
                $tabW=explode(' ',$extension_Wysiwyg_fma);

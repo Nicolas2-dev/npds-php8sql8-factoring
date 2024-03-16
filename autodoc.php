@@ -20,11 +20,7 @@
 /* Le mainfile.php est un bon exemple (extraction des fonctions de type BLOCS)                                                   */
 /*                                                                                                                               */
 /*********************************************************************************************************************************/
-if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) include ("mainfile.php");
-
-function Access_Error () {
-  include("admin/die.php");
-}
+if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) include ('boot/bootstrap.php');
 
 function dochead($a,$b) {
    if (file_exists("storage/meta/meta.php")) {
@@ -48,7 +44,7 @@ function docfoot() {
 
 function autodoc($fichier, $paragraphe) {
    $fcontents = @file($fichier);
-   if ($fcontents=='') Access_Error();
+   if ($fcontents=='') Header("Location: die.php");
    $pasfin=false;
    $tabdoc='';
    echo '

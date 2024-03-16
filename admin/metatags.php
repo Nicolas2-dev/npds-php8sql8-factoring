@@ -193,29 +193,32 @@ function MetaTagSave($filename, $tags) {
       $content .= "else\n";
       $content .= "   \$l_meta=\$meta_doctype.\"\\n<html lang=\\\"\$lang\\\">\\n<head>\\n\";\n";
       if (!empty($tags['content-type'])) {
-         $tags['content-type'] = htmlspecialchars(stripslashes($tags['content-type']),ENT_COMPAT|ENT_HTML401,cur_charset);
-         $fp = fopen("config/constants.php", "w");
+         $tags['content-type'] = htmlspecialchars(stripslashes($tags['content-type']),ENT_COMPAT|ENT_HTML401,'utf-8');
+         //$fp = fopen("config/constants.php", "w");
+         $fp = fopen("config/doctype.php", "w");
          if ($fp) {
-            fwrite($fp, "<?php\nif (!defined(\"cur_charset\"))\n   define ('cur_charset', \"".substr($tags['content-type'],strpos($tags['content-type'],"charset=")+8)."\");\n");
-            fwrite($fp, "if (!defined(\"doctype\"))\n   define ('doctype', \"".$tags['doctype']."\");\n?>");
+            // fwrite($fp, "<?php\nif (!defined(\"'cur_charset'\"))\n   define (''utf-8'', \"".substr($tags['content-type'],strpos($tags['content-type'],"charset=")+8)."\");\n");
+            fwrite($fp, "<?php\nif (!defined(\"doctype\"))\n   define ('doctype', \"".$tags['doctype']."\");\n?>");
          }
          fclose($fp);
-         if ($tags['doctype'] == "HTML 5.1") 
-            $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
-         else
+         // if ($tags['doctype'] == "HTML 5.1") 
+         //    $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
+         // else
             $content .= MetaTagMakeSingleTag('content-type', $tags['content-type'], 'http-equiv');
       } else {
-         $fp = fopen("config/constants.php", "w");
+         //$fp = fopen("config/constants.php", "w");
+         $fp = fopen("config/doctype.php", "w");
          if ($fp) {
-            fwrite($fp, "<?php\nif (!defined(\"cur_charset\"))\n   define ('cur_charset', \"utf-8\");\n");
-            fwrite($fp, "if (!defined(\"doctype\"))\n   define ('doctype', \"".$tags['doctype']."\");\n?>");
+            //fwrite($fp, "<?php\nif (!defined(\"'cur_charset'\"))\n   define (''utf-8'', \"utf-8\");\n");
+            fwrite($fp, "<?php\nif (!defined(\"doctype\"))\n   define ('doctype', \"".$tags['doctype']."\");\n?>");
          }
          fclose($fp);
          if ($tags['doctype'] == "XHTML 1.0 Transitional" || $tags['doctype'] == "XHTML 1.0 Strict") {
             $content .= MetaTagMakeSingleTag('content-type', 'text/html; charset=utf-8', 'http-equiv');
-         } else {
-            $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
          }
+         // } else {
+         //    $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
+         // }
       }
       $content .= "\$l_meta.=\"<title>\$Titlesitename</title>\\n\";\n";
       $content .= MetaTagMakeSingleTag('viewport', 'width=device-width, initial-scale=1, shrink-to-fit=no');
@@ -226,46 +229,46 @@ function MetaTagSave($filename, $tags) {
       $content .= MetaTagMakeSingleTag('cache-control', 'no-cache', 'http-equiv');
       $content .= MetaTagMakeSingleTag('identifier-url', '$nuke_url', 'http-equiv');
       if (!empty($tags['author'])) {
-         $tags['author'] = htmlspecialchars(stripslashes($tags['author']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['author'] = htmlspecialchars(stripslashes($tags['author']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= MetaTagMakeSingleTag('author', $tags['author']);
       }
       if (!empty($tags['owner'])) {
-         $tags['owner'] = htmlspecialchars(stripslashes($tags['owner']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['owner'] = htmlspecialchars(stripslashes($tags['owner']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= MetaTagMakeSingleTag('owner', $tags['owner']);
       }
       if (!empty($tags['reply-to'])) {
-         $tags['reply-to'] = htmlspecialchars(stripslashes($tags['reply-to']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['reply-to'] = htmlspecialchars(stripslashes($tags['reply-to']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= MetaTagMakeSingleTag('reply-to', $tags['reply-to']);
       } else
          $content .= MetaTagMakeSingleTag('reply-to', $adminmail);
       if (!empty($tags['description'])) {
-         $tags['description'] = htmlspecialchars(stripslashes($tags['description']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['description'] = htmlspecialchars(stripslashes($tags['description']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= "if (\$m_description!=\"\")\n";
          $content .= "   \$l_meta.=\"<meta name=\\\"description\\\" content=\\\"\$m_description\\\" />\\n\";\n";
          $content .= "else\n";
          $content .= "   ".MetaTagMakeSingleTag('description', $tags['description']);
       }
       if (!empty($tags['keywords'])) {
-         $tags['keywords'] = htmlspecialchars(stripslashes($tags['keywords']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['keywords'] = htmlspecialchars(stripslashes($tags['keywords']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= "if (\$m_keywords!=\"\")\n";
          $content .= "   \$l_meta.=\"<meta name=\\\"keywords\\\" content=\\\"\$m_keywords\\\" />\\n\";\n";
          $content .= "else\n";
          $content .= "   ".MetaTagMakeSingleTag('keywords', $tags['keywords']);
       }
       if (!empty($tags['rating'])) {
-         $tags['rating'] = htmlspecialchars(stripslashes($tags['rating']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['rating'] = htmlspecialchars(stripslashes($tags['rating']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= MetaTagMakeSingleTag('rating', $tags['rating']);
       }
       if (!empty($tags['distribution'])) {
-         $tags['distribution'] = htmlspecialchars(stripslashes($tags['distribution']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['distribution'] = htmlspecialchars(stripslashes($tags['distribution']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= MetaTagMakeSingleTag('distribution', $tags['distribution']);
       }
       if (!empty($tags['copyright'])) {
-         $tags['copyright'] = htmlspecialchars(stripslashes($tags['copyright']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['copyright'] = htmlspecialchars(stripslashes($tags['copyright']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= MetaTagMakeSingleTag('copyright', $tags['copyright']);
       }
       if (!empty($tags['revisit-after'])) {
-         $tags['revisit-after'] = htmlspecialchars(stripslashes($tags['revisit-after']),ENT_COMPAT|ENT_HTML401,cur_charset);
+         $tags['revisit-after'] = htmlspecialchars(stripslashes($tags['revisit-after']),ENT_COMPAT|ENT_HTML401,'utf-8');
          $content .= MetaTagMakeSingleTag('revisit-after', $tags['revisit-after']);
       } else
          $content .= MetaTagMakeSingleTag('revisit-after', "14 days");
@@ -289,7 +292,7 @@ function MetaTagSave($filename, $tags) {
    return false;
 }
 
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
+if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Header("Location: die.php?op=admin");
 include ("admin/settings_save.php");
 
 global $language;

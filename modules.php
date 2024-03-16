@@ -11,22 +11,25 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-include ("grab_globals.php");
 
-function Access_Error () {
-  include("admin/die.php");
-}
+if (!function_exists("Mysql_Connexion"))
+include ('boot/bootstrap.php');
 
 function filtre_module($strtmp) {
-   if (strstr($strtmp,'..') || stristr($strtmp,'script') || stristr($strtmp,'cookie') || stristr($strtmp,'iframe') || stristr($strtmp,'applet') || stristr($strtmp,'object'))
-      Access_Error();
+   if (strstr($strtmp,'..') ||
+      strstr($strtmp,'..') || 
+      stristr($strtmp,'script') || 
+      stristr($strtmp,'cookie') || 
+      stristr($strtmp,'iframe') || 
+      stristr($strtmp,'applet') || 
+      stristr($strtmp,'object'))
+      stristr($strtmp, 'meta') || 
+      Header("Location: die.php?op=module");
    else
-      return $strtmp!='' ? true : false ;
+      return $strtmp!='' ? true : false;
 }
 
 if (filtre_module($ModPath) and filtre_module($ModStart)) {
-   if (!function_exists("Mysql_Connexion"))
-      include ("mainfile.php");
    if (file_exists("modules/$ModPath/http/$ModStart.php")) {
       include("modules/$ModPath/http/$ModStart.php");
       die();
@@ -34,8 +37,9 @@ if (filtre_module($ModPath) and filtre_module($ModStart)) {
       include("modules/$ModPath/$ModStart.php");
       die();
    } else
-      Access_Error();
+      Header("Location: die.php?op=module-exist");
 } 
 else
-   Access_Error();
+   Header("Location: die.php?op=module");
+
 ?>

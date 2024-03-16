@@ -11,7 +11,7 @@
 /************************************************************************/
 
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
    $tmp_theme = getTheme();
 

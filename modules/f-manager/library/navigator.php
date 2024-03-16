@@ -16,7 +16,7 @@ define ('DateFormat',translate("dateinternal"));
 class Navigator {
    // Vars
    var $GetDirSz;
-   var $Curdir;
+   var $CurDir;
    var $DirsList  =  array("Name" =>array(),"DateM"=>array(),"Size" =>array(),
                            "Perms"=>array() );
    var $FilesList =  array("Name" =>array(),"DateM"=>array(),"Size" =>array(),
@@ -38,7 +38,7 @@ class Navigator {
 // Constructor
 function File_Navigator($parm,$sort_filed="N",$dir="ASC", $DirSize=false) {
    if (!isset($parm)) $parm=".";
-   if (is_dir($parm)) $this->CurDir=$parm; else Access_Error();
+   if (is_dir($parm)) $this->CurDir=$parm; else Header("Location: die.php");
 
    $this->GetDirSz=$DirSize;
 

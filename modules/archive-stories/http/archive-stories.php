@@ -11,22 +11,21 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
-   die();
+// if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
+//    die();
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
+
 include_once('functions.php');
-include ("modules/$ModPath/config/archive-stories.conf.php");
+
+include ("modules/$ModPath/config/archive-stories.php");
 include ("modules/$ModPath/config/cache.timings.php");
+
 if (!isset($start)) $start=0;
 include("themes/default/header.php");
-// Include cache manager
-if ($SuperCache) {
-   $cache_obj = new cacheManager();
-   $cache_obj->startCachingPage();
-} else
-   $cache_obj = new SuperCacheEmpty();
-if (($cache_obj->genereting_output==1) or ($cache_obj->genereting_output==-1) or (!$SuperCache)) {
+
+// start caching page
+if ((cacheManagerStart()->genereting_output==1) or (cacheManagerStart()->genereting_output==-1) or (!$SuperCache)) {
    if ($arch_titre) 
       echo aff_langue($arch_titre);
    echo '
@@ -78,11 +77,16 @@ if (($cache_obj->genereting_output==1) or ($cache_obj->genereting_output==-1) or
       }
       else
          $title = '<a href="article.php?sid='.$sid.'&amp;archive='.$arch.'" >'.aff_langue(ucfirst($title)).'</a>';
-      setlocale (LC_TIME, aff_langue($locale));
-      preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
-      $datetime = strftime("%d-%m-%Y %H:%M:%S", mktime($datetime[4]+(integer)$gmt,$datetime[5],$datetime[6],$datetime[2],$datetime[3],$datetime[1]));
-      if (cur_charset!="utf-8") //no need !
-         $datetime = ucfirst($datetime);// no need ! capital sur un chiffre ?
+      
+      // setlocale (LC_TIME, aff_langue($locale));
+      // preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
+      // $datetime = strftime("%d-%m-%Y %H:%M:%S", mktime($datetime[4]+(integer)$gmt,$datetime[5],$datetime[6],$datetime[2],$datetime[3],$datetime[1]));
+      // if ('utf-8'!="utf-8") //no need !
+      //    $datetime = ucfirst($datetime);// no need ! capital sur un chiffre ?
+
+      $locale = getLocale();
+      $datetime = ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring"), $time, $locale), ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401, 'utf-8'));
+
       echo '
         <tr>
            <td>'.$title.'</td>
@@ -104,7 +108,9 @@ if (($cache_obj->genereting_output==1) or ($cache_obj->genereting_output==-1) or
    echo paginate('modules.php?ModPath=archive-stories&amp;ModStart=archive-stories&amp;start=', '&amp;count='.$count, $nbPages, $current, 1, $maxcount, $start);
    echo '</div>';
 }
-if ($SuperCache)
-   $cache_obj->endCachingPage();
+
+// end Caching page
+cacheManagerEnd();
+
 include("themes/default/footer.php");
 ?>

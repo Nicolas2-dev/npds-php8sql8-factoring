@@ -12,8 +12,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\cache\cacheManager;
+use npds\system\cache\SuperCacheEmpty;
+
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
 include("functions.php");
 if ($SuperCache)
@@ -58,7 +62,7 @@ if ($submitS) {
    $userdata = get_userdata($userdata[1]);
 
    if ($allow_html == 0 || isset($html))
-      $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,cur_charset);
+      $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,'utf-8');
 
    if (($allow_bbcode==1) and ($forum_type!='6') and ($forum_type!='5'))
       $message = smile($message);
@@ -148,9 +152,9 @@ if ($submitS) {
          $message = str_replace("<br />", "\n", $message);
          $message = smile($message);
          $message = desaf_cod($message);
-         $message = undo_htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,cur_charset);
+         $message = undo_htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,'utf-8');
       } else
-         $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,cur_charset);
+         $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,'utf-8');
 
       $message = stripslashes($message);
    }
@@ -166,12 +170,12 @@ if ($submitS) {
          <div class="mb-3 row">
             <label class="col-form-label col-sm-12" for="subject">'.translate("Titre").'</label>
             <div class="col-sm-12">
-               <input class="form-control" type="text" id="subject" name="subject" maxlength="100" value="'.htmlspecialchars($title,ENT_COMPAT|ENT_HTML401,cur_charset).'" />
+               <input class="form-control" type="text" id="subject" name="subject" maxlength="100" value="'.htmlspecialchars($title,ENT_COMPAT|ENT_HTML401,'utf-8').'" />
             </div>
          </div>';
       else {
          echo '<strong>'.translate("Edition de la soumission").'</strong> : '.$title;
-         echo "<input type=\"hidden\" name=\"subject\" value=\"".htmlspecialchars($title,ENT_COMPAT|ENT_HTML401,cur_charset)."\" />";
+         echo "<input type=\"hidden\" name=\"subject\" value=\"".htmlspecialchars($title,ENT_COMPAT|ENT_HTML401,'utf-8')."\" />";
       }
    } else
       forumerror('0036');

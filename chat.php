@@ -17,7 +17,7 @@
    //   include("grab_globals.php");
 
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
    $Titlesitename='NPDS';
    $meta_op='';

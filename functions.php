@@ -92,23 +92,6 @@ function get_last_post($id, $type, $cmd, $Mmod) {
    return($val);
 }
 
-function convertdateTOtimestamp($myrow) {
-   if (substr($myrow,2,1)=="-") {
-      $day=substr($myrow,0,2);
-      $month=substr($myrow,3,2);
-      $year=substr($myrow,6,4);
-   } else {
-      $day=substr($myrow,8,2);
-      $month=substr($myrow,5,2);
-      $year=substr($myrow,0,4);
-   }
-   $hour=substr($myrow,11,2);
-   $mns=substr($myrow,14,2);
-   $sec=substr($myrow,17,2);
-   $tmst=mktime((int) $hour,(int) $mns,(int) $sec,(int) $month,(int) $day,(int) $year);
-   return ($tmst);
-}
-
 function post_convertdate($tmst) {
    $val = $tmst>0 ? date(translate("dateinternal"),$tmst) : '';
    return ($val);

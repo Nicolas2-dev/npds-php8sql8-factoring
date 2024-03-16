@@ -69,6 +69,6 @@ function upload_translate($phrase) {
    case "Extensions autorisées"; $tmp='Allowed extensions'; break;
    default: $tmp = "Need tanslation [** $phrase **]"; break;
  }
-   return (htmlentities($tmp,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401,cur_charset));
+   return (htmlentities($tmp,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401,'utf-8'));
 }
 ?>

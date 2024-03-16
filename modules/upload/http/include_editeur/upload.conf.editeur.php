@@ -42,10 +42,10 @@
                   $fp = fopen($DOCUMENTROOT.$user_dir."/index.html", 'w');
                   fclose($fp);
                } else
-                  Access_Error();
+               Header("Location: die.php");
             }
          } else
-            Access_Error();
+            Header("Location: die.php?op=module");
          $rep_upload_editeur = $user_dir."/";
       } else {
          $rep_upload_editeur = $racine."/modules/upload/assets/images/upload/";

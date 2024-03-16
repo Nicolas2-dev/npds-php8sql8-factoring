@@ -85,7 +85,7 @@ if ($smilies) {
    $taille_fichier = 81920;
    if (!$avatar_size) $avatar_size='80*100';
    $avatar_wh = explode('*',$avatar_size);
-   $m->add_upload('B1', '', '30', $taille_fichier);
+   $m->add_upload('B1', '', 30, $taille_fichier);
    $m->add_extender('B1', '', '<span class="help-block text-end">Taille maximum du fichier image :&nbsp;=>&nbsp;<strong>'.$taille_fichier.'</strong> octets et <strong>'.$avatar_size.'</strong> pixels</span>');
    $m->add_extra('<div id="avatarPreview" class="preview"></div>');
    $m->add_checkbox('raz_avatar',translate("Revenir aux avatars standards"), 1, false, false);

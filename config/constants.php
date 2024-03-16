@@ -1,9 +1,19 @@
 <?php
 
-if (!defined("cur_charset")) {
-   define ('cur_charset', "utf-8");
+
+// superCache contantes
+
+if (!defined("LOCK_EX")) {
+    define("LOCK_EX", 2);
 }
 
-if (!defined("doctype")) {
-   define ('doctype', "HTML 5.1");
+if (!defined("LOCK_EX")) {
+    define("LOCK_UN", 3);
+}
+
+// sform Constants
+
+// Constante
+if (!defined("CRLF")) {
+    define('CRLF', "\n");
 }

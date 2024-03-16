@@ -18,7 +18,7 @@ $f_titre = adm_translate("Administrateurs");
 //==> controle droit
 admindroits($aid,$f_meta_nom);
 //<== controle droit
-if($radminsuper!=1) Access_Error();
+if($radminsuper!=1) Header("Location: die.php");
 
 global $language, $adminimg, $admf_ext;
 $listdroits='';$listdroitsmodulo='';
@@ -69,7 +69,7 @@ $scri_check ='
       $("#ckball_f").change(function(){
          check_a_f = $("#ckball_f").is(":checked");
          if(check_a_f) {
-            $("#ckb_status_f").text("'.html_entity_decode(adm_translate("Tout décocher"),ENT_COMPAT | ENT_HTML401,cur_charset).'");
+            $("#ckb_status_f").text("'.html_entity_decode(adm_translate("Tout décocher"),ENT_COMPAT | ENT_HTML401,'utf-8').'");
          } else {
             $("#ckb_status_f").text("'.adm_translate("Tout cocher").'");
          }
@@ -79,7 +79,7 @@ $scri_check ='
       $("#ckball_m").change(function(){
          check_a_m = $("#ckball_m").is(":checked");
          if(check_a_m) {
-            $("#ckb_status_m").text("'.html_entity_decode(adm_translate("Tout décocher"),ENT_COMPAT | ENT_HTML401,cur_charset).'");
+            $("#ckb_status_m").text("'.html_entity_decode(adm_translate("Tout décocher"),ENT_COMPAT | ENT_HTML401,'utf-8').'");
          } else {
             $("#ckb_status_m").text("'.adm_translate("Tout cocher").'");
          }

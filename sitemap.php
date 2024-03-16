@@ -153,7 +153,7 @@ function sitemap_create($PAGES, $filename) {
 
 /* -----------------------------------------*/
 // http://www.example.com/storage/cache/sitemap.xml 
-$filename="storage/cache/sitemap.xml";
+$filename="storage/sitemap/sitemap.xml";
 // delais = 6 heures (21600 secondes)
 $refresh=21600;
 global $PAGES;

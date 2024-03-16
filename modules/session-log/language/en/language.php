@@ -33,6 +33,6 @@ function SessionLog_translate($phrase) {
    case "Agent" : $tmp = "Agent"; break;
    default: $tmp = "Translation error [** $phrase **]"; break;
  }
-  return (htmlentities($tmp,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401,cur_charset));
+  return (htmlentities($tmp,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401,'utf-8'));
 }
 ?>

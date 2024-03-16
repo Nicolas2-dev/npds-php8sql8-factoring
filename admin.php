@@ -12,11 +12,8 @@
 /************************************************************************/
 
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 include("language/$language/language-adm.php");
-function Access_Error () {
-   include("admin/die.php");
-}
 
 function admindroits($aid,$f_meta_nom) {
    global $NPDS_Prefix, $radminsuper;
@@ -27,7 +24,7 @@ function admindroits($aid,$f_meta_nom) {
       $supers[] = $data[1];
    }
    if ((!in_array('1', $supers)) AND (!in_array($f_meta_nom, $foncts)))
-      Access_Error();
+      Header("Location: die.php?op=admin");
    $radminsuper = $supers[0];
 }
 
@@ -430,7 +427,7 @@ function GraphicAdmin($hlpfile) {
             lst_id.fadeOut(1000);//hide();
             btn_hide=$('#'+hid);
             btn_hide.attr('id',sho);
-            btn_hide.attr('title','".html_entity_decode(adm_translate("Déplier la liste"),ENT_QUOTES|ENT_HTML401,cur_charset)."');
+            btn_hide.attr('title','".html_entity_decode(adm_translate("Déplier la liste"),ENT_QUOTES|ENT_HTML401,'utf-8')."');
             i_id.attr('class','fa fa-caret-down fa-lg text-primary me-1');
         }
        });

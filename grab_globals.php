@@ -19,14 +19,16 @@
 if (stristr($_SERVER['PHP_SELF'],'grab_globals.php') and strlen($_SERVER['QUERY_STRING']) !='') 
    include('admin/die.php');
 
+   require 'vendor/autoload.php';
+
 if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
    define('NPDS_GRAB_GLOBALS_INCLUDED', 1);
 
    // Modify the report level of PHP
    // error_reporting(0);// report NO ERROR
    //error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE); // Devel report
-   error_reporting(E_ERROR | E_WARNING | E_PARSE); // standard ERROR report
-   //error_reporting(E_ALL);
+   //error_reporting(E_ERROR | E_WARNING | E_PARSE); // standard ERROR report
+   error_reporting(E_ALL);
    function getip() {
       if (isset($_SERVER)) {
          if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
@@ -86,6 +88,10 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
    // include current charset
    if (file_exists("config/constants.php"))
       include ("config/constants.php");
+
+      if (file_exists("config/doctype.php"))
+      include ("config/doctype.php");
+
    // include url_protect Bad Words and create the filter function
    include ("config/url_protect.php");
 

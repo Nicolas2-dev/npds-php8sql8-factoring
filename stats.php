@@ -12,7 +12,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 include("themes/default/header.php");
 function generatePourcentageAndTotal($count, $total){
    $tab[] = wrh($count);

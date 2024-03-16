@@ -1,6 +1,6 @@
 <?php
 /* Do not change anything in this file manually. Use the administration interface. */
-/* généré le : 04-11-2023 12:01:30 */
+/* généré le : 06-03-2024 13:17:31 */
 global $nuke_url;
 $meta_doctype = isset($meta_doctype) ? $meta_doctype : '' ;
 $nuke_url = isset($nuke_url) ? $nuke_url : '' ;
@@ -13,7 +13,6 @@ if ($meta_doctype=="")
    $l_meta="<!DOCTYPE html>\n<html lang=\"$lang\">\n<head>\n";
 else
    $l_meta=$meta_doctype."\n<html lang=\"$lang\">\n<head>\n";
-$l_meta.="<meta charset=\"utf-8\" />\n";
 $l_meta.="<title>$Titlesitename</title>\n";
 $l_meta.="<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\n";
 $l_meta.="<meta http-equiv=\"content-script-type\" content=\"text/javascript\" />\n";

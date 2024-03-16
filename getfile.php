@@ -1,4 +1,6 @@
 <?php
+
+use npds\system\utility\crypt;
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
@@ -11,7 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+   include ('boot/bootstrap.php');
 
 switch($apli) {
    case 'f-manager':
@@ -19,12 +21,14 @@ switch($apli) {
       $fma=explode('#fma#',$fma);
       $att_id=decrypt($fma[0]);
       $att_name=decrypt($fma[1]);
+   
    case 'forum_npds':
       if(isset($user)) {
          $userX=base64_decode($user);
          $userdata=explode(':', $userX);
          $marqueurM=substr($userdata[2],8,6);
       }
+
    case 'minisite':
    case 'getfile':
       $att_name=StripSlashes(str_replace("\"",'',rawurldecode($att_name)));
@@ -36,10 +40,12 @@ switch($apli) {
                case 'forum_npds':
                   $fic="modules/upload/storage/upload_forum/$att_id.$apli.$att_name";
                break;
+
                // MiniSite
                case 'minisite':
                   $fic="storage/users_private/$att_id/mns/$att_name";
                break;
+
                // Application générique : la présence de getfile.conf.php est nécessaire
                case 'getfile':
                   if (file_exists("$att_id/getfile.conf.php") or file_exists("$att_id/.getfile.conf.php"))
@@ -47,27 +53,34 @@ switch($apli) {
                   else
                      header("location: index.php");
                break;
+
                case 'f-manager';
                   $fic="$att_id/$att_name";
                break;
             }
+
             include ("modules/upload/language/$language/language.php");
             include ("modules/upload/http/include/mimetypes.php");
+
             $suffix=strtoLower(substr(strrchr( $att_name, '.' ),1));
             if (isset($type))
                list ($type, $garbage) = explode(';',$type);      // strip "; name=.... " (Opera6)
+
             if (isset($mimetypes[$suffix]) )
                $type=$mimetypes[$suffix];
             elseif (empty($type) || ($type=='application/octet-stream'))
                $type=$mimetype_default;
+
             $att_type = $type;
             $att_size = @filesize ($fic);
+
             if (file_exists ($fic)) {
                if ($apli=='forum_npds') {
                   include ('auth.php');
                   $sql="UPDATE $upload_table SET compteur = compteur+1 WHERE att_id = '$att_id'";
                   sql_query($sql);
                }
+
                // Output file to the browser
                header('Expires: Thu, 01 Jan 1970 00:00:01 GMT');
                header('Cache-Control: max-age=60, must-revalidate');
@@ -92,8 +105,10 @@ switch($apli) {
                   header("Content-type: application/x-shockwave-flash");
                else
                   header("Content-Type: $att_type; name=\"".basename($att_name)."\"");
+
                header ("Content-length: $att_size");
                header("Content-Disposition: inline; filename=\"".basename($att_name)."\"");
+
                readfile($fic);
             } else
                header("location: index.php");
@@ -104,7 +119,7 @@ switch($apli) {
    break;
 
    case 'captcha':
-      $mot=rawurldecode(decrypt($att_id));
+      $mot=rawurldecode(crypt::decrypt($att_id));
       $font=16;
       $width=imagefontwidth($font)* strlen($mot);
       $height=imagefontheight($font);
@@ -112,8 +127,8 @@ switch($apli) {
       $blanc=imagecolorallocate($img, 255, 255, 255);
       $noir=imagecolorallocate($img, 0, 0, 0);
       imagecolortransparent($img, $blanc);
-      if (cur_charset=="utf-8")
-         $mot=utf8_decode($mot);
+      // if ('utf-8'=="utf-8")
+      //    $mot=utf8_decode($mot);
       imagestring($img, $font, 1 , 1, $mot, $noir);
       imagepng($img);
       imagedestroy($img);

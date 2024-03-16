@@ -12,8 +12,9 @@
 /* Dont modify this file is you dont know what you make                 */
 /************************************************************************/
 
+use npds\system\sform\form_handler;
+
 $sform_path='support/sform/';
-include_once('library/sform/sform.php');
 
 global $m;
 $m=new form_handler();
