@@ -14,22 +14,40 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+use npds\system\logs\logs;
+use npds\system\assets\css;
+
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'ConfigFiles';
 $f_titre = adm_translate("Les fichiers de configuration");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language;
 $hlpfile = "manuels/$language/configfiles.html";
 
-function ConfigFiles($contents, $files)
+/**
+ * [ConfigFiles description]
+ *
+ * @param   string  $contents  [$contents description]
+ * @param   string  $files     [$files description]
+ *
+ * @return  void
+ */
+function ConfigFiles(string $contents, string $files): void
 {
-    global $hlpfile, $language, $max_car, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     if ($contents == '') {
         echo '
     <hr />
@@ -130,7 +148,9 @@ function ConfigFiles($contents, $files)
         <h3 class="my-3">' . adm_translate("Modification de") . ' : <span class="text-muted">' . $files . '</span></h3>
         <form action="admin.php?op=ConfigFiles_save" method="post">
             <code><textarea class="form-control" name="Xtxt" rows="20" cols="70">';
+        
         echo htmlspecialchars($contents, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8');
+        
         echo '</textarea></code>
             <input type="hidden" name="Xfiles" value="' . $files . '" />
             <div class="mb-3 mt-3">
@@ -140,10 +160,19 @@ function ConfigFiles($contents, $files)
         </form>
         ';
     }
-    adminfoot('', '', '', '');
+
+    css::adminfoot('', '', '', '');
 }
 
-function ConfigFiles_save($Xtxt, $Xfiles)
+/**
+ * [ConfigFiles_save description]
+ *
+ * @param   string  $Xtxt    [$Xtxt description]
+ * @param   string  $Xfiles  [$Xfiles description]
+ *
+ * @return  void
+ */
+function ConfigFiles_save(string $Xtxt, string $Xfiles): void
 {
     if ($Xfiles == "header_before") {
         $fp = fopen("themes/default/view/include/header_before.inc", "w");
@@ -192,62 +221,103 @@ function ConfigFiles_save($Xtxt, $Xfiles)
     }
 
     global $aid;
-    Ecr_Log('security', "SaveConfigFile($Xfiles) by AID : $aid", '');
+    logs::Ecr_Log('security', "SaveConfigFile($Xfiles) by AID : $aid", '');
+
     header("location: admin.php?op=ConfigFiles");
 }
 
-function delete_configfile($fileX)
+/**
+ * [delete_configfile description]
+ *
+ * @param   string  $fileX  [$fileX description]
+ *
+ * @return  void
+ */
+function delete_configfile(string $fileX): void
 {
     global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     echo '
     <div class="alert alert-danger" role="alert">
         <p><strong>' . adm_translate("Supprimer le fichier") . ' ' . $fileX . ' ? </strong><br /><br /><a class="btn btn-danger btn-sm" href="admin.php?op=ConfigFiles_delete&amp;file=' . $fileX . '">' . adm_translate("Oui") . '</a>&nbsp;&nbsp;<a class="btn btn-secondary btn-sm" href="admin.php?op=ConfigFiles" >' . adm_translate("Non") . '</a></p>
     </div>';
-    adminfoot('', '', '', '');
+
+    css::adminfoot('', '', '', '');
 }
 
-function ConfigFiles_delete($modele)
+/**
+ * [ConfigFiles_delete description]
+ *
+ * @param   string  $modele  [$modele description]
+ *
+ * @return  void
+ */
+function ConfigFiles_delete(string $modele): void
 {
-    if ($modele == 'header_before')
+    if ($modele == 'header_before') {
         @unlink("themes/default/view/include/header_before.inc");
-    elseif ($modele == 'header_head')
+    } elseif ($modele == 'header_head') {
         @unlink("themes/default/view/include/header_head.inc");
-    elseif ($modele == 'body_onload')
+    } elseif ($modele == 'body_onload') {
         @unlink("themes/default/view/include/body_onload.inc");
-    elseif ($modele == 'header_after')
+    } elseif ($modele == 'header_after') {
         @unlink("themes/default/view/include/header_after.inc");
-    elseif ($modele == 'footer_before')
+    } elseif ($modele == 'footer_before') {
         @unlink("themes/default/view/include/footer_before.inc");
-    elseif ($modele == 'footer_after')
+    } elseif ($modele == 'footer_after') {
         @unlink("themes/default/view/include/footer_after.inc");
-    elseif ($modele == 'new_user')
+    } elseif ($modele == 'new_user') {
         @unlink("themes/default/view/include/new_user.inc");
-    elseif ($modele == 'user')
+    } elseif ($modele == 'user') {
         @unlink("themes/default/view/include/user.inc");
+    }
 
     global $aid;
-    Ecr_Log('security', "DeleteConfigFile($modele) by AID : $aid", '');
+    logs::Ecr_Log('security', "DeleteConfigFile($modele) by AID : $aid", '');
+
     header("location: admin.php?op=ConfigFiles");
 }
 
-function copy_sample($fileX)
+/**
+ * [copy_sample description]
+ *
+ * @param   string  $fileX  [$fileX description]
+ *
+ * @return  void
+ */
+function copy_sample(string $fileX): void
 {
     global $hlpfile, $f_meta_nom, $f_titre, $adminimg, $header;
-    if ($header != 1) include("themes/default/header.php");
+
+    if ($header != 1) {
+        include("themes/default/header.php");
+    }
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     echo '
     <hr />
     <div class="card card-body">
         <p>' . adm_translate("Créer le fichier en utilisant le modèle") . ' ? <br /><br /><a class="btn btn-primary" href="admin.php?op=ConfigFiles_create&amp;modele=' . $fileX . '" >' . adm_translate("Oui") . '</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="admin.php?op=ConfigFiles" >' . adm_translate("Non") . '</a></p>
     </div>';
-    adminfoot('', '', '', '');
+
+    css::adminfoot('', '', '', '');
 }
 
-function ConfigFiles_create($modele)
+/**
+ * [ConfigFiles_create description]
+ *
+ * @param   string  $modele  [$modele description]
+ *
+ * @return  void
+ */
+function ConfigFiles_create(string $modele): void
 {
     @umask("0000");
     if ($modele == "header_before") {
@@ -277,7 +347,8 @@ function ConfigFiles_create($modele)
     }
 
     global $aid;
-    Ecr_Log('security', "CreateConfigFile($modele) by AID : $aid", '');
+    logs::Ecr_Log('security', "CreateConfigFile($modele) by AID : $aid", '');
+
     header("location: admin.php?op=ConfigFiles");
 }
 
@@ -289,64 +360,72 @@ switch ($op) {
                 $Xcontents = fread($fp, filesize("themes/default/view/include/header_before.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'header_head') {
             if (file_exists("themes/default/view/include/header_head.inc")) {
                 $fp = fopen("themes/default/view/include/header_head.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/header_head.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'body_onload') {
             if (file_exists("themes/default/view/include/body_onload.inc")) {
                 $fp = fopen("themes/default/view/include/body_onload.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/body_onload.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'header_after') {
             if (file_exists("themes/default/view/include/header_after.inc")) {
                 $fp = fopen("themes/default/view/include/header_after.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/header_after.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'footer_before') {
             if (file_exists("themes/default/view/include/footer_before.inc")) {
                 $fp = fopen("themes/default/view/include/footer_before.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/footer_before.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'footer_after') {
             if (file_exists("themes/default/view/include/footer_after.inc")) {
                 $fp = fopen("themes/default/view/include/footer_after.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/footer_after.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'new_user') {
             if (file_exists("themes/default/view/include/new_user.inc")) {
                 $fp = fopen("themes/default/view/include/new_user.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/new_user.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'user') {
             if (file_exists("themes/default/view/include/user.inc")) {
                 $fp = fopen("themes/default/view/include/user.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/user.inc"));
                 fclose($fp);
                 ConfigFiles($Xcontents, $files);
-            } else
+            } else {
                 copy_sample($files);
+            }
         } elseif ($files == 'cache.config') {
             if (file_exists("config/cache.config.php")) {
                 $fp = fopen("config/cache.config.php", "r");
@@ -370,18 +449,23 @@ switch ($op) {
             }
         }
         break;
+
     case 'ConfigFiles_save':
         ConfigFiles_save($Xtxt, $Xfiles);
         break;
+
     case 'ConfigFiles_create':
         ConfigFiles_create($modele);
         break;
+
     case 'delete_configfile':
         delete_configfile($file);
         break;
+
     case 'ConfigFiles_delete':
         ConfigFiles_delete($file);
         break;
+
     default:
         ConfigFiles('', '');
         break;

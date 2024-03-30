@@ -13,62 +13,100 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+use npds\system\assets\css;
+use npds\system\auth\groupe;
+use npds\system\language\language;
+use npds\system\support\facades\DB;
+
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'blocks';
 $f_titre = adm_translate('Gestion des blocs');
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language;
 $hlpfile = "manuels/$language/blocks.html";
 
-function groupe($groupe)
+/**
+ * [groupe description]
+ *
+ * @param   string  $groupe  [$groupe description]
+ *
+ * @return  string
+ */
+function groupe(string $groupe): string
 {
     $les_groupes = explode(',', $groupe);
-    $mX = liste_group();
+    $mX = groupe::liste_group();
     $nbg = 0;
     $str = '';
+
     foreach ($mX as $groupe_id => $groupe_name) {
         $selectionne = 0;
+
         if ($les_groupes) {
             foreach ($les_groupes as $groupevalue) {
-                if (($groupe_id == $groupevalue) and ($groupe_id != 0)) $selectionne = 1;
+                if (($groupe_id == $groupevalue) and ($groupe_id != 0)) {
+                    $selectionne = 1;
+                }
             }
         }
-        if ($selectionne == 1)
-            $str .= '
-            <option value="' . $groupe_id . '" selected="selected">' . $groupe_name . '</option>';
-        else
-            $str .= '
-            <option value="' . $groupe_id . '">' . $groupe_name . '</option>';
+
+        if ($selectionne == 1) {
+            $str .= '<option value="' . $groupe_id . '" selected="selected">' . $groupe_name . '</option>';
+        } else {
+            $str .= '<option value="' . $groupe_id . '">' . $groupe_name . '</option>';
+        }
+
         $nbg++;
     }
-    if ($nbg > 5) $nbg = 5;
+
+    if ($nbg > 5) {
+        $nbg = 5;
+    }
+    
     return ('
     <select multiple="multiple" class="form-control" name="Mmember[]" size="' . $nbg . '">
     ' . $str . '
     </select>');
 }
 
-function droits_bloc($member, $j, $lb)
+/**
+ * [droits_bloc description]
+ *
+ * @param   string  $member  [$member description]
+ * @param   string  $j       [$j description]
+ * @param   string  $lb      [$lb description]
+ *
+ * @return  void
+ */
+function droits_bloc(string $member, string $j, string $lb): void
 {
     echo '
     <div class="mb-3">
         <div class="form-check form-check-inline">';
+
     $checked = $member == -127 ? ' checked="checked"' : '';
+
     echo '
             <input type="radio" id="adm' . $j . $lb . '" name="members" value="-127" ' . $checked . ' class="form-check-input" />
             <label class="form-check-label" for="adm' . $j . $lb . '">' . adm_translate("Administrateurs") . '</label>
         </div>
         <div class="form-check form-check-inline">';
+
     $checked = $member == -1 ? ' checked="checked"' : '';
+
     echo '
             <input type="radio" id="ano' . $j . $lb . '" name="members" value="-1" ' . $checked . ' class="form-check-input" />
             <label class="form-check-label" for="ano' . $j . $lb . '">' . adm_translate("Anonymes") . '</label>
-        </div>';
-    echo '
+        </div>
         <div class="form-check form-check-inline">';
+
     if ($member > 0) {
         echo '
             <input type="radio" id="mem' . $j . $lb . '" name="members" value="1" checked="checked" class="form-check-input"/>
@@ -87,6 +125,7 @@ function droits_bloc($member, $j, $lb)
     </div>';
     } else {
         $checked = $member == 0 ? ' checked="checked"' : '';
+
         echo '
             <input type="radio" id="mem' . $j . $lb . '" name="members" value="1" class="form-check-input" />
             <label class="form-check-label" for="mem' . $j . $lb . '">' . adm_translate("Membres") . '</label>
@@ -105,19 +144,27 @@ function droits_bloc($member, $j, $lb)
     }
 }
 
-function blocks()
+/**
+ * [blocks description]
+ *
+ * @return  void
+ */
+function blocks(): void
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg, $aid;
+    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
     echo '
     <hr />
     <h3>' . adm_translate("Edition des Blocs de gauche") . '</h3>';
-    $result = sql_query("SELECT id, title, content, member, Lindex, cache, actif, aide, css FROM " . $NPDS_Prefix . "lblocks ORDER BY Lindex ASC");
-    $num_row = sql_num_rows($result);
-    if ($num_row > 0) {
+    
+    $lblocks = DB::table('lblocks')->select('id', 'title', 'content', 'member', 'Lindex', 'cache', 'actif', 'aide', 'css')->orderBy('Lindex', 'ASC')->get();
+
+    if ($lblocks > 0) {
         echo '
     <script type="text/javascript">
         //<![CDATA[
@@ -159,62 +206,75 @@ function blocks()
             </tr>
         </thead>
         <tbody>';
+       
         $j = 0;
-        while (list($id, $title, $content, $member, $Lindex, $Scache, $Sactif, $BLaide, $css) = sql_fetch_row($result)) {
+        foreach($lblocks as $lblock) {
             $funct = '';
-            if ($title == '') {
-                //$title=adm_translate("Sans nom");
-                $pos_func = strpos($content, 'function#');
-                $pos_nl = strpos($content, chr(13), $pos_func);
+            
+            if ($lblock['title'] == '') {
+                //$$lblock['title'] = adm_translate("Sans nom");
+                $pos_func = strpos($lblock['content'], 'function#');
+                $pos_nl = strpos($lblock['content'], chr(13), $pos_func);
+                
                 if ($pos_func !== false) {
                     $funct = '<span style="font-size: 0.65rem;"> (';
-                    if ($pos_nl !== false)
-                        $funct .= substr($content, $pos_func, $pos_nl - $pos_func);
-                    else
-                        $funct .= substr($content, $pos_func);
+                    
+                    if ($pos_nl !== false) {
+                        $funct .= substr($lblock['content'], $pos_func, $pos_nl - $pos_func);
+                    } else {
+                        $funct .= substr($lblock['content'], $pos_func);
+                    }
+                    
                     $funct .= ')</span>';
                 }
                 $funct = adm_translate("Sans nom") . $funct;
             }
-            echo $Sactif ? '
-            <tr class="table-success">' : '
-            <tr class="table-danger">';
+
+            echo $lblock['actif'] 
+                ? '<tr class="table-success">' 
+                : '<tr class="table-danger">';
+
             echo '
                 <td align="left">
-                <a class="tog" id="show_bloga_' . $id . '" title="' . adm_translate("Déplier la liste") . '"><i id="i_bloga_' . $id . '" class="fa fa-caret-down fa-lg text-primary me-2" ></i></a>';
-            echo aff_langue($title) . ' ' . $funct . '</td>';
-            echo $Sactif ? '
-                <td class="d-none d-sm-table-cell text-center">' . adm_translate("Oui") . '</td>' : '
-                <td class="text-danger d-none d-sm-table-cell text-center">' . adm_translate("Non") . '</td>';
+                <a class="tog" id="show_bloga_' . $lblock['id'] . '" title="' . adm_translate("Déplier la liste") . '"><i id="i_bloga_' . $lblock['id'] . '" class="fa fa-caret-down fa-lg text-primary me-2" ></i></a>';
+            
+            echo language::aff_langue($lblock['title']) . ' ' . $funct . '</td>';
+            
+            echo $lblock['actif'] 
+                ? '<td class="d-none d-sm-table-cell text-center">' . adm_translate("Oui") . '</td>' 
+                : '<td class="text-danger d-none d-sm-table-cell text-center">' . adm_translate("Non") . '</td>';
+
             echo '
-                <td class="d-none d-sm-table-cell" align="right">' . $Lindex . '</td>
-                <td class="d-none d-sm-table-cell" align="right">' . $Scache . '</td>
-                <td class="text-end">' . $id . '</td>
+                <td class="d-none d-sm-table-cell" align="right">' . $lblock['Lindex'] . '</td>
+                <td class="d-none d-sm-table-cell" align="right">' . $lblock['cache'] . '</td>
+                <td class="text-end">' . $lblock['id'] . '</td>
             </tr>
             <tr>
-                <td id="bloga_' . $id . '" class="togxg" style="display:none;" colspan="5">
-                <form id="fad_bloga_' . $id . '" action="admin.php" method="post">
+                <td id="bloga_' . $lblock['id'] . '" class="togxg" style="display:none;" colspan="5">
+                <form id="fad_bloga_' . $lblock['id'] . '" action="admin.php" method="post">
                     <div class="row g-3">
                         <div class="col-md-8">
                             <fieldset>
                             <legend>' . adm_translate("Contenu") . '</legend>
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="text" id="titlega_' . $id . '" name="title" maxlength="1000" value="' . $title . '" />
-                                <label for="titlega_' . $id . '">' . adm_translate("Titre") . '</label>
+                                <input class="form-control" type="text" id="titlega_' . $lblock['id'] . '" name="title" maxlength="1000" value="' . $lblock['title'] . '" />
+                                <label for="titlega_' . $lblock['id'] . '">' . adm_translate("Titre") . '</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="contentga_' . $id . '" name="content" style="height:140px">' . $content . '</textarea>
-                                <label for="contentga_' . $id . '">' . adm_translate("Contenu") . '</label>
+                                <textarea class="form-control" id="contentga_' . $lblock['id'] . '" name="content" style="height:140px">' . $lblock['content'] . '</textarea>
+                                <label for="contentga_' . $lblock['id'] . '">' . adm_translate("Contenu") . '</label>
                                 <span class="help-block"><a href="javascript:void(0);" onclick="window.open(\'autodoc.php?op=blocs\', \'windocu\', \'width=720, height=400, resizable=yes,menubar=no,location=no,directories=no,status=no,copyhistory=no,toolbar=no,scrollbars=yes\');">' . adm_translate("Manuel en ligne") . '</a></span>
                             </div>
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" rows="2" id="BLaidega_' . $id . '" name="BLaide" style="height:100px">' . $BLaide . '</textarea>
-                                <label for="BLaidega_' . $id . '">' . adm_translate("Aide en ligne de ce bloc") . '</label>
+                                <textarea class="form-control" rows="2" id="BLaidega_' . $lblock['id'] . '" name="BLaide" style="height:100px">' . $lblock['aide'] . '</textarea>
+                                <label for="BLaidega_' . $lblock['id'] . '">' . adm_translate("Aide en ligne de ce bloc") . '</label>
                             </div>
                             </fieldset>
                             <fieldset>
                             <legend>' . adm_translate("Droits") . '</legend>';
-            echo droits_bloc($member, $j, 'L');
+
+            echo droits_bloc($lblock['member'], $j, 'L');
+
             echo '
                             </fieldset>
                             <div class="mb-3 row">
@@ -231,41 +291,51 @@ function blocks()
                             <fieldset>
                             <legend>' . adm_translate("Paramètres") . '</legend>
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="number" id="Lindexga_' . $id . '" name="Lindex" max="9999" value="' . $Lindex . '" />
-                                <label for="Lindexga_' . $id . '">Index</label>
+                                <input class="form-control" type="number" id="Lindexga_' . $lblock['id'] . '" name="Lindex" max="9999" value="' . $lblock['Lindex'] . '" />
+                                <label for="Lindexga_' . $lblock['id'] . '">Index</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="number" id="Scachega_' . $id . '" name="Scache" min="0" max="99999" value="' . $Scache . '" />
-                                <label for="Scachega_' . $id . '">' . adm_translate("Rétention") . '</label>
+                                <input class="form-control" type="number" id="Scachega_' . $lblock['id'] . '" name="Scache" min="0" max="99999" value="' . $lblock['cache'] . '" />
+                                <label for="Scachega_' . $lblock['id'] . '">' . adm_translate("Rétention") . '</label>
                                 <span class="help-block">' . adm_translate("Chaque bloc peut utiliser SuperCache. La valeur du délai de rétention 0 indique que le bloc ne sera pas caché (obligatoire pour le bloc function#adminblock).") . '</span>
                             </div>
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="Sactif' . $j . 'L" name="Sactif" value="ON" ';
-            if ($Sactif) echo 'checked="checked" ';
+            
+            if ($lblock['actif']) {
+                echo 'checked="checked" ';
+            }
+            
             echo '/>
                                 <label class="form-check-label" for="Sactif' . $j . 'L">' . adm_translate("Activer le Bloc") . '</label>
                             </div>
                             <div class="form-check mb-3">
                                 <input type="checkbox" class="form-check-input" id="css' . $j . 'L" name="css" value="1" ';
-            if ($css == '1') echo 'checked="checked" ';
+
+            if ($lblock['css'] == '1') {
+                echo 'checked="checked" ';
+            }
+
             echo '/>
                                 <label class="form-check-label" for="css' . $j . 'L">' . adm_translate("CSS Specifique") . '</label>
                             </div>
                             </fieldset>
                         </div>
-                        <input type="hidden" name="id" value="' . $id . '" />
+                        <input type="hidden" name="id" value="' . $lblock['id'] . '" />
                     </div>
                     <button class="btn btn-primary mb-2" type="submit">' . adm_translate("Ok") . '</button>
                 </form>
                 <script type="text/javascript">
                 //<![CDATA[
-                    tog("bloga_' . $id . '","show_bloga_' . $id . '","hide_bloga_' . $id . '");
+                    tog("bloga_' . $lblock['id'] . '","show_bloga_' . $lblock['id'] . '","hide_bloga_' . $lblock['id'] . '");
                 //]]>
                 </script>
                 </td>
             </tr>';
+
             $j++;
         }
+
         echo '
         </tbody>
     </table>
@@ -275,9 +345,10 @@ function blocks()
     echo '
     <hr />
     <h3>' . adm_translate("Edition des Blocs de droite") . '</h3>';
-    $result = sql_query("SELECT id, title, content, member, Rindex, cache, actif, aide, css FROM " . $NPDS_Prefix . "rblocks ORDER BY Rindex ASC");
-    $num_row = sql_num_rows($result);
-    if ($num_row > 0) {
+
+    $rblocks = DB::table('rblocks')->select('id', 'title', 'content', 'member', 'Rindex', 'cache', 'actif', 'aide', 'css')->orderBy('Rindex', 'ASC')->get();
+
+    if ($rblocks > 0) {
         echo '
     <script type="text/javascript">
         //<![CDATA[
@@ -304,62 +375,75 @@ function blocks()
             </tr>
         </thead>
         <tbody>';
+
         $j = 0;
-        while (list($id, $title, $content, $member, $Rindex, $Scache, $Sactif, $BRaide, $css) = sql_fetch_row($result)) {
+        foreach($rblocks as $rblock) {
             $funct = '';
-            if ($title == '') {
-                //$title=adm_translate("Sans nom");
-                $pos_func = strpos($content, 'function#');
-                $pos_nl = strpos($content, chr(13), $pos_func);
+
+            if ($rblock['title'] == '') {
+                //$rblock['title'] = adm_translate("Sans nom");
+                $pos_func = strpos($rblock['content'], 'function#');
+                $pos_nl = strpos($rblock['content'], chr(13), $pos_func);
+
                 if ($pos_func !== false) {
                     $funct = '<span style="font-size: 0.65rem"> (';
-                    if ($pos_nl !== false)
-                        $funct .= substr($content, $pos_func, $pos_nl - $pos_func);
-                    else
-                        $funct .= substr($content, $pos_func);
+
+                    if ($pos_nl !== false) {
+                        $funct .= substr($rblock['content'], $pos_func, $pos_nl - $pos_func);
+                    } else {
+                        $funct .= substr($rblock['content'], $pos_func);
+                    }
+
                     $funct .= ')</span>';
                 }
                 $funct = adm_translate("Sans nom") . $funct;
             }
-            echo $Sactif ? '
-            <tr class="table-success w-100 mw-100">' : '
-            <tr class="table-danger w-100 mw-100">';
+
+            echo $rblock['actif'] 
+                ? '<tr class="table-success w-100 mw-100">' 
+                : '<tr class="table-danger w-100 mw-100">';
+
             echo '
                 <td align="left">
-                <a data-bs-toggle="collapse" data-bs-target="#blodr_' . $id . '" aria-expanded="false" aria-controls="blodr_' . $id . '" class="tog tooltipbyclass" id="show_blodr_' . $id . '" title="' . adm_translate("Déplier la liste") . '"><i id="i_blodr_' . $id . '" class="fa fa-caret-down fa-lg text-primary me-2" ></i></a>';
-            echo aff_langue($title) . ' ' . $funct . '</td>';
-            echo $Sactif ? '
-                <td class="d-none d-sm-table-cell text-center" >' . adm_translate("Oui") . '</td>' : '
-                <td class="text-danger d-none d-sm-table-cell text-center">' . adm_translate("Non") . '</td>';
+                <a data-bs-toggle="collapse" data-bs-target="#blodr_' . $rblock['id'] . '" aria-expanded="false" aria-controls="blodr_' . $rblock['id'] . '" class="tog tooltipbyclass" id="show_blodr_' . $rblock['id'] . '" title="' . adm_translate("Déplier la liste") . '"><i id="i_blodr_' . $rblock['id'] . '" class="fa fa-caret-down fa-lg text-primary me-2" ></i></a>';
+            
+            echo language::aff_langue($rblock['title']) . ' ' . $funct . '</td>';
+            
+            echo $rblock['actif'] 
+                ? '<td class="d-none d-sm-table-cell text-center" >' . adm_translate("Oui") . '</td>' 
+                : '<td class="text-danger d-none d-sm-table-cell text-center">' . adm_translate("Non") . '</td>';
+
             echo '
-                <td class="d-none d-sm-table-cell text-end">' . $Rindex . '</td>
-                <td class="d-none d-sm-table-cell text-end">' . $Scache . '</td>
-                <td class="text-end">' . $id . '</td>
+                <td class="d-none d-sm-table-cell text-end">' . $rblock['Rindex'] . '</td>
+                <td class="d-none d-sm-table-cell text-end">' . $rblock['cache'] . '</td>
+                <td class="text-end">' . $rblock['id'] . '</td>
             </tr>
             <tr class="w-100">
-                <td id="blodr_' . $id . '" class="togxd collapse" colspan="5">
-                <form id="fad_blodr_' . $id . '" action="admin.php" method="post">
+                <td id="blodr_' . $rblock['id'] . '" class="togxd collapse" colspan="5">
+                <form id="fad_blodr_' . $rblock['id'] . '" action="admin.php" method="post">
                     <div class="row g-3">
                         <div class="col-md-8">
                             <fieldset>
                             <legend>' . adm_translate("Contenu") . '</legend>
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="text" id="titledr_' . $id . '" name="title" maxlength="1000" value="' . $title . '" />
-                                <label for="titledr_' . $id . '">' . adm_translate("Titre") . '</label>
+                                <input class="form-control" type="text" id="titledr_' . $rblock['id'] . '" name="title" maxlength="1000" value="' . $rblock['title'] . '" />
+                                <label for="titledr_' . $rblock['id'] . '">' . adm_translate("Titre") . '</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" style="height:140px;" id="contentdr_' . $id . '" name="content">' . $content . '</textarea>
-                                <label for="contentdr_' . $id . '">' . adm_translate("Contenu") . '</label>
+                                <textarea class="form-control" style="height:140px;" id="contentdr_' . $rblock['id'] . '" name="content">' . $rblock['content'] . '</textarea>
+                                <label for="contentdr_' . $rblock['id'] . '">' . adm_translate("Contenu") . '</label>
                                 <span class="help-block"><a href="javascript:void(0);" onclick="window.open(\'autodoc.php?op=blocs\', \'windocu\', \'width=720, height=400, resizable=yes,menubar=no,location=no,directories=no,status=no,copyhistory=no,toolbar=no,scrollbars=yes\');">' . adm_translate("Manuel en ligne") . '</a></span>
                             </div>
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" style="height:100px;" id="BRaidedr_' . $id . '" name="BRaide">' . $BRaide . '</textarea>
-                                <label class="col-form-label col-sm-12" for="BRaidedr_' . $id . '">' . adm_translate("Aide en ligne de ce bloc") . '</label>
+                                <textarea class="form-control" style="height:100px;" id="BRaidedr_' . $rblock['id'] . '" name="BRaide">' . $rblock['aide'] . '</textarea>
+                                <label class="col-form-label col-sm-12" for="BRaidedr_' . $rblock['id'] . '">' . adm_translate("Aide en ligne de ce bloc") . '</label>
                             </div>
                             </fieldset>
                             <fieldset>
                             <legend>' . adm_translate("Droits") . '</legend>';
-            echo droits_bloc($member, $j, 'R');
+
+            echo droits_bloc($rblock['member'], $j, 'R');
+
             echo '
                             </fieldset>
                             <div class="mb-3 row">
@@ -376,47 +460,58 @@ function blocks()
                             <fieldset>
                             <legend>' . adm_translate("Paramètres") . '</legend>
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="number" id="Rindexdr_' . $id . '" name="Rindex" min="0" max="9999" value="' . $Rindex . '" />
-                                <label for="Rindexdr_' . $id . '">Index</label>
+                                <input class="form-control" type="number" id="Rindexdr_' . $rblock['id'] . '" name="Rindex" min="0" max="9999" value="' . $rblock['Rindex'] . '" />
+                                <label for="Rindexdr_' . $rblock['id'] . '">Index</label>
                             </div>
                             <div class="form-floating mb-3"">
-                                <input class="form-control" type="number" name="Scache" id="Scache" min="0" max="99999" value="' . $Scache . '" />
+                                <input class="form-control" type="number" name="Scache" id="Scache" min="0" max="99999" value="' . $rblock['cache'] . '" />
                                 <label for="Scache">' . adm_translate("Rétention") . '</label>
                                 <span class="help-block">' . adm_translate("Chaque bloc peut utiliser SuperCache. La valeur du délai de rétention 0 indique que le bloc ne sera pas caché (obligatoire pour le bloc function#adminblock).") . '</span>
                             </div>
                             <div class="mb-3">
                                 <div class="form-check" >
                                     <input type="checkbox" class="form-check-input" id="Sactif' . $j . 'R" name="Sactif" value="ON" ';
-            if ($Sactif) echo 'checked="checked" ';
+
+            if ($rblock['actif']) {
+                echo 'checked="checked" ';
+            }
+
             echo '/>
                                     <label class="form-check-label" for="Sactif' . $j . 'R">' . adm_translate("Activer le Bloc") . '</label>
                                 </div>
                                 <div class="form-check" >
                                     <input type="checkbox" class="form-check-input" id="css' . $j . 'R" name="css" value="1" ';
-            if ($css == "1") echo 'checked="checked" ';
+
+            if ($rblock['css'] == "1") {
+                echo 'checked="checked" ';
+            }
+
             echo '/>
                                     <label class="form-check-label" for="css' . $j . 'R"> ' . adm_translate("CSS Specifique") . '</label>
                                 </div>
                             </div>
                             </fieldset>
                         </div>
-                        <input type="hidden" name="id" value="' . $id . '" />
+                        <input type="hidden" name="id" value="' . $rblock['id'] . '" />
                     </div>
                     <button class="btn btn-primary mb-3" type="submit">' . adm_translate("Ok") . '</button>
                 </form>
                 <script type="text/javascript">
                 //<![CDATA[
-                    tog("blodr_' . $id . '","show_blodr_' . $id . '","hide_blodr_' . $id . '");
+                    tog("blodr_' . $rblock['id'] . '","show_blodr_' . $rblock['id'] . '","hide_blodr_' . $rblock['id'] . '");
                 //]]>
                 </script>
                 </td>
             </tr>';
+
             $j++;
         }
+
         echo '
         </tbody>
     </table>';
     }
+
     echo '
     <hr />
     <h3 class="my-3">' . adm_translate("Créer un nouveau Bloc") . '</h3>
@@ -442,7 +537,9 @@ function blocks()
                 </fieldset>
                 <fieldset>
                 <legend>' . adm_translate("Droits") . '</legend>';
+
     echo droits_bloc('0', '', '');
+
     echo '
                 </fieldset>
                 <fieldset>
@@ -486,11 +583,13 @@ function blocks()
         </div>
         <button class="btn btn-primary mb-2" type="submit">' . adm_translate("Valider") . '</button>
     </form>';
+
     $arg1 = '
         var formulid = ["blocknewblock"];
         inpandfieldlen("nblock_title",1000);
     ';
-    adminfoot('fv', '', $arg1, '');
+
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 switch ($op) {

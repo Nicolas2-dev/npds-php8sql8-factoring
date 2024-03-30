@@ -13,8 +13,10 @@
 $Titlesitename = 'NPDS';
 $nuke_url = '';
 $meta_op = '';
+
 include('boot/bootstrap.php');
 include('storage/meta/meta.php');
+
 echo '
     </head>
     <body>

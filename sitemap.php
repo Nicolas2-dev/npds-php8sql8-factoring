@@ -11,11 +11,18 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-if (stristr($_SERVER['PHP_SELF'], 'sitemap.php')) die();
+
+use npds\system\logs\logs;
+
+
+if (stristr($_SERVER['PHP_SELF'], 'sitemap.php')) {
+    die();
+}
 
 function sitemapforum($prio)
 {
     global $NPDS_Prefix, $nuke_url;
+
     $tmp = '';
 
     $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE forum_access='0' ORDER BY forum_id");
@@ -27,7 +34,9 @@ function sitemapforum($prio)
         $tmp .= "<changefreq>hourly</changefreq>\n";
         $tmp .= "<priority>$prio</priority>\n";
         $tmp .= "</url>\n\n";
+
         $sub_result = sql_query("SELECT topic_id, topic_time FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id' AND topic_status!='2' ORDER BY topic_id");
+
         while (list($topic_id, $topic_time) = sql_fetch_row($sub_result)) {
             // Topics
             $tmp .= "<url>\n";
@@ -38,15 +47,18 @@ function sitemapforum($prio)
             $tmp .= "</url>\n\n";
         }
     }
-    return ($tmp);
+
+    return $tmp;
 }
 
 function sitemaparticle($prio)
 {
     global $NPDS_Prefix, $nuke_url;
+
     $tmp = '';
 
     $result = sql_query("SELECT sid,time FROM " . $NPDS_Prefix . "stories WHERE ihome='0' AND archive='0' ORDER BY sid");
+
     while (list($sid, $time) = sql_fetch_row($result)) {
         // Articles
         $tmp .= "<url>\n";
@@ -56,12 +68,14 @@ function sitemaparticle($prio)
         $tmp .= "<priority>$prio</priority>\n";
         $tmp .= "</url>\n\n";
     }
-    return ($tmp);
+
+    return $tmp;
 }
 
 function sitemaprub($prio)
 {
     global $NPDS_Prefix, $nuke_url;
+
     $tmp = '';
 
     // Sommaire des rubriques
@@ -73,6 +87,7 @@ function sitemaprub($prio)
     $tmp .= "</url>\n\n";
 
     $result = sql_query("SELECT artid, timestamp FROM " . $NPDS_Prefix . "seccont WHERE userlevel='0' ORDER BY artid");
+
     while (list($artid, $timestamp) = sql_fetch_row($result)) {
         // Rubriques
         $tmp .= "<url>\n";
@@ -82,12 +97,14 @@ function sitemaprub($prio)
         $tmp .= "<priority>$prio</priority>\n";
         $tmp .= "</url>\n\n";
     }
-    return ($tmp);
+
+    return $tmp;
 }
 
 function sitemapdown($prio)
 {
     global $NPDS_Prefix, $nuke_url;
+
     $tmp = '';
 
     // Sommaire des downloads
@@ -99,6 +116,7 @@ function sitemapdown($prio)
     $tmp .= "</url>\n\n";
 
     $result = sql_query("SELECT did, ddate FROM " . $NPDS_Prefix . "downloads WHERE perms='0' ORDER BY did");
+
     while (list($did, $ddate) = sql_fetch_row($result)) {
         $tmp .= "<url>\n";
         $tmp .= "<loc>$nuke_url/download.php?op=geninfo&amp;did=$did</loc>\n";
@@ -107,13 +125,16 @@ function sitemapdown($prio)
         $tmp .= "<priority>$prio</priority>\n";
         $tmp .= "</url>\n\n";
     }
-    return ($tmp);
+
+    return $tmp;
 }
 
 function sitemapothers($PAGES)
 {
     global $nuke_url;
+
     $tmp = '';
+
     foreach ($PAGES as $name => $loc) {
         if (isset($PAGES[$name]['sitemap'])) {
             if (($PAGES[$name]['run'] == "yes") and ($name != "article.php") and ($name != "forum.php") and ($name != "sections.php") and ($name != "download.php")) {
@@ -126,7 +147,8 @@ function sitemapothers($PAGES)
             }
         }
     }
-    return ($tmp);
+
+    return $tmp;
 }
 
 function sitemap_create($PAGES, $filename)
@@ -138,14 +160,21 @@ function sitemap_create($PAGES, $filename)
     $ibid .= "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
     $ibid .= "xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9\n http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">\n\n";
 
-    if (isset($PAGES['article.php']['sitemap']))
+    if (isset($PAGES['article.php']['sitemap'])) {
         $ibid .= sitemaparticle($PAGES['article.php']['sitemap']);
-    if (isset($PAGES['forum.php']['sitemap']))
+    }
+
+    if (isset($PAGES['forum.php']['sitemap'])) {
         $ibid .= sitemapforum($PAGES['forum.php']['sitemap']);
-    if (isset($PAGES['sections.php']['sitemap']))
+    }
+
+    if (isset($PAGES['sections.php']['sitemap'])) {
         $ibid .= sitemaprub($PAGES['sections.php']['sitemap']);
-    if (isset($PAGES['download.php']['sitemap']))
+    }
+
+    if (isset($PAGES['download.php']['sitemap'])) {
         $ibid .= sitemapdown($PAGES['download.php']['sitemap']);
+    }
 
     $ibid .= sitemapothers($PAGES);
     $ibid .= "</urlset>";
@@ -154,18 +183,22 @@ function sitemap_create($PAGES, $filename)
     fwrite($file, $ibid);
     fclose($file);
 
-    Ecr_Log("sitemap", "sitemap generated : " . date("H:i:s", time()), "");
+    logs::Ecr_Log("sitemap", "sitemap generated : " . date("H:i:s", time()), "");
 }
+
 
 /* -----------------------------------------*/
 // http://www.example.com/storage/cache/sitemap.xml 
 $filename = "storage/sitemap/sitemap.xml";
 // delais = 6 heures (21600 secondes)
 $refresh = 21600;
+
 global $PAGES;
 if (file_exists($filename)) {
     if (time() - filemtime($filename) - $refresh > 0) {
         sitemap_create($PAGES, $filename);
     }
-} else
+
+} else { 
     sitemap_create($PAGES, $filename);
+}

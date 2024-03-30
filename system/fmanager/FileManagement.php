@@ -29,12 +29,12 @@ class FileManagement
     /**
      * [file_size_format description]
      *
-     * @param   string  $fileName   [$fileName description]
+     * @param   int  $fileName   [$fileName description]
      * @param   int     $precision  [$precision description]
      *
      * @return  string
      */
-    function file_size_format(string $fileName, int $precision): string
+    function file_size_format(int $fileName, int $precision): string
     {
         $bytes = $fileName;
         $bytes = max($bytes, 0);

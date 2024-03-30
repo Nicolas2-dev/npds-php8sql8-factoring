@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -11,7 +12,19 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\assets\css;
+use npds\system\auth\users;
+use npds\system\cache\cache;
+use npds\system\routing\url;
+use npds\system\support\str;
+use npds\system\mail\mailler;
+use npds\system\language\language;
+use npds\system\support\facades\DB;
+
+
 include_once('boot/bootstrap.php');
+
 
 function viewbanner()
 {
@@ -21,31 +34,37 @@ function viewbanner()
     $while_limit = 3;
     $while_cpt = 0;
 
-    $bresult = sql_query("SELECT bid FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9'");
-    $numrows = sql_num_rows($bresult);
+    //$bresult = sql_query("SELECT bid FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9'");
+    //$numrows = sql_num_rows($bresult);
     
+    $numrows = DB::table('banner')->where('userlevel', '!=', 9)->count('bid');
+
     while ((!$okprint) and ($while_cpt < $while_limit)) {
         // More efficient random stuff, thanks to Cristian Arroyo from http://www.planetalinux.com.ar
         if ($numrows > 0) {
-            mt_srand((float)microtime() * 1000000);
+            mt_srand((int) microtime() * 1000000);
             $bannum = mt_rand(0, $numrows);
-        } else
+        } else {
             break;
+        }
         
-        $bresult2 = sql_query("SELECT bid, userlevel FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9' LIMIT $bannum,1");
+        $bresult2 = sql_query("SELECT bid, userlevel FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9' LIMIT $bannum, 1");
         list($bid, $userlevel) = sql_fetch_row($bresult2);
+        
+
+
         
         if ($userlevel == 0) {
             $okprint = true;
         } else {
             if ($userlevel == 1) {
-                if (secur_static("member")) {
+                if (users::secur_static("member")) {
                     $okprint = true;
                 }
             }
 
             if ($userlevel == 3) {
-                if (secur_static("admin")) {
+                if (users::secur_static("admin")) {
                     $okprint = true;
                 }
             }
@@ -55,7 +74,7 @@ function viewbanner()
 
     // Le risque est de sortir sans un BID valide
     if (!isset($bid)) {
-        $rowQ1 = Q_Select("SELECT bid FROM " . $NPDS_Prefix . "banner WHERE userlevel='0' LIMIT 0,1", 86400);
+        $rowQ1 = cache::Q_Select("SELECT bid FROM " . $NPDS_Prefix . "banner WHERE userlevel='0' LIMIT 0,1", 86400);
         
         if ($rowQ1) {
             $myrow = $rowQ1[0]; // erreur à l'install quand on n'a pas de banner dans la base ....
@@ -81,16 +100,21 @@ function viewbanner()
                 sql_query("DELETE FROM " . $NPDS_Prefix . "banner WHERE bid='$bid'");
             }
 
-            if ($imageurl != '')
-                echo '<a href="banners.php?op=click&amp;bid=' . $bid . '" target="_blank"><img class="img-fluid" src="' . aff_langue($imageurl) . '" alt="" /></a>';
-            else {
+            if ($imageurl != '') {
+                echo '<a href="banners.php?op=click&amp;bid=' . $bid . '" target="_blank"><img class="img-fluid" src="' . language::aff_langue($imageurl) . '" alt="" /></a>';
+            } else {
                 if (stristr($clickurl, '.txt')) {
-                    if (file_exists($clickurl))
+                    if (file_exists($clickurl)) {
                         include_once($clickurl);
-                } else
+                    }
+                } else {
                     echo $clickurl;
+                }
             }
         }
+     } else {
+        echo 'not banners ! ';
+        // url::redirect_url('index.php');
     }
 }
 
@@ -109,7 +133,7 @@ function clickbanner($bid)
         $clickurl = $nuke_url;
     }
 
-    Header("Location: " . aff_langue($clickurl));
+    Header("Location: " . language::aff_langue($clickurl));
 }
 
 function clientlogin()
@@ -141,14 +165,17 @@ function clientlogin()
         var formulid=["loginbanner"];
         ';
 
-    adminfoot('fv', '', $arg1, 'no');
+    css::adminfoot('fv', '', $arg1, 'no');
     footer_page();
 }
 
 function IncorrectLogin()
 {
     header_page();
-    echo '<div class="alert alert-danger lead">' . translate("Identifiant incorrect !") . '<br /><button class="btn btn-secondary mt-2" onclick="javascript:history.go(-1)" >' . translate("Retour en arrière") . '</button></div>';
+    echo '<div class="alert alert-danger lead">' . translate("Identifiant incorrect !") . '
+        <br />
+        <button class="btn btn-secondary mt-2" onclick="javascript:history.go(-1)" >' . translate("Retour en arrière") . '</button>
+        </div>';
     footer_page();
 }
 
@@ -161,19 +188,25 @@ function header_page()
     
     if ($url_upload_css) {
         $url_upload_cssX = str_replace('style.css', $language . '-style.css', $url_upload_css);
-        if (is_readable($url_upload . $url_upload_cssX))
+        
+        if (is_readable($url_upload . $url_upload_cssX)) {
             $url_upload_css = $url_upload_cssX;
+        }
+
         print("<link href=\"" . $url_upload . $url_upload_css . "\" title=\"default\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />\n");
     }
 
-    if (file_exists('themes/default/view/include/header_head.inc'))
+    if (file_exists('themes/default/view/include/header_head.inc')) {
         include('themes/default/view/include/header_head.inc');
+    }
     
-    if (file_exists('themes/' . $Default_Theme . '/include/header_head.inc'))
+    if (file_exists('themes/' . $Default_Theme . '/include/header_head.inc')) {
         include('themes/' . $Default_Theme . '/include/header_head.inc');
+    }
     
-    if (file_exists('themes/' . $Default_Theme . '/style/style.css'))
+    if (file_exists('themes/' . $Default_Theme . '/style/style.css')) {
         echo '<link href="themes/' . $Default_Theme . '/style/style.css" rel="stylesheet" type=\"text/css\" media="all" />';
+    }
 
     echo '
     </head>
@@ -206,9 +239,9 @@ function bannerstats($login, $pass)
     $result = sql_query("SELECT cid, name, passwd FROM " . $NPDS_Prefix . "bannerclient WHERE login='$login'");
     list($cid, $name, $passwd) = sql_fetch_row($result);
     
-    if ($login == '' and $pass == '' or $pass == '')
+    if ($login == '' and $pass == '' or $pass == '') {
         IncorrectLogin();
-    else {
+    } else {
         if ($pass == $passwd) {
             header_page();
             
@@ -229,9 +262,12 @@ function bannerstats($login, $pass)
                 <tbody>';
             
             $result = sql_query("SELECT bid, imptotal, impmade, clicks, date FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
+            
             while (list($bid, $imptotal, $impmade, $clicks, $date) = sql_fetch_row($result)) {
+                
                 $percent = $impmade == 0 ? '0' : substr(100 * $clicks / $impmade, 0, 5);
                 $left = $imptotal == 0 ? translate("Illimité") : $imptotal - $impmade;
+                
                 echo '
                 <tr>
                     <td>' . $bid . '</td>
@@ -255,12 +291,12 @@ function bannerstats($login, $pass)
             $result = sql_query("SELECT bid, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
 
             while (list($bid, $imageurl, $clickurl) = sql_fetch_row($result)) {
-                $numrows = sql_num_rows($result);
+                //$numrows = sql_num_rows($result); // ??? not used
                 echo '<div class="card card-body mb-3">';
 
                 if ($imageurl != '') {
                     echo '
-                <p><img src="' . aff_langue($imageurl) . '" class="img-fluid" />'; //pourquoi aff_langue ??
+                <p><img src="' . language::aff_langue($imageurl) . '" class="img-fluid" />'; //pourquoi aff_langue ??
                 } else {
                     echo '<p>';
                     echo $clickurl;
@@ -270,7 +306,7 @@ function bannerstats($login, $pass)
                 <h4 class="mb-2">Banner ID : ' . $bid . '</h4>';
                 
                 if ($imageurl != '') {
-                    echo '<p>' . translate("Cette bannière est affichée sur l'url") . ' : <a href="' . aff_langue($clickurl) . '" target="_Blank" >[ URL ]</a></p>';
+                    echo '<p>' . translate("Cette bannière est affichée sur l'url") . ' : <a href="' . language::aff_langue($clickurl) . '" target="_Blank" >[ URL ]</a></p>';
                 }
 
                 echo '
@@ -278,20 +314,20 @@ function bannerstats($login, $pass)
                 
                 if ($imageurl != '') {
                     echo '
-                <div class="mb-3 row">
-                    <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
-                    <div class="col-sm-12">
-                        <input class="form-control" type="text" name="url" maxlength="200" value="' . $clickurl . '" />
-                    </div>
-                </div>';
+                    <div class="mb-3 row">
+                        <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
+                        <div class="col-sm-12">
+                            <input class="form-control" type="text" name="url" maxlength="200" value="' . $clickurl . '" />
+                        </div>
+                    </div>';
                 } else {
                     echo '
-                <div class="mb-3 row">
-                    <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
-                    <div class="col-sm-12">
-                        <input class="form-control" type="text" name="url" maxlength="200" value="' . htmlentities($clickurl, ENT_QUOTES, 'utf-8') . '" />
-                    </div>
-                </div>';
+                    <div class="mb-3 row">
+                        <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
+                        <div class="col-sm-12">
+                            <input class="form-control" type="text" name="url" maxlength="200" value="' . htmlentities($clickurl, ENT_QUOTES, 'utf-8') . '" />
+                        </div>
+                    </div>';
                 }
 
                 echo '
@@ -306,8 +342,7 @@ function bannerstats($login, $pass)
             }
 
             // Finnished Banners
-            echo "<br />";
-            echo '
+            echo '<br />
             <h3>' . translate("Bannières terminées pour") . ' ' . $name . '</h3>
             <table data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-show-columns="true" data-icons="icons" data-icons-prefix="fa">
                 <thead>
@@ -323,12 +358,15 @@ function bannerstats($login, $pass)
                 <tbody>';
             
             $result = sql_query("SELECT bid, impressions, clicks, datestart, dateend FROM " . $NPDS_Prefix . "bannerfinish WHERE cid='$cid'");
+            
             while (list($bid, $impressions, $clicks, $datestart, $dateend) = sql_fetch_row($result)) {
+                
                 $percent = substr(100 * $clicks / $impressions, 0, 5);
+                
                 echo '
                 <tr>
                     <td>' . $bid . '</td>
-                    <td>' . wrh($impressions) . '</td>
+                    <td>' . str::wrh($impressions) . '</td>
                     <td>' . $clicks . '</td>
                     <td>' . $percent . ' %</td>
                     <td><small>' . $datestart . '</small></td>
@@ -340,7 +378,7 @@ function bannerstats($login, $pass)
                 </tbody>
             </table>';
 
-            adminfoot('fv', '', '', 'no');
+            css::adminfoot('fv', '', '', 'no');
             footer_page();
         } else
             IncorrectLogin();
@@ -372,21 +410,24 @@ function EmailStats($login, $cid, $bid)
             if ($imptotal == 0) {
                 $left = translate("Illimité");
                 $imptotal = translate("Illimité");
-            } else
+            } else {
                 $left = $imptotal - $impmade;
+            }
             
             global $sitename, $gmt;
 
             $fecha = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
             $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . $sitename;
+            
             $message  = "Client : $name\n" . translate("Bannière") . " ID : $bid\n" . translate("Bannière") . " Image : $imageurl\n" . translate("Bannière") . " URL : $clickurl\n\n";
             $message .= "Impressions " . translate("Réservées") . " : $imptotal\nImpressions " . translate("Réalisées") . " : $impmade\nImpressions " . translate("Restantes") . " : $left\nClicks " . translate("Reçus") . " : $clicks\nClicks " . translate("Pourcentage") . " : $percent%\n\n";
             $message .= translate("Rapport généré le") . ' : ' . "$fecha\n\n";
             
             include("config/signat.php");
 
-            send_email($email, $subject, $message, '', true, 'html', '');
+            mailler::send_email($email, $subject, $message, '', true, 'html', '');
             header_page();
+            
             echo '
             <div class="card bg-light">
                 <div class="card-body"
@@ -417,12 +458,12 @@ function change_banner_url_by_client($login, $pass, $cid, $bid, $url)
     if (!empty($pass) and $pass == $passwd) {
         sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE bid='$bid'");
         sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE bid='$bid'");
-        echo '
-            <div class="alert alert-success">' . translate("Vous avez changé l'url de la bannière") . '<br /><a href="javascript:history.go(-1)" class="alert-link">' . translate("Retour en arrière") . '</a></div>';
-    } else
-        echo '
-            <div class="alert alert-danger">' . translate("Identifiant incorrect !") . '<br />' . translate("Merci de") . ' <a href="banners.php?op=login" class="alert-link">' . translate("vous reconnecter.") . '</a></div>';
-    
+
+        echo '<div class="alert alert-success">' . translate("Vous avez changé l'url de la bannière") . '<br /><a href="javascript:history.go(-1)" class="alert-link">' . translate("Retour en arrière") . '</a></div>';
+    } else {
+        echo '<div class="alert alert-danger">' . translate("Identifiant incorrect !") . '<br />' . translate("Merci de") . ' <a href="banners.php?op=login" class="alert-link">' . translate("vous reconnecter.") . '</a></div>';
+    }
+
     footer_page();
 }
 
@@ -453,7 +494,7 @@ switch ($op) {
         if ($banners) {
             viewbanner();
         } else {
-            redirect_url('index.php');
+            url::redirect_url('index.php');
         }
         break;
 }

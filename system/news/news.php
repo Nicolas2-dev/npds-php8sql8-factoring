@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\news;
 
+use PDO;
 use npds\system\logs\logs;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
@@ -11,6 +12,7 @@ use npds\system\support\str;
 use npds\system\utility\code;
 use npds\system\support\edito;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 use npds\system\subscribe\subscribe;
 
 class news
@@ -58,13 +60,12 @@ class news
     /**
      * Gestion + fine des destinataires (-1, 0, 1, 2 -> 127, -127)
      *
-     * @param   string  $ihome  [$ihome description]
-     * @param   string          [ description]
-     * @param   int     $catid  [$catid description]
+     * @param   string|int  $ihome  [$ihome description]
+     * @param   string|int     $catid  [$catid description]
      *
      * @return  bool
      */
-    public static function ctrl_aff(string $ihome, string|int $catid = 0): bool
+    public static function ctrl_aff(string|int $ihome, string|int $catid = 0): bool
     {
         global $user;
 
@@ -113,7 +114,7 @@ class news
     public static function news_aff(string $type_req, string $sel, string|int $storynum, string|int $oldnum): array
     { // pas stabilisé ...!
         global $NPDS_Prefix;
-
+        
         // Astuce pour afficher le nb de News correct même si certaines News ne sont pas visibles (membres, groupe de membres)
         // En fait on * le Nb de News par le Nb de groupes
         $row_Q2 = cache::Q_select("SELECT COUNT(groupe_id) AS total FROM " . $NPDS_Prefix . "groupes", 86400);
@@ -129,7 +130,16 @@ class news
         
         if ($type_req == 'index') {
             $Xstorynum = $storynum * $coef;
-            $result = cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
+        //    $result = cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
+           $result = cache::Q_select2(DB::table('stories')
+                ->where('ihome', '!=', 1)
+                ->where('archive', 0)
+                ->limit($Xstorynum)
+                ->orderBy('sid', 'desc')
+                ->get(array('sid', 'catid', 'ihome')), 3600, $type_req);
+
+    //var_dump($result);
+           
             $Znum = $storynum;
         }
 
@@ -161,6 +171,7 @@ class news
         settype($tab, 'array');
 
         foreach ($result as $myrow) {
+
             $s_sid = $myrow['sid'];
             $catid = $myrow['catid'];
             $ihome = $myrow['ihome'];
@@ -307,7 +318,7 @@ class news
     public static function aff_news(string $op, int|string $catid, int|string $marqeur): void
     {
         $url = $op;
-
+//var_dump($op);
         if ($marqeur == '') {
             $marqeur = 0;
         }
@@ -331,7 +342,7 @@ class news
         if ($op == 'newcategory') {
             $op = 'categories';
         }
-
+//        var_dump($op);
         $news_tab = static::prepa_aff_news($op, $catid, $marqeur);
         $story_limit = 0;
 
@@ -424,7 +435,7 @@ class news
         } else {
             $storynum = $storyhome;
         }
-
+//var_dump($op);
         if ($op == "categories") {
             sql_query("UPDATE " . $NPDS_Prefix . "stories_cat SET counter=counter+1 WHERE catid='$catid'");
             
@@ -457,9 +468,11 @@ class news
         } elseif ($op == "article") {
             $xtab = static::news_aff("index", "WHERE ihome!='1' AND sid='$catid'", 1, "");
         } else {
-            $xtab = static::news_aff("index", "WHERE ihome!='1' AND archive='0'", $storynum, "");
+            //var_dump('req ii');
+            //$xtab = static::news_aff("index", "WHERE ihome!='1' AND archive='0'", $storynum, "");
+            $xtab = static::news_aff("index", "", $storynum, "");
         }
-
+        
         $story_limit = 0;
         while (($story_limit < $storynum) and ($story_limit < sizeof($xtab))) {
             list($s_sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[$story_limit];

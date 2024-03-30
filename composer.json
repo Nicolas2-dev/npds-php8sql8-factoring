@@ -19,7 +19,8 @@
             "npds\\": "./"
         },
         "files": [
-            "support/helpers.php"
+            "support/helpers.php",
+            "system/support/helpers.php"
         ]
     }
 }

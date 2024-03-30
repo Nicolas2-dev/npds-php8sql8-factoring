@@ -6,7 +6,7 @@ namespace npds\system\support;
 
 class str
 {
- 
+
     /**
      * convertie \r \n  BR ... en br XHTML
      *
@@ -17,9 +17,10 @@ class str
     public static function conv2br(string $txt): string
     {
         return str_replace(
-            ['\r\n', '\r', '\n', '<BR />', '<BR>'], 
-            ['<br />', '<br />', '<br />', '<br />', '<br />'], 
-            $txt);
+            ['\r\n', '\r', '\n', '<BR />', '<BR>'],
+            ['<br />', '<br />', '<br />', '<br />', '<br />'],
+            $txt
+        );
     }
 
     /**
@@ -40,7 +41,7 @@ class str
 
         return ($tmp %= 16);
     }
- 
+
     /**
      * Formate une chaine numérique avec un espace tous les 3 chiffres / cheekybilly 2005
      *
@@ -55,7 +56,7 @@ class str
 
         return $tmp;
     }
- 
+
     /**
      * Découpe la chaine en morceau de $slpit longueur si celle-ci ne contient pas d'espace / Snipe 2004
      *
@@ -113,21 +114,21 @@ class str
 
             $string = $outlines . $string;
         }
-        
+
         // }
     }
 
-     /**
-      * [changetoamp description]
-      *
-      * @param   array   $r  [$r description]
-      *
-      * @return  string
-      */
+    /**
+     * [changetoamp description]
+     *
+     * @param   array   $r  [$r description]
+     *
+     * @return  string
+     */
     public static function changetoamp(array $r): string
     {
         return str_replace('&', '&amp;', $r[0]);
-    } 
+    }
 
     /**
      * [changetoampadm description]
@@ -140,7 +141,7 @@ class str
     {
         return static::changetoamp($r[0]);
     }
- 
+
     /**
      * Encode une chaine UF8 au format javascript - JPB 2005
      *
@@ -148,7 +149,7 @@ class str
      *
      * @return  string
      */
-    public static function utf8_java(string $ibid): string 
+    public static function utf8_java(string $ibid): string
     {
         // UTF8 = &#x4EB4;&#x6B63;&#7578; 
         // javascript = \u4EB4\u6B63\u.dechex(7578)
@@ -159,10 +160,10 @@ class str
 
                 $bidon = substr($bidon, 0, (int) strpos($bidon, ";"));
                 $hex = strpos($bidon, 'x');
-                
-                $ibid = ($hex === false) 
-                    ? str_replace('&#' . $bidon . ';', '\\u' . dechex( (int) $bidon), $ibid) 
-                    : str_replace('&#' . $bidon . ';', '\\u' . substr( (string) $bidon, 1), $ibid);
+
+                $ibid = ($hex === false)
+                    ? str_replace('&#' . $bidon . ';', '\\u' . dechex((int) $bidon), $ibid)
+                    : str_replace('&#' . $bidon . ';', '\\u' . substr((string) $bidon, 1), $ibid);
             }
         }
 
@@ -176,11 +177,11 @@ class str
      *
      * @return  array|string|null
      */
-    public static function FixQuotes(?string $what = ''): array|string|null 
+    public static function FixQuotes(?string $what = ''): array|string|null
     {
         $what = str_replace("&#39;", "'", $what);
         $what = str_replace("'", "''", $what);
-        
+
         while (preg_match("#\\\\'#", $what)) {
             $what = preg_replace("#\\\\'#", "'", $what);
         }

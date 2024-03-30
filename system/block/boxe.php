@@ -244,16 +244,16 @@ class boxe
             $content = language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', 'changetoampadm', $content));
 
             //==> recuperation
-            $messagerie_npds = file_get_contents('https://raw.githubusercontent.com/npds/npds_dune/master/versus.txt');
-            $messages_npds = explode("\n", $messagerie_npds);
-            array_pop($messages_npds);
+            // $messagerie_npds = 'un|teste'; //file_get_contents('https://raw.githubusercontent.com/npds/npds_dune/master/versus.txt');
+            // $messages_npds = explode("\n", $messagerie_npds);
+            // array_pop($messages_npds);
 
-            // traitement specifique car fonction permanente versus
-            $versus_info = explode('|', $messages_npds[0]);
-            if ($versus_info[1] == $Version_Sub and $versus_info[2] == $Version_Num)
-                sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . $Version_Sub . " " . $Version_Num . "', furlscript='' WHERE fid='36'");
-            else
-                sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
+            // // traitement specifique car fonction permanente versus
+            // $versus_info = explode('|', $messages_npds[0]);
+            // if ($versus_info[1] == $Version_Sub and $versus_info[2] == $Version_Num)
+            //     sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . $Version_Sub . " " . $Version_Num . "', furlscript='' WHERE fid='36'");
+            // else
+            //     sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
             
             $content .= '
           <div class="d-flex justify-content-start flex-wrap" id="adm_block">
@@ -265,29 +265,29 @@ class boxe
             $content .= '</div>
           <div class="mt-3">
              <small class="text-muted"><i class="fas fa-user-cog fa-2x align-middle"></i> ' . $aid . '</small>
-          </div>
-       <div class="modal fade" id="bl_versusModal" tabindex="-1" aria-labelledby="bl_versusModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-             <div class="modal-content">
-                <div class="modal-header">
-                   <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" loading="lazy" />' . translate("Version") . ' NPDS^</h5>
-                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                   <p>Vous utilisez NPDS^ ' . $Version_Sub . ' ' . $Version_Num . '</p>
-                   <p>' . translate("Une nouvelle version de NPDS^ est disponible !") . '</p>
-                   <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
-                   <p class="my-3">
-                      <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
-                      <a class="mx-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.tar.gz" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.tar.gz</a>
-                   </p>
-                </div>
-                <div class="modal-footer">
-                </div>
-             </div>
-          </div>
-       </div>
-       <div class="modal fade" id="bl_messageModal" tabindex="-1" aria-labelledby="bl_messageModalLabel" aria-hidden="true">
+          </div>';
+    //    <div class="modal fade" id="bl_versusModal" tabindex="-1" aria-labelledby="bl_versusModalLabel" aria-hidden="true">
+    //       <div class="modal-dialog">
+    //          <div class="modal-content">
+    //             <div class="modal-header">
+    //                <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" loading="lazy" />' . translate("Version") . ' NPDS^</h5>
+    //                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    //             </div>
+    //             <div class="modal-body">
+    //                <p>Vous utilisez NPDS^ ' . $Version_Sub . ' ' . $Version_Num . '</p>
+    //                <p>' . translate("Une nouvelle version de NPDS^ est disponible !") . '</p>
+    //                <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
+    //                <p class="my-3">
+    //                   <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
+    //                   <a class="mx-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.tar.gz" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.tar.gz</a>
+    //                </p>
+    //             </div>
+    //             <div class="modal-footer">
+    //             </div>
+    //          </div>
+    //       </div>
+    //    </div>
+       $content .= '<div class="modal fade" id="bl_messageModal" tabindex="-1" aria-labelledby="bl_messageModalLabel" aria-hidden="true">
           <div class="modal-dialog">
              <div class="modal-content">
                 <div class="modal-header">

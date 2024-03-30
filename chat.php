@@ -14,16 +14,16 @@
 // gp_id=ID du groupe au sens NPDS du terme => 0 : tous / -127 : Admin / -1 : Anonyme / 1 : membre / 2 ... 126 : groupe de membre
 // token_de_securite = encrypt(serialize(gp_id)) => Permet d'éviter le lancement du Chat sans autorisation
 
-//if (!defined('NPDS_GRAB_GLOBALS_INCLUDED'))
-//   include("grab_globals.php");
-
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
+}
 
 $Titlesitename = 'NPDS';
 $meta_op = '';
 $meta_doctype = '<!DOCTYPE html>';
+
 include("storage/meta/meta.php");
+
 echo '
             <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
         </head>  

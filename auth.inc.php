@@ -23,9 +23,10 @@ function Admin_alert($motif)
 
     logs::Ecr_Log('security', 'auth.inc.php/Admin_alert : ' . $motif, '');
     
-    $Titlesitename = 'NPDS';
-    if (file_exists("storage/meta/meta.php"))
+    if (file_exists("storage/meta/meta.php")) {
+        $Titlesitename = 'NPDS';
         include("storage/meta/meta.php");
+    }
 
     echo '
         </head>
@@ -58,25 +59,28 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
                     sql_query("UPDATE " . $NPDS_Prefix . "authors SET pwd='$pwd', hashkey='1' WHERE aid='$aid'");
                     $result = sql_query("SELECT pwd, hashkey FROM " . $NPDS_Prefix . "authors WHERE aid = '$aid'");
                     
-                    if (sql_num_rows($result) == 1)
+                    if (sql_num_rows($result) == 1) {
                         $setinfo = sql_fetch_assoc($result);
+                    }
 
                     $dbpass = $setinfo['pwd'];
                     $scryptPass = crypt($dbpass, $hashpass);
                 }
             }
 
-            if (password_verify($pwd, $dbpass))
+            if (password_verify($pwd, $dbpass)) {
                 $CryptpPWD = $dbpass;
-            elseif (password_verify($dbpass, $scryptPass) or strcmp($dbpass, $pwd) == 0)
+            } elseif (password_verify($dbpass, $scryptPass) or strcmp($dbpass, $pwd) == 0) {
                 $CryptpPWD = $pwd;
-            else
+            } else {
                 Admin_Alert("Passwd not in DB#1 : $aid");
+            }
 
             $admin = base64_encode("$aid:" . md5($CryptpPWD));
 
-            if ($admin_cook_duration <= 0)
+            if ($admin_cook_duration <= 0) {
                 $admin_cook_duration = 1;
+            }
 
             $timeX = time() + (3600 * $admin_cook_duration);
 
@@ -96,21 +100,23 @@ if (isset($admin) and ($admin != '')) {
     $aid = urlencode($Xadmin[0]);
     $AIpwd = $Xadmin[1];
 
-    if ($aid == '' or $AIpwd == '')
+    if ($aid == '' or $AIpwd == '') {
         Admin_Alert('Null Aid or Passwd');
+    }
 
     $result = sql_query("SELECT pwd, radminsuper FROM " . $NPDS_Prefix . "authors WHERE aid = '$aid'");
 
-    if (!$result)
+    if (!$result) {
         Admin_Alert("DB not ready #2 : $aid / $AIpwd");
-    else {
+    } else {
         list($AIpass, $Xsuper_admintest) = sql_fetch_row($result);
         
         if (md5($AIpass) == $AIpwd and $AIpass != '') {
             $admintest = true;
             $super_admintest = $Xsuper_admintest;
-        } else
+        } else {
             Admin_Alert("Password in Cookies not Good #1 : $aid / $AIpwd");
+        }
     }
     
     unset($AIpass);

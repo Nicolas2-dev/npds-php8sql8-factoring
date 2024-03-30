@@ -13,23 +13,42 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+use npds\system\assets\js;
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\mail\mailler;
+use npds\system\support\editeur;
+use npds\system\language\language;
+use npds\system\support\facades\DB;
+
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'email_user';
 $f_titre = adm_translate("Diffusion d'un Message Interne");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language;
 $hlpfile = "manuels/$language/email_user.html";
 
-function email_user()
+/**
+ * [email_user description]
+ *
+ * @return  void
+ */
+function email_user(): void
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
-    include("themes/default/header.php");;
+    include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     echo '
         <hr />
         <form id="emailuseradm" action="admin.php" method="post" name="AdmMI">
@@ -60,11 +79,13 @@ function email_user()
                 <div class="col-sm-8">
                     <select id="groupe" class="form-select" name="groupe" >
                         <option value="0" selected="selected">' . adm_translate("Choisir un groupe");
-    $resultID = sql_query("SELECT groupe_id, groupe_name FROM " . $NPDS_Prefix . "groupes ORDER BY groupe_id ASC");
-    while (list($groupe_id, $groupe_name) = sql_fetch_row($resultID)) {
-        echo '
-                        <option value="' . $groupe_id . '">' . $groupe_id . ' - ' . aff_langue($groupe_name);
+
+    $groupes = DB::table('groupes')->select('groupe_id', 'groupe_name')->orderBy('groupe_id', 'ASC')->get();
+
+    foreach ($groupes as $groupe) {
+        echo '<option value="' . $groupe['groupe_id'] . '">' . $groupe['groupe_id'] . ' - ' . language::aff_langue($groupe['groupe_name']);
     }
+
     echo '
                     </select>
                 </div>
@@ -91,7 +112,9 @@ function email_user()
                     <textarea class="tin form-control" rows="25" id="message" name="message"></textarea>
                 </div>
                 </div>';
-    echo aff_editeur('AdmMI', '');
+
+    echo editeur::aff_editeur('AdmMI', '');
+
     echo '
                 <div class="mb-3 row">
                 <div class="col-sm-12">
@@ -134,106 +157,159 @@ function email_user()
     });
     //]]>
     </script>';
+
     $arg1 = '
     var formulid = ["emailuseradm"];
     inpandfieldlen("subject",100);
     ';
-    echo auto_complete('membre', 'uname', 'users', 'username', '86400');
-    adminfoot('fv', '', $arg1, '');
+
+    echo js::auto_complete('membre', 'uname', 'users', 'username', '86400');
+
+    css::adminfoot('fv', '', $arg1, '');
 }
 
-function send_email_to_user($username, $subject, $message, $all, $groupe, $expediteur)
+/**
+ * [send_email_to_user description]
+ *
+ * @param   string  $username    [$username description]
+ * @param   string  $subject     [$subject description]
+ * @param   string  $message     [$message description]
+ * @param   string  $all         [$all description]
+ * @param   string  $groupe      [$groupe description]
+ * @param   string  $expediteur  [$expediteur description]
+ *
+ * @return  void
+ */
+function send_email_to_user(string $username, string $subject, string $message, string $all, string $groupe, string $expediteur): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre, $adminimg;
 
     if ($subject != '') {
-        if ($expediteur == 1)
+        if ($expediteur == 1) {
             $emetteur = 1;
-        else {
+        } else {
             global $user;
             if ($user) {
                 $userX = base64_decode($user);
                 $userdata = explode(':', $userX);
                 $emetteur = $userdata[0];
-            } else
+            } else {
                 $emetteur = 1;
+            }
         }
+
         if ($all) {
-            $result = sql_query("SELECT uid, user_langue FROM " . $NPDS_Prefix . "users");
-            while (list($to_userid, $user_langue) = sql_fetch_row($result)) {
-                $tab_to_userid[] = $to_userid . ':' . $user_langue;
+            $users = DB::table('users')->select('uid', 'user_langue')->get();
+
+            foreach ($users as $user) {
+                $tab_to_userid[] = $user['uid'] . ':' . $user['user_langue'];
             }
         } else {
             if ($groupe) {
-                $result = sql_query("SELECT s.uid, s.groupe, u.user_langue FROM " . $NPDS_Prefix . "users_status s, " . $NPDS_Prefix . "users u WHERE s.uid=u.uid AND s.groupe!='' ORDER BY s.uid ASC");
-                while (list($to_userid, $groupeX, $user_langue) = sql_fetch_row($result)) {
-                    $tab_groupe = explode(',', $groupeX);
+
+                $users = DB::table('users_status')
+                ->leftJoin('users', 'users_status.uid', '=', 'users.uid')
+                ->select('users_status.uid', 'users_status.users_groupe', 'users.user_language')
+                ->where('users_status.groupe', '!=', '')
+                ->orderBy('users_status.uid', 'ASC')
+                ->get();
+
+                foreach ($users as $user) {
+                    $tab_groupe = explode(',', $user['users_groupe']);
+                    
                     if ($tab_groupe) {
                         foreach ($tab_groupe as $groupevalue) {
-                            if ($groupevalue == $groupe)
-                                $tab_to_userid[] = $to_userid . ':' . $user_langue;
+                            if ($groupevalue == $groupe) {
+                                $tab_to_userid[] = $user['uid'] . ':' . $user['user_langue'];
+                            }
                         }
                     }
                 }
             } else {
-                $result = sql_query("SELECT uid, user_langue FROM " . $NPDS_Prefix . "users WHERE uname='$username'");
-                while (list($to_userid, $user_langue) = sql_fetch_row($result)) {
-                    $tab_to_userid[] = $to_userid . ':' . $user_langue;
+                $users = DB::table('users')->select('uid', 'user_langue')->where('uname', $username)->first();
+
+                foreach($users as $user) {
+                    $tab_to_userid[] = $user['uid'] . ':' . $user['user_langue'];
                 }
             }
         }
-        if (($subject == '') or ($message == ''))
+
+        if (($subject == '') or ($message == '')) {
             header("location: admin.php");
+        }
+
         $message = str_replace('\n', '<br />', $message);
+
         global $gmt;
         $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
+        
         $pasfin = false;
         $count = 0;
+
         include_once("language/multilang.php");
+
         while ($count < sizeof($tab_to_userid)) {
             $to_tmp = explode(':', $tab_to_userid[$count]);
             $to_userid = $to_tmp[0];
+
             if (($to_userid != '') and ($to_userid != 1)) {
-                $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
-                $sql .= "VALUES ('$image', '$subject', '$emetteur', '$to_userid', '$time', '$message')";
-                if ($resultX = sql_query($sql))
+
+                $resultX = DB::table('priv_msgs')->insert(array(
+                    'msg_image'      => $image,
+                    'subject'        => $subject,
+                    'from_userid'    => $emetteur,
+                    'to_userid'      => $to_userid,
+                    'msg_time'       => $time,
+                    'msg_text'       => $message,
+                ));
+            
+                if ($resultX) {
                     $pasfin = true;
+                }
+
                 // A copy in email if necessary
                 global $nuke_url, $subscribe;
                 if ($subscribe) {
                     $old_message = $message;
+                    
                     $sujet = translate_ml($to_tmp[1], 'Vous avez un nouveau message.');
                     $message = translate_ml($to_tmp[1], 'Bonjour') . ",<br /><br /><a href=\"$nuke_url/viewpmsg.php\">" . translate_ml($to_tmp[1], "Cliquez ici pour lire votre nouveau message.") . "</a><br /><br />";
+                    
                     include("config/signat.php");
-                    copy_to_email($to_userid, $sujet, $message);
+                    
+                    mailler::copy_to_email($to_userid, $sujet, $message);
                     $message = $old_message;
                 }
             }
             $count++;
         }
     }
+
     global $aid;
-    Ecr_Log('security', "SendEmailToUser($subject) by AID : $aid", '');
+    logs::Ecr_Log('security', "SendEmailToUser($subject) by AID : $aid", '');
 
     global $hlpfile;
-    include("themes/default/header.php");;
+    include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
-    echo '
-    <hr />';
-    if ($pasfin)
-        echo '
-    <div class="alert alert-success"><strong>"' . stripslashes($subject) . '"</strong> ' . adm_translate("a été envoyée") . '.</div>';
-    else
-        echo '
-    <div class="alert alert-danger"><strong>"' . stripslashes($subject) . '"</strong>' . adm_translate("n'a pas été envoyée") . '.</div>';
-    adminfoot('', '', '', '');
+
+    echo '<hr />';
+    
+    if ($pasfin) {
+        echo '<div class="alert alert-success"><strong>"' . stripslashes($subject) . '"</strong> ' . adm_translate("a été envoyée") . '.</div>';
+    } else {
+        echo '<div class="alert alert-danger"><strong>"' . stripslashes($subject) . '"</strong>' . adm_translate("n'a pas été envoyée") . '.</div>';
+    }
+        
+    css::adminfoot('', '', '', '');
 }
 
 switch ($op) {
     case 'send_email_to_user':
         send_email_to_user($username, $subject, $message, $all, $groupe, $expediteur);
         break;
+
     case 'email_user':
         email_user();
         break;

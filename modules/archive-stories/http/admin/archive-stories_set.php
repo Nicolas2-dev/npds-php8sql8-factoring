@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -15,26 +16,34 @@
 /* version 3.0 30/08/2015                                               */
 /************************************************************************/
 
+use npds\system\assets\css;
+
 // For More security
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) {
     include($_SERVER['DOCUMENT_ROOT'] . "/admin/die.php");
-if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
-    die();
+}
+
 // For More security
 $f_meta_nom = 'archive-stories';
 $f_titre = adm_translate("Module") . ' : ' . $ModPath;
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 $hlpfile = '/manuels/' . $language . '/mod-archive-stories.html';
 
 function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
 {
     global $hlpfile;
-    if (file_exists("modules/$ModPath/config/archive-stories.conf.php"))
+
+    if (file_exists("modules/$ModPath/config/archive-stories.conf.php")) {
         include("modules/$ModPath/config/archive-stories.conf.php");
+    }
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Paramètres") . '</h3>
@@ -46,6 +55,7 @@ function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
         <span class="help-block text-end"><span id="countcar_arch_titre"></span></span>
         <div class="form-floating mb-3">
             <select class="form-select" name="arch">';
+
     if (isset($arch) and $arch == 1) {
         $sel_a = 'selected="selected"';
         $sel_i = '';
@@ -53,6 +63,7 @@ function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
         $sel_i = 'selected="selected"';
         $sel_a = '';
     }
+
     echo '
                 <option name="status" value="1" ' . $sel_a . '>' . adm_translate("Les articles en archive") . '</option>
                 <option name="status" value="0" ' . $sel_i . '>' . adm_translate("Les articles en ligne") . '</option>
@@ -83,6 +94,7 @@ function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
     </form>
     <hr />
     <a href= "modules.php?ModPath=' . $ModPath . '&amp;ModStart=' . $ModPath . '" ><i class="fas fa-external-link-alt fa-lg me-1" title="Voir le module en mode utilisation." data-bs-toggle="tooltip" data-bs-placement="right"></i>Voir le module en mode utilisation.</a>';
+
     $fv_parametres = '
     maxcount: {
         validators: {
@@ -105,15 +117,18 @@ function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
             }
         }
     },';
+
     $arg1 = '
     var formulid=["archiveadm"];
     inpandfieldlen("arch_titre",400);';
-    adminfoot('fv', $fv_parametres, $arg1, '');
+
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPath, $ModStart)
 {
     $file = fopen("modules/$ModPath/config/archive-stories.conf.php", "w");
+
     $content = "<?php \n";
     $content .= "/************************************************************************/\n";
     $content .= "/* DUNE by NPDS                                                         */\n";
@@ -121,7 +136,7 @@ function SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPa
     $content .= "/*                                                                      */\n";
     $content .= "/* From ALL STORIES Add-On ... ver. 1.4.1a                              */\n";
     $content .= "/*                                                                      */\n";
-    $content .= "/* NPDS Copyright (c) 2002-" . date('Y') . " by Philippe Brunier                     */\n";
+    $content .= "/* NPDS Copyright (c) 2002-" . date('Y') . " by Philippe Brunier        */\n";
     $content .= "/*                                                                      */\n";
     $content .= "/* This program is free software. You can redistribute it and/or modify */\n";
     $content .= "/* it under the terms of the GNU General Public License as published by */\n";
@@ -144,6 +159,7 @@ function SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPa
     $content .= "?>";
     fwrite($file, $content);
     fclose($file);
+
     @chmod("modules/$ModPath/config/archive-stories.conf.php", 0666);
 
     $file = fopen("modules/$ModPath/config/cache.timings.php", "w");
@@ -154,7 +170,7 @@ function SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPa
     $content .= "/*                                                                      */\n";
     $content .= "/* From ALL STORIES Add-On ... ver. 1.4.1a                              */\n";
     $content .= "/*                                                                      */\n";
-    $content .= "/* NPDS Copyright (c) 2002-" . date('Y') . " by Philippe Brunier                     */\n";
+    $content .= "/* NPDS Copyright (c) 2002-" . date('Y') . " by Philippe Brunier        */\n";
     $content .= "/*                                                                      */\n";
     $content .= "/* This program is free software. You can redistribute it and/or modify */\n";
     $content .= "/* it under the terms of the GNU General Public License as published by */\n";
@@ -167,14 +183,17 @@ function SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPa
     $content .= "?>";
     fwrite($file, $content);
     fclose($file);
+
     @chmod("modules/$ModPath/config/cache.timings.php", 0666);
 }
+
 settype($subop, 'string');
+
 switch ($subop) {
     case "SaveSetArchive_stories":
         SaveSetArchive_stories($maxcount, $arch, $arch_titre, $retcache, $ModPath, $ModStart);
+
     default:
         ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg);
         break;
 }
-?>

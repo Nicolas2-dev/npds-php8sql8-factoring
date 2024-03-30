@@ -15,7 +15,7 @@
 #$CACHE_QUERYS['section.php'] = "^offset=(10|20|30)&cat=[0-9]{1,2}"\;
 #$CACHE_QUERYS['news.php']    = "^idn=[0-9]{1,2}"\;
 
-$SuperCache = true;
+$SuperCache = false;
 
 $CACHE_TIMINGS['index.php'] = 300;
 $CACHE_QUERYS['index.php'] = "^";

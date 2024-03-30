@@ -17,10 +17,42 @@
 /* variables from them                                                  */
 /************************************************************************/
 
-if (stristr($_SERVER['PHP_SELF'], 'grab_globals.php') and strlen($_SERVER['QUERY_STRING']) != '')
+use npds\system\logs\logs;
+use npds\system\http\Request;
+use npds\system\utility\spam;
+use npds\system\exception\ExceptionHandler;
+
+if (stristr($_SERVER['PHP_SELF'], 'grab_globals.php') and strlen($_SERVER['QUERY_STRING']) != '') {
     include('admin/die.php');
+}
 
 require 'vendor/autoload.php';
+
+
+    // $request = Request::getInstance();
+    //     $method = $request->method();
+
+    //     $path = $request->path();
+
+    // vd(
+    //     $method, 
+    //     $path,
+    //     $request->ip(),
+    //     $request->ajax(),
+    //     $request->previous(),
+    //     $request->server('op'),
+    //     $request->input('op'),
+    //     $request->query('toto'),
+    //     $request->files(),
+    //     $request->file('uu'),
+    //     $request->hasFile('test'),
+    //     $request->cookies(),
+    //     $request->cookie('user'),
+    //     $request->hasCookie('user')
+    // );
+    //vd($headers = apache_request_headers());
+
+
 
 if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     define('NPDS_GRAB_GLOBALS_INCLUDED', 1);
@@ -29,26 +61,39 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     // error_reporting(0);// report NO ERROR
     //error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE); // Devel report
     //error_reporting(E_ERROR | E_WARNING | E_PARSE); // standard ERROR report
-    error_reporting(E_ALL);
+    //error_reporting(E_ALL);
+
+    // error_reporting(-1);
+
+    // ini_set('display_errors', 'on');
+
+    // // Initialize the Exceptions Handler.
+    // ExceptionHandler::initialize(true);
+
     function getip()
     {
         if (isset($_SERVER)) {
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $realip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            elseif (isset($_SERVER['HTTP_CLIENT_IP']))
+            } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
                 $realip = $_SERVER['HTTP_CLIENT_IP'];
-            else
+            } else {
                 $realip = $_SERVER['REMOTE_ADDR'];
+            }
         } else {
-            if (getenv('HTTP_X_FORWARDED_FOR'))
+            if (getenv('HTTP_X_FORWARDED_FOR')) {
                 $realip = getenv('HTTP_X_FORWARDED_FOR');
-            elseif (getenv('HTTP_CLIENT_IP'))
+            } elseif (getenv('HTTP_CLIENT_IP')) {
                 $realip = getenv('HTTP_CLIENT_IP');
-            else
+            } else {
                 $realip = getenv('REMOTE_ADDR');
+            }
         }
-        if (strpos($realip, ",") > 0)
+
+        if (strpos($realip, ",") > 0) {
             $realip = substr($realip, 0, strpos($realip, ",") - 1);
+        }
+
         // from Gu1ll4um3r0m41n - 08-05-2007 - dev 2012
         return (urlencode(trim($realip)));
     }
@@ -59,28 +104,40 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     }
 
     // First of all : Spam from IP / |5 indicate that the same IP has passed 6 times with status KO in the anti_spambot function
-    if (file_exists("storage/logs/spam.log"))
+    if (file_exists("storage/logs/spam.log")) {
         $tab_spam = str_replace("\r\n", "", file("storage/logs/spam.log"));
+    }
+
     if (is_array($tab_spam)) {
         $ipadr = urldecode(getip());
         $ipv = strstr($ipadr, ':') ? '6' : '4';
-        if (in_array($ipadr . "|5", $tab_spam))
+        
+        if (in_array($ipadr . "|5", $tab_spam)) {
             access_denied();
-        //=> nous pouvons bannir une plage d'adresse ip en V4 (dans l'admin IPban sous forme x.x.%|5 ou x.x.x.%|5)
+        }
+        
+            //=> nous pouvons bannir une plage d'adresse ip en V4 (dans l'admin IPban sous forme x.x.%|5 ou x.x.x.%|5)
         if ($ipv == '4') {
             $ip4detail = explode('.', $ipadr);
-            if (in_array($ip4detail[0] . '.' . $ip4detail[1] . '.%|5', $tab_spam))
+            if (in_array($ip4detail[0] . '.' . $ip4detail[1] . '.%|5', $tab_spam)) {
                 access_denied();
-            if (in_array($ip4detail[0] . '.' . $ip4detail[1] . '.' . $ip4detail[2] . '.%|5', $tab_spam))
+            }
+
+            if (in_array($ip4detail[0] . '.' . $ip4detail[1] . '.' . $ip4detail[2] . '.%|5', $tab_spam)) {
                 access_denied();
+            }
         }
+
         //=> nous pouvons bannir une plage d'adresse ip en V6 (dans l'admin IPban sous forme x:x:%|5 ou x:x:x:%|5)
         if ($ipv == '6') {
             $ip6detail = explode(':', $ipadr);
-            if (in_array($ip6detail[0] . ':' . $ip6detail[1] . ':%|5', $tab_spam))
+            if (in_array($ip6detail[0] . ':' . $ip6detail[1] . ':%|5', $tab_spam)) {
                 access_denied();
-            if (in_array($ip6detail[0] . ':' . $ip6detail[1] . ':' . $ip6detail[2] . ':%|5', $tab_spam))
+            }
+
+            if (in_array($ip6detail[0] . ':' . $ip6detail[1] . ':' . $ip6detail[2] . ':%|5', $tab_spam)) {
                 access_denied();
+            }
         }
     }
 
@@ -90,11 +147,13 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     }
 
     // include current charset
-    if (file_exists("config/constants.php"))
+    if (file_exists("config/constants.php")) {
         include("config/constants.php");
+    }
 
-    if (file_exists("config/doctype.php"))
+    if (file_exists("config/doctype.php")) {
         include("config/doctype.php");
+    }
 
     // include url_protect Bad Words and create the filter function
     include("config/url_protect.php");
@@ -102,11 +161,14 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     function url_protect($arr, $key)
     {
         global $bad_uri_content, $bad_uri_key, $badname_in_uri;
+
         $ibid = true;
+
         // mieux faire face aux techniques d'évasion de code : base64_decode(utf8_decode(bin2hex($arr))));
         $arr = rawurldecode($arr);
         $RQ_tmp = strtolower($arr);
         $RQ_tmp_large = strtolower($key) . "=" . $RQ_tmp;
+
         if (
             in_array($RQ_tmp, $bad_uri_content)
             or
@@ -118,21 +180,7 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         )
             access_denied();
     }
-    /*
-    var_dump($_POST);
-    var_dump($_SERVER['ORIG_PATH_INFO']);
-    */
-    /*
-    function post_protect($arr,$key) {
-        global $bad_uri_key, $badname_in_uri;
-        if(
-            in_array($key, $bad_uri_key,true)
-            OR
-            count($badname_in_uri)>0
-        )
-            access_denied();
-    }
-    */
+
     // Get values, slash, filter and extract
     if (!empty($_GET)) {
         array_walk_recursive($_GET, 'addslashes_GPC');
@@ -140,51 +188,62 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         array_walk_recursive($_GET, 'url_protect');
         extract($_GET, EXTR_OVERWRITE);
     }
+
     if (!empty($_POST)) {
         array_walk_recursive($_POST, 'addslashes_GPC');
         /*
         array_walk_recursive($_POST,'post_protect');
         if(!isset($_SERVER['HTTP_REFERER'])) {
-            Ecr_Log('security','Ghost form in '.$_SERVER['ORIG_PATH_INFO'].' => who playing with form ?','');
-            L_spambot('',"false");
+            logs::Ecr_Log('security','Ghost form in '.$_SERVER['ORIG_PATH_INFO'].' => who playing with form ?','');
+            spam::L_spambot('',"false");
+            access_denied();
+        } else if ($_SERVER['HTTP_REFERER'] !== $nuke_url.$_SERVER['ORIG_PATH_INFO']) {
+            logs::Ecr_Log('security','Ghost form in '.$_SERVER['ORIG_PATH_INFO'].'. => '.$_SERVER["HTTP_REFERER"],'');
+            spam::L_spambot('',"false");
             access_denied();
         }
-        else if ($_SERVER['HTTP_REFERER'] !== $nuke_url.$_SERVER['ORIG_PATH_INFO']) {
-            Ecr_Log('security','Ghost form in '.$_SERVER['ORIG_PATH_INFO'].'. => '.$_SERVER["HTTP_REFERER"],'');
-            L_spambot('',"false");
-            access_denied();
-        }
-    */
+        */
         extract($_POST, EXTR_OVERWRITE);
     }
+
     // Cookies - analyse et purge - shiney 07-11-2010
-    if (!empty($_COOKIE))
+    if (!empty($_COOKIE)) {
         extract($_COOKIE, EXTR_OVERWRITE);
+    }
+
     if (isset($user)) {
         $ibid = explode(':', base64_decode($user));
         array_walk($ibid, 'url_protect');
         $user = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
     }
+
     if (isset($user_language)) {
         $ibid = explode(':', $user_language);
         array_walk($ibid, 'url_protect');
         $user_language = str_replace("%3A", ":", urlencode($user_language));
     }
+
     if (isset($admin)) {
         $ibid = explode(':', base64_decode($admin));
         array_walk($ibid, 'url_protect');
         $admin = base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));
     }
+
     // Cookies - analyse et purge - shiney 07-11-2010
-    if (!empty($_SERVER))
+    if (!empty($_SERVER)) {
         extract($_SERVER, EXTR_OVERWRITE);
-    if (!empty($_ENV))
+    }
+
+    if (!empty($_ENV)) {
         extract($_ENV, EXTR_OVERWRITE);
+    }
+
     if (!empty($_FILES)) {
         foreach ($_FILES as $key => $value) {
             $$key = $value['tmp_name'];
         }
     }
+
     unset($bad_uri_content);
     unset($bad_uri_key);
     unset($badname_in_uri);

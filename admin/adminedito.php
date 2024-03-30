@@ -34,7 +34,7 @@ $hlpfile = "manuels/$language/edito.html";
 
 function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
 {
-    global $hlpfile, $language, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
@@ -144,18 +144,16 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
         </form>';
 
         $arg1 = '
-    var formulid = ["admineditomod"];
-    ';
+            var formulid = ["admineditomod"];';
 
         $fv_parametres = '
         aff_jours: {
-        validators: {
-            digits: {
-                message: "This must be a number"
+            validators: {
+                digits: {
+                    message: "This must be a number"
+                }
             }
-        }
-    },
-    ';
+        },';
 
         css::adminfoot('fv', $fv_parametres, $arg1, '');
     }

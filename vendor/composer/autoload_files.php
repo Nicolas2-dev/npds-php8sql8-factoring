@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     '9e71c1459ef1226520e4b26dac3a180d' => $vendorDir . '/php81_bc/strftime/src/php-8.1-strftime.php',
     'c27451b32a11305d12db7be1018f86bb' => $baseDir . '/support/helpers.php',
+    '834ba46ebd553b763c7e5985c3d977c0' => $baseDir . '/system/support/helpers.php',
 );

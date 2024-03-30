@@ -105,7 +105,7 @@ $extension_fma = "*";
 // $extension_Edit_fma="txt php js html htm";
 $extension_Edit_fma = "txt php js html htm";
 
-// $extension_Wysiwyg_fma permet de définir la liste des extensions éditables qui supporteront un editeur Wysiwyg (TinyMce par exemple)
+// $extension_Wysiwyg_fma permet de définir la liste des extensions Editables qui supporteront un editeur Wysiwyg (TinyMce par exemple)
 // $extension_Wysiwyg_fma="html htm";
 $extension_Wysiwyg_fma = "html htm";
 
@@ -125,6 +125,7 @@ $extension_Wysiwyg_fma = "html htm";
 //       'config.php' => 'admin'
 // );
 $ficlimit_fma = array();
+
 // $infos_fma permet d'inclure automatiquement un fichier particulier (par exemple une bannière ...) s'il se trouve dans le répertoire courant
 $infos_fma = "infos.txt";
 
@@ -167,7 +168,7 @@ $themeC_fma = "f-manager-cmd.html";
 $home_fma = "";
 
 // $NPDS_fma permet d'inclure le files-manager dans le thème de NPDS
-$NPDS_fma = true;
+$NPDS_fma = false;
 
 // $css_fma permet d'inclure la css d'un thème / Cette option n'a de sens que si $NPDS_fma=false
 if (($NPDS_fma === false) and (file_exists("themes/$Default_Theme/assets/css/f-manager.css")))

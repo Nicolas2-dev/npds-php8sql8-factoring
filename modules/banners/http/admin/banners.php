@@ -13,11 +13,12 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
-    include('die.php');
+use npds\system\assets\css;
+use npds\system\language\language;
 
-if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
-    die();
+if (!function_exists('admindroits')) {
+    include('die.php');
+}
 
 $f_meta_nom = 'BannersAdmin';
 $f_titre = adm_translate("Administration des bannières");
@@ -100,6 +101,7 @@ function BannersAdmin()
 
     $result = sql_query("SELECT bid, cid, imageurl, imptotal, impmade, clicks, date FROM " . $NPDS_Prefix . "banner WHERE userlevel='9' order by bid");
     while (list($bid, $cid, $imageurl, $imptotal, $impmade, $clicks, $date) = sql_fetch_row($result)) {
+        
         $result2 = sql_query("SELECT cid, name FROM " . $NPDS_Prefix . "bannerclient WHERE cid='$cid'");
         list($cid, $name) = sql_fetch_row($result2);
         
@@ -113,7 +115,7 @@ function BannersAdmin()
             <td>' . $left . '</td>
             <td>' . $clicks . '</td>
             <td>' . $percent . '%</td>
-            <td>' . $name . ' | <span class="small">' . basename(aff_langue($imageurl)) . '</span></td>
+            <td>' . $name . ' | <span class="small">' . basename(language::aff_langue($imageurl)) . '</span></td>
             <td><a href="admin.php?op=BannerEdit&amp;bid=' . $bid . '" ><i class="fa fa-edit fa-lg me-3" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=BannerDelete&amp;bid=' . $bid . '&amp;ok=0" class="text-danger"><i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></i></a></td>
             </tr>';
     }
@@ -140,11 +142,13 @@ function BannersAdmin()
 
     $result = sql_query("SELECT bid, cid, impressions, clicks, datestart, dateend FROM " . $NPDS_Prefix . "bannerfinish ORDER BY bid");
     while (list($bid, $cid, $impressions, $clicks, $datestart, $dateend) = sql_fetch_row($result)) {
+        
         $result2 = sql_query("SELECT cid, name FROM " . $NPDS_Prefix . "bannerclient WHERE cid='$cid'");
         list($cid, $name) = sql_fetch_row($result2);
         
-        if ($impressions == 0) 
+        if ($impressions == 0) {
             $impressions = 1;
+        }
         
         $percent = substr(100 * $clicks / $impressions, 0, 5);
         
@@ -215,9 +219,9 @@ function BannersAdmin()
             <select class="form-select" name="cid">';
         
         $result = sql_query("SELECT cid, name FROM " . $NPDS_Prefix . "bannerclient");
+        
         while (list($cid, $name) = sql_fetch_row($result)) {
-            echo '
-                <option value="' . $cid . '">' . $name . '</option>';
+            echo '<option value="' . $cid . '">' . $name . '</option>';
         }
 
         echo '
@@ -308,14 +312,16 @@ function BannersAdmin()
         }
     },';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function BannersAdd($name, $cid, $imptotal, $imageurl, $clickurl, $userlevel)
+//function BannersAdd($name, $cid, $imptotal, $imageurl, $clickurl, $userlevel) // $name ???
+function BannersAdd($cid, $imptotal, $imageurl, $clickurl, $userlevel)
 {
     global $NPDS_Prefix;
 
     sql_query("INSERT INTO " . $NPDS_Prefix . "banner VALUES (NULL, '$cid', '$imptotal', '1', '0', '$imageurl', '$clickurl', '$userlevel', now())");
+
     Header("Location: admin.php?op=BannersAdmin");
 }
 
@@ -324,6 +330,7 @@ function BannerAddClient($name, $contact, $email, $login, $passwd, $extrainfo)
     global $NPDS_Prefix;
 
     sql_query("INSERT INTO " . $NPDS_Prefix . "bannerclient VALUES (NULL, '$name', '$contact', '$email', '$login', '$passwd', '$extrainfo')");
+
     Header("Location: admin.php?op=BannersAdmin");
 }
 
@@ -332,6 +339,7 @@ function BannerFinishDelete($bid)
     global $NPDS_Prefix;
 
     sql_query("DELETE FROM " . $NPDS_Prefix . "bannerfinish WHERE bid='$bid'");
+
     Header("Location: admin.php?op=BannersAdmin");
 }
 
@@ -341,6 +349,7 @@ function BannerDelete($bid, $ok = 0)
 
     if ($ok == 1) {
         sql_query("DELETE FROM " . $NPDS_Prefix . "banner WHERE bid='$bid'");
+
         Header("Location: admin.php?op=BannersAdmin");
     } else {
         global $hlpfile;
@@ -348,6 +357,7 @@ function BannerDelete($bid, $ok = 0)
         include("themes/default/header.php");
         
         GraphicAdmin($hlpfile);
+        
         $result = sql_query("SELECT cid, imptotal, impmade, clicks, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE bid='$bid'");
         list($cid, $imptotal, $impmade, $clicks, $imageurl, $clickurl) = sql_fetch_row($result);
         
@@ -357,7 +367,7 @@ function BannerDelete($bid, $ok = 0)
         <hr />
         <h3 class="text-danger">' . adm_translate("Effacer Bannière") . '</h3>';
         echo $imageurl != '' ?
-            '<a href="' . aff_langue($clickurl) . '"><img class="img-fluid" src="' . aff_langue($imageurl) . '" alt="banner" /></a><br />' :
+            '<a href="' . language::aff_langue($clickurl) . '"><img class="img-fluid" src="' . language::aff_langue($imageurl) . '" alt="banner" /></a><br />' :
             $clickurl;
         
         echo '
@@ -398,7 +408,7 @@ function BannerDelete($bid, $ok = 0)
         <div class="alert alert-danger">' . adm_translate("Etes-vous sûr de vouloir effacer cette Bannière ?") . '<br />
         <a class="btn btn-danger btn-sm mt-3" href="admin.php?op=BannerDelete&amp;bid=' . $bid . '&amp;ok=1">' . adm_translate("Oui") . '</a>&nbsp;<a class="btn btn-secondary btn-sm mt-3" href="admin.php?op=BannersAdmin" >' . adm_translate("Non") . '</a></div>';
     
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function BannerEdit($bid)
@@ -418,7 +428,7 @@ function BannerEdit($bid)
     <h3 class="mb-2">' . adm_translate("Edition Bannière") . '</h3>';
 
     if ($imageurl != '')
-        echo '<img class="img-fluid" src="' . aff_langue($imageurl) . '" alt="banner" /><br />';
+        echo '<img class="img-fluid" src="' . language::aff_langue($imageurl) . '" alt="banner" /><br />';
     else
         echo $clickurl;
 
@@ -432,14 +442,12 @@ function BannerEdit($bid)
     $result = sql_query("SELECT cid, name FROM " . $NPDS_Prefix . "bannerclient WHERE cid='$cid'");
     list($cid, $name) = sql_fetch_row($result);
 
-    echo '
-                <option value="' . $cid . '" selected="selected">' . $name . '</option>';
+    echo '<option value="' . $cid . '" selected="selected">' . $name . '</option>';
 
     $result = sql_query("SELECT cid, name FROM " . $NPDS_Prefix . "bannerclient");
     while (list($ccid, $name) = sql_fetch_row($result)) {
         if ($cid != $ccid)
-            echo '
-                <option value="' . $ccid . '">' . $name . '</option>';
+            echo '<option value="' . $ccid . '">' . $name . '</option>';
     }
 
     echo '
@@ -482,7 +490,7 @@ function BannerEdit($bid)
         inpandfieldlen("clickurl",320);
     ';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function BannerChange($bid, $cid, $imptotal, $impadded, $imageurl, $clickurl, $userlevel)
@@ -516,29 +524,28 @@ function BannerClientDelete($cid, $ok = 0)
         echo '
         <hr />
         <h3 class="text-danger">' . adm_translate("Supprimer l'Annonceur") . '</h3>';
-        echo '
-        <div class="alert alert-secondary my-3">' . adm_translate("Vous êtes sur le point de supprimer cet annonceur : ") . ' <strong>' . $name . '</strong> ' . adm_translate("et toutes ses bannières !!!");
+        echo '<div class="alert alert-secondary my-3">' . adm_translate("Vous êtes sur le point de supprimer cet annonceur : ") . ' <strong>' . $name . '</strong> ' . adm_translate("et toutes ses bannières !!!");
         
         $result2 = sql_query("SELECT imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
         $numrows = sql_num_rows($result2);
 
-        if ($numrows == 0)
+        if ($numrows == 0) {
             echo '<br />' . adm_translate("Cet annonceur n'a pas de bannière active pour le moment.") . '</div>';
-        else
-            echo '
-        <br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . $sitename . '</div>';
-        
+        } else {
+            echo '<br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . $sitename . '</div>';
+        }
+
         while (list($imageurl, $clickurl) = sql_fetch_row($result2)) {
-            echo $imageurl != '' ?
-                '<img class="img-fluid" src="' . aff_langue($imageurl) . '" alt="" /><br />' :
-                $clickurl . '<br />';
+            echo $imageurl != '' 
+                ? '<img class="img-fluid" src="' . language::aff_langue($imageurl) . '" alt="" /><br />' 
+                : $clickurl . '<br />';
         }
     }
 
     echo '<div class="alert alert-danger mt-3">' . adm_translate("Etes-vous sûr de vouloir effacer cet annonceur et TOUTES ses bannières ?") . '</div>
     <a href="admin.php?op=BannerClientDelete&amp;cid=' . $cid . '&amp;ok=1" class="btn btn-danger">' . adm_translate("Oui") . '</a> <a href="admin.php?op=BannersAdmin" class="btn btn-secondary">' . adm_translate("Non") . '</a>';
     
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function BannerClientEdit($cid)
@@ -610,7 +617,7 @@ function BannerClientEdit($cid)
         }
     },';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function BannerClientChange($cid, $name, $contact, $email, $extrainfo, $login, $passwd)
@@ -624,7 +631,8 @@ function BannerClientChange($cid, $name, $contact, $email, $extrainfo, $login, $
 
 switch ($op) {
     case 'BannersAdd':
-        BannersAdd($name, $cid, $imptotal, $imageurl, $clickurl, $userlevel);
+        //BannersAdd($name, $cid, $imptotal, $imageurl, $clickurl, $userlevel);
+        BannersAdd($cid, $imptotal, $imageurl, $clickurl, $userlevel);
         break;
 
     case 'BannerAddClient':

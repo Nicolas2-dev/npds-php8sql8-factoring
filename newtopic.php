@@ -14,28 +14,44 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+use npds\system\cache\cache;
+use npds\system\routing\url;
+use npds\system\theme\theme;
+//use npds\system\utility\code;
+use npds\system\utility\spam;
+use npds\system\security\hack;
 use npds\system\cache\cacheManager;
+use npds\system\subscribe\subscribe;
 use npds\system\cache\SuperCacheEmpty;
 
 settype($cancel, 'string');
-if ($cancel)
-    header("Location: viewforum.php?forum=$forum");
 
-if (!function_exists("Mysql_Connexion"))
+if ($cancel) {
+    header("Location: viewforum.php?forum=$forum");
+}
+
+if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
+}
 
 include('functions.php');
-if ($SuperCache)
+
+if ($SuperCache) {
     $cache_obj = new cacheManager();
-else
+} else {
     $cache_obj = new SuperCacheEmpty();
+}
 
 include('auth.php');
+
 global $NPDS_Prefix;
 
-$rowQ1 = Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
-if (!$rowQ1)
+$rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
+if (!$rowQ1) {
     forumerror('0001');
+}
+
 $myrow = $rowQ1[0];
 $forum_name = $myrow['forum_name'];
 $forum_access = $myrow['forum_access'];
@@ -43,77 +59,97 @@ $moderator = get_moderator($myrow['forum_moderator']);
 $moderator = explode(' ', $moderator);
 $moderatorX = get_moderator($myrow['forum_moderator']);
 
-
 if (isset($user)) {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
     $Mmod = false;
+    
     for ($i = 0; $i < count($moderator); $i++) {
         if (($userdata[1] == $moderator[$i])) {
             $Mmod = true;
             break;
         }
     }
+
     $userdata = get_userdata($userdata[1]);
 }
 
-if (($myrow['forum_type'] == 1) and ($Forum_passwd != $myrow['forum_pass']))
+if (($myrow['forum_type'] == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
     header("Location: forum.php");
-if ($forum_access == 9)
+}
+
+if ($forum_access == 9) {
     header("Location: forum.php");
-if (!does_exists($forum, "forum"))
+}
+
+if (!does_exists($forum, "forum")) {
     forumerror('0030');
+}
+
 // Forum ARBRE
-if ($myrow['arbre'])
+if ($myrow['arbre']) {
     $hrefX = "viewtopicH.php";
-else
+} else {
     $hrefX = "viewtopic.php";
+}
 
 settype($submitS, 'string');
 settype($stop, 'integer');
+
 if ($submitS) {
-    if ($message == '')
+    if ($message == '') {
         $stop = 1;
-    if ($subject == '')
+    }
+
+    if ($subject == '') {
         $stop = 1;
+    }
+
     if (!isset($user)) {
         if ($forum_access == 0) {
             $userdata = array("uid" => 1);
             $modo = '';
+
             include('themes/default/header.php');
         } else {
-            if (($username == '') or ($password == ''))
+            if (($username == '') or ($password == '')) {
                 forumerror('0027');
-            else {
+            } else {
                 $modo = '';
                 $result = sql_query("SELECT pass FROM " . $NPDS_Prefix . "users WHERE uname='$username'");
                 list($pass) = sql_fetch_row($result);
+                
                 if ((password_verify($password, $pass)) and ($pass != '')) {
                     $userdata = get_userdata($username);
+
                     include('themes/default/header.php');
-                } else
+                } else {
                     forumerror('0028');
+                }
             }
         }
     } else {
         $modo = user_is_moderator($userdata['uid'], $userdata['uname'], $forum_access);
         include('themes/default/header.php');
     }
+
     // Either valid user/pass, or valid session. continue with post.
     if ($stop != 1) {
         $poster_ip = getip();
-        if ($dns_verif)
+        
+        if ($dns_verif) {
             $hostname = @gethostbyaddr($poster_ip);
-        else
+        } else {
             $hostname = '';
+        }
 
         // anti flood
         anti_flood($modo, $anti_flood, $poster_ip, $userdata, $gmt);
 
         //anti_spambot
-        if (!R_spambot($asb_question, $asb_reponse, $message)) {
-            Ecr_Log('security', 'Forum Anti-Spam : forum=' . $forum . ' / topic_title=' . $subject, '');
-            redirect_url("index.php");
+        if (!spam::R_spambot($asb_question, $asb_reponse, $message)) {
+            logs::Ecr_Log('security', 'Forum Anti-Spam : forum=' . $forum . ' / topic_title=' . $subject, '');
+            url::redirect_url("index.php");
             die();
         }
 
@@ -121,55 +157,79 @@ if ($submitS) {
             $formulaire = $myrow['forum_pass'];
             include("modules/sform/forum/forum_extender.php");
         }
-        /*
-        if ($allow_html == 0 || isset($html))
-            $message = htmlspecialchars($message,ENT_COMPAT|ENT_HTML401,'utf-8');
-    */
-        if (isset($sig) && $userdata['uid'] != 1 && $myrow['forum_type'] != 6 && $myrow['forum_type'] != 5)
+
+        // if ($allow_html == 0 || isset($html)) {
+        //     $message = htmlspecialchars($message, ENT_COMPAT|ENT_HTML401, 'utf-8');
+        // }
+
+        if (isset($sig) && $userdata['uid'] != 1 && $myrow['forum_type'] != 6 && $myrow['forum_type'] != 5) {
             $message .= " [addsig]";
-        if (($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
-            //         $message = af_cod($message);
         }
-        if (($allow_bbcode) and ($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5))
+
+        // if (($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
+        //     $message = code::af_cod($message);
+        // }
+
+        if (($allow_bbcode) and ($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
             $message = smile($message);
+        }
+
         if (($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
             $message = make_clickable($message);
-            $message = removeHack($message);
+            $message = hack::removeHack($message);
         }
+
         $message = addslashes($message);
-        if (!isset($Mmod))
-            $subject = removeHack(strip_tags($subject));
+
+        if (!isset($Mmod)) {
+            $subject = hack::removeHack(strip_tags($subject));
+        }
 
         $Msubject = $subject;
         $time = date("Y-m-d H:i", time() + ((int)$gmt * 3600));
+        
         $sql = "INSERT INTO " . $NPDS_Prefix . "forumtopics (topic_title, topic_poster, current_poster, forum_id, topic_time, topic_notify) VALUES ('$subject', '" . $userdata['uid'] . "', '" . $userdata['uid'] . "', '$forum', '$time'";
-        if (isset($notify2) && $userdata['uid'] != 1)
+        if (isset($notify2) && $userdata['uid'] != 1) {
             $sql .= ", '1'";
-        else
+        } else {
             $sql .= ", '0'";
+        }
+        
         $sql .= ')';
-        if (!$result = sql_query($sql))
+
+        if (!$result = sql_query($sql)) {
             forumerror('0020');
+        }
+
         $topic_id = sql_last_id();
         $sql = "INSERT INTO " . $NPDS_Prefix . "posts (topic_id, image, forum_id, poster_id, post_text, post_time, poster_ip, poster_dns) VALUES ('$topic_id', '$image_subject', '$forum', '" . $userdata['uid'] . "', '$message', '$time', '$poster_ip', '$hostname')";
-        if (!$result = sql_query($sql))
+        
+        if (!$result = sql_query($sql)) {
             forumerror('0020');
-        else
+        } else {
             $IdPost = sql_last_id();
+        }
 
         $sql = "UPDATE " . $NPDS_Prefix . "users_status SET posts=posts+1 WHERE (uid='" . $userdata['uid'] . "')";
         $result = sql_query($sql);
-        if (!$result)
+        
+        if (!$result) {
             forumerror('0029');
+        }
+
         $topic = $topic_id;
+
         global $subscribe;
-        if ($subscribe)
-            subscribe_mail("forum", $topic, stripslashes($forum), stripslashes($Msubject), $userdata['uid']);
+        if ($subscribe) {
+            subscribe::subscribe_mail("forum", $topic, stripslashes($forum), stripslashes($Msubject), $userdata['uid']);
+        }
+
         if (isset($upload)) {
             include("modules/upload/upload_forum.php");
             win_upload("forum_npds", $IdPost, $forum, $topic, "win");
         }
-        redirect_url($hrefX . "?forum=$forum&topic=$topic");
+
+        url::redirect_url($hrefX . "?forum=$forum&topic=$topic");
     } else {
         echo '
         <div class="alert alert-danger lead" role="alert">
@@ -179,27 +239,35 @@ if ($submitS) {
     }
 } else {
     include('themes/default/header.php');
-    if ($allow_bbcode) include("assets/formhelp.java.php");
+
+    if ($allow_bbcode) {
+        include("assets/formhelp.java.php");
+    }
+
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
     $posterdata = get_userdata_from_id($userdata[0]);
+
     if ($smilies) {
         if (isset($user)) {
             if ($posterdata['user_avatar'] != '') {
-                if (stristr($posterdata['user_avatar'], "users_private"))
+                
+                if (stristr($posterdata['user_avatar'], "users_private")) {
                     $imgava = $posterdata['user_avatar'];
-                else
-                if ($ibid = theme_image("forum/avatar/" . $posterdata['user_avatar'])) {
-                    $imgava = $ibid;
                 } else {
-                    $imgava = "assets/images/forum/avatar/" . $posterdata['user_avatar'];
+                    if ($ibid = theme::theme_image("forum/avatar/" . $posterdata['user_avatar'])) {
+                        $imgava = $ibid;
+                    } else {
+                        $imgava = "assets/images/forum/avatar/" . $posterdata['user_avatar'];
+                    }
                 }
             }
-        } else
-            if ($ibid = theme_image("forum/avatar/blank.gif")) {
-            $imgava = $ibid;
         } else {
-            $imgava = "assets/images/forum/avatar/blank.gif";
+            if ($ibid = theme::theme_image("forum/avatar/blank.gif")) {
+                $imgava = $ibid;
+            } else {
+                $imgava = "assets/images/forum/avatar/blank.gif";
+            }
         }
     }
 
@@ -210,32 +278,40 @@ if ($submitS) {
         <div class="card">
             <div class="card-block-small">
             ' . translate("Modéré par : ");
+
     $moderator_data = explode(' ', $moderatorX);
     for ($i = 0; $i < count($moderator_data); $i++) {
         $modera = get_userdata($moderator_data[$i]);
+        
         if ($modera['user_avatar'] != '') {
-            if (stristr($modera['user_avatar'], "users_private"))
+            if (stristr($modera['user_avatar'], "users_private")) {
                 $imgtmp = $modera['user_avatar'];
-            else
-                if ($ibid = theme_image("forum/avatar/" . $modera['user_avatar'])) {
-                $imgtmp = $ibid;
             } else {
-                $imgtmp = "assets/images/forum/avatar/" . $modera['user_avatar'];
+                if ($ibid = theme::theme_image("forum/avatar/" . $modera['user_avatar'])) {
+                    $imgtmp = $ibid;
+                } else {
+                    $imgtmp = "assets/images/forum/avatar/" . $modera['user_avatar'];
+                }
             }
         }
+
         echo '<a href="user.php?op=userinfo&amp;uname=' . $moderator_data[$i] . '"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava me-1 mx-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
     }
+
     echo '
             </div>
         </div>
         <h4 class="my-3"><img width="48" height="48" class=" rounded-circle me-3" src="' . $imgava . '" alt="" />' . translate("Poster un nouveau sujet dans :") . ' ' . stripslashes($forum_name) . '<span class="text-muted">&nbsp;#' . $forum . '</span></h4>
             <blockquote class="blockquote">' . translate("A propos des messages publiés :") . '<br />';
-    if ($forum_access == 0)
+    
+    if ($forum_access == 0) {
         echo translate("Les utilisateurs anonymes peuvent poster de nouveaux sujets et des réponses dans ce forum.");
-    else if ($forum_access == 1)
+    } elseif ($forum_access == 1) {
         echo translate("Tous les utilisateurs enregistrés peuvent poster de nouveaux sujets et répondre dans ce forum.");
-    else if ($forum_access == 2)
+    } elseif ($forum_access == 2) {
         echo translate("Seuls les modérateurs peuvent poster de nouveaux sujets et répondre dans ce forum.");
+    }
+
     echo '
         </blockquote>
         <form id="new_top" action="newtopic.php" method="post" name="coolsus">';
@@ -263,29 +339,37 @@ if ($submitS) {
         } else {
             $allow_to_post = 1;
         }
+
     } elseif ($forum_access == 2) {
         if (user_is_moderator($userdata[0], $userdata[2], $forum_access)) {
             echo '<strong>' . translate("Auteur") . ' :</strong>';
             echo $userdata[1];
             $allow_to_post = 1;
         }
-    } elseif ($forum_access == 0)
+    } elseif ($forum_access == 0) {
         $allow_to_post = 1;
+    }
 
     settype($submitP, 'string');
+
     if ($allow_to_post) {
         if ($submitP) {
             $acc = 'newtopic';
             $subject = stripslashes($subject);
             $message = stripslashes($message);
-            if (isset($username))
+
+            if (isset($username)) {
                 $username = stripslashes($username);
-            else
+            } else {
                 $username = '';
-            if (isset($password))
+            }
+
+            if (isset($password)) {
                 $password = stripslashes($password);
-            else
+            } else {
                 $password = '';
+            }
+
             include("preview.php");
         } else {
             $username = '';
@@ -293,46 +377,58 @@ if ($submitS) {
             $subject = '';
             $message = '';
         }
+
         if ($myrow['forum_type'] == 8) {
             $formulaire = $myrow['forum_pass'];
+
             include("modules/sform/forum/forum_extender.php");
         } else {
             echo ' 
             <div class="mb-3 row">
                 <label class="form-label" for="subject">' . translate("Sujet") . '</label>
                 <div class="col-sm-12">
-                <input class="form-control" type="text" id="subject" name="subject" placeholder="' . translate("Sujet") . '" required="required" value="' . $subject . '" />
+                    <input class="form-control" type="text" id="subject" name="subject" placeholder="' . translate("Sujet") . '" required="required" value="' . $subject . '" />
                 </div>
             </div>';
+
             if ($smilies) {
                 settype($image_subject, 'string');
+
                 echo '
-            <div class="d-none d-sm-block mb-3 row">
-                <label class="form-label">' . translate("Icone du message") . '</label>
-                <div class="col-sm-12">
-                <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
-                ' . emotion_add($image_subject) . '
-                </div>
-                </div>
-            </div>';
+                <div class="d-none d-sm-block mb-3 row">
+                    <label class="form-label">' . translate("Icone du message") . '</label>
+                    <div class="col-sm-12">
+                        <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
+                        ' . emotion_add($image_subject) . '
+                        </div>
+                    </div>
+                </div>';
             }
+
             echo ' 
             <div class="mb-3 row">
                 <label class="form-label" for="message">' . translate("Message") . '</label>';
-            if ($allow_bbcode)
+
+            if ($allow_bbcode) {
                 $xJava = 'name="message" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
+            }
+
             echo '
             <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">
                     <div class="float-start">';
+
             putitems('ta_newtopic');
-            echo '
-                    </div>';
-            if ($allow_html == 1)
+
+            echo '</div>';
+
+            if ($allow_html == 1) {
                 echo '<span class="text-success float-end mt-2" title="HTML ' . translate("On") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . HTML_Add();
-            else
+            } else {
                 echo '<span class="text-danger float-end mt-2" title="HTML ' . translate("Off") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
+            }
+
             echo '
                 </div>
                 <div class="card-body">
@@ -350,55 +446,74 @@ if ($submitS) {
             <label class="form-label">' . translate("Options") . '</label>
             <div class="col-sm-12">
                 <div class="custom-controls-stacked">';
+
             if (($allow_html == 1) and ($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
-                if (isset($html)) $sethtml = 'checked="checked"';
-                else $sethtml = '';
+                if (isset($html)) {
+                    $sethtml = 'checked="checked"';
+                } else {
+                    $sethtml = '';
+                }
+
                 echo '
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="html" name="html" ' . $sethtml . ' />
                     <label class="form-check-label" for="html">' . translate("Désactiver le html pour cet envoi") . '</label>
                 </div>';
             }
+
             if ($user) {
                 if ($allow_sig == 1 || $sig == 'on') {
                     $asig = sql_query("SELECT attachsig FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'");
                     list($attachsig) = sql_fetch_row($asig);
-                    if ($attachsig == 1) $s = 'checked="checked"';
-                    else $s = '';
+                    
+                    if ($attachsig == 1) { 
+                        $s = 'checked="checked"';
+                    } else {
+                        $s = '';
+                    }
+                    
                     if (($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
                         echo '
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="sig" name="sig" ' . $s . ' />
-                    <label class="form-check-label" for="sig">' . translate("Afficher la signature") . '</label>
-                </div>';
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="sig" name="sig" ' . $s . ' />
+                        <label class="form-check-label" for="sig">' . translate("Afficher la signature") . '</label>
+                        </div>';
                     }
                 }
+
                 settype($up, 'string');
                 settype($upload, 'string');
+
                 if ($allow_upload_forum) {
-                    if ($upload == "on")
+                    if ($upload == "on") {
                         $up = 'checked="checked"';
+                    }
+
                     echo '
-                <div class="form-check">
+                    <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="upload" name="upload" ' . $up . ' />
                     <label class="form-check-label" for="upload">' . translate("Charger un fichier une fois l'envoi accepté") . '</label>
-                </div>';
+                    </div>';
                 }
-                if (isset($notify2))
+
+                if (isset($notify2)) {
                     $selnot = 'checked="checked"';
-                else
+                } else {
                     $selnot = '';
+                }
+
                 echo '
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="notify2" name="notify2" ' . $selnot . ' />
                     <label class="form-check-label" for="notify2">' . translate("Prévenir par Email quand de nouvelles réponses sont postées") . '</label>
                 </div>';
             }
+
             echo '
                 </div>
             </div>
         </div>
-        ' . Q_spambot() . '
+        ' . spam::Q_spambot() . '
         <div class="mb-3 row">
             <div class="col-sm-12">
                 <input type="hidden" name="forum" value="' . $forum . '" />
@@ -408,7 +523,9 @@ if ($submitS) {
         </div>';
         }
     }
+
     echo '
         </form>';
 }
+
 include('themes/default/footer.php');

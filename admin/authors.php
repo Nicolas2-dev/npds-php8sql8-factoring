@@ -12,40 +12,54 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+use npds\system\assets\js;
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\auth\users;
+use npds\system\support\facades\DB;
+
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'mod_authors';
 $f_titre = adm_translate("Administrateurs");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
-if ($radminsuper != 1) Header("Location: die.php");
+
+if ($radminsuper != 1) {
+    Header("Location: die.php");
+}
 
 global $language, $adminimg, $admf_ext;
+
 $listdroits = '';
 $listdroitsmodulo = '';
 $hlpfile = "manuels/$language/authors.html";
 
-// sélection des fonctions sauf les fonctions de type alerte 
-$R = sql_query("SELECT fid, fnom, fnom_affich, fcategorie FROM " . $NPDS_Prefix . "fonctions f WHERE f.finterface =1 AND fcategorie < 7 ORDER BY f.fcategorie");
-while (list($fid, $fnom, $fnom_affich, $fcategorie) = sql_fetch_row($R)) {
-    if ($fcategorie == 6) {
+$R = DB::table('fonctions')->select('fid', 'fnom', 'fnom_affich', 'fcategorie')->where('finterface', 1)->where('fcategorie', '<', 7)->orderBy('fcategorie')->get();
+
+foreach($R as $func) {
+    if ($func['fcategorie'] == 6) {
         $listdroitsmodulo .= '
             <div class="col-md-4 col-sm-6">
                 <div class="form-check">
-                <input class="ckbm form-check-input" id="ad_d_m_' . $fnom . '" type="checkbox" name="ad_d_m_' . $fnom . '" value="' . $fid . '" />
-                <label class="form-check-label" for="ad_d_m_' . $fnom . '">' . $fnom_affich . '</label>
+                <input class="ckbm form-check-input" id="ad_d_m_' . $func['fnom'] . '" type="checkbox" name="ad_d_m_' . $func['fnom'] . '" value="' . $func['fid'] . '" />
+                <label class="form-check-label" for="ad_d_m_' . $func['fnom'] . '">' . $func['fnom_affich'] . '</label>
                 </div>
             </div>';
     } else {
-        if ($fid != 12)
+        if ($func['fid'] != 12) {
             $listdroits .= '
             <div class="col-md-4 col-sm-6">
                 <div class="form-check">
-                <input class="ckbf form-check-input" id="ad_d_' . $fid . '" type="checkbox" name="ad_d_' . $fid . '" value="' . $fid . '" />
-                <label class="form-check-label" for="ad_d_' . $fid . '">' . adm_translate($fnom_affich) . '</label>
+                <input class="ckbf form-check-input" id="ad_d_' . $func['fid'] . '" type="checkbox" name="ad_d_' . $func['fid'] . '" value="' . $func['fid'] . '" />
+                <label class="form-check-label" for="ad_d_' . $func['fid'] . '">' . adm_translate($func['fnom_affich']) . '</label>
                 </div>
             </div>';
+        }
     }
 }
 
@@ -91,13 +105,22 @@ $scri_check = '
     //]]>
     </script>';
 
-function displayadmins()
+/**
+ * [displayadmins description]
+ *
+ * @return  void
+ */
+function displayadmins(): void
 {
-    global $hlpfile, $NPDS_Prefix, $admf_ext, $fieldnames, $listdroits, $listdroitsmodulo, $f_meta_nom, $f_titre, $adminimg, $scri_check;
+    global $hlpfile, $admf_ext, $listdroits, $listdroitsmodulo, $f_meta_nom, $f_titre, $adminimg, $scri_check;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
-    $result = sql_query("SELECT aid, name, url, email, radminsuper FROM " . $NPDS_Prefix . "authors");
+
+    $authors = DB::table('authors')->select('aid', 'name', 'url', 'email', 'radminsuper')->get();
+
     echo '
     <hr />
     <h3>' . adm_translate("Les administrateurs") . '</h3>
@@ -110,25 +133,32 @@ function displayadmins()
             </tr>
         </thead>
         <tbody>';
-    while (list($a_aid, $name, $url, $email, $supadm) = sql_fetch_row($result)) {
-        if ($supadm == 1) echo '
-            <tr class="table-danger">';
-        else echo '
-            <tr>';
+
+    //while (list($a_aid, $name, $url, $email, $supadm) = sql_fetch_row($result)) {
+    foreach($authors as $author) {   
+        if ($author['radminsuper'] == 1) { 
+            echo '<tr class="table-danger">';
+        } else {
+            echo '<tr>';
+        }
+        
         echo '
-                <td>' . $a_aid . '</td>
-                <td>' . $email . '</td>
+                <td>' . $author['aid'] . '</td>
+                <td>' . $author['email'] . '</td>
                 <td align="right" nowrap="nowrap">
-                <a href="admin.php?op=modifyadmin&amp;chng_aid=' . $a_aid . '" class=""><i class="fa fa-edit fa-lg" title="' . adm_translate("Modifier l'information") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
-                <a href="mailto:' . $email . '"><i class="fa fa-at fa-lg" title="' . adm_translate("Envoyer un courriel à") . ' ' . $a_aid . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
-        if ($url != '')
-            echo '
-                <a href="' . $url . '"><i class="fas fa-external-link-alt fa-lg" title="' . adm_translate("Visiter le site web") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+                <a href="admin.php?op=modifyadmin&amp;chng_aid=' . $author['aid'] . '" class=""><i class="fa fa-edit fa-lg" title="' . adm_translate("Modifier l'information") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
+                <a href="mailto:' . $author['email'] . '"><i class="fa fa-at fa-lg" title="' . adm_translate("Envoyer un courriel à") . ' ' . $author['aid'] . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+        
+        if ($author['url'] != '') {
+            echo 'a href="' . $author['url'] . '"><i class="fas fa-external-link-alt fa-lg" title="' . adm_translate("Visiter le site web") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+        }
+
         echo '
-                <a href="admin.php?op=deladmin&amp;del_aid=' . $a_aid . '" ><i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer l'Auteur") . '" data-bs-toggle="tooltip" ></i></a>
+                <a href="admin.php?op=deladmin&amp;del_aid=' . $author['aid'] . '" ><i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer l'Auteur") . '" data-bs-toggle="tooltip" ></i></a>
                 </td>
             </tr>';
     }
+
     echo '
         </tbody>
     </table>
@@ -200,16 +230,18 @@ function displayadmins()
         </fieldset>
     </form>
     ' . $scri_check;
+
     $arg1 = '
         var formulid = ["nou_adm"];
-        ' . auto_complete('admin', 'aid', 'authors', '', '0') . '
-        ' . auto_complete('adminname', 'name', 'authors', '', '0') . '
+        ' . js::auto_complete('admin', 'aid', 'authors', '', '0') . '
+        ' . js::auto_complete('adminname', 'name', 'authors', '', '0') . '
         inpandfieldlen("add_aid",30);
         inpandfieldlen("add_name",50);
         inpandfieldlen("add_email",254);
         inpandfieldlen("add_url",320);
         inpandfieldlen("add_pwd",20);
         ';
+
     $fv_parametres = '
     add_aid: {
         validators: {
@@ -242,69 +274,89 @@ function displayadmins()
             checkPassword: {},
         }
     },';
-    adminfoot('fv', $fv_parametres, $arg1, '');
+
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function modifyadmin($chng_aid)
+/**
+ * [modifyadmin description]
+ *
+ * @param   string  $chng_aid  [$chng_aid description]
+ *
+ * @return  void
+ */
+function modifyadmin(string $chng_aid): void
 {
-    global $hlpfile, $aid, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg, $scri_check, $fv_parametres;
+    global $hlpfile, $admf_ext, $f_meta_nom, $f_titre, $adminimg, $scri_check, $fv_parametres;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     echo '
     <hr />
     <h3>' . adm_translate("Actualiser l'administrateur") . ' : <span class="text-muted">' . $chng_aid . '</span></h3>';
 
-    $result = sql_query("SELECT aid, name, url, email, pwd, radminsuper FROM " . $NPDS_Prefix . "authors WHERE aid='$chng_aid'");
-    list($chng_aid, $chng_name, $chng_url, $chng_email, $chng_pwd, $chng_radminsuper) = sql_fetch_row($result);
-    $supadm_inp = $chng_radminsuper == 1 ? ' checked="checked"' : '';
+    $author = DB::table('authors')->select('aid', 'name', 'url', 'email', 'pwd', 'radminsuper')->where('aid', $chng_aid)->first();
+
+    $supadm_inp = (($author['radminsuper'] == 1) ? ' checked="checked"' : '');
+
     //==> construction des check-box des droits
     $listdroits = '';
     $listdroitsmodulo = '';
-    $result3 = sql_query("SELECT * FROM " . $NPDS_Prefix . "droits WHERE d_aut_aid ='$chng_aid'");
+
+    $droits = DB::table('droits')->select('d_fon_fid')->where('d_aut_aid', $author['aid'])->get();
+
     $datas = array();
-    while ($data = sql_fetch_row($result3)) {
-        $datas[] = $data[1];
+    foreach ($droits as $key => $value) {
+        $datas[] = $value['d_fon_fid'];
     }
-    $R = sql_query("SELECT fid, fnom, fnom_affich, fcategorie FROM " . $NPDS_Prefix . "fonctions f WHERE f.finterface =1 AND fcategorie < 7 ORDER BY f.fcategorie");
-    while (list($fid, $fnom, $fnom_affich, $fcategorie) = sql_fetch_row($R)) {
-        $chec = in_array($fid, $datas) ? 'checked="checked"' : '';
-        if ($fcategorie == 6) {
+
+    $R = DB::table('fonctions')->select('fid', 'fnom', 'fnom_affich', 'fcategorie')->where('finterface', 1)->where('fcategorie', '<', 7)->orderBy('fcategorie')->get();
+
+    foreach($R as $func) {
+        
+        $chec = ((in_array($func['fid'], $datas)) ? 'checked="checked"' : '');
+
+        if ($func['fcategorie'] == 6) {
             $listdroitsmodulo .= '
             <div class="col-md-4 col-sm-6">
                 <div class="form-check">
-                <input class="ckbm form-check-input" id="ad_d_m_' . $fnom . '" type="checkbox" ' . $chec . ' name="ad_d_m_' . $fnom . '" value="' . $fid . '" />
-                <label class="form-check-label" for="ad_d_m_' . $fnom . '">' . $fnom_affich . '</label>
+                <input class="ckbm form-check-input" id="ad_d_m_' . $func['fnom'] . '" type="checkbox" ' . $chec . ' name="ad_d_m_' . $func['fnom'] . '" value="' . $func['fid'] . '" />
+                <label class="form-check-label" for="ad_d_m_' . $func['fnom'] . '">' . $func['fnom_affich'] . '</label>
                 </div>
             </div>';
         } else {
-            if ($fid != 12)
+            if ($func['fid'] != 12) {
                 $listdroits .= '
-            <div class="col-md-4 col-sm-6">
-                <div class="form-check">
-                <input class="ckbf form-check-input" id="ad_d_' . $fid . '" type="checkbox" ' . $chec . ' name="ad_d_' . $fid . '" value="' . $fid . '" />
-                <label class="form-check-label" for="ad_d_' . $fid . '">' . adm_translate($fnom_affich) . '</label>
-                </div>
-            </div>';
+                <div class="col-md-4 col-sm-6">
+                    <div class="form-check">
+                    <input class="ckbf form-check-input" id="ad_d_' . $func['fid'] . '" type="checkbox" ' . $chec . ' name="ad_d_' . $func['fid'] . '" value="' . $func['fid'] . '" />
+                    <label class="form-check-label" for="ad_d_' . $func['fid'] . '">' . adm_translate($func['fnom_affich']) . '</label>
+                    </div>
+                </div>';
+            }
         }
     }
+
     //<== construction des check-box des droits
     echo '
     <form id="mod_adm" class="" action="admin.php" method="post">
         <fieldset>
-            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" title="' . $chng_aid . '" /> ' . adm_translate("Informations") . '</legend>
+            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" title="' . $author['aid'] . '" /> ' . adm_translate("Informations") . '</legend>
             <div class="form-floating mb-3 mt-3">
-                <input id="chng_name" class="form-control" type="text" name="chng_name" value="' . $chng_name . '" maxlength="30" placeholder="' . adm_translate("Nom") . '" required="required" />
+                <input id="chng_name" class="form-control" type="text" name="chng_name" value="' . $author['name'] . '" maxlength="30" placeholder="' . adm_translate("Nom") . '" required="required" />
                 <label for="chng_name">' . adm_translate("Nom") . ' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_chng_name"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="chng_email" class="form-control" type="text" name="chng_email" value="' . $chng_email . '" maxlength="254" placeholder="' . adm_translate("E-mail") . '" required="required" />
+                <input id="chng_email" class="form-control" type="text" name="chng_email" value="' . $author['email'] . '" maxlength="254" placeholder="' . adm_translate("E-mail") . '" required="required" />
                 <label for="chng_email">' . adm_translate("E-mail") . ' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_chng_email"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="chng_url" class="form-control" type="url" name="chng_url" value="' . $chng_url . '" maxlength="320" placeholder="' . adm_translate("URL") . '" />
+                <input id="chng_url" class="form-control" type="url" name="chng_url" value="' . $author['url'] . '" maxlength="320" placeholder="' . adm_translate("URL") . '" />
                 <label for="chng_url">' . adm_translate("URL") . '</label>
                 <span class="help-block text-end"><span id="countcar_chng_url"></span></span>
             </div>
@@ -328,7 +380,7 @@ function modifyadmin($chng_aid)
                 </div>
                 <span class="help-block">' . adm_translate("Si Super administrateur est coché, cet administrateur aura TOUS les droits.") . '</span>
             </div>
-            <input type="hidden" name="chng_aid" value="' . $chng_aid . '" />
+            <input type="hidden" name="chng_aid" value="' . $author['aid'] . '" />
         </fieldset>
         <fieldset>
             <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
@@ -351,12 +403,14 @@ function modifyadmin($chng_aid)
                 ' . $listdroitsmodulo . '
                 </div>
             </div>
-            <input type="hidden" name="old_pwd" value="' . $chng_pwd . '" />
+            <input type="hidden" name="old_pwd" value="' . $author['pwd'] . '" />
             <input type="hidden" name="op" value="UpdateAuthor" />
             <button class="btn btn-primary my-3" type="submit"><i class="fa fa-check fa-lg me-2"></i>' . adm_translate("Actualiser l'administrateur") . '</button>
         </fieldset>
     </form>';
+
     echo $scri_check;
+
     $arg1 = '
         var formulid = ["mod_adm"]
             inpandfieldlen("chng_name",50);
@@ -365,6 +419,7 @@ function modifyadmin($chng_aid)
             inpandfieldlen("chng_pwd",20);
             inpandfieldlen("chng_pwd2",20);
         ';
+
     $fv_parametres = '
     chng_pwd: {
         validators: {
@@ -384,51 +439,95 @@ function modifyadmin($chng_aid)
     mod_adm.querySelector(\'[name="chng_pwd"]\').addEventListener("input", function() {
         fvitem.revalidateField("chng_pwd2");
     });';
-    adminfoot('fv', $fv_parametres, $arg1, '');
+
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function deletedroits($del_dr_aid)
+/**
+ * [deletedroits description]
+ *
+ * @param   int   $del_dr_aid  [$del_dr_aid description]
+ *
+ * @return  void
+ */
+function deletedroits(int $del_dr_aid): void
 {
-    global $NPDS_Prefix;
-    $res = sql_query("DELETE FROM " . $NPDS_Prefix . "droits WHERE d_aut_aid='$del_dr_aid'");
+    DB::table('droits')->where('d_aut_aid', $del_dr_aid)->delete();
 }
 
-function updatedroits($chng_aid)
+/**
+ * [updatedroits description]
+ *
+ * @param   string  $chng_aid  [$chng_aid description]
+ *
+ * @return  void
+ */
+function updatedroits(string $chng_aid): void
 {
-    global $NPDS_Prefix;
     foreach ($_POST as $y => $w) {
-        if (stristr("$y", 'ad_d_')) $res = sql_query("INSERT INTO " . $NPDS_Prefix . "droits VALUES ('$chng_aid', '$w', 11111)");
+        if (stristr("$y", 'ad_d_')) {
+            DB::table('droits')->insert(array(
+                'd_aut_aid' => $chng_aid,
+                'd_fon_fid' => $w,
+                'd_droits'  => 11111,
+            ));
+        }
     }
 }
 
-function updateadmin($chng_aid, $chng_name, $chng_email, $chng_url, $chng_radminsuper, $chng_pwd, $chng_pwd2, $ad_d_27, $old_pwd)
+/**
+ * [updateadmin description]
+ *
+ * @param   string  $chng_aid          [$chng_aid description]
+ * @param   string  $chng_name         [$chng_name description]
+ * @param   string  $chng_email        [$chng_email description]
+ * @param   string  $chng_url          [$chng_url description]
+ * @param   int     $chng_radminsuper  [$chng_radminsuper description]
+ * @param   string  $chng_pwd          [$chng_pwd description]
+ * @param   string  $chng_pwd2         [$chng_pwd2 description]
+ * @param   string  $ad_d_27           [$ad_d_27 description]
+ * @param   string  $old_pwd           [$old_pwd description]
+ *
+ * @return  void
+ */
+function updateadmin(string $chng_aid, string $chng_name, string $chng_email, string $chng_url, int $chng_radminsuper, string $chng_pwd, string $chng_pwd2, string $ad_d_27, string $old_pwd): void
 {
-    global $NPDS_Prefix;
-
-    if (!($chng_aid && $chng_name && $chng_email))
+    if (!($chng_aid && $chng_name && $chng_email)) {
         Header("Location: admin.php?op=mod_authors");
+    }
+    
     include_once('functions.php');
+    
     if (checkdnsmail($chng_email) === false) {
         global $hlpfile;
         include("themes/default/header.php");
+        
         GraphicAdmin($hlpfile);
+        
         echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") . '<br />');
+        
         include("themes/default/footer.php");
         return;
     }
 
-    $result = sql_query("SELECT radminsuper FROM " . $NPDS_Prefix . "authors WHERE aid='$chng_aid'");
-    list($ori_radminsuper) = sql_fetch_row($result);
-    if (!$ori_radminsuper and $chng_radminsuper) {
+    $author = DB::table('authors')->select('radminsuper')->where('aid', $chng_aid)->first();
+
+    if (!$author['radminsuper'] and $chng_radminsuper) {
         @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
+        
         deletedroits($chng_aid);
     }
-    if ($ori_radminsuper and !$chng_radminsuper) {
+
+    if ($author['radminsuper'] and !$chng_radminsuper) {
         @unlink("modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
+        
         updatedroits($chng_aid);
     }
-    if (file_exists("modules/f-managerconfigs/" . strtolower($chng_aid) . ".conf.php") and $ad_d_27 != '27')
+
+    if (file_exists("modules/f-managerconfigs/" . strtolower($chng_aid) . ".conf.php") and $ad_d_27 != '27') {
         @unlink("modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
+    }
+    
     if (($chng_radminsuper or $ad_d_27 != '') and !file_exists("modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php")) {
         @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
     }
@@ -437,54 +536,101 @@ function updateadmin($chng_aid, $chng_name, $chng_email, $chng_url, $chng_radmin
         if ($chng_pwd != $chng_pwd2) {
             global $hlpfile;
             include("themes/default/header.php");
+            
             GraphicAdmin($hlpfile);
+            
             echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") . '<br />');
+            
             include("themes/default/footer.php");
             exit;
         }
 
         $AlgoCrypt = PASSWORD_BCRYPT;
         $min_ms = 100;
-        $options = ['cost' => getOptimalBcryptCostParameter($chng_pwd, $AlgoCrypt, $min_ms)];
+        $options = ['cost' => users::getOptimalBcryptCostParameter($chng_pwd, $AlgoCrypt, $min_ms)];
         $hashpass = password_hash($chng_pwd, $AlgoCrypt, $options);
         $chng_pwd = crypt($chng_pwd, $hashpass);
 
         if ($old_pwd) {
             global $admin, $admin_cook_duration;
+
             $Xadmin = base64_decode($admin);
             $Xadmin = explode(':', $Xadmin);
             $aid = urlencode($Xadmin[0]);
             $AIpwd = $Xadmin[1];
+
             if ($aid == $chng_aid) {
                 if (md5($old_pwd) == $AIpwd and $chng_pwd != '') {
                     $admin = base64_encode("$aid:" . md5($chng_pwd));
-                    if ($admin_cook_duration <= 0)
+                    
+                    if ($admin_cook_duration <= 0) {
                         $admin_cook_duration = 1;
+                    }
+
                     $timeX = time() + (3600 * $admin_cook_duration);
+
                     setcookie('admin', $admin, $timeX);
                     setcookie('adm_exp', $timeX, $timeX);
                 }
             }
         }
-        $result = $chng_radminsuper == 1 ?
-            sql_query("UPDATE " . $NPDS_Prefix . "authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='$chng_radminsuper', pwd='$chng_pwd', hashkey='1' WHERE aid='$chng_aid'") :
-            sql_query("UPDATE " . $NPDS_Prefix . "authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='0', pwd='$chng_pwd', hashkey='1' WHERE aid='$chng_aid'");
+
+        if($chng_radminsuper == 1) { 
+            DB::table('authors')->where('aid', $chng_aid)->update(array(
+                'name'          => $chng_name,
+                'email'         => $chng_email,
+                'url'           => $chng_url,
+                'radminsuper'   => $chng_radminsuper,
+                'pwd'           => $chng_pwd,
+                'hashkey'       => 1,
+            ));
+        } else {
+            DB::table('authors')->where('aid', $chng_aid)->update(array(
+                'name'          => $chng_name,
+                'email'         => $chng_email,
+                'url'           => $chng_url,
+                'radminsuper'   => 0,
+                'pwd'           => $chng_pwd,
+                'hashkey'       => 1,
+            ));
+        }
     } else {
         if ($chng_radminsuper == 1) {
-            $result = sql_query("UPDATE " . $NPDS_Prefix . "authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='$chng_radminsuper' WHERE aid='$chng_aid'");
+            DB::table('authors')->where('aid', $chng_aid)->update(array(
+                'name'          => $chng_name,
+                'email'         => $chng_email,
+                'url'           => $chng_url,
+                'radminsuper'   => $chng_radminsuper,
+            ));
+
             deletedroits($chng_aid);
         } else {
-            $result = sql_query("UPDATE " . $NPDS_Prefix . "authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='0' WHERE aid='$chng_aid'");
+            DB::table('authors')->where('aid', $chng_aid)->update(array(
+                'name'          => $chng_name,
+                'email'         => $chng_email,
+                'url'           => $chng_url,
+                'radminsuper'   => 0,
+            ));
+
             deletedroits($chng_aid);
             updatedroits($chng_aid);
         }
     }
+
     global $aid;
-    Ecr_Log('security', "ModifyAuthor($chng_name) by AID : $aid", '');
+    logs::Ecr_Log('security', "ModifyAuthor($chng_name) by AID : $aid", '');
+
     Header("Location: admin.php?op=mod_authors");
 }
 
-function error_handler($ibid)
+/**
+ * [error_handler description]
+ *
+ * @param   string  $ibid  [$ibid description]
+ *
+ * @return  void
+ */
+function error_handler(string $ibid): void
 {
     echo '
     <div class="alert alert-danger mb-3">
@@ -497,55 +643,84 @@ switch ($op) {
     case 'mod_authors':
         displayadmins();
         break;
+
     case 'modifyadmin':
         modifyadmin($chng_aid);
         break;
+
     case 'UpdateAuthor':
         settype($chng_radminsuper, 'int');
         settype($ad_d_27, 'int');
+
         updateadmin($chng_aid, $chng_name, $chng_email, $chng_url, $chng_radminsuper, $chng_pwd, $chng_pwd2, $ad_d_27, $old_pwd);
         break;
+
     case 'AddAuthor':
         settype($add_radminsuper, 'int');
 
         if (!($add_aid && $add_name && $add_email && $add_pwd)) {
             global $hlpfile;
             include("themes/default/header.php");
+
             GraphicAdmin($hlpfile);
+
             echo error_handler(adm_translate("Vous devez remplir tous les Champs") . '<br />');
+
             include("themes/default/footer.php");
             return;
         }
+
         include_once('functions.php');
+
         if (checkdnsmail($add_email) === false) {
             global $hlpfile;
             include("themes/default/header.php");
+
             GraphicAdmin($hlpfile);
+
             echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") . '<br />');
+
             include("themes/default/footer.php");
             return;
         }
 
         $AlgoCrypt = PASSWORD_BCRYPT;
         $min_ms = 100;
-        $options = ['cost' => getOptimalBcryptCostParameter($add_pwd, $AlgoCrypt, $min_ms)];
+        $options = ['cost' => users::getOptimalBcryptCostParameter($add_pwd, $AlgoCrypt, $min_ms)];
         $hashpass = password_hash($add_pwd, $AlgoCrypt, $options);
         $add_pwdX = crypt($add_pwd, $hashpass);
 
-        $result = sql_query("INSERT INTO " . $NPDS_Prefix . "authors VALUES ('$add_aid', '$add_name', '$add_url', '$add_email', '$add_pwdX', '1', '0', '$add_radminsuper')");
+        DB::table('authors')->insert(array(
+            'aid'           => $add_aid,
+            'name'          => $add_name,
+            'url'           => $add_url,
+            'email'         => $add_email,
+            'pwd'           => $add_pwdX,
+            'hashkey'       => 1,
+            'counter'       => 0,
+            'radminsuper'   => $add_radminsuper,
+        ));
+
         updatedroits($add_aid);
+
         // Copie du fichier pour filemanager
-        if ($add_radminsuper or isset($ad_d_27)) // $ad_d_27 pas là ?
+        if ($add_radminsuper or isset($ad_d_27)) { // $ad_d_27 pas là ?
             @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/" . strtolower($add_aid) . ".conf.php");
+        }
+
         global $aid;
-        Ecr_Log('security', "AddAuthor($add_aid) by AID : $aid", '');
+        logs::Ecr_Log('security', "AddAuthor($add_aid) by AID : $aid", '');
+
         Header("Location: admin.php?op=mod_authors");
         break;
+
     case 'deladmin':
         global $hlpfile;
         include("themes/default/header.php");
+
         GraphicAdmin($hlpfile);
         adminhead($f_meta_nom, $f_titre, $adminimg);
+
         echo '
         <hr />
         <h3>' . adm_translate("Effacer l'Administrateur") . ' : <span class="text-muted">' . $del_aid . '</span></h3>
@@ -553,16 +728,23 @@ switch ($op) {
         <p><strong>' . adm_translate("Etes-vous sûr de vouloir effacer") . ' ' . $del_aid . ' ? </strong></p>
         <a href="admin.php?op=deladminconf&amp;del_aid=' . $del_aid . '" class="btn btn-danger btn-sm">' . adm_translate("Oui") . '</a>&nbsp;<a href="admin.php?op=mod_authors" class="btn btn-secondary btn-sm">' . adm_translate("Non") . '</a>
         </div>';
-        adminfoot('', '', '', '');
+
+        css::adminfoot('', '', '', '');
         break;
+
     case 'deladminconf':
-        sql_query("DELETE FROM " . $NPDS_Prefix . "authors WHERE aid='$del_aid'");
+        DB::table('authors')->where('aid', $del_aid)->delete();
+
         deletedroits($chng_aid = $del_aid);
-        sql_query("DELETE FROM " . $NPDS_Prefix . "publisujet WHERE aid='$del_aid'");
+
+        DB::table('publisujet')->where('aid', $del_aid)->delete();
+
         // Supression du fichier pour filemanager
         @unlink("modules/f-manager/config/" . strtolower($del_aid) . ".conf.php");
+
         global $aid;
-        Ecr_Log('security', "DeleteAuthor($del_aid) by AID : $aid", '');
+        logs::Ecr_Log('security', "DeleteAuthor($del_aid) by AID : $aid", '');
+
         Header("Location: admin.php?op=mod_authors");
         break;
 }

@@ -60,14 +60,15 @@ if ($admin) {
 
     $timex = time() - $xdate;
 
-    if ($timex >= 86400)
+    if ($timex >= 86400) {
         $timex = round($timex / 86400) . ' ' . translate("Jour(s)");
-    elseif ($timex >= 3600)
+    } elseif ($timex >= 3600) {
         $timex = round($timex / 3600) . ' ' . translate("Heure(s)");
-    elseif ($timex >= 60)
+    } elseif ($timex >= 60) {
         $timex = round($timex / 60) . ' ' . translate("Minute(s)");
-    else
+    } else {
         $timex = $timex . ' ' . translate("Seconde(s)");
+    }
 
     echo '
     <hr />
@@ -84,12 +85,13 @@ if ($admin) {
                 <td>' . translate("Nb. pages vues") . ' : </td>
                 <td>' . str::wrh($totalz) . ' (';
 
-    if ($totalz > $xtotalz)
+    if ($totalz > $xtotalz) {
         echo '<span class="text-success">+';
-    elseif ($totalz < $xtotalz)
+    } elseif ($totalz < $xtotalz) {
         echo '<span class="text-danger">';
-    else
+    } else {
         echo '<span>';
+    }
 
     echo str::wrh($totalz - $xtotalz) . '</span>)</td>
             </tr>
@@ -97,12 +99,13 @@ if ($admin) {
                 <td>' . translate("Nb. de membres") . ' : </td>
                 <td>' . str::wrh($membres) . ' (';
 
-    if ($membres > $xmembres)
+    if ($membres > $xmembres) {
         echo '<span class="text-success">+';
-    elseif ($membres < $xmembres)
+    } elseif ($membres < $xmembres) {
         echo '<span class="text-danger">';
-    else
+    } else {
         echo '<span>';
+    }
 
     echo str::wrh($membres - $xmembres) . '</span>)</td>
             </tr>
@@ -110,12 +113,13 @@ if ($admin) {
                 <td>' . translate("Nb. d'articles") . ' : </td>
                 <td>' . str::wrh($totala) . ' (';
 
-    if ($totala > $xtotala)
+    if ($totala > $xtotala) {
         echo '<span class="text-success">+';
-    elseif ($totala < $xtotala)
+    } elseif ($totala < $xtotala) {
         echo '<span class="text-danger">';
-    else
+    } else {
         echo '<span>';
+    }
 
     echo str::wrh($totala - $xtotala) . '</span>)</td>
             </tr>
@@ -123,12 +127,13 @@ if ($admin) {
                 <td>' . translate("Nb. de forums") . ' : </td>
                 <td>' . str::wrh($totalc) . ' (';
 
-    if ($totalc > $xtotalc)
+    if ($totalc > $xtotalc) {
         echo '<span class="text-success">+';
-    elseif ($totalc < $xtotalc)
+    } elseif ($totalc < $xtotalc) {
         echo '<span class="text-danger">';
-    else
+    } else {
         echo '<span>';
+    }
 
     echo str::wrh($totalc - $xtotalc) . '</span>)</td>
             </tr>
@@ -136,12 +141,13 @@ if ($admin) {
                 <td>' . translate("Nb. de sujets") . ' : </td>
                 <td>' . str::wrh($totald) . ' (';
 
-    if ($totald > $xtotald)
+    if ($totald > $xtotald) {
         echo '<span class="text-success">+';
-    elseif ($totald < $xtotald)
+    } elseif ($totald < $xtotald) {
         echo '<span class="text-danger">';
-    else
+    } else {
         echo '<span>';
+    }
 
     echo str::wrh($totald - $xtotald) . '</span>)</td>
             </tr>
@@ -149,12 +155,13 @@ if ($admin) {
                 <td>' . translate("Nb. de critiques") . ' : </td>
                 <td>' . str::wrh($totalb) . ' (';
 
-    if ($totalb > $xtotalb)
+    if ($totalb > $xtotalb) {
         echo '<span class="text-success">+';
-    elseif ($totalb < $xtotalb)
+    } elseif ($totalb < $xtotalb) {
         echo '<span class="text-danger">';
-    else
+    } else {
         echo '<span>';
+    }
 
     echo str::wrh($totalb - $xtotalb) . '</span>)</td>
             </tr>
@@ -162,12 +169,13 @@ if ($admin) {
                 <td>' . translate("Nb abonnés à lettre infos") . ' : </td>
                 <td>' . str::wrh($totalnl) . ' (';
 
-    if ($totalnl > $xtotalnl)
+    if ($totalnl > $xtotalnl) {
         echo '<span class="text-success">+';
-    elseif ($totalnl < $xtotalnl)
+    } elseif ($totalnl < $xtotalnl) {
         echo '<span class="text-danger">';
-    else
+    }  else {
         echo '<span>';
+    }
 
     echo str::wrh($totalnl - $xtotalnl) . '</span>)</td>
             </tr>';
@@ -206,14 +214,16 @@ if ($admin) {
             <tr>
                 <td><span class="text-danger">';
 
-        if (array_key_exists($num_dow, $xdownload))
+        if (array_key_exists($num_dow, $xdownload)) {
             echo $xdownload[$num_dow][1];
+        }
 
         echo '</span> -/- ' . $dfilename . '</td>
                 <td><span class="text-danger">';
 
-        if (array_key_exists($num_dow, $xdownload))
+        if (array_key_exists($num_dow, $xdownload)) {
             echo $xdownload[$num_dow][2];
+        }
 
         echo '</span> -/- ' . $dcounter . '</td>
             </tr>';
@@ -242,8 +252,9 @@ if ($admin) {
     while (list($cat_id, $cat_title) = sql_fetch_row($result)) {
         $sub_sql = "SELECT f.*, u.uname FROM " . $NPDS_Prefix . "forums f, " . $NPDS_Prefix . "users u WHERE f.cat_id = '$cat_id' AND f.forum_moderator = u.uid ORDER BY forum_index,forum_id";
         
-        if (!$sub_result = sql_query($sub_sql)) 
+        if (!$sub_result = sql_query($sub_sql)) {
             forumerror('0022');
+        }
 
         if ($myrow = sql_fetch_assoc($sub_result)) {
             echo '
@@ -268,14 +279,16 @@ if ($admin) {
                 echo '
                 <td><a tabindex="0" role="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="' . $desc . '"><i class="far fa-lg fa-file-alt me-2"></i></a><a href="viewforum.php?forum=' . $myrow['forum_id'] . '" ><span class="text-danger">';
                 
-                if (array_key_exists($num_for, $xforum))
+                if (array_key_exists($num_for, $xforum)) {
                     echo $xforum[$num_for][1];
+                }
 
                 echo '</span> -/- ' . $name . ' </a></td>
                 <td class="text-center"><span class="text-danger">';
 
-                if (array_key_exists($num_for, $xforum))
+                if (array_key_exists($num_for, $xforum)) {
                     echo $xforum[$num_for][2];
+                }
 
                 echo '</span> -/- ' . $total_topics . '</td>';
 
@@ -285,8 +298,9 @@ if ($admin) {
                 echo '
                 <td class="text-center"><span class="text-danger">';
 
-                if (array_key_exists($num_for, $xforum))
+                if (array_key_exists($num_for, $xforum)) {
                     echo $xforum[$num_for][3];
+                }
 
                 echo '</span> -/- ' . $total_posts . '</td>
                 <td class="text-end small">' . $last_post . '</td>';

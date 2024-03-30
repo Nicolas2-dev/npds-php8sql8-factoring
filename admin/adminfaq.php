@@ -19,6 +19,7 @@ use npds\system\utility\code;
 use npds\system\support\editeur;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -34,9 +35,14 @@ admindroits($aid, $f_meta_nom);
 global $language;
 $hlpfile = "manuels/$language/faqs.html";
 
-function FaqAdmin()
+/**
+ * [FaqAdmin description]
+ *
+ * @return  void
+ */
+function FaqAdmin(): void
 {
-    global $hlpfile, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
@@ -55,13 +61,13 @@ function FaqAdmin()
         </thead>
         <tbody>';
 
-    $result = sql_query("SELECT id_cat, categories FROM " . $NPDS_Prefix . "faqcategories order by id_cat ASC");
-    
-    while (list($id_cat, $categories) = sql_fetch_row($result)) {
+    $categories = DB::table('faqcategories')->select('id', 'categories')->orderBy('categories', 'ASC')->get();
+
+    foreach($categories as $categorie) {
         echo '
             <tr>
-                <td><span title="ID : ' . $id_cat . '">' . language::aff_langue($categories) . '</span><br /><a href="admin.php?op=FaqCatGo&amp;id_cat=' . $id_cat . '" class="noir"><i class="fa fa-level-up-alt fa-lg fa-rotate-90 " title="' . adm_translate("Voir") . '" data-bs-toggle="tooltip"></i>&nbsp;&nbsp;' . adm_translate("Questions & Réponses") . '&nbsp;</a></td>
-                <td><a href="admin.php?op=FaqCatEdit&amp;id_cat=' . $id_cat . '"><i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=FaqCatDel&amp;id_cat=' . $id_cat . '&amp;ok=0"><i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></a></td>
+                <td><span title="ID : ' . $categorie['id'] . '">' . language::aff_langue($categorie['categories']) . '</span><br /><a href="admin.php?op=FaqCatGo&amp;id_cat=' . $categorie['id'] . '" class="noir"><i class="fa fa-level-up-alt fa-lg fa-rotate-90 " title="' . adm_translate("Voir") . '" data-bs-toggle="tooltip"></i>&nbsp;&nbsp;' . adm_translate("Questions & Réponses") . '&nbsp;</a></td>
+                <td><a href="admin.php?op=FaqCatEdit&amp;id_cat=' . $categorie['id'] . '"><i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=FaqCatDel&amp;id_cat=' . $categorie['id'] . '&amp;ok=0"><i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></a></td>
             </tr>';
     }
 
@@ -96,9 +102,16 @@ function FaqAdmin()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatGo($id_cat)
+/**
+ * [FaqCatGo description]
+ *
+ * @param   int   $id_cat  [$id_cat description]
+ *
+ * @return  void
+ */
+function FaqCatGo(int $id_cat): void
 {
-    global $hlpfile, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
@@ -107,20 +120,27 @@ function FaqCatGo($id_cat)
 
     $lst_qr = '';
 
-    $result = sql_query("SELECT fa.id, fa.question, fa.answer, fc.categories FROM " . $NPDS_Prefix . "faqanswer fa LEFT JOIN " . $NPDS_Prefix . "faqcategories fc ON fa.id_cat = fc.id_cat WHERE fa.id_cat='$id_cat' ORDER BY id");
-    
-    while (list($id, $question, $answer, $categories) = sql_fetch_row($result)) {
-        $faq_cat = language::aff_langue($categories);
-        $answer = code::aff_code(aff_langue($answer));
+    $faq_categorie_id = DB::table('faqcategories')
+        ->leftJoin('faqanswer', 'faqcategories.id', '=', 'faqanswer.id_categorie')
+        ->select('faqanswer.id', 'faqanswer.question', 'faqanswer.answer', 'faqcategories.categories')
+        ->where('faqcategories.id', $id_cat)->orderBy('faqanswer.id')
+        ->get();
+
+    foreach($faq_categorie_id as $faq) { 
+        $faq_cat = language::aff_langue($faq['categories']);
         
-        $lst_qr .= '
-        <li id="qr_' . $id . '" class="list-group-item">
-            <div class="topi">
-                <h5 id="q_' . $id . '" class="list-group-item-heading"><a class="" href="admin.php?op=FaqCatGoEdit&amp;id=' . $id . '" title="' . adm_translate("Editer la question réponse") . '" data-bs-toggle="tooltip">' . language::aff_langue($question) . '</a></h5>
-                <p class="list-group-item-text">' . metalang::meta_lang($answer) . '</p>
-                <div id="shortcut-tools_' . $id . '" class="n-shortcut-tools" style="display:none;"><a class="text-danger btn" href="admin.php?op=FaqCatGoDel&amp;id=' . $id . '&amp;ok=0" ><i class="fas fa-trash fa-2x" title="' . adm_translate("Supprimer la question réponse") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></div>
-            </div>
-        </li>';
+        if (isset($faq['answer'])) {
+            $answer = code::aff_code(aff_langue($faq['answer']));
+            
+            $lst_qr .= '
+            <li id="qr_' . $faq['id'] . '" class="list-group-item">
+                <div class="topi">
+                    <h5 id="q_' . $faq['id'] . '" class="list-group-item-heading"><a class="" href="admin.php?op=FaqCatGoEdit&amp;id=' . $faq['id'] . '" title="' . adm_translate("Editer la question réponse") . '" data-bs-toggle="tooltip">' . language::aff_langue($faq['question']) . '</a></h5>
+                    <p class="list-group-item-text">' . metalang::meta_lang($answer) . '</p>
+                    <div id="shortcut-tools_' . $faq['id'] . '" class="n-shortcut-tools" style="display:none;"><a class="text-danger btn" href="admin.php?op=FaqCatGoDel&amp;id=' . $faq['id'] . '&amp;ok=0" ><i class="fas fa-trash fa-2x" title="' . adm_translate("Supprimer la question réponse") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></div>
+                </div>
+            </li>';
+        }
     }
 
     echo '
@@ -184,28 +204,34 @@ function FaqCatGo($id_cat)
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatEdit($id_cat)
+/**
+ * [FaqCatEdit description]
+ *
+ * @param   int   $id_cat  [$id_cat description]
+ *
+ * @return  void
+ */
+function FaqCatEdit(int $id_cat): void
 {
-    global $hlpfile, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
-    $result = sql_query("SELECT categories FROM " . $NPDS_Prefix . "faqcategories WHERE id_cat='$id_cat'");
-    list($categories) = sql_fetch_row($result);
+    $faq_categorie = DB::table('faqcategories')->select('categories')->find($id_cat);
 
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Editer la catégorie") . '</h3>
-    <h4><a href="admin.php?op=FaqCatGo&amp;id_cat=' . $id_cat . '">' . $categories . '</a></h4>
+    <h4><a href="admin.php?op=FaqCatGo&amp;id_cat=' . $id_cat . '">' . $faq_categorie['categories'] . '</a></h4>
     <form id="adminfaqcated" action="admin.php" method="post">
         <fieldset>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="categories">' . adm_translate("Nom") . '</label>
                 <div class="col-sm-12">
-                <textarea class="form-control" type="text" name="categories" id="categories" maxlength="255" rows="3" required="required" >' . $categories . '</textarea>
+                <textarea class="form-control" type="text" name="categories" id="categories" maxlength="255" rows="3" required="required" >' . $faq_categorie['categories'] . '</textarea>
                 <span class="help-block text-end"><span id="countcar_categories"></span></span>
                 </div>
             </div>
@@ -228,31 +254,41 @@ function FaqCatEdit($id_cat)
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatGoEdit($id)
+/**
+ * [FaqCatGoEdit description]
+ *
+ * @param   int   $id  [$id description]
+ *
+ * @return  void
+ */
+function FaqCatGoEdit(int $id): void
 {
-    global $hlpfile, $NPDS_Prefix, $local_user_language, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $local_user_language, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
-    $result = sql_query("SELECT fa.question, fa.answer, fa.id_cat, fc.categories FROM " . $NPDS_Prefix . "faqanswer fa LEFT JOIN " . $NPDS_Prefix . "faqcategories fc ON fa.id_cat = fc.id_cat WHERE fa.id='$id'");
-    list($question, $answer, $id_cat, $faq_cat) = sql_fetch_row($result);
+    $faq = DB::table('faqanswer')
+        ->leftJoin('faqcategories', 'faqanswer.id_categorie', '=', 'faqcategories.id')
+        ->select('faqanswer.question', 'faqanswer.answer', 'faqanswer.id_categorie', 'faqcategories.categories')
+        ->where('faqanswer.id', $id)
+        ->first();
 
     echo '
     <hr />
-    <h3 class="mb-3">' . $faq_cat . '</h3>
-    <h4>' . $question . '</h4>
+    <h3 class="mb-3">' . $faq['categories'] . '</h3>
+    <h4>' . $faq['question'] . '</h4>
     <h4>' . adm_translate("Prévisualiser") . '</h4>';
     echo '
     <label class="col-form-label" for="">'
         . language::aff_local_langue('', 'local_user_language', adm_translate("Langue de Prévisualisation")) . '
     </label>
     <div class="card card-body mb-3">
-    <p>' . language::preview_local_langue($local_user_language, $question) . '</p>';
+    <p>' . language::preview_local_langue($local_user_language, $faq['question']) . '</p>';
 
-    $answer = code::aff_code($answer);
+    $answer = code::aff_code($faq['answer']);
 
     echo '<p>' . metalang::meta_lang(language::preview_local_langue($local_user_language, $answer)) . '</p>
     </div>';
@@ -264,7 +300,7 @@ function FaqCatGoEdit($id)
             <div class="mb-3 row">
                 <label class="col-form-label col-12" for="question">' . adm_translate("Question") . '</label>
                 <div class="col-sm-12">
-                <textarea class="form-control" type="text" name="question" id="question" maxlength="255">' . $question . '</textarea>
+                <textarea class="form-control" type="text" name="question" id="question" maxlength="255">' . $faq['question'] . '</textarea>
                 <span class="help-block text-end"><span id="countcar_question"></span></span>
                 </div>
             </div>
@@ -280,7 +316,7 @@ function FaqCatGoEdit($id)
                 <input type="hidden" name="id" value="' . $id . '" />
                 <input type="hidden" name="op" value="FaqCatGoSave" />
                 <button class="btn btn-outline-primary col-sm-6 mb-2 " type="submit">' . adm_translate("Sauver les modifications") . '</button>
-                <button class="btn btn-outline-secondary col-sm-6 mb-2 " href="admin.php?op=FaqCatGo&amp;id_cat=' . $id_cat . '" >' . adm_translate("Retour en arrière") . '</a>
+                <button class="btn btn-outline-secondary col-sm-6 mb-2 " href="admin.php?op=FaqCatGo&amp;id_cat=' . $faq['id_categorie'] . '" >' . adm_translate("Retour en arrière") . '</a>
                 </div>
             </div>
         </fieldset>
@@ -294,63 +330,99 @@ function FaqCatGoEdit($id)
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatSave($old_id_cat, $id_cat, $categories)
+/**
+ * [FaqCatSave description]
+ *
+ * @param   int     $old_id_cat  [$old_id_cat description]
+ * @param   int     $id_cat      [$id_cat description]
+ * @param   string  $categories  [$categories description]
+ *
+ * @return  void
+ */
+function FaqCatSave(int $old_id_cat, int $id_cat, string $categories): void
 {
-    global $NPDS_Prefix;
-
-    $categories = stripslashes(str::FixQuotes($categories));
-
     if ($old_id_cat != $id_cat) {
-        sql_query("UPDATE " . $NPDS_Prefix . "faqanswer SET id_cat='$id_cat' WHERE id_cat='$old_id_cat'");
+        DB::table('faqanswer')->where('id', $old_id_cat)->update(array(
+            'id_categorie'  => $id_cat,
+        ));
     }
 
-    sql_query("UPDATE " . $NPDS_Prefix . "faqcategories SET id_cat='$id_cat', categories='$categories' WHERE id_cat='$old_id_cat'");
+    DB::table('faqcategories')->where('id', $old_id_cat)->update(array(
+        'id'            => $id_cat,
+        'categories'    => stripslashes(str::FixQuotes($categories)),
+    ));
 
     Header("Location: admin.php?op=FaqAdmin");
 }
 
-function FaqCatGoSave($id, $question, $answer)
+/**
+ * [FaqCatGoSave description]
+ *
+ * @param   int     $id        [$id description]
+ * @param   string  $question  [$question description]
+ * @param   string  $answer    [$answer description]
+ *
+ * @return  void
+ */
+function FaqCatGoSave(int $id, string $question, string $answer): void
 {
-    global $NPDS_Prefix;
-
-    $question = stripslashes(str::FixQuotes($question));
-    $answer = stripslashes(str::FixQuotes($answer));
-
-    sql_query("UPDATE " . $NPDS_Prefix . "faqanswer SET question='$question', answer='$answer' WHERE id='$id'");
+    DB::table('faqanswer')->where('id', $id)->update(array(
+        'question'  => stripslashes(str::FixQuotes($question)),
+        'answer'    => stripslashes(str::FixQuotes($answer)),
+    ));
 
     Header("Location: admin.php?op=FaqCatGoEdit&id=$id");
 }
 
-function FaqCatAdd($categories)
+/**
+ * [FaqCatAdd description]
+ *
+ * @param   string  $categories  [$categories description]
+ *
+ * @return  void
+ */
+function FaqCatAdd(string $categories): void
 {
-    global $NPDS_Prefix;
-
-    $categories = stripslashes(str::FixQuotes($categories));
-
-    sql_query("INSERT INTO " . $NPDS_Prefix . "faqcategories VALUES (NULL, '$categories')");
+    DB::table('faqcategories')->insert(array(
+        'categorie' => stripslashes(str::FixQuotes($categories)),
+    ));
 
     Header("Location: admin.php?op=FaqAdmin");
 }
 
-function FaqCatGoAdd($id_cat, $question, $answer)
+/**
+ * [FaqCatGoAdd description]
+ *
+ * @param   int     $id_cat    [$id_cat description]
+ * @param   string  $question  [$question description]
+ * @param   string  $answer    [$answer description]
+ *
+ * @return  void
+ */
+function FaqCatGoAdd(int $id_cat, string $question, string $answer): void
 {
-    global $NPDS_Prefix;
-
-    $question = stripslashes(str::FixQuotes($question));
-    $answer = stripslashes(str::FixQuotes($answer));
-
-    sql_query("INSERT INTO " . $NPDS_Prefix . "faqanswer VALUES (NULL, '$id_cat', '$question', '$answer')");
+    DB::table('faqanswer')->insert(array(
+        'id_categorie' => $id_cat,
+        'question'     => stripslashes(str::FixQuotes($question)),
+        'answer'       => stripslashes(str::FixQuotes($answer)),
+    ));
 
     Header("Location: admin.php?op=FaqCatGo&id_cat=$id_cat");
 }
 
-function FaqCatDel($id_cat, $ok = 0)
+/**
+ * [FaqCatDel description]
+ *
+ * @param   int   $id_cat  [$id_cat description]
+ * @param   int   $ok      [$ok description]
+ *
+ * @return  void
+ */
+function FaqCatDel(int $id_cat, int $ok = 0): void 
 {
-    global $NPDS_Prefix;
-
     if ($ok == 1) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "faqcategories WHERE id_cat='$id_cat'");
-        sql_query("DELETE FROM " . $NPDS_Prefix . "faqanswer WHERE id_cat='$id_cat'");
+        DB::table('faqcategories')->where('id', $id_cat)->delete();
+        DB::table('faqanswer')->where('id_categorie', $id_cat)->delete();
 
         Header("Location: admin.php?op=FaqAdmin");
     } else {
@@ -372,13 +444,19 @@ function FaqCatDel($id_cat, $ok = 0)
     }
 }
 
-function FaqCatGoDel($id, $ok = 0)
+/**
+ * [FaqCatGoDel description]
+ *
+ * @param   int   $id  [$id description]
+ * @param   int   $ok  [$ok description]
+ *
+ * @return  void
+ */
+function FaqCatGoDel(int $id, int $ok = 0): void
 {
-    global $NPDS_Prefix;
-
     if ($ok == 1) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "faqanswer WHERE id='$id'");
-
+        DB::table('faqanswer')->where('id', $id)->delete();
+        
         Header("Location: admin.php?op=FaqAdmin");
     } else {
         global $hlpfile, $f_meta_nom, $f_titre, $adminimg;

@@ -61,7 +61,7 @@ class cache
      */
     public static function cacheManagerStart2(): bool
     {
-        global $SuperCache;
+        global $SuperCache, $cache_obj;
 
         if ($SuperCache) {
             $cache_obj = new cacheManager();
@@ -84,7 +84,7 @@ class cache
      */
     public static function cacheManagerEnd(): void
     {
-        global $SuperCache;
+        global $SuperCache, $cache_obj;
         
         if ($SuperCache) {
             $cache_obj = cacheManager::getInstance();
@@ -163,6 +163,20 @@ class cache
             }
             
             return $tab_tmp;
+        }
+    }
+
+    public static function Q_Select2(string|array $Xquery, int $retention = 3600, string $type_req): string|array
+    {
+        global $SuperCache, $cache_obj;
+
+        if ($SuperCache) {
+            $row = $cache_obj->CachingQuery2($Xquery, $retention, $type_req);
+            
+            //var_dump($row);
+            return $row;
+        } else {
+            return $Xquery;
         }
     }
 

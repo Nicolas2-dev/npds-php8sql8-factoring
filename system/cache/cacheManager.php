@@ -313,7 +313,7 @@ class cacheManager
      *
      * @return  void
      */
-    function logVisit(string $request, string $type): void
+    function logVisit(string|array $request, string $type): void
     {
         global $CACHE_CONFIG;
 
@@ -524,6 +524,49 @@ class cacheManager
             return $tab_tmp;
         }
     }
+
+
+    function CachingQuery2(array $Xquery, int $retention, $type_req): array
+    {
+        global $CACHE_CONFIG;
+        
+        $filename = $CACHE_CONFIG['data_dir'] . "sql/" . md5($type_req);
+//var_dump($filename);
+        if (file_exists($filename)) {
+            if (filemtime($filename) > time() - $retention) {
+                
+                if (filesize($filename) > 0) {
+                    $data = fread($fp = fopen($filename, 'r'), filesize($filename));
+                    fclose($fp);
+                } else {
+                    return array();
+                }
+
+                $no_cache = false;
+                $this->logVisit($Xquery, 'HIT');
+
+                return unserialize($data);
+            } else {
+                $no_cache = true;
+            }
+        } else {
+            $no_cache = true;
+        }
+
+        if ($no_cache) {
+            if ($fp = fopen($filename, 'w')) {
+                flock($fp, LOCK_EX);
+                fwrite($fp, serialize($Xquery));
+                flock($fp, LOCK_UN);
+                fclose($fp);
+            }
+
+            $this->logVisit($Xquery, 'MISS');
+
+            return $Xquery;
+        }
+    }
+
 
     /**
      * [startCachingObjet description]

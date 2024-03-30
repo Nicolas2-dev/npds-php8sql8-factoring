@@ -13,8 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
+}
 
 function filtre_module($strtmp)
 {
@@ -25,22 +26,27 @@ function filtre_module($strtmp)
         stristr($strtmp, 'cookie') ||
         stristr($strtmp, 'iframe') ||
         stristr($strtmp, 'applet') ||
-        stristr($strtmp, 'object')
-    )
-        stristr($strtmp, 'meta') ||
-            Header("Location: die.php?op=module");
-    else
+        stristr($strtmp, 'object') ||
+        stristr($strtmp, 'meta')       
+    ) {
+        Header("Location: die.php?op=module");
+    } else {
         return $strtmp != '' ? true : false;
+    }
 }
 
 if (filtre_module($ModPath) and filtre_module($ModStart)) {
     if (file_exists("modules/$ModPath/http/$ModStart.php")) {
         include("modules/$ModPath/http/$ModStart.php");
         die();
+
     } elseif (file_exists("modules/$ModPath/$ModStart.php")) {
         include("modules/$ModPath/$ModStart.php");
         die();
-    } else
+        
+    } else {
         Header("Location: die.php?op=module-exist");
-} else
+    }
+} else {
     Header("Location: die.php?op=module");
+}

@@ -75,13 +75,11 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
     }
 
     $boxtitle = translate("Liens relatifs");
-    $boxstuff = '
-        <ul>';
+    $boxstuff = '<ul>';
 
     $result = sql_query("SELECT name, url FROM " . $NPDS_Prefix . "related WHERE tid='$topic'");
     while (list($name, $url) = sql_fetch_row($result)) {
-        $boxstuff .= '
-            <li><a href="' . $url . '" target="_blank"><span>' . $name . '</span></a></li>';
+        $boxstuff .= '<li><a href="' . $url . '" target="_blank"><span>' . $name . '</span></a></li>';
     }
 
     $boxstuff .= '
@@ -106,16 +104,14 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
         : news::news_aff("archive", "WHERE topic=$topic AND archive='1' ORDER BY sid DESC LIMIT 0,5", 0, 5);
 
     $story_limit = 0;
-    $boxstuff .= '
-        <ul>';
+    $boxstuff .= '<ul>';
 
     while (($story_limit < 5) and ($story_limit < sizeof($xtab))) {
         list($sid1, $catid1, $aid1, $title1) = $xtab[$story_limit];
         $story_limit++;
         
         $title1 = language::aff_langue(addslashes($title1));
-        $boxstuff .= '
-            <li><a href="article.php?sid=' . $sid1 . '&amp;archive=' . $archive . '" >' . language::aff_langue(stripslashes($title1)) . '</a></li>';
+        $boxstuff .= '<li><a href="article.php?sid=' . $sid1 . '&amp;archive=' . $archive . '" >' . language::aff_langue(stripslashes($title1)) . '</a></li>';
     }
 
     $boxstuff .= '

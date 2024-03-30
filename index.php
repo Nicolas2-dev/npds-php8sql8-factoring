@@ -18,6 +18,7 @@ use npds\system\auth\users;
 use npds\system\cache\cache;
 use npds\system\theme\theme;
 use npds\system\support\edito;
+use npds\system\support\facades\DB;
 
 
 // Modification pour IZ-Xinstall - EBH - JPB & PHR
@@ -75,6 +76,17 @@ function select_start_page($op)
 function theindex($op, $catid, $marqeur)
 {
     include("themes/default/header.php");
+
+
+    // $users = DB::table('users')->where('uname', '!=', 'Anonyme')
+    //     ->limit(2)
+    //     ->orderBy('uname', 'desc')
+    //     ->get(array('uid', 'name', 'uname', 'email'));
+    
+    
+    // var_dump($users, $users[0]->uname);
+
+//td();
 
     // start Caching page
     if (cache::cacheManagerStart2()) {
