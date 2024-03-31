@@ -28,7 +28,7 @@ function viewbanner()
     $okprint = false;
     $while_limit = 3;
     $while_cpt = 0;
-    $bresult = sql_query("SELECT bid FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9'");
+    $bresult = sql_query("SELECT id FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9'");
     $numrows = sql_num_rows($bresult);
 
     while ((!$okprint) and ($while_cpt < $while_limit)) {
@@ -41,7 +41,7 @@ function viewbanner()
             break;
         }
 
-        $bresult2 = sql_query("SELECT bid, userlevel FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9' LIMIT $bannum,1");
+        $bresult2 = sql_query("SELECT id, userlevel FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9' LIMIT $bannum,1");
         list($bid, $userlevel) = sql_fetch_row($bresult2);
 
         if ($userlevel == 0) {
@@ -65,11 +65,11 @@ function viewbanner()
 
     // Le risque est de sortir sans un BID valide
     if (!isset($bid)) {
-        $rowQ1 = cache::Q_Select("SELECT bid FROM " . $NPDS_Prefix . "banner WHERE userlevel='0' LIMIT 0,1", 86400);
+        $rowQ1 = cache::Q_Select("SELECT id FROM " . $NPDS_Prefix . "banner WHERE userlevel='0' LIMIT 0,1", 86400);
         
         if ($rowQ1) {
             $myrow = $rowQ1[0]; // erreur à l'install quand on n'a pas de banner dans la base ....
-            $bid = $myrow['bid'];
+            $bid = $myrow['id'];
             $okprint = true;
         }
     }
@@ -80,16 +80,16 @@ function viewbanner()
         $myhost = getip();
         
         if ($myIP != $myhost) {
-            sql_query("UPDATE " . $NPDS_Prefix . "banner SET impmade=impmade+1 WHERE bid='$bid'");
+            sql_query("UPDATE " . $NPDS_Prefix . "banner SET impmade=impmade+1 WHERE id='$bid'");
         }
 
         if (($numrows > 0) and ($bid)) {
-            $aborrar = sql_query("SELECT cid, imptotal, impmade, clicks, imageurl, clickurl, date FROM " . $NPDS_Prefix . "banner WHERE bid='$bid'");
+            $aborrar = sql_query("SELECT cid, imptotal, impmade, clicks, imageurl, clickurl, date FROM " . $NPDS_Prefix . "banner WHERE id='$bid'");
             list($cid, $imptotal, $impmade, $clicks, $imageurl, $clickurl, $date) = sql_fetch_row($aborrar);
             
             if ($imptotal == $impmade) {
                 sql_query("INSERT INTO " . $NPDS_Prefix . "bannerfinish VALUES (NULL, '$cid', '$impmade', '$clicks', '$date', now())");
-                sql_query("DELETE FROM " . $NPDS_Prefix . "banner WHERE bid='$bid'");
+                sql_query("DELETE FROM " . $NPDS_Prefix . "banner WHERE id='$bid'");
             }
 
             if ($imageurl != '') {
@@ -111,10 +111,10 @@ function clickbanner($bid)
 {
     global $NPDS_Prefix;
 
-    $bresult = sql_query("SELECT clickurl FROM " . $NPDS_Prefix . "banner WHERE bid='$bid'");
+    $bresult = sql_query("SELECT clickurl FROM " . $NPDS_Prefix . "banner WHERE id='$bid'");
     list($clickurl) = sql_fetch_row($bresult);
     
-    sql_query("UPDATE " . $NPDS_Prefix . "banner SET clicks=clicks+1 WHERE bid='$bid'");
+    sql_query("UPDATE " . $NPDS_Prefix . "banner SET clicks=clicks+1 WHERE id='$bid'");
     sql_free_result($bresult);
     
     if ($clickurl == '') {
@@ -250,7 +250,7 @@ function bannerstats($login, $pass)
                 </thead>
                 <tbody>';
 
-            $result = sql_query("SELECT bid, imptotal, impmade, clicks, date FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
+            $result = sql_query("SELECT id, imptotal, impmade, clicks, date FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
             
             while (list($bid, $imptotal, $impmade, $clicks, $date) = sql_fetch_row($result)) {
 
@@ -278,7 +278,7 @@ function bannerstats($login, $pass)
                 <a href="' . $nuke_url . '" target="_blank">' . $sitename . '</a>
             </div>';
 
-            $result = sql_query("SELECT bid, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
+            $result = sql_query("SELECT id, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
 
             while (list($bid, $imageurl, $clickurl) = sql_fetch_row($result)) {
                 $numrows = sql_num_rows($result); // ??????
@@ -346,7 +346,7 @@ function bannerstats($login, $pass)
                 </thead>
                 <tbody>';
 
-            $result = sql_query("SELECT bid, impressions, clicks, datestart, dateend FROM " . $NPDS_Prefix . "bannerfinish WHERE cid='$cid'");
+            $result = sql_query("SELECT id, impressions, clicks, datestart, dateend FROM " . $NPDS_Prefix . "bannerfinish WHERE cid='$cid'");
             
             while (list($bid, $impressions, $clicks, $datestart, $dateend) = sql_fetch_row($result)) {
                 $percent = substr(100 * $clicks / $impressions, 0, 5);
@@ -392,7 +392,7 @@ function EmailStats($login, $cid, $bid)
             
             footer_page();
         } else {
-            $result = sql_query("SELECT bid, imptotal, impmade, clicks, imageurl, clickurl, date FROM " . $NPDS_Prefix . "banner WHERE bid='$bid' AND cid='$cid'");
+            $result = sql_query("SELECT id, imptotal, impmade, clicks, imageurl, clickurl, date FROM " . $NPDS_Prefix . "banner WHERE id='$bid' AND cid='$cid'");
             list($bid, $imptotal, $impmade, $clicks, $imageurl, $clickurl, $date) = sql_fetch_row($result);
             
             $percent = $impmade == 0 ? '0' : substr(100 * $clicks / $impmade, 0, 5);
@@ -447,8 +447,8 @@ function change_banner_url_by_client($login, $pass, $cid, $bid, $url)
     list($passwd) = sql_fetch_row($result);
 
     if (!empty($pass) and $pass == $passwd) {
-        sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE bid='$bid'");
-        sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE bid='$bid'");
+        sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE id='$bid'");
+        sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE id='$bid'");
         
         echo '
             <div class="alert alert-success">' . translate("Vous avez changé l'url de la bannière") . '<br /><a href="javascript:history.go(-1)" class="alert-link">' . translate("Retour en arrière") . '</a></div>';

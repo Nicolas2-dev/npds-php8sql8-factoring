@@ -317,7 +317,7 @@ class groupe
             settype($nb_doc_gr, 'string');
             settype($lst_doc_tog, 'string');
             
-            include("modules/wspad/config.php");
+            include("modules/wspad/config/config.php");
             
             $docs_gr = sql_query("SELECT page, editedby, modtime, ranq FROM " . $NPDS_Prefix . "wspad WHERE (ws_id) IN (SELECT MAX(ws_id) FROM " . $NPDS_Prefix . "wspad WHERE member='$gr' GROUP BY page) ORDER BY page ASC");
             $nb_doc = sql_num_rows($docs_gr);
@@ -347,7 +347,7 @@ class groupe
             settype($lst_blocnote_tog, 'string');
             settype($lst_blocnote, 'string');
             
-            include_once("modules/bloc-notes/bloc-notes.php");
+            include_once("modules/bloc-notes/http/bloc-notes.php");
             
             $lst_blocnote_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_blocnote_' . $gr . '" class="text-primary" id="show_lst_blocnote" title="' . translate("Déplier la liste") . '"><i id="i_lst_blocnote" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a><i class="far fa-sticky-note fa-2x text-muted ms-3 align-middle"></i>&nbsp;<span class="text-uppercase">Bloc note</span>';
             $lst_blocnote = '

@@ -16,6 +16,7 @@
 use npds\system\assets\css;
 use npds\system\support\str;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -31,7 +32,12 @@ admindroits($aid, $f_meta_nom);
 global $language;
 $hlpfile = "manuels/$language/ephem.html";
 
-function Ephemerids()
+/**
+ * [Ephemerids description]
+ *
+ * @return  void
+ */
+function Ephemerids(): void
 {
     global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
@@ -131,22 +137,41 @@ function Ephemerids()
     css::adminfoot('', '', '', '');
 }
 
-function Ephemeridsadd($did, $mid, $yid, $content)
+/**
+ * [Ephemeridsadd description]
+ *
+ * @param   int     $did      [$did description]
+ * @param   int     $mid      [$mid description]
+ * @param   int     $yid      [$yid description]
+ * @param   string  $content  [$content description]
+ *
+ * @return  void
+ */
+function Ephemeridsadd(int $did, int $mid, int $yid, string $content): void
 {
-    global $NPDS_Prefix;
-
-    $content = stripslashes(str::FixQuotes($content) . "");
-
-    sql_query("INSERT into " . $NPDS_Prefix . "ephem VALUES (NULL, '$did', '$mid', '$yid', '$content')");
+    DB::table('ephem')->insert(array(
+        'did'       => $did,
+        'mid'       => $mid,
+        'yid'       => $yid,
+        'content '  => stripslashes(str::FixQuotes($content) . ""),
+    ));
 
     Header("Location: admin.php?op=Ephemerids");
 }
 
-function Ephemeridsmaintenance($did, $mid)
+/**
+ * [Ephemeridsmaintenance description]
+ *
+ * @param   int   $did  [$did description]
+ * @param   int   $mid  [$mid description]
+ *
+ * @return  void
+ */
+function Ephemeridsmaintenance(int $did, int $mid): void
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
-    $resultX = sql_query("SELECT eid, did, mid, yid, content FROM " . $NPDS_Prefix . "ephem WHERE did='$did' AND mid='$mid' ORDER BY yid ASC");
+    $resultX = DB::table('ephem')->select('eid', 'did', 'mid', 'yid', 'content')->where('did', $did)->where('mid', $mid)->orderBy('yid', 'ASC')->get();
 
     if (!sql_num_rows($resultX)) {
         header("location: admin.php?op=Ephemerids");
@@ -170,12 +195,12 @@ function Ephemeridsmaintenance($did, $mid)
         </thead>
         <tbody>';
 
-    while (list($eid, $did, $mid, $yid, $content) = sql_fetch_row($resultX)) {
+    foreach ($resultX as $ephem) {
         echo '
             <tr>
-                <td>' . $yid . '</td>
-                <td>' . language::aff_langue($content) . '</td>
-                <td><a href="admin.php?op=Ephemeridsedit&amp;eid=' . $eid . '&amp;did=' . $did . '&amp;mid=' . $mid . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit fa-lg me-2"></i></a>&nbsp;<a href="admin.php?op=Ephemeridsdel&amp;eid=' . $eid . '&amp;did=' . $did . '&amp;mid=' . $mid . '" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>
+                <td>' . $ephem['yid'] . '</td>
+                <td>' . language::aff_langue($ephem['content']) . '</td>
+                <td><a href="admin.php?op=Ephemeridsedit&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit fa-lg me-2"></i></a>&nbsp;<a href="admin.php?op=Ephemeridsdel&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>
             </tr>';
     }
 
@@ -186,37 +211,52 @@ function Ephemeridsmaintenance($did, $mid)
     css::adminfoot('', '', '', '');
 }
 
-function Ephemeridsdel($eid, $did, $mid)
+/**
+ * [Ephemeridsdel description]
+ *
+ * @param   int   $eid  [$eid description]
+ * @param   int   $did  [$did description]
+ * @param   int   $mid  [$mid description]
+ *
+ * @return  void
+ */
+function Ephemeridsdel(int $eid, int $did, int $mid): void
 {
-    global $NPDS_Prefix;
-
-    sql_query("DELETE FROM " . $NPDS_Prefix . "ephem WHERE eid='$eid'");
+    DB::table('ephem')->where('eid', $eid)->delete();
 
     Header("Location: admin.php?op=Ephemeridsmaintenance&did=$did&mid=$mid");
 }
 
-function Ephemeridsedit($eid, $did, $mid)
+/**
+ * [Ephemeridsedit description]
+ *
+ * @param   int   $eid  [$eid description]
+ * @param   int   $did  [$did description]
+ * @param   int   $mid  [$mid description]
+ *
+ * @return  void
+ */
+function Ephemeridsedit(int $eid, int $did, int $mid): void
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
-    $result = sql_query("SELECT yid, content FROM " . $NPDS_Prefix . "ephem WHERE eid='$eid'");
-    list($yid, $content) = sql_fetch_row($result);
+    $ephem = DB::table('ephem')->select('yid', 'content')->where('eid', $eid)->first();
 
     echo '
     <hr />
     <h3>' . adm_translate("Editer éphéméride") . '</h3>
     <form action="admin.php" method="post">
         <div class="form-floating mb-3">
-            <input class="form-control" type="number" name="yid" value="' . $yid . '" max="2500" />
+            <input class="form-control" type="number" name="yid" value="' . $ephem['yid'] . '" max="2500" />
             <label for="yid">' . adm_translate("Année") . '</label>
         </div>
         <div class="form-floating mb-3">
-            <textarea name="content" id="content" class="form-control" style="height:120px;">' . $content . '</textarea>
+            <textarea name="content" id="content" class="form-control" style="height:120px;">' . $ephem['content'] . '</textarea>
             <label for="content">' . adm_translate("Description de l'éphéméride") . '</label>
         </div>
         <input type="hidden" name="did" value="' . $did . '" />
@@ -229,13 +269,23 @@ function Ephemeridsedit($eid, $did, $mid)
     css::adminfoot('', '', '', '');
 }
 
-function Ephemeridschange($eid, $did, $mid, $yid, $content)
+/**
+ * [Ephemeridschange description]
+ *
+ * @param   int     $eid      [$eid description]
+ * @param   int     $did      [$did description]
+ * @param   int     $mid      [$mid description]
+ * @param   int     $yid      [$yid description]
+ * @param   string  $content  [$content description]
+ *
+ * @return  void
+ */
+function Ephemeridschange(int $eid, int $did, int $mid, int $yid, string $content): void
 {
-    global $NPDS_Prefix;
-
-    $content = stripslashes(str::FixQuotes($content) . "");
-
-    sql_query("UPDATE " . $NPDS_Prefix . "ephem SET yid='$yid', content='$content' WHERE eid='$eid'");
+    DB::table('ephem')->where('eid', $eid)->update(array(
+        'yid'       => $yid,
+        'content'   => stripslashes(str::FixQuotes($content) . ""),
+    ));
 
     Header("Location: admin.php?op=Ephemeridsmaintenance&did=$did&mid=$mid");
 }

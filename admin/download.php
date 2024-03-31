@@ -13,6 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\js;
 use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\support\editeur;

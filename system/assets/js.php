@@ -138,4 +138,73 @@ class js
 
         return $scri_js;
     }
+
+    /**
+     * [auto_complete_multièdb description]
+     *
+     * @param   string  $nom_array_js  [$nom_array_js description]
+     * @param   string  $nom_champ     [$nom_champ description]
+     * @param   string  $id_inpu       [$id_inpu description]
+     * @param   array   $query           [$req description]
+     *
+     * @return  string
+     */
+    public static function auto_complete_multi_query(string $nom_array_js, string $nom_champ, string $id_inpu, array $query): string
+    {
+        $list_json = '';
+        $list_json .= $nom_array_js . ' = [';
+        
+        foreach($query as $result) {
+            $list_json .= '\'' . $result[$nom_champ] . '\',';
+        }
+
+        $list_json = rtrim($list_json, ',');
+        $list_json .= '];';
+        $scri_js = '';
+        $scri_js .= '
+        <script type="text/javascript">
+        //<![CDATA[
+        var ' . $nom_array_js . ';
+        $(function() {
+        ' . $list_json . '
+        function split( val ) {
+        return val.split( /,\s*/ );
+        }
+        function extractLast( term ) {
+        return split( term ).pop();
+        }
+        $( "#' . $id_inpu . '" )
+        // dont navigate away from the field on tab when selecting an item
+        .bind( "keydown", function( event ) {
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).autocomplete( "instance" ).menu.active ) {
+            event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+            response( $.ui.autocomplete.filter(
+                ' . $nom_array_js . ', extractLast( request.term ) ) );
+            },
+            focus: function() {
+            return false;
+            },
+            select: function( event, ui ) {
+            var terms = split( this.value );
+            terms.pop();
+            terms.push( ui.item.value );
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+            }
+        });
+        });
+        //]]>
+        </script>' . "\n";
+
+        return $scri_js;
+    }
+
+
 }

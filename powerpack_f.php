@@ -55,7 +55,7 @@ function writeDB_private_message($to_userid, $image, $subject, $from_userid, $me
         global $gmt;
         $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
 
-        include_once("language/multilang.php");
+        include_once("language/multilangue.php");
 
         $subject = removeHack($subject);
         $message = str_replace("\n", "<br />", $message);

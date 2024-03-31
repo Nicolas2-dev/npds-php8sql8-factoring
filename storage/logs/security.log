@@ -56,3 +56,11 @@
 03/30/2024 04:36:34 admin.php=>ChangeAdminBlock() by AID : Root                  IP=>::1   
 03/30/2024 14:01:18 admin.php=>ModifyAuthor(Root) by AID : Root                  IP=>::1   
 03/30/2024 14:05:52 admin.php=>ModifyAuthor(Root) by AID : Root                  IP=>::1   
+03/30/2024 21:49:18 admin.php=>CreateGroupe(2, test) by AID : Root               IP=>::1   
+03/30/2024 21:51:08 admin.php=>AddMemberToGroup(2, user) by AID : Root           IP=>::1   
+03/31/2024 01:20:35 admin.php=>CreateBlocnoteWS(2) by AID : Root                 IP=>::1   
+03/31/2024 01:24:33 admin.php=>DeleteBlocnoteWS(2) by AID : Root                 IP=>::1   
+03/31/2024 01:25:22 admin.php=>CreateBlocnoteWS(2) by AID : Root                 IP=>::1   
+03/31/2024 01:28:02 admin.php=>ActivateChatWS(2) by AID : Root                   IP=>::1   
+03/31/2024 01:28:51 admin.php=>CreatePadWS(2) by AID : Root                      IP=>::1   
+03/31/2024 01:29:40 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   

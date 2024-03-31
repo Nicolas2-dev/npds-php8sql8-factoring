@@ -14258,3 +14258,1111 @@ Exception information:
 
 ---------
 
+Exception information:
+
+    Date: Mar 30, 2024 21:21PM
+
+    Message: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'inner join users_status on users.uid=users_status.uid WHERE users.uid<>1 AND gro' à la ligne 1
+
+    Code: 42000
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php
+
+    Line: 233
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php(233): PDO->prepare('inner join user...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php(121): npds\system\database\Connection->prepare('inner join user...')
+#2 [internal function]: npds\system\database\Connection->select('inner join user...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Manager.php(54): call_user_func_array(Array, Array)
+#4 [internal function]: npds\system\database\Manager->__call('select', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\support\facades\DB.php(15): call_user_func_array(Array, Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\download.php(162): npds\system\support\facades\DB::__callStatic('select', Array)
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(977): DownloadAdmin()
+#8 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:27PM
+
+    Message: Parse error: syntax error, unexpected identifier "vd"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\download.php
+
+    Line: 164
+
+    Stack trace:
+
+#0 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:27PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:27PM
+
+    Message: Class "js" not found
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\download.php
+
+    Line: 162
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(977): DownloadAdmin()
+#1 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:27PM
+
+    Message: Illegal argument to a regular expression.
+
+    Code: 3685
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT uname FR...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\js.php(88): sql_query('SELECT uname FR...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\download.php(163): npds\system\assets\js::auto_complete_multi('membre', 'uname', 'users', 'luname', 'inner join user...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(977): DownloadAdmin()
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:43PM
+
+    Message: Call to undefined function paginate()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php
+
+    Line: 782
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1483): adminMain(0)
+#1 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:43PM
+
+    Message: copy(modules/groupe/matrice/groupe.png): Failed to open stream: No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1250
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'copy(modules/gr...', 'E:\\New_Serv_Wam...', 1250)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1250): copy('modules/groupe/...', 'storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:43PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:44PM
+
+    Message: Duplicata du champ '2' pour la clef 'groupes.groupe_id'
+
+    Code: 1062
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'INSERT INTO gro...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1269): sql_query('INSERT INTO gro...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:44PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:45PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1270
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 1270)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1270): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:45PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:46PM
+
+    Message: unlink(storage/users_private/groupe/2/delete): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1275
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'unlink(storage/...', 'E:\\New_Serv_Wam...', 1275)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1275): unlink('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:46PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:47PM
+
+    Message: Duplicata du champ '2' pour la clef 'groupes.groupe_id'
+
+    Code: 1062
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'INSERT INTO gro...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1269): sql_query('INSERT INTO gro...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:47PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:48PM
+
+    Message: Duplicata du champ '2' pour la clef 'groupes.groupe_id'
+
+    Code: 1062
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'INSERT INTO gro...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1269): sql_query('INSERT INTO gro...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:48PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:48PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1270
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 1270)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1270): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:48PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:50PM
+
+    Message: include_once(language/multilang.php): Failed to open stream: No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\powerpack_f.php
+
+    Line: 58
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\powerpack_f.php(58): npds\system\exception\BaseHandler->handleError(2, 'include_once(la...', 'E:\\New_Serv_Wam...', 58)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\powerpack_f.php(58): include_once()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(468): writeDB_private_message('user', '18.png', 'Nouvelles du gr...', 1, 'Vous faites d&e...', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1158): membre_add_finish('2', 'user')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:50PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 21:51PM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\viewpmsg.php(34): include('E:\\New_Serv_Wam...')
+#12 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:09PM
+
+    Message: Method [joint] not found.
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Query\Builder.php
+
+    Line: 701
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(406): npds\system\database\Query\Builder->__call('joint', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1157): membre_add(2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:11PM
+
+    Message: Type error: npds\system\assets\js::auto_complete_multi2(): Argument #4 ($req) must be of type string, array given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php on line 410
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\js.php
+
+    Line: 143
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(410): npds\system\assets\js::auto_complete_multi2('membre', 'uname', 'luname', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1157): membre_add(2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:18PM
+
+    Message: Call to undefined method npds\system\assets\js::auto_complete_multi_db()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 408
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1155): membre_add(2)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:24PM
+
+    Message: Type error: npds\system\assets\js::auto_complete_multi_query(): Argument #4 ($query) must be of type npds\system\support\facades\DB, array given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php on line 408
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\js.php
+
+    Line: 153
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(408): npds\system\assets\js::auto_complete_multi_query('membre', 'uname', 'luname', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1155): membre_add(2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:25PM
+
+    Message: Type error: npds\system\assets\js::auto_complete_multi_query(): Argument #4 ($query) must be of type npds\system\database\Manager, array given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php on line 408
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\js.php
+
+    Line: 153
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(408): npds\system\assets\js::auto_complete_multi_query('membre', 'uname', 'luname', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1155): membre_add(2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:25PM
+
+    Message: Type error: npds\system\assets\js::auto_complete_multi_query(): Argument #4 ($query) must be of type npds\system\database\Manager, array given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php on line 408
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\js.php
+
+    Line: 153
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(408): npds\system\assets\js::auto_complete_multi_query('membre', 'uname', 'luname', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1155): membre_add(2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:28PM
+
+    Message: Undefined variable $NPDS_Prefix
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 55
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(55): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 55)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1283): group_liste()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:33PM
+
+    Message: Undefined variable $NPDS_Prefix
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 159
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(159): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 159)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1284): group_liste()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 30, 2024 22:41PM
+
+    Message: Undefined variable $uname
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 220
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(220): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 220)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1291): group_liste()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:19AM
+
+    Message: include(modules/sform/extend-user/adm_extend-user.php): Failed to open stream: No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\users.php
+
+    Line: 127
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\users.php(127): npds\system\exception\BaseHandler->handleError(2, 'include(modules...', 'E:\\New_Serv_Wam...', 127)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\users.php(127): include()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\users.php(497): modifyUser('2')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1238): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:21AM
+
+    Message: Call to undefined function paginate()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php
+
+    Line: 782
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1483): adminMain(0)
+#1 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:21AM
+
+    Message: Champ 'bid' inconnu dans field list
+
+    Code: 1054
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 117
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(117): mysqli_query(Object(mysqli), 'SELECT bid FROM...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(31): sql_query('SELECT bid FROM...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\banners.php(487): viewbanner()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code(6): include('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_banner()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_banner', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(490): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): meta_lang('\n   <nav id="up...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(97): require_once('E:\\New_Serv_Wam...')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#14 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:24AM
+
+    Message: Call to undefined function paginate()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php
+
+    Line: 782
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1483): adminMain(0)
+#1 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:25AM
+
+    Message: include_once(modules/bloc-notes/bloc-notes.php): Failed to open stream: No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\auth\groupe.php
+
+    Line: 350
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\auth\groupe.php(350): npds\system\exception\BaseHandler->handleError(2, 'include_once(mo...', 'E:\\New_Serv_Wam...', 350)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\auth\groupe.php(350): include_once()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\boxe.php(855): npds\system\auth\groupe::fab_espace_groupe('2', '0', '1')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(286): npds\system\block\boxe::bloc_espace_groupe('2', '1')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(61): bloc_espace_groupe('2', '1')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(265): npds\system\block\block::block_fonction('', 'function#bloc_e...')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(373): npds\system\block\block::fab_block('', '2', 'function#bloc_e...', '0')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(304): npds\system\block\block::Pre_fab_block('', 'LB', 'col')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(173): npds\system\block\block::leftblocks('col')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(178): leftblocks('col')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(true, 'admin.php', Array, 'npds-boost_sk', 'default', '', '', '')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(56): include('E:\\New_Serv_Wam...')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1507): group_liste()
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#15 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:27AM
+
+    Message: Undefined variable $description
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1413
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1413): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1413)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:27AM
+
+    Message: Undefined variable $description
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1413
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1413): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1413)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:28AM
+
+    Message: opendir(themes/npds-boost_sk%2Bdefault): Le fichier spécifié est introuvab (code: 2)
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php
+
+    Line: 51
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'opendir(themes/...', 'E:\\New_Serv_Wam...', 51)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php(51): opendir('themes/npds-boo...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1076): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1427): groupe_mns_create(2)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:28AM
+
+    Message: opendir(themes/npds-boost_sk%2Bdefault): Le fichier spécifié est introuvab (code: 2)
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php
+
+    Line: 51
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'opendir(themes/...', 'E:\\New_Serv_Wam...', 51)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php(51): opendir('themes/npds-boo...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(807): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(2)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:28AM
+
+    Message: include(modules/wspad/config.php): Failed to open stream: No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\auth\groupe.php
+
+    Line: 320
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\auth\groupe.php(320): npds\system\exception\BaseHandler->handleError(2, 'include(modules...', 'E:\\New_Serv_Wam...', 320)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\auth\groupe.php(320): include()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\boxe.php(855): npds\system\auth\groupe::fab_espace_groupe('2', '0', '1')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(286): npds\system\block\boxe::bloc_espace_groupe('2', '1')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(61): bloc_espace_groupe('2', '1')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(265): npds\system\block\block::block_fonction('', 'function#bloc_e...')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(373): npds\system\block\block::fab_block('', '2', 'function#bloc_e...', '0')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(304): npds\system\block\block::Pre_fab_block('', 'LB', 'col')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(173): npds\system\block\block::leftblocks('col')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(178): leftblocks('col')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(128): include('E:\\New_Serv_Wam...')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(355): head(true, 'admin.php', Array, 'npds-boost_sk', 'default', '', '', '')
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(56): include('E:\\New_Serv_Wam...')
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1507): group_liste()
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#15 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:29AM
+
+    Message: include_once(modules/wspad/config.php): Failed to open stream: No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\modules\wspad\http\wspad.php
+
+    Line: 33
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\modules\wspad\http\wspad.php(33): npds\system\exception\BaseHandler->handleError(2, 'include_once(mo...', 'E:\\New_Serv_Wam...', 33)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\modules\wspad\http\wspad.php(33): include_once()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\modules.php(40): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:29AM
+
+    Message: opendir(themes/npds-boost_sk%2Bdefault): Le fichier spécifié est introuvab (code: 2)
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php
+
+    Line: 51
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'opendir(themes/...', 'E:\\New_Serv_Wam...', 51)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php(51): opendir('themes/npds-boo...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1076): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1427): groupe_mns_create(2)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:30AM
+
+    Message: Undefined variable $description
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1413
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1413): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1413)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:39AM
+
+    Message: Undefined variable $description
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1413
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1413): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1413)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
