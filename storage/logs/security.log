@@ -64,3 +64,25 @@
 03/31/2024 01:28:02 admin.php=>ActivateChatWS(2) by AID : Root                   IP=>::1   
 03/31/2024 01:28:51 admin.php=>CreatePadWS(2) by AID : Root                      IP=>::1   
 03/31/2024 01:29:40 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
+03/31/2024 01:51:28 admin.php=>CreateGroupe(3, dqsfqs) by AID : Root             IP=>::1   
+03/31/2024 01:52:39 admin.php=>AddMemberToGroup(3, user) by AID : Root           IP=>::1   
+03/31/2024 20:00:35 admin.php=>CreateWS(2) by AID : Root                         IP=>::1   
+03/31/2024 20:00:39 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
+03/31/2024 20:08:12 admin.php=>CreateMnsWS(2) by AID : Root                      IP=>::1   
+03/31/2024 20:08:22 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
+03/31/2024 20:12:51 admin.php=>CreateMnsWS(3) by AID : Root                      IP=>::1   
+03/31/2024 20:12:54 admin.php=>DeleteMnsWS(3) by AID : Root                      IP=>::1   
+03/31/2024 20:16:50 admin.php=>CreateMnsWS(3) by AID : Root                      IP=>::1   
+03/31/2024 20:16:56 admin.php=>CreatePadWS(3) by AID : Root                      IP=>::1   
+03/31/2024 20:17:09 admin.php=>CreateBlocnoteWS(3) by AID : Root                 IP=>::1   
+03/31/2024 20:17:14 admin.php=>ActivateChatWS(3) by AID : Root                   IP=>::1   
+03/31/2024 20:27:37 admin.php=>DeleteMnsWS(3) by AID : Root                      IP=>::1   
+03/31/2024 20:27:41 admin.php=>DeleteMnsWS(2) by AID : Root                      IP=>::1   
+03/31/2024 20:27:47 admin.php=>ArchiveWS(3) by AID : Root                        IP=>::1   
+03/31/2024 20:27:51 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
+03/31/2024 20:43:32 admin.php=>CreateWS(3) by AID : Root                         IP=>::1   
+03/31/2024 20:44:06 admin.php=>ArchiveWS(3) by AID : Root                        IP=>::1   
+03/31/2024 20:44:08 admin.php=>DeletePadWS(3) by AID : Root                      IP=>::1   
+03/31/2024 20:44:10 admin.php=>DesactivateChatWS(3) by AID : Root                IP=>::1   
+03/31/2024 20:44:12 admin.php=>DeleteBlocnoteWS(3) by AID : Root                 IP=>::1   
+03/31/2024 20:47:33 admin.php=>DeleteAllMemberToGroup(3, 2) by AID : Root        IP=>::1   

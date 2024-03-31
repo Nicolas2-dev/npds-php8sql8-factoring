@@ -13,18 +13,24 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'OptimySQL';
 $f_titre = adm_translate("Optimisation de la base de données") . ' : ' . $dbname;
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 $hlpfile = 'manuels/' . $language . '/optimysql.html';
 
 $date_opt = date(adm_translate("dateforop"));
 $heure_opt = date("h:i a");
+
 include("themes/default/header.php");
+
 GraphicAdmin($hlpfile);
 
 global $dbname; // non utile ?
@@ -32,12 +38,17 @@ global $dbname; // non utile ?
 // Insertion de valeurs d'initialisation de la table (si nécessaire)
 $result = sql_query("SELECT optid FROM " . $NPDS_Prefix . "optimy");
 list($idopt) = sql_fetch_row($result);
-if (!$idopt or ($idopt == ''))
+
+if (!$idopt or ($idopt == '')) {
     $result = sql_query("INSERT INTO " . $NPDS_Prefix . "optimy (optid, optgain, optdate, opthour, optcount) VALUES ('1', '0', '', '', '0')");
+}
+
 // Extraction de la date et de l'heure de la précédente optimisation
 $last_opti = '';
+
 $result = sql_query("SELECT optdate, opthour FROM " . $NPDS_Prefix . "optimy WHERE optid='1'");
 list($dateopt, $houropt) = sql_fetch_row($result);
+
 if (!$dateopt or ($dateopt == '') or !$houropt or ($houropt == '')) {
 } else {
     $last_opti = adm_translate("Dernière optimisation effectuée le") . " : " . $dateopt . " " . adm_translate(" à ") . " " . $houropt . "<br />\n";
@@ -47,10 +58,13 @@ $tot_data = 0;
 $tot_idx = 0;
 $tot_all = 0;
 $li_tab_opti = '';
+
 // si optimysql n'affiche rien - essayer avec la ligne ci-dessous
 //$result = sql_query("SHOW TABLE STATUS FROM `$dbname`";);
 $result = sql_query("SHOW TABLE STATUS FROM " . $dbname);
+
 if (sql_num_rows($result)) {
+
     while ($row = sql_fetch_assoc($result)) {
         $tot_data = $row['Data_length'];
         $tot_idx  = $row['Index_length'];
@@ -59,11 +73,14 @@ if (sql_num_rows($result)) {
         $total = round($total, 3);
         $gain = $row['Data_free'];
         $gain = ($gain / 1024);
+
         settype($total_gain, 'integer');
+
         $total_gain += $gain;
         $gain = round($gain, 3);
         $resultat = sql_query("OPTIMIZE TABLE " . $row['Name'] . " ");
-        if ($gain == 0)
+
+        if ($gain == 0) {
             $li_tab_opti .= '
             <tr class="table-success">
                 <td align="right">' . $row['Name'] . '</td>
@@ -71,7 +88,7 @@ if (sql_num_rows($result)) {
                 <td align="center">' . adm_translate("optimisée") . '</td>
                 <td align="center"> -- </td>
             </tr>';
-        else
+        } else {
             $li_tab_opti .= '
             <tr class="table-danger">
                 <td align="right">' . $row['Name'] . '</td>
@@ -79,24 +96,30 @@ if (sql_num_rows($result)) {
                 <td class="text-danger" align="center">' . adm_translate("non optimisée") . '</td>
                 <td align="right">' . $gain . ' Ko</td>
             </tr>';
+        }
     }
 }
+
 $total_gain = round($total_gain, 3);
 
 // Historique des gains
 // Extraction du nombre d'optimisation effectuée
 $result = sql_query("SELECT optgain, optcount FROM " . $NPDS_Prefix . "optimy WHERE optid='1'");
 list($gainopt, $countopt) = sql_fetch_row($result);
+
 $newgain = ($gainopt + $total_gain);
 $newcount = ($countopt + 1);
+
 // Enregistrement du nouveau gain
 $result = sql_query("UPDATE " . $NPDS_Prefix . "optimy SET optgain='$newgain', optdate='$date_opt', opthour='$heure_opt', optcount='$newcount' WHERE optid='1'");
+
 // Lecture des gains précédents et addition
 $result = sql_query("SELECT optgain, optcount FROM " . $NPDS_Prefix . "optimy WHERE optid='1'");
 list($gainopt, $countopt) = sql_fetch_row($result);
 
 // Affichage
 adminhead($f_meta_nom, $f_titre, $adminimg);
+
 echo '<hr /><p class="lead">' . adm_translate("Optimisation effectuée") . ' : ' . adm_translate("Gain total réalisé") . ' ' . $total_gain . ' Ko</br>';
 echo $last_opti;
 echo '
@@ -119,10 +142,14 @@ echo '
         </tr>
     </tfoot>
     <tbody>';
+
 echo $li_tab_opti;
+
 echo '
     </tbody>
     </table>';
+
 adminfoot('', '', '', '');
+
 global $aid;
 Ecr_Log('security', "OptiMySql() by AID : $aid", '');

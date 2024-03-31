@@ -14,25 +14,32 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) { 
     include('die.php');
+}
+
 $f_meta_nom = 'ForumConfigAdmin';
 $f_titre = adm_translate('Configuration des Forums');
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language, $adminimg, $admf_ext;
 $hlpfile = "manuels/$language/forumconfig.html";
 
 function ForumConfigAdmin()
 {
     global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
     $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "config");
     list($allow_html, $allow_bbcode, $allow_sig, $posts_per_page, $hot_threshold, $topics_per_page, $allow_upload_forum, $allow_forum_hide, $forum_attachments, $rank1, $rank2, $rank3, $rank4, $rank5, $anti_flood, $solved) = sql_fetch_row($result);
+    
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Configuration des Forums") . '</h3>
@@ -40,6 +47,7 @@ function ForumConfigAdmin()
         <div class="row">
             <label class="col-form-label col-sm-5" for="allow_html">' . adm_translate("Autoriser le HTML") . '</label>
             <div class="col-sm-7 my-2">';
+
     $cky = '';
     $ckn = '';
     if ($allow_html == 1) {
@@ -49,6 +57,7 @@ function ForumConfigAdmin()
         $cky = '';
         $ckn = 'checked="checked"';
     }
+
     echo '
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="allow_html_y" name="allow_html" value="1" ' . $cky . ' />
@@ -63,6 +72,7 @@ function ForumConfigAdmin()
         <div class="row">
             <label class="col-form-label col-sm-5 " for="allow_bbcode">' . adm_translate("Autoriser les Smilies") . '</label>
             <div class="col-sm-7 my-2">';
+
     $cky = '';
     $ckn = '';
     if ($allow_bbcode == 1) {
@@ -72,6 +82,7 @@ function ForumConfigAdmin()
         $cky = '';
         $ckn = 'checked="checked"';
     }
+
     echo '
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="allow_bbcode_y" name="allow_bbcode" value="1" ' . $cky . ' />
@@ -86,6 +97,7 @@ function ForumConfigAdmin()
         <div class="row">
             <label class="col-form-label col-sm-5" for="allow_sig">' . adm_translate("Autoriser les Signatures") . '</label>
             <div class="col-sm-7 my-2">';
+
     $cky = '';
     $ckn = '';
     if ($allow_sig == 1) {
@@ -95,6 +107,7 @@ function ForumConfigAdmin()
         $cky = '';
         $ckn = 'checked="checked"';
     }
+
     echo '
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="allow_sig_y" name="allow_sig" value="1" ' . $cky . ' />
@@ -137,6 +150,7 @@ function ForumConfigAdmin()
         <div class="row">
             <label class="col-form-label col-sm-5" for="solved">' . adm_translate("Activer le tri des contributions 'résolues'") . '</label>
             <div class="col-sm-7 my-2">';
+
     $cky = '';
     $ckn = '';
     if ($solved == 1) {
@@ -146,6 +160,7 @@ function ForumConfigAdmin()
         $cky = '';
         $ckn = 'checked="checked"';
     }
+
     echo '
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="solved_y" name="solved" value="1" ' . $cky . ' />
@@ -160,6 +175,7 @@ function ForumConfigAdmin()
         <div class="row">
             <label class="col-form-label col-sm-5" for="allow_upload_forum">' . adm_translate("Activer l'upload dans les forums ?") . '</label>
             <div class="col-sm-7 my-2">';
+
     $cky = '';
     $ckn = '';
     if ($allow_upload_forum == 1) {
@@ -169,6 +185,7 @@ function ForumConfigAdmin()
         $cky = '';
         $ckn = 'checked="checked"';
     }
+
     echo '
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="allow_upload_forum_y" name="allow_upload_forum" value="1" ' . $cky . ' />
@@ -183,6 +200,7 @@ function ForumConfigAdmin()
         <div class="row">
             <label class="col-form-label col-sm-5" for="allow_forum_hide">' . adm_translate("Activer les textes cachés") . '</label>
             <div class="col-sm-7 my-2">';
+
     $cky = '';
     $ckn = '';
     if ($allow_forum_hide == 1) {
@@ -192,6 +210,7 @@ function ForumConfigAdmin()
         $cky = '';
         $ckn = 'checked="checked"';
     }
+
     echo '
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="allow_forum_hide_y" name="allow_forum_hide" value="1" ' . $cky . '/>
@@ -233,6 +252,7 @@ function ForumConfigAdmin()
             <button class="btn btn-primary" type="submit">' . adm_translate("Changer") . '</button>
         </div>
     </form>';
+
     $fv_parametres = '
         hot_threshold: {
             validators: {
@@ -267,6 +287,7 @@ function ForumConfigAdmin()
             }
         },
     ';
+
     $arg1 = '
     var formulid = ["phpbbconfigforum"];
     inpandfieldlen("posts_per_page",255);
@@ -279,13 +300,17 @@ function ForumConfigAdmin()
     inpandfieldlen("rank4",255);
     inpandfieldlen("rank5",255);
     ';
+
     adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function ForumConfigChange($allow_html, $allow_bbcode, $allow_sig, $posts_per_page, $hot_threshold, $topics_per_page, $allow_upload_forum, $allow_forum_hide, $rank1, $rank2, $rank3, $rank4, $rank5, $anti_flood, $solved)
 {
     global $NPDS_Prefix;
+
     sql_query("UPDATE " . $NPDS_Prefix . "config SET allow_html='$allow_html', allow_bbcode='$allow_bbcode', allow_sig='$allow_sig', posts_per_page='$posts_per_page', hot_threshold='$hot_threshold', topics_per_page='$topics_per_page', allow_upload_forum='$allow_upload_forum', allow_forum_hide='$allow_forum_hide', rank1='$rank1', rank2='$rank2', rank3='$rank3', rank4='$rank4', rank5='$rank5', anti_flood='$anti_flood', solved='$solved'");
+    
     Q_Clean();
+    
     Header("Location: admin.php?op=ForumConfigAdmin");
 }

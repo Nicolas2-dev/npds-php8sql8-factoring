@@ -15366,3 +15366,1024 @@ Exception information:
 
 ---------
 
+Exception information:
+
+    Date: Mar 31, 2024 1:49AM
+
+    Message: Type error: groupe_edit(): Argument #1 ($groupe_id) must be of type int, string given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php on line 1455
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 635
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1455): groupe_edit('groupe_add')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:50AM
+
+    Message: unlink(storage/users_private/groupe/3/delete): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1500
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'unlink(storage/...', 'E:\\New_Serv_Wam...', 1500)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1500): unlink('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:50AM
+
+    Message: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicata du champ '3' pour la clef 'groupes.groupe_id'
+
+    Code: 23000
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php
+
+    Line: 175
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php(175): PDOStatement->execute(Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php(137): npds\system\database\Connection->statement('INSERT INTO {gr...', Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Query\Builder.php(161): npds\system\database\Connection->insert('INSERT INTO {gr...', Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1483): npds\system\database\Query\Builder->insert(Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:51AM
+
+    Message: Undefined variable $2,3
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 490
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(490): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 490)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1371): membre_add_finish(3, 'user')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:52AM
+
+    Message: Undefined variable $description
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1413
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1413): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1413)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 1:53AM
+
+    Message: Call to undefined function paginate()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php
+
+    Line: 782
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1483): adminMain(0)
+#1 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 19:56PM
+
+    Message: opendir(themes/npds-boost_sk%2Bdefault): Le fichier spécifié est introuvab (code: 2)
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php
+
+    Line: 51
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'opendir(themes/...', 'E:\\New_Serv_Wam...', 51)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\modules\upload\config\upload.conf.php(51): opendir('themes/npds-boo...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(807): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(2)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:00PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 821
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 821)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(821): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(2)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:07PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 821
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 821)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(821): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(2)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:08PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 821
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 821)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(821): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(2)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:12PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 821
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 821)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(821): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(2)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:12PM
+
+    Message: unlink(storage/users_private/groupe/3/delete): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 862
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'unlink(storage/...', 'E:\\New_Serv_Wam...', 862)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(862): unlink('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:17PM
+
+    Message: Undefined variable $description
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1413
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1413): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1413)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:27PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 821
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 821)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(821): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:33PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 821
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 821)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(821): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:33PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:34PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:34PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:34PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:35PM
+
+    Message: Call to undefined function file_exist()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 821
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:35PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:35PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:36PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:36PM
+
+    Message: mkdir(): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): No suc...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('/storage/users_...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:36PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:37PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:37PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:37PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:38PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:38PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:39PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:39PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:39PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:39PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:39PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:40PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 824
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 824)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(824): mkdir('E:/New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1406): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:42PM
+
+    Message: mkdir(): File exists
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 843
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'mkdir(): File e...', 'E:\\New_Serv_Wam...', 843)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(843): mkdir('storage/users_p...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1403): workspace_create(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:47PM
+
+    Message: Trying to access array offset on value of type null
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1048
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1048): npds\system\exception\BaseHandler->handleError(2, 'Trying to acces...', 'E:\\New_Serv_Wam...', 1048)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(775): forum_groupe_delete(3)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(751): groupe_delete(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1451): groupe_maj('Supprimer')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:48PM
+
+    Message: Trying to access array offset on value of type null
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1048
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1048): npds\system\exception\BaseHandler->handleError(2, 'Trying to acces...', 'E:\\New_Serv_Wam...', 1048)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(775): forum_groupe_delete(3)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(751): groupe_delete(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1451): groupe_maj('Supprimer')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:49PM
+
+    Message: Trying to access array offset on value of type null
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1048
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1048): npds\system\exception\BaseHandler->handleError(2, 'Trying to acces...', 'E:\\New_Serv_Wam...', 1048)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(775): forum_groupe_delete(3)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(751): groupe_delete(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1451): groupe_maj('Supprimer')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:49PM
+
+    Message: Trying to access array offset on value of type null
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1048
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1048): npds\system\exception\BaseHandler->handleError(2, 'Trying to acces...', 'E:\\New_Serv_Wam...', 1048)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(775): forum_groupe_delete(3)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(751): groupe_delete(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1451): groupe_maj('Supprimer')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:49PM
+
+    Message: Undefined variable $forum
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 1062
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1062): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1062)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(775): forum_groupe_delete(3)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(751): groupe_delete(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1451): groupe_maj('Supprimer')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:49PM
+
+    Message: unlink(modules/f-manager/config/groupe_3.conf.php): No such file or directory
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php
+
+    Line: 964
+
+    Stack trace:
+
+#0 [internal function]: npds\system\exception\BaseHandler->handleError(2, 'unlink(modules/...', 'E:\\New_Serv_Wam...', 964)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(964): unlink('modules/f-manag...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(776): workspace_archive(3)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(751): groupe_delete(3)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\groupes.php(1451): groupe_maj('Supprimer')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1459): include('E:\\New_Serv_Wam...')
+#6 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:52PM
+
+    Message: Call to undefined function paginate()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php
+
+    Line: 782
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1483): adminMain(0)
+#1 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:53PM
+
+    Message: Undefined variable $NPDS_Prefix
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\headlines.php
+
+    Line: 56
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\headlines.php(56): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 56)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\headlines.php(257): HeadlinesAdmin()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1055): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:56PM
+
+    Message: Parse error: Unmatched '}'
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\headlines.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 {main}
+
+---------
+
+Exception information:
+
+    Date: Mar 31, 2024 20:56PM
+
+    Message: Undefined array key "hid"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\headlines.php
+
+    Line: 61
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\headlines.php(61): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 61)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\headlines.php(253): HeadlinesAdmin()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1055): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+

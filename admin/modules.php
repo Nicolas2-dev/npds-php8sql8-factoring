@@ -22,26 +22,32 @@
 /* Version 1.3 - 2015                                                   */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'modules';
 $f_titre = adm_translate("Gestion, Installation Modules");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 $hlpfile = "manuels/$language/modules.html";
 
 global $language, $adminimg, $admf_ext;
 
 include("themes/default/header.php");
+
 GraphicAdmin($hlpfile);
 
 $handle = opendir('modules');
 $modlist = '';
 while (false !== ($file = readdir($handle))) {
     if (!@file_exists("modules/$file/kernel")) {
-        if (is_dir("modules/$file") and ($file != '.') and ($file != '..'))
+        if (is_dir("modules/$file") and ($file != '.') and ($file != '..')) {
             $modlist .= "$file ";
+        }
     }
 }
 closedir($handle);
@@ -49,16 +55,22 @@ $modlist = explode(' ', rtrim($modlist));
 
 $whatondb = sql_query("SELECT mnom FROM " . $NPDS_Prefix . "modules");
 while ($row = sql_fetch_row($whatondb)) {
-    if (!in_array($row[0], $modlist)) sql_query("DELETE FROM " . $NPDS_Prefix . "modules WHERE mnom='" . $row[0] . "'");
+    if (!in_array($row[0], $modlist)) {
+        sql_query("DELETE FROM " . $NPDS_Prefix . "modules WHERE mnom='" . $row[0] . "'");
+    }
 }
+
 foreach ($modlist as $value) {
     $queryexiste = sql_query("SELECT mnom FROM " . $NPDS_Prefix . "modules WHERE mnom='" . $value . "'");
     $moexiste = sql_num_rows($queryexiste);
-    if ($moexiste !== 1)
+    
+    if ($moexiste !== 1) {
         sql_query("INSERT INTO " . $NPDS_Prefix . "modules VALUES (NULL, '" . $value . "', '0')");
+    }
 }
 
 adminhead($f_meta_nom, $f_titre, $adminimg);
+
 echo '
     <hr />
     <h3>' . adm_translate("Les modules") . '</h3>
@@ -73,12 +85,15 @@ echo '
         <tbody>';
 
 $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "modules ORDER BY mid");
+
 while ($row = sql_fetch_assoc($result)) {
     $icomod = '';
     $clatd = '';
+
     $icomod = file_exists("modules/" . $row["mnom"] . "/" . $row["mnom"] . ".png") ?
         '<img class="adm_img" src="modules/' . $row["mnom"] . '/' . $row["mnom"] . '.png" alt="icon_' . $row["mnom"] . '" title="" />' :
         '<img class="adm_img" src="assets/images/admin/module.png" alt="icon_module" title="" />';
+
     if ($row["minstall"] == 0) {
         $status_chngac = file_exists("modules/" . $row["mnom"] . "/install.conf.php") ?
             '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $row["mnom"] . '&amp;subop=install" ><i class="fa fa-compress fa-lg"></i><i class="fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Installer le module") . '" data-bs-toggle="tooltip"></i></a>' :
@@ -90,6 +105,7 @@ while ($row = sql_fetch_assoc($result)) {
             '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $row["mnom"] . '" ><i class="fa fa fa-ban fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Marquer le module comme désinstallé") . '" data-bs-toggle="tooltip"</i></a>';
         $clatd = 'table-success';
     }
+
     echo '
             <tr>
                 <td class="' . $clatd . '">' . $icomod . '</td>
@@ -97,7 +113,9 @@ while ($row = sql_fetch_assoc($result)) {
                 <td class="' . $clatd . '">' . $status_chngac . '</td>
             </tr>';
 }
+
 echo '
         </tbody>
     </table>';
+    
 adminfoot('', '', '', '');

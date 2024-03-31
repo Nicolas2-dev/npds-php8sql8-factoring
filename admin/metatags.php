@@ -11,8 +11,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) {
     include('die.php');
+}
 
 $f_meta_nom = 'MetaTagAdmin';
 $f_titre = adm_translate("Administration des MétaTags");
@@ -37,12 +38,13 @@ function MetaTagAdmin(bool $meta_saved = false)
     echo '
     <hr />';
 
-    if ($meta_saved)
+    if ($meta_saved) {
         echo '
         <div class="alert alert-success">
             ' . adm_translate("Vos MétaTags ont été modifiés avec succès !") . '
             <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>';
+    }
 
     echo '
     <form id="metatagsadm" action="admin.php" method="post">
@@ -172,17 +174,21 @@ function GetMetaTags($filename)
 function MetaTagMakeSingleTag($name, $content, $type = 'name')
 {
     if ($content != "humans.txt") {
-        if ($content != "")
+        if ($content != "") {
             return "\$l_meta.=\"<meta $type=\\\"" . $name . "\\\" content=\\\"" . $content . "\\\" />\\n\";\n";
-        else
+        } else {
             return "\$l_meta.=\"<meta $type=\\\"" . $name . "\\\" />\\n\";\n";
-    } else
+        }
+    } else {
         return "\$l_meta.=\"<link type=\"text/plain\" rel=\"author\" href=\"http://humanstxt.org/humans.txt\" />\";\n";
+    }
 }
 
 function MetaTagSave($filename, $tags)
 {
-    if (!is_array($tags)) return false;
+    if (!is_array($tags)) {
+        return false;
+    }
 
     global $adminmail, $Version_Id, $Version_Num, $Version_Sub;
 
@@ -201,12 +207,17 @@ function MetaTagSave($filename, $tags)
         $content .= "if (\$meta_doctype==\"\")\n";
 
         if (!empty($tags['doctype'])) {
-            if ($tags['doctype'] == "XHTML 1.0 Transitional")
+            if ($tags['doctype'] == "XHTML 1.0 Transitional") {
                 $content .= "   \$l_meta=\"<!DOCTYPE html PUBLIC \\\"-//W3C//DTD XHTML 1.0 Transitional//EN\\\" \\\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\\\">\\n<html lang=\\\"\$lang\\\" xml:lang=\\\"\$lang\\\" xmlns=\\\"http://www.w3.org/1999/xhtml\\\">\\n<head>\\n\";\n";
-            if ($tags['doctype'] == "XHTML 1.0 Strict")
+            }
+            
+            if ($tags['doctype'] == "XHTML 1.0 Strict"){ 
                 $content .= "   \$l_meta=\"<!DOCTYPE html PUBLIC \\\"-//W3C//DTD XHTML 1.0 Strict//EN\\\" \\\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\\\">\\n<html lang=\\\"\$lang\\\" xml:lang=\\\"\$lang\\\" xmlns=\\\"http://www.w3.org/1999/xhtml\\\">\\n<head>\\n\";\n";
-            if ($tags['doctype'] == "HTML 5.1")
+            }
+            
+            if ($tags['doctype'] == "HTML 5.1") {
                 $content .= "   \$l_meta=\"<!DOCTYPE html>\\n<html lang=\\\"\$lang\\\">\\n<head>\\n\";\n";
+            }
         } else {
             $tags['doctype'] = "HTML 5.1";
             $content .= "   \$l_meta=\"<!DOCTYPE html>\\n<html lang=\\\"\$lang\\\">\\n<head>\\n\";\n";
@@ -217,6 +228,7 @@ function MetaTagSave($filename, $tags)
 
         if (!empty($tags['content-type'])) {
             $tags['content-type'] = htmlspecialchars(stripslashes($tags['content-type']), ENT_COMPAT | ENT_HTML401, 'utf-8');
+            
             //$fp = fopen("config/constants.php", "w");
             $fp = fopen("config/doctype.php", "w");
             if ($fp) {
@@ -225,11 +237,13 @@ function MetaTagSave($filename, $tags)
             }
             fclose($fp);
 
-            // if ($tags['doctype'] == "HTML 5.1") 
+            // if ($tags['doctype'] == "HTML 5.1") { 
             //    $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
-            // else
-            $content .= MetaTagMakeSingleTag('content-type', $tags['content-type'], 'http-equiv');
+            // } else {
+                $content .= MetaTagMakeSingleTag('content-type', $tags['content-type'], 'http-equiv');
+            //}
         } else {
+            
             //$fp = fopen("config/constants.php", "w");
             $fp = fopen("config/doctype.php", "w");
             if ($fp) {
@@ -241,7 +255,6 @@ function MetaTagSave($filename, $tags)
             if ($tags['doctype'] == "XHTML 1.0 Transitional" || $tags['doctype'] == "XHTML 1.0 Strict") {
                 $content .= MetaTagMakeSingleTag('content-type', 'text/html; charset=utf-8', 'http-equiv');
             }
-
             // } else {
             //    $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
             // }
@@ -269,8 +282,9 @@ function MetaTagSave($filename, $tags)
         if (!empty($tags['reply-to'])) {
             $tags['reply-to'] = htmlspecialchars(stripslashes($tags['reply-to']), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $content .= MetaTagMakeSingleTag('reply-to', $tags['reply-to']);
-        } else
+        } else {
             $content .= MetaTagMakeSingleTag('reply-to', $adminmail);
+        }
 
         if (!empty($tags['description'])) {
             $tags['description'] = htmlspecialchars(stripslashes($tags['description']), ENT_COMPAT | ENT_HTML401, 'utf-8');
@@ -306,8 +320,9 @@ function MetaTagSave($filename, $tags)
         if (!empty($tags['revisit-after'])) {
             $tags['revisit-after'] = htmlspecialchars(stripslashes($tags['revisit-after']), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $content .= MetaTagMakeSingleTag('revisit-after', $tags['revisit-after']);
-        } else
+        } else {
             $content .= MetaTagMakeSingleTag('revisit-after', "14 days");
+        }
 
         $content .= MetaTagMakeSingleTag('resource-type', "document");
         $content .= MetaTagMakeSingleTag('robots', $tags['robots']);
@@ -331,10 +346,13 @@ function MetaTagSave($filename, $tags)
 
         return true;
     }
+    
     return false;
 }
 
-if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) Header("Location: die.php?op=admin");
+if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) {
+    Header("Location: die.php?op=admin");
+}
 
 include("admin/settings_save.php");
 

@@ -11,13 +11,17 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'supercache';
 $f_titre = adm_translate("SuperCache");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language;
 $hlpfile = "manuels/$language/overload.html";
 
@@ -76,11 +80,14 @@ function save_supercache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt
 function main()
 {
     global $hlpfile, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
     include("config/cache.timings.php");
+
     echo '
         <hr />
         <form id="overloadcacheadm" action="admin.php" method="post">
@@ -88,8 +95,10 @@ function main()
         <legend>' . adm_translate("Activation") . '</legend>
             <div class="mb-3">
                 <div>';
+
     $cky = '';
     $ckn = '';
+
     if ($SuperCache == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
@@ -97,6 +106,7 @@ function main()
         $cky = '';
         $ckn = 'checked="checked"';
     }
+
     echo '
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="xsupercache_y" name="xsupercache" value="true" ' . $cky . ' />
@@ -113,24 +123,31 @@ function main()
     if (($CACHE_TIMINGS['index.php'] == '') or (!isset($CACHE_TIMINGS['index.php']))) {
         $CACHE_TIMINGS['index.php'] = 300;
     }
+
     if (($CACHE_TIMINGS['article.php'] == '') or (!isset($CACHE_TIMINGS['article.php']))) {
         $CACHE_TIMINGS['article.php'] = 60;
     }
+
     if (($CACHE_TIMINGS['sections.php'] == '') or (!isset($CACHE_TIMINGS['sections.php']))) {
         $CACHE_TIMINGS['sections.php'] = 300;
     }
+
     if (($CACHE_TIMINGS['faq.php'] == '') or (!isset($CACHE_TIMINGS['faq.php']))) {
         $CACHE_TIMINGS['faq.php'] = 86400;
     }
+
     if (($CACHE_TIMINGS['links.php'] == '') or (!isset($CACHE_TIMINGS['links.php']))) {
         $CACHE_TIMINGS['links.php'] = 28800;
     }
+
     if (($CACHE_TIMINGS['forum.php'] == '') or (!isset($CACHE_TIMINGS['forum.php']))) {
         $CACHE_TIMINGS['forum.php'] = 3600;
     }
+
     if (($CACHE_TIMINGS['memberslist.php'] == '') or (!isset($CACHE_TIMINGS['memberslist.php']))) {
         $CACHE_TIMINGS['memberslist.php'] = 1800;
     }
+
     if (($CACHE_TIMINGS['modules.php'] == '') or (!isset($CACHE_TIMINGS['modules.php']))) {
         $CACHE_TIMINGS['modules.php'] = 3600;
     }
@@ -197,6 +214,7 @@ function main()
             </div>
             <input type="hidden" name="op" value="supercache_empty" />
         </form>';
+
     $fv_parametres = '
         xt_index: {
             validators: {
@@ -263,6 +281,7 @@ function main()
             }
         },
     ';
+
     $arg1 = '
     var formulid = ["overloadcacheadm"];
     inpandfieldlen("xt_index",6);
@@ -274,22 +293,29 @@ function main()
     inpandfieldlen("xt_memberlist",6);
     inpandfieldlen("xt_modules",6);
     ';
+
     adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 switch ($op) {
     case 'supercache_save':
         save_supercache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt_faq, $xt_links, $xt_forum, $xt_memberlist, $xt_modules);
+
         global $aid;
         Ecr_Log('security', "ChangeSuperCache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt_faq, $xt_links, $xt_forum, $xt_memberlist, $xt_modules) by AID : $aid", '');
+        
         Header("Location: admin.php?op=supercache");
         break;
+
     case 'supercache_empty':
         SC_clean();
+
         global $aid;
         Ecr_Log('security', "EmptySuperCache() by AID : $aid", '');
+        
         Header("Location: admin.php?op=supercache");
         break;
+        
     default:
         main();
         break;

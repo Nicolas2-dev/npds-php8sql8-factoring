@@ -13,12 +13,19 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+use npds\system\routing\url;
+
+if (!function_exists('admindroits')) {
     include('die.php');
+}
 
 include("themes/default/header.php");
+
 if ($ModPath != '') {
-    if (file_exists("modules/$ModPath/$ModStart.php"))
-        include("modules/$ModPath/$ModStart.php");
-} else
-    redirect_url(urldecode($ModStart));
+    if (file_exists("modules/$ModPath/$ModStart.php")) {
+        include("modules/$ModPath/$ModStart.php"); 
+    } 
+
+} else {
+    url::redirect_url(urldecode($ModStart));
+}

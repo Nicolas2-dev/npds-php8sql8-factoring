@@ -13,8 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) {
     include('die.php');
+}
 
 $f_meta_nom = 'MetaLangAdmin';
 $f_titre = 'META-LANG';
@@ -28,7 +29,9 @@ $hlpfile = 'manuels/' . $language . '/meta_lang.html';
 
 function go_back($label)
 {
-    if (!$label) $label = adm_translate("Retour en arrière");
+    if (!$label) {
+        $label = adm_translate("Retour en arrière");
+    }
 
     echo '
     <script type="text/javascript">
@@ -50,14 +53,16 @@ function list_meta($meta, $type_meta)
     <select class="form-select" name="meta" onchange="window.location=eval(\'this.options[this.selectedIndex].value\')">
         <option value="">META-MOT</option>';
 
-    if (!empty($type_meta)) 
+    if (!empty($type_meta)) { 
         $Q = sql_query("SELECT def FROM " . $NPDS_Prefix . "metalang WHERE type_meta = '" . $type_meta . "' ORDER BY type_meta, def ASC");
-    else 
+    } else {
         $Q = sql_query("SELECT def FROM " . $NPDS_Prefix . "metalang ORDER BY 'def' ASC");
+    }
 
     while ($resultat = sql_fetch_row($Q)) {
-        if ($meta == $resultat[0]) 
+        if ($meta == $resultat[0]) {
             $sel = 'selected="selected"';
+        }
 
         $list .= '
         <option ' . $sel . ' value="admin.php?op=Meta-LangAdmin&amp;meta=' . $resultat[0] . '">' . $resultat[0] . '</option>';
@@ -69,7 +74,7 @@ function list_meta($meta, $type_meta)
     $list .= '
     </select>';
 
-    return ($list);
+    return $list;
 }
 
 function list_meta_type()
@@ -83,7 +88,7 @@ function list_meta_type()
         <option value="admin.php?op=Creat_Meta_Lang&amp;type_meta=them">them</option>
     </select>';
 
-    return ($list);
+    return $list;
 }
 
 function list_type_meta($type_meta)
@@ -100,7 +105,10 @@ function list_type_meta($type_meta)
     $Q = sql_query("SELECT type_meta FROM " . $NPDS_Prefix . "metalang GROUP BY type_meta ORDER BY 'type_meta' ASC");
 
     while ($resultat = sql_fetch_row($Q)) {
-        if ($type_meta == $resultat[0]) $sel = 'selected="selected"';
+        if ($type_meta == $resultat[0]) {
+            $sel = 'selected="selected"';
+        }
+
         $list .= '
         <option ' . $sel . ' value="admin.php?op=Meta-LangAdmin&amp;type_meta=' . $resultat[0] . '">' . $resultat[0] . '</option>';
         $sel = '';
@@ -118,13 +126,14 @@ function List_Meta_Lang()
 {
     global $hlpfile, $NPDS_Prefix, $meta, $type_meta, $f_meta_nom, $f_titre, $adminimg;
 
-    if (!empty($meta)) 
+    if (!empty($meta)) {
         $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang WHERE def = '" . $meta . "' ORDER BY type_meta, def ASC");
-    else if (!empty($type_meta)) 
+    } else if (!empty($type_meta)) {
         $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang WHERE type_meta = '" . $type_meta . "' ORDER BY type_meta, def ASC");
-    else 
+    } else {
         $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang ORDER BY 'type_meta','def' ASC");
-    
+    }
+
     include("themes/default/header.php");
 
     GraphicAdmin($hlpfile);
@@ -140,11 +149,12 @@ function List_Meta_Lang()
                 <td>
                 <input type="hidden" name="nbr" value="' . $ibid . '" />';
 
-        if ($obligatoire == false)
+        if ($obligatoire == false) {
             $tablmeta_c .= '<a href="admin.php?op=Edit_Meta_Lang&amp;ml=' . urlencode($def) . '"><i class="fa fa-edit fa-lg" title="Editer ce m&#xE9;ta-mot" data-bs-toggle="tooltip" data-bs-placement="right"></i></a>&nbsp;&nbsp;<i class="fas fa-trash fa-lg text-muted" title="Effacer ce m&#xE9;ta-mot" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<input type="checkbox" name="action[' . $ibid . ']" value="' . $def . '" />';
-        else 
+        } else {
             $tablmeta_c .= '<a href="admin.php?op=Edit_Meta_Lang&amp;ml=' . urlencode($def) . '" ><i class="fa fa-eye fa-lg" title="Voir le code de ce m&#xE9;ta-mot" data-bs-toggle="tooltip" ></i></a>';
-        
+        }
+
         $tablmeta_c .= '
                 </td>
                 <td><code>' . $def . '</code></td>
@@ -221,8 +231,9 @@ function Edit_Meta_Lang()
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
     echo '<hr />';
-    if ($Q['obligatoire'] != true)
+    if ($Q['obligatoire'] != true) {
         echo '<h3>' . adm_translate("Modifier un ") . ' META-MOT</h3>';
+    }
     
     echo aff_local_langue('', 'local_user_language') . '<br />', '<label class="col-form-label">' . adm_translate("Langue de Prévisualisation") . '</label>';
     
@@ -242,8 +253,9 @@ function Edit_Meta_Lang()
     if ($Q['type_meta'] == 'smil') {
         eval($Q['content']);
         echo $cmd;
-    } else
+    } else {
         echo preview_local_langue($local_user_language, aff_langue($Q['description']));
+    }
 
     echo '
         </div>
@@ -277,12 +289,13 @@ function Edit_Meta_Lang()
         if ($Q['type_meta'] == 'smil') {
             eval($Q['content']);
             echo $cmd . '</div></div>';
-        } else
+        } else {
             echo '
                 <textarea class="form-control" id="desc" name="desc" rows="7" >' . $Q['description'] . '</textarea>
 
             </div>
         </div>';
+        }
 
         if ($Q['type_meta'] != "docu" and $Q['type_meta'] != "them") {
             echo '
@@ -302,11 +315,17 @@ function Edit_Meta_Lang()
         $sel1 = '';
 
         if ($Q['type_uri'] == '+') {
-            if ($Q['obligatoire'] == true) $sel1 = 'selected="selected"';
-            else $sel1 = ' selected';
+            if ($Q['obligatoire'] == true) { 
+                $sel1 = 'selected="selected"';
+            } else {
+                $sel1 = ' selected';
+            }
         } else {
-            if ($Q['obligatoire'] == true) $sel0 = 'selected="selected"';
-            else $sel0 = ' selected';
+            if ($Q['obligatoire'] == true) {
+                $sel0 = 'selected="selected"';
+            } else {
+                $sel0 = ' selected';
+            }
         }
 
         echo '
@@ -362,8 +381,9 @@ function Creat_Meta_Lang()
     <h3>' . adm_translate("Créer un nouveau") . ' META-MOT : <small>de type ' . $type_meta . '</small></h3>
     <form id="metalangcreat" name="creat_meta_lang" action="admin.php" method="post">';
 
-    if (!$type_meta)
+    if (!$type_meta) {
         echo adm_translate("Veuillez choisir un type de META-MOT") . ' ';
+    }
 
     echo list_meta_type($type_meta);
 
@@ -379,36 +399,39 @@ function Creat_Meta_Lang()
 
         if ($type_meta != "smil") {
             echo '
-        <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="desc">' . adm_translate("Description") . '</label>
-            <div class="col-sm-12">
-                <textarea class="form-control" name="desc" id="desc" rows="7">[fr]...[/fr][en]...[/en]</textarea>
-            </div>
-        </div>';
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-12" for="desc">' . adm_translate("Description") . '</label>
+                <div class="col-sm-12">
+                    <textarea class="form-control" name="desc" id="desc" rows="7">[fr]...[/fr][en]...[/en]</textarea>
+                </div>
+            </div>';
         }
 
         if ($type_meta != "them") {
             echo '
-        <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="content">' . adm_translate("Script") . '</label>
-            <div class="col-sm-12">';
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-12" for="content">' . adm_translate("Script") . '</label>
+                <div class="col-sm-12">';
             
-            if ($type_meta == "smil")
+            if ($type_meta == "smil") {
                 echo '
                 <input class="form-control" type="text" name="content" id="content" maxlength="255" required="required" />
                 <span class="help-block">' . adm_translate("Chemin et nom de l'image du Smiley") . ' Ex. : forum/smilies/pafmur.gif<span class="float-end ms-1" id="countcar_content"></span></span>
                 </div>
             </div>';
-            else
+            } else {
                 echo '
                 <textarea class="form-control" name="content" id="content" rows="20" required="required">';
+            }
 
-            if ($type_meta == "meta") echo "function MM_XYZ (\$arg) {\n   global \$NPDS_Prefix;\n   \$arg = arg_filter(\$arg);\n\n   return(\$content);\n}";
+            if ($type_meta == "meta") {
+                echo "function MM_XYZ (\$arg) {\n   global \$NPDS_Prefix;\n   \$arg = arg_filter(\$arg);\n\n   return(\$content);\n}";
+            }
 
             echo '
-                </textarea>
-            </div>
-        </div>';
+                    </textarea>
+                </div>
+            </div>';
         }
 
         echo '
@@ -459,8 +482,9 @@ function kill_Meta_Lang($nbr, $action)
 
     $i = 0;
     while ($i <= $nbr) {
-        if (!empty($action[$i]))
+        if (!empty($action[$i])) {
             sql_query("DELETE FROM " . $NPDS_Prefix . "metalang WHERE def='" . $action[$i] . "' ");
+        }
         $i++;
     }
 
@@ -508,12 +532,14 @@ function Maj_Bdd_ML($Maj_Bdd_ML, $def, $content, $type_meta, $type_uri, $uri, $d
         if ($Q['def']) {
             meta_exist($Q['def']);
         } else {
-            if ($type_meta == 'smil')
+            if ($type_meta == 'smil') {
                 $content = "\$cmd=MM_img(\"$content\");";
+            }
 
-            if ($def != '')
+            if ($def != '') {
                 sql_query("INSERT INTO " . $NPDS_Prefix . "metalang SET def='" . $def . "', content='$content', type_meta='" . $type_meta . "', type_uri='" . $type_uri . "', uri='" . $uri . "', description='" . $desc . "', obligatoire='0'");
-            
+            }
+
             Header('Location: admin.php?op=Meta-LangAdmin');
         }
     }

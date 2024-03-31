@@ -13,6 +13,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+
+use npds\system\assets\css;
+use npds\system\support\facades\DB;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -27,9 +31,14 @@ admindroits($aid, $f_meta_nom);
 global $language;
 $hlpfile = "manuels/$language/headlines.html";
 
-function HeadlinesAdmin()
+/**
+ * [HeadlinesAdmin description]
+ *
+ * @return  void
+ */
+function HeadlinesAdmin(): void
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
@@ -51,16 +60,16 @@ function HeadlinesAdmin()
         </thead>
         <tbody>';
 
-    $result = sql_query("SELECT hid, sitename, url, headlinesurl, status FROM " . $NPDS_Prefix . "headlines ORDER BY hid");
+    $headlines = DB::table('headlines')->select('hid', 'sitename', 'url', 'headlinesurl', 'status')->orderBy('hid')->get();
 
-    while (list($hid, $sitename, $url, $headlinesurl, $status) = sql_fetch_row($result)) {
+    foreach($headlines as $headline) {
         echo '
             <tr>
-                <td>' . $hid . '</td>
-                <td>' . $sitename . '</td>
-                <td>' . $url . '</td>';
+                <td>' . $headline['hid'] . '</td>
+                <td>' . $headline['sitename'] . '</td>
+                <td>' . $headline['url'] . '</td>';
         
-        if ($status == 1) {
+        if ($headline['status'] == 1) {
             $status = '<span class="text-success">' . adm_translate("Actif(s)") . '</span>';
         } else {
             $status = '<span class="text-danger">' . adm_translate("Inactif(s)") . '</span>';
@@ -69,9 +78,9 @@ function HeadlinesAdmin()
         echo '
                 <td>' . $status . '</td>
                 <td>
-                <a href="admin.php?op=HeadlinesEdit&amp;hid=' . $hid . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
-                <a href="' . $url . '" target="_blank"><i class="fas fa-external-link-alt fa-lg" title="' . adm_translate("Visiter") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
-                <a href="admin.php?op=HeadlinesDel&amp;hid=' . $hid . '&amp;ok=0" class="text-danger"><i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></i></a>
+                <a href="admin.php?op=HeadlinesEdit&amp;hid=' . $headline['hid'] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
+                <a href="' . $headline['url'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg" title="' . adm_translate("Visiter") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
+                <a href="admin.php?op=HeadlinesDel&amp;hid=' . $headline['hid'] . '&amp;ok=0" class="text-danger"><i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></i></a>
                 </td>
             </tr>';
     }
@@ -115,45 +124,51 @@ function HeadlinesAdmin()
         inpandfieldlen("url",320);
         inpandfieldlen("headlinesurl",320);';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
-function HeadlinesEdit($hid)
+/**
+ * [HeadlinesEdit description]
+ *
+ * @param   int   $hid  [$hid description]
+ *
+ * @return  void
+ */
+function HeadlinesEdit(int $hid): void
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
-    $result = sql_query("SELECT sitename, url, headlinesurl, status FROM " . $NPDS_Prefix . "headlines WHERE hid='$hid'");
-    list($xsitename, $url, $headlinesurl, $status) = sql_fetch_row($result);
+    $headline = DB::table('headlines')->select('hid', 'sitename', 'url', 'headlinesurl', 'status')->where('hid', $hid)->first();
 
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Editer paramètres Grand Titre") . '</h3>
     <form id="fed_headline" action="admin.php" method="post">
         <fieldset>
-            <input type="hidden" name="hid" value="' . $hid . '" />
+            <input type="hidden" name="hid" value="' . $headline['hid'] . '" />
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="xsitename">' . adm_translate("Nom du site") . '</label>
                 <div class="col-sm-8">
-                <input class="form-control" type="text" name="xsitename" id="xsitename"  maxlength="30" value="' . $xsitename . '" required="required" />
+                <input class="form-control" type="text" name="xsitename" id="xsitename"  maxlength="30" value="' . $headline['sitename'] . '" required="required" />
                 <span class="help-block text-end"><span id="countcar_xsitename"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="url">' . adm_translate("URL") . '&nbsp;<a href="' . $url . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a></label>
+                <label class="col-form-label col-sm-4" for="url">' . adm_translate("URL") . '&nbsp;<a href="' . $headline['url'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a></label>
                 <div class="col-sm-8">
-                <input class="form-control" type="url" id="url" name="url" maxlength="320" value="' . $url . '" required="required" />
+                <input class="form-control" type="url" id="url" name="url" maxlength="320" value="' . $headline['url'] . '" required="required" />
                 <span class="help-block text-end"><span id="countcar_url"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="headlinesurl">' . adm_translate("URL pour le fichier RDF/XML") . '&nbsp;<a href="' . $headlinesurl . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a></label>
+                <label class="col-form-label col-sm-4" for="headlinesurl">' . adm_translate("URL pour le fichier RDF/XML") . '&nbsp;<a href="' . $headline['headlinesurl'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a></label>
                 <div class="col-sm-8">
-                <input class="form-control" type="url" name="headlinesurl" id="headlinesurl" maxlength="320" value="' . $headlinesurl . '" required="required" />
+                <input class="form-control" type="url" name="headlinesurl" id="headlinesurl" maxlength="320" value="' . $headline['headlinesurl'] . '" required="required" />
                 <span class="help-block text-end"><span id="countcar_headlinesurl"></span></span>
                 </div>
             </div>
@@ -162,8 +177,8 @@ function HeadlinesEdit($hid)
                 <div class="col-sm-8">
                 <select class="form-select" name="status">';
 
-    $sel_a = $status == 1 ? 'selected="selected"' : '';
-    $sel_i = $status == 0 ? 'selected="selected"' : '';
+    $sel_a = $headline['status'] == 1 ? 'selected="selected"' : '';
+    $sel_i = $headline['status'] == 0 ? 'selected="selected"' : '';
 
     echo '
 
@@ -187,33 +202,68 @@ function HeadlinesEdit($hid)
         inpandfieldlen("url",320);
         inpandfieldlen("headlinesurl",320);';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
-function HeadlinesSave($hid, $xsitename, $url, $headlinesurl, $status)
+/**
+ * [HeadlinesSave description]
+ *
+ * @param   int     $hid           [$hid description]
+ * @param   string  $xsitename     [$xsitename description]
+ * @param   string  $url           [$url description]
+ * @param   string  $headlinesurl  [$headlinesurl description]
+ * @param   int     $status        [$status description]
+ *
+ * @return  void
+ */
+function HeadlinesSave(int $hid, string $xsitename, string $url, string $headlinesurl, int $status): void
 {
-    global $NPDS_Prefix;
+    DB::table('headlines')->where('hid', $hid)->update(array(
+        'sitename'      => $xsitename,
+        'url'           => $url,
+        'headlinesurl'  => $headlinesurl,
+        'status'        => $status,
+    ));
+    
+    Header("Location: admin.php?op=HeadlinesAdmin");
+}
 
-    sql_query("UPDATE " . $NPDS_Prefix . "headlines SET sitename='$xsitename', url='$url', headlinesurl='$headlinesurl', status='$status' WHERE hid='$hid'");
+/**
+ * [HeadlinesAdd description]
+ *
+ * @param   string  $xsitename     [$xsitename description]
+ * @param   string  $url           [$url description]
+ * @param   string  $headlinesurl  [$headlinesurl description]
+ * @param   int     $status        [$status description]
+ *
+ * @return  void
+ */
+function HeadlinesAdd(string $xsitename, string $url, string $headlinesurl, int $status): void
+{
+    DB::table('headlines')->insert(array(
+        'sitename'      => $xsitename,
+        'url'           => $url,
+        'headlinesurl'  => $headlinesurl,
+        'status'        => $status,
+    ));
 
     Header("Location: admin.php?op=HeadlinesAdmin");
 }
 
-function HeadlinesAdd($xsitename, $url, $headlinesurl, $status)
+/**
+ * [HeadlinesDel description]
+ *
+ * @param   int   $hid  [$hid description]
+ * @param   int   $ok   [$ok description]
+ *
+ * @return  void
+ */
+function HeadlinesDel(int $hid, int $ok = 0): void
 {
-    global $NPDS_Prefix;
-
-    sql_query("INSERT INTO " . $NPDS_Prefix . "headlines VALUES (NULL, '$xsitename', '$url', '$headlinesurl', '$status')");
-
-    Header("Location: admin.php?op=HeadlinesAdmin");
-}
-
-function HeadlinesDel($hid, $ok = 0)
-{
-    global $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre, $adminimg;
 
     if ($ok == 1) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "headlines WHERE hid='$hid'");
+        DB::table('headlines')->where('hid', $hid)->delete();
 
         Header("Location: admin.php?op=HeadlinesAdmin");
     } else {

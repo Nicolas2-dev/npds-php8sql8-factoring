@@ -12,13 +12,17 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-if (!function_exists('admindroits'))
+if (!function_exists('admindroits')) {
     include('die.php');
+}
+
 $f_meta_nom = 'reviews';
 $f_titre = adm_translate("Critiques");
+
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
+
 global $language;
 $hlpfile = "manuels/$language/reviews.html";
 
@@ -28,16 +32,21 @@ function mod_main($title, $description)
 
     $title = stripslashes(FixQuotes($title));
     $description = stripslashes(FixQuotes($description));
+
     sql_query("UPDATE " . $NPDS_Prefix . "reviews_main SET title='$title', description='$description'");
+
     Header("Location: admin.php?op=reviews");
 }
 
 function reviews()
 {
     global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
     include("themes/default/header.php");
+
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
+
     $resultrm = sql_query("SELECT title, description FROM " . $NPDS_Prefix . "reviews_main");
     list($title, $description) = sql_fetch_row($resultrm);
 
@@ -68,15 +77,20 @@ function reviews()
         </fieldset>
     </form>
     <hr />';
+
     $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "reviews_add ORDER BY id");
     $numrows = sql_num_rows($result);
+
     echo '<h3>' . adm_translate("Critiques en attente de validation") . '<span class="badge bg-danger float-end">' . $numrows . '</span></h3>';
+
     $jsfvc = '';
     $jsfvf = '';
+
     if ($numrows > 0) {
         while (list($id, $date, $title, $text, $reviewer, $email, $score, $url, $url_title) = sql_fetch_row($result)) {
             $title = stripslashes($title);
             $text = stripslashes($text);
+            
             echo '
     <h4 class="my-3">' . adm_translate("Ajouter la critique N° : ") . ' ' . $id . '</h4>
     <form id="reviewsaddcr' . $id . '" action="admin.php" method="post">
@@ -123,6 +137,7 @@ function reviews()
                 <input class="form-control" type="number" id="score' . $id . '" name="score" value="' . $score . '"  min="1" max="10" />
             </div>
         </div>';
+
             if ($url != '') {
                 echo '
         <div class="mb-3 row">
@@ -140,6 +155,7 @@ function reviews()
             </div>
         </div>';
             }
+
             echo '
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="cover' . $id . '">' . adm_translate("Image de garde") . '</label>
@@ -156,6 +172,7 @@ function reviews()
             </div>
         </div>
     </form>';
+
             $jsfvf .= ',"reviewsaddcr' . $id . '"';
             $jsfvc .= '
             inpandfieldlen("title' . $id . '",40);
@@ -165,9 +182,11 @@ function reviews()
             inpandfieldlen("url_title' . $id . '",50);
             inpandfieldlen("cover' . $id . '",100);';
         }
+
         $arg1 = '
             var formulid = ["reviewspagecfg"' . $jsfvf . '];
             inpandfieldlen("tit_cri",100);' . $jsfvc;
+
 
         echo '
     <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
@@ -188,10 +207,12 @@ function reviews()
     } else {
         echo '
         <div class="alert alert-success my-3">' . adm_translate("Aucune critique à ajouter") . '</div>';
+
         $arg1 = '
         var formulid = ["reviewspagecfg"];
         inpandfieldlen("tit_cri",100);';
     }
+
     echo '
     <hr />
     <p><a href="reviews.php?op=write_review" >' . adm_translate("Cliquer ici pour proposer une Critique.") . '</a></p>
@@ -202,6 +223,7 @@ function reviews()
     </div>';
 
     sql_free_result($result);
+
     adminfoot('fv', '', $arg1, '');
 }
 
@@ -213,8 +235,11 @@ function add_review($id, $date, $title, $text, $reviewer, $email, $score, $cover
     $text = stripslashes(FixQuotes($text));
     $reviewer = stripslashes(FixQuotes($reviewer));
     $email = stripslashes(FixQuotes($email));
+
     sql_query("INSERT INTO " . $NPDS_Prefix . "reviews VALUES (NULL, '$date', '$title', '$text', '$reviewer', '$email', '$score', '$cover', '$url', '$url_title', '1')");
+    
     sql_query("DELETE FROM " . $NPDS_Prefix . "reviews_add WHERE id = '$id'");
+
     Header("Location: admin.php?op=reviews");
 }
 
@@ -222,9 +247,11 @@ switch ($op) {
     case 'reviews':
         reviews();
         break;
+
     case 'add_review':
         add_review($id, $date, $title, $text, $reviewer, $email, $score, $cover, $url, $url_title);
         break;
+        
     case 'mod_main':
         mod_main($title, $description);
         break;

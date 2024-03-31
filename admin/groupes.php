@@ -487,7 +487,7 @@ function membre_add_finish(int $groupe_id, string $luname): void
                 }
 
                 DB::table('users_status')->where('uid', $ibid['uid'])->update(array(
-                    'groupe'       => $$groupesmodif,
+                    'groupe'       => $groupesmodif,
                 ));
             }
 
@@ -628,11 +628,11 @@ function retiredugroupe_all(int $groupe_id, string $tab_groupe): void
 /**
  * [groupe_edit description]
  *
- * @param   int   $groupe_id  [$groupe_id description]
+ * @param   string   $groupe_id  [$groupe_id description]
  *
  * @return  void
  */
-function groupe_edit(int $groupe_id): void
+function groupe_edit(string $groupe_id): void
 {
     global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
