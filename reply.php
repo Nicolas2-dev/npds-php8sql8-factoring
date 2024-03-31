@@ -17,10 +17,9 @@
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
-
-include('functions.php');
+}
 
 $cache_obj = $SuperCache ? new cacheManager() : new SuperCacheEmpty();
 

@@ -28,7 +28,6 @@ global $language, $adminimg, $admf_ext;
 $hlpfile = "manuels/$language/forumcat.html";
 
 include("auth.php");
-include("functions.php");
 
 function ForumAdmin()
 {

@@ -438,8 +438,6 @@ function membre_add(int $gp): void
  */
 function membre_add_finish(int $groupe_id, string $luname): void
 {
-    include('powerpack_f.php');
-
     $image = '18.png';
 
     $groupes = DB::table('groupes')->select('groupe_name')->where('groupe_id', $groupe_id)->first();
@@ -512,8 +510,6 @@ function membre_add_finish(int $groupe_id, string $luname): void
  */
 function retiredugroupe(int $groupe_id, int $uid, string $uname): void
 {
-    include('powerpack_f.php');
-
     $image = '18.png';
 
     $gn = DB::table('groupes')->select('groupe_name')->where('groupe_id', $groupe_id)->first();
@@ -1273,8 +1269,7 @@ function groupe_member_ask(): void
     $directory = "storage/users_private/groupe";
     
     if (isset($sub_op)) {
-        include_once('powerpack_f.php');
-
+        
         $user = DB::table('users')->select('uname')->where('uid', $user_asked)->first();
         $uname = $user['uname'];
 

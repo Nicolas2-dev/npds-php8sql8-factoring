@@ -21,8 +21,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-include("powerpack_f.php");
-
 global $powerpack;
 $powerpack = true;
 

@@ -32,8 +32,9 @@ function mapsections()
     if (sql_num_rows($result) > 0) {
         while (list($rubid, $rubname) = sql_fetch_row($result)) {
             
-            if ($rubname != ''){
-                $tmp .= '<li>' . language::aff_langue($rubname);}
+            if ($rubname != '') {
+                $tmp .= '<li>' . language::aff_langue($rubname);
+            }
             
             $result2 = sql_query("SELECT secid, secname, image, userlevel, intro FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' AND (userlevel='0' OR userlevel='') ORDER BY ordre");
             

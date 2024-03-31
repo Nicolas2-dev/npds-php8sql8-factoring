@@ -307,4 +307,51 @@ class spam
             return false;
         }
     }
+
+    /**
+     * [spam_logs description]
+     *
+     * @return  void
+     */
+    public static function spam_logs(): void
+    {
+        // First of all : Spam from IP / |5 indicate that the same IP has passed 6 times with status KO in the anti_spambot function
+        if (file_exists("storage/logs/spam.log")) {
+            $tab_spam = str_replace("\r\n", "", file("storage/logs/spam.log"));
+        }
+
+        if (is_array($tab_spam)) {
+            $ipadr = urldecode(getip());
+            $ipv = strstr($ipadr, ':') ? '6' : '4';
+            
+            if (in_array($ipadr . "|5", $tab_spam)) {
+                access_denied();
+            }
+            
+                //=> nous pouvons bannir une plage d'adresse ip en V4 (dans l'admin IPban sous forme x.x.%|5 ou x.x.x.%|5)
+            if ($ipv == '4') {
+                $ip4detail = explode('.', $ipadr);
+                if (in_array($ip4detail[0] . '.' . $ip4detail[1] . '.%|5', $tab_spam)) {
+                    access_denied();
+                }
+
+                if (in_array($ip4detail[0] . '.' . $ip4detail[1] . '.' . $ip4detail[2] . '.%|5', $tab_spam)) {
+                    access_denied();
+                }
+            }
+
+            //=> nous pouvons bannir une plage d'adresse ip en V6 (dans l'admin IPban sous forme x:x:%|5 ou x:x:x:%|5)
+            if ($ipv == '6') {
+                $ip6detail = explode(':', $ipadr);
+                if (in_array($ip6detail[0] . ':' . $ip6detail[1] . ':%|5', $tab_spam)) {
+                    access_denied();
+                }
+
+                if (in_array($ip6detail[0] . ':' . $ip6detail[1] . ':' . $ip6detail[2] . ':%|5', $tab_spam)) {
+                    access_denied();
+                }
+            }
+        }
+    }
+
 }

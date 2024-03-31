@@ -1,6 +1,7 @@
 <?php
 
 use npds\system\assets\js;
+use npds\system\chat\chat;
 use npds\system\date\date;
 use npds\system\logs\logs;
 use npds\system\news\news;
@@ -11,6 +12,7 @@ use npds\system\assets\java;
 use npds\system\auth\groupe;
 use npds\system\block\block;
 use npds\system\cache\cache;
+use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\support\str;
 use npds\system\theme\theme;
@@ -31,9 +33,11 @@ use npds\system\session\session;
 use npds\system\support\counter;
 use npds\system\support\editeur;
 use npds\system\support\referer;
+use npds\system\security\protect;
 use npds\system\support\download;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\messenger\messenger;
 use npds\system\subscribe\subscribe;
 
 // function provisoire
@@ -151,6 +155,11 @@ function secur_static($sec_type)
 function autorisation($auto)
 {
     return users::autorisation($auto);
+}
+
+function member_menu($mns, $qui)
+{
+    return users::member_menu($mns, $qui);
 }
 
 
@@ -374,6 +383,17 @@ function convertdateTOtimestamp($myrow)
     return date::convertdateTOtimestamp($myrow);
 }
 
+function post_convertdate($tmst)
+{
+    return date::post_convertdate($tmst);
+}
+
+function convertdate($myrow)
+{
+    return date::convertdate($myrow);
+}
+
+
 // http
 
 // response.php
@@ -528,6 +548,21 @@ function Mess_Check_Mail_Sub($username, $class)
     return mailler::Mess_Check_Mail_Sub($username, $class);
 }
 
+function checkdnsmail($email)
+{
+    return mailler::checkdnsmail($email);
+}
+
+function isbadmailuser($utilisateur)
+{
+    return mailler::isbadmailuser($utilisateur);
+}
+
+function fakedmail($r)
+{
+    return mailler::fakedmail($r);
+}
+
 
 // news
 
@@ -595,6 +630,13 @@ function redirect_url($urlx)
 function removeHack($Xstring)
 {
     return hack::removeHack($Xstring);
+}
+
+// protect.php
+
+function url_protect($arr, $key) 
+{
+    return protect::url($arr, $key);
 }
 
 
@@ -676,6 +718,11 @@ function Site_Load()
     return online::Site_Load();
 }
 
+function online_members()
+{
+    return online::online_members();  
+}
+
 
 // polls.php
 
@@ -752,6 +799,11 @@ function FixQuotes($what)
 {
     return str::FixQuotes($what);
 }
+
+function addslashes_GPC(&$arr) {
+    return str::addslashes_GPC($arr);
+}
+
 
 // .php
 
@@ -875,6 +927,189 @@ function dd() {
     }, func_get_args());
     die();
 }
+
+// chat
+
+function if_chat($pour) {
+   return  chat::if_chat($pour);
+}
+
+function insertChat($username, $message, $dbname, $id) {
+   return  chat::insertChat($username, $message, $dbname, $id);
+}
+
+function makeChatBox($pour) {
+   return  chat::makeChatBox($pour);
+}
+
+// messenger
+
+function Form_instant_message($to_userid) {
+   return  messenger::Form_instant_message($to_userid);
+}
+
+function writeDB_private_message($to_userid, $image, $subject, $from_userid, $message, $copie) {
+   return  messenger::writeDB_private_message($to_userid, $image, $subject, $from_userid, $message, $copie);
+}
+
+function write_short_private_message($to_userid) {
+   return  messenger::write_short_private_message($to_userid);
+}
+
+function instant_members_message() {
+   return  messenger::instant_members_message();
+}
+
+
+// forum
+
+
+function RecentForumPosts($title, $maxforums, $maxtopics, $displayposter = false, $topicmaxchars = 15, $hr = false, $decoration = '') {
+   return forum::RecentForumPosts($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
+}
+
+function RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration) {
+   return forum::RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
+}
+
+function get_total_topics($forum_id) 
+{
+   return forum::get_total_topics($forum_id);
+}
+
+function get_contributeurs($fid, $tid) {
+    return forum::get_contributeurs($fid, $tid);
+}
+
+function get_total_posts($fid, $tid, $type, $Mmod) 
+{
+    return forum::get_total_posts($fid, $tid, $type, $Mmod);
+}
+
+function get_last_post($id, $type, $cmd, $Mmod) 
+{
+    return forum::get_last_post($id, $type, $cmd, $Mmod);
+}
+
+function get_moderator($user_id) 
+{
+    return forum::get_moderator($user_id);
+}
+
+function user_is_moderator($uidX, $passwordX, $forum_accessX) 
+{
+    return forum::user_is_moderator($uidX, $passwordX, $forum_accessX);
+}
+ 
+function get_userdata_from_id($userid) 
+{
+    return forum::get_userdata_from_id($userid);
+}
+ 
+function get_userdata_extend_from_id($userid) 
+{
+    return forum::get_userdata_extend_from_id($userid);
+}
+ 
+function get_userdata($username) 
+{
+    return forum::get_userdata($username);
+ }
+ 
+function  does_exists($id, $type)
+{
+    return forum::does_exists($id, $type);
+}
+
+function is_locked($topic) 
+{
+    return forum::is_locked($topic);
+}
+ 
+function smilie($message) 
+{
+    return forum::smilie($message);
+}
+ 
+function smile($message) 
+{
+    return forum::smile($message);
+}
+ 
+function aff_video_yt($ibid) 
+{
+    return forum::aff_video_yt($ibid);
+}
+ 
+function putitems_more() 
+{
+    return forum::putitems_more();
+}
+
+function putitems($targetarea) 
+{
+    return forum::putitems($targetarea);
+}
+ 
+function HTML_Add() 
+{
+    return forum::HTML_Add();
+}
+ 
+function emotion_add($image_subject) 
+{
+    return forum::emotion_add($image_subject);
+}
+ 
+function make_clickable($text) 
+{
+    return forum::make_clickable($text);
+}
+ 
+function undo_htmlspecialchars($input) 
+{
+    return forum::undo_htmlspecialchars($input);
+}
+
+function searchblock() {
+    return forum::searchblock();
+}
+ 
+function member_qualif($poster, $posts, $rank) 
+{
+    return forum::member_qualif($poster, $posts, $rank);
+}
+ 
+function forumerror($e_code) 
+{
+    return forum::forumerror($e_code);
+}
+ 
+function control_efface_post($apli, $post_id, $topic_id, $IdForum) 
+{
+    return forum::control_efface_post($apli, $post_id, $topic_id, $IdForum);
+}
+ 
+function autorize() 
+{
+    return forum::autorize();
+}
+
+function anti_flood($modoX, $paramAFX, $poster_ipX, $userdataX, $gmtX) 
+{
+    return forum::anti_flood($modoX, $paramAFX, $poster_ipX, $userdataX, $gmtX);
+}
+ 
+function forum($rowQ1) 
+{
+    return forum::forum($rowQ1);
+}
+ 
+function sub_forum_folder($forum) 
+{
+    return forum::sub_forum_folder($forum);
+}
+
 
 // .php
 

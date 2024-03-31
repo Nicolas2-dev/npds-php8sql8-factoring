@@ -205,8 +205,6 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
             echo '<div class="alert alert-danger">' . translate("Email non valide (ex.: prenom.nom@hotmail.com)") . '</div>';
         }
 
-        include_once('functions.php');
-
         if (checkdnsmail($email) === false) {
             $error = 1;
             echo '<div class="alert alert-danger">' . translate("Erreur : DNS ou serveur de mail incorrect") . '</div>';

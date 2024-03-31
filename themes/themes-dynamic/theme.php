@@ -252,7 +252,7 @@ function userpopover($who, $dim, $avpop)
 {
     global $short_user, $user, $NPDS_Prefix;
     $result = sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uname ='$who'");
-    include_once('functions.php');
+
     if (sql_num_rows($result)) {
         $temp_user = get_userdata($who);
         $socialnetworks = array();

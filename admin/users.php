@@ -282,8 +282,6 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
         $tmp = 1;
     }
 
-    include_once('functions.php');
-
     if (checkdnsmail($chng_email) === false) {
         global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
         
@@ -450,7 +448,6 @@ function checkdnsmailusers()
     global $hlpfile, $admf_ext, $f_meta_nom, $f_titre, $adminimg, $NPDS_Prefix, $gmt, $adminmail, $page, $end, $autocont;
 
     include("themes/default/header.php");
-    include_once('functions.php');
 
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
@@ -835,8 +832,6 @@ switch ($op) {
             adminfoot('', '', '', '');
             return;
         }
-
-        include_once('functions.php');
 
         if (checkdnsmail($add_email) === false) {
             global $hlpfile, $f_meta_nom, $f_titre, $adminimg;

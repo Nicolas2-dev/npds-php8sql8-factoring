@@ -69,4 +69,34 @@ class date
 
         return mktime((int) $hour, (int) $mns, (int) $sec, (int) $month, (int) $day, (int) $year);
     }
+
+    /**
+     * [post_convertdate description]
+     *
+     * @param   int     $tmst  [$tmst description]
+     *
+     * @return  string
+     */
+    public static function post_convertdate(int $tmst): string 
+    {
+        $val = $tmst > 0 ? date(translate("dateinternal"), $tmst) : '';
+    
+        return $val;
+    }
+    
+    /**
+     * [convertdate description]
+     *
+     * @param   string  $myrow  [$myrow description]
+     *
+     * @return  string
+     */
+    public static function convertdate(string $myrow): string
+    {
+        $tmst = static::convertdateTOtimestamp($myrow);
+        $val = static::post_convertdate($tmst);
+    
+        return $val;
+    }
+
 }

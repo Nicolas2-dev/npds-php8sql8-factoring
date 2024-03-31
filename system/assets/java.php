@@ -8,7 +8,7 @@ class java
 {
  
     /**
-     * provenance de cette function powerpack_f.php
+     * 
      *
      * @param   string  $F  [$F description]
      * @param   string  $T  [$T description]

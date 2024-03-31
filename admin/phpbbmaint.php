@@ -28,7 +28,6 @@ global $language, $adminimg, $admf_ext;
 $hlpfile = "manuels/$language/forummaint.html";
 
 include("auth.php");
-include("functions.php");
 
 function ForumMaintMarkTopics()
 {

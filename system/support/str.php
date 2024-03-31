@@ -188,4 +188,17 @@ class str
 
         return $what;
     }
+
+    /**
+     * [addslashes_GPC description]
+     *
+     * @param   string  $arr  [$arr description]
+     *
+     * @return  void
+     */
+    public static function addslashes_GPC(string &$arr): void
+    {
+        $arr = addslashes($arr);
+    }
+
 }

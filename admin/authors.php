@@ -495,9 +495,7 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
     if (!($chng_aid && $chng_name && $chng_email)) {
         Header("Location: admin.php?op=mod_authors");
     }
-    
-    include_once('functions.php');
-    
+
     if (checkdnsmail($chng_email) === false) {
         global $hlpfile;
         include("themes/default/header.php");
@@ -669,8 +667,6 @@ switch ($op) {
             include("themes/default/footer.php");
             return;
         }
-
-        include_once('functions.php');
 
         if (checkdnsmail($add_email) === false) {
             global $hlpfile;

@@ -73,8 +73,6 @@ function userCheck($uname, $email)
 {
     global $NPDS_Prefix;
 
-    include_once('functions.php');
-
     $stop = '';
     if ((!$email) || ($email == '') || (!preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $email))) {
         $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Erreur : Email invalide");
@@ -465,8 +463,6 @@ function userinfo($uname)
     global $cookie;
 
     include("themes/default/header.php");
-
-    include_once("functions.php");
 
     $email = hack::removeHack($femail);
     $name = stripslashes(hack::removeHack($name));
@@ -1219,7 +1215,6 @@ function edituser()
     global $NPDS_Prefix, $user, $smilies, $short_user, $subscribe, $member_invisible, $avatar_size;
 
     include("themes/default/header.php");
-    include_once('functions.php');
 
     $userinfo = getusrinfo($user);
 
@@ -1396,7 +1391,6 @@ function edithome()
     global $user, $Default_Theme, $Default_Skin;
 
     include("themes/default/header.php");
-    include_once('functions.php');
 
     $userinfo = getusrinfo($user);
     member_menu($userinfo['mns'], $userinfo['uname']);
@@ -1501,7 +1495,6 @@ function chgtheme()
     global $user;
 
     include("themes/default/header.php");
-    include_once('functions.php');
 
     $userinfo = getusrinfo($user);
     $ibid = explode('+', $userinfo['theme']);
@@ -1652,7 +1645,6 @@ function editjournal()
     global $user;
 
     include("themes/default/header.php");
-    include_once('functions.php');
 
     $userinfo = getusrinfo($user);
     member_menu($userinfo['mns'], $userinfo['uname']);

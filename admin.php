@@ -656,7 +656,6 @@ function adminMain($deja_affiches)
     $hlpfile = "manuels/$language/admin.html";
 
     include("themes/default/header.php");
-    include_once('functions.php');
 
     global $short_menu_admin;
 

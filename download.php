@@ -26,8 +26,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-include('functions.php');
-
 function geninfo($did, $out_template)
 {
     global $sitename, $NPDS_Prefix;

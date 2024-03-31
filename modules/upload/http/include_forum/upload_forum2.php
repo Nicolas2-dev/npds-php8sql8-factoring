@@ -19,7 +19,7 @@ global $Titlesitename;
 /*****************************************************/
 $forum = $IdForum;
 include_once("auth.php");
-include_once("functions.php");
+
 include_once("modules/upload/language/$language/language.php");
 include_once("modules/upload/http/include_forum/upload.conf.forum.php");
 include_once("modules/upload/http/include_forum/upload.func.forum.php");

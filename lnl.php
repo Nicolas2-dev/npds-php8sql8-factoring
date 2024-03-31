@@ -27,8 +27,6 @@ function SuserCheck($email)
 {
     global $NPDS_Prefix, $stop;
 
-    include_once('functions.php');
-
     $stop = '';
 
     if ((!$email) || ($email == '') || (!preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $email))) {

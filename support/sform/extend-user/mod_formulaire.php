@@ -36,7 +36,7 @@ $m->add_field('url', translate("Votre page Web"), $userinfo['url'], 'url', false
 $m->add_extender('url', '', '<span class="help-block"><span class="float-end" id="countcar_url"></span></span>');
 
 // ---- SUBSCRIBE and INVISIBLE
-include_once('functions.php');
+
 if ($subscribe)
     if (isbadmailuser($userinfo['uid']) === false) { //proto
         if ($userinfo['send_email'] == 1) $checked = true;

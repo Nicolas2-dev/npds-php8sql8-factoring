@@ -3,7 +3,6 @@
    $ava='';$cha='';$bal='';$menuser='';
 
    if ($user) {
-      include_once("functions.php");
       $userdata = get_userdata_from_id($cookie[0]);
       $username = $cookie[1];
       $ibix=explode('+', urldecode($cookie[9]));

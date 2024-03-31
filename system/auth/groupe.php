@@ -172,7 +172,6 @@ class groupe
             $my_rs = '';
 
             if (!$short_user) {
-                include_once('functions.php');
 
                 $posterdata_extend = get_userdata_extend_from_id($uid);
 

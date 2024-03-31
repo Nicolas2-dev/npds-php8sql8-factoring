@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\mail;
 
 use npds\system\theme\theme;
+use npds\system\utility\spam;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MaillerExecption;
@@ -278,4 +279,61 @@ class mailler
 
         return ("$Mel : $YNmail / $Ymail");
     }
+
+    /**
+     * Contrôle si le domaine existe et si il dispose d'un serveur de mail
+     *
+     * @param   string  $email  [$email description]
+     *
+     * @return  bool
+     */
+    public static function checkdnsmail(string $email): bool 
+    {
+        $ibid = explode('@', $email);
+
+        if (!checkdnsrr($ibid[1], 'MX')) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * utilisateur dans le fichier des mails incorrect true or false 
+     *
+     * @param   string  $utilisateur  [$utilisateur description]
+     *
+     * @return  bool
+     */
+    public static function isbadmailuser(string $utilisateur): bool
+    {
+        $contents = '';
+        $filename = "storage/users_private/usersbadmail.txt";
+        $handle = fopen($filename, "r");
+
+        if (filesize($filename) > 0) {
+            $contents = fread($handle, filesize($filename));
+        }
+
+        fclose($handle);
+
+        if (strstr($contents, '#' . $utilisateur . '|')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * [fakedmail description]
+     *
+     * @param   array   $r  [$r description]
+     *
+     * @return  string
+     */
+    public static function fakedmail(array $r): string
+    {
+        return spam::preg_anti_spam($r[1]);
+    }
+
 }

@@ -16,7 +16,6 @@
 if (!function_exists("Mysql_Connexion"))
     die();
 
-include('functions.php');
 include('auth.php');
 
 filtre_module($file_name);

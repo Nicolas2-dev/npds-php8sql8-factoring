@@ -75,4 +75,32 @@ class online
 
         return array($member_online_num, $guest_online_num);
     }
+
+    /**
+     * liste des membres connectés
+     * Retourne un tableau dont la position 0 est le nombre, puis la liste des username | time 
+     * Appel : $xx=online_members(); puis $xx[x]['username'] $xx[x]['time'] ...
+     *
+     * @return  array
+     */
+    public static function online_members(): array
+    {
+        global $NPDS_Prefix;
+
+        $result = sql_query("SELECT username, guest, time FROM " . $NPDS_Prefix . "session WHERE guest='0' ORDER BY username ASC");
+        $i = 0;
+        $members_online[$i] = sql_num_rows($result);
+
+        while ($session = sql_fetch_assoc($result)) {
+            if (isset($session['guest']) and $session['guest'] == 0) {
+                $i++;
+                $members_online[$i]['username'] = $session['username'];
+                $members_online[$i]['time'] = $session['time'];
+            }
+        }
+
+        return $members_online;
+    }
+
+
 }

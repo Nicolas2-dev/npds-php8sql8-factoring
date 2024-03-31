@@ -15,7 +15,7 @@
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
     die();
-include_once('functions.php');
+
 include_once('auth.php');
 
 settype($forum, 'integer');

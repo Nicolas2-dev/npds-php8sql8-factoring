@@ -21,7 +21,7 @@ if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'scri
 
 if (!function_exists("Mysql_Connexion"))
     include('boot/bootstrap.php');
-include('functions.php');
+
 if (!$user) header('location:index.php');
 
 global $cookie, $language;

@@ -21,8 +21,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-include("functions.php");
-
 settype($gr_name, 'string');
 settype($new_pages, 'string');
 

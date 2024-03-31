@@ -20,8 +20,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-include("functions.php");
-
 if (isset($user)) {
     if ($cookie[9] == '') {
         $cookie[9] = $Default_Theme;

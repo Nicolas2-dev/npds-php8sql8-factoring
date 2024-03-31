@@ -25,7 +25,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-include("functions.php");
 include("auth.php");
 
 $f_meta_nom = 'abla';

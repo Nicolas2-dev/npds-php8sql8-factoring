@@ -27,12 +27,6 @@ if ($id === '' || unserialize(crypt::decrypt($auto)) != $id) {
     die();
 }
 
-if (!function_exists("makeChatBox")) {
-    include("powerpack_f.php");
-}
-
-include("functions.php");
-
 settype($repere, 'integer');
 settype($aff_entetes, 'integer');
 settype($connectes, 'integer');

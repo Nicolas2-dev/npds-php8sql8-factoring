@@ -24,7 +24,7 @@ if (file_exists('IZ-Xinstall.ok')) include('admin/die.php');
 /*
     # Contrôle des fichiers de base de IZ-Xinstall
     */
-if (file_exists('grab_globals.php')) include('grab_globals.php');
+
 if (file_exists('install/libraries/graphIZm.php')) include('install/libraries/graphIZm.php');
 if (file_exists('install/libraries/lib-inc.php')) include('install/libraries/lib-inc.php');
 include('config/config.php');

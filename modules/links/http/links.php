@@ -239,7 +239,7 @@ function FooterOrderBy($cid, $sid, $orderbyTrans, $linkop)
 function viewlink($cid, $min, $orderby, $show)
 {
     global $ModPath, $ModStart, $links_DB, $admin, $perpage;
-    include('functions.php');
+
     include("themes/default/header.php");
     // Include cache manager
     global $SuperCache;
@@ -325,7 +325,6 @@ function viewslink($sid, $min, $orderby, $show)
 {
     global $ModPath, $ModStart, $links_DB, $admin, $perpage;
     include("themes/default/header.php");
-    include_once('functions.php');
 
     // Include cache manager
     global $SuperCache;

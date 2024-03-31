@@ -15,7 +15,7 @@
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
     die();
-include('functions.php');
+
 include('auth.php');
 include('modules/geoloc/http/geoloc_locip.php');
 

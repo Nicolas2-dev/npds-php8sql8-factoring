@@ -1,9 +1,7 @@
 <?php
 
 use npds\system\news\gzfile;
-use npds\system\support\env;
 use npds\system\news\zipfile;
-use npds\system\container\container;
 
 #autodoc get_os() : retourne true si l'OS de la station cliente est Windows sinon false
 function get_os()
@@ -101,6 +99,44 @@ function send_tofile($line, $repertoire, $filename, $extension, $MSos)
         
         echo $line;
     }
+}
+
+function getip()
+{
+    if (isset($_SERVER)) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $realip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $realip = $_SERVER['HTTP_CLIENT_IP'];
+        } else {
+            $realip = $_SERVER['REMOTE_ADDR'];
+        }
+    } else {
+        if (getenv('HTTP_X_FORWARDED_FOR')) {
+            $realip = getenv('HTTP_X_FORWARDED_FOR');
+        } elseif (getenv('HTTP_CLIENT_IP')) {
+            $realip = getenv('HTTP_CLIENT_IP');
+        } else {
+            $realip = getenv('REMOTE_ADDR');
+        }
+    }
+
+    if (strpos($realip, ",") > 0) {
+        $realip = substr($realip, 0, strpos($realip, ",") - 1);
+    }
+
+    // from Gu1ll4um3r0m41n - 08-05-2007 - dev 2012
+    return urlencode(trim($realip));
+}
+
+/**
+ * [access_denied description]
+ *
+ * @return  [type]  [return description]
+ */
+function access_denied()
+{
+    include("admin/die.php");
 }
 
 

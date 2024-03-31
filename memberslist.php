@@ -21,8 +21,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-include('functions.php');
-
 // Make Member_list Private or not
 if (!users::AutoReg()) {
     unset($user);

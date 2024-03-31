@@ -7,16 +7,80 @@ use npds\system\session\session;
 use npds\system\database\Manager;
 use npds\system\language\language;
 use npds\system\language\metalang;
-use npds\system\support\facades\DB;
+use npds\system\support\str;
+use npds\system\utility\spam;
+use npds\system\security\protect;
 use npds\system\exception\ExceptionHandler;
 
 
-    error_reporting(-1);
+require 'vendor/autoload.php';
 
-    ini_set('display_errors', 'Off');
+if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
+    define('NPDS_GRAB_GLOBALS_INCLUDED', 1);
 
-include("grab_globals.php");
+    spam::spam_logs();
 
+    // include current charset
+    if (file_exists("config/constants.php")) {
+        include("config/constants.php");
+    }
+
+    if (file_exists("config/doctype.php")) {
+        include("config/doctype.php");
+    }
+
+    // Get values, slash, filter and extract
+    if (!empty($_GET)) {
+        array_walk_recursive($_GET, [str::class, 'addslashes_GPC']);
+        reset($_GET); // no need
+
+        array_walk_recursive($_GET, [protect::class, 'url']);
+        extract($_GET, EXTR_OVERWRITE);
+    }
+
+    if (!empty($_POST)) {
+        array_walk_recursive($_POST, [str::class, 'addslashes_GPC']);
+        extract($_POST, EXTR_OVERWRITE);
+    }
+
+    // Cookies - analyse et purge - shiney 07-11-2010
+    if (!empty($_COOKIE)) {
+        extract($_COOKIE, EXTR_OVERWRITE);
+    }
+
+    if (isset($user)) {
+        $ibid = explode(':', base64_decode($user));
+        array_walk($ibid, [protect::class, 'url']);
+        $user = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
+    }
+
+    if (isset($user_language)) {
+        $ibid = explode(':', $user_language);
+        array_walk($ibid, [protect::class, 'url']);
+        $user_language = str_replace("%3A", ":", urlencode($user_language));
+    }
+
+    if (isset($admin)) {
+        $ibid = explode(':', base64_decode($admin));
+        array_walk($ibid, [protect::class, 'url']);
+        $admin = base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));
+    }
+
+    // Cookies - analyse et purge - shiney 07-11-2010
+    if (!empty($_SERVER)) {
+        extract($_SERVER, EXTR_OVERWRITE);
+    }
+
+    if (!empty($_ENV)) {
+        extract($_ENV, EXTR_OVERWRITE);
+    }
+
+    if (!empty($_FILES)) {
+        foreach ($_FILES as $key => $value) {
+            $$key = $value['tmp_name'];
+        }
+    }
+}
 
 // Load the configuration files.
 foreach (glob('config/*.php') as $path) {
@@ -42,8 +106,13 @@ foreach (glob('config/*.php') as $path) {
     }  
 }
 
+error_reporting(-1);
+
+ini_set('display_errors', 'Off');
+
 // Initialize the Exceptions Handler.
 ExceptionHandler::initialize(true);
+
 
 // Initialize the Aliases Loader.
 AliasLoader::initialize();
@@ -54,42 +123,6 @@ $db = Manager::getInstance();
 
 $db->connection()->setFetchMode(PDO::FETCH_ASSOC);
 
-
-
-// $users = DB::select('SELECT * FROM users');
-
-// vd($users);
-
-// $query = DB::table('users');
-
-// $users = $query->where('uname', '!=', 'Anonyme')
-//     ->limit(2)
-//     ->orderBy('uname', 'desc')
-//     ->get(array('uid', 'name', 'uname', 'email'));
-
-
-// var_dump($users, $users[0]->uname);
-
-
-// $query = DB::table('users');
-
-// $user = $query->find(2);
-
-// $query = DB::table('users');
-
-// $users = $query->where('uname', '!=', 'anonyme')
-//     //->limit('2')
-//     //->orderBy('uname', 'desc')
-//     ->get();
-
-// $users = DB::table('users')->select('uid', 'uname', 'email')
-// ->where('uname', '!=', 'admin')
-// ->orderBy('uname', 'desc')
-// ->limit(2)
-// ->get();
-
-
-// vd($users);
 
 include("config/config.php");
 include_once('config/cache.config.php');

@@ -25,12 +25,6 @@ if ($id === '' || unserialize(crypt::decrypt($auto)) != $id) {
     die();
 }
 
-if (!function_exists("makeChatBox")) {
-    include("powerpack_f.php");
-}
-
-include("functions.php");
-
 // Savoir si le 'connecté' a le droit à ce chat ?
 // le problème c'est que tous les groupes qui existent on le droit au chat ... donc il faut trouver une solution pour pouvoir l'interdire
 // soit on vient d'un bloc qui par définition autorise en fabricant l'interface
