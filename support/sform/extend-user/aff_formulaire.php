@@ -11,6 +11,10 @@
 /************************************************************************/
 /* Dont modify this file if you dont know what you make                 */
 /************************************************************************/
+
+use npds\system\theme\theme;
+
+
 $m->add_form_field_size(50);
 
 settype($op, 'string');
@@ -19,7 +23,7 @@ if ($op != 'userinfo') {
     global $theme;
     $direktori = "assets/images/forum/avatar";
     if (function_exists("theme_image")) {
-        if (theme_image("forum/avatar/blank.gif"))
+        if (theme::theme_image("forum/avatar/blank.gif"))
             $direktori = "themes/$theme/images/forum/avatar";
     }
     $m->add_extra('<img class="img-thumbnail n-ava mb-2" src="' . $direktori . '/' . $user_avatar . '" align="top" title="" />');

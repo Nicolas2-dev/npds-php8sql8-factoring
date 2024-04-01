@@ -13,7 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\utility\spam;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -37,7 +39,7 @@ if (!$user) {
 
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
-    $userdata = get_userdata($userdata[1]);
+    $userdata = forum::get_userdata($userdata[1]);
 
     settype($start, 'integer');
     settype($type, 'string');
@@ -62,7 +64,7 @@ if (!$user) {
     $resultID = sql_query($sql);
 
     if (!$resultID) {
-        forumerror('0005');
+        forum::forumerror('0005');
     } else {
         $myrow = sql_fetch_assoc($resultID);
         
@@ -71,7 +73,7 @@ if (!$user) {
             $result = sql_query($sql);
             
             if (!$result) {
-                forumerror('0005');
+                forum::forumerror('0005');
             }
         }
     }
@@ -99,9 +101,9 @@ if (!$user) {
             <div class="card-header">';
         
         if ($type == 'outbox') {
-            $posterdata = get_userdata_from_id($myrow['to_userid']);
+            $posterdata = forum::get_userdata_from_id($myrow['to_userid']);
         } else {
-            $posterdata = get_userdata_from_id($myrow['from_userid']);
+            $posterdata = forum::get_userdata_from_id($myrow['from_userid']);
         }
 
         $posts = $posterdata['posts'];
@@ -113,7 +115,7 @@ if (!$user) {
             $my_rs = '';
 
             if (!$short_user) {
-                $posterdata_extend = get_userdata_extend_from_id($posterdata['uid']);
+                $posterdata_extend = forum::get_userdata_extend_from_id($posterdata['uid']);
 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
 
@@ -165,7 +167,7 @@ if (!$user) {
             }
 
             if ($posterdata['femail'] != ''){
-                $useroutils .= '<a class="list-group-item text-primary" href="mailto:' . anti_spam($posterdata['femail'], 1) . '" target="_blank" title="' . translate("Email") . '" data-bs-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ms-3 d-none d-md-inline">' . translate("Email") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="mailto:' . spam::anti_spam($posterdata['femail'], 1) . '" target="_blank" title="' . translate("Email") . '" data-bs-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ms-3 d-none d-md-inline">' . translate("Email") . '</span></a>';
             }
 
             if ($posterdata['url'] != '') {
@@ -191,7 +193,7 @@ if (!$user) {
 
             if ($posterdata['uid'] <> 1) {
                 $aff_reso = isset($my_rsos[0]) ? $my_rsos[0] : '';
-                echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'' . member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '<br /><div class="list-group">' . $useroutils . '</div><hr />' . $aff_reso . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>';
+                echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'' . forum::member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '<br /><div class="list-group">' . $useroutils . '</div><hr />' . $aff_reso . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>';
             } else {
                 echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title=\'<i class="fa fa-cogs fa-lg"></i>\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>';
             }
@@ -236,8 +238,8 @@ if (!$user) {
         $message = stripslashes($myrow['msg_text']);
 
         if ($allow_bbcode) {
-            $message = smilie($message);
-            $message = aff_video_yt($message);
+            $message = forum::smilie($message);
+            $message = forum::aff_video_yt($message);
         }
 
         $message = str_replace('[addsig]', '<br />' . nl2br($posterdata['user_sig']), language::aff_langue($message));

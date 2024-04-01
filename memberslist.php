@@ -12,9 +12,12 @@
 /************************************************************************/
 
 use npds\system\auth\users;
+use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\mail\mailler;
 use npds\system\utility\spam;
 use npds\system\security\hack;
+use npds\system\pagination\paginator;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -346,7 +349,7 @@ if ($letter != 'front') {
             $my_rs = '';
 
             if (!$short_user) {
-                $posterdata_extend = get_userdata_extend_from_id($temp_user['uid']);
+                $posterdata_extend = forum::get_userdata_extend_from_id($temp_user['uid']);
 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 include('modules/geoloc/config/geoloc.conf');
@@ -452,14 +455,14 @@ if ($letter != 'front') {
 
                 if ($sortby != 'user_from ASC') {
                     if ($admin) {
-                        if (isbadmailuser($temp_user['uid']) === true) {
+                        if (mailler::isbadmailuser($temp_user['uid']) === true) {
                             echo '<td class="table-danger"><small>' . $temp_user['email'] . '</small></td>';
                         } else {
-                            echo '<td><small>' . preg_anti_spam($temp_user['email']) . '</small></td>';
+                            echo '<td><small>' . spam::preg_anti_spam($temp_user['email']) . '</small></td>';
                         }
                     } else {
                         if ($temp_user['user_viewemail']) {
-                            echo '<td><small>' . preg_anti_spam($temp_user['email']) . '</small></td>';
+                            echo '<td><small>' . spam::preg_anti_spam($temp_user['email']) . '</small></td>';
                         } else {
                             echo '<td><small>' . substr($temp_user['femail'], 0, strpos($temp_user['femail'], "@")) . '</small></td>';
                         }
@@ -543,7 +546,7 @@ if ($letter != 'front') {
             $current = $nbPages;
         }
 
-        echo paginate_single('memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '&amp;page=', '', $nbPages, $current, $adj = 3, '', '');
+        echo paginator::paginate_single('memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '&amp;page=', '', $nbPages, $current, $adj = 3, '', '');
     } else {
         echo '<div class="mt-3 lead align-middle"><span class="badge bg-secondary lead">' . $num_rows_per_order . '</span> ' . translate("Utilisateurs trouvés") . '</div>';
     }

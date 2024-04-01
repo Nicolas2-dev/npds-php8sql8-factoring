@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\mail;
 
+use npds\system\logs\logs;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
 use PHPMailer\PHPMailer\SMTP;
@@ -154,7 +155,7 @@ class mailler
                 
                 $result = true;
             } catch (MaillerExecption $e) {
-                Ecr_Log('smtpmail', "send Smtp mail by $email", "Message could not be sent. Mailer Error: $mail->ErrorInfo");
+                logs::Ecr_Log('smtpmail', "send Smtp mail by $email", "Message could not be sent. Mailer Error: $mail->ErrorInfo");
                 $result = false;
             }
         }

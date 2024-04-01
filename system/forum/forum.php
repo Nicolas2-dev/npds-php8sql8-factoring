@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace npds\system\forum;
 
+use npds\system\date\date;
+use npds\system\logs\logs;
+use npds\system\auth\groupe;
+use npds\system\cache\cache;
+use npds\system\theme\theme;
+use npds\system\mail\mailler;
+use npds\system\language\language;
+use npds\system\language\metalang;
+
 class forum
 {
 
@@ -46,8 +55,8 @@ class forum
         while ($row = sql_fetch_row($result)) {
             if (($row[6] == "5") or ($row[6] == "7")) {
                 $ok_affich = false;
-                $tab_groupe = valid_group($user);
-                $ok_affich = groupe_forum($row[7], $tab_groupe);
+                $tab_groupe = groupe::valid_group($user);
+                $ok_affich = groupe::groupe_forum($row[7], $tab_groupe);
             } else {
                 $ok_affich = true;
             }
@@ -97,7 +106,7 @@ class forum
 
                     if ($displayposter) {
                         $posterid = $topicrow[2];
-                        $RowQ1 = Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid = '$posterid'", 3600);
+                        $RowQ1 = cache::Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid = '$posterid'", 3600);
                         $myrow = $RowQ1[0];
                         $postername = $myrow['uname'];
                     }
@@ -152,7 +161,7 @@ class forum
     {
         global $NPDS_Prefix;
     
-        $rowQ1 = Q_Select("SELECT DISTINCT poster_id FROM " . $NPDS_Prefix . "posts WHERE topic_id='$tid' AND forum_id='$fid'", 2);
+        $rowQ1 = cache::Q_Select("SELECT DISTINCT poster_id FROM " . $NPDS_Prefix . "posts WHERE topic_id='$tid' AND forum_id='$fid'", 2);
     
         $posterids = '';
         foreach ($rowQ1 as $contribs) {
@@ -180,7 +189,7 @@ class forum
                 break;
     
             case 'user':
-                forumerror('0031');
+                static::forumerror('0031');
         }
     
         if (!$result = sql_query($sql)) {
@@ -221,8 +230,8 @@ class forum
             if (!$myrow = sql_fetch_row($result)) { 
                 $val = translate("Rien");
             } else {
-                $rowQ1 = Q_Select($sql2 . "'" . $myrow[1] . "'", 3600);
-                $val = convertdate($myrow[0]);
+                $rowQ1 = cache::Q_Select($sql2 . "'" . $myrow[1] . "'", 3600);
+                $val = date::convertdate($myrow[0]);
                 $val .= $rowQ1 ? ' ' . userpopover($rowQ1[0]['uname'], 40, 2) : '';
             }
         }
@@ -241,7 +250,7 @@ class forum
             return ("None");
         }
     
-        $rowQ1 = Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid='$user_id'", 3600);
+        $rowQ1 = cache::Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid='$user_id'", 3600);
         $modslist = '';
     
         foreach ($rowQ1 as $modnames) {
@@ -280,7 +289,7 @@ class forum
         $sql2 = "SELECT * FROM " . $NPDS_Prefix . "users_status WHERE uid='$userid'";
     
         if (!$result = sql_query($sql1)) {
-            forumerror('0016');
+            static::forumerror('0016');
         }
     
         if (!$myrow = sql_fetch_assoc($result)) {
@@ -321,7 +330,7 @@ class forum
         $sql = "SELECT * FROM " . $NPDS_Prefix . "users WHERE uname='$username'";
     
         if (!$result = sql_query($sql)) {
-            forumerror('0016');
+            static::forumerror('0016');
         }
     
         if (!$myrow = sql_fetch_assoc($result)) {
@@ -382,7 +391,7 @@ class forum
         // Tranforme un :-) en IMG
         global $theme;
     
-        if ($ibid = theme_image("forum/smilies/smilies.php")) {
+        if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/";
         } else {
             $imgtmp = "assets/images/forum/smilies/";
@@ -402,7 +411,7 @@ class forum
             }
         }
     
-        if ($ibid = theme_image("forum/smilies/more/smilies.php")) {
+        if ($ibid = theme::theme_image("forum/smilies/more/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/more/";
         } else {
             $imgtmp = "assets/images/forum/smilies/more/";
@@ -424,7 +433,7 @@ class forum
         // Tranforme une IMG en :-)
         global $theme;
     
-        if ($ibid = theme_image("forum/smilies/smilies.php")) {
+        if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/";
         } else {
             $imgtmp = "assets/images/forum/smilies/";
@@ -438,7 +447,7 @@ class forum
             }
         }
     
-        if ($ibid = theme_image("forum/smilies/more/smilies.php")) {
+        if ($ibid = theme::theme_image("forum/smilies/more/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/more/";
         } else {
             $imgtmp = "assets/images/forum/smilies/more/";
@@ -540,7 +549,7 @@ class forum
     
         echo '<p align="center">' . translate("Cliquez pour insérer des émoticons dans votre message") . '</p>';
     
-        if ($ibid = theme_image("forum/smilies/more/smilies.php")) {
+        if ($ibid = theme::theme_image("forum/smilies/more/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/more/";
         } else {
             $imgtmp = "assets/images/forum/smilies/more/";
@@ -649,7 +658,7 @@ class forum
     {
         global $theme;
     
-        if ($ibid = theme_image('forum/subject/index.html')) {
+        if ($ibid = theme::theme_image('forum/subject/index.html')) {
             $imgtmp = "themes/$theme/images/forum/subject";
         } else {
             $imgtmp = 'assets/images/forum/subject';
@@ -737,7 +746,7 @@ class forum
     
         $tmp = '';
     
-        if ($ibid = theme_image('forum/rank/post.gif')) { 
+        if ($ibid = theme::theme_image('forum/rank/post.gif')) { 
             $imgtmpP = $ibid;
         } else {
             $imgtmpP = 'assets/images/forum/rank/post.gif';
@@ -773,7 +782,7 @@ class forum
             }
     
             if ($rank) {
-                if ($ibid = theme_image("forum/rank/" . $rank . ".gif") or $ibid = theme_image("forum/rank/" . $rank . ".png")) { 
+                if ($ibid = theme::theme_image("forum/rank/" . $rank . ".gif") or $ibid = theme::theme_image("forum/rank/" . $rank . ".png")) { 
                     $imgtmpA = $ibid;
                 } else {
                     $imgtmpA = "assets/images/forum/rank/" . $rank . ".png";
@@ -782,7 +791,7 @@ class forum
                 $rank = 'rank' . $rank;
     
                 global $$rank;
-                $tmp .= '<div class="my-2"><img class="n-smil" src="' . $imgtmpA . '" alt="logo rôle" loading="lazy" />&nbsp;' . aff_langue($$rank) . '</div>';
+                $tmp .= '<div class="my-2"><img class="n-smil" src="' . $imgtmpA . '" alt="logo rôle" loading="lazy" />&nbsp;' . language::aff_langue($$rank) . '</div>';
             }
         }
     
@@ -986,7 +995,7 @@ class forum
             $myrow = sql_fetch_assoc(sql_query("SELECT forum_moderator FROM " . $NPDS_Prefix . "forums WHERE (forum_id='$IdForum')"));
             
             if ($myrow) {
-                $moderator = get_moderator($myrow['forum_moderator']);
+                $moderator = static::get_moderator($myrow['forum_moderator']);
                 $moderator = explode(' ', $moderator);
                 
                 if (isset($user)) {
@@ -1029,17 +1038,17 @@ class forum
             list($time90) = sql_fetch_row(sql_query($sql . $timebase . $sql2));
     
             if ($time90 > ($paramAFX * 2)) {
-                Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
+                logs::Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
                 
-                forumerror(translate("Vous n'êtes pas autorisé à participer à ce forum"));
+                static::forumerror(translate("Vous n'êtes pas autorisé à participer à ce forum"));
             } else {
                 $timebase = date("Y-m-d H:i", time() + ($gmtX * 3600) - 1800);
                 list($time30) = sql_fetch_row(sql_query($sql . $timebase . $sql2));
                 
                 if ($time30 > $paramAFX) {
-                    Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
+                    logs::Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
                     
-                    forumerror(translate("Vous n'êtes pas autorisé à participer à ce forum"));
+                    static::forumerror(translate("Vous n'êtes pas autorisé à participer à ce forum"));
                 }
             }
         }
@@ -1072,16 +1081,16 @@ class forum
         if ($user) {
             $userX = base64_decode($user);
             $userR = explode(':', $userX);
-            $tab_groupe = valid_group($user);
+            $tab_groupe = groupe::valid_group($user);
         }
     
-        if ($ibid = theme_image("forum/icons/red_folder.gif")) {
+        if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
             $imgtmpR = $ibid;
         } else {
             $imgtmpR = "assets/images/forum/icons/red_folder.gif";
         }
     
-        if ($ibid = theme_image("forum/icons/folder.gif")) {
+        if ($ibid = theme::theme_image("forum/icons/folder.gif")) {
             $imgtmp = $ibid;
         } else {
             $imgtmp = "assets/images/forum/icons/folder.gif";
@@ -1105,7 +1114,7 @@ class forum
         }
     
         // preparation du compteur total_post
-        $rowQ0 = Q_Select("SELECT forum_id, COUNT(post_aff) AS total FROM " . $NPDS_Prefix . "posts GROUP BY forum_id", 600);
+        $rowQ0 = cache::Q_Select("SELECT forum_id, COUNT(post_aff) AS total FROM " . $NPDS_Prefix . "posts GROUP BY forum_id", 600);
         foreach ($rowQ0 as $row0) {
             $tab_total_post[$row0['forum_id']] = $row0['total'];
         }
@@ -1116,7 +1125,7 @@ class forum
             foreach ($rowQ1 as $row) {
                 $title_aff = true;
                 
-                $rowQ2 = Q_Select("SELECT * FROM " . $NPDS_Prefix . "forums WHERE cat_id = '" . $row['cat_id'] . "' AND SUBSTRING(forum_name,1,3)!='<!>' ORDER BY forum_index,forum_id", 21600);
+                $rowQ2 = cache::Q_Select("SELECT * FROM " . $NPDS_Prefix . "forums WHERE cat_id = '" . $row['cat_id'] . "' AND SUBSTRING(forum_name,1,3)!='<!>' ORDER BY forum_index,forum_id", 21600);
                
                 if ($rowQ2) {
                     foreach ($rowQ2 as $myrow) {
@@ -1126,7 +1135,7 @@ class forum
                             
                             // Gestion des Forums réservés à un groupe de membre
                             if (($myrow['forum_type'] == "7") or ($myrow['forum_type'] == "5")) {
-                                $ok_affich = groupe_forum($myrow['forum_pass'], $tab_groupe);
+                                $ok_affich = groupe::groupe_forum($myrow['forum_pass'], $tab_groupe);
                                 
                                 if ((isset($admin)) and ($adminforum == 1)) {
                                     $ok_affich = true; // to see when admin mais pas assez precis
@@ -1150,7 +1159,7 @@ class forum
                                     $title_aff = false;
                                 }
     
-                                $forum_moderator = explode(' ', get_moderator($myrow['forum_moderator']));
+                                $forum_moderator = explode(' ', static::get_moderator($myrow['forum_moderator']));
                                 $Mmod = false;
     
                                 for ($i = 0; $i < count($forum_moderator); $i++) {
@@ -1159,7 +1168,7 @@ class forum
                                     }
                                 }
     
-                                $last_post = get_last_post($myrow['forum_id'], "forum", "infos", $Mmod);
+                                $last_post = static::get_last_post($myrow['forum_id'], "forum", "infos", $Mmod);
                                 $ibid .= '
                                     <p class="mb-0 list-group-item list-group-item-action flex-column align-items-start">
                                         <span class="d-flex w-100 mt-1">';
@@ -1189,7 +1198,7 @@ class forum
                                     </span>';
                                 }
     
-                                $desc = stripslashes(meta_lang($myrow['forum_desc']));
+                                $desc = stripslashes(metalang::meta_lang($myrow['forum_desc']));
     
                                 if ($desc != '') {
                                     $ibid .= '<span class="d-flex w-100 mt-1">' . $desc . '</span>';
@@ -1242,7 +1251,7 @@ class forum
                                     // Subscribe
                                     if (($subscribe) and ($user)) {
                                         if (!$redirect) {
-                                            if (isbadmailuser($userR[0]) === false) { //proto
+                                            if (mailler::isbadmailuser($userR[0]) === false) { //proto
                                                 $ibid .= '
                                 <span class="d-flex w-100 mt-1" >
                                 <span class="form-check">';
@@ -1281,7 +1290,7 @@ class forum
         }
     
         if (($subscribe) and ($user) and ($ok_affich)) {
-            if (isbadmailuser($userR[0]) === false) { //proto
+            if (mailler::isbadmailuser($userR[0]) === false) { //proto
                 $ibid .= '
             <div class="form-check mt-1">
                 <input class="form-check-input" type="checkbox" id="ckball_f" />
@@ -1309,13 +1318,13 @@ class forum
         $result = sql_query("SELECT COUNT(DISTINCT topicid) AS total FROM " . $NPDS_Prefix . "forum_read WHERE uid='$userR[0]' AND topicid>'0' AND status!='0' AND forum_id='$forum'");
         list($totalF) = sql_fetch_row($result);
     
-        if ($ibid = theme_image("forum/icons/red_sub_folder.gif")) {
+        if ($ibid = theme::theme_image("forum/icons/red_sub_folder.gif")) {
             $imgtmpR = $ibid;
         } else {
             $imgtmpR = "assets/images/forum/icons/red_sub_folder.gif";
         }
     
-        if ($ibid = theme_image("forum/icons/sub_folder.gif")) {
+        if ($ibid = theme::theme_image("forum/icons/sub_folder.gif")) {
             $imgtmp = $ibid;
         } else {
             $imgtmp = "assets/images/forum/icons/sub_folder.gif";

@@ -13,6 +13,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\support\str;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -58,7 +62,7 @@ function poll_createPoll()
         echo '
                 <tr>
                 <td>' . $object["pollID"] . '</td>
-                <td>' . aff_langue($object["pollTitle"]) . '</td>
+                <td>' . language::aff_langue($object["pollTitle"]) . '</td>
                 <td>' . $object["voters"] . '</td>
                 <td>
                     <a href="admin.php?op=editpollPosted&amp;id=' . $object["pollID"] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer ce sondage") . '" data-bs-toggle="tooltip"></i></a>
@@ -115,7 +119,7 @@ function poll_createPoll()
     inpandfieldlen("optionText' . $i . '",255)';
     }
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function poll_createPosted()
@@ -123,7 +127,7 @@ function poll_createPosted()
     global $maxOptions, $pollTitle, $optionText, $poll_type, $NPDS_Prefix;
 
     $timeStamp = time();
-    $pollTitle = FixQuotes($pollTitle);
+    $pollTitle = str::FixQuotes($pollTitle);
 
     $result = sql_query("INSERT INTO " . $NPDS_Prefix . "poll_desc VALUES (NULL, '$pollTitle', '$timeStamp', 0)");
     $object = sql_fetch_assoc(sql_query("SELECT pollID FROM " . $NPDS_Prefix . "poll_desc WHERE pollTitle='$pollTitle'"));
@@ -132,7 +136,7 @@ function poll_createPosted()
 
     for ($i = 1; $i <= sizeof($optionText); $i++) {
         if ($optionText[$i] != '') {
-            $optionText[$i] = FixQuotes($optionText[$i]);
+            $optionText[$i] = str::FixQuotes($optionText[$i]);
         }
 
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "poll_data (pollID, optionText, optionCount, voteID, pollType) VALUES ('$id', '$optionText[$i]', 0, '$i', '$poll_type')");
@@ -359,7 +363,7 @@ function poll_editPollPosted()
         inpandfieldlen("optionText' . $i . '",255)';
         }
 
-        adminfoot('fv', '', $arg1, '');
+        css::adminfoot('fv', '', $arg1, '');
     } else {
         header("location: admin.php?op=editpoll");
     }
@@ -367,17 +371,17 @@ function poll_editPollPosted()
 
 function poll_SendEditPoll()
 {
-    global $maxOptions, $pollTitle, $optionText, $poll_type, $pollID, $poll_close, $NPDS_Prefix;
+    global $pollTitle, $optionText, $poll_type, $pollID, $poll_close, $NPDS_Prefix;
 
-    $result = sql_query("UPDATE " . $NPDS_Prefix . "poll_desc SET pollTitle='$pollTitle' WHERE pollID='$pollID'");
+    sql_query("UPDATE " . $NPDS_Prefix . "poll_desc SET pollTitle='$pollTitle' WHERE pollID='$pollID'");
     $poll_type = $poll_type + 128 * $poll_close;
 
     for ($i = 1; $i <= sizeof($optionText); $i++) {
         if ($optionText[$i] != '') {
-            $optionText[$i] = FixQuotes($optionText[$i]);
+            $optionText[$i] = str::FixQuotes($optionText[$i]);
         }
 
-        $result = sql_query("UPDATE " . $NPDS_Prefix . "poll_data SET optionText='$optionText[$i]', pollType='$poll_type' WHERE pollID='$pollID' and voteID='$i'");
+        sql_query("UPDATE " . $NPDS_Prefix . "poll_data SET optionText='$optionText[$i]', pollType='$poll_type' WHERE pollID='$pollID' and voteID='$i'");
     }
 
     Header("Location: admin.php?op=create");

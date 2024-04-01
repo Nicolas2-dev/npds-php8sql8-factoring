@@ -19,6 +19,7 @@ use npds\system\news\news;
 use npds\system\assets\css;
 use npds\system\auth\users;
 use npds\system\auth\groupe;
+use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
@@ -82,7 +83,7 @@ function userCheck($uname, $email)
         $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Erreur : une adresse Email ne peut pas contenir d'espaces");
     }
 
-    if (checkdnsmail($email) === false) {
+    if (mailler::checkdnsmail($email) === false) {
         $stop = translate("Erreur : DNS ou serveur de mail incorrect") . '!<br />';
     }
 
@@ -452,7 +453,7 @@ function userinfo($uname)
     global $user, $sitename, $smilies, $short_user;
     global $name, $email, $url, $bio, $user_avatar, $user_from, $user_occ, $user_intrest, $user_sig, $user_journal, $C7, $C8;
 
-    $uname = removeHack($uname);
+    $uname = hack::removeHack($uname);
     $result = sql_query("SELECT uid, name, femail, url, bio, user_avatar, user_from, user_occ, user_intrest, user_sig, user_journal, mns FROM " . $NPDS_Prefix . "users WHERE uname='$uname'");
     list($uid, $name, $femail, $url, $bio, $user_avatar, $user_from, $user_occ, $user_intrest, $user_sig, $user_journal, $mns) = sql_fetch_row($result);
     
@@ -483,7 +484,7 @@ function userinfo($uname)
         // a revoir pour classe !!
         $direktori = 'assets/images/forum/avatar/';
         if (function_exists("theme_image")) {
-            if (theme_image("forum/avatar/blank.gif")) {
+            if (theme::theme_image("forum/avatar/blank.gif")) {
                 $direktori = "themes/$theme/images/forum/avatar/";
             }
         }
@@ -493,7 +494,7 @@ function userinfo($uname)
     $posterdata_extend = array();
     $res_id = array();
     $my_rs = '';
-    $posterdata_extend = get_userdata_extend_from_id($uid);
+    $posterdata_extend = forum::get_userdata_extend_from_id($uid);
 
     if (!$short_user) {
         include('modules/reseaux-sociaux/config/reseaux-sociaux.conf.php');
@@ -530,7 +531,7 @@ function userinfo($uname)
         }
     }
 
-    $posterdata = get_userdata_from_id($uid);
+    $posterdata = forum::get_userdata_from_id($uid);
     $useroutils = '';
 
     if (($user) and ($uid != 1)) { 
@@ -539,7 +540,7 @@ function userinfo($uname)
 
     if (array_key_exists('femail', $posterdata)) {
         if ($posterdata['femail'] != '') {
-            $useroutils .= '<a class=" text-primary me-3" href="mailto:' . anti_spam($posterdata['femail'], 1) . '" target="_blank" ><i class="fa fa-at fa-2x" title="' . translate("Email") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+            $useroutils .= '<a class=" text-primary me-3" href="mailto:' . spam::anti_spam($posterdata['femail'], 1) . '" target="_blank" ><i class="fa fa-at fa-2x" title="' . translate("Email") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
         }
     }
 
@@ -582,7 +583,7 @@ function userinfo($uname)
 
     if (isset($cookie[1])) {
         if ($uname == $cookie[1]) {
-            member_menu($mns, $uname);
+            users::member_menu($mns, $uname);
         }
     }
 
@@ -764,10 +765,10 @@ function userinfo($uname)
     
     while (list($topic_id, $forum_id, $post_text, $post_time) = sql_fetch_row($result)) {
         $url = str_replace("#topic#", $topic_id, $filelist[$forum_id]);
-        echo '<p><a href="' . $url . '">' . translate("Posté : ") . convertdate($post_time) . '</a></p>';
+        echo '<p><a href="' . $url . '">' . translate("Posté : ") . date::convertdate($post_time) . '</a></p>';
         
-        $message = smilie(stripslashes($post_text));
-        $message = aff_video_yt($message);
+        $message = forum::smilie(stripslashes($post_text));
+        $message = forum::aff_video_yt($message);
         $message = str_replace('[addsig]', '', $message);
         
         if (stristr($message, "<a href")) {
@@ -1216,9 +1217,9 @@ function edituser()
 
     include("themes/default/header.php");
 
-    $userinfo = getusrinfo($user);
+    $userinfo = users::getusrinfo($user);
 
-    member_menu($userinfo['mns'], $userinfo['uname']);
+    users::member_menu($userinfo['mns'], $userinfo['uname']);
 
     global $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1;
     $result = sql_query("SELECT C1, C2, C3, C4, C5, C6, C7, C8, M1, M2, T1, T2, B1 FROM " . $NPDS_Prefix . "users_extend WHERE uid='" . $userinfo['uid'] . "'");
@@ -1392,8 +1393,8 @@ function edithome()
 
     include("themes/default/header.php");
 
-    $userinfo = getusrinfo($user);
-    member_menu($userinfo['mns'], $userinfo['uname']);
+    $userinfo = users::getusrinfo($user);
+    users::member_menu($userinfo['mns'], $userinfo['uname']);
 
     if ($userinfo['theme'] == '') {
         $userinfo['theme'] = "$Default_Theme+$Default_Skin";
@@ -1477,7 +1478,7 @@ function savehome($uid, $uname, $theme, $storynum, $ublockon, $ublock)
 
         sql_query("UPDATE " . $NPDS_Prefix . "users SET storynum='$storynum', ublockon='$ublockon', ublock='$ublock' WHERE uid='$uid'");
 
-        $userinfo = getusrinfo($user);
+        $userinfo = users::getusrinfo($user);
 
         docookie($userinfo['uid'], $userinfo['uname'], $userinfo['pass'], $userinfo['storynum'], $userinfo['umode'], $userinfo['uorder'], $userinfo['thold'], $userinfo['noscore'], $userinfo['ublockon'], $userinfo['theme'], $userinfo['commentmax'], '');
         
@@ -1496,7 +1497,7 @@ function chgtheme()
 
     include("themes/default/header.php");
 
-    $userinfo = getusrinfo($user);
+    $userinfo = users::getusrinfo($user);
     $ibid = explode('+', $userinfo['theme']);
     $theme = $ibid[0];
 
@@ -1506,7 +1507,7 @@ function chgtheme()
         $skin = '';
     }
 
-    member_menu($userinfo['mns'], $userinfo['uname']);
+    users::member_menu($userinfo['mns'], $userinfo['uname']);
 
     echo '
     <h2 class="mb-3">' . translate("Changer le thème") . '</h2>
@@ -1627,7 +1628,7 @@ function savetheme($uid, $theme)
     list($vuid) = sql_fetch_row($result);
     if ($uid == $vuid) {
         sql_query("UPDATE " . $NPDS_Prefix . "users SET theme='$theme' WHERE uid='$uid'");
-        $userinfo = getusrinfo($user);
+        $userinfo = users::getusrinfo($user);
         
         docookie($userinfo['uid'], $userinfo['uname'], $userinfo['pass'], $userinfo['storynum'], $userinfo['umode'], $userinfo['uorder'], $userinfo['thold'], $userinfo['noscore'], $userinfo['ublockon'], $theme, $userinfo['commentmax'], '');
         
@@ -1646,8 +1647,8 @@ function editjournal()
 
     include("themes/default/header.php");
 
-    $userinfo = getusrinfo($user);
-    member_menu($userinfo['mns'], $userinfo['uname']);
+    $userinfo = users::getusrinfo($user);
+    users::member_menu($userinfo['mns'], $userinfo['uname']);
 
     echo '
     <h2 class="mb-3">' . translate("Editer votre journal") . '</h2>

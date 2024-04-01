@@ -13,6 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\date\date;
 use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\support\str;
@@ -610,7 +611,7 @@ function LinksModLink($lid)
             $editorialtext = stripslashes($editorialtext);
 
             echo '
-    <h3 class="mb-3">' . adm_translate("Modifier l'Editorial") . '</h3> - ' . adm_translate("Auteur") . ' : ' . $adminid . ' : ' . formatTimeStamp($editorialtimestamp);
+    <h3 class="mb-3">' . adm_translate("Modifier l'Editorial") . '</h3> - ' . adm_translate("Auteur") . ' : ' . $adminid . ' : ' . date::formatTimeStamp($editorialtimestamp);
             echo '
     <form action="admin.php" method="post" id="linkseditorial">
         <div class="mb-3 row">
@@ -1210,7 +1211,7 @@ function LinksDelEditorial($linkid)
     sql_query("DELETE FROM " . $NPDS_Prefix . "links_editorials WHERE linkid='$linkid'");
 
     global $aid;
-    log::Ecr_Log('security', "DeteteEditorialLinks($linkid) by AID : $aid", '');
+    logs::Ecr_Log('security', "DeteteEditorialLinks($linkid) by AID : $aid", '');
 
     message_error('<div class="alert alert-success"><strong>' . adm_translate("Editorial supprimé de la base de données") . '</strong></div>');
 }

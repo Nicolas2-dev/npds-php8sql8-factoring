@@ -13,6 +13,11 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\support\str;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -68,20 +73,20 @@ function mblock()
         }
     }
 
-    adminfoot('fv', '', '', '');
+    css::adminfoot('fv', '', '', '');
 }
 
 function changemblock($title, $content)
 {
     global $NPDS_Prefix;
 
-    $title = stripslashes(FixQuotes($title));
-    $content = stripslashes(FixQuotes($content));
+    $title = stripslashes(str::FixQuotes($title));
+    $content = stripslashes(str::FixQuotes($content));
 
     sql_query("UPDATE " . $NPDS_Prefix . "block SET title='$title', content='$content' WHERE id='1'");
 
     global $aid;
-    Ecr_Log('security', "ChangeMainBlock(" . aff_langue($title) . ") by AID : $aid", '');
+    logs::Ecr_Log('security', "ChangeMainBlock(" . language::aff_langue($title) . ") by AID : $aid", '');
 
     Header("Location: admin.php?op=adminMain");
 }

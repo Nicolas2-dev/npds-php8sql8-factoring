@@ -13,6 +13,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+use npds\system\support\str;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -41,8 +45,8 @@ function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRa
         $Rindex = 0;
     }
 
-    $title = stripslashes(FixQuotes($title));
-    $content = stripslashes(FixQuotes($content));
+    $title = stripslashes(str::FixQuotes($title));
+    $content = stripslashes(str::FixQuotes($content));
 
     if ($SHTML != 'ON') {
         $content = strip_tags(str_replace('<br />', "\n", $content));
@@ -51,7 +55,7 @@ function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRa
     sql_query("INSERT INTO " . $NPDS_Prefix . "rblocks VALUES (NULL,'$title','$content', '$members', '$Rindex', '$Scache', '1', '$css', '$BRaide')");
 
     global $aid;
-    Ecr_Log('security', "MakeRightBlock(" . aff_langue($title) . ") by AID : $aid", '');
+    logs::Ecr_Log('security', "MakeRightBlock(" . language::aff_langue($title) . ") by AID : $aid", '');
 
     Header("Location: admin.php?op=blocks");
 }
@@ -71,7 +75,7 @@ function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scach
         $Rindex = 0;
     }
 
-    $title = stripslashes(FixQuotes($title));
+    $title = stripslashes(str::FixQuotes($title));
 
     if ($Sactif == 'ON') { 
         $Sactif = 1;
@@ -79,12 +83,12 @@ function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scach
         $Sactif = 0;
     }
 
-    $content = stripslashes(FixQuotes($content));
+    $content = stripslashes(str::FixQuotes($content));
     
     sql_query("UPDATE " . $NPDS_Prefix . "rblocks SET title='$title', content='$content', member='$members', Rindex='$Rindex', cache='$Scache', actif='$Sactif', css='$css', aide='$BRaide' WHERE id='$id'");
 
     global $aid;
-    Ecr_Log('security', "ChangeRightBlock(" . aff_langue($title) . " - $id) by AID : $aid", '');
+    logs::Ecr_Log('security', "ChangeRightBlock(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
 
     Header("Location: admin.php?op=blocks");
 }
@@ -104,7 +108,7 @@ function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, 
         $Rindex = 0;
     }
 
-    $title = stripslashes(FixQuotes($title));
+    $title = stripslashes(str::FixQuotes($title));
 
     if ($Sactif == 'ON') { 
         $Sactif = 1;
@@ -112,13 +116,13 @@ function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, 
         $Sactif = 0;
     }
 
-    $content = stripslashes(FixQuotes($content));
+    $content = stripslashes(str::FixQuotes($content));
 
     sql_query("INSERT INTO " . $NPDS_Prefix . "lblocks VALUES (NULL,'$title','$content','$members', '$Rindex', '$Scache', '$Sactif', '$css', '$BRaide')");
     sql_query("DELETE FROM " . $NPDS_Prefix . "rblocks WHERE id='$id'");
 
     global $aid;
-    Ecr_Log('security', "MoveRightBlockToLeft(" . aff_langue($title) . " - $id) by AID : $aid", '');
+    logs::Ecr_Log('security', "MoveRightBlockToLeft(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
 
     Header("Location: admin.php?op=blocks");
 }
@@ -130,7 +134,7 @@ function deleterblock($id)
     sql_query("DELETE FROM " . $NPDS_Prefix . "rblocks WHERE id='$id'");
 
     global $aid;
-    Ecr_Log('security', "DeleteRightBlock($id) by AID : $aid", '');
+    logs::Ecr_Log('security', "DeleteRightBlock($id) by AID : $aid", '');
 
     Header("Location: admin.php?op=blocks");
 }

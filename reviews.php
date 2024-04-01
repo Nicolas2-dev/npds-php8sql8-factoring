@@ -17,6 +17,7 @@ use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\routing\url;
 use npds\system\support\str;
+use npds\system\mail\mailler;
 use npds\system\utility\spam;
 use npds\system\security\hack;
 use npds\system\language\language;
@@ -163,7 +164,7 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
     global $admin, $short_review;
 
     $title = stripslashes(strip_tags($title));
-    $text = stripslashes(hack::removeHack(conv2br($text)));
+    $text = stripslashes(hack::removeHack(str::conv2br($text)));
     $reviewer = stripslashes(strip_tags($reviewer));
     $url_title = stripslashes(strip_tags($url_title));
     $error = '';
@@ -205,7 +206,7 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
             echo '<div class="alert alert-danger">' . translate("Email non valide (ex.: prenom.nom@hotmail.com)") . '</div>';
         }
 
-        if (checkdnsmail($email) === false) {
+        if (mailler::checkdnsmail($email) === false) {
             $error = 1;
             echo '<div class="alert alert-danger">' . translate("Erreur : DNS ou serveur de mail incorrect") . '</div>';
         }

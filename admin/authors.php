@@ -16,6 +16,7 @@ use npds\system\assets\js;
 use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\auth\users;
+use npds\system\mail\mailler;
 use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
@@ -496,7 +497,7 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
         Header("Location: admin.php?op=mod_authors");
     }
 
-    if (checkdnsmail($chng_email) === false) {
+    if (mailler::checkdnsmail($chng_email) === false) {
         global $hlpfile;
         include("themes/default/header.php");
         
@@ -668,7 +669,7 @@ switch ($op) {
             return;
         }
 
-        if (checkdnsmail($add_email) === false) {
+        if (mailler::checkdnsmail($add_email) === false) {
             global $hlpfile;
             include("themes/default/header.php");
 

@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
@@ -65,7 +66,7 @@ function show_imm($op)
 
         include("themes/$theme/theme.php");
 
-        $userdata = get_userdata($userdata[1]);
+        $userdata = forum::get_userdata($userdata[1]);
 
         $sql = ($op != 'new_msg') 
             ? "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND read_msg='1' AND type_msg='0' AND dossier='...' ORDER BY msg_id DESC" 
@@ -89,7 +90,7 @@ function show_imm($op)
                     <div class="card card-body">';
 
             }
-            $posterdata = get_userdata_from_id($myrow['from_userid']);
+            $posterdata = forum::get_userdata_from_id($myrow['from_userid']);
 
             echo '
                 <div class="card mb-3">
@@ -110,7 +111,7 @@ function show_imm($op)
             $posts = $posterdata['posts'];
 
             if ($posterdata['uid'] <> 1) {
-                echo member_qualif($posterdata['uname'], $posts, $posterdata['rang']);
+                echo forum::member_qualif($posterdata['uname'], $posts, $posterdata['rang']);
             }
 
             echo '<br /><br />';
@@ -150,8 +151,8 @@ function show_imm($op)
             $message = stripslashes($myrow['msg_text']);
 
             if ($allow_bbcode) {
-                $message = smilie($message);
-                $message = aff_video_yt($message);
+                $message = forum::smilie($message);
+                $message = forum::aff_video_yt($message);
             }
 
             $message = str_replace("[addsig]", "<br /><br />" . nl2br($posterdata['user_sig']), language::aff_langue($message));
@@ -200,7 +201,7 @@ function sup_imm($msg_id)
         $sql = "DELETE FROM " . $NPDS_Prefix . "priv_msgs WHERE msg_id='$msg_id' AND to_userid='$cookie[0]'";
         
         if (!sql_query($sql)) {
-            forumerror('0021');
+            forum::forumerror('0021');
         }
     }
 }
@@ -215,7 +216,7 @@ function read_imm($msg_id, $sub_op)
         $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET read_msg='1' WHERE msg_id='$msg_id' AND to_userid='$cookie[0]'";
         
         if (!sql_query($sql)) {
-            forumerror('0021');
+            forum::forumerror('0021');
         }
 
         if ($sub_op == 'reply') {

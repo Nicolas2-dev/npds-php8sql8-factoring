@@ -13,6 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\utility\code;
 use npds\system\security\hack;
@@ -46,15 +47,15 @@ switch ($acc) {
         }
 
         if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) {
-            $messageP = smile($messageP);
+            $messageP = forum::smile($messageP);
         }
 
         if (($forum_type != 6) and ($forum_type != 5)) {
-            $messageP = make_clickable($messageP);
+            $messageP = forum::make_clickable($messageP);
             $messageP = hack::removeHack($messageP);
 
             if ($allow_bbcode) {
-                $messageP = aff_video_yt($messageP);
+                $messageP = forum::aff_video_yt($messageP);
             }
         }
 
@@ -67,7 +68,7 @@ switch ($acc) {
 
     case 'reply':
         if (array_key_exists(1, $userdata)) {
-            $userdata = get_userdata($userdata[1]);
+            $userdata = forum::get_userdata($userdata[1]);
         }
 
         if ($allow_html == 0 || isset($html)) {
@@ -84,22 +85,22 @@ switch ($acc) {
         }
 
         if (($allow_bbcode) and ($forum_type != '6') and ($forum_type != '5')) {
-            $messageP = smile($messageP);
+            $messageP = forum::smile($messageP);
         }
 
         if (($forum_type != 6) and ($forum_type != 5)) {
-            $messageP = make_clickable($messageP);
+            $messageP = forum::make_clickable($messageP);
             $messageP = hack::removeHack($messageP);
 
             if ($allow_bbcode) {
-                $messageP = aff_video_yt($messageP);
+                $messageP = forum::aff_video_yt($messageP);
             }
         }
         $messageP = addslashes($messageP);
         break;
 
     case 'editpost':
-        $userdata = get_userdata($userdata[1]);
+        $userdata = forum::get_userdata($userdata[1]);
 
         settype($post_id, "integer");
 
@@ -107,7 +108,7 @@ switch ($acc) {
         $result = sql_query($sql);
 
         if (!$result) {
-            forumerror('0022');
+            forum::forumerror('0022');
         }
 
         $row2 = sql_fetch_assoc($result);
@@ -125,7 +126,7 @@ switch ($acc) {
         }
 
         if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) {
-            $messageP = smile($messageP);
+            $messageP = forum::smile($messageP);
         }
 
         if (($forum_type != 6) and ($forum_type != 5)) {
@@ -134,7 +135,7 @@ switch ($acc) {
             $messageP .= '<br /><div class=" text-muted text-end small"><i class="fa fa-edit"></i> ' . translate("Message édité par") . ' : ' . $userdata['uname'] . '</div';
 
             if ($allow_bbcode) {
-                $messageP = aff_video_yt($messageP);
+                $messageP = forum::aff_video_yt($messageP);
             }
         } else{
             $messageP .= "\n\n" . translate("Message édité par") . ' : ' . $userdata['uname'];
@@ -144,7 +145,7 @@ switch ($acc) {
         break;
 }
 
-$theposterdata = get_userdata_from_id($userdatat[0]);
+$theposterdata = forum::get_userdata_from_id($userdatat[0]);
 
 echo '
         <div class="mb-3">
@@ -168,7 +169,7 @@ if ($smilies) {
                 }
             }
 
-            echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-html="true" data-bs-title="' . $theposterdata['uname'] . '" data-bs-content=\'' . member_qualif($theposterdata['uname'], $theposterdata['posts'], $theposterdata['rang']) . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $theposterdata['uname'] . '" /></a>';
+            echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-html="true" data-bs-title="' . $theposterdata['uname'] . '" data-bs-content=\'' . forum::member_qualif($theposterdata['uname'], $theposterdata['posts'], $theposterdata['rang']) . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $theposterdata['uname'] . '" /></a>';
         }
     } else {
         echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-html="true" data-bs-title="' . $anonymous . '" data-bs-content=\'' . $anonymous . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="icone ' . $anonymous . '" /></a>';
@@ -210,7 +211,7 @@ if (($forum_type == '6') or ($forum_type == '5')) {
     highlight_string(stripslashes($messageP));
 } else {
     if ($allow_bbcode) {
-        $messageP = smilie($messageP);
+        $messageP = forum::smilie($messageP);
     }
 
     if (array_key_exists('user_sig', $theposterdata)) {

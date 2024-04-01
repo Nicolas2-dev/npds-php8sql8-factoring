@@ -13,6 +13,12 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\js;
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\support\str;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -60,8 +66,8 @@ function topicsmanager()
             echo '
             </div>
             <div class="">
-                <h4 class="my-3"><a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '" ><i class="fa fa-edit me-1 align-middle"></i>' . aff_langue($topicname) . '</a></h4>
-                <p>' . aff_langue($topictext) . '</p>
+                <h4 class="my-3"><a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '" ><i class="fa fa-edit me-1 align-middle"></i>' . language::aff_langue($topicname) . '</a></h4>
+                <p>' . language::aff_langue($topictext) . '</p>
                 <div id="shortcut-tools_' . $topicid . '" class="n-shortcut-tools" style="display:none;"><a class="text-danger btn" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=0" ><i class="fas fa-trash fa-2x"></i></a></div>
             </div>
         </div>
@@ -184,11 +190,11 @@ function topicsmanager()
     inpandfieldlen("topicadmin",255);
     ';
 
-    echo auto_complete_multi('admin', 'aid', 'authors', 'topicadmin', '');
+    echo js::auto_complete_multi('admin', 'aid', 'authors', 'topicadmin', '');
 
     sql_free_result($result);
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function topicedit($topicid)
@@ -205,7 +211,7 @@ function topicedit($topicid)
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Editer le Sujet :") . ' <span class="text-muted">' . aff_langue($topicname) . '</span></h3>';
+    <h3 class="mb-3">' . adm_translate("Editer le Sujet :") . ' <span class="text-muted">' . language::aff_langue($topicname) . '</span></h3>';
 
     if ($topicimage != '') {
         echo '
@@ -283,7 +289,7 @@ function topicedit($topicid)
 
     echo '
         <hr />
-        <h3 class="my-2">' . adm_translate("Gérer les Liens Relatifs : ") . ' <span class="text-muted">' . aff_langue($topicname) . '</span></h3>';
+        <h3 class="my-2">' . adm_translate("Gérer les Liens Relatifs : ") . ' <span class="text-muted">' . language::aff_langue($topicname) . '</span></h3>';
 
     $res = sql_query("SELECT rid, name, url FROM " . $NPDS_Prefix . "related WHERE tid='$topicid'");
 
@@ -359,9 +365,9 @@ function topicedit($topicid)
     inpandfieldlen("url",320);
     ';
 
-    echo auto_complete_multi('admin', 'aid', 'authors', 'topicadmin', '');
+    echo js::auto_complete_multi('admin', 'aid', 'authors', 'topicadmin', '');
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function relatededit($tid, $rid)
@@ -429,7 +435,7 @@ function relatededit($tid, $rid)
         inpandfieldlen("url",320);
     ';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function relatedsave($tid, $rid, $name, $url)
@@ -469,7 +475,7 @@ function topicmake($topicname, $topicimage, $topictext, $topicadmin)
     sql_query("INSERT INTO " . $NPDS_Prefix . "topics VALUES (NULL,'$topicname','$topicimage','$topictext','0', '$topicadmin')");
 
     global $aid;
-    Ecr_Log("security", "topicMake ($topicname) by AID : $aid", "");
+    logs::Ecr_Log("security", "topicMake ($topicname) by AID : $aid", "");
 
     $topicadminX = explode(",", $topicadmin);
     array_pop($topicadminX);
@@ -525,16 +531,16 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
         }
     }
 
-    $topicname = stripslashes(FixQuotes($topicname));
-    $topicimage = stripslashes(FixQuotes($topicimage));
-    $topictext = stripslashes(FixQuotes($topictext));
-    $name = stripslashes(FixQuotes($name));
-    $url = stripslashes(FixQuotes($url));
+    $topicname = stripslashes(str::FixQuotes($topicname));
+    $topicimage = stripslashes(str::FixQuotes($topicimage));
+    $topictext = stripslashes(str::FixQuotes($topictext));
+    $name = stripslashes(str::FixQuotes($name));
+    $url = stripslashes(str::FixQuotes($url));
 
     sql_query("UPDATE " . $NPDS_Prefix . "topics SET topicname='$topicname', topicimage='$topicimage', topictext='$topictext', topicadmin='$topicadmin' WHERE topicid='$topicid'");
     
     global $aid;
-    Ecr_Log("security", "topicChange ($topicname, $topicid) by AID : $aid", "");
+    logs::Ecr_Log("security", "topicChange ($topicname, $topicid) by AID : $aid", "");
     
     if ($name) {
         sql_query("INSERT INTO " . $NPDS_Prefix . "related VALUES (NULL, '$topicid','$name','$url')");
@@ -555,15 +561,15 @@ function topicdelete($topicid, $ok = 0)
 
         sql_query("DELETE FROM " . $NPDS_Prefix . "stories WHERE topic='$topicid'");
 
-        Ecr_Log("security", "topicDelete (stories, $topicid) by AID : $aid", "");
+        logs::Ecr_Log("security", "topicDelete (stories, $topicid) by AID : $aid", "");
 
         sql_query("DELETE FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
 
-        Ecr_Log("security", "topicDelete (topic, $topicid) by AID : $aid", "");
+        logs::Ecr_Log("security", "topicDelete (topic, $topicid) by AID : $aid", "");
 
         sql_query("DELETE FROM " . $NPDS_Prefix . "related WHERE tid='$topicid'");
 
-        Ecr_Log("security", "topicDelete (related, $topicid) by AID : $aid", '');
+        logs::Ecr_Log("security", "topicDelete (related, $topicid) by AID : $aid", '');
 
         // commentaires
         if (file_exists("modules/comments/config/article.conf.php")) {
@@ -571,7 +577,7 @@ function topicdelete($topicid, $ok = 0)
             
             sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' and topic_id='$topic'");
             
-            Ecr_Log("security", "topicDelete (comments, $topicid) by AID : $aid", "");
+            logs::Ecr_Log("security", "topicDelete (comments, $topicid) by AID : $aid", "");
         }
 
         Header("Location: admin.php?op=topicsmanager");
@@ -587,7 +593,7 @@ function topicdelete($topicid, $ok = 0)
         list($topicimage, $topicname, $topictext) = sql_fetch_row($result2);
 
         echo '
-    <h3 class=""><span class="text-danger">' . adm_translate("Effacer le Sujet") . ' : </span>' . aff_langue($topicname) . '</h3>';
+    <h3 class=""><span class="text-danger">' . adm_translate("Effacer le Sujet") . ' : </span>' . language::aff_langue($topicname) . '</h3>';
         echo '<div class="alert alert-danger lead" role="alert">';
 
         if ($topicimage != "") {
@@ -603,7 +609,7 @@ function topicdelete($topicid, $ok = 0)
         <p><a class="btn btn-danger" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=1">' . adm_translate("Oui") . '</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">' . adm_translate("Non") . '</a></p>
     </div>';
 
-        adminfoot('', '', '', '');
+        css::adminfoot('', '', '', '');
     }
 }
 

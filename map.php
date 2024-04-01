@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\auth\users;
+use npds\system\forum\forum;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -87,7 +88,7 @@ function mapsections()
 function mapforum()
 {
     $tmp = '';
-    $tmp .= RecentForumPosts_fab('', 10, 0, false, 50, false, '<li>', false);
+    $tmp .= forum::RecentForumPosts_fab('', 10, 0, false, 50, false, '<li>', false);
 
     if ($tmp != '') {
         echo '

@@ -6,6 +6,7 @@ namespace npds\system\support;
 
 use npds\system\date\date;
 use npds\system\language\language;
+use npds\system\language\metalang;
 
 class edito
 {
@@ -91,7 +92,7 @@ class edito
             $affich = true;
         }
 
-        $Xcontents = meta_lang(language::aff_langue($Xcontents));
+        $Xcontents = metalang::meta_lang(language::aff_langue($Xcontents));
 
         return array($affich, $Xcontents);
     }

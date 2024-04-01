@@ -13,6 +13,14 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\js;
+use npds\system\date\date;
+use npds\system\assets\css;
+use npds\system\cache\cache;
+use npds\system\forum\forum;
+use npds\system\support\str;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -51,7 +59,7 @@ function ForumMaintMarkTopics()
         <tbody>';
 
     if (!$r = sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read")) {
-        forumerror('0001');
+        forum::forumerror('0001');
     } else {
         $resultF = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums ORDER BY forum_id ASC");
         $time_actu = time() + ((int)$gmt * 3600);
@@ -94,7 +102,7 @@ function ForumMaintMarkTopics()
     </tbody>
     </table>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function ForumMaintTopics($before, $forum_name)
@@ -135,7 +143,7 @@ function ForumMaintTopics($before, $forum_name)
 
         while (list($topic_id, $topic_title) = sql_fetch_row($resultT)) {
 
-            $tt = $parse == 0 ? FixQuotes($topic_title) : stripslashes($topic_title);
+            $tt = $parse == 0 ? str::FixQuotes($topic_title) : stripslashes($topic_title);
             $oo = urlencode($tt); ///// ???? not used
             
             echo '
@@ -160,7 +168,7 @@ function ForumMaintTopics($before, $forum_name)
         </div>
     </form>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function ForumMaintTopicDetail($topic, $topic_title)
@@ -180,7 +188,7 @@ function ForumMaintTopicDetail($topic, $topic_title)
     <h3 class="mb-3 text-danger">' . adm_translate("Supprimer massivement les Topics") . '</h3>
     <div class="lead">Topic : ' . $topic . ' | ' . stripslashes($topic_title) . '</div>
     <div class="card p-4 my-3 border-danger">
-        <p class="text-end small text-muted">[ ' . convertdate($post_time) . ' ]</p>' . stripslashes($post_text) . '
+        <p class="text-end small text-muted">[ ' . date::convertdate($post_time) . ' ]</p>' . stripslashes($post_text) . '
     </div>
     <form action="admin.php" method="post">
         <input type="hidden" name="op" value="ForumMaintTopicSup" />
@@ -190,7 +198,7 @@ function ForumMaintTopicDetail($topic, $topic_title)
 
     sql_free_result($resultTT);
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function ForumMaintTopicMassiveSup($topics)
@@ -204,27 +212,27 @@ function ForumMaintTopicMassiveSup($topics)
                 $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE topic_id = '$topic_id'";
                 
                 if (!$result = sql_query($sql)) {
-                    forumerror('0009');
+                    forum::forumerror('0009');
                 }
                 
                 $sql = "DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic_id'";
                 
                 if (!$result = sql_query($sql)) {
-                    forumerror('0010');
+                    forum::forumerror('0010');
                 }
 
                 $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid = '$topic_id'";
 
                 if (!$r = sql_query($sql)) {
-                    forumerror('0001');
+                    forum::forumerror('0001');
                 }
 
-                control_efface_post("forum_npds", "", $topic_id, "");
+                forum::control_efface_post("forum_npds", "", $topic_id, "");
             }
         }
     }
 
-    Q_Clean();
+    cache::Q_Clean();
 
     header("location: admin.php?op=MaintForumAdmin");
 }
@@ -236,24 +244,24 @@ function ForumMaintTopicSup($topic)
     $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE topic_id = '$topic'";
 
     if (!$result = sql_query($sql)) {
-        forumerror('0009');
+        forum::forumerror('0009');
     }
 
     $sql = "DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
 
     if (!$result = sql_query($sql)) {
-        forumerror('0010');
+        forum::forumerror('0010');
     }
 
     $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid = '$topic'";
 
     if (!$r = sql_query($sql)) {
-        forumerror('0001');
+        forum::forumerror('0001');
     }
 
-    control_efface_post("forum_npds", "", $topic, "");
+    forum::control_efface_post("forum_npds", "", $topic, "");
 
-    Q_Clean();
+    cache::Q_Clean();
 
     header("location: admin.php?op=MaintForumTopics");
 }
@@ -263,7 +271,7 @@ function SynchroForum()
     global $NPDS_Prefix;
     // affectation d'un topic à un forum
     if (!$result1 = sql_query("SELECT topic_id, forum_id FROM " . $NPDS_Prefix . "forumtopics ORDER BY topic_id ASC")) {
-        forumerror('0009');
+        forum::forumerror('0009');
     }
 
     while (list($topi_cid, $foru_mid) = sql_fetch_row($result1)) {
@@ -274,13 +282,15 @@ function SynchroForum()
 
     // table forum_read et contenu des topic
     if (!$result1 = sql_query("SELECT topicid, uid, rid FROM " . $NPDS_Prefix . "forum_read ORDER BY topicid ASC")) {
-        forumerror('0009');
+        forum::forumerror('0009');
     }
 
     while (list($topicid, $uid, $rid) = sql_fetch_row($result1)) {
-        if (($topicid . $uid) == $tmp) {
-            $resultD = sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topicid' and uid='$uid' and rid='$rid'");
-        }
+
+        /// ???????? $tmp do not exist
+        // if (($topicid . $uid) == $tmp) {
+        //     sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topicid' and uid='$uid' and rid='$rid'");
+        // }
 
         $tmp = $topicid . $uid;
 
@@ -288,7 +298,7 @@ function SynchroForum()
             list($topic_id) = sql_fetch_row($result2);
             
             if (!$topic_id) {
-                $result3 = sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topicid'");
+                sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topicid'");
             }
         }
 
@@ -371,7 +381,7 @@ function MergeForum()
 
     sql_free_result($result);
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function MergeForumAction($oriforum, $destforum)
@@ -382,25 +392,25 @@ function MergeForumAction($oriforum, $destforum)
     $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET forum_id='$destforum' WHERE forum_id='$oriforum'";
 
     if (!$r = sql_query($sql)) {
-        forumerror('0010');
+        forum::forumerror('0010');
     }
 
     $sql = "UPDATE " . $NPDS_Prefix . "posts SET forum_id='$destforum' WHERE forum_id='$oriforum'";
 
     if (!$r = sql_query($sql)) {
-        forumerror('0010');
+        forum::forumerror('0010');
     }
 
     $sql = "UPDATE " . $NPDS_Prefix . "forum_read SET forum_id='$destforum' WHERE forum_id='$oriforum'";
 
     if (!$r = sql_query($sql)) {
-        forumerror('0001');
+        forum::forumerror('0001');
     }
 
     $sql = "UPDATE $upload_table SET forum_id='$destforum' WHERE apli='forum_npds' and forum_id='$oriforum'";
     sql_query($sql);
 
-    Q_Clean();
+    cache::Q_Clean();
 
     header("location: admin.php?op=MaintForumAdmin");
 }
@@ -466,7 +476,7 @@ function ForumMaintAdmin()
         </div>
     </form>
     <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
-    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/' . language_iso(1, '', '') . '.js"></script>
+    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/' . language::language_iso(1, '', '') . '.js"></script>
     <script type="text/javascript">
     //<![CDATA[
         $(document).ready(function() {
@@ -482,7 +492,7 @@ function ForumMaintAdmin()
             altInput: true,
             altFormat: "l j F Y",
             dateFormat:"Y-m-d",
-            "locale": "' . language_iso(1, '', '') . '",
+            "locale": "' . language::language_iso(1, '', '') . '",
             onChange: function() {
                 fvitem.revalidateField(\'before\');
             }
@@ -492,7 +502,7 @@ function ForumMaintAdmin()
     $arg1 = '
     var formulid = ["faddeletetop"];';
     
-    echo auto_complete("forname", "forum_name", "forums", "titreforum", "86400");
+    echo js::auto_complete("forname", "forum_name", "forums", "titreforum", "86400");
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }

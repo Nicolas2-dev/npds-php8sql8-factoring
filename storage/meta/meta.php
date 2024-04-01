@@ -1,4 +1,7 @@
 <?php
+
+use npds\system\language\language;
+
 /* Do not change anything in this file manually. Use the administration interface. */
 /* généré le : 06-03-2024 13:17:31 */
 global $nuke_url;
@@ -8,7 +11,7 @@ $meta_doctype = isset($meta_doctype) ? $meta_doctype : '' ;
 $meta_op = isset($meta_op) ? $meta_op : '' ;
 $m_description = isset($m_description) ? $m_description : '' ;
 $m_keywords = isset($m_keywords) ? $m_keywords : '' ;
-$lang = language_iso(1, '', 0);
+$lang = language::language_iso(1, '', 0);
 if ($meta_doctype=="")
    $l_meta="<!DOCTYPE html>\n<html lang=\"$lang\">\n<head>\n";
 else

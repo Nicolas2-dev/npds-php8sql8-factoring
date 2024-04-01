@@ -12,6 +12,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\theme\theme;
 use npds\system\language\language;
 
 
@@ -19,14 +20,14 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-$tmp_theme = getTheme();
+$tmp_theme = theme::getTheme();
 
 include("themes/$tmp_theme/theme.php");
 
 $Titlesitename = "META-LANG";
 include("storage/meta/meta.php");
 
-echo css::import_css($tmp_theme, $language, getSkin(), '', '');
+echo css::import_css($tmp_theme, $language, theme::getSkin(), '', '');
 
 global $NPDS_Prefix;
 $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description FROM " . $NPDS_Prefix . "metalang ORDER BY 'type_meta','def' ASC");

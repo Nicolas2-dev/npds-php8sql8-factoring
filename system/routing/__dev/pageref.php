@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\routing\__dev;
 
+use npds\system\language\language;
+
 // global $tiny_mce;
 // $tmp_theme = getTheme();
 // $page__ref = pageref::configure($tmp_theme, $tiny_mce);
@@ -238,14 +240,14 @@ class pageref
     public static function loadPagedescription()
     {
         if (array_key_exists('meta-description', static::$pages_ref[static::$page_uri]) and (static::$meta_description == '')) {
-            static::$meta_description = aff_langue(static::$pages_ref[static::$page_uri]['meta-description']);
+            static::$meta_description = language::aff_langue(static::$pages_ref[static::$page_uri]['meta-description']);
         }
     }
 
     public static function loadPageKeywords()
     {
         if (array_key_exists('meta-keywords', static::$pages_ref[static::$page_uri]) and (static::$meta_keywords == '')) {
-            static::$meta_keywords = aff_langue(static::$pages_ref[static::$page_uri]['meta-keywords']);
+            static::$meta_keywords = language::aff_langue(static::$pages_ref[static::$page_uri]['meta-keywords']);
         }
     }
 

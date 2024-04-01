@@ -13,6 +13,7 @@ use npds\system\cache\cache;
 use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\support\stats;
+use npds\system\support\download;
 use npds\system\language\language;
 
 class boxe
@@ -241,7 +242,7 @@ class boxe
 
             global $block_title;
             $title = $title == '' ? $block_title : language::aff_langue($title);
-            $content = language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', 'changetoampadm', $content));
+            $content = language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', [str::class, 'changetoampadm'], $content));
 
             //==> recuperation
             // $messagerie_npds = 'un|teste'; //file_get_contents('https://raw.githubusercontent.com/npds/npds_dune/master/versus.txt');
@@ -461,7 +462,7 @@ class boxe
 
         $title = $block_title == '' ? translate("Les plus téléchargés") : $block_title;
         $boxstuff = '<ul>';
-        $boxstuff .= topdownload_data('short', 'dcounter');
+        $boxstuff .= download::topdownload_data('short', 'dcounter');
         $boxstuff .= '</ul>';
 
         if ($boxstuff == '<ul></ul>') 
@@ -483,7 +484,7 @@ class boxe
         $title = $block_title == '' ? translate("Fichiers les + récents") : $block_title;
 
         $boxstuff = '<ul>';
-        $boxstuff .= topdownload_data('short', 'ddate');
+        $boxstuff .= download::topdownload_data('short', 'ddate');
         $boxstuff .= '</ul>';
 
         if ($boxstuff == '<ul></ul>') 

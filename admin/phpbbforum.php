@@ -13,6 +13,12 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\js;
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\cache\cache;
+use npds\system\forum\forum;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -90,7 +96,7 @@ function ForumAdmin()
     $arg1 = '
     var formulid = ["forumaddcat"];';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function ForumGo($cat_id)
@@ -128,7 +134,7 @@ function ForumGo($cat_id)
     $result = sql_query("SELECT forum_id, forum_name, forum_access, forum_moderator, forum_type, arbre, attachement, forum_index FROM " . $NPDS_Prefix . "forums WHERE cat_id='$cat_id' ORDER BY forum_index,forum_id");
     
     while (list($forum_id, $forum_name, $forum_access, $forum_moderator, $forum_type, $arbre, $attachement, $forum_index) = sql_fetch_row($result)) {
-        $moderator = str_replace(' ', ', ', get_moderator($forum_moderator));
+        $moderator = str_replace(' ', ', ', forum::get_moderator($forum_moderator));
         
         echo '
             <tr>
@@ -282,7 +288,7 @@ function ForumGo($cat_id)
         </div>
         </form>';
 
-    echo auto_complete_multi('modera', 'uname', 'users', 'l_forum_mod', 'WHERE uid<>1');
+    echo js::auto_complete_multi('modera', 'uname', 'users', 'l_forum_mod', 'WHERE uid<>1');
 
     $arg1 = '
     var formulid=["fadaddforu"];
@@ -371,7 +377,7 @@ function ForumGo($cat_id)
     });
     impu.addEventListener("input", function(e) {fvitem.revalidateField("forum_pass");});';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function ForumGoEdit($forum_id, $ctg)
@@ -422,7 +428,7 @@ function ForumGoEdit($forum_id, $ctg)
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="forum_mod">' . adm_translate("Modérateur(s)") . '</label>';
 
-    $moderator = str_replace(' ', ',', get_moderator($forum_mod));
+    $moderator = str_replace(' ', ',', forum::get_moderator($forum_mod));
 
     echo '
             <div class="col-sm-8">
@@ -614,7 +620,7 @@ function ForumGoEdit($forum_id, $ctg)
         </div>
     </form>';
 
-    echo auto_complete_multi('modera', 'uname', 'users', 'forum_mod', 'WHERE uid<>1');
+    echo js::auto_complete_multi('modera', 'uname', 'users', 'forum_mod', 'WHERE uid<>1');
 
     $arg1 = '
     var formulid=["fadeditforu"];
@@ -702,7 +708,7 @@ function ForumGoEdit($forum_id, $ctg)
     });
     impu.addEventListener("input", function(e) {fvitem.revalidateField("forum_pass");});';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function ForumCatEdit($cat_id)
@@ -760,7 +766,7 @@ function ForumCatEdit($cat_id)
     $arg1 = '
     var formulid=["phpbbforumedcat"];';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function ForumCatSave($old_catid, $cat_id, $cat_title)
@@ -772,10 +778,10 @@ function ForumCatSave($old_catid, $cat_id, $cat_title)
         sql_query("UPDATE " . $NPDS_Prefix . "forums SET cat_id='$cat_id' WHERE cat_id='$old_catid'");
     }
 
-    Q_Clean();
+    cache::Q_Clean();
     
     global $aid;
-    Ecr_Log("security", "UpdateForumCat($old_catid, $cat_id, $cat_title) by AID : $aid", '');
+    logs::Ecr_Log("security", "UpdateForumCat($old_catid, $cat_id, $cat_title) by AID : $aid", '');
 
     Header("Location: admin.php?op=ForumAdmin");
 }
@@ -830,10 +836,10 @@ function ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_
             sql_query("UPDATE " . $NPDS_Prefix . "forums SET forum_name='$forum_name', forum_desc='$forum_desc', forum_access='$forum_access', forum_moderator='$forum_mod', cat_id='$cat_id', forum_type='$forum_type', forum_pass='', arbre='$arbre', attachement='$attachement', forum_index='$forum_index' WHERE forum_id='$forum_id'");
         }
 
-        Q_Clean();
+        cache::Q_Clean();
 
         global $aid;
-        Ecr_Log("security", "UpdateForum($forum_id, $forum_name) by AID : $aid", '');
+        logs::Ecr_Log("security", "UpdateForum($forum_id, $forum_name) by AID : $aid", '');
 
         Header("Location: admin.php?op=ForumGo&cat_id=$cat_id");
     }
@@ -846,7 +852,7 @@ function ForumCatAdd($catagories)
     sql_query("INSERT INTO " . $NPDS_Prefix . "catagories VALUES (NULL, '$catagories')");
 
     global $aid;
-    Ecr_Log('security', "AddForumCat($catagories) by AID : $aid", '');
+    logs::Ecr_Log('security', "AddForumCat($catagories) by AID : $aid", '');
 
     Header("Location: admin.php?op=ForumAdmin");
 }
@@ -896,10 +902,10 @@ function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id
 
         sql_query("INSERT INTO " . $NPDS_Prefix . "forums VALUES (NULL, '$forum_name', '$forum_desc', '$forum_access', '$forum_mod', '$cat_id', '$forum_type', '$forum_pass', '$arbre', '$attachement', '$forum_index')");
         
-        Q_Clean();
+        cache::Q_Clean();
 
         global $aid;
-        Ecr_Log("security", "AddForum($forum_name) by AID : $aid", "");
+        logs::Ecr_Log("security", "AddForum($forum_name) by AID : $aid", "");
 
         Header("Location: admin.php?op=ForumGo&cat_id=$cat_id");
     }
@@ -916,7 +922,7 @@ function ForumCatDel($cat_id, $ok = 0)
             sql_query("DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id'");
             sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum_id'");
 
-            control_efface_post("forum_npds", "", "", $forum_id);
+            forum::control_efface_post("forum_npds", "", "", $forum_id);
 
             sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum_id'");
         }
@@ -924,10 +930,10 @@ function ForumCatDel($cat_id, $ok = 0)
         sql_query("DELETE FROM " . $NPDS_Prefix . "forums WHERE cat_id='$cat_id'");
         sql_query("DELETE FROM " . $NPDS_Prefix . "catagories WHERE cat_id='$cat_id'");
 
-        Q_Clean();
+        cache::Q_Clean();
 
         global $aid;
-        Ecr_Log("security", "DeleteForumCat($cat_id) by AID : $aid", "");
+        logs::Ecr_Log("security", "DeleteForumCat($cat_id) by AID : $aid", "");
 
         Header("Location: admin.php?op=ForumAdmin");
     } else {
@@ -944,7 +950,7 @@ function ForumCatDel($cat_id, $ok = 0)
             <a href="admin.php?op=ForumAdmin" class="btn btn-secondary">' . adm_translate("Non") . '</a>
         </div>';
 
-        adminfoot('', '', '', '');
+        css::adminfoot('', '', '', '');
     }
 }
 
@@ -956,15 +962,15 @@ function ForumGoDel($forum_id, $ok = 0)
         sql_query("DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id'");
         sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum_id'");
 
-        control_efface_post('forum_npds', '', '', $forum_id);
+        forum::control_efface_post('forum_npds', '', '', $forum_id);
 
         sql_query("DELETE FROM " . $NPDS_Prefix . "forums WHERE forum_id='$forum_id'");
         sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum_id'");
 
-        Q_Clean();
+        cache::Q_Clean();
 
         global $aid;
-        Ecr_Log('security', "DeleteForum($forum_id) by AID : $aid", '');
+        logs::Ecr_Log('security', "DeleteForum($forum_id) by AID : $aid", '');
 
         Header("Location: admin.php?op=ForumAdmin");
     } else {
@@ -981,6 +987,6 @@ function ForumGoDel($forum_id, $ok = 0)
             <a class="btn btn-secondary" href="admin.php?op=ForumAdmin" >' . adm_translate("Non") . '</a>
         </div>';
         
-        adminfoot('', '', '', '');
+        css::adminfoot('', '', '', '');
     }
 }

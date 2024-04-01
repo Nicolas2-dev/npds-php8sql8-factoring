@@ -11,6 +11,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\cache\cache;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -294,7 +298,7 @@ function main()
     inpandfieldlen("xt_modules",6);
     ';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 switch ($op) {
@@ -302,16 +306,16 @@ switch ($op) {
         save_supercache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt_faq, $xt_links, $xt_forum, $xt_memberlist, $xt_modules);
 
         global $aid;
-        Ecr_Log('security', "ChangeSuperCache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt_faq, $xt_links, $xt_forum, $xt_memberlist, $xt_modules) by AID : $aid", '');
+        logs::Ecr_Log('security', "ChangeSuperCache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt_faq, $xt_links, $xt_forum, $xt_memberlist, $xt_modules) by AID : $aid", '');
         
         Header("Location: admin.php?op=supercache");
         break;
 
     case 'supercache_empty':
-        SC_clean();
+        cache::SC_clean();
 
         global $aid;
-        Ecr_Log('security', "EmptySuperCache() by AID : $aid", '');
+        logs::Ecr_Log('security', "EmptySuperCache() by AID : $aid", '');
         
         Header("Location: admin.php?op=supercache");
         break;

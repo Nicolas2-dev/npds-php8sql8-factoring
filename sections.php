@@ -246,7 +246,7 @@ function listarticles($secid)
             }
 
             if ($intro != '') {
-                echo aff_langue($intro);
+                echo language::aff_langue($intro);
             }
 
             if ($image != '') {
@@ -512,7 +512,7 @@ function PrintSecPage($artid)
         $content = str_replace("[page", str_repeat("-", 50) . "&nbsp;[page", $content);
     }
 
-    echo meta_lang($content);
+    echo metalang::meta_lang($content);
 
     echo '
                 <hr />

@@ -13,6 +13,12 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\auth\groupe;
+use npds\system\mail\mailler;
+use npds\system\support\editeur;
+use npds\system\language\metalang;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -125,7 +131,7 @@ function Detail_Header_Footer($ibid, $type)
         global $tiny_mce_relurl;
         $tiny_mce_relurl = 'false';
 
-        echo aff_editeur('xtext', '');
+        echo editeur::aff_editeur('xtext', '');
     }
 
     if ($type == 'HED') {
@@ -144,7 +150,7 @@ function Detail_Header_Footer($ibid, $type)
         </div>
     </form>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function ShowBody()
@@ -229,7 +235,7 @@ function Detail_Body($ibid)
         global $tiny_mce_relurl;
         $tiny_mce_relurl = "false";
 
-        echo aff_editeur("xtext", "false");
+        echo editeur::aff_editeur("xtext", "false");
     }
 
     echo '
@@ -243,7 +249,7 @@ function Detail_Body($ibid)
         </div>
     </form>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function Add_Body()
@@ -277,7 +283,7 @@ function Add_Body()
     global $tiny_mce_relurl;
     $tiny_mce_relurl = "false";
 
-    echo aff_editeur("xtext", "false");
+    echo editeur::aff_editeur("xtext", "false");
 
     echo '
             <div class="mb-3 row">
@@ -303,7 +309,7 @@ function Add_Body()
     var formulid = ["lnlbody"];
     ';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function Add_Body_Submit($Ytext, $Yhtml)
@@ -398,7 +404,7 @@ function Add_Header_Footer($ibid)
     global $tiny_mce_relurl;
     $tiny_mce_relurl = 'false';
 
-    echo aff_editeur('xtext', 'false');
+    echo editeur::aff_editeur('xtext', 'false');
 
     echo '
                 <input type="hidden" name="op" value="' . $va . '" />
@@ -422,7 +428,7 @@ function Add_Header_Footer($ibid)
     var formulid = ["lnlheadfooter"];
     ';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function Add_Header_Footer_Submit($ibid, $xtext, $xhtml)
@@ -544,7 +550,7 @@ function main()
                 </div>
             </div>';
 
-    $mX = liste_group();
+    $mX = groupe::liste_group();
 
     $tmp_groupe = '';
     foreach ($mX as $groupe_id => $groupe_name) {
@@ -583,7 +589,7 @@ function main()
         inpandfieldlen("Xsubject",255);
         ';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function Del_Question($retour, $param)
@@ -601,7 +607,7 @@ function Del_Question($retour, $param)
     <a href="admin.php?op=' . $retour . '&amp;' . $param . '" class="btn btn-danger btn-sm">' . adm_translate("Oui") . '</a>
     <a href="javascript:history.go(-1)" class="btn btn-secondary btn-sm">' . adm_translate("Non") . '</a>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function Test($Yheader, $Ybody, $Yfooter)
@@ -632,14 +638,14 @@ function Test($Yheader, $Ybody, $Yfooter)
         <h3 class="mb-3">' . adm_translate("Prévisualiser") . ' HTML</h3>';
         
         $Xmime = 'html-nobr';
-        $message = meta_lang($Xheader[0] . $Xbody[0] . $Xfooter[0]);
+        $message = metalang::meta_lang($Xheader[0] . $Xbody[0] . $Xfooter[0]);
     } else {
         echo '
         <hr />
         <h3 class="mb-3">' . adm_translate("Prévisualiser") . ' ' . adm_translate("TEXTE") . '</h3>';
         
         $Xmime = 'text';
-        $message = meta_lang(nl2br($Xheader[0]) . nl2br($Xbody[0]) . nl2br($Xfooter[0]));
+        $message = metalang::meta_lang(nl2br($Xheader[0]) . nl2br($Xbody[0]) . nl2br($Xfooter[0]));
     }
 
     echo '
@@ -649,9 +655,9 @@ function Test($Yheader, $Ybody, $Yfooter)
     <a class="btn btn-secondary my-3" href="javascript:history.go(-1)" >' . adm_translate("Retour en arrière") . '</a>';
 
     global $adminmail;
-    send_email($adminmail, 'LNL TEST', $message, $adminmail, true, $Xmime, '');
+    mailler::send_email($adminmail, 'LNL TEST', $message, $adminmail, true, $Xmime, '');
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function lnl_list()
@@ -710,7 +716,7 @@ function lnl_list()
         </tbody>
     </table>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function lnl_user_list()
@@ -760,7 +766,7 @@ function lnl_user_list()
     </table>
     <br /><a href="javascript:history.go(-1)" class="btn btn-secondary">' . adm_translate("Retour en arrière") . '</a>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 switch ($op) {
@@ -914,7 +920,7 @@ switch ($op) {
                                 $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") . " : $nuke_url/lnl.php?op=unsubscribe&email=$email";
                             }
 
-                            send_email($email, $subject, meta_lang($Xmessage), "", true, $Xmime, '');
+                            mailler::send_email($email, $subject, metalang::meta_lang($Xmessage), "", true, $Xmime, '');
                             $number_send++;
                         }
                     }
@@ -966,7 +972,7 @@ switch ($op) {
                         if ($email != '') {
 
                             if (($message != '') and ($subject != '')) {
-                                send_email($email, $subject, meta_lang($message), "", true, $Xmime, '');
+                                mailler::send_email($email, $subject, metalang::meta_lang($message), "", true, $Xmime, '');
                                 $number_send++;
                             }
                         }

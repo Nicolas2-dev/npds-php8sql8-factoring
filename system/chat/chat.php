@@ -4,6 +4,14 @@ declare(strict_types=1);
 
 namespace npds\system\chat;
 
+use npds\system\assets\java;
+use npds\system\block\block;
+use npds\system\cache\cache;
+use npds\system\forum\forum;
+use npds\system\support\str;
+use npds\system\security\hack;
+use npds\system\utility\crypt;
+
 class chat
 {
 
@@ -12,8 +20,8 @@ class chat
     {
         global $NPDS_Prefix;
 
-        $auto = autorisation_block("params#" . $pour);
-        $dimauto = count($auto);
+        $auto = block::autorisation_block("params#" . $pour);
+        $dimauto = count( (array) $auto);
         $numofchatters = 0;
 
         if ($dimauto <= 1) {
@@ -30,8 +38,8 @@ class chat
         global $NPDS_Prefix;
 
         if ($message != '') {
-            $username = removeHack(stripslashes(FixQuotes(strip_tags(trim($username)))));
-            $message =  removeHack(stripslashes(FixQuotes(strip_tags(trim($message)))));
+            $username = hack::removeHack(stripslashes(str::FixQuotes(strip_tags(trim($username)))));
+            $message =  hack::removeHack(stripslashes(str::FixQuotes(strip_tags(trim($message)))));
 
             $ip = getip();
 
@@ -47,7 +55,7 @@ class chat
     {
         global $user, $admin, $member_list, $long_chain, $NPDS_Prefix;
 
-        $auto = autorisation_block('params#' . $pour);
+        $auto = (array) block::autorisation_block('params#' . $pour);
         $dimauto = count($auto);
 
         if (!$long_chain) {
@@ -81,12 +89,12 @@ class chat
 
                     $une_ligne = true;
                     $thing .= (strlen($message) > $long_chain)  ?
-                        "&gt;&nbsp;<span>" . smilie(stripslashes(substr($message, 0, $long_chain))) . " </span><br />\n" :
-                        "&gt;&nbsp;<span>" . smilie(stripslashes($message)) . " </span><br />\n";
+                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($message, 0, $long_chain))) . " </span><br />\n" :
+                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes($message)) . " </span><br />\n";
                 }
             }
 
-            $PopUp = JavaPopUp("chat.php?id=" . $auto[0] . "&amp;auto=" . encrypt(serialize($auto[0])), "chat" . $auto[0], 380, 480);
+            $PopUp = java::JavaPopUp("chat.php?id=" . $auto[0] . "&amp;auto=" . crypt::encrypt(serialize($auto[0])), "chat" . $auto[0], 380, 480);
             
             if ($une_ligne) {
                 $thing .= '<hr />';
@@ -104,10 +112,10 @@ class chat
                 $thing .= '<ul>';
                 
                 foreach ($auto as $autovalue) {
-                    $result = Q_select("SELECT groupe_id, groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$autovalue'", 3600);
+                    $result = cache::Q_select("SELECT groupe_id, groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$autovalue'", 3600);
                     $autovalueX = $result[0];
 
-                    $PopUp = JavaPopUp("chat.php?id=" . $autovalueX['groupe_id'] . "&auto=" . encrypt(serialize($autovalueX['groupe_id'])), "chat" . $autovalueX['groupe_id'], 380, 480);
+                    $PopUp = java::JavaPopUp("chat.php?id=" . $autovalueX['groupe_id'] . "&auto=" . crypt::encrypt(serialize($autovalueX['groupe_id'])), "chat" . $autovalueX['groupe_id'], 380, 480);
                     $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">" . $autovalueX['groupe_name'] . "</a>";
 
                     $result = sql_query("SELECT DISTINCT ip FROM " . $NPDS_Prefix . "chatbox WHERE id='" . $autovalueX['groupe_id'] . "' AND date >= " . (time() - (60 * 3)) . "");

@@ -12,6 +12,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\support\str;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -30,8 +34,8 @@ function mod_main($title, $description)
 {
     global $NPDS_Prefix;
 
-    $title = stripslashes(FixQuotes($title));
-    $description = stripslashes(FixQuotes($description));
+    $title = stripslashes(str::FixQuotes($title));
+    $description = stripslashes(str::FixQuotes($description));
 
     sql_query("UPDATE " . $NPDS_Prefix . "reviews_main SET title='$title', description='$description'");
 
@@ -190,7 +194,7 @@ function reviews()
 
         echo '
     <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
-    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/' . language_iso(1, '', '') . '.js"></script>
+    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/' . language::language_iso(1, '', '') . '.js"></script>
     <script type="text/javascript">
     //<![CDATA[
         $(document).ready(function() {
@@ -200,7 +204,7 @@ function reviews()
             altInput: true,
             altFormat: "l j F Y",
             dateFormat:"Y-m-d",
-            "locale": "' . language_iso(1, '', '') . '",
+            "locale": "' . language::language_iso(1, '', '') . '",
         });
     //]]>
     </script>';
@@ -224,17 +228,17 @@ function reviews()
 
     sql_free_result($result);
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function add_review($id, $date, $title, $text, $reviewer, $email, $score, $cover, $url, $url_title)
 {
     global $NPDS_Prefix;
 
-    $title = stripslashes(FixQuotes($title));
-    $text = stripslashes(FixQuotes($text));
-    $reviewer = stripslashes(FixQuotes($reviewer));
-    $email = stripslashes(FixQuotes($email));
+    $title = stripslashes(str::FixQuotes($title));
+    $text = stripslashes(str::FixQuotes($text));
+    $reviewer = stripslashes(str::FixQuotes($reviewer));
+    $email = stripslashes(str::FixQuotes($email));
 
     sql_query("INSERT INTO " . $NPDS_Prefix . "reviews VALUES (NULL, '$date', '$title', '$text', '$reviewer', '$email', '$score', '$cover', '$url', '$url_title', '1')");
     

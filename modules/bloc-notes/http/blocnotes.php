@@ -12,6 +12,10 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\security\hack;
+
+
 global $NPDS_Prefix;
 if ($uriBlocNote) {
     if ($typeBlocNote == "shared")
@@ -39,12 +43,12 @@ if ($uriBlocNote) {
             $result = sql_query("SELECT texte FROM " . $NPDS_Prefix . "blocnotes WHERE bnid='$bnid'");
             if (sql_num_rows($result) > 0) {
                 if ($texteBlocNote != '')
-                    sql_query("UPDATE " . $NPDS_Prefix . "blocnotes SET texte='" . removeHack($texteBlocNote) . "' WHERE bnid='$bnid'");
+                    sql_query("UPDATE " . $NPDS_Prefix . "blocnotes SET texte='" . hack::removeHack($texteBlocNote) . "' WHERE bnid='$bnid'");
                 else
                     sql_query("DELETE FROM " . $NPDS_Prefix . "blocnotes WHERE bnid='$bnid'");
             } else {
                 if ($texteBlocNote != '')
-                    sql_query("INSERT INTO " . $NPDS_Prefix . "blocnotes (bnid, texte) VALUES ('$bnid', '" . removeHack($texteBlocNote) . "')");
+                    sql_query("INSERT INTO " . $NPDS_Prefix . "blocnotes (bnid, texte) VALUES ('$bnid', '" . hack::removeHack($texteBlocNote) . "')");
             }
             sql_query("UNLOCK TABLES");
         }

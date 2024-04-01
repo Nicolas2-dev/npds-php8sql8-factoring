@@ -16387,3 +16387,982 @@ Exception information:
 
 ---------
 
+Exception information:
+
+    Date: Apr 01, 2024 3:47AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php
+
+    Line: 11
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(41): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:47AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php
+
+    Line: 11
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(41): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:47AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php
+
+    Line: 11
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(41): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:47AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php
+
+    Line: 11
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(41): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:47AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php
+
+    Line: 11
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(41): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:47AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php
+
+    Line: 11
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(41): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:47AM
+
+    Message: Call to undefined function get_userdata_from_id()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\header.html
+
+    Line: 6
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(99): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(135): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:48AM
+
+    Message: Class "forum" not found
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\header.html
+
+    Line: 6
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(99): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(135): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:49AM
+
+    Message: Call to undefined function autorisation()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\header.html
+
+    Line: 40
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(50): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(99): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(135): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 3:51AM
+
+    Message: Call to undefined function Who_Online()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(345) : eval()'d code
+
+    Line: 2
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(97): MM_nb_online()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\language\metalang.php(348): npds\system\language\metalang::charg('MM_nb_online', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\header.php(55): npds\system\language\metalang::meta_lang('\n   <nav id="up...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(99): require_once('E:\\New_Serv_Wam...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(135): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#9 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:49AM
+
+    Message: Type error: npds\system\news\news::getTopics(): Argument #1 ($s_sid) must be of type int, string given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\news\news.php on line 485
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\news\news.php
+
+    Line: 562
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\news\news.php(485): npds\system\news\news::getTopics('10')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\news\news.php(346): npds\system\news\news::prepa_aff_news('edito', '0', 0)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(113): npds\system\news\news::aff_news('edito', '', 0)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:49AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:54AM
+
+    Message: Parse error: syntax error, unexpected token ":", expecting "," or ";"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\view\include\header_head.inc
+
+    Line: 12
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(362): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:54AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:55AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:55AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:55AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:57AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:57AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:57AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 4:57AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:00AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(33): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(100): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(47): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(58): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:21AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:21AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:21AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:21AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:21AM
+
+    Message: Call to undefined function vd()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\view\include\header_head.inc
+
+    Line: 34
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(86): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(366): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#5 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:22AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:25AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:27AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:28AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(36): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:28AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(40): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:28AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 13
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(40): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:32AM
+
+    Message: Class "language" not found
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 14
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(38): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:32AM
+
+    Message: Class "npds\system\language" not found
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 14
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(38): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:32AM
+
+    Message: Class "npds\system\language" not found
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 14
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(38): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:32AM
+
+    Message: Class "npds\system\language" not found
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\view\footer.html
+
+    Line: 14
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\themes-dynamic\footer.php(38): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(106): require_once('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(122): include('E:\\New_Serv_Wam...')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#7 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:36AM
+
+    Message: Type error: preg_replace_callback(): Argument #2 ($callback) must be a valid callback, function "changetoampadm" not found or invalid function name
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\boxe.php
+
+    Line: 245
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\boxe.php(245): preg_replace_callback('#<a href=[^>]*(...', 'changetoampadm', '<ul><li><a href...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(250): npds\system\block\boxe::adminblock()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(88): adminblock()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(256): npds\system\block\block::block_fonction('Administration', 'function#adminb...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(373): npds\system\block\block::fab_block('Administration', '0', 'function#adminb...', '0')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(304): npds\system\block\block::Pre_fab_block('', 'LB', 'col')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(196): npds\system\block\block::leftblocks('col')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(136): include('E:\\New_Serv_Wam...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(366): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#12 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:38AM
+
+    Message: Call to undefined function aff_langue()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php
+
+    Line: 585
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(663): GraphicAdmin('manuels/fr/admi...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1482): adminMain(0)
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 5:40AM
+
+    Message: Call to undefined function npds\system\assets\language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 154
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\settings.php(2046): npds\system\assets\css::adminfoot('fv', Array, '\n    const sett...', '')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\settings.php(2051): Configure()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1064): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+

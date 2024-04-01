@@ -12,6 +12,8 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\auth\users;
+use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\security\hack;
 use npds\system\utility\crypt;
@@ -32,7 +34,7 @@ settype($aff_entetes, 'integer');
 settype($connectes, 'integer');
 
 // Savoir si le 'connecté' a le droit à ce chat ?
-if (!autorisation($id)) {
+if (!users::autorisation($id)) {
     die();
 }
 
@@ -89,7 +91,7 @@ if ($result) {
             $thing .= "<div class='chatnom'>$username</div>";
         }
 
-        $message = smilie($message);
+        $message = forum::smilie($message);
         $chat_forbidden_words = array(
             "'\"'i" => '&quot;',
             "'OxOA'i" => '',
@@ -100,7 +102,7 @@ if ($result) {
         );
 
         $message = preg_replace(array_keys($chat_forbidden_words), array_values($chat_forbidden_words), $message);
-        $message = str_replace('"', '\"', make_clickable($message));
+        $message = str_replace('"', '\"', forum::make_clickable($message));
         $thing .= "<div class='chattexte'>" . hack::removeHack($message) . "</div></div>";
         $repere = $date_message;
     }

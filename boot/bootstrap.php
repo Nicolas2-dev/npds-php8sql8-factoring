@@ -132,7 +132,7 @@ include_once('config/cache.timings.php');
 if (file_exists('storage/language/langcode.php')) {
     include('storage/language/langcode.php');
 } else {
-    $languageslist = languageList();
+    $languageslist = language::languageList();
 }
 
 if (isset($choice_user_language)) {

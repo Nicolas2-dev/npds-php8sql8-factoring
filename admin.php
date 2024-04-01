@@ -12,6 +12,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\language\language;
+use npds\system\pagination\paginator;
+
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
@@ -112,7 +116,7 @@ function login()
         var formulid =["adminlogin"];
         ';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function GraphicAdmin($hlpfile)
@@ -582,7 +586,7 @@ function GraphicAdmin($hlpfile)
         <div id="adm_men_dial" class="border rounded px-2 py-2" >
             <div id="adm_men_alert" >
                 <div id="alertes">
-                ' . aff_langue($bloc_foncts_A) . '
+                ' . language::aff_langue($bloc_foncts_A) . '
                 </div>
             </div>
         </div>
@@ -730,7 +734,7 @@ function adminMain($deja_affiches)
                 <td>' . $sid . '</td>
                 <td>';
 
-            $title = aff_langue($title);
+            $title = language::aff_langue($title);
 
             if ($archive)
                 echo $title . ' <i>(archive)</i>';
@@ -738,10 +742,10 @@ function adminMain($deja_affiches)
                 if ($affiche) {
                     echo '<a data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" href="article.php?sid=' . $sid . '" data-bs-content=\'   <div class="thumbnail"><img class="img-rounded" src="assets/images/topics/' . $topicimage . '" height="80" width="80" alt="topic_logo" /><div class="caption">' . htmlentities($hometext, ENT_QUOTES) . '</div></div>\' title="' . $sid . '" data-bs-html="true">' . ucfirst($title) . '</a>';
                     if ($ihome == 1)
-                        echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip">' . aff_langue($cat_title) . '</span> <span class="text-danger">non publié en index</span></small>';
+                        echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip">' . language::aff_langue($cat_title) . '</span> <span class="text-danger">non publié en index</span></small>';
                     else
                 if ($catid > 0)
-                        echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip"> ' . aff_langue($cat_title) . '</span> <span class="text-success"> publié en index</span></small>';
+                        echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip"> ' . language::aff_langue($cat_title) . '</span> <span class="text-success"> publié en index</span></small>';
                 } else {
                     echo '<i>' . $title . '</i>';
                 }
@@ -752,7 +756,7 @@ function adminMain($deja_affiches)
                 <td>';
             } else {
                 echo '</td>
-                <td>' . $topictext . '<a href="index.php?op=newtopic&amp;topic=' . $topic . '" class="tooltip">' . aff_langue($topictext) . '</a>';
+                <td>' . $topictext . '<a href="index.php?op=newtopic&amp;topic=' . $topic . '" class="tooltip">' . language::aff_langue($topictext) . '</a>';
             }
 
             if ($affiche)
@@ -778,7 +782,7 @@ function adminMain($deja_affiches)
             <li class="page-item disabled"><a class="page-link" href="#">' . $nbPages . ' ' . adm_translate("Page(s)") . '</a></li>
         </ul>';
 
-        echo paginate('admin.php?op=suite_articles&amp;deja_affiches=', '', $nbPages, $current, 1, $admart, $start);
+        echo paginator::paginate('admin.php?op=suite_articles&amp;deja_affiches=', '', $nbPages, $current, 1, $admart, $start);
 
         echo '
         </div>';

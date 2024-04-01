@@ -7,9 +7,12 @@ namespace npds\system\auth;
 use npds\system\auth\users;
 use npds\system\assets\java;
 use npds\system\cache\cache;
+use npds\system\forum\forum;
+use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
 use npds\system\utility\crypt;
+use npds\system\support\online;
 use npds\system\language\language;
 
 class groupe
@@ -160,7 +163,7 @@ class groupe
         $li_mb .= '
            <div class="my-4">
               <a data-bs-toggle="collapse" data-bs-target="#lst_mb_ws_' . $gr . '" class="text-primary" id="show_lst_mb_ws_' . $gr . '" title="' . translate("Déplier la liste") . '"><i id="i_lst_mb_ws_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a><i class="fa fa-users fa-2x text-muted ms-3 align-middle" title="' . translate("Liste des membres du groupe.") . '" data-bs-toggle="tooltip"></i>&nbsp;<a href="memberslist.php?gr_from_ws=' . $gr . '" class="text-uppercase">' . translate("Membres") . '</a><span class="badge bg-secondary float-end">' . $nb_mb . '</span>';
-        $tab = online_members();
+        $tab = online::online_members();
 
         $li_mb .= '
               <ul id="lst_mb_ws_' . $gr . '" class="list-group ul_bloc_ws collapse">';
@@ -173,7 +176,7 @@ class groupe
 
             if (!$short_user) {
 
-                $posterdata_extend = get_userdata_extend_from_id($uid);
+                $posterdata_extend = forum::get_userdata_extend_from_id($uid);
 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
 
@@ -328,7 +331,7 @@ class groupe
                 $nb_doc_gr = '  <span class="badge bg-secondary float-end">' . $nb_doc . '</span>';
                 
                 while (list($p, $e, $m, $r) = sql_fetch_row($docs_gr)) {
-                    $surlignage = $couleur[hexfromchr($e)];
+                    $surlignage = $couleur[str::hexfromchr($e)];
                     $lst_doc .= '
                  <li class="list-group-item list-group-item-action px-1 py-3" style="line-height:14px;"><div id="last_editor_' . $p . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernier éditeur") . ' : ' . $e . ' ' . date(translate("dateinternal"), $m) . '" style="float:left; width:1rem; height:1rem; background-color:' . $surlignage . '"></div><i class="fa fa-edit text-muted mx-1" data-bs-toggle="tooltip" title="' . translate("Document co-rédigé") . '." ></i><a href="modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page=' . $p . '&amp;member=' . $gr . '&amp;ranq=' . $r . '">' . $p . '</a></li>';
                 }

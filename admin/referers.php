@@ -13,6 +13,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -100,7 +102,7 @@ function hreferer($filter)
         <li class="nav-item"><a class="nav-link" href="admin.php?op=archreferer&amp;filter=' . $filter . '">' . adm_translate("Archiver les Référants") . '</a></li>
     </ul>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function delreferer()

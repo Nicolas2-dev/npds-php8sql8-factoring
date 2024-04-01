@@ -12,6 +12,7 @@
 /************************************************************************/
 
 use npds\system\auth\groupe;
+use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\security\hack;
 use npds\system\language\language;
@@ -68,7 +69,7 @@ if (($op != '') and ($op)) {
 
         if (dirname($op) != 'groupe') {
             // single user
-            $userdata = get_userdata($op);
+            $userdata = forum::get_userdata($op);
             
             if ($userdata['mns'] == true) {
                 $affich = true;
@@ -274,7 +275,7 @@ if ($affich) {
         $rupt = strpos($Xcontent, '#v_yt#');
 
         echo substr($Xcontent, 0, $rupt);
-        echo aff_video_yt(substr($Xcontent, $rupt + 6));
+        echo forum::aff_video_yt(substr($Xcontent, $rupt + 6));
 
         if ($adminblog) {
             echo '

@@ -11,6 +11,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
 $theme = 'npds-boost_sk';
 $long_chain = '34'; // Nombre de caractères affichés avant troncature pour certains blocs
 

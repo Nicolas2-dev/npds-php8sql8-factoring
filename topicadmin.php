@@ -15,6 +15,7 @@
 /************************************************************************/
 
 use npds\system\cache\cache;
+use npds\system\forum\forum;
 use npds\system\utility\spam;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -70,15 +71,15 @@ if (isset($user)) {
 
     $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
     if (!$rowQ1) {
-        forumerror('0001');
+        forum::forumerror('0001');
     }
 
     $myrow = $rowQ1[0];
-    $moderator = explode(' ', get_moderator($myrow['forum_moderator']));
+    $moderator = explode(' ', forum::get_moderator($myrow['forum_moderator']));
 
     for ($i = 0; $i < count($moderator); $i++) {
         if (($userdata[1] == $moderator[$i])) {
-            if (user_is_moderator($userdata[0], $userdata[2], $myrow['forum_access'])) {
+            if (forum::user_is_moderator($userdata[0], $userdata[2], $myrow['forum_access'])) {
                 $Mmod = true;
             }
             break;
@@ -87,7 +88,7 @@ if (isset($user)) {
 }
 
 if ((!$Mmod) and ($adminforum == 0)) {
-    forumerror('0007');
+    forum::forumerror('0007');
 }
 
 //   }
@@ -95,17 +96,17 @@ if ((!$Mmod) and ($adminforum == 0)) {
 if ((isset($submit)) and ($mode == 'move')) {
     $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET forum_id='$newforum' WHERE topic_id='$topic'";
     if (!$r = sql_query($sql)) {
-        forumerror('0010');
+        forum::forumerror('0010');
     }
 
     $sql = "UPDATE " . $NPDS_Prefix . "posts SET forum_id='$newforum' WHERE topic_id='$topic' AND forum_id='$forum'";
     if (!$r = sql_query($sql)) {
-        forumerror('0010');
+        forum::forumerror('0010');
     }
 
     $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read where topicid='$topic'";
     if (!$r = sql_query($sql)) {
-        forumerror('0001');
+        forum::forumerror('0001');
     }
 
     $sql = "UPDATE $upload_table SET forum_id='$newforum' WHERE apli='forum_npds' AND topic_id='$topic' AND forum_id='$forum'";
@@ -186,20 +187,20 @@ if ((isset($submit)) and ($mode == 'move')) {
             case 'del':
                 $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'";
                 if (!$result = sql_query($sql)) {
-                    forumerror('0009');
+                    forum::forumerror('0009');
                 }
 
                 $sql = "DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'";
                 if (!$result = sql_query($sql)) {
-                    forumerror('0010');
+                    forum::forumerror('0010');
                 }
 
                 $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topic'";
                 if (!$r = sql_query($sql)) {
-                    forumerror('0001');
+                    forum::forumerror('0001');
                 }
 
-                control_efface_post("forum_npds", "", $topic, "");
+                forum::control_efface_post("forum_npds", "", $topic, "");
 
                 header("location: viewforum.php?forum=$forum");
                 break;
@@ -207,7 +208,7 @@ if ((isset($submit)) and ($mode == 'move')) {
             case 'lock':
                 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status=1 WHERE topic_id='$topic'";
                 if (!$r = sql_query($sql)) {
-                    forumerror('0011');
+                    forum::forumerror('0011');
                 }
 
                 header("location: $url_ret?topic=$topic&forum=$forum");
@@ -222,7 +223,7 @@ if ((isset($submit)) and ($mode == 'move')) {
 
                 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status = '0', topic_first='1', topic_title='" . addslashes($topic_title) . "' WHERE topic_id = '$topic'";
                 if (!$r = sql_query($sql)) {
-                    forumerror('0012');
+                    forum::forumerror('0012');
                 }
 
                 header("location: $url_ret?topic=$topic&forum=$forum");
@@ -231,7 +232,7 @@ if ((isset($submit)) and ($mode == 'move')) {
             case 'first':
                 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status = '1', topic_first='0' WHERE topic_id = '$topic'";
                 if (!$r = sql_query($sql)) {
-                    forumerror('0011');
+                    forum::forumerror('0011');
                 }
 
                 header("location: $url_ret?topic=$topic&forum=$forum");
@@ -244,11 +245,11 @@ if ((isset($submit)) and ($mode == 'move')) {
                 $sql = "SELECT u.uname, p.poster_ip, p.poster_dns FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "posts p WHERE p.post_id = '$post' AND u.uid = p.poster_id";
                 
                 if (!$r = sql_query($sql)) {
-                    forumerror('0013');
+                    forum::forumerror('0013');
                 }
 
                 if (!$m = sql_fetch_assoc($r)) {
-                    forumerror('0014');
+                    forum::forumerror('0014');
                 }
 
                 echo '
@@ -277,11 +278,11 @@ if ((isset($submit)) and ($mode == 'move')) {
                 $sql = "SELECT p.poster_ip FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "posts p WHERE p.post_id = '$post' AND u.uid = p.poster_id";
 
                 if (!$r = sql_query($sql)) {
-                    forumerror('0013');
+                    forum::forumerror('0013');
                 }
 
                 if (!$m = sql_fetch_assoc($r)) {
-                    forumerror('0014');
+                    forum::forumerror('0014');
                 }
 
                 spam::L_spambot($m['poster_ip'], "ban");

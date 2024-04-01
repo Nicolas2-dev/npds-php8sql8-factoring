@@ -11,7 +11,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\chat\chat;
 use npds\system\assets\css;
+use npds\system\auth\users;
+use npds\system\forum\forum;
 use npds\system\utility\crypt;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -30,7 +33,7 @@ if ($id === '' || unserialize(crypt::decrypt($auto)) != $id) {
 // soit on vient d'un bloc qui par définition autorise en fabricant l'interface
 // soit on viens de WS et là ....
 
-if (!autorisation($id)) {
+if (!users::autorisation($id)) {
     die();
 }
 
@@ -104,7 +107,7 @@ echo '
             <textarea id="chatarea" class="form-control my-3" type="text" rows="2" ' . $xJava . ' placeholder="🖋"></textarea>
             <div class="float-end">';
 
-putitems("chatarea");
+forum::putitems("chatarea");
 
 echo '
             </div>
@@ -131,6 +134,6 @@ switch ($op) {
             $dbname = 1;
         }
         
-        insertChat($uname, $message, $dbname, $id);
+        chat::insertChat($uname, $message, $dbname, $id);
         break;
 }

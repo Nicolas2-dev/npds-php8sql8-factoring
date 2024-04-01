@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace npds\system\news;
 
-use PDO;
 use npds\system\logs\logs;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
@@ -12,6 +11,7 @@ use npds\system\support\str;
 use npds\system\utility\code;
 use npds\system\support\edito;
 use npds\system\language\language;
+use npds\system\language\metalang;
 use npds\system\support\facades\DB;
 use npds\system\subscribe\subscribe;
 
@@ -47,7 +47,7 @@ class news
             $rfile2 = sql_query("SELECT topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'"); 
             list($topictext, $topicimage) = sql_fetch_row($rfile2);
             
-            $hometext = meta_lang(strip_tags($hometext));
+            $hometext = metalang::meta_lang(strip_tags($hometext));
             
             fwrite($file, "%%\n$title\n$nuke_url/article.php?sid=$sid\n$time\n$aid\n$topictext\n$hometext\n$topicimage\n");
             fwrite($file2, "<NEWS>\n<NBX>$topictext</NBX>\n<TITLE>" . stripslashes($title) . "</TITLE>\n<SUMMARY>$hometext</SUMMARY>\n<URL>$nuke_url/article.php?sid=$sid</URL>\n<AUTHOR>" . $aid . "</AUTHOR>\n</NEWS>\n\n");
@@ -482,7 +482,7 @@ class news
             $printP = '<a href="print.php?sid=' . $s_sid . '" class="me-3" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp;';
             $sendF = '<a href="friend.php?op=FriendSend&amp;sid=' . $s_sid . '" class="me-3" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a>';
             
-            getTopics($s_sid);
+            static::getTopics($s_sid);
             
             $title = language::aff_langue(stripslashes($title));
             $hometext = language::aff_langue(stripslashes($hometext));
@@ -537,8 +537,8 @@ class news
             $news_tab[$story_limit]['title'] = serialize($title);
             $news_tab[$story_limit]['counter'] = serialize($counter);
             $news_tab[$story_limit]['topic'] = serialize($topic);
-            $news_tab[$story_limit]['hometext'] = serialize(meta_lang(code::aff_code($hometext)));
-            $news_tab[$story_limit]['notes'] = serialize(meta_lang(code::aff_code($notes)));
+            $news_tab[$story_limit]['hometext'] = serialize(metalang::meta_lang(code::aff_code($hometext)));
+            $news_tab[$story_limit]['notes'] = serialize(metalang::meta_lang(code::aff_code($notes)));
             $news_tab[$story_limit]['morelink'] = serialize($morelink);
             $news_tab[$story_limit]['topicname'] = serialize($topicname);
             $news_tab[$story_limit]['topicimage'] = serialize($topicimage);
@@ -555,11 +555,11 @@ class news
     /**
      * Retourne le nom, l'image et le texte d'un topic ou False
      *
-     * @param   int   $s_sid  [$s_sid description]
+     * @param   string|int   $s_sid  [$s_sid description]
      *
      * @return  bool
      */
-    public static function getTopics(int $s_sid): bool
+    public static function getTopics(string|int $s_sid): bool
     {
         global $NPDS_Prefix, $topicname, $topicimage, $topictext;
 

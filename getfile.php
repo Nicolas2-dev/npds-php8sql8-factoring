@@ -22,7 +22,7 @@ if (!function_exists("Mysql_Connexion")) {
 
 switch ($apli) {
     case 'f-manager':
-        $fma = rawurldecode(decrypt($att_id));
+        $fma = rawurldecode(crypt::decrypt($att_id));
         $fma = explode('#fma#', $fma);
         $att_id = crypt::decrypt($fma[0]);
         $att_name = crypt::decrypt($fma[1]);

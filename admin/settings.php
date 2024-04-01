@@ -13,6 +13,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\theme\theme;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -247,7 +251,7 @@ function Configure()
                     <select class="form-select" id="xDefault_Theme" name="xDefault_Theme">';
 
     //include("themes/list.php");
-    $themelist = themeLists(true);
+    $themelist = theme::themeLists(true);
     $themelist = explode(" ", $themelist);
     
     for ($i = 0; $i < sizeof($themelist); $i++) {
@@ -314,7 +318,7 @@ function Configure()
                 <select class="form-select" id="xlanguage" name="xlanguage">';
 
     //include("manuels/list.php");
-    $languageslist = languageList();
+    $languageslist = language::languageList();
     $languageslist = explode(' ', $languageslist);
 
     for ($i = 0; $i < sizeof($languageslist); $i++) {
@@ -1581,13 +1585,13 @@ function Configure()
                 <label class="col-form-label col-sm-8" for="xdownload_cat">' . adm_translate("Rubrique de téléchargement") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xdownload_cat" name="xdownload_cat">
-                    <option value="' . $download_cat . '">' . aff_langue($download_cat) . '</option>';
+                    <option value="' . $download_cat . '">' . language::aff_langue($download_cat) . '</option>';
 
     $result = sql_query("SELECT distinct dcategory FROM " . $NPDS_Prefix . "downloads");
 
     while (list($category) = sql_fetch_row($result)) {
         $category = stripslashes($category);
-        echo '<option value="' . $category . '">' . aff_langue($category) . '</option>';
+        echo '<option value="' . $category . '">' . language::aff_langue($category) . '</option>';
     }
 
     echo '
@@ -2039,7 +2043,7 @@ function Configure()
     inpandfieldlen("xadmf_ext",3);
     ';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 switch ($op) {

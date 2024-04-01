@@ -15,8 +15,10 @@
 /************************************************************************/
 
 use npds\system\assets\js;
+use npds\system\date\date;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
+use npds\system\forum\forum;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -38,7 +40,7 @@ function ancre($forum_id, $topic_id, $post_id, $posts_per_page)
 
     $rowQ1 = cache::Q_Select("SELECT post_id FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum_id' AND topic_id='$topic_id' ORDER BY post_id ASC", 600);
     if (!$rowQ1) {
-        forumerror('0015');
+        forum::forumerror('0015');
     }
 
     $i = 0;
@@ -103,7 +105,7 @@ echo '
 
 $rowQ1 = cache::Q_Select("SELECT forum_name,forum_id FROM " . $NPDS_Prefix . "forums", 3600);
 if (!$rowQ1) {
-    forumerror('0015');
+    forum::forumerror('0015');
 }
 
 foreach ($rowQ1 as $row) {
@@ -209,7 +211,7 @@ if (isset($username) && $username != '') {
     $username = hack::removeHack(stripslashes(htmlspecialchars(urldecode($username), ENT_QUOTES, 'utf-8'))); // electrobug
 
     if (!$result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$username'")) {
-        forumerror('0001');
+        forum::forumerror('0001');
     }
 
     list($userid) = sql_fetch_row($result);
@@ -312,7 +314,7 @@ if ($affiche) {
             echo '
                 <td><a href="viewtopic' . $Hplus . '.php?topic=' . $row['topic_id'] . '&amp;forum=' . $row['forum_id'] . $ancre . '" >' . stripslashes($row['topic_title']) . '</a></td>
                 <td><a href="user.php?op=userinfo&amp;uname=' . $row['uname'] . '" >' . $row['uname'] . '</a></td>
-                <td><small>' . convertdate($row['post_time']) . '</small></td>
+                <td><small>' . date::convertdate($row['post_time']) . '</small></td>
                 </tr>';
             $count++;
         }

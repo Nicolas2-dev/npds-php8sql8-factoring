@@ -13,8 +13,13 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\date\date;
+use npds\system\assets\css;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
-    include('die.php');}
+    include('die.php');
+}
 
 $f_meta_nom = 'submissions';
 $f_titre = adm_translate('Article en attente de validation');
@@ -90,18 +95,18 @@ function submissions()
                 $subject = adm_translate("Aucun Sujet");
             }
 
-            $subject = aff_langue($subject);
+            $subject = language::aff_langue($subject);
 
             if ($affiche) {
-                echo '<img class=" " src="assets/images/topics/' . $topicimage . '" height="30" width="30" alt="avatar" />&nbsp;<a href="admin.php?op=topicedit&amp;topicid=' . $topic . '" class="adm_tooltip">' . aff_langue($topictext) . '</a></td>
+                echo '<img class=" " src="assets/images/topics/' . $topicimage . '" height="30" width="30" alt="avatar" />&nbsp;<a href="admin.php?op=topicedit&amp;topicid=' . $topic . '" class="adm_tooltip">' . language::aff_langue($topictext) . '</a></td>
                 <td align="left"><a href="admin.php?op=DisplayStory&amp;qid=' . $qid . '">' . ucfirst($subject) . '</a></td>';
             } else {
-                echo aff_langue($topictext) . '</td>
+                echo language::aff_langue($topictext) . '</td>
                 <td><i>' . ucfirst($subject) . '</i></td>';
             }
 
             echo '
-                <td class="small">' . formatTimestamp($timestamp) . '</td>';
+                <td class="small">' . date::formatTimestamp($timestamp) . '</td>';
 
             if ($affiche) {
                 echo '
@@ -125,7 +130,7 @@ function submissions()
         }
     }
     
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 switch ($op) {

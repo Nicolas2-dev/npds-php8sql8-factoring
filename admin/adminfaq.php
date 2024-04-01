@@ -130,7 +130,7 @@ function FaqCatGo(int $id_cat): void
         $faq_cat = language::aff_langue($faq['categories']);
         
         if (isset($faq['answer'])) {
-            $answer = code::aff_code(aff_langue($faq['answer']));
+            $answer = code::aff_code(language::aff_langue($faq['answer']));
             
             $lst_qr .= '
             <li id="qr_' . $faq['id'] . '" class="list-group-item">

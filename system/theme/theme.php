@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\theme;
 
+use npds\system\language\metalang;
+
 class theme
 {
 
@@ -133,6 +135,6 @@ class theme
      */
     public static function themepreview(string $title, string $hometext, string $bodytext = '', string $notes = ''): void
     {
-        echo "$title<br />" . meta_lang($hometext) . "<br />" . meta_lang($bodytext) . "<br />" . meta_lang($notes);
+        echo "$title<br />" . metalang::meta_lang($hometext) . "<br />" . metalang::meta_lang($bodytext) . "<br />" . metalang::meta_lang($notes);
     }
 }

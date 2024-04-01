@@ -16,6 +16,7 @@
 /************************************************************************/
 
 use npds\system\support\str;
+use npds\system\support\polls;
 use npds\system\language\language;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -274,7 +275,7 @@ if (isset($forwarder)) {
     }
 
 } elseif ($op == 'results') {
-    list($ibid, $pollClose) = pollSecur($pollID);
+    list($ibid, $pollClose) = polls::pollSecur($pollID);
 
     if ($pollID == $ibid) {
         if ($header != 1) {

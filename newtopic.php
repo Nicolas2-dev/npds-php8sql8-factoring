@@ -16,9 +16,10 @@
 
 use npds\system\logs\logs;
 use npds\system\cache\cache;
+use npds\system\forum\forum;
 use npds\system\routing\url;
-use npds\system\theme\theme;
 //use npds\system\utility\code;
+use npds\system\theme\theme;
 use npds\system\utility\spam;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
@@ -47,15 +48,15 @@ global $NPDS_Prefix;
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
 $forum_name = $myrow['forum_name'];
 $forum_access = $myrow['forum_access'];
-$moderator = get_moderator($myrow['forum_moderator']);
+$moderator = forum::get_moderator($myrow['forum_moderator']);
 $moderator = explode(' ', $moderator);
-$moderatorX = get_moderator($myrow['forum_moderator']);
+$moderatorX = forum::get_moderator($myrow['forum_moderator']);
 
 if (isset($user)) {
     $userX = base64_decode($user);
@@ -69,7 +70,7 @@ if (isset($user)) {
         }
     }
 
-    $userdata = get_userdata($userdata[1]);
+    $userdata = forum::get_userdata($userdata[1]);
 }
 
 if (($myrow['forum_type'] == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
@@ -80,8 +81,8 @@ if ($forum_access == 9) {
     header("Location: forum.php");
 }
 
-if (!does_exists($forum, "forum")) {
-    forumerror('0030');
+if (!forum::does_exists($forum, "forum")) {
+    forum::forumerror('0030');
 }
 
 // Forum ARBRE
@@ -111,23 +112,23 @@ if ($submitS) {
             include('themes/default/header.php');
         } else {
             if (($username == '') or ($password == '')) {
-                forumerror('0027');
+                forum::forumerror('0027');
             } else {
                 $modo = '';
                 $result = sql_query("SELECT pass FROM " . $NPDS_Prefix . "users WHERE uname='$username'");
                 list($pass) = sql_fetch_row($result);
                 
                 if ((password_verify($password, $pass)) and ($pass != '')) {
-                    $userdata = get_userdata($username);
+                    $userdata = forum::get_userdata($username);
 
                     include('themes/default/header.php');
                 } else {
-                    forumerror('0028');
+                    forum::forumerror('0028');
                 }
             }
         }
     } else {
-        $modo = user_is_moderator($userdata['uid'], $userdata['uname'], $forum_access);
+        $modo = forum::user_is_moderator($userdata['uid'], $userdata['uname'], $forum_access);
         include('themes/default/header.php');
     }
 
@@ -142,7 +143,7 @@ if ($submitS) {
         }
 
         // anti flood
-        anti_flood($modo, $anti_flood, $poster_ip, $userdata, $gmt);
+        forum::anti_flood($modo, $anti_flood, $poster_ip, $userdata, $gmt);
 
         //anti_spambot
         if (!spam::R_spambot($asb_question, $asb_reponse, $message)) {
@@ -169,11 +170,11 @@ if ($submitS) {
         // }
 
         if (($allow_bbcode) and ($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
-            $message = smile($message);
+            $message = forum::smile($message);
         }
 
         if (($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
-            $message = make_clickable($message);
+            $message = forum::make_clickable($message);
             $message = hack::removeHack($message);
         }
 
@@ -196,14 +197,14 @@ if ($submitS) {
         $sql .= ')';
 
         if (!$result = sql_query($sql)) {
-            forumerror('0020');
+            forum::forumerror('0020');
         }
 
         $topic_id = sql_last_id();
         $sql = "INSERT INTO " . $NPDS_Prefix . "posts (topic_id, image, forum_id, poster_id, post_text, post_time, poster_ip, poster_dns) VALUES ('$topic_id', '$image_subject', '$forum', '" . $userdata['uid'] . "', '$message', '$time', '$poster_ip', '$hostname')";
         
         if (!$result = sql_query($sql)) {
-            forumerror('0020');
+            forum::forumerror('0020');
         } else {
             $IdPost = sql_last_id();
         }
@@ -212,7 +213,7 @@ if ($submitS) {
         $result = sql_query($sql);
         
         if (!$result) {
-            forumerror('0029');
+            forum::forumerror('0029');
         }
 
         $topic = $topic_id;
@@ -244,7 +245,7 @@ if ($submitS) {
 
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
-    $posterdata = get_userdata_from_id($userdata[0]);
+    $posterdata = forum::get_userdata_from_id($userdata[0]);
 
     if ($smilies) {
         if (isset($user)) {
@@ -279,7 +280,7 @@ if ($submitS) {
 
     $moderator_data = explode(' ', $moderatorX);
     for ($i = 0; $i < count($moderator_data); $i++) {
-        $modera = get_userdata($moderator_data[$i]);
+        $modera = forum::get_userdata($moderator_data[$i]);
         
         if ($modera['user_avatar'] != '') {
             if (stristr($modera['user_avatar'], "users_private")) {
@@ -339,7 +340,7 @@ if ($submitS) {
         }
 
     } elseif ($forum_access == 2) {
-        if (user_is_moderator($userdata[0], $userdata[2], $forum_access)) {
+        if (forum::user_is_moderator($userdata[0], $userdata[2], $forum_access)) {
             echo '<strong>' . translate("Auteur") . ' :</strong>';
             echo $userdata[1];
             $allow_to_post = 1;
@@ -397,7 +398,7 @@ if ($submitS) {
                     <label class="form-label">' . translate("Icone du message") . '</label>
                     <div class="col-sm-12">
                         <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
-                        ' . emotion_add($image_subject) . '
+                        ' . forum::emotion_add($image_subject) . '
                         </div>
                     </div>
                 </div>';
@@ -417,12 +418,12 @@ if ($submitS) {
                 <div class="card-header">
                     <div class="float-start">';
 
-            putitems('ta_newtopic');
+            forum::putitems('ta_newtopic');
 
             echo '</div>';
 
             if ($allow_html == 1) {
-                echo '<span class="text-success float-end mt-2" title="HTML ' . translate("On") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . HTML_Add();
+                echo '<span class="text-success float-end mt-2" title="HTML ' . translate("On") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
             } else {
                 echo '<span class="text-danger float-end mt-2" title="HTML ' . translate("Off") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
             }

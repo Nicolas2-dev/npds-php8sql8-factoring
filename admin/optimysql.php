@@ -13,6 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+use npds\system\assets\css;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -149,7 +152,7 @@ echo '
     </tbody>
     </table>';
 
-adminfoot('', '', '', '');
+css::adminfoot('', '', '', '');
 
 global $aid;
-Ecr_Log('security', "OptiMySql() by AID : $aid", '');
+logs::Ecr_Log('security', "OptiMySql() by AID : $aid", '');

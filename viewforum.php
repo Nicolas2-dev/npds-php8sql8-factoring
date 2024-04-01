@@ -17,8 +17,11 @@
 use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
+use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\security\hack;
 use npds\system\cache\cacheManager;
+use npds\system\pagination\paginator;
 use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -88,13 +91,13 @@ settype($forum, "integer");
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
-    forumerror('0002');
+    forum::forumerror('0002');
 }
 
 $myrow = $rowQ1[0];
 
 $forum_name = stripslashes($myrow['forum_name']);
-$moderator = get_moderator($myrow['forum_moderator']);
+$moderator = forum::get_moderator($myrow['forum_moderator']);
 $forum_access = $myrow['forum_access'];
 
 if (($op == "solved") and ($topic_id) and ($forum) and ($sec_clef)) {
@@ -102,10 +105,10 @@ if (($op == "solved") and ($topic_id) and ($forum) and ($sec_clef)) {
         $local_sec_clef = md5($forum . $topic_id . md5($NPDS_Key));
 
         if ($local_sec_clef == $sec_clef) {
-            $sqlS = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status='2', topic_title='[" . translate("Résolu") . "] - " . removehack($topic_title) . "' WHERE topic_id='$topic_id'";
+            $sqlS = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status='2', topic_title='[" . translate("Résolu") . "] - " . hack::removehack($topic_title) . "' WHERE topic_id='$topic_id'";
             
             if (!$r = sql_query($sqlS)) {
-                forumerror('0011');
+                forum::forumerror('0011');
             }
         }
         unset($local_sec_clef);
@@ -146,7 +149,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     $moderator_data = explode(' ', $moderator);
     for ($i = 0; $i < count($moderator_data); $i++) {
-        $modera = get_userdata($moderator_data[$i]);
+        $modera = forum::get_userdata($moderator_data[$i]);
 
         if ($modera['user_avatar'] != '') {
             if (stristr($modera['user_avatar'], "users_private")) {
@@ -227,7 +230,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         $allow_to_post = true;
 
         if ($forum_access == 2) {
-            if (!user_is_moderator($userR[0], $userR[2], $forum_access)) { 
+            if (!forum::user_is_moderator($userR[0], $userR[2], $forum_access)) { 
                 $allow_to_post = false;
             }
         }
@@ -253,7 +256,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     $Mmod = false;
 
     for ($i = 0; $i < count($moderator_data); $i++) {
-        $modera = get_userdata($moderator_data[$i]);
+        $modera = forum::get_userdata($moderator_data[$i]);
 
         if ($modera['user_avatar'] != '') {
             if (stristr($modera['user_avatar'], 'users_private')) {
@@ -287,7 +290,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     $sql = "SELECT * FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum' $closol ORDER BY topic_first,topic_time DESC LIMIT $start, $topics_per_page";
     if (!$result = sql_query($sql)) {
-        forumerror('0004');
+        forum::forumerror('0004');
     }
 
     if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
@@ -323,7 +326,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
             echo '
                 <tr>';
 
-            $replys = get_total_posts($forum, $myrow['topic_id'], "topic", $Mmod);
+            $replys = forum::get_total_posts($forum, $myrow['topic_id'], "topic", $Mmod);
             $replys--;
 
             if ($replys >= 0) {
@@ -429,7 +432,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                     </tr>';
                 } else {
                     echo '
-                        <td class="small">' . get_last_post($myrow['topic_id'], "topic", "infos", $Mmod) . '</td>
+                        <td class="small">' . forum::get_last_post($myrow['topic_id'], "topic", "infos", $Mmod) . '</td>
                     </tr>';
                 }
             }
@@ -453,7 +456,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     $sql = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum' $closol";
     if (!$r = sql_query($sql)) {
-        forumerror('0001');
+        forum::forumerror('0001');
     }
 
     list($all_topics) = sql_fetch_row($r);
@@ -477,9 +480,9 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         $current = $nbPages;
     }
 
-    echo '<div class="mb-2"></div>' . paginate('viewforum.php?forum=' . $forum . '&amp;start=', $closol, $nbPages, $current, 1, $topics_per_page, $start);
+    echo '<div class="mb-2"></div>' . paginator::paginate('viewforum.php?forum=' . $forum . '&amp;start=', $closol, $nbPages, $current, 1, $topics_per_page, $start);
 
-    echo searchblock();
+    echo forum::searchblock();
 
     echo '
     <blockquote class="blockquote my-3">';

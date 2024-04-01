@@ -13,6 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\theme\theme;
 use npds\system\utility\code;
 use npds\system\language\language;
 
@@ -25,7 +26,7 @@ function code_aff($subject, $story, $bodytext, $notes)
     $bodytextX = code::aff_code(language::preview_local_langue($local_user_language, $bodytext));
     $notesX = code::aff_code(language::preview_local_langue($local_user_language, $notes));
 
-    themepreview($subjectX, $storyX, $bodytextX, $notesX);
+    theme::themepreview($subjectX, $storyX, $bodytextX, $notesX);
 }
 
 function publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)

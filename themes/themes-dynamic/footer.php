@@ -11,24 +11,37 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\language\language;
+use npds\system\language\metalang;
+
+
 global $theme;
+
 $rep = false;
+
 settype($ContainerGlobal, 'string');
-if (file_exists("themes/" . $theme . "/view/footer.html"))
+
+if (file_exists("themes/" . $theme . "/view/footer.html")) {
     $rep = $theme;
-elseif (file_exists("themes/default/view/footer.html"))
+} elseif (file_exists("themes/default/view/footer.html")) {
     $rep = "default";
-else {
+} else {
     echo "footer.html manquant / not find !<br />";
     die();
 }
 
+
 if ($rep) {
+
     ob_start();
-    include("themes/" . $rep . "/view/footer.html");
-    $Xcontent = ob_get_contents();
+        include("themes/" . $rep . "/view/footer.html");
+        $Xcontent = ob_get_contents();
     ob_end_clean();
-    if ($ContainerGlobal)
+
+    if ($ContainerGlobal) {
         $Xcontent .= $ContainerGlobal;
-    echo meta_lang(aff_langue($Xcontent));
+    }
+
+    echo metalang::meta_lang(language::aff_langue($Xcontent));
 }

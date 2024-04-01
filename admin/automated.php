@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\date\date;
+use npds\system\news\news;
 use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\support\str;
@@ -512,7 +513,7 @@ function autoSaveEdit(int $anid, string $title, string $hometext, string $bodyte
     ));
 
     if ($ultramode) {
-        ultramode();
+        news::ultramode();
     }
     
     Header("Location: admin.php?op=autoEdit&anid=$anid");

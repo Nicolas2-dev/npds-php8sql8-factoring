@@ -25,6 +25,10 @@
 /* Version 2.0 - 30/08/2015 by jpb                                      */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\routing\url;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -72,7 +76,7 @@ function nmig_Start($name_module, $txtdeb)
     <div class="">';
 
     if (isset($txtdeb) && $txtdeb != '') {
-        $display .= aff_langue($txtdeb);
+        $display .= language::aff_langue($txtdeb);
     } else {
         $display .= '
         <p class="lead">' . adm_translate("Bonjour et bienvenue dans l'installation automatique du module") . ' "' . $name_module . '"</p>
@@ -476,7 +480,7 @@ function nmig_txt($txtfin)
 
     $display = '
     <hr />
-    <div class="lead mb-3">' . aff_langue($txtfin) . '</div>
+    <div class="lead mb-3">' . language::aff_langue($txtfin) . '</div>
     <div class="text-center mb-3">
         <a class="btn btn-primary" href="admin.php?op=Module-Install&amp;ModInstall=' . $ModInstall . '&amp;nmig=e10" >' . adm_translate("Etape suivante") . '</a><br />
     </div>' . nmig_copyright();
@@ -524,7 +528,7 @@ if ($ModInstall != '' && $ModDesinstall == '') {
     if (file_exists("modules/" . $ModInstall . "/install.conf.php")) {
         include("modules/" . $ModInstall . "/install.conf.php");
     } else {
-        redirect_url("admin.php?op=modules");
+        url::redirect_url("admin.php?op=modules");
         die();
     }
 
@@ -693,7 +697,7 @@ if ($ModInstall != '' && $ModDesinstall == '') {
         // maj etat d'installation
         sql_query("UPDATE " . $NPDS_Prefix . "modules SET minstall='0' WHERE mnom= '" . $ModDesinstall . "'");
 
-        redirect_url("admin.php?op=modules");
+        url::redirect_url("admin.php?op=modules");
     }
 
     include("themes/default/header.php");
@@ -759,4 +763,4 @@ if ($ModInstall == '' && $ModDesinstall != '') {
 }
 
 echo $display;
-adminfoot('', '', '', '');
+css::adminfoot('', '', '', '');

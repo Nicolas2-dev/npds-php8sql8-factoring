@@ -224,7 +224,7 @@ class language
         }
 
         $M_langue = '<form action="' . $ibid_index . '" name="local_user_language" method="post">';
-        $M_langue .= $mess . aff_localzone_langue($ibid);
+        $M_langue .= $mess . static::aff_localzone_langue($ibid);
         $M_langue .= '</form>';
 
         return $M_langue;
@@ -246,8 +246,8 @@ class language
             $old_langue = $language;
             $language = $local_user_language;
 
-            $tab_langue = make_tab_langue();
-            $ibid = aff_langue($ibid);
+            $tab_langue = static::make_tab_langue();
+            $ibid = static::aff_langue($ibid);
 
             $language = $old_langue;
         }

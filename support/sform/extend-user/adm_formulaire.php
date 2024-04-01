@@ -1,5 +1,6 @@
 <?php
 
+
 /************************************************************************/
 /* SFORM Extender for NPDS USER                                         */
 /* ===========================                                          */
@@ -12,6 +13,11 @@
 /************************************************************************/
 /* Dont modify this file iF you dont know what you make                 */
 /************************************************************************/
+
+use npds\system\assets\css;
+use npds\system\auth\groupe;
+use npds\system\language\language;
+
 global $NPDS_Prefix;
 // quand un form est utilisé plusieurs fois dans des context différents add/mod/new les variables ne sont pas toujours defini ce qui entraine des notices php dans les if ...solution peu élégante mais efficace
 if (!isset($chng_uname)) $chng_uname = '';
@@ -79,26 +85,26 @@ list($rank1, $rank2, $rank3, $rank4, $rank5) = sql_fetch_row($r);
 $tmp_tempo[0]['en'] = '-> ' . adm_translate("Supprimer") . '/' . adm_translate("Choisir un rôle") . ' <-';
 if (($chng_rank == '') or ($chng_rank == '0')) $tmp_tempo[0]['selected'] = true;
 else $tmp_tempo[0]['selected'] = false;
-$tmp_tempo[1]['en'] = aff_langue($rank1);
+$tmp_tempo[1]['en'] = language::aff_langue($rank1);
 if ($chng_rank == 1) $tmp_tempo[1]['selected'] = true;
 else $tmp_tempo[1]['selected'] = false;
-$tmp_tempo[2]['en'] = aff_langue($rank2);
+$tmp_tempo[2]['en'] = language::aff_langue($rank2);
 if ($chng_rank == 2) $tmp_tempo[2]['selected'] = true;
 else $tmp_tempo[2]['selected'] = false;
-$tmp_tempo[3]['en'] = aff_langue($rank3);
+$tmp_tempo[3]['en'] = language::aff_langue($rank3);
 if ($chng_rank == 3) $tmp_tempo[3]['selected'] = true;
 else $tmp_tempo[3]['selected'] = false;
-$tmp_tempo[4]['en'] = aff_langue($rank4);
+$tmp_tempo[4]['en'] = language::aff_langue($rank4);
 if ($chng_rank == 4) $tmp_tempo[4]['selected'] = true;
 else $tmp_tempo[4]['selected'] = false;
-$tmp_tempo[5]['en'] = aff_langue($rank5);
+$tmp_tempo[5]['en'] = language::aff_langue($rank5);
 if ($chng_rank == 5) $tmp_tempo[5]['selected'] = true;
 else $tmp_tempo[5]['selected'] = false;
 $m->add_select('chng_rank', adm_translate("Rôle de l'Utilisateur"), $tmp_tempo, false, '', false);
 
 // ---- Groupes
 $les_groupes = explode(',', $groupe);
-$mX = liste_group();
+$mX = groupe::liste_group();
 $nbg = 0;
 foreach ($mX as $groupe_id => $groupe_name) {
     //   while (list($groupe_id, $groupe_name)=each($mX)) {
@@ -301,8 +307,8 @@ $fv_parametres .= '
                 maxDate:"today",
                 minDate:"' . date("Y-m-d", (time() - 3784320000)) . '",
                 dateFormat:"d/m/Y",
-                "locale": "' . language_iso(1, '', '') . '",
+                "locale": "' . language::language_iso(1, '', '') . '",
             });
             ';
-$m->add_extra(adminfoot('fv', $fv_parametres, $arg1, '1'));
+$m->add_extra(css::adminfoot('fv', $fv_parametres, $arg1, '1'));
 // ----------------------------------------------------------------

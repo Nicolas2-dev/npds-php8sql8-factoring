@@ -13,6 +13,12 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\js;
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\auth\users;
+use npds\system\mail\mailler;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -70,14 +76,14 @@ function displayUsers()
     $op = 'displayUsers';
     include("modules/sform/extend-user/adm_extend-user.php");
 
-    echo auto_complete('membre', 'uname', 'users', 'chng_uid', '86400');
+    echo js::auto_complete('membre', 'uname', 'users', 'chng_uid', '86400');
 
     echo '<hr />
         <h3 class="mb-3">' . adm_translate("Fonctions") . '</h3>
         <a href="admin.php?op=checkdnsmail_users">' . adm_translate("Contrôler les serveurs de mail de tous les utilisateurs") . '</a><br />
         <a href="admin.php?op=checkdnsmail_users&amp;page=0&amp;end=1">' . adm_translate("Serveurs de mail incorrects") . '</a><br />';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function extractUserCSV()
@@ -134,7 +140,7 @@ function extractUserCSV()
     send_file($line, "annuaire", "csv", $MSos);
 
     global $aid;
-    Ecr_Log('security', "ExtractUserCSV() by AID : $aid", '');
+    logs::Ecr_Log('security', "ExtractUserCSV() by AID : $aid", '');
 }
 
 function modifyUser($chng_user)
@@ -166,7 +172,7 @@ function modifyUser($chng_user)
         error_handler("Utilisateur inexistant !" . "<br />");
     }
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function error_handler($ibid)
@@ -240,7 +246,7 @@ function Minisites($chng_mns, $chng_uname)
         unset($filelist);
 
         global $aid;
-        Ecr_Log('security', "CreateMiniSite($chng_uname) by AID : $aid", '');
+        logs::Ecr_Log('security', "CreateMiniSite($chng_uname) by AID : $aid", '');
     }
 }
 
@@ -258,7 +264,7 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
         
         echo error_handler(adm_translate("ERREUR : cet identifiant est déjà utilisé") . '<br />');
         
-        adminfoot('', '', '', '');
+        css::adminfoot('', '', '', '');
         return;
     }
 
@@ -275,14 +281,14 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
             
             echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") . '<br />');
             
-            adminfoot('', '', '', '');
+            css::adminfoot('', '', '', '');
             return;
         }
 
         $tmp = 1;
     }
 
-    if (checkdnsmail($chng_email) === false) {
+    if (mailler::checkdnsmail($chng_email) === false) {
         global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
         
         include("themes/default/header.php");
@@ -292,7 +298,7 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
         
         echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") . '<br />');
         
-        adminfoot('', '', '', '');
+        css::adminfoot('', '', '', '');
         
         return;
     }
@@ -325,7 +331,7 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
     if ($tmp == 1) {
         $AlgoCrypt = PASSWORD_BCRYPT;
         $min_ms = 100;
-        $options = ['cost' => getOptimalBcryptCostParameter($chng_pass, $AlgoCrypt, $min_ms)];
+        $options = ['cost' => users::getOptimalBcryptCostParameter($chng_pass, $AlgoCrypt, $min_ms)];
         $hashpass = password_hash($chng_pass, $AlgoCrypt, $options);
         $cpass = crypt($chng_pass, $hashpass);
 
@@ -387,7 +393,7 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
     fclose($file);
 
     global $aid;
-    Ecr_Log('security', "UpdateUser($chng_uid, $chng_uname) by AID : $aid", '');
+    logs::Ecr_Log('security', "UpdateUser($chng_uid, $chng_uname) by AID : $aid", '');
 
     global $referer;
     if ($referer != "memberslist.php")  {
@@ -440,7 +446,7 @@ function nonallowedUsers()
         </body>
     </table>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function checkdnsmailusers()
@@ -501,7 +507,7 @@ function checkdnsmailusers()
     $datelimit = '';
 
     while (list($uid, $uname, $email) = sql_fetch_row($result)) {
-        if (checkdnsmail($email) === true and isbadmailuser($uid) === true) {
+        if (mailler::checkdnsmail($email) === true and mailler::isbadmailuser($uid) === true) {
             $re = '/#' . $uid . '\|(\d+)/m';
             $maj = preg_replace($re, '', $contents);
 
@@ -510,15 +516,15 @@ function checkdnsmailusers()
             fclose($file);
         }
 
-        if (checkdnsmail($email) === false) {
-            if (isbadmailuser($uid) === false) {
+        if (mailler::checkdnsmail($email) === false) {
+            if (mailler::isbadmailuser($uid) === false) {
                 $arrayusers[] = '#' . $uid . '|' . time();
 
                 //suspension des souscriptions
                 sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$uid'");
 
                 global $aid;
-                Ecr_Log("security", "UnsubUser($uid) by AID : $aid", "");
+                logs::Ecr_Log("security", "UnsubUser($uid) by AID : $aid", "");
 
                 //suspension de l'envoi des mails pour PM suspension lnl
                 sql_query("UPDATE " . $NPDS_Prefix . "users SET send_email='0', user_lnl='0' WHERE uid='$uid'");
@@ -531,7 +537,7 @@ function checkdnsmailusers()
                 $datelimit = date('d/m/Y', time() + 5184000);
             }
 
-            if (isbadmailuser($uid) === true) {
+            if (mailler::isbadmailuser($uid) === true) {
                 $re = '/#' . $uid . '\|(\d+)/m';
                 preg_match($re, $contents, $res);
 
@@ -652,7 +658,7 @@ function checkdnsmailusers()
     </div>';
     }
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 switch ($op) {
@@ -787,7 +793,7 @@ switch ($op) {
             fclose($file);
 
             global $aid;
-            Ecr_Log('security', "DeleteUser($del_uid) by AID : $aid", '');
+            logs::Ecr_Log('security', "DeleteUser($del_uid) by AID : $aid", '');
         }
 
         if ($referer != "memberslist.php") {
@@ -815,7 +821,7 @@ switch ($op) {
 
             echo error_handler('<i class="fa fa-exclamation me-2"></i>' . adm_translate("ERREUR : cet identifiant est déjà utilisé") . '<br />');
             
-            adminfoot('', '', '', '');
+            css::adminfoot('', '', '', '');
             return;
         }
 
@@ -829,11 +835,11 @@ switch ($op) {
 
             echo error_handler(adm_translate("Vous devez remplir tous les Champs") . '<br />'); // ce message n'est pas très précis ..
             
-            adminfoot('', '', '', '');
+            css::adminfoot('', '', '', '');
             return;
         }
 
-        if (checkdnsmail($add_email) === false) {
+        if (mailler::checkdnsmail($add_email) === false) {
             global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
             
             include("themes/default/header.php");
@@ -843,7 +849,7 @@ switch ($op) {
             
             echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") . '<br />');
             
-            adminfoot('', '', '', '');
+            css::adminfoot('', '', '', '');
             return;
         }
 
@@ -886,7 +892,7 @@ switch ($op) {
         Minisites($add_mns, $add_uname);
 
         global $aid;
-        Ecr_Log('security', "AddUser($add_name, $add_uname) by AID : $aid", '');
+        logs::Ecr_Log('security', "AddUser($add_name, $add_uname) by AID : $aid", '');
 
         Header("Location: admin.php?op=mod_users");
         break;
@@ -899,7 +905,7 @@ switch ($op) {
             sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$chng_uid'");
 
             global $aid;
-            Ecr_Log("security", "UnsubUser($chng_uid) by AID : $aid", "");
+            logs::Ecr_Log("security", "UnsubUser($chng_uid) by AID : $aid", "");
         }
 
         Header("Location: admin.php?op=mod_users");

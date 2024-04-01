@@ -13,12 +13,14 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\date\date;
 use npds\system\auth\users;
 use npds\system\support\str;
 use npds\system\mail\mailler;
 use npds\system\fmanager\File;
 use npds\system\security\hack;
 use npds\system\language\language;
+use npds\system\pagination\paginator;
 use npds\system\fmanager\FileManagement;
 
 
@@ -77,7 +79,7 @@ function geninfo($did, $out_template)
 
         echo '</p>
                 <p><strong>' . translate("Version") . '&nbsp;:</strong>&nbsp;' . $dver . '</p>
-                <p><strong>' . translate("Date de chargement sur le serveur") . '&nbsp;:</strong>&nbsp;' . convertdate($ddate) . '</p>
+                <p><strong>' . translate("Date de chargement sur le serveur") . '&nbsp;:</strong>&nbsp;' . date::convertdate($ddate) . '</p>
                 <p><strong>' . translate("Chargements") . '&nbsp;:</strong>&nbsp;' . str::wrh($dcounter) . '</p>
                 <p><strong>' . translate("Catégorie") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($dcategory)) . '</p>
                 <p><strong>' . translate("Description") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($ddescription)) . '</p>
@@ -264,7 +266,7 @@ function SortLinks($dcategory, $sortby)
 
     echo '</th>';
 
-    if ($user or autorisation(-127)) {
+    if ($user or users::autorisation(-127)) {
         echo '<th class="text-center n-t-col-xs-1"></th>';
     }
 
@@ -445,7 +447,7 @@ function listdownloads($dcategory, $sortby, $sortorder)
 
         echo '</td>
                 <td>' . language::aff_langue(stripslashes($dcat)) . '</td>
-                <td class="small text-center">' . convertdate($ddate) . '</td>
+                <td class="small text-center">' . date::convertdate($ddate) . '</td>
                 <td class="small text-center">' . $dver . '</td>
                 <td class="small text-center">' . str::wrh($dcounter) . '</td>';
 
@@ -468,7 +470,7 @@ function listdownloads($dcategory, $sortby, $sortorder)
 
     $dcategory = StripSlashes($dcategory);
 
-    echo '<div class="mt-3"></div>' . paginate_single('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $sortby . '&amp;sortorder=' . $sortorder . '&amp;page=', '', $nbPages, $current, $adj = 3, '', $page);
+    echo '<div class="mt-3"></div>' . paginator::paginate_single('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $sortby . '&amp;sortorder=' . $sortorder . '&amp;page=', '', $nbPages, $current, $adj = 3, '', $page);
 }
 
 function main()

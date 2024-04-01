@@ -37,7 +37,7 @@ function SuserCheck($email)
         $stop = translate("Erreur : une adresse Email ne peut pas contenir d'espaces");
     }
 
-    if (checkdnsmail($email) === false) {
+    if (mailler::checkdnsmail($email) === false) {
         $stop = translate("Erreur : DNS ou serveur de mail incorrect");
     }
 
@@ -177,10 +177,10 @@ function unsubscribe($xemail)
                 include("themes/default/footer.php");
             }
         } else {
-            redirect_url("index.php");
+            url::redirect_url("index.php");
         }
     } else {
-        redirect_url("index.php");
+        url::redirect_url("index.php");
     }
 }
 

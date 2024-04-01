@@ -17,9 +17,11 @@
 use npds\system\assets\js;
 use npds\system\logs\logs;
 use npds\system\assets\css;
+use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
+use npds\system\messenger\messenger;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -489,7 +491,7 @@ function membre_add_finish(int $groupe_id, string $luname): void
                 ));
             }
 
-            writeDB_private_message($to_userid, $image, $subject, $from_userid, $message, $copie);
+            messenger::writeDB_private_message($to_userid, $image, $subject, $from_userid, $message, $copie);
         }
     }
 
@@ -519,8 +521,6 @@ function retiredugroupe(int $groupe_id, int $uid, string $uname): void
     $q = '';
     $ok = 0;
 
-    $res = sql_query("SELECT f.forum_id, f.forum_name, f.forum_moderator FROM " . $NPDS_Prefix . "forums f WHERE f.forum_pass='$groupe_id' AND cat_id='-1'");
-    
     $res = DB::table('forums')->select('forum_moderator')->where('forum_pass', $groupe_id)->where('cat_id', -1)->get();
     
     foreach($res as $row) {
@@ -570,7 +570,7 @@ function retiredugroupe(int $groupe_id, int $uid, string $uname): void
             'groupe'    => $groupesmodif,
         ));
 
-        writeDB_private_message($to_userid, $image, $subject, $from_userid, $message, $copie);
+        messenger::writeDB_private_message($to_userid, $image, $subject, $from_userid, $message, $copie);
 
         global $aid;
         logs::Ecr_Log('security', "DeleteMemberToGroup($groupe_id, $uname) by AID : $aid", '');
@@ -1305,7 +1305,7 @@ function groupe_member_ask(): void
                 ));
             }
 
-            writeDB_private_message($uname, $image, $subject, 1, $message, '');
+            messenger::writeDB_private_message($uname, $image, $subject, 1, $message, '');
 
             global $aid;
             logs::Ecr_Log('security', "AddMemberToGroup($groupe_asked, $uname) by AID : $aid", '');
@@ -1316,7 +1316,7 @@ function groupe_member_ask(): void
             $message = '🚫 ' . adm_translate('Demande refusée pour votre participation au groupe') . ' : ' . $gn . ' [' . $groupe_asked . '].';
             unlink($directory . '/ask4group_' . $user_asked . '_' . $groupe_asked . '_.txt');
 
-            writeDB_private_message($uname, $image, $subject, 1, $message, '');
+            messenger::writeDB_private_message($uname, $image, $subject, 1, $message, '');
 
             Header("Location: admin.php?op=groupes");
         }
@@ -1334,7 +1334,7 @@ function groupe_member_ask(): void
         if ($fileinfo->isFile() and strpos($fileinfo->getFilename(), 'ask4group') !== false) {
             
             $us_gr = explode('_', $fileinfo->getFilename());
-            $myrow = get_userdata_from_id($us_gr[1]);
+            $myrow = forum::get_userdata_from_id($us_gr[1]);
 
             $r = DB::table('groupes')->select('groupe_name')->where('groupe_id', $us_gr[2])->first();
             $gn = $r['groupe_name'];

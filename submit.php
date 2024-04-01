@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\logs\logs;
+use npds\system\auth\users;
 use npds\system\routing\url;
 use npds\system\support\str;
 use npds\system\theme\theme;
@@ -21,6 +22,7 @@ use npds\system\mail\mailler;
 use npds\system\pixels\image;
 use npds\system\utility\code;
 use npds\system\utility\spam;
+use npds\system\security\hack;
 use npds\system\support\editeur;
 use npds\system\language\language;
 
@@ -64,7 +66,7 @@ function defaultDisplay()
 
     global $user, $anonymous;
     if ($user) {
-        $userinfo = getusrinfo($user);
+        $userinfo = users::getusrinfo($user);
     }
 
     echo '
@@ -205,7 +207,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
     $storyX = code::aff_code($story);
     $bodytextX = code::aff_code($bodytext);
 
-    themepreview('<h3>' . $subject . $topiclogo . '</h3>', '<div class="text-muted">' . $storyX . '</div>', $bodytextX, '');
+    theme::themepreview('<h3>' . $subject . $topiclogo . '</h3>', '<div class="text-muted">' . $storyX . '</div>', $bodytextX, '');
 
     //    if ($no_img) {
     //       echo '<strong>'.language::aff_langue($topictext).'</strong>';
@@ -299,9 +301,9 @@ function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_fi
 
     $story = image::dataimagetofileurl($story, 'storage/cache/ai');
     $bodytext = image::dataimagetofileurl($bodytext, 'storage/cache/ac');
-    $subject = removeHack(stripslashes(str::FixQuotes(str_replace("\"", "&quot;", (strip_tags($subject))))));
-    $story = removeHack(stripslashes(str::FixQuotes($story)));
-    $bodytext = removeHack(stripslashes(str::FixQuotes($bodytext)));
+    $subject = hack::removeHack(stripslashes(str::FixQuotes(str_replace("\"", "&quot;", (strip_tags($subject))))));
+    $story = hack::removeHack(stripslashes(str::FixQuotes($story)));
+    $bodytext = hack::removeHack(stripslashes(str::FixQuotes($bodytext)));
 
     $result = sql_query("INSERT INTO " . $NPDS_Prefix . "queue VALUES (NULL, '$uid', '$name', '$subject', '$story', '$bodytext', now(), '$topic','$date_debval','$date_finval','$epur')");
     if (sql_last_id()) {
@@ -331,7 +333,7 @@ switch ($op) {
     case 'Prévisualiser':
     case translate("Prévisualiser"):
         if ($user) {
-            $userinfo = getusrinfo($user);
+            $userinfo = users::getusrinfo($user);
             $name = $userinfo['uname'];
         } else {
             $name = $anonymous;

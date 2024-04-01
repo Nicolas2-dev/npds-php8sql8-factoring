@@ -13,6 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\language\language;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -169,7 +172,7 @@ function List_Meta_Lang()
             <td>' . $content . '</td>';
         } else {
             $tablmeta_c .= '
-            <td>' . aff_langue($description) . '</td>';
+            <td>' . language::aff_langue($description) . '</td>';
         }
 
         $tablmeta_c .= '
@@ -214,7 +217,7 @@ function List_Meta_Lang()
 
     echo $tablmeta;
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function Edit_Meta_Lang()
@@ -235,7 +238,7 @@ function Edit_Meta_Lang()
         echo '<h3>' . adm_translate("Modifier un ") . ' META-MOT</h3>';
     }
     
-    echo aff_local_langue('', 'local_user_language') . '<br />', '<label class="col-form-label">' . adm_translate("Langue de Prévisualisation") . '</label>';
+    echo language::aff_local_langue('', 'local_user_language') . '<br />', '<label class="col-form-label">' . adm_translate("Langue de Prévisualisation") . '</label>';
     
     echo '
     <div class="row">
@@ -254,7 +257,7 @@ function Edit_Meta_Lang()
         eval($Q['content']);
         echo $cmd;
     } else {
-        echo preview_local_langue($local_user_language, aff_langue($Q['description']));
+        echo language::preview_local_langue($local_user_language, language::aff_langue($Q['description']));
     }
 
     echo '
@@ -360,10 +363,10 @@ function Edit_Meta_Lang()
     var formulid = ["metalangedit"];
     inpandfieldlen("uri",255);';
 
-        adminfoot('fv', '', $arg1, '');
+        css::adminfoot('fv', '', $arg1, '');
     } else {
         go_back('');
-        adminfoot('', '', '', '');
+        css::adminfoot('', '', '', '');
     }
 }
 
@@ -473,7 +476,7 @@ function Creat_Meta_Lang()
     inpandfieldlen("def",50);
     inpandfieldlen("uri",255);';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function kill_Meta_Lang($nbr, $action)
@@ -509,7 +512,7 @@ function meta_exist($def)
     echo '
     </div>';
 
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function Maj_Bdd_ML($Maj_Bdd_ML, $def, $content, $type_meta, $type_uri, $uri, $desc)

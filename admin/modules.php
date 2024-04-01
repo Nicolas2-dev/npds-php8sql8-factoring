@@ -22,6 +22,8 @@
 /* Version 1.3 - 2015                                                   */
 /************************************************************************/
 
+use npds\system\assets\css;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -118,4 +120,4 @@ echo '
         </tbody>
     </table>';
     
-adminfoot('', '', '', '');
+css::adminfoot('', '', '', '');

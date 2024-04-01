@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\date\date;
+use npds\system\news\news;
 use npds\system\cache\cache;
 use npds\system\security\hack;
 use npds\system\language\language;
@@ -289,7 +290,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
 
         if ($result) {
             while (list($sid, $aid, $title, $time, $url, $topic, $informant, $ihome) = sql_fetch_row($result)) {
-                if (ctrl_aff($ihome, 0)) {
+                if (news::ctrl_aff($ihome, 0)) {
                     $tab_sid[$x]['sid'] = $sid;
                     $tab_sid[$x]['aid'] = $aid;
                     $tab_sid[$x]['title'] = $title;
@@ -456,7 +457,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
                 $furl = "sections.php?op=viewarticle&amp;artid=$artid";
                 echo '
                 <tr>
-                <td><a href="' . $furl . '">' . aff_langue($title) . '</a> ' . translate("dans la sous-rubrique") . ' <a href="' . $surl . '">' . language::aff_langue($row2['secname']) . '</a></td>
+                <td><a href="' . $furl . '">' . language::aff_langue($title) . '</a> ' . translate("dans la sous-rubrique") . ' <a href="' . $surl . '">' . language::aff_langue($row2['secname']) . '</a></td>
                 </tr>';
                 $x++;
             }

@@ -15,6 +15,7 @@
 
 use npds\system\cache\cache;
 use npds\system\support\str;
+use npds\system\messenger\messenger;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -30,7 +31,7 @@ switch ($op) {
     
     // Instant Members Message
     case 'instant_message':
-        Form_instant_message($to_userid);
+        messenger::Form_instant_message($to_userid);
         break;
 
     case 'write_instant_message':
@@ -46,7 +47,7 @@ switch ($op) {
                 $subject = str::FixQuotes($subject) . '';
                 $messages = str::FixQuotes($messages) . '';
                 
-                writeDB_private_message($to_userid, '', $subject, $from_userid, $message, $copie);
+                messenger::writeDB_private_message($to_userid, '', $subject, $from_userid, $message, $copie);
             }
         }
 

@@ -13,6 +13,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\support\str;
 use npds\system\support\stats;
@@ -252,7 +253,7 @@ if ($admin) {
         $sub_sql = "SELECT f.*, u.uname FROM " . $NPDS_Prefix . "forums f, " . $NPDS_Prefix . "users u WHERE f.cat_id = '$cat_id' AND f.forum_moderator = u.uid ORDER BY forum_index,forum_id";
         
         if (!$sub_result = sql_query($sub_sql)) {
-            forumerror('0022');
+            forum::forumerror('0022');
         }
 
         if ($myrow = sql_fetch_assoc($sub_result)) {
@@ -264,12 +265,12 @@ if ($admin) {
             
             do {
                 $num_for++;
-                $last_post = get_last_post($myrow['forum_id'], 'forum', 'infos', true);
+                $last_post = forum::get_last_post($myrow['forum_id'], 'forum', 'infos', true);
                 
                 echo '
                 <tr>';
 
-                $total_topics = get_total_topics($myrow['forum_id']);
+                $total_topics = forum::get_total_topics($myrow['forum_id']);
                 $name = stripslashes($myrow['forum_name']);
                 $xfile .= "\$xforum[$num_for][1] = \"$name\";\n";
                 $xfile .= "\$xforum[$num_for][2] = $total_topics;\n";
@@ -291,7 +292,7 @@ if ($admin) {
 
                 echo '</span> -/- ' . $total_topics . '</td>';
 
-                $total_posts = get_total_posts($myrow['forum_id'], "", "forum", false);
+                $total_posts = forum::get_total_posts($myrow['forum_id'], "", "forum", false);
                 $xfile .= "\$xforum[$num_for][3] = $total_posts;\n";
 
                 echo '

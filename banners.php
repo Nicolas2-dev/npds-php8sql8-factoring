@@ -16,6 +16,8 @@
 use npds\system\assets\css;
 use npds\system\auth\users;
 use npds\system\cache\cache;
+use npds\system\routing\url;
+use npds\system\support\str;
 use npds\system\mail\mailler;
 use npds\system\language\language;
 
@@ -353,7 +355,7 @@ function bannerstats($login, $pass)
                 echo '
                 <tr>
                     <td>' . $bid . '</td>
-                    <td>' . wrh($impressions) . '</td>
+                    <td>' . str::wrh($impressions) . '</td>
                     <td>' . $clicks . '</td>
                     <td>' . $percent . ' %</td>
                     <td><small>' . $datestart . '</small></td>
@@ -486,7 +488,7 @@ switch ($op) {
         if ($banners) {
             viewbanner();
         } else {
-            redirect_url('index.php');
+            url::redirect_url('index.php');
         }
         break;
 }

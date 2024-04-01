@@ -11,6 +11,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+use npds\system\assets\css;
+
 if (!function_exists('admindroits')) {
     include('die.php');
 }
@@ -138,7 +141,7 @@ function MetaTagAdmin(bool $meta_saved = false)
     inpandfieldlen("newtagcopyright",100);
     inpandfieldlen("newtagrevisitafter",30);';
 
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function GetMetaTags($filename)
@@ -342,7 +345,7 @@ function MetaTagSave($filename, $tags)
         fclose($fh);
 
         global $aid;
-        Ecr_Log('security', "MetaTagsave() by AID : $aid", '');
+        logs::Ecr_Log('security', "MetaTagsave() by AID : $aid", '');
 
         return true;
     }

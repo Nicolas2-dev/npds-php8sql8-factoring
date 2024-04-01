@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace npds\system\messenger;
 
+use npds\system\assets\java;
+use npds\system\cache\cache;
+use npds\system\forum\forum;
+use npds\system\theme\theme;
+use npds\system\mail\mailler;
+use npds\system\security\hack;
+use npds\system\support\online;
+use npds\system\language\language;
+
 class messenger
 {
 
@@ -11,7 +20,7 @@ class messenger
     public static function Form_instant_message($to_userid)
     {
         include("themes/default/header.php");
-        write_short_private_message(removeHack($to_userid));
+        static::write_short_private_message(hack::removeHack($to_userid));
         include("themes/default/footer.php");;
     }
 
@@ -24,22 +33,22 @@ class messenger
         list($to_useridx, $user_languex) = sql_fetch_row($res);
 
         if ($to_useridx == '') {
-            forumerror('0016');
+            forum::forumerror('0016');
         } else {
             global $gmt;
             $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
 
             include_once("language/multilangue.php");
 
-            $subject = removeHack($subject);
+            $subject = hack::removeHack($subject);
             $message = str_replace("\n", "<br />", $message);
-            $message = addslashes(removeHack($message));
+            $message = addslashes(hack::removeHack($message));
 
             $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
             $sql .= "VALUES ('$image', '$subject', '$from_userid', '$to_useridx', '$time', '$message')";
 
             if (!$result = sql_query($sql)) {
-                forumerror('0020');
+                forum::forumerror('0020');
             }
 
             if ($copie) {
@@ -47,7 +56,7 @@ class messenger
                 $sql .= "VALUES ('$image', '$subject', '$from_userid', '$to_useridx', '$time', '$message', '1', '1')";
                 
                 if (!$result = sql_query($sql)) {
-                    forumerror('0020');
+                    forum::forumerror('0020');
                 }
             }
 
@@ -58,7 +67,7 @@ class messenger
                 
                 include("config/signat.php");
                 
-                copy_to_email($to_useridx, $sujet, stripslashes($message));
+                mailler::copy_to_email($to_useridx, $sujet, stripslashes($message));
             }
         }
     }
@@ -124,7 +133,7 @@ class messenger
             $boxstuff = '
             <ul class="">';
 
-            $ibid = online_members();
+            $ibid = online::online_members();
 
             $rank1 = '';
             for ($i = 1; $i <= $ibid[0]; $i++) {
@@ -154,14 +163,14 @@ class messenger
                 list($userid) = sql_fetch_row($result);
 
                 if ($userid) {
-                    $rowQ1 = Q_Select("SELECT rang FROM " . $NPDS_Prefix . "users_status WHERE uid='$userid'", 3600);
+                    $rowQ1 = cache::Q_Select("SELECT rang FROM " . $NPDS_Prefix . "users_status WHERE uid='$userid'", 3600);
                     $myrow = $rowQ1[0];
                     $rank = $myrow['rang'];
                     $tmpR = '';
 
                     if ($rank) {
                         if ($rank1 == '') {
-                            if ($rowQ2 = Q_Select("SELECT rank1, rank2, rank3, rank4, rank5 FROM " . $NPDS_Prefix . "config", 86400)) {
+                            if ($rowQ2 = cache::Q_Select("SELECT rank1, rank2, rank3, rank4, rank5 FROM " . $NPDS_Prefix . "config", 86400)) {
                                 $myrow = $rowQ2[0];
                                 $rank1 = $myrow['rank1'];
                                 $rank2 = $myrow['rank2'];
@@ -171,14 +180,14 @@ class messenger
                             }
                         }
 
-                        if ($ibidR = theme_image("forum/rank/" . $rank . ".gif")) {
+                        if ($ibidR = theme::theme_image("forum/rank/" . $rank . ".gif")) {
                             $imgtmpA = $ibidR;
                         } else {
                             $imgtmpA = "assets/images/forum/rank/" . $rank . ".gif";
                         }
 
                         $messR = 'rank' . $rank;
-                        $tmpR = "<img src=\"" . $imgtmpA . "\" border=\"0\" alt=\"" . aff_langue($$messR) . "\" title=\"" . aff_langue($$messR) . "\" loading=\"lazy\" />";
+                        $tmpR = "<img src=\"" . $imgtmpA . "\" border=\"0\" alt=\"" . language::aff_langue($$messR) . "\" title=\"" . language::aff_langue($$messR) . "\" loading=\"lazy\" />";
                     } else {
                         $tmpR = '&nbsp;';
                     }
@@ -186,7 +195,7 @@ class messenger
                     $new_messages = sql_num_rows(sql_query("SELECT msg_id FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '$userid' AND read_msg='0' AND type_msg='0'"));
                     
                     if ($new_messages > 0) {
-                        $PopUp = JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
+                        $PopUp = java::JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
                         $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
                         
                         if ($ibid[$i]['username'] == $cookie[1]) {
@@ -204,7 +213,7 @@ class messenger
                         $messages = sql_num_rows(sql_query("SELECT msg_id FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '$userid' AND type_msg='0' AND dossier='...'"));
                         
                         if ($messages > 0) {
-                            $PopUp = JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
+                            $PopUp = java::JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
                             $PopUp = '<a href="javascript:void(0);" onclick="window.open(' . $PopUp . ');">';
                             
                             if ($ibid[$i]['username'] == $cookie[1]) {
@@ -238,7 +247,7 @@ class messenger
             themesidebox($block_title, $boxstuff);
         } else {
             if ($admin) {
-                $ibid = online_members();
+                $ibid = online::online_members();
 
                 if ($ibid[0]) {
                     for ($i = 1; $i <= $ibid[0]; $i++) {

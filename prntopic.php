@@ -14,9 +14,12 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\date\date;
 use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
+use npds\system\forum\forum;
+use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -33,7 +36,7 @@ include('auth.php');
 
 $rowQ1 = cache::Q_Select("SELECT forum_id FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'", 3600);
 if (!$rowQ1) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
@@ -41,7 +44,7 @@ $forum = $myrow['forum_id'];
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
@@ -74,7 +77,7 @@ if (isset($user)) {
     $userdata = explode(':', $userX);
 }
 
-$moderator = get_moderator($mod);
+$moderator = forum::get_moderator($mod);
 $moderator = explode(' ', $moderator);
 $Mmod = false;
 
@@ -89,7 +92,7 @@ if (isset($user)) {
 
 $sql = "SELECT topic_title, topic_status FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
 if (!$result = sql_query($sql)) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = sql_fetch_assoc($result);
@@ -118,7 +121,7 @@ $post_aff = $Mmod ? ' ' : " AND post_aff='1' ";
 
 $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND post_id='$post_id'" . $post_aff;
 if (!$result = sql_query($sql)) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = sql_fetch_assoc($result);
@@ -135,7 +138,7 @@ if ($allow_upload_forum) {
 }
 
 if ($myrow['poster_id'] != 0) {
-    $posterdata = get_userdata_from_id($myrow['poster_id']);
+    $posterdata = forum::get_userdata_from_id($myrow['poster_id']);
     $posts = $posterdata['posts'];
 }
 
@@ -192,7 +195,7 @@ echo '
             <p class="">' . translate("Forum") . '&nbsp;&raquo;&nbsp;&raquo;&nbsp;' . stripslashes($forum_name) . '&nbsp;&raquo;&nbsp;&raquo;&nbsp;<strong>' . $topic_subject . '</strong></p>
             <hr />
             <p class="text-end">
-            <small>' . translate("Posté : ") . convertdate($myrow['post_time']) . '</small> ';
+            <small>' . translate("Posté : ") . date::convertdate($myrow['post_time']) . '</small> ';
 
 if ($myrow['image'] != '') {
     if ($ibid = theme::theme_image("forum/subject/" . $myrow['image'])) {
@@ -211,7 +214,7 @@ echo '</p>';
 $message = stripslashes($myrow['post_text']);
 
 if ($allow_bbcode) {
-    $message = smilie($message);
+    $message = forum::smilie($message);
     $message = str_replace('[video_yt]', 'https://www.youtube.com/watch?v=', $message);
     $message = str_replace('[/video_yt]', '', $message);
 }
@@ -220,7 +223,7 @@ if (stristr($message, '<a href')) {
     $message = preg_replace('#_blank(")#i', '_blank\1 class=\1\1', $message);
 }
 
-$message = split_string_without_space($message, 80);
+$message = str::split_string_without_space($message, 80);
 
 if (($forum_type == '6') or ($forum_type == '5')) {
     highlight_string(stripslashes($myrow['post_text'])) . '<br /><br />';

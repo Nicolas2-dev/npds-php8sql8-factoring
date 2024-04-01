@@ -9,6 +9,8 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+use npds\system\language\language;
+
 define('CITRON','tarteaucitron');
 
 // since NPDS Rev 16 this ressources are required dont remove //
@@ -30,9 +32,9 @@ echo '
 ';
 
 if(defined('CITRON')){
-   if (function_exists('language_iso'))
+   if (method_exists(language::class, 'language_iso'))
       echo '
-<script type="text/javascript"> var tarteaucitronForceLanguage = "'.language_iso(1,'','').'"; </script>
+<script type="text/javascript"> var tarteaucitronForceLanguage = "'.language::language_iso(1,'','').'"; </script>
 <script type="text/javascript" src="assets/shared/tarteaucitron/tarteaucitron.js"></script>
 <script type="text/javascript">
    //<![CDATA[

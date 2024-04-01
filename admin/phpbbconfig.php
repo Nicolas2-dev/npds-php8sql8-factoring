@@ -14,6 +14,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\cache\cache;
+
 if (!function_exists('admindroits')) { 
     include('die.php');
 }
@@ -301,7 +304,7 @@ function ForumConfigAdmin()
     inpandfieldlen("rank5",255);
     ';
 
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function ForumConfigChange($allow_html, $allow_bbcode, $allow_sig, $posts_per_page, $hot_threshold, $topics_per_page, $allow_upload_forum, $allow_forum_hide, $rank1, $rank2, $rank3, $rank4, $rank5, $anti_flood, $solved)
@@ -310,7 +313,7 @@ function ForumConfigChange($allow_html, $allow_bbcode, $allow_sig, $posts_per_pa
 
     sql_query("UPDATE " . $NPDS_Prefix . "config SET allow_html='$allow_html', allow_bbcode='$allow_bbcode', allow_sig='$allow_sig', posts_per_page='$posts_per_page', hot_threshold='$hot_threshold', topics_per_page='$topics_per_page', allow_upload_forum='$allow_upload_forum', allow_forum_hide='$allow_forum_hide', rank1='$rank1', rank2='$rank2', rank3='$rank3', rank4='$rank4', rank5='$rank5', anti_flood='$anti_flood', solved='$solved'");
     
-    Q_Clean();
+    cache::Q_Clean();
     
     Header("Location: admin.php?op=ForumConfigAdmin");
 }

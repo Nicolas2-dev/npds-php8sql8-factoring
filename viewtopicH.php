@@ -18,6 +18,7 @@ use npds\system\date\date;
 use npds\system\auth\users;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
+use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
@@ -40,7 +41,7 @@ if ($allow_upload_forum) {
 
 $rowQ1 = cache::Q_Select("SELECT forum_id FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'", 3600);
 if (!$rowQ1) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
@@ -48,7 +49,7 @@ $forum = $myrow['forum_id'];
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
@@ -81,7 +82,7 @@ if (isset($user)) {
     $userdata = explode(':', $userX);
 }
 
-$moderator = get_moderator($mod);
+$moderator = forum::get_moderator($mod);
 $moderator = explode(' ', $moderator);
 $Mmod = false;
 
@@ -95,7 +96,7 @@ if (isset($user)) {
 }
 
 $sql = "SELECT topic_title, topic_status, topic_poster FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
-$total = get_total_posts($forum, $topic, "topic", $Mmod);
+$total = forum::get_total_posts($forum, $topic, "topic", $Mmod);
 
 if ($total > $posts_per_page) {
     $times = 0;
@@ -108,7 +109,7 @@ if ($total > $posts_per_page) {
 }
 
 if (!$result = sql_query($sql)) {
-    forumerror('0001');
+    forum::forumerror('0001');
 }
 
 $myrow = sql_fetch_assoc($result);
@@ -116,7 +117,7 @@ $topic_subject = stripslashes($myrow['topic_title']);
 $lock_state = $myrow['topic_status'];
 $original_poster = $myrow['topic_poster'];
 
-$contributeurs = get_contributeurs($forum, $topic);
+$contributeurs = forum::get_contributeurs($forum, $topic);
 $contributeurs = explode(' ', $contributeurs);
 $total_contributeurs = count($contributeurs);
 
@@ -171,7 +172,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
             $idtog = ($level + 1) . ($count + 1);
         }
 
-        $posterdata = get_userdata_from_id($myrow['poster_id']);
+        $posterdata = forum::get_userdata_from_id($myrow['poster_id']);
 
         if ($myrow['poster_id'] !== '0') {
 
@@ -182,7 +183,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
             $my_rs = '';
 
             if (!$short_user) {
-                $posterdata_extend = get_userdata_extend_from_id($myrow['poster_id']);
+                $posterdata_extend = forum::get_userdata_extend_from_id($myrow['poster_id']);
 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 include('modules/geoloc/config/geoloc.conf');
@@ -301,7 +302,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                 }
 
                 echo '
-                <a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'<div class="my-2 border rounded p-2">' . member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '</div><div class="list-group mb-3 text-center">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>
+                <a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'<div class="my-2 border rounded p-2">' . forum::member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '</div><div class="list-group mb-3 text-center">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>
                 <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
             } else {
                 echo '
@@ -354,8 +355,8 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                     <div class="card-text pt-2">';
 
         if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) {
-            $message = smilie($message);
-            $message = aff_video_yt($message);
+            $message = forum::smilie($message);
+            $message = forum::aff_video_yt($message);
         }
 
         if (($forum_type == '6') or ($forum_type == '5')) {
@@ -380,7 +381,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <div class=" col-sm-6 text-muted small">' . post_convertdate($date_post) . '</div>
+                        <div class=" col-sm-6 text-muted small">' . date::post_convertdate($date_post) . '</div>
                         <div class=" col-sm-6 text-end">';
 
         if ($forum_access != 9) {
@@ -477,7 +478,7 @@ function aff_pub_in($lock_state, $topic, $forum, $post)
     return $ibid;
 }
 
-$contributeurs = get_contributeurs($forum, $topic);
+$contributeurs = forum::get_contributeurs($forum, $topic);
 $contributeurs = explode(' ', $contributeurs);
 $total_contributeurs = count($contributeurs);
 
@@ -499,7 +500,7 @@ if ($forum_access != 9) {
             $allow_to_post = true;
         }
     } elseif ($forum_access == 2) {
-        if (user_is_moderator($userdata[0], $userdata[2], $forum_access)) {
+        if (forum::user_is_moderator($userdata[0], $userdata[2], $forum_access)) {
             $allow_to_post = true;
         }
     }
@@ -524,7 +525,7 @@ echo '
                 <div class=" align-self-center me-auto">';
 
 for ($i = 0; $i < $total_contributeurs; $i++) {
-    $contri = get_userdata_from_id($contributeurs[$i]);
+    $contri = forum::get_userdata_from_id($contributeurs[$i]);
 
     if ($contributeurs[$i] !== '0') {
         if ($contri['user_avatar'] != '') {
@@ -556,7 +557,7 @@ echo '
                 <div class=" align-self-center me-auto">';
 
 for ($i = 0; $i < $ibidcountmod; $i++) {
-    $modera = get_userdata($moderator[$i]);
+    $modera = forum::get_userdata($moderator[$i]);
 
     if ($modera['user_avatar'] != '') {
         if (stristr($modera['user_avatar'], "users_private")) {

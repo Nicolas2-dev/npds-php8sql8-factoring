@@ -18,8 +18,13 @@
 /* Fermeture : div > div"#corps"> $ContainerGlobal>                     */
 /*                    ouverts dans le Header.php                        */
 /* =====================================================================*/
+
+use npds\system\block\block;
+
 global $pdst;
+
 $moreclass = 'col-12';
+
 switch ($pdst) {
     case '-1':
     case '3':
@@ -29,6 +34,7 @@ switch ($pdst) {
         </div>
     </div>';
         break;
+        
     case '1':
     case '2':
         echo '
@@ -37,13 +43,14 @@ switch ($pdst) {
         echo '
             <div id="col_RB" class="collapse show col-lg-3 ">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        rightblocks($moreclass);
+        block::rightblocks($moreclass);
         echo '
                 </div>
             </div>
         </div>
     </div>';
         break;
+
     case '4':
         echo '
         </div>';
@@ -51,7 +58,7 @@ switch ($pdst) {
         echo '
             <div id="col_LB" class="collapse show col-lg-3">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        leftblocks($moreclass);
+        block::leftblocks($moreclass);
         echo '
             </div>
         </div>';
@@ -59,13 +66,14 @@ switch ($pdst) {
         echo '
             <div id="col_RB" class="collapse show col-lg-3">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        rightblocks($moreclass);
+        block::rightblocks($moreclass);
         echo '
                 </div>
             </div>
         </div>
     </div>';
         break;
+
     case '6':
         echo '
         </div>';
@@ -73,13 +81,14 @@ switch ($pdst) {
         echo '
         <div id="col_LB" class="collapse show col-lg-3">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        leftblocks($moreclass);
+        block::leftblocks($moreclass);
         echo '
             </div>
         </div>
     </div>
     </div>';
         break;
+
     default:
         echo '
             </div>

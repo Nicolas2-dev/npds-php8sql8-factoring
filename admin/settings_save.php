@@ -12,31 +12,35 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+use npds\system\cache\cache;
+use npds\system\support\str;
+
 function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xstartdate, $xadminmail, $xtop, $xstoryhome, $xoldnum, $xultramode, $xanonpost, $xDefault_Theme, $xbanners, $xmyIP, $xfoot1, $xfoot2, $xfoot3, $xfoot4, $xbackend_title, $xbackend_language, $xbackend_image, $xbackend_width, $xbackend_height, $xlanguage, $xlocale, $xperpage, $xpopular, $xnewlinks, $xtoplinks, $xlinksresults, $xlinks_anonaddlinklock, $xnotify, $xnotify_email, $xnotify_subject, $xnotify_message, $xnotify_from, $xmoderate, $xanonymous, $xmaxOptions, $xsetCookies, $xtipath, $xuserimg, $xadminimg, $xadmingraphic, $xadmart, $xminpass, $xhttpref, $xhttprefmax, $xpollcomm, $xlinkmainlogo, $xstart_page, $xsmilies, $xOnCatNewLink, $xEmailFooter, $xshort_user, $xgzhandler, $xrss_host_verif, $xcache_verif, $xmember_list, $xdownload_cat, $xmod_admin_news, $xgmt, $xAutoRegUser, $xTitlesitename, $xfilemanager, $xshort_review, $xnot_admin_count, $xadmin_cook_duration, $xuser_cook_duration, $xtroll_limit, $xsubscribe, $xCloseRegUser, $xshort_menu_admin, $xmail_fonction, $xmemberpass, $xshow_user, $xdns_verif, $xmember_invisible, $xavatar_size, $xlever, $xcoucher, $xmulti_langue, $xadmf_ext, $xsavemysql_size, $xsavemysql_mode, $xtiny_mce, $xnpds_twi, $xnpds_fcb, $xDefault_Skin, $xsmtp_host, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xsmtp_port, $xdkim_auto)
 {
     include("config/config.php");
 
     if ($xparse == 0) {
-        $xsitename =  FixQuotes($xsitename);
-        $xTitlesitename = FixQuotes($xTitlesitename);
+        $xsitename =  str::FixQuotes($xsitename);
+        $xTitlesitename = str::FixQuotes($xTitlesitename);
     } else {
         $xsitename =  stripslashes($xsitename);
         $xTitlesitename = stripslashes($xTitlesitename);
     }
 
-    $xnuke_url = FixQuotes($xnuke_url);
-    $xsite_logo = FixQuotes($xsite_logo);
+    $xnuke_url = str::FixQuotes($xnuke_url);
+    $xsite_logo = str::FixQuotes($xsite_logo);
 
     if ($xparse == 0) {
         $xslogan = FixQuotes($xslogan);
-        $xstartdate = FixQuotes($xstartdate);
+        $xstartdate = str::FixQuotes($xstartdate);
     } else {
         $xslogan = stripslashes($xslogan);
         $xstartdate = stripslashes($xstartdate);
     }
 
     // Theme
-    $xDefault_Theme = FixQuotes($xDefault_Theme);
+    $xDefault_Theme = str::FixQuotes($xDefault_Theme);
 
     if ($xDefault_Theme != $Default_Theme) {
         include("config/cache.config.php");
@@ -60,22 +64,22 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     $xfoot4 = str_replace(chr(13) . chr(10), "\n", $xfoot4);
 
     if ($xparse == 0) {
-        $xbackend_title = FixQuotes($xbackend_title);
+        $xbackend_title = str::FixQuotes($xbackend_title);
     } else {
         $xbackend_title = stripslashes($xbackend_title);
     }
 
-    $xbackend_language = FixQuotes($xbackend_language);
-    $xbackend_image = FixQuotes($xbackend_image);
-    $xbackend_width = FixQuotes($xbackend_width);
-    $xbackend_height = FixQuotes($xbackend_height);
-    $xlanguage = FixQuotes($xlanguage);
-    $xlocale = FixQuotes($xlocale);
-    $xnotify_email = FixQuotes($xnotify_email);
+    $xbackend_language = str::FixQuotes($xbackend_language);
+    $xbackend_image = str::FixQuotes($xbackend_image);
+    $xbackend_width = str::FixQuotes($xbackend_width);
+    $xbackend_height = str::FixQuotes($xbackend_height);
+    $xlanguage = str::FixQuotes($xlanguage);
+    $xlocale = str::FixQuotes($xlocale);
+    $xnotify_email = str::FixQuotes($xnotify_email);
 
     if ($xparse == 0) {
-        $xnotify_subject = FixQuotes($xnotify_subject);
-        $xdownload_cat = FixQuotes($xdownload_cat);
+        $xnotify_subject = str::FixQuotes($xnotify_subject);
+        $xdownload_cat = str::FixQuotes($xdownload_cat);
     } else {
         $xnotify_subject = stripslashes($xnotify_subject);
         $xdownload_cat = stripslashes($xdownload_cat);
@@ -83,11 +87,11 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
 
     $xnotify_message = str_replace(chr(13) . chr(10), "\n", $xnotify_message);
 
-    $xnotify_from = FixQuotes($xnotify_from);
-    $xanonymous = FixQuotes($xanonymous);
-    $xtipath = FixQuotes($xtipath);
-    $xuserimg = FixQuotes($xuserimg);
-    $xadminimg = FixQuotes($xadminimg);
+    $xnotify_from = str::FixQuotes($xnotify_from);
+    $xanonymous = str::FixQuotes($xanonymous);
+    $xtipath = str::FixQuotes($xtipath);
+    $xuserimg = str::FixQuotes($xuserimg);
+    $xadminimg = str::FixQuotes($xadminimg);
     $file = fopen("config/config.php", "w");
     $line = "######################################################################\n";
     $content = "<?php\n";
@@ -537,9 +541,9 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     fclose($file);
 
     global $aid;
-    Ecr_Log("security", "ConfigSave() by AID : $aid", "");
+    logs::Ecr_Log("security", "ConfigSave() by AID : $aid", "");
 
-    SC_Clean();
+    cache::SC_Clean();
 
     Header("Location: admin.php?op=AdminMain");
 }

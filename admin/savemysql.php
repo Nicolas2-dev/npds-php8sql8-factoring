@@ -17,6 +17,8 @@
 /* Adapted by : M. PASCAL aKa EBH (plan.net@free.fr)                                         */
 /*********************************************************************************************/
 
+use npds\system\routing\url;
+
 if (!function_exists('admindroits')) {  
     include('die.php');
 }
@@ -324,7 +326,7 @@ switch ($op) {
                     //]]>
                     </script>";
 
-            redirect_url("admin.php");
+            url::redirect_url("admin.php");
         } else if ($savemysql_mode == 3) {
             dbSave_tofile("slogs", 1, $savemysql_size);
 
@@ -334,11 +336,11 @@ switch ($op) {
                     //]]>
                     </script>";
 
-            redirect_url("admin.php");
+            url::redirect_url("admin.php");
         } else {
             dbSave();
 
-            redirect_url("admin.php");
+            url::redirect_url("admin.php");
         }
         break;
 

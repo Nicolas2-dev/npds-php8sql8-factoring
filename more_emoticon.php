@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\forum\forum;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -48,6 +49,6 @@ include('assets/formhelp.java.php');
 echo '
         </head>
         <body class="p-2">
-        ' . putitems_more() . '
+        ' . forum::putitems_more() . '
         </body>
     </html>';
