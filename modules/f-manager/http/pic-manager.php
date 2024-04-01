@@ -439,9 +439,9 @@ if ($inclusion) {
         $Xcontent = str_replace('_files', '', $Xcontent);
 
     if (!$NPDS_fma) {
-        // utilisation de pages.php
+        // utilisation de routes/pages.php
         settype($PAGES, 'array');
-        require_once("config/pages.php");
+        require_once("routes/pages.php");
         $Titlesitename = language::aff_langue($PAGES["modules.php?ModPath=$ModPath&ModStart=$ModStart*"]['title']);
         global $Default_Theme, $Default_Skin, $user;
         if (isset($user) and $user != '') {

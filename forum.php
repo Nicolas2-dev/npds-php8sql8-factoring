@@ -83,6 +83,7 @@ if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1
 
     if ($inclusion) {
         $Xcontent = join('', file($inclusion));
+
         echo metalang::meta_lang(language::aff_langue($Xcontent));
     }
 }

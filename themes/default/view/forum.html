@@ -1,21 +1,21 @@
 <h2 class="mb-3">Forums</h2>
-   forum_subscribeON()
+   <?php echo MM_forum_subscribeON(); ?>
    <div class="mb-3 row">
       <div class="col-sm-12">
          <input type="text" class="mb-3 form-control form-control-sm n_filtrbox" placeholder="Filtrer les résultats" />
       </div>
    </div>
    <div class="n-filtrable list-group">
-      forum_all()
+      <?php echo MM_forum_all(); ?>
    </div>
    <div class="row">
       <div class="col-sm-12">
-         <span class="help-block">forum_message()</span>
-         forum_bouton_subscribe()
+         <span class="help-block"><?php echo MM_forum_message(); ?></span>
+         <?php echo MM_forum_bouton_subscribe(); ?>
       </div>
    </div>
-   forum_subscribeOFF()
-   <div id="forum_recherche"><p>forum_recherche()</p></div>
+   <?php echo MM_forum_subscribeOFF(); ?>
+   <div id="forum_recherche"><p><?php echo MM_forum_recherche(); ?></p></div>
    <script type="text/javascript">
    //<![CDATA[
       $(function(){

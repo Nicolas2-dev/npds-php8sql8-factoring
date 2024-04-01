@@ -17,6 +17,7 @@ use npds\system\date\date;
 use npds\system\auth\users;
 use npds\system\support\str;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 use npds\system\fmanager\File;
 use npds\system\security\hack;
 use npds\system\language\language;
@@ -68,7 +69,7 @@ function geninfo($did, $out_template)
 
         echo '<p><strong>' . translate("Taille du fichier") . ' : </strong>';
 
-        $Fichier = new File($durl); // ??? not used
+        //$Fichier = new File($durl); // ??? not used
         $objZF = new FileManagement;
 
         if ($dfilesize != 0) {
@@ -427,7 +428,7 @@ function listdownloads($dcategory, $sortby, $sortorder)
         }
 
         echo '</td>
-                <td class="text-center">' . $Fichier->Affiche_Extention('webfont') . '</td>
+                <td class="text-center">' . $Fichier->Affiche_Extention('webfont') . ' </td>
                 <td>';
 
         if ($okfile == true) {
@@ -565,7 +566,7 @@ function broken($did)
             settype($did, "integer");
             
             $message = $nuke_url . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . " $cookie[1] / IP : " . getip() . "\n\n";
-            include 'config/signat.php';
+            $message .= Config::get('signature.message');
             
             mailler::send_email($notify_email, html_entity_decode(translate("Rapporter un lien rompu"), ENT_COMPAT | ENT_HTML401, 'utf-8'), nl2br($message), $notify_from, false, "html", '');
             

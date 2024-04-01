@@ -35,7 +35,7 @@ function ShowFaq($id_cat, $categories) // cette function ne sert strictement a r
         <a href="faq.php" title="' . translate("Retour à l'index FAQ") . '" data-bs-toggle="tooltip">Index</a>&nbsp;&raquo;&raquo;&nbsp;' . StripSlashes($categories) . '
     </p>';
 
-    $result = sql_query("SELECT id, id_cat, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id_cat='$id_cat'");
+    $result = sql_query("SELECT id, id_categorie, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id='$id_cat'");
     while (list($id, $id_cat, $question, $answer) = sql_fetch_row($result)) {
     }
 }
@@ -44,7 +44,7 @@ function ShowFaqAll($id_cat)
 {
     global $NPDS_Prefix;
 
-    $result = sql_query("SELECT id, id_cat, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id_cat='$id_cat'");
+    $result = sql_query("SELECT id, id_categorie, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id='$id_cat'");
 
     while (list($id, $id_cat, $question, $answer) = sql_fetch_row($result)) {
         echo '
@@ -77,7 +77,7 @@ if (!$myfaq) {
     }
 
     if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
-        $result = sql_query("SELECT id_cat, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id_cat ASC");
+        $result = sql_query("SELECT id, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id ASC");
         
         echo '
         <h2 class="mb-4">' . translate("FAQ - Questions fréquentes") . '</h2>

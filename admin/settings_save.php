@@ -16,7 +16,7 @@ use npds\system\logs\logs;
 use npds\system\cache\cache;
 use npds\system\support\str;
 
-function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xstartdate, $xadminmail, $xtop, $xstoryhome, $xoldnum, $xultramode, $xanonpost, $xDefault_Theme, $xbanners, $xmyIP, $xfoot1, $xfoot2, $xfoot3, $xfoot4, $xbackend_title, $xbackend_language, $xbackend_image, $xbackend_width, $xbackend_height, $xlanguage, $xlocale, $xperpage, $xpopular, $xnewlinks, $xtoplinks, $xlinksresults, $xlinks_anonaddlinklock, $xnotify, $xnotify_email, $xnotify_subject, $xnotify_message, $xnotify_from, $xmoderate, $xanonymous, $xmaxOptions, $xsetCookies, $xtipath, $xuserimg, $xadminimg, $xadmingraphic, $xadmart, $xminpass, $xhttpref, $xhttprefmax, $xpollcomm, $xlinkmainlogo, $xstart_page, $xsmilies, $xOnCatNewLink, $xEmailFooter, $xshort_user, $xgzhandler, $xrss_host_verif, $xcache_verif, $xmember_list, $xdownload_cat, $xmod_admin_news, $xgmt, $xAutoRegUser, $xTitlesitename, $xfilemanager, $xshort_review, $xnot_admin_count, $xadmin_cook_duration, $xuser_cook_duration, $xtroll_limit, $xsubscribe, $xCloseRegUser, $xshort_menu_admin, $xmail_fonction, $xmemberpass, $xshow_user, $xdns_verif, $xmember_invisible, $xavatar_size, $xlever, $xcoucher, $xmulti_langue, $xadmf_ext, $xsavemysql_size, $xsavemysql_mode, $xtiny_mce, $xnpds_twi, $xnpds_fcb, $xDefault_Skin, $xsmtp_host, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xsmtp_port, $xdkim_auto)
+function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xstartdate, $xadminmail, $xtop, $xstoryhome, $xoldnum, $xultramode, $xanonpost, $xDefault_Theme, $xbanners, $xmyIP, $xfoot1, $xfoot2, $xfoot3, $xfoot4, $xbackend_title, $xbackend_language, $xbackend_image, $xbackend_width, $xbackend_height, $xlanguage, $xlocale, $xperpage, $xpopular, $xnewlinks, $xtoplinks, $xlinksresults, $xlinks_anonaddlinklock, $xnotify, $xnotify_email, $xnotify_subject, $xnotify_message, $xnotify_from, $xmoderate, $xanonymous, $xmaxOptions, $xsetCookies, $xtipath, $xuserimg, $xadminimg, $xadmingraphic, $xadmart, $xminpass, $xhttpref, $xhttprefmax, $xpollcomm, $xlinkmainlogo, $xstart_page, $xsmilies, $xOnCatNewLink, $xEmailFooter, $xshort_user, $xgzhandler, $xrss_host_verif, $xcache_verif, $xmember_list, $xdownload_cat, $xmod_admin_news, $xgmt, $xAutoRegUser, $xTitlesitename, $xfilemanager, $xshort_review, $xnot_admin_count, $xadmin_cook_duration, $xuser_cook_duration, $xtroll_limit, $xsubscribe, $xCloseRegUser, $xshort_menu_admin, $xmail_fonction, $xmemberpass, $xshow_user, $xdns_verif, $xmember_invisible, $xavatar_size, $xlever, $xcoucher, $xmulti_langue, $xadmf_ext, $xsavemysql_size, $xsavemysql_mode, $xtiny_mce, $xnpds_twi, $xnpds_fcb, $xDefault_Skin, $xmail_debug, $xsmtp_host, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xsmtp_port, $xdkim_auto)
 {
     include("config/config.php");
 
@@ -484,66 +484,105 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     fclose($file);
 
     $xEmailFooter = str_replace(chr(13) . chr(10), "\n", $xEmailFooter);
-    $file = fopen("config/signat.php", "w");
-    $content = "<?php\n";
-    $content .= "$line";
-    $content .= "# DUNE by NPDS : Net Portal Dynamic System\n";
-    $content .= "# ===================================================\n";
-    $content .= "#\n";
-    $content .= "# This version name NPDS Copyright (c) 2001-" . date("Y") . " by Philippe Brunier\n";
-    $content .= "#\n";
-    $content .= "# This module is to configure Footer of Email send By NPDS\n";
-    $content .= "#\n";
-    $content .= "# This program is free software. You can redistribute it and/or modify\n";
-    $content .= "# it under the terms of the GNU General Public License as published by\n";
-    $content .= "# the Free Software Foundation; either version 3 of the License.\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$message .= \"$xEmailFooter\";\n";
+    $file = fopen("config/signature.php", "w");
 
-    $content .= "?>";
+    $content = "<?php\n";
+    $content .= "\n";
+    $content .= "return array(\n";
+    $content .= "/**\n";
+    $content .= "* Signature\n";
+    $content .= "*\n";
+    $content .= "*/\n";
+    $content .= "\n";
+    $content .= "    'message  => '". $xEmailFooter . "',\n";
+    $content .= "\n";
+    $content .= ");\n";
+    $content .= "\n";
     fwrite($file, $content);
     fclose($file);
-
-    $file = fopen("config/mailer.php", "w");
-    $content = "<?php\n";
-    $content .= "$line";
-    $content .= "# DUNE by NPDS : Net Portal Dynamic System\n";
-    $content .= "# ===================================================\n";
-    $content .= "#\n";
-    $content .= "# This version name NPDS Copyright (c) 2001-" . date("Y") . " by Philippe Brunier\n";
-    $content .= "#\n";
-    $content .= "# This file is to configure PHPMailer to send email from NPDS portal\n";
-    $content .= "#\n";
-    $content .= "# This program is free software. You can redistribute it and/or modify\n";
-    $content .= "# it under the terms of the GNU General Public License as published by\n";
-    $content .= "# the Free Software Foundation; either version 3 of the License.\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "# Configurer le serveur SMTP\n";
-    $content .= "\$smtp_host = \"$xsmtp_host\";\n";
-    $content .= "# Port TCP, utilisez 587 si vous avez activé le chiffrement TLS\n";
-    $content .= "\$smtp_port = \"$xsmtp_port\";\n";
-    $content .= "# Activer l'authentification SMTP\n";
-    $content .= "\$smtp_auth = $xsmtp_auth;\n";
-    $content .= "# Nom d'utilisateur SMTP\n";
-    $content .= "\$smtp_username = \"$xsmtp_username\";\n";
-    $content .= "# Mot de passe SMTP\n";
-    $content .= "\$smtp_password = \"$xsmtp_password\";\n";
-    $content .= "# Activer le chiffrement TLS\n";
-    $content .= "\$smtp_secure = $xsmtp_secure;\n";
-    $content .= "# Type du chiffrement TLS\n";
-    $content .= "\$smtp_crypt = \"$xsmtp_crypt\";\n";
-    $content .= "# DKIM 1 pour celui du dns 2 pour une génération automatique\n";
-    $content .= "\$dkim_auto = $xdkim_auto;\n";
-    $content .= "?>";
-    fwrite($file, $content);
-    fclose($file);
-
+    
+    // save configuration mailer
+    save_setting_mailler($xmail_debug, $xsmtp_host, $xsmtp_port, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xdkim_auto);
+    
     global $aid;
     logs::Ecr_Log("security", "ConfigSave() by AID : $aid", "");
 
     cache::SC_Clean();
 
     Header("Location: admin.php?op=AdminMain");
+}
+
+/**
+ * [save_setting_mailler description]
+ *
+ * @param   int     $xmail_debug     [$xmail_debug description]
+ * @param   string  $xsmtp_host      [$xsmtp_host description]
+ * @param   int     $xsmtp_port      [$xsmtp_port description]
+ * @param   int     $xsmtp_auth      [$xsmtp_auth description]
+ * @param   string  $xsmtp_username  [$xsmtp_username description]
+ * @param   string  $xsmtp_password  [$xsmtp_password description]
+ * @param   int     $xsmtp_secure    [$xsmtp_secure description]
+ * @param   string  $xsmtp_crypt     [$xsmtp_crypt description]
+ * @param   int     $xdkim_auto      [$xdkim_auto description]
+ *
+ * @return  void
+ */
+function save_setting_mailler(int $xmail_debug, string $xsmtp_host, int $xsmtp_port, int $xsmtp_auth, string $xsmtp_username, string $xsmtp_password, int $xsmtp_secure, string $xsmtp_crypt, int $xdkim_auto): void
+{
+    $file = fopen("config/mailer.php", "w");
+    $content = "<?php\n";
+    $content .= "\n";
+    $content .= "return array(\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Debug\n";
+    $content .= "     */\n";
+    $content .= "    'debug' => ($xmail_debug == 0) ? false : true),\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Configurer le serveur SMTP\n";
+    $content .= "     *\n";
+    $content .= "     * @var [type]\n";
+    $content .= "     */\n";
+    $content .= "    'smtp_host' => '".$xsmtp_host."',\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Port TCP, utilisez 587 si vous avez activé le chiffrement TLS\n";
+    $content .= "     */\n";
+    $content .= "    'smtp_port' => '".$xsmtp_port."',\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Activer l'authentification SMTP\n";
+    $content .= "     */\n";
+    $content .= "    'smtp_auth' => $xsmtp_auth,\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Nom d'utilisateur SMTP\n";
+    $content .= "     */\n";
+    $content .= "    'smtp_username' => '".$xsmtp_username."',\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Mot de passe SMTP\n";
+    $content .= "     */\n";
+    $content .= "    'smtp_password' => '".$xsmtp_password."',\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Activer le chiffrement TLS\n";
+    $content .= "     */\n";
+    $content .= "    'smtp_secure' => $xsmtp_secure,\n";
+    $content .= "\n";
+    $content .= "    /**\n";
+    $content .= "     * Type du chiffrement TLS\n";
+    $content .= "     */\n";
+    $content .= "    'smtp_crypt' => '".$xsmtp_crypt."',\n";
+    $content .= " \n";
+    $content .= "    /**\n";
+    $content .= "     * DKIM 1 pour celui du dns 2 pour une génération automatique\n";
+    $content .= "     */\n";
+    $content .= "    'dkim_auto' => $xdkim_auto,\n";
+    $content .= "\n";
+    $content .= ");\n";
+    $content .= "\n";
+    fwrite($file, $content);
+    fclose($file);
 }

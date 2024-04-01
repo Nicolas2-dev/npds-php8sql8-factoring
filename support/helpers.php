@@ -49,7 +49,7 @@ use npds\system\support\polls;
 // use npds\system\support\editeur;
 // use npds\system\support\referer;
 // use npds\system\security\protect;
-// use npds\system\support\download;
+use npds\system\support\download;
 // use npds\system\language\language;
 // use npds\system\language\metalang;
 use npds\system\messenger\messenger;
@@ -690,10 +690,10 @@ function cacheManagerEnd()
 
 // // download.php
 
-// function topdownload_data($form, $ordre)
-// {
-//     return download::topdownload_data($form, $ordre);
-// }
+function topdownload_data($form, $ordre)
+{
+    return download::topdownload_data($form, $ordre);
+}
 
 
 // // editeur.php
@@ -1133,6 +1133,12 @@ function RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $t
 // // }
 
 //metalang function database 
+
+
+function MM_sc_infos()
+{
+    return cache::sc_infos();
+}
 
 
 function MM_Scalcul($opex, $premier, $deuxieme)
@@ -1885,7 +1891,7 @@ function MM_top_sections($arg)
 
     $result = sql_query("SELECT artid, title, counter FROM " . $NPDS_Prefix . "seccont ORDER BY counter DESC LIMIT 0,$arg");
     while (list($artid, $title, $counter) = sql_fetch_row($result)) {
-        $content .= '<li class="ms-4 my-1"><a href="sections.php?op=viewarticle&amp;artid=' . $artid . '" >' . aff_langue($title) . '</a>&nbsp;<span class="badge bg-secondary float-end">' . str::wrh($counter) . ' ' . translate("Fois") . '</span></li>';
+        $content .= '<li class="ms-4 my-1"><a href="sections.php?op=viewarticle&amp;artid=' . $artid . '" >' . language::aff_langue($title) . '</a>&nbsp;<span class="badge bg-secondary float-end">' . str::wrh($counter) . ' ' . translate("Fois") . '</span></li>';
     }
 
     sql_free_result($result);

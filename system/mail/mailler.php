@@ -8,6 +8,7 @@ use npds\system\logs\logs;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
 use PHPMailer\PHPMailer\SMTP;
+use npds\system\config\Config;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MaillerExecption;
 
@@ -37,9 +38,10 @@ class mailler
         $From_email = $from != '' ? $from : $adminmail;
 
         if (preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $From_email)) {
-            include 'config/mailer.php';
             
-            if ($dkim_auto == 2) {
+            $config = Config::get('mailer');
+            
+            if ($config['dkim_auto'] == 2) {
                 //Private key filename for this selector 
                 $privatekeyfile = 'storage/mailer/key/' . $NPDS_Key . '_dkim_private.pem';
                 
@@ -54,7 +56,7 @@ class mailler
                             'private_key_bits' => 2048,
                             'private_key_type' => OPENSSL_KEYTYPE_RSA,
                         ]
-                    );
+                        );
 
                     //Save private key 
                     openssl_pkey_export_to_file($pk, $privatekeyfile);
@@ -66,27 +68,26 @@ class mailler
                 }
             }
 
-            $debug = false;
-            $mail = new PHPMailer($debug);
+            $mail = new PHPMailer($config['debug']);
 
             try {
                 //Server settings config smtp 
                 if ($mail_fonction == 2) {
                     $mail->isSMTP();
-                    $mail->Host       = $smtp_host;
-                    $mail->SMTPAuth   = $smtp_auth;
-                    $mail->Username   = $smtp_username;
-                    $mail->Password   = $smtp_password;
+                    $mail->Host       = $config['smtp_host'];
+                    $mail->SMTPAuth   = $config['smtp_auth'];
+                    $mail->Username   = $config['smtp_username'];
+                    $mail->Password   = $config['smtp_password'];
                     
-                    if ($smtp_secure) {
-                        if ($smtp_crypt === 'tls') {
+                    if ($config['smtp_secure']) {
+                        if ($config['smtp_crypt'] === 'tls') {
                             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                        } elseif ($smtp_crypt === 'ssl') {
+                        } elseif ($config['smtp_crypt'] === 'ssl') {
                             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                         }
                     }
 
-                    $mail->Port       = $smtp_port;
+                    $mail->Port       = $config['smtp_port'];
                 }
 
                 $mail->CharSet = 'utf-8';
@@ -132,7 +133,7 @@ class mailler
                     $mail->Body = sprintf($stub_mail, $message);
                 }
                 
-                if ($dkim_auto == 2) {
+                if ($config['dkim_auto'] == 2) {
                     $mail->DKIM_domain = str_replace(['http://', 'https://'], ['', ''], $nuke_url);
                     $mail->DKIM_private = $privatekeyfile;;
                     $mail->DKIM_selector = $NPDS_Key;
@@ -140,7 +141,7 @@ class mailler
                 }
 
                 if ($mail_fonction == 2) {
-                    if ($debug) {
+                    if ($config['debug']) {
                         // on génère un journal détaillé après l'envoi du mail 
                         $mail->SMTPDebug = SMTP::DEBUG_SERVER;
                     }
@@ -148,7 +149,7 @@ class mailler
 
                 $mail->send();
 
-                if ($debug) {
+                if ($config['debug']) {
                     // stop l'exécution du script pour affichage du journal sur la page 
                     die();
                 }

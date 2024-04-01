@@ -60,7 +60,7 @@ class css
         // Chargeur CSS spécifique
         if ($css_pages_ref) {
 
-            include("config/pages.php");
+            include("routes/pages.php");
 
             if (is_array($PAGES[$css_pages_ref]['css'])) {
                 foreach ($PAGES[$css_pages_ref]['css'] as $tab_css) {

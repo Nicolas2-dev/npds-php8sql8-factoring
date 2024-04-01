@@ -18,6 +18,7 @@ use npds\system\assets\css;
 use npds\system\routing\url;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\language\language;
 
@@ -130,8 +131,7 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
 
     $fname = hack::removeHack($fname);
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.") . "\n\n" . language::aff_langue($title) . "\n" . translate("Date :") . " $time\n" . translate("Sujet : ") . " " . language::aff_langue($topictext) . "\n\n" . translate("L'article") . " : <a href=\"$nuke_url/article.php?sid=$sid&amp;archive=$archive\">$nuke_url/article.php?sid=$sid&amp;archive=$archive</a>\n\n";
-    
-    include("config/signat.php");
+    $message .= Config::get('signature.message');
 
     $fmail = hack::removeHack($fmail);
     $subject = hack::removeHack($subject);
@@ -256,8 +256,7 @@ function SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse)
     $subject = html_entity_decode(translate("Site à découvrir : "), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
     $fname = hack::removeHack($fname);
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé notre site") . " $sitename " . translate("intéressant et a voulu vous le faire connaître.") . "\n\n$sitename : <a href=\"$nuke_url\">$nuke_url</a>\n\n";
-    
-    include("config/signat.php");
+    $message .= Config::get('signature.message');
 
     $fmail = hack::removeHack($fmail);
     $subject = hack::removeHack($subject);

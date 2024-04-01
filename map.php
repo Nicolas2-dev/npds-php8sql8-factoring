@@ -178,11 +178,11 @@ function mapfaq()
 
     $lis_faq = '';
 
-    $result = sql_query("SELECT id_cat, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id_cat ASC");
+    $result = sql_query("SELECT id, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id ASC");
 
-    while (list($id_cat, $categories) = sql_fetch_row($result)) {
+    while (list($id, $categories) = sql_fetch_row($result)) {
         $catname = language::aff_langue($categories);
-        $lis_faq .= "<li><a href=\"faq.php?id_cat=$id_cat&amp;myfaq=yes&amp;categories=" . urlencode($catname) . "\">" . $catname . "</a></li>\n";
+        $lis_faq .= "<li><a href=\"faq.php?id_cat=$id&amp;myfaq=yes&amp;categories=" . urlencode($catname) . "\">" . $catname . "</a></li>\n";
     }
 
     if ($lis_faq != '')

@@ -22,6 +22,7 @@ use npds\system\theme\theme;
 use npds\system\mail\mailler;
 use npds\system\utility\code;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\subscribe\subscribe;
@@ -221,8 +222,7 @@ if ($submitS) {
             $message .= translate_ml($m['user_langue'], "Vous recevez ce Mail car vous avez demandé à être informé lors de la publication d'une réponse.") . "\n";
             $message .= translate_ml($m['user_langue'], "Pour lire la réponse") . " : ";
             $message .= "<a href=\"$nuke_url/viewtopicH.php?topic=$topic&forum=$forum\">$nuke_url/viewtopicH.php?topic=$topic&forum=$forum</a>\n\n";
-            
-            include("config/signat.php");
+            $message .= Config::get('signature.message');
 
             mailler::send_email($m['email'], $subject, $message, '', true, 'html', '');
             $sauf = $m['uid'];

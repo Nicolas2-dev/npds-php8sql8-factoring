@@ -16,6 +16,7 @@
 use npds\system\auth\users;
 use npds\system\routing\url;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\cache\cacheManager;
@@ -202,16 +203,14 @@ function listarticles($secid)
 {
     global $user, $prev, $NPDS_Prefix;
 
-    if (file_exists("config/sections.php")) {
-        include("config/sections.php");
-    }
-
     $result = sql_query("SELECT secname, rubid, image, intro, userlevel FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
     list($secname, $rubid, $image, $intro, $userlevel) = sql_fetch_row($result);
 
     list($rubname) = sql_fetch_row(sql_query("SELECT rubname FROM " . $NPDS_Prefix . "rubriques WHERE rubid='$rubid'"));
 
-    if ($sections_chemin == 1) {
+    $config = Config::get('sections');
+    
+    if ($config['sections_chemin'] == 1) {
         $chemin = '<span class="lead"><a href="sections.php" title="' . translate("Retour à l'index des rubriques") . '" data-bs-toggle="tooltip">Index</a>&nbsp;/&nbsp;<a href="sections.php?rubric=' . $rubid . '">' . language::aff_langue($rubname) . '</a></span>';
     }
 
@@ -311,11 +310,8 @@ function listarticles($secid)
 function viewarticle($artid, $page)
 {
     global $NPDS_Prefix, $prev, $user, $numpage;
+    
     $numpage = $page;
-
-    if (file_exists("config/sections.php")) {
-        include("config/sections.php");
-    }
 
     if ($page == '') {
         sql_query("UPDATE " . $NPDS_Prefix . "seccont SET counter=counter+1 WHERE artid='$artid'");
@@ -344,7 +340,9 @@ function viewarticle($artid, $page)
             $pindex = translate("Page") . ' ' . $pindex;
         }
 
-        if ($sections_chemin == 1) {
+        $config = Config::get('sections');
+
+        if ($config['sections_chemin'] == 1) {
             $chemin = '<span class="lead"><a href="sections.php">Index</a>&nbsp;/&nbsp;<a href="sections.php?rubric=' . $rubid . '">' . language::aff_langue($rubname) . '</a>&nbsp;/&nbsp;<a href="sections.php?op=listarticles&amp;secid=' . $secid . '">' . language::aff_langue($secname) . '</a></span>';
         }
 

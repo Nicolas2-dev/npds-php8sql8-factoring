@@ -46,6 +46,7 @@ class block
                     if ($prm[$i] == "false") {
                         $prm[$i] = false;
                     }
+
                     if ($prm[$i] == "true") {
                         $prm[$i] = true;
                     }
@@ -120,7 +121,7 @@ class block
             $hidden = true;
         }
 
-        // Si on cherche à charger un JS qui a déjà été chargé par pages.php alors on ne le charge pas ...
+        // Si on cherche à charger un JS qui a déjà été chargé par routes/pages.php alors on ne le charge pas ...
         global $pages_js;
         if ($pages_js != '') {
             preg_match('#src="([^"]*)#', $content, $jssrc);
@@ -135,7 +136,9 @@ class block
                 }
             } else {
                 if (array_key_exists('1', $jssrc)) {
-                    if ($pages_js == $jssrc[1]) $content = "";
+                    if ($pages_js == $jssrc[1]) {
+                        $content = "";
+                    }
                 }
             }
         }
@@ -147,8 +150,9 @@ class block
             $CACHE_TIMINGS[$cache_clef] = $Xcache;
             $cache_obj = new cacheManager();
             $cache_obj->startCachingBlock($cache_clef);
-        } else
+        } else {
             $cache_obj = new SuperCacheEmpty();
+        }
 
         if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache) or ($Xcache == 0)) {
             global $user, $admin;
@@ -161,16 +165,20 @@ class block
             if (stristr($content, 'class-') or stristr($content, 'uri')) {
                 $tmp = explode("\n", $content);
                 $content = '';
+                
                 foreach ($tmp as $id => $class) {
                     $temp = explode("#", $class);
-                    if ($temp[0] == "class-title")
+                    
+                    if ($temp[0] == "class-title") {
                         $B_class_title = str_replace("\r", "", $temp[1]);
-                    else if ($temp[0] == "class-content")
+                    } else if ($temp[0] == "class-content") {
                         $B_class_content = str_replace("\r", "", $temp[1]);
-                    else if ($temp[0] == "uri")
+                    } else if ($temp[0] == "uri") {
                         $R_uri = str_replace("\r", '', $temp[1]);
-                    else {
-                        if ($content != '') $content .= "\n ";
+                    } else {
+                        if ($content != '') {
+                            $content .= "\n ";
+                        }
                         $content .= str_replace("\r", '', $class);
                     }
                 }
@@ -186,40 +194,49 @@ class block
                 $tab_pref = parse_url($page_ref);
                 $racine_page = $tab_pref['path'];
 
-                if (array_key_exists('query', $tab_pref))
+                if (array_key_exists('query', $tab_pref)) {
                     $tab_pref = explode('&', $tab_pref['query']);
+                }
 
                 foreach ($tab_uri as $RR_uri) {
                     $tab_puri = parse_url($RR_uri);
                     $racine_uri = $tab_puri['path'];
 
                     if ($racine_page == $racine_uri) {
-                        if (array_key_exists('query', $tab_puri))
+                        if (array_key_exists('query', $tab_puri)) {
                             $tab_puri = explode('&', $tab_puri['query']);
+                        }
 
                         foreach ($tab_puri as $idx => $RRR_uri) {
                             if (substr($RRR_uri, -1) == "*") {
                                 // si le token contient *
-                                if (substr($RRR_uri, 0, strpos($RRR_uri, "=")) == substr($tab_pref[$idx], 0, strpos($tab_pref[$idx], "=")))
+                                if (substr($RRR_uri, 0, strpos($RRR_uri, "=")) == substr($tab_pref[$idx], 0, strpos($tab_pref[$idx], "="))) {
                                     $R_content = true;
+                                }
                             } else {
-                                if ($RRR_uri != $tab_pref[$idx])
+                                if ($RRR_uri != $tab_pref[$idx]) {
                                     $R_content = false;
-                                else
+                                } else {
                                     $R_content = true;
+                                }
                             }
                         }
                     }
 
-                    if ($R_content == true) break;
+                    if ($R_content == true) {
+                        break;
+                    }
                 }
 
-                if (!$R_content) $content = '';
+                if (!$R_content) {
+                    $content = '';
+                }
             }
 
             // For Javascript in Block
-            if (!stristr($content, 'javascript'))
+            if (!stristr($content, 'javascript')) {
                 $content = nl2br($content);
+            }
 
             // For including externale file in block / the return MUST BE in $content
             if (stristr($content, 'include#')) {
@@ -247,41 +264,46 @@ class block
             if (!empty($content)) {
                 if (($member == 1) and (isset($user))) {
                     if (!static::block_fonction($title, $content)) {
-                        if (!$hidden)
+                        if (!$hidden) {
                             themesidebox($title, $content);
-                        else
+                        } else {
                             echo $content;
+                        }
                     }
                 } elseif ($member == 0) {
                     if (!static::block_fonction($title, $content)) {
-                        if (!$hidden)
+                        if (!$hidden) {
                             themesidebox($title, $content);
-                        else
+                        } else {
                             echo $content;
+                        }
                     }
                 } elseif (($member > 1) and (isset($user))) {
                     $tab_groupe = groupe::valid_group($user);
                     if (groupe::groupe_autorisation($member, $tab_groupe)) {
                         if (!static::block_fonction($title, $content)) {
-                            if (!$hidden)
+                            if (!$hidden)  {
                                 themesidebox($title, $content);
-                            else
+                            } else {
                                 echo $content;
+                            }
                         }
                     }
                 } elseif (($member == -1) and (!isset($user))) {
                     if (!static::block_fonction($title, $content)) {
-                        if (!$hidden)
+                        if (!$hidden) {
                             themesidebox($title, $content);
-                        else
+                        } else {
                             echo $content;
+                        }
                     }
                 } elseif (($member == -127) and (isset($admin)) and ($admin)) {
                     if (!static::block_fonction($title, $content)) {
-                        if (!$hidden)
+                        if (!$hidden) {
                             themesidebox($title, $content);
-                        else
+                        } else {
                             echo $content;
+                        }
                     }
                 }
             }
@@ -348,14 +370,15 @@ class block
     {
         global $NPDS_Prefix, $htvar; // modif Jireck
 
-        if ($Xid)
-            $result = $Xblock == 'RB' ?
-                sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "rblocks WHERE id='$Xid'") :
-                sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "lblocks WHERE id='$Xid'");
-        else
-            $result = $Xblock == 'RB' ?
-                sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "rblocks ORDER BY Rindex ASC") :
-                sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "lblocks ORDER BY Lindex ASC");
+        if ($Xid) {
+            $result = $Xblock == 'RB' 
+                ? sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "rblocks WHERE id='$Xid'") 
+                : sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "lblocks WHERE id='$Xid'");
+        } else {
+            $result = $Xblock == 'RB' 
+                ? sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "rblocks ORDER BY Rindex ASC") 
+                : sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "lblocks ORDER BY Lindex ASC");
+        }
 
         global $bloc_side;
 
@@ -364,12 +387,11 @@ class block
         while (list($title, $content, $member, $cache, $actif, $id, $css) = sql_fetch_row($result)) {
             if (($actif) or ($Xid)) {
                 if ($css == 1) {
-                    $htvar = '
-             <div class="' . $moreclass . '" id="' . $Xblock . '_' . $id . '">'; // modif Jireck
+                    $htvar = '<div class="' . $moreclass . '" id="' . $Xblock . '_' . $id . '">'; // modif Jireck
                 } else {
-                    $htvar = '
-             <div class="' . $moreclass . ' ' . strtolower($bloc_side) . 'bloc">'; // modif Jireck
+                    $htvar = '<div class="' . $moreclass . ' ' . strtolower($bloc_side) . 'bloc">'; // modif Jireck
                 }
+
                 static::fab_block($title, $member, $content, $cache);
                 // echo "</div>"; // modif Jireck
             }
@@ -425,14 +447,16 @@ class block
         // on dépile le dernier indice
         array_pop($auto);
         foreach ($auto as $autovalue) {
-            if (users::autorisation($autovalue))
+            if (users::autorisation($autovalue)) {
                 $autoX[] = $autovalue;
+            }
         }
         
-        if ($actif)
+        if ($actif) {
             return $autoX;
-        else
+        } else {
             return '';
+        }
     }
 
 }

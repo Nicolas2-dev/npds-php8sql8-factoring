@@ -100,9 +100,9 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
 
     echo css::import_css($tmp_theme, $language, '', $css_pages_ref, $css);
 
-    // Mod by Jireck - Chargeur de JS via PAGES.PHP
+    // Mod by Jireck - Chargeur de JS via routes/pages.php
     //importPageRefJs($js);
-    // Mod by Jireck - Chargeur de JS via PAGES.PHP
+    // Mod by Jireck - Chargeur de JS via routes/pages.php
     // function importPageRefJs($js)
     // {
     if ($js) {
@@ -152,18 +152,18 @@ $skin = theme::getSkin();
 // include page référence
 //include('library/pages/pageref.php');
 
-// LOAD pages.php and Go ...
+// LOAD routes/pages.php and Go ...
 settype($PAGES, 'array');
 settype($m_keywords, 'string');
 settype($m_description, 'string');
 
 global $pdst, $Titlesitename, $PAGES;
 
-require_once("config/pages.php");
+require_once("routes/pages.php");
 
-// import pages.php specif values from theme
-if (file_exists("themes/" . $tmp_theme . "/pages.php")) { 
-    include("themes/" . $tmp_theme . "/pages.php");
+// import routes/pages.php specif values from theme
+if (file_exists("themes/" . $tmp_theme . "/routes/pages.php")) { 
+    include("themes/" . $tmp_theme . "/routes/pages.php");
 }
 
 $page_uri = preg_split("#(&|\?)#", $_SERVER['REQUEST_URI']); //var_dump($page_uri);
@@ -196,7 +196,7 @@ if ($pages_ref == "admin.php") {
     }
 }
 
-// extend usage of pages.php : blocking script with part of URI for user, admin or with the value of a VAR
+// extend usage of routes/pages.php : blocking script with part of URI for user, admin or with the value of a VAR
 if ($Npage_uri > 1) {
     for ($uri = 1; $uri < $Npage_uri; $uri++) {
         if (array_key_exists($page_uri[$uri], $PAGES)) {
@@ -209,7 +209,7 @@ if ($Npage_uri > 1) {
 }
 
 // -----------------------
-// A partir de ce niveau - $PAGES[$pages_ref] doit exister - sinon c'est que la page n'est pas dans pages.php
+// A partir de ce niveau - $PAGES[$pages_ref] doit exister - sinon c'est que la page n'est pas dans routes/pages.php
 // -----------------------
 if (array_key_exists($pages_ref, $PAGES)) {
     // on definit l'affichage des blocks ... left, right, both, ...
@@ -335,7 +335,7 @@ if ($tiny_mce) {
     $tiny_mce_init = false;
 }
 
-// Chargeur de CSS via PAGES.PHP
+// Chargeur de CSS via routes/pages.php
 
 if (array_key_exists($pages_ref, $PAGES)) {
     if (array_key_exists('css', $PAGES[$pages_ref])) {
@@ -350,7 +350,7 @@ if (array_key_exists($pages_ref, $PAGES)) {
     $css = '';
 }
 
-// Mod by Jireck - Chargeur de JS via PAGES.PHP
+// Mod by Jireck - Chargeur de JS via routes/pages.php
 if (array_key_exists($pages_ref, $PAGES)) {
     if (array_key_exists('js', $PAGES[$pages_ref])) {
         $js = $PAGES[$pages_ref]['js'];

@@ -1211,9 +1211,9 @@ if ($inclusion) {
     $Xcontent = str_replace('_quota', $obj->ConvertSize($sizeofDir + $sizeofFic) . ' || ' . fma_translate("Taille maximum d'un fichier : ") . $obj->ConvertSize($max_size), $Xcontent);
 
     if (!$NPDS_fma) {
-        // utilisation de pages.php
+        // utilisation de routes/pages.php
         settype($PAGES, 'array');
-        require_once("config/pages.php");
+        require_once("routes/pages.php");
         $Titlesitename = language::aff_langue($PAGES["modules.php?ModPath=$ModPath&ModStart=$ModStart*"]['title']);
 
         global $Default_Theme, $Default_Skin, $user;

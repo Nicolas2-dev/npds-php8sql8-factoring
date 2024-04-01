@@ -36,8 +36,8 @@ if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'scri
 global $title, $language, $NPDS_Prefix, $user, $admin, $nuke_url;
 // For More security
 
-if (file_exists("modules/$ModPath/pages.php"))
-    include("modules/$ModPath/pages.php");
+if (file_exists("modules/$ModPath/routes/pages.php"))
+    include("modules/$ModPath/routes/pages.php");
 
 include_once("modules/$ModPath/language/$language/language.php");
 include_once("modules/$ModPath/config.php");

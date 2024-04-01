@@ -39,7 +39,7 @@ echo '
    /*
    $time = round(microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"],5); // php => 5.4 
    echo '
-   <span class="small" id="build_time"><i class="bi bi-clock-history me-1"></i>'.aff_langue('[fr]Temps :[/fr][en]Time:[/en][de]Zeit in Sekunden[/de][es]Tiempo en segundos :[/es][zh]&#x5728;&#x51E0;&#x79D2;&#x949F;&#x7684;&#x65F6;&#x95F4; :[/zh] '.$time.' [fr]seconde(s)[/fr][en]second(s)[/en]').'</span>';
+   <span class="small" id="build_time"><i class="bi bi-clock-history me-1"></i>'.language::aff_langue('[fr]Temps :[/fr][en]Time:[/en][de]Zeit in Sekunden[/de][es]Tiempo en segundos :[/es][zh]&#x5728;&#x51E0;&#x79D2;&#x949F;&#x7684;&#x65F6;&#x95F4; :[/zh] '.$time.' [fr]seconde(s)[/fr][en]second(s)[/en]').'</span>';
    */
 // <== page-time pseudo-module
 

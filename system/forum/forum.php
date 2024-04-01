@@ -41,9 +41,10 @@ class forum
 
         $lim = $maxforums == 0 ? '' : " LIMIT $maxforums";
 
-        $query = $user ?
-            "SELECT * FROM " . $NPDS_Prefix . "forums ORDER BY cat_id,forum_index,forum_id" . $lim :
-            "SELECT * FROM " . $NPDS_Prefix . "forums WHERE forum_type!='9' AND forum_type!='7' AND forum_type!='5' ORDER BY cat_id,forum_index,forum_id" . $lim;
+        $query = $user 
+            ? "SELECT * FROM " . $NPDS_Prefix . "forums ORDER BY cat_id,forum_index,forum_id" . $lim 
+            : "SELECT * FROM " . $NPDS_Prefix . "forums WHERE forum_type!='9' AND forum_type!='7' AND forum_type!='5' ORDER BY cat_id,forum_index,forum_id" . $lim;
+        
         $result = sql_query($query);
 
         if (!$result) {
@@ -131,8 +132,7 @@ class forum
             }
         }
 
-        $boxstuff .= '
-            </ul>';
+        $boxstuff .= '</ul>';
             
         return ($boxstuff);
     }
@@ -144,11 +144,11 @@ class forum
         $sql = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id'";
     
         if (!$result = sql_query($sql)) {
-            return ("ERROR");
+            return "ERROR";
         }
     
         if (!$myrow = sql_fetch_assoc($result)) {
-            return ("ERROR");
+            return "ERROR";
         }
     
         sql_free_result($result);
@@ -1187,7 +1187,7 @@ class forum
                                 } else {
                                     $ibid .= '
                                         <a href="viewforum.php?forum=' . $myrow['forum_id'] . '" >' . $name . '</a>';
-                                    }
+                                }
     
                                 if (!$redirect) {
                                     $ibid .= '

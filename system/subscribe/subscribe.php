@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\subscribe;
 
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 
 class subscribe
 {
@@ -78,8 +79,7 @@ class subscribe
                 $message = $entete;
                 $message .= $resume;
                 $message .= $url;
-
-                include("config/signat.php");
+                $message .= Config::get('signature.message');
 
                 mailler::send_email($email, $subject, $message, '', true, 'html');
             }

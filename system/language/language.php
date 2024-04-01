@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\language;
 
+use npds\system\config\Config;
+
 class language
 {
 
@@ -44,7 +46,7 @@ class language
      */
     public static function languages(): array 
     {
-        return include('config/languages.php');
+        return Config::get('languages');
     }
 
     /**

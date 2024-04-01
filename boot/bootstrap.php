@@ -15,18 +15,46 @@ use npds\system\exception\ExceptionHandler;
 
 require 'vendor/autoload.php';
 
+// Load the configuration files.
+foreach (glob('config/*.php') as $path) {
+    $key = lcfirst(pathinfo($path, PATHINFO_FILENAME));
+
+    if (($key[0] !== '_') and (!strstr($key, '.'))
+    and (!strstr($key, 'cache.config'))
+    and (!strstr($key, 'cache.timings'))
+    and (!strstr($key, 'config'))
+    and (!strstr($key, 'constants'))
+    and (!strstr($key, 'doctype'))
+    and (!strstr($key, 'filemanager'))
+    //and (!strstr($key, 'languages'))
+    //and (!strstr($key, 'mailer'))
+    and (!strstr($key, 'pages'))
+    and (!strstr($key, 'sample.proxy'))
+    and (!strstr($key, 'sample.rewrite_engine'))
+    and (!strstr($key, 'section'))
+    //and (!strstr($key, 'signat'))
+    //and (!strstr($key, 'url_protect'))
+    ) {
+        Config::set($key, require($path));
+    }  
+}
+
+
+//vd(Config::get('mailer'));
+//vd(Config::all());
+
 if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     define('NPDS_GRAB_GLOBALS_INCLUDED', 1);
 
     spam::spam_logs();
 
     // include current charset
-    if (file_exists("config/constants.php")) {
-        include("config/constants.php");
+    if (file_exists("constants.php")) {
+        include("constants.php");
     }
 
-    if (file_exists("config/doctype.php")) {
-        include("config/doctype.php");
+    if (file_exists("doctype.php")) {
+        include("doctype.php");
     }
 
     // Get values, slash, filter and extract
@@ -80,30 +108,6 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
             $$key = $value['tmp_name'];
         }
     }
-}
-
-// Load the configuration files.
-foreach (glob('config/*.php') as $path) {
-    $key = lcfirst(pathinfo($path, PATHINFO_FILENAME));
-
-    if (($key[0] !== '_') and (!strstr($key, '.'))
-    and (!strstr($key, 'cache.config'))
-    and (!strstr($key, 'cache.timings'))
-    and (!strstr($key, 'config'))
-    and (!strstr($key, 'constants'))
-    and (!strstr($key, 'doctype'))
-    and (!strstr($key, 'filemanager'))
-    and (!strstr($key, 'language'))
-    and (!strstr($key, 'mailer'))
-    and (!strstr($key, 'pages'))
-    and (!strstr($key, 'sample.proxy'))
-    and (!strstr($key, 'sample.rewrite_engine'))
-    and (!strstr($key, 'section'))
-    and (!strstr($key, 'signat'))
-    and (!strstr($key, 'url_protect'))
-    ) {
-        Config::set($key, require($path));
-    }  
 }
 
 error_reporting(-1);

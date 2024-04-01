@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\auth;
 
+use npds\system\support\facades\DB;
+
 class authors
 {
  
@@ -34,17 +36,14 @@ class authors
      */
     public static function formatAidHeader(string $aid): void
     {
-        global $NPDS_Prefix;
-        
-        $holder = sql_query("SELECT url, email FROM " . $NPDS_Prefix . "authors WHERE aid='$aid'");
-        
-        if ($holder) {
-            list($url, $email) = sql_fetch_row($holder);
+        $author = DB::table('authors')->select('url', 'email')->where('aid', $aid)->first();
+
+        if ($author) {
             
-            if (isset($url)) {
-                echo '<a href="' . $url . '" >' . $aid . '</a>';
-            } elseif (isset($email)) {
-                echo '<a href="mailto:' . $email . '" >' . $aid . '</a>';
+            if (isset($author['url'])) {
+                echo '<a href="' . $author['url'] . '" >' . $aid . '</a>';
+            } elseif (isset($author['email'])) {
+                echo '<a href="mailto:' . $author['email'] . '" >' . $aid . '</a>';
             } else {
                 echo $aid;
             }

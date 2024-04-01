@@ -273,8 +273,13 @@ class news
                         }
                         
                             // Réseaux sociaux
-                        if (file_exists('modules/npds_twi/npds_to_twi.php')) include('modules/npds_twi/npds_to_twi.php');
-                        if (file_exists('modules/npds_fbk/npds_to_fbk.php')) include('modules/npds_twi/npds_to_fbk.php');
+                        if (file_exists('modules/npds_twi/npds_to_twi.php')) {
+                            include('modules/npds_twi/npds_to_twi.php');
+                        }
+
+                        if (file_exists('modules/npds_fbk/npds_to_fbk.php')) {
+                            include('modules/npds_twi/npds_to_fbk.php');
+                        }
                         // Réseaux sociaux
                     }
                 }
@@ -318,7 +323,7 @@ class news
     public static function aff_news(string $op, int|string $catid, int|string $marqeur): void
     {
         $url = $op;
-//var_dump($op);
+
         if ($marqeur == '') {
             $marqeur = 0;
         }
@@ -342,7 +347,7 @@ class news
         if ($op == 'newcategory') {
             $op = 'categories';
         }
-//        var_dump($op);
+
         $news_tab = static::prepa_aff_news($op, $catid, $marqeur);
         $story_limit = 0;
 
@@ -435,7 +440,7 @@ class news
         } else {
             $storynum = $storyhome;
         }
-//var_dump($op);
+
         if ($op == "categories") {
             sql_query("UPDATE " . $NPDS_Prefix . "stories_cat SET counter=counter+1 WHERE catid='$catid'");
             
@@ -468,7 +473,6 @@ class news
         } elseif ($op == "article") {
             $xtab = static::news_aff("index", "WHERE ihome!='1' AND sid='$catid'", 1, "");
         } else {
-            //var_dump('req ii');
             //$xtab = static::news_aff("index", "WHERE ihome!='1' AND archive='0'", $storynum, "");
             $xtab = static::news_aff("index", "", $storynum, "");
         }

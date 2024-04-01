@@ -39,25 +39,30 @@ class boxe
         <li class="my-1">' . translate("Nb. de sujets") . ' <span class="badge rounded-pill bg-secondary float-end">' . str::wrh($totald) . '</span></li>
         <li class="my-1">' . translate("Nb. de critiques") . ' <span class="badge rounded-pill bg-secondary float-end">' . str::wrh($totalb) . '</span></li>
         </ul>';
+
             if ($ibid = theme::theme_image("box/top.gif")) {
                 $imgtmp = $ibid;
             } else {
                 $imgtmp = false;
             } // no need
+            
             if ($imgtmp) {
-                $aff .= '
-        <p class="text-center"><a href="top.php"><img src="' . $imgtmp . '" alt="' . translate("Top") . ' ' . $top . '" /></a>&nbsp;&nbsp;';
+                $aff .= '<p class="text-center"><a href="top.php"><img src="' . $imgtmp . '" alt="' . translate("Top") . ' ' . $top . '" /></a>&nbsp;&nbsp;';
+                
                 if ($ibid = theme::theme_image("box/stat.gif")) {
                     $imgtmp = $ibid;
                 } else {
                     $imgtmp = false;
                 } // no need
+                
                 $aff .= '<a href="stats.php"><img src="' . $imgtmp . '" alt="' . translate("Statistiques") . '" /></a></p>';
-            } else
-                $aff .= '
-        <p class="text-center"><a href="top.php">' . translate("Top") . ' ' . $top . '</a>&nbsp;&nbsp;<a href="stats.php" >' . translate("Statistiques") . '</a></p>';
+            } else {
+                $aff .= '<p class="text-center"><a href="top.php">' . translate("Top") . ' ' . $top . '</a>&nbsp;&nbsp;<a href="stats.php" >' . translate("Statistiques") . '</a></p>';
+            }
+
             global $block_title;
             $title = $block_title == '' ? translate("Activité du site") : $block_title;
+
             themesidebox($title, $aff);
     }
  
@@ -77,8 +82,9 @@ class boxe
         if ($username == '') {
             $username = $ip;
             $guest = 1;
-        } else
+        } else {
             $guest = 0;
+        }
 
         $past = time() - 300;
         sql_query("DELETE FROM " . $NPDS_Prefix . "session WHERE time < '$past'");
@@ -86,10 +92,11 @@ class boxe
         $result = sql_query("SELECT time FROM " . $NPDS_Prefix . "session WHERE username='$username'");
         $ctime = time();
 
-        if ($row = sql_fetch_row($result))
+        if ($row = sql_fetch_row($result)) {
             sql_query("UPDATE " . $NPDS_Prefix . "session SET username='$username', time='$ctime', host_addr='$ip', guest='$guest' WHERE username='$username'");
-        else
+        } else  {
             sql_query("INSERT INTO " . $NPDS_Prefix . "session (username, time, host_addr, guest) VALUES ('$username', '$ctime', '$ip', '$guest')");
+        }
 
         $result = sql_query("SELECT username FROM " . $NPDS_Prefix . "session WHERE guest=1");
         $guest_online_num = sql_num_rows($result);
@@ -110,9 +117,10 @@ class boxe
             $numrow = sql_num_rows($result2);
 
             $content .= translate("Vous avez") . ' <a href="viewpmsg.php"><span class="badge bg-primary">' . $numrow . '</span></a> ' . translate("message(s) personnel(s).") . '</p>';
-        } else
+        } else {
             $content .= '<br />' . translate("Devenez membre privilégié en cliquant") . ' <a href="user.php?op=only_newuser">' . translate("ici") . '</a></p>';
-        
+        }
+
         global $block_title;
         $title = $block_title == '' ? translate("Qui est en ligne ?") : $block_title;
 
@@ -132,7 +140,7 @@ class boxe
         $title = $block_title == '' ? translate("La lettre") : $block_title;
 
         $arg1 = '
-       var formulid = ["lnlblock"]';
+        var formulid = ["lnlblock"]';
 
         $boxstuff = '
           <form id="lnlblock" action="lnl.php" method="get">
@@ -199,18 +207,21 @@ class boxe
                 $cat_n[] = $SAQ['fcategorie_nom'];
                 $fid_ar[] = $SAQ['fid'];
 
-                if ($SAQ['fcategorie'] == 9)
-                    $adminico = $adminimg . $SAQ['ficone'] . '.' . $admf_ext;
+                if ($SAQ['fcategorie'] == 9){
+                    $adminico = $adminimg . $SAQ['ficone'] . '.' . $admf_ext;}
 
-                if ($SAQ['fcategorie'] == 9 and strstr($SAQ['furlscript'], "op=Extend-Admin-SubModule"))
-                    if (file_exists('modules/' . $SAQ['fnom'] . '/' . $SAQ['fnom'] . '.' . $admf_ext)) 
+                if ($SAQ['fcategorie'] == 9 and strstr($SAQ['furlscript'], "op=Extend-Admin-SubModule")) {
+                    if (file_exists('modules/' . $SAQ['fnom'] . '/' . $SAQ['fnom'] . '.' . $admf_ext)) {
                         $adminico = 'modules/' . $SAQ['fnom'] . '/' . $SAQ['fnom'] . '.' . $admf_ext;
-                    else 
+                    } else {
                         $adminico = $adminimg . 'module.' . $admf_ext;
+                    }
+                }
 
                 if ($SAQ['fcategorie'] == 9) {
-                    if (preg_match('#messageModal#', $SAQ['furlscript']))
+                    if (preg_match('#messageModal#', $SAQ['furlscript'])) {
                         $furlscript = 'data-bs-toggle="modal" data-bs-target="#bl_messageModal"';
+                    }
 
                     if (preg_match('#mes_npds_\d#', $SAQ['fnom'])) {
                         if (!in_array($aid, $arraylecture, true)) {
@@ -223,10 +234,11 @@ class boxe
                     } else {
                         $furlscript = preg_match('#versusModal#', $SAQ['furlscript']) 
                             ? 'data-bs-toggle="modal" data-bs-target="#bl_versusModal"' 
-                            :  $SAQ['furlscript'];
+                            : $SAQ['furlscript'];
 
-                        if (preg_match('#NPDS#', $SAQ['fretour_h']))
+                        if (preg_match('#NPDS#', $SAQ['fretour_h'])) {
                             $SAQ['fretour_h'] = str_replace('NPDS', 'NPDS^', $SAQ['fretour_h']);
+                        }
 
                         $bloc_foncts_A .= '
                    <a class=" btn btn-outline-primary btn-sm me-2 my-1 tooltipbyclass" title="' . $SAQ['fretour_h'] . '" data-id="' . $SAQ['fid'] . '" data-bs-html="true" ' . $furlscript . ' >
@@ -245,49 +257,52 @@ class boxe
             $content = language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', [str::class, 'changetoampadm'], $content));
 
             //==> recuperation
-            // $messagerie_npds = 'un|teste'; //file_get_contents('https://raw.githubusercontent.com/npds/npds_dune/master/versus.txt');
-            // $messages_npds = explode("\n", $messagerie_npds);
-            // array_pop($messages_npds);
+            // voir pour foskopen 
+            $messagerie_npds = file_get_contents('https://raw.githubusercontent.com/npds/npds_dune/master/versus.txt');
+            $messages_npds = explode("\n", $messagerie_npds);
+            array_pop($messages_npds);
 
-            // // traitement specifique car fonction permanente versus
-            // $versus_info = explode('|', $messages_npds[0]);
-            // if ($versus_info[1] == $Version_Sub and $versus_info[2] == $Version_Num)
-            //     sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . $Version_Sub . " " . $Version_Num . "', furlscript='' WHERE fid='36'");
-            // else
-            //     sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
-            
+            // traitement specifique car fonction permanente versus
+            $versus_info = explode('|', $messages_npds[0]);
+            if ($versus_info[1] == $Version_Sub and $versus_info[2] == $Version_Num) {
+                sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . $Version_Sub . " " . $Version_Num . "', furlscript='' WHERE fid='36'");
+            } else {
+                sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
+            }
+
             $content .= '
-          <div class="d-flex justify-content-start flex-wrap" id="adm_block">
-          ' . $bloc_foncts_A;
+            <div class="d-flex justify-content-start flex-wrap" id="adm_block">
+            ' . $bloc_foncts_A;
 
-            if ($Q['radminsuper'] == 1)
+            if ($Q['radminsuper'] == 1) {
                 $content .= '<a class="btn btn-outline-primary btn-sm me-2 my-1" title="' . translate("Vider la table chatBox") . '" data-bs-toggle="tooltip" href="powerpack.php?op=admin_chatbox_write&amp;chatbox_clearDB=OK" ><img src="assets/images/admin/chat.png" class="adm_img" />&nbsp;<span class="badge bg-danger ms-1">X</span></a>';
-           
+            }
+
             $content .= '</div>
-          <div class="mt-3">
-             <small class="text-muted"><i class="fas fa-user-cog fa-2x align-middle"></i> ' . $aid . '</small>
-          </div>';
-    //    <div class="modal fade" id="bl_versusModal" tabindex="-1" aria-labelledby="bl_versusModalLabel" aria-hidden="true">
-    //       <div class="modal-dialog">
-    //          <div class="modal-content">
-    //             <div class="modal-header">
-    //                <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" loading="lazy" />' . translate("Version") . ' NPDS^</h5>
-    //                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    //             </div>
-    //             <div class="modal-body">
-    //                <p>Vous utilisez NPDS^ ' . $Version_Sub . ' ' . $Version_Num . '</p>
-    //                <p>' . translate("Une nouvelle version de NPDS^ est disponible !") . '</p>
-    //                <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
-    //                <p class="my-3">
-    //                   <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
-    //                   <a class="mx-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.tar.gz" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.tar.gz</a>
-    //                </p>
-    //             </div>
-    //             <div class="modal-footer">
-    //             </div>
-    //          </div>
-    //       </div>
-    //    </div>
+        <div class="mt-3">
+            <small class="text-muted"><i class="fas fa-user-cog fa-2x align-middle"></i> ' . $aid . '</small>
+        </div>
+        <div class="modal fade" id="bl_versusModal" tabindex="-1" aria-labelledby="bl_versusModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" loading="lazy" />' . translate("Version") . ' NPDS^</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <p>Vous utilisez NPDS^ ' . $Version_Sub . ' ' . $Version_Num . '</p>
+                    <p>' . translate("Une nouvelle version de NPDS^ est disponible !") . '</p>
+                    <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
+                    <p class="my-3">
+                        <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
+                        <a class="mx-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.tar.gz" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.tar.gz</a>
+                    </p>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>';
        $content .= '<div class="modal fade" id="bl_messageModal" tabindex="-1" aria-labelledby="bl_messageModalLabel" aria-hidden="true">
           <div class="modal-dialog">
              <div class="modal-content">
@@ -332,6 +347,7 @@ class boxe
              });
           });
        </script>';
+
             themesidebox($title, $content);
         }
     }
@@ -350,7 +366,9 @@ class boxe
         list($title, $content) = sql_fetch_row($result);
 
         global $block_title;
-        if ($title == '') $title = $block_title;
+        if ($title == '') {
+            $title = $block_title;
+        }
 
         //must work from php 4 to 7 !..?..
         themesidebox(language::aff_langue($title), language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', [str::class, 'changetoamp'], $content)));
@@ -374,8 +392,9 @@ class boxe
         $boxstuff = '<div>' . translate("En ce jour...") . '</div>';
 
         while (list($yid, $content) = sql_fetch_row($result)) {
-            if ($cnt == 1)
+            if ($cnt == 1) {
                 $boxstuff .= "\n<br />\n";
+            }
 
             $boxstuff .= "<b>$yid</b>\n<br />\n";
             $boxstuff .= language::aff_langue($content);
@@ -465,8 +484,9 @@ class boxe
         $boxstuff .= download::topdownload_data('short', 'dcounter');
         $boxstuff .= '</ul>';
 
-        if ($boxstuff == '<ul></ul>') 
+        if ($boxstuff == '<ul></ul>') {
             $boxstuff = '';
+        }
 
         themesidebox($title, $boxstuff);
     }
@@ -487,8 +507,9 @@ class boxe
         $boxstuff .= download::topdownload_data('short', 'ddate');
         $boxstuff .= '</ul>';
 
-        if ($boxstuff == '<ul></ul>') 
+        if ($boxstuff == '<ul></ul>') { 
             $boxstuff = '';
+        }
 
         themesidebox($title, $boxstuff);
     }
@@ -510,10 +531,11 @@ class boxe
         $boxstuff = '<ul class="list-group">';
         $storynum = isset($cookie[3]) ? $cookie[3] : $storyhome;
 
-        if (($categories == 1) and ($cat != ''))
+        if (($categories == 1) and ($cat != '')) {
             $sel = $user ? "WHERE catid='$cat'" : "WHERE catid='$cat' AND ihome=0";
-        else
+        } else {
             $sel = $user ? '' : "WHERE ihome=0";
+        }
 
         $sel =  "WHERE ihome=0"; // en dur pour test
         $vari = 0;
@@ -533,16 +555,17 @@ class boxe
             $locale = language::getLocale();
             $datetime2 = ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring2"), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
 
-            if ($language != 'chinese')
+            if ($language != 'chinese') {
                 $datetime2 = ucfirst($datetime2);
+            }
 
             $comments = $typ_aff == 'lecture' ?
                 '<span class="badge rounded-pill bg-secondary ms-1" title="' . translate("Lu") . '" data-bs-toggle="tooltip">' . $counter . '</span>' : '';
 
-            if ($time2 == $datetime2)
+            if ($time2 == $datetime2) {
                 $boxstuff .= '
           <li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center"><a class="n-ellipses" href="article.php?sid=' . $sid . '">' . language::aff_langue($title) . '</a>' . $comments . '</li>';
-            else {
+            } else {
                 if ($a == 0) {
                     $boxstuff .= '<li class="list-group-item fs-6">' . $datetime2 . '</li><li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center"><a href="article.php?sid=' . $sid . '">' . language::aff_langue($title) . '</a>' . $comments . '</li>';
                     $time2 = $datetime2;
@@ -564,7 +587,9 @@ class boxe
 
         $boxstuff .= '</ul>';
 
-        if ($boxstuff == '<ul></ul>') $boxstuff = '';
+        if ($boxstuff == '<ul></ul>') {
+            $boxstuff = '';
+        }
 
         global $block_title;
         $boxTitle = $block_title == '' ? translate("Anciens articles") : $block_title;
@@ -586,19 +611,23 @@ class boxe
         $today = getdate();
         $day = $today['mday'];
 
-        if ($day < 10) $day = "0$day";
+        if ($day < 10) {
+            $day = "0$day";
+        }
 
         $month = $today['mon'];
 
-        if ($month < 10) $month = "0$month";
+        if ($month < 10) {
+            $month = "0$month";
+        }
 
         $year = $today['year'];
         $tdate = "$year-$month-$day";
         $xtab = news::news_aff("big_story", "WHERE (time LIKE '%$tdate%')", 1, 1);
 
-        if (sizeof($xtab))
+        if (sizeof($xtab)) {
             list($fsid, $ftitle) = $xtab[0];
-        else {
+        } else {
             $fsid = '';
             $ftitle = '';
         }
@@ -626,9 +655,9 @@ class boxe
         $result = sql_query("SELECT catid, title FROM " . $NPDS_Prefix . "stories_cat ORDER BY title");
         $numrows = sql_num_rows($result);
 
-        if ($numrows == 0)
+        if ($numrows == 0) {
             return;
-        else {
+        } else {
             $boxstuff = '<ul>';
             
             while (list($catid, $title) = sql_fetch_row($result)) {
@@ -638,9 +667,11 @@ class boxe
                 if ($numrows > 0) {
                     $res = sql_query("SELECT time FROM " . $NPDS_Prefix . "stories WHERE catid='$catid' ORDER BY sid DESC LIMIT 0,1");
                     list($time) = sql_fetch_row($res);
-                    $boxstuff .= $cat == $catid ?
-                        '<li><strong>' . language::aff_langue($title) . '</strong></li>' :
-                        '<li class="list-group-item list-group-item-action hyphenate"><a href="index.php?op=newcategory&amp;catid=' . $catid . '" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernière contribution") . ' <br />' . date::formatTimestamp($time) . ' ">' . language::aff_langue($title) . '</a></li>';
+                    
+                    $boxstuff .= (($cat == $catid) 
+                        ? '<li><strong>' . language::aff_langue($title) . '</strong></li>' 
+                        : '<li class="list-group-item list-group-item-action hyphenate"><a href="index.php?op=newcategory&amp;catid=' . $catid . '" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernière contribution") . ' <br />' . date::formatTimestamp($time) . ' ">' . language::aff_langue($title) . '</a></li>'
+                    );
                 }
             }
 
@@ -668,12 +699,15 @@ class boxe
     {
         global $NPDS_Prefix, $Version_Num, $Version_Id, $rss_host_verif, $long_chain;
 
-        if (file_exists("config/proxy.php"))
+        if (file_exists("config/proxy.php")) {
             include("config/proxy.php");
-        if ($hid == '')
+        }
+
+        if ($hid == '') {
             $result = sql_query("SELECT sitename, url, headlinesurl, hid FROM " . $NPDS_Prefix . "headlines WHERE status=1");
-        else
+        } else {
             $result = sql_query("SELECT sitename, url, headlinesurl, hid FROM " . $NPDS_Prefix . "headlines WHERE hid='$hid' AND status=1");
+        }
 
         while (list($sitename, $url, $headlinesurl, $hid) = sql_fetch_row($result)) {
             $boxtitle = $sitename;
@@ -691,23 +725,28 @@ class boxe
 
                 if ($rss_host_verif == true) {
                     $verif = fsockopen($rss['host'], 80, $errno, $errstr, $rss_timeout);
+                    
                     if ($verif) {
                         fclose($verif);
                         $verif = true;
                     }
-                } else
+                } else {
                     $verif = true;
+                }
 
                 if (!$verif) {
                     $cache_file_sec = $cache_file . ".security";
                     
-                    if (file_exists($cache_file))
+                    if (file_exists($cache_file)) { 
                         $ibid = rename($cache_file, $cache_file_sec);
+                    }
 
                     themesidebox($boxtitle, "Security Error");
                     return true;
                 } else {
-                    if (!$long_chain) $long_chain = 15;
+                    if (!$long_chain) {
+                        $long_chain = 15;
+                    }
 
                     $fpwrite = fopen($cache_file, 'w');
 
@@ -722,10 +761,17 @@ class boxe
                         if ($flux->entry) {
                             $j = 0;
                             $cont = '';
+
                             foreach ($flux->entry as $entry) {
-                                if ($entry->content) $cont = (string) $entry->content;
+                                if ($entry->content) {
+                                    $cont = (string) $entry->content;
+                                }
+                                
                                 fputs($fpwrite, '<li><a href="' . (string)$entry->link['href'] . '" target="_blank" >' . (string) $entry->title . '</a><br />' . $cont . '</li>');
-                                if ($j == $max_items) break;
+                                
+                                if ($j == $max_items) { 
+                                    break;
+                                }
                                 $j++;
                             }
                         }
@@ -734,29 +780,48 @@ class boxe
                             $j = 0;
                             $cont = '';
                             foreach ($flux->item as $item) {
-                                if ($item->description) $cont = (string) $item->description;
+                                if ($item->description) {
+                                    $cont = (string) $item->description;
+                                }
+                                
                                 fputs($fpwrite, '<li><a href="' . (string)$item->link['href'] . '"  target="_blank" >' . (string) $item->title . '</a><br /></li>');
-                                if ($j == $max_items) break;
+                                
+                                if ($j == $max_items) {
+                                    break;
+                                }
                                 $j++;
                             }
                         }
+
                         //RSS
                         if ($flux->{'channel'}) {
                             $j = 0;
                             $cont = '';
                             foreach ($flux->channel->item as $item) {
-                                if ($item->description) $cont = (string) $item->description;
+                                if ($item->description) {
+                                    $cont = (string) $item->description;
+                                }
+                                
                                 fputs($fpwrite, '<li><a href="' . (string)$item->link . '"  target="_blank" >' . (string) $item->title . '</a><br />' . $cont . '</li>');
-                                if ($j == $max_items) break;
+                                
+                                if ($j == $max_items) {
+                                    break;
+                                }
                                 $j++;
                             }
                         }
 
                         $j = 0;
-                        if ($flux->image) $ico = '<img class="img-fluid" src="' . $flux->image->url . '" />&nbsp;';
+                        if ($flux->image) {
+                            $ico = '<img class="img-fluid" src="' . $flux->image->url . '" />&nbsp;';
+                        }
+
                         foreach ($flux->item as $item) {
                             fputs($fpwrite, '<li>' . $ico . '<a href="' . (string) $item->link . '" target="_blank" >' . (string) $item->title . '</a></li>');
-                            if ($j == $max_items) break;
+                            
+                            if ($j == $max_items) {
+                                break;
+                            }
                             $j++;
                         }
 
@@ -765,20 +830,23 @@ class boxe
                     }
                 }
             }
+
             if (file_exists($cache_file)) {
                 ob_start();
-                $ibid = readfile($cache_file); // ??????
-                $boxstuff = $rss_font . ob_get_contents() . '</span>';
+                    $ibid = readfile($cache_file); // ??????
+                    $boxstuff = $rss_font . ob_get_contents() . '</span>';
                 ob_end_clean();
             }
-            $boxstuff .= '
-             <div class="text-end"><a href="' . $url . '" target="_blank">' . translate("Lire la suite...") . '</a></div>';
+
+            $boxstuff .= '<div class="text-end"><a href="' . $url . '" target="_blank">' . translate("Lire la suite...") . '</a></div>';
+
             if ($block) {
                 themesidebox($boxtitle, $boxstuff);
                 $boxstuff = '';
                 return true;
-            } else
-                return ($boxstuff);
+            } else {
+                return $boxstuff;
+            }
         }
     }
 
@@ -798,10 +866,12 @@ class boxe
         while (list($rubid, $rubname) = sql_fetch_row($result)) {
             $title = language::aff_langue($rubname);
             $result2 = sql_query("SELECT secid, secname, userlevel, ordre FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
+
             $boxstuff .= '<li><strong>' . $title . '</strong></li>';
 
             //$ibid++;//??? only for notice ???
             while (list($secid, $secname, $userlevel) = sql_fetch_row($result2)) {
+
                 $query3 = "SELECT artid FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid'";
                 $result3 = sql_query($query3);
                 $nb_article = sql_num_rows($result3);
@@ -812,13 +882,16 @@ class boxe
 
                     foreach ($tmp_auto as $userlevel) {
                         $okprintLV1 = users::autorisation($userlevel);
-                        if ($okprintLV1) break;
+                        if ($okprintLV1) {
+                            break;
+                        }
                     }
 
                     if ($okprintLV1) {
                         $sec = language::aff_langue($secname);
                         $boxstuff .= '<li><a href="sections.php?op=listarticles&amp;secid=' . $secid . '">' . $sec . '</a></li>';
                     }
+
                     $boxstuff .= '</ul>';
                 }
             }
@@ -850,8 +923,9 @@ class boxe
         if ($block_title == '') {
             $rsql = sql_fetch_assoc(sql_query("SELECT groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$gr'"));
             $title = $rsql['groupe_name'];
-        } else
+        } else {
             $title = $block_title;
+        }
 
         themesidebox($title, groupe::fab_espace_groupe($gr, "0", $i_gr));
     }
@@ -906,12 +980,13 @@ class boxe
             $cookie = explode(':', $user2);
             $ibix = explode('+', urldecode($cookie[9]));
             $skinOn = substr($ibix[0], -3) != '_sk' ? '' : $ibix[1];
-        } else
+        } else {
             $skinOn = substr($Default_Theme, -3) != '_sk' ? '' : $Default_Skin;
+        }
 
         $content = '';
 
-        if ($skinOn != '')
+        if ($skinOn != '') {
             $content .= '
        <div class="form-floating">
           <select class="form-select" id="blocskinchoice"><option>' . $skinOn . '</option></select>
@@ -943,8 +1018,9 @@ class boxe
           }
           //]]>
        </script>';
-        else
+        } else {
             $content .= '<div class="alert alert-danger">Thème non skinable</div>';
+        }
 
         themesidebox('Theme Skin', $content);
     }
@@ -962,73 +1038,77 @@ class boxe
     {
         global $NPDS_Prefix, $maxOptions, $boxTitle, $boxContent, $userimg, $language, $pollcomm, $cookie;
 
-        if (!isset($pollID))
+        if (!isset($pollID)) {
             $pollID = 1;
+        }
 
-        if (!isset($url))
+        if (!isset($url)) {
             $url = sprintf("pollBooth.php?op=results&amp;pollID=%d", $pollID);
+        }
 
         $boxContent = '
         <form action="pollBooth.php" method="post">
         <input type="hidden" name="pollID" value="' . $pollID . '" />
         <input type="hidden" name="forwarder" value="' . $url . '" />';
 
-            $result = sql_query("SELECT pollTitle, voters FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$pollID'");
-            list($pollTitle, $voters) = sql_fetch_row($result);
+        $result = sql_query("SELECT pollTitle, voters FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$pollID'");
+        list($pollTitle, $voters) = sql_fetch_row($result);
 
-            global $block_title;
-            $boxTitle = $block_title == '' ? translate("Sondage") :  $block_title;
+        global $block_title;
+        $boxTitle = $block_title == '' ? translate("Sondage") :  $block_title;
 
-            $boxContent .= '<legend>' . language::aff_langue($pollTitle) . '</legend>';
-            $result = sql_query("SELECT pollID, optionText, optionCount, voteID FROM " . $NPDS_Prefix . "poll_data WHERE (pollID='$pollID' AND optionText<>'') ORDER BY voteID");
+        $boxContent .= '<legend>' . language::aff_langue($pollTitle) . '</legend>';
+        $result = sql_query("SELECT pollID, optionText, optionCount, voteID FROM " . $NPDS_Prefix . "poll_data WHERE (pollID='$pollID' AND optionText<>'') ORDER BY voteID");
            
-            $sum = 0;
-            $j = 0;
+        $sum = 0;
+        $j = 0;
             
-            if (!$pollClose) {
+        if (!$pollClose) {
+            $boxContent .= '<div class="mb-3">';
+                
+            while ($object = sql_fetch_assoc($result)) {
                 $boxContent .= '
-            <div class="mb-3">';
-                while ($object = sql_fetch_assoc($result)) {
-                    $boxContent .= '
                 <div class="form-check">
                     <input class="form-check-input" type="radio" id="voteID' . $j . '" name="voteID" value="' . $object['voteID'] . '" />
                     <label class="form-check-label d-block" for="voteID' . $j . '" >' . language::aff_langue($object['optionText']) . '</label>
                 </div>';
-                    $sum = $sum + $object['optionCount'];
-                    $j++;
-                }
-                $boxContent .= '
-            </div>';
-            } else {
-                while ($object = sql_fetch_assoc($result)) {
-                    $boxContent .= '&nbsp;' . language::aff_langue($object['optionText']) . '<br />';
-                    $sum = $sum + $object['optionCount'];
-                }
+                $sum = $sum + $object['optionCount'];
+                $j++;
             }
 
-            settype($inputvote, 'string');
+            $boxContent .= '</div>';
+        } else {
+            while ($object = sql_fetch_assoc($result)) {
+                $boxContent .= '&nbsp;' . language::aff_langue($object['optionText']) . '<br />';
+                $sum = $sum + $object['optionCount'];
+            }
+        }
 
-            if (!$pollClose)
-                $inputvote = '<button class="btn btn-outline-primary btn-sm btn-block" type="submit" value="' . translate("Voter") . '" title="' . translate("Voter") . '" ><i class="fa fa-check fa-lg"></i> ' . translate("Voter") . '</button>';
-            
-            $boxContent .= '
+        settype($inputvote, 'string');
+
+        if (!$pollClose) {
+            $inputvote = '<button class="btn btn-outline-primary btn-sm btn-block" type="submit" value="' . translate("Voter") . '" title="' . translate("Voter") . '" ><i class="fa fa-check fa-lg"></i> ' . translate("Voter") . '</button>';
+        }
+
+        $boxContent .= '
         <div class="mb-3">' . $inputvote . '</div>
         </form>
         <a href="pollBooth.php?op=results&amp;pollID=' . $pollID . '" title="' . translate("Résultats") . '">' . translate("Résultats") . '</a>&nbsp;&nbsp;<a href="pollBooth.php">' . translate("Anciens sondages") . '</a>
         <ul class="list-group mt-3">
         <li class="list-group-item">' . translate("Votes : ") . ' <span class="badge rounded-pill bg-secondary float-end">' . $sum . '</span></li>';
             
-            if ($pollcomm) {
-                if (file_exists("modules/comments/config/pollBoth.conf.php"))
-                    include("modules/comments/config/pollBoth.conf.php");
-
-                list($numcom) = sql_fetch_row(sql_query("SELECT COUNT(*) FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$pollID' AND post_aff='1'"));
-                $boxContent .= '
-        <li class="list-group-item">' . translate("Commentaire(s) : ") . ' <span class="badge rounded-pill bg-secondary float-end">' . $numcom . '</span></li>';
+        if ($pollcomm) {
+            if (file_exists("modules/comments/config/pollBoth.conf.php")) {
+                include("modules/comments/config/pollBoth.conf.php");
             }
+
+            list($numcom) = sql_fetch_row(sql_query("SELECT COUNT(*) FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$pollID' AND post_aff='1'"));
+                
+            $boxContent .= '<li class="list-group-item">' . translate("Commentaire(s) : ") . ' <span class="badge rounded-pill bg-secondary float-end">' . $numcom . '</span></li>';
+        }
             
-            $boxContent .= '
-        </ul>';
-            themesidebox($boxTitle, $boxContent);
+        $boxContent .= '</ul>';
+        
+        themesidebox($boxTitle, $boxContent);
     }
 }

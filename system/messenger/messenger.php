@@ -9,6 +9,7 @@ use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\support\online;
 use npds\system\language\language;
@@ -64,8 +65,7 @@ class messenger
             if ($subscribe) {
                 $sujet = html_entity_decode(translate_ml($user_languex, "Notification message privé."), ENT_COMPAT | ENT_HTML401, 'utf-8') . '[' . $from_userid . '] / ' . $sitename;
                 $message = $time . '<br />' . translate_ml($user_languex, "Bonjour") . '<br />' . translate_ml($user_languex, "Vous avez un nouveau message.") . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . $nuke_url . '/viewpmsg.php">' . translate_ml($user_languex, "Cliquez ici pour lire votre nouveau message.") . '</a><br />';
-                
-                include("config/signat.php");
+                $message .= Config::get('signature.message');
                 
                 mailler::copy_to_email($to_useridx, $sujet, stripslashes($message));
             }

@@ -17,6 +17,7 @@ use npds\system\logs\logs;
 use npds\system\routing\url;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -114,8 +115,7 @@ function subscribe_ok($xemail)
 
                 $subject = html_entity_decode(translate("La lettre"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' / ' . $sitename;
                 $message = translate("Merci d'avoir consacré du temps pour vous enregistrer.") . '<br /><br />' . translate("Pour supprimer votre abonnement à notre lettre, merci d'utiliser") . ' : <br />' . $nuke_url . '/lnl.php?op=unsubscribe&email=' . $xemail . '<br /><br />';
-                
-                include("config/signat.php");
+                $message .= Config::get('signature.message');
 
                 mailler::send_email($xemail, $subject, $message, '', true, 'html', '');
 

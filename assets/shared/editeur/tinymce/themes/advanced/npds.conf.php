@@ -66,7 +66,7 @@ $tmp.='
                }
                ],';
 
-// Analyse the type of Theme from pages.php and determine if setup inclusion file is request
+// Analyse the type of Theme from routes/pages.php and determine if setup inclusion file is request
 $setup=explode('+',$tiny_mce_theme);
 $tiny_mce_theme=$setup[0];
 if (!array_key_exists(1,$setup)) $setup[1]='';

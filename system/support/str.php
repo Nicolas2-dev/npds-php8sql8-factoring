@@ -45,13 +45,13 @@ class str
     /**
      * Formate une chaine numérique avec un espace tous les 3 chiffres / cheekybilly 2005
      *
-     * @param   int     $ibid  [$ibid description]
+     * @param   string|int     $ibid  [$ibid description]
      *
      * @return  string
      */
-    public static function wrh(int $ibid): string
+    public static function wrh(string|int $ibid): string
     {
-        $tmp = number_format($ibid, 0, ',', ' ');
+        $tmp = number_format( (float) $ibid, 0, ',', ' ');
         $tmp = str_replace(' ', '&nbsp;', $tmp);
 
         return $tmp;

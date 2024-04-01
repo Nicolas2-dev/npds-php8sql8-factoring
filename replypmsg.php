@@ -19,6 +19,7 @@ use npds\system\assets\java;
 use npds\system\forum\forum;
 use npds\system\mail\mailler;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -127,8 +128,7 @@ if (isset($user)) {
                         $old_message = $message; // what this
                         $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . $sitename;
                         $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . $nuke_url . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
-                        
-                        include("config/signat.php");
+                        $message .= Config::get('signature.message');
 
                         mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
                         $message = $old_message; // what this
@@ -162,8 +162,7 @@ if (isset($user)) {
                 if ($subscribe) {
                     $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . $sitename;
                     $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . $nuke_url . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
-                    
-                    include("config/signat.php");
+                    $message .= Config::get('signature.message');
 
                     mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
                 }

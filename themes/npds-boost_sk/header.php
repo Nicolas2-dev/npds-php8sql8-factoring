@@ -40,7 +40,7 @@ Dans ce thème la variable $pdst permet de gérer le nombre et la disposition (d
 "5"  -> col_RB + col_princ
 "6"  -> col_princ + col_LB
     
-La gestion de ce paramètre s'effectue dans le fichier "pages.php" du dossier "themes
+La gestion de ce paramètre s'effectue dans le fichier "routes/pages.php" du dossier "themes
 */
 
 $coltarget = '';
@@ -120,7 +120,7 @@ require_once("themes/themes-dynamic/header.php");
 /*     On Ouvre les Différent Blocs en Fonction de la Variable $pdst    */
 /*                         Le corps englobe :                           */
 /*                 col_LB + col_princ + col_RB                          */
-/*           Si Aucune variable pdst dans pages.php                     */
+/*           Si Aucune variable pdst dans routes/pages.php                     */
 /*   ==> Alors affichage par defaut : col_LB + col_princ soit $pdst=0   */
 /* =====================================================================*/
 echo '

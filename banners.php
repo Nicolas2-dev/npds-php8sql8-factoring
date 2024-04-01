@@ -19,6 +19,7 @@ use npds\system\cache\cache;
 use npds\system\routing\url;
 use npds\system\support\str;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 use npds\system\language\language;
 
 include_once('boot/bootstrap.php');
@@ -415,8 +416,7 @@ function EmailStats($login, $cid, $bid)
             $message  = "Client : $name\n" . translate("Bannière") . " ID : $bid\n" . translate("Bannière") . " Image : $imageurl\n" . translate("Bannière") . " URL : $clickurl\n\n";
             $message .= "Impressions " . translate("Réservées") . " : $imptotal\nImpressions " . translate("Réalisées") . " : $impmade\nImpressions " . translate("Restantes") . " : $left\nClicks " . translate("Reçus") . " : $clicks\nClicks " . translate("Pourcentage") . " : $percent%\n\n";
             $message .= translate("Rapport généré le") . ' : ' . "$fecha\n\n";
-            
-            include("config/signat.php");
+            $message .= Config::get('signature.message');
 
             mailler::send_email($email, $subject, $message, '', true, 'html', '');
 

@@ -17,6 +17,7 @@ use npds\system\assets\js;
 use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 use npds\system\support\editeur;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
@@ -274,8 +275,7 @@ function send_email_to_user(string $username, string $subject, string $message, 
                     
                     $sujet = translate_ml($to_tmp[1], 'Vous avez un nouveau message.');
                     $message = translate_ml($to_tmp[1], 'Bonjour') . ",<br /><br /><a href=\"$nuke_url/viewpmsg.php\">" . translate_ml($to_tmp[1], "Cliquez ici pour lire votre nouveau message.") . "</a><br /><br />";
-                    
-                    include("config/signat.php");
+                    $message .= Config::get('signature.message');
                     
                     mailler::copy_to_email($to_userid, $sujet, $message);
                     $message = $old_message;
