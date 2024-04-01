@@ -1055,7 +1055,7 @@ if (file_exists($infos_fma))
     $infos = language::aff_langue(join('', file($infos_fma)));
 // Form
 $upload_file = '
-    <form id="uploadfichier" enctype="multipart/form-data" method="post" action="modules.php" lang="' . language_iso(1, '', '') . '">
+    <form id="uploadfichier" enctype="multipart/form-data" method="post" action="modules.php" lang="' . language::language_iso(1, '', '') . '">
         <input type="hidden" name="ModPath" value="' . $ModPath . '" />
         <input type="hidden" name="ModStart" value="' . $ModStart . '" />
         <input type="hidden" name="FmaRep" value="' . $FmaRep . '" />

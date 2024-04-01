@@ -337,7 +337,7 @@ $fv_parametres = '
                 maxDate:"today",
                 minDate:"' . date("Y-m-d", (time() - 3784320000)) . '",
                 dateFormat:"d/m/Y",
-                "locale": "' . language_iso(1, '', '') . '",
+                "locale": "' . language::language_iso(1, '', '') . '",
             });
             ';
 $m->add_extra(css::adminfoot('fv', $fv_parametres, $arg1, '1'));

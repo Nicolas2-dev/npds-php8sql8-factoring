@@ -13,7 +13,6 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-
 use npds\system\assets\css;
 use npds\system\support\facades\DB;
 

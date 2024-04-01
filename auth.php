@@ -14,7 +14,6 @@
 
 use npds\system\cache\cache;
 
-
 if (!function_exists("Mysql_Connexion")) {
     header("location: index.php");
 }

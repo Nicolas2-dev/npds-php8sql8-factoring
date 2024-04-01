@@ -17366,3 +17366,1428 @@ Exception information:
 
 ---------
 
+Exception information:
+
+    Date: Apr 01, 2024 8:08AM
+
+    Message: Undefined variable $id
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 40
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(40): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 40)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(364): chat()
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:09AM
+
+    Message: Undefined variable $id
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 364
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(364): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 364)
+#1 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:10AM
+
+    Message: A class [\DB] already exists with the same name.
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\app\AliasLoader.php
+
+    Line: 30
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\boot\bootstrap.php(118): npds\system\app\AliasLoader::initialize()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(337): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(355): chattop()
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:10AM
+
+    Message: Undefined variable $auto
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 216
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(216): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 216)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput()
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:10AM
+
+    Message: Undefined variable $auto
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 216
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(216): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 216)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput()
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:10AM
+
+    Message: A class [\DB] already exists with the same name.
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\app\AliasLoader.php
+
+    Line: 30
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\boot\bootstrap.php(118): npds\system\app\AliasLoader::initialize()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(337): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(355): chattop()
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:10AM
+
+    Message: Undefined variable $auto
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 216
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(216): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 216)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput()
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:10AM
+
+    Message: A class [\DB] already exists with the same name.
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\app\AliasLoader.php
+
+    Line: 30
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\boot\bootstrap.php(118): npds\system\app\AliasLoader::initialize()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(337): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(355): chattop()
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:11AM
+
+    Message: Undefined variable $auto
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 216
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(216): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 216)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput()
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:11AM
+
+    Message: Undefined variable $auto
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 216
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(216): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 216)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput()
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:11AM
+
+    Message: Undefined variable $auto
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 216
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(216): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 216)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput()
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:12AM
+
+    Message: Undefined variable $language
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 266
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 266)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:12AM
+
+    Message: Undefined variable $language
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 266
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 266)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:12AM
+
+    Message: Undefined variable $language
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 266
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 266)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:13AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:13AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:13AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:14AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:14AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:14AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:15AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:15AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:15AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:16AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:17AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(359): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:17AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:18AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(359): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:18AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:18AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:18AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(359): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:18AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(363): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:18AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(359): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:19AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:19AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:20AM
+
+    Message: Undefined array key "chatt.php"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 65
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(65): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 65)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php(124): npds\system\assets\css::import_css_javascript('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(266): npds\system\assets\css::import_css('npds-boost_sk', 'fr', 'default', 'chatt.php', '')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(347): chatinput(0, '')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:21AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:22AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(343): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:25AM
+
+    Message: Undefined variable $gmt
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php
+
+    Line: 105
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(105): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 105)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(362): chatrafraich(0, '')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:27AM
+
+    Message: Undefined variable $Titlesitename
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php
+
+    Line: 19
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\storage\meta\meta.php(19): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 19)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(168): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\chatt.php(364): chatrafraich(0, '')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:40AM
+
+    Message: Class "polls" not found
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php
+
+    Line: 751
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(88): PollNewest()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(256): npds\system\block\block::block_fonction('Sondage', 'function#pollNe...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(373): npds\system\block\block::fab_block('Sondage', '0', 'function#pollNe...', '60')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(304): npds\system\block\block::Pre_fab_block('', 'LB', 'col')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\header.php(196): npds\system\block\block::leftblocks('col')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(136): include('E:\\New_Serv_Wam...')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\header.php(366): head(false, '', '', 'npds-boost_sk', 'default', '', '', '')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(78): include('E:\\New_Serv_Wam...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(69): theindex('edito', '', '')
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\index.php(143): select_start_page('edito', '')
+#10 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:42AM
+
+    Message: Call to undefined function npds\system\assets\language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\assets\css.php
+
+    Line: 154
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\boxe.php(152): npds\system\assets\css::adminfoot('fv', '', '\r\n       var fo...', '0')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\support\helpers.php(240): npds\system\block\boxe::lnlbox()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(88): lnlbox()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(256): npds\system\block\block::block_fonction('Lettre d'inform...', 'function#lnlbox')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(373): npds\system\block\block::fab_block('Lettre d'inform...', '0', 'function#lnlbox', '86400')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\block\block.php(316): npds\system\block\block::Pre_fab_block('', 'RB', 'col-12')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\npds-boost_sk\footer.php(46): npds\system\block\block::rightblocks('col-12')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(66): include('E:\\New_Serv_Wam...')
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\themes\default\footer.php(88): foot()
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\search.php(558): include('E:\\New_Serv_Wam...')
+#10 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:44AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\support\sform\extend-user\extender\formulaire.php
+
+    Line: 78
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\support\sform\extend-user\mod_formulaire.php(149): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\support\sform\extend-user\mod_extend-user.php(29): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\user.php(1230): include('E:\\New_Serv_Wam...')
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\user.php(1801): edituser()
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:44AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\support\sform\extend-user\mod_formulaire.php
+
+    Line: 340
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\support\sform\extend-user\mod_extend-user.php(29): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\user.php(1230): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\user.php(1801): edituser()
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 01, 2024 8:45AM
+
+    Message: Call to undefined function language_iso()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\support\sform\extend-user\mod_formulaire.php
+
+    Line: 340
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\support\sform\extend-user\mod_extend-user.php(29): include()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\user.php(1230): include('E:\\New_Serv_Wam...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\user.php(1801): edituser()
+#3 {main}
+
+---------
+

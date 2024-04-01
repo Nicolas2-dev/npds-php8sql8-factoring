@@ -16,7 +16,7 @@ use npds\system\language\language;
 use npds\system\language\metalang;
 
 // use npds\system\assets\js;
-// use npds\system\chat\chat;
+use npds\system\chat\chat;
 // use npds\system\date\date;
 // use npds\system\logs\logs;
 // use npds\system\news\news;
@@ -27,7 +27,7 @@ use npds\system\language\metalang;
 // use npds\system\auth\groupe;
 // use npds\system\block\block;
 // use npds\system\cache\cache;
-// use npds\system\forum\forum;
+//use npds\system\forum\forum;
 // use npds\system\routing\url;
 // use npds\system\support\str;
 // use npds\system\theme\theme;
@@ -40,7 +40,7 @@ use npds\system\language\metalang;
 // use npds\system\http\response;
 // use npds\system\security\hack;
 // use npds\system\support\edito;
-// use npds\system\support\polls;
+use npds\system\support\polls;
 // use npds\system\support\stats;
 // use npds\system\utility\crypt;
 // use npds\system\support\online;
@@ -52,7 +52,7 @@ use npds\system\language\metalang;
 // use npds\system\support\download;
 // use npds\system\language\language;
 // use npds\system\language\metalang;
-// use npds\system\messenger\messenger;
+use npds\system\messenger\messenger;
 // use npds\system\subscribe\subscribe;
 
 // // function provisoire
@@ -746,10 +746,10 @@ function cacheManagerEnd()
 //     return polls::pollSecur($pollID);
 // }
 
-// function PollNewest(?int $id = null)
-// {
-//     return polls::PollNewest($id);
-// }
+function PollNewest(?int $id = null)
+{
+    return polls::PollNewest($id);
+}
 
 
 // // referer.php
@@ -953,9 +953,9 @@ function dd() {
 //    return  chat::insertChat($username, $message, $dbname, $id);
 // }
 
-// function makeChatBox($pour) {
-//    return  chat::makeChatBox($pour);
-// }
+function makeChatBox($pour) {
+   return  chat::makeChatBox($pour);
+}
 
 // // messenger
 
@@ -971,21 +971,21 @@ function dd() {
 //    return  messenger::write_short_private_message($to_userid);
 // }
 
-// function instant_members_message() {
-//    return  messenger::instant_members_message();
-// }
+function instant_members_message() {
+   return  messenger::instant_members_message();
+}
 
 
 // // forum
 
 
-// function RecentForumPosts($title, $maxforums, $maxtopics, $displayposter = false, $topicmaxchars = 15, $hr = false, $decoration = '') {
-//    return forum::RecentForumPosts($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
-// }
+function RecentForumPosts($title, $maxforums, $maxtopics, $displayposter = false, $topicmaxchars = 15, $hr = false, $decoration = '') {
+   return forum::RecentForumPosts($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
+}
 
-// function RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration) {
-//    return forum::RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
-// }
+function RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration) {
+   return forum::RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
+}
 
 // function get_total_topics($forum_id) 
 // {

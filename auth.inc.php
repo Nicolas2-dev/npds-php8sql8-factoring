@@ -13,6 +13,7 @@
 /************************************************************************/
 
 use npds\system\logs\logs;
+use npds\system\auth\users;
 
 function Admin_alert($motif)
 {
@@ -52,7 +53,7 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
                 if (!$setinfo['hashkey']) {
                     $AlgoCrypt = PASSWORD_BCRYPT;
                     $min_ms = 100;
-                    $options = ['cost' => getOptimalBcryptCostParameter($pwd, $AlgoCrypt, $min_ms)];
+                    $options = ['cost' => users::getOptimalBcryptCostParameter($pwd, $AlgoCrypt, $min_ms)];
                     $hashpass = password_hash($pwd, $AlgoCrypt, $options);
                     $pwd = crypt($pwd, $hashpass);
                     

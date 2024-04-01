@@ -151,7 +151,7 @@ class css
             echo '
     <script type="text/javascript" src="assets/js/es6-shim.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/FormValidation.full.min.js"></script>
-    <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/' . language_iso(1, "_", 1) . '.min.js"></script>
+    <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/' . language::language_iso(1, "_", 1) . '.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/L10n.min.js"></script>
     <script type="text/javascript" src="assets/js/checkfieldinp.js"></script>

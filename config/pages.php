@@ -297,6 +297,8 @@ global $nuke_url;
 $PAGES['chatrafraich.php']['css'] = array("chat.css+");
 $PAGES['chatinput.php']['css'] = array("chat.css+");
 
+$PAGES['chatt.php']['css'] = array("chat.css+");
+
 $PAGES['modules.php?ModPath=reseaux-sociaux&ModStart=reseaux-sociaux*']['title'] = "[fr]R&eacute;seaux Sociaux[/fr][en]Social Networks[/en]";
 $PAGES['modules.php?ModPath=reseaux-sociaux&ModStart=reseaux-sociaux*']['run'] = "yes";
 $PAGES['modules.php?ModPath=reseaux-sociaux&ModStart=reseaux-sociaux*']['blocs'] = "0";
