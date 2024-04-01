@@ -16,6 +16,9 @@
 /* geoloc_bloc.php file 2008-2022 by Jean Pierre Barbary (jpb)          */
 /* dev team : Philippe Revilliod (Phr), A.NICOL                         */
 /************************************************************************/
+
+use npds\system\language\language;
+
 $ModPath = 'geoloc';
 global $nuke_url;
 $content = '';
@@ -207,4 +210,4 @@ $content .= '<div class="mt-1"><a href="modules.php?ModPath=' . $ModPath . '&amp
 if ($admin)
     $content .= '<div class="text-end"><a class="tooltipbyclass" href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=geoloc&amp;ModStart=admin/geoloc_set" title="[fr]Administration[/fr][en]Administration[/en][zh]&#34892;&#25919;[/zh][es]Administraci&oacute;n[/es][de]Verwaltung[/de]" data-bs-placement="left"><i class="fa fa-cogs fa-lg ms-1"></i></a></div>';
 $content .= '</div>';
-$content = aff_langue($content);
+$content = language::aff_langue($content);

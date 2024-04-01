@@ -10,6 +10,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\routing\url;
+use npds\system\pixels\image;
+use npds\system\language\language;
+
+
 function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
 {
     global $tiny_mce;
@@ -53,7 +59,7 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
                 fwrite($fp, $xnews[$j]);
             }
             fclose($fp);
-            redirect_url("minisite.php?op=$op");
+            url::redirect_url("minisite.php?op=$op");
         }
         // Ajouter - Ecriture
         if (substr($action, 0, 3) == 'AOK') {
@@ -69,10 +75,10 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
                 $formatted = str_replace("\n", '', $formatted);
             }
             $newsto = date("d m Y") . '!;!' . $title . '!;!' . $formatted;
-            $newsto = dataimagetofileurl($newsto, 'storage/users_private/' . $op . '/mns');
+            $newsto = image::dataimagetofileurl($newsto, 'storage/users_private/' . $op . '/mns');
             fwrite($fp, StripSlashes($newsto) . "\n");
             fclose($fp);
-            redirect_url("minisite.php?op=$op");
+            url::redirect_url("minisite.php?op=$op");
         }
         // Ajouter
         if (substr($action, 0, 1) == 'A') {
@@ -112,7 +118,7 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
                 $formatted = str_replace("\n", '', $formatted);
             }
             $newsto = date("d m Y") . '!;!' . $title . '!;!' . $formatted;
-            $newsto = dataimagetofileurl($newsto, 'storage/users_private/' . $op . '/mns');
+            $newsto = image::dataimagetofileurl($newsto, 'storage/users_private/' . $op . '/mns');
             $xnews[$index] = StripSlashes($newsto) . "\n";
             $xnews = array_reverse($xnews);
             $fp = fopen($blog_file, "w");
@@ -120,7 +126,7 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
                 fwrite($fp, $xnews[$j]);
             }
             fclose($fp);
-            redirect_url("minisite.php?op=$op");
+            url::redirect_url("minisite.php?op=$op");
         }
         // Modifier
         if (substr($action, 0, 1) == 'M') {
@@ -159,7 +165,7 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
         $content .= '
       <div class="card mb-3">
          <div class="card-body">
-            <h2 class="card-title">' . aff_langue($crtsplit[1]) . '</h2>
+            <h2 class="card-title">' . language::aff_langue($crtsplit[1]) . '</h2>
             <h6 class="card-subtitle text-muted">' . translate("Posté le ") . ' ' . $crtsplit[0] . '</h6>
          </div>
          <div class=" card-body">' . convert_ressources($crtsplit[2]) . '</div>';

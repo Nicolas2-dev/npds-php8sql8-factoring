@@ -17,6 +17,9 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\theme\theme;
+
 if (!stristr($_SERVER['PHP_SELF'], 'install.php')) die();
 
 function etape_5()
@@ -55,7 +58,7 @@ function etape_5()
                     <div class="form-floating mb-3">
                         <select class="form-select" id="new_Default_Theme" name="new_Default_Theme" />';
     //include("themes/list.php");
-    $themelist = themeLists(true);
+    $themelist = theme::themeLists(true);
     $themelist = explode(' ', $themelist);
     $sel = '';
     $themelistsize = sizeof($themelist);

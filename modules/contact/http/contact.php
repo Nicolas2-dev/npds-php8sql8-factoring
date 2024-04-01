@@ -10,8 +10,10 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
+}
+
 include("themes/default/header.php");
 include_once('modules/contact/support/sform/contact.php');
 include("themes/default/footer.php");;

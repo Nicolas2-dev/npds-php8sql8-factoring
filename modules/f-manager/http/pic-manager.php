@@ -10,6 +10,16 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\auth\groupe;
+use npds\system\routing\url;
+use npds\system\support\str;
+use npds\system\theme\theme;
+use npds\system\security\hack;
+use npds\system\utility\crypt;
+use npds\system\language\language;
+use npds\system\language\metalang;
+
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 
 global $ModPath, $ModStart, $language, $Default_Theme, $Default_Skin, $NPDS_Key;
@@ -18,7 +28,7 @@ include("modules/$ModPath/library/navigator.php");
 
 if (isset($user)) {
     //include("themes/list.php");
-    $themelist = themeLists(true);
+    $themelist = theme::themeLists(true);
     $themelist = explode(' ', $themelist);
     $pos = array_search($cookie[9], $themelist);
     if ($pos !== false)
@@ -44,7 +54,7 @@ function fma_filter($type, $filename, $Extension)
 {
     $autorise = false;
     $error = '';
-    if ($type == 'f') $filename = removeHack($filename);
+    if ($type == 'f') $filename = hack::removeHack($filename);
     $filename = preg_replace('#[/\\\:\*\?"<>|]#i', '', rawurldecode($filename));
     $filename = str_replace('..', '', $filename);
 
@@ -97,7 +107,7 @@ function fma_autorise($type, $dir)
         elseif (($autorise_arbo == 'admin') and ($admin))
             $auto_dir = true;
         elseif (($autorise_arbo != 'membre') and ($autorise_arbo != 'anonyme') and ($autorise_arbo != 'admin') and ($user)) {
-            $tab_groupe = valid_group($user);
+            $tab_groupe = groupe::valid_group($user);
             if ($tab_groupe) {
                 foreach ($tab_groupe as $groupevalue) {
                     $tab_auto = explode(',', $autorise_arbo);
@@ -193,7 +203,8 @@ function CreateThumb($Image, $Source, $Destination, $Max, $ext)
                 @imagepng($im, $Destination . $Image, 6);
                 break;
         }
-        @chmod($Dest . $Image, 0766);
+        //@chmod($Dest . $Image, 0766); // ???? $Dest
+        @chmod($Image, 0766);
         $size['gene-img'][0] = true;
     }
     return ($size);
@@ -218,7 +229,7 @@ if ($FmaRep) {
     Header("Location: die.php");
 
 if ($browse != '') {
-    $ibid = rawurldecode(decrypt($browse));
+    $ibid = rawurldecode(crypt::decrypt($browse));
     if (substr(@php_uname(), 0, 7) == "Windows")
         $ibid = preg_replace('#[\*\?"<>|]#i', '', $ibid);
     else
@@ -245,13 +256,13 @@ if ($obj->File_Navigator($base, $tri_fma['tri'], $tri_fma['sens'], $dirsize_fma)
         $cur_nav_back = str_replace('\\', '/', dirname($base));
     }
     $home = '/' . basename($basedir_fma);
-    $cur_nav_href_back = "<a href=\"modules.php?ModPath=$ModPath&amp;ModStart=$ModStart&amp;FmaRep=$FmaRep&amp;browse=" . rawurlencode(encrypt($cur_nav_back)) . "\">" . str_replace(dirname($basedir_fma), "", $cur_nav_back) . "</a>/" . basename($cur_nav);
+    $cur_nav_href_back = "<a href=\"modules.php?ModPath=$ModPath&amp;ModStart=$ModStart&amp;FmaRep=$FmaRep&amp;browse=" . rawurlencode(crypt::encrypt($cur_nav_back)) . "\">" . str_replace(dirname($basedir_fma), "", $cur_nav_back) . "</a>/" . basename($cur_nav);
     if ($home_fma != '')
         $cur_nav_href_back = str_replace($home, $home_fma, $cur_nav_href_back);
-    $cur_nav_encrypt = rawurlencode(encrypt($cur_nav));
+    $cur_nav_encrypt = rawurlencode(crypt::encrypt($cur_nav));
 } else {
     // le répertoire ou sous répertoire est protégé (ex : chmod)
-    redirect_url("modules.php?ModPath=$ModPath&amp;ModStart=$ModStart&amp;FmaRep=$FmaRep&amp;browse=" . rawurlencode(encrypt(dirname($base))));
+    url::redirect_url("modules.php?ModPath=$ModPath&amp;ModStart=$ModStart&amp;FmaRep=$FmaRep&amp;browse=" . rawurlencode(crypt::encrypt(dirname($base))));
 }
 
 // gestion des types d'extension de fichiers
@@ -272,7 +283,7 @@ while ($obj->NextDir()) {
     if (fma_autorise('d', $obj->FieldName)) {
         $subdirs .= '
         <tr>';
-        $clik_url = "<a href=\"modules.php?ModPath=$ModPath&amp;ModStart=$ModStart&amp;FmaRep=$FmaRep&amp;browse=" . rawurlencode(encrypt("$base/$obj->FieldName")) . "\">";
+        $clik_url = "<a href=\"modules.php?ModPath=$ModPath&amp;ModStart=$ModStart&amp;FmaRep=$FmaRep&amp;browse=" . rawurlencode(crypt::encrypt("$base/$obj->FieldName")) . "\">";
         if ($dirpres_fma[0])
             $subdirs .= '
             <td width="3%">' . $clik_url . $att_icon_dir . '</a></td>';
@@ -305,7 +316,7 @@ $refresh = $fp[2];
 if ($refresh == 0)
     $refresh = 3600;
 $rep_cache = $racine_fma . '/storage/cache/';
-$rep_cache_encrypt = rawurlencode(encrypt($rep_cache));
+$rep_cache_encrypt = rawurlencode(crypt::encrypt($rep_cache));
 $cache_prefix = $cookie[1] . md5(str_replace('/', '.', str_replace($racine_fma . '/', '', $cur_nav)));
 
 if ($Max_thumb > 0) {
@@ -315,7 +326,7 @@ if ($Max_thumb > 0) {
             $suf = strtolower($obj->FieldView);
             if (($suf == 'gif') or ($suf == 'jpg') or ($suf == 'png') or ($suf == 'swf') or ($suf == 'mp3')) {
                 if ($ficpres_fma[1]) {
-                    $ibid = rawurlencode(encrypt(rawurldecode($cur_nav_encrypt) . '#fma#' . encrypt($obj->FieldName)));
+                    $ibid = rawurlencode(crypt::encrypt(rawurldecode($cur_nav_encrypt) . '#fma#' . crypt::encrypt($obj->FieldName)));
                     $imagette = '';
 
                     if (($suf == 'gif') or ($suf == 'jpg')) {
@@ -326,7 +337,7 @@ if ($Max_thumb > 0) {
                                     if (filesize($rep_cache . $cache_prefix . '.' . $obj->FieldName) > 0) {
                                         $cache = true;
                                         $image = imagesize($obj->FieldName, $Max_thumb);
-                                        $imagette = rawurlencode(encrypt(rawurldecode($rep_cache_encrypt) . '#fma#' . encrypt($cache_prefix . '.' . $obj->FieldName)));
+                                        $imagette = rawurlencode(crypt::encrypt(rawurldecode($rep_cache_encrypt) . '#fma#' . crypt::encrypt($cache_prefix . '.' . $obj->FieldName)));
                                     } else
                                         $cache = false;
                                 } else
@@ -337,7 +348,7 @@ if ($Max_thumb > 0) {
                                 $image = CreateThumb($obj->FieldName, $cur_nav, $rep_cache . $cache_prefix . '.', $Max_thumb, $suf);
                                 if (array_key_exists('gene-img', $image))
                                     if ($image['gene-img'][0] == true)
-                                        $imagette = rawurlencode(encrypt(rawurldecode($rep_cache_encrypt) . '#fma#' . encrypt($cache_prefix . '.' . $obj->FieldName)));
+                                        $imagette = rawurlencode(crypt::encrypt(rawurldecode($rep_cache_encrypt) . '#fma#' . crypt::encrypt($cache_prefix . '.' . $obj->FieldName)));
                             }
                         } else {
                             $image = imagesize($curn_nav . $obj->FieldName, $Max_thumb);
@@ -381,7 +392,7 @@ if ($Max_thumb > 0) {
                             $files .= "<div class=\"imagethumb\">";
                             $uniqid = uniqid("mp3");
                             $files .= "<a href=\"javascript:void(0);\" onclick=\"document.$uniqid.SetVariable('player:jsUrl', '$PopUp'); document.$uniqid.SetVariable('player:jsPlay', '');\">";
-                            $files .= "<div class=\"mp3\"><p align=\"center\">" . fma_translate("Cliquer ici pour charger le fichier dans le player") . "</p><br />" . split_string_without_space($obj->FieldName, 24) . "</div>";
+                            $files .= "<div class=\"mp3\"><p align=\"center\">" . fma_translate("Cliquer ici pour charger le fichier dans le player") . "</p><br />" . str::split_string_without_space($obj->FieldName, 24) . "</div>";
                             $files .= "<div style=\"margin-top: 10px;\">";
                             $files .= "<object id=\"" . $uniqid . "\" type=\"application/x-shockwave-flash\" data=\"modules/$ModPath/plugins/player_mp3_maxi.swf\" width=\"$Max_thumb\" height=\"15\">
                         <param name=\"movie\" value=\"modules/$ModPath/plugins/player_mp3_maxi.swf\" />
@@ -431,7 +442,7 @@ if ($inclusion) {
         // utilisation de pages.php
         settype($PAGES, 'array');
         require_once("config/pages.php");
-        $Titlesitename = aff_langue($PAGES["modules.php?ModPath=$ModPath&ModStart=$ModStart*"]['title']);
+        $Titlesitename = language::aff_langue($PAGES["modules.php?ModPath=$ModPath&ModStart=$ModStart*"]['title']);
         global $Default_Theme, $Default_Skin, $user;
         if (isset($user) and $user != '') {
             global $cookie;
@@ -476,7 +487,7 @@ if ($inclusion) {
         echo "\n";
     }
 
-    echo meta_lang(aff_langue($Xcontent));
+    echo metalang::meta_lang(language::aff_langue($Xcontent));
 
     // Foot banner de présentation F-Manager
     if (file_exists("themes/$Default_Theme/view/modules/f-manager/foot.html")) {

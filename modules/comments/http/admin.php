@@ -13,6 +13,11 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\forum\forum;
+use npds\system\routing\url;
+
+
 if (!function_exists("Mysql_Connexion"))
     die();
 
@@ -57,19 +62,19 @@ if ($Mmod) {
         case 'del':
             $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id = '$topic'";
             if (!$result = sql_query($sql))
-                forumerror('0009');
+                forum::forumerror('0009');
             // ordre de mise à jour d'un champ externe ?
             if ($comments_req_raz != '')
                 sql_query("UPDATE " . $NPDS_Prefix . $comments_req_raz);
-            redirect_url("$url_ret");
+            url::redirect_url("$url_ret");
             break;
         case 'viewip':
             include("themes/default/header.php");
             $sql = "SELECT u.uname, p.poster_ip, p.poster_dns FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "posts p WHERE p.post_id = '$post' AND u.uid = p.poster_id";
             if (!$r = sql_query($sql))
-                forumerror('0013');
+                forum::forumerror('0013');
             if (!$m = sql_fetch_assoc($r))
-                forumerror('0014');
+                forum::forumerror('0014');
             echo '
         <h2 class="mb-3">' . translate("Commentaire") . '</h2>
         <div class="card mb-3">
@@ -108,7 +113,7 @@ if ($Mmod) {
                 if ($comments_req_del != '')
                     sql_query("UPDATE " . $NPDS_Prefix . $comments_req_del);
             }
-            redirect_url("$url_ret");
+            url::redirect_url("$url_ret");
             break;
     }
 } else {

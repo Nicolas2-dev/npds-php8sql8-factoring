@@ -11,6 +11,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\utility\spam;
+
 // Champ Combo : hauteur = 5 
 $tmp = array(
     "a1" => array('en' => "1", 'selected' => false),
@@ -39,7 +41,7 @@ $m->add_field('topic', '', $topic, 'hidden', false);
 $m->add_field('file_name', '', $file_name, 'hidden', false);
 // Submit bouton and anti-spam
 $m->add_extra('<tr><td align="center" colspan="2"><br />');
-$m->add_extra_hidden(Q_spambot() . "&nbsp;&nbsp;");
+$m->add_extra_hidden(spam::Q_spambot() . "&nbsp;&nbsp;");
 $m->add_field('SubmitS', "", translate("Valider"), 'submit', false);
 $m->add_extra('</td></tr>');
 // ------------------------------------------------------------------------------

@@ -11,6 +11,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\cache\cache;
+
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');
 $f_meta_nom = 'setban';
@@ -59,7 +62,7 @@ function ConfigureBan($ModPath, $ModStart)
                 </div>
             </div>
         </form>';
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function SaveSetBan($Xip_ban)
@@ -67,7 +70,7 @@ function SaveSetBan($Xip_ban)
     $file = fopen('storage/logs/spam.log', 'w');
     fwrite($file, $Xip_ban);
     fclose($file);
-    SC_clean();
+    cache::SC_clean();
 }
 
 settype($subop, 'string');

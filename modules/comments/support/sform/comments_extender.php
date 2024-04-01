@@ -12,7 +12,9 @@
 /************************************************************************/
 /* Dont modify this file is you dont know what you make                 */
 /************************************************************************/
-include_once("library/sform/sform.php");
+
+use npds\system\language\language;
+use npds\system\sform\form_handler;
 
 global $m;
 $m = new form_handler();
@@ -29,6 +31,6 @@ include("modules/comments/support/sform/$formulaire");
 /************************************************/
 
 if (!isset($GLOBALS["submitS"]))
-    echo aff_langue($m->print_form(''));
+    echo language::aff_langue($m->print_form(''));
 else
-    $message = aff_langue($m->aff_response('', "not_echo", ''));
+    $message = language::aff_langue($m->aff_response('', "not_echo", ''));
