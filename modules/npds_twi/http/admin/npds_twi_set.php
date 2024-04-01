@@ -15,6 +15,8 @@
 /* dev team :                                                           */
 /************************************************************************/
 
+use npds\system\assets\css;
+
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');
 include('modules/' . $ModPath . '/language/' . $language . '/language.php');
@@ -181,7 +183,7 @@ function Configuretwi($subop, $ModPath, $ModStart, $class_sty_2, $npds_twi_arti,
     <div class="text-end">Version : ' . $npds_twi_versus . '</div>';
     $arg1 = '
         var formulid = ["twitterset"];';
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function SaveSettwi($npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $tbox_width, $tbox_height, $class_sty_1, $class_sty_2, $ModPath, $ModStart)

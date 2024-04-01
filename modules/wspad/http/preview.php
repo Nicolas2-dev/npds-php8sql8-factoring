@@ -12,6 +12,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\assets\css;
+use npds\system\utility\crypt;
+use npds\system\language\language;
+
+
 // For More security
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
@@ -42,17 +48,17 @@ if (isset($user) and $user != '') {
 $Titlesitename = "NPDS wspad";
 include("storage/meta/meta.php");
 echo '<link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />';
-echo import_css($tmp_theme, $language, $skin, '', '');
+echo css::import_css($tmp_theme, $language, $skin, '', '');
 echo '
     </head>
     <body style="padding: 10px; background:#ffffff;">';
-$wspad = rawurldecode(decrypt($pad));
+$wspad = rawurldecode(crypt::decrypt($pad));
 $wspad = explode("#wspad#", $wspad);
 $row = sql_fetch_assoc(sql_query("SELECT content, modtime, editedby, ranq  FROM " . $NPDS_Prefix . "wspad WHERE page='" . $wspad[0] . "' AND member='" . $wspad[1] . "' AND ranq='" . $wspad[2] . "'"));
 echo '
         <h2>' . $wspad[0] . '</h2>
         <span class="">[ ' . wspad_trans("révision") . ' : ' . $row['ranq'] . ' - ' . $row['editedby'] . " / " . date(translate("dateinternal"), $row['modtime'] + ((int)$gmt * 3600)) . ' ]</span>
         <hr />
-        ' . aff_langue($row['content']) . '
+        ' . language::aff_langue($row['content']) . '
     </body>
     </html>';

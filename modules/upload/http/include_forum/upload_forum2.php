@@ -11,6 +11,10 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\assets\css;
+use npds\system\forum\forum;
+
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 
 global $Titlesitename;
@@ -30,7 +34,7 @@ $inline_list['0'] = upload_translate("Non");
 
 // Security
 if (!$allow_upload_forum) Header("Location: die.php");
-if (!autorize()) Header("Location: die.php");
+if (!forum::autorize()) Header("Location: die.php");
 
 /*****************************************************/
 /* Entete                                            */
@@ -64,7 +68,7 @@ if ($skin != '') {
             <link rel="stylesheet" href="assets/shared/bootstrap/dist/css/bootstrap.min.css" />';
 echo '
             <link rel="stylesheet" href="assets/shared/bootstrap-table/dist/bootstrap-table.min.css" />'; //hardcoded lol
-echo import_css($theme, $language, '', '', '');
+echo css::import_css($theme, $language, '', '', '');
 echo '
         </head>
     <body>';
@@ -73,9 +77,9 @@ echo '
 global $NPDS_Prefix;
 $sql = "SELECT forum_moderator FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'";
 if (!$result = sql_query($sql))
-    forumerror('0001');
+    forum::forumerror('0001');
 $myrow = sql_fetch_assoc($result);
-$moderator = get_moderator($myrow['forum_moderator']);
+$moderator = forum::get_moderator($myrow['forum_moderator']);
 $moderator = explode(' ', $moderator);
 $Mmod = false;
 for ($i = 0; $i < count($moderator); $i++) {

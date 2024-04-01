@@ -14,6 +14,9 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\language\language;
+
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 global $NPDS_Prefix;
 $x = 0;
@@ -49,10 +52,10 @@ while (list($lid, $url, $title, $description, $time, $hits, $topicid_card, $xcid
                 <div class="card-body ibid_descr">';
         if ($url == '')
             echo '
-                <h4 class="text-muted"><i class="fas fa-external-link-alt"></i>&nbsp;' . aff_langue($title);
+                <h4 class="text-muted"><i class="fas fa-external-link-alt"></i>&nbsp;' . language::aff_langue($title);
         else
             echo '
-                <h4><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=visit&amp;lid=' . $lid . '" target="_blank" ><i class="fas fa-external-link-alt"></i>&nbsp;' . aff_langue($title) . '</a>';
+                <h4><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=visit&amp;lid=' . $lid . '" target="_blank" ><i class="fas fa-external-link-alt"></i>&nbsp;' . language::aff_langue($title) . '</a>';
 
         echo '&nbsp;' . newlinkgraphic($datetime, $time) . '</h4>';
 
@@ -63,7 +66,7 @@ while (list($lid, $url, $title, $description, $time, $hits, $topicid_card, $xcid
             list($stitle) = sql_fetch_row($result4);
             if ($stitle == '') $slash = '';
             else $slash = '/';
-            echo translate("Catégorie : ") . "<strong>" . aff_langue($ctitle) . "</strong> $slash <b>" . aff_langue($stitle) . "</b>";
+            echo translate("Catégorie : ") . "<strong>" . language::aff_langue($ctitle) . "</strong> $slash <b>" . language::aff_langue($stitle) . "</b>";
         }
         global $links_topic;
         if ($links_topic and $topicid_card != 0) {
@@ -71,7 +74,7 @@ while (list($lid, $url, $title, $description, $time, $hits, $topicid_card, $xcid
             echo '<br />' . translate("Sujets") . ' : <strong>' . $topicLX . '</strong>';
         }
         echo '
-                <div class="ibid_descr "><p>' . aff_langue($description) . '</p></div>';
+                <div class="ibid_descr "><p>' . language::aff_langue($description) . '</p></div>';
         if ($url != '') {
             echo '<div class="d-flex justify-content-between">';
             global $popular;

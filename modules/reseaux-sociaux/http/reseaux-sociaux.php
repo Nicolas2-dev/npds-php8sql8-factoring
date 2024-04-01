@@ -16,6 +16,11 @@
 /* version 1.0 17/02/2016                                               */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\auth\users;
+use npds\system\forum\forum;
+use npds\system\security\hack;
+
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
     die();
 
@@ -25,7 +30,7 @@ if (!function_exists("Mysql_Connexion"))
 if (!$user) header('location:index.php');
 
 global $cookie, $language;
-$userdata = get_userdata_from_id($cookie[0]);
+$userdata = forum::get_userdata_from_id($cookie[0]);
 
 $ModStart = 'reseaux-sociaux';
 include("modules/$ModPath/language/$language/language.php");
@@ -38,7 +43,7 @@ function ListReseaux($ModPath, $ModStart)
     include("themes/default/header.php");
     echo '
     <h2>' . translate("Utilisateur") . '</h2>
-    ' . member_menu($userdata['mns'], $userdata['uname']) . '
+    ' . users::member_menu($userdata['mns'], $userdata['uname']) . '
     <h3 class="mt-3">' . rs_translate("Réseaux sociaux") . '</h3>
     <div class="help-block">' . rs_translate("Liste des réseaux sociaux mis à disposition par l'administrateur.") . '</div>
     <hr />
@@ -68,7 +73,7 @@ function EditReseaux($ModPath, $ModStart)
     include_once("functions.php");
     include("themes/default/header.php");
     global $cookie;
-    $posterdata_extend = get_userdata_extend_from_id($cookie[0]);
+    $posterdata_extend = forum::get_userdata_extend_from_id($cookie[0]);
     if ($posterdata_extend['M2'] != '') {
         $i = 0;
         $socialnetworks = explode(';', $posterdata_extend['M2']);
@@ -81,7 +86,7 @@ function EditReseaux($ModPath, $ModStart)
 
     echo '
     <h2>' . translate("Utilisateur") . '</h2>';
-    member_menu($userdata['mns'], $userdata['uname']);
+    users::member_menu($userdata['mns'], $userdata['uname']);
     echo '
     <h3 class="mt-1">' . rs_translate("Réseaux sociaux") . '</h3>
     <div>
@@ -130,7 +135,7 @@ function EditReseaux($ModPath, $ModStart)
             </div>
         </div>
     </form>';
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function SaveSetReseaux($ModPath, $ModStart)
@@ -142,7 +147,7 @@ function SaveSetReseaux($ModPath, $ModStart)
             $li_rs .= $v1['id'] . '|' . $v1['uid'] . ';';
     }
     $li_rs = rtrim($li_rs, ';');
-    $li_rs = removeHack(stripslashes(FixQuotes($li_rs)));
+    $li_rs = hack::removeHack(stripslashes(FixQuotes($li_rs)));
     sql_query("UPDATE " . $NPDS_Prefix . "users_extend SET M2='$li_rs' WHERE uid='$cookie[0]'");
     Header("Location: modules.php?&ModPath=$ModPath&ModStart=$ModStart");
 }

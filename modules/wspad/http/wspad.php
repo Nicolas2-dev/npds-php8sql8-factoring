@@ -18,6 +18,16 @@
 /* member='-1'      => PAD des admins (si un admin est connecté)          */
 /**************************************************************************/
 
+use npds\system\assets\java;
+use npds\system\auth\groupe;
+use npds\system\support\str;
+use npds\system\pixels\image;
+use npds\system\security\hack;
+use npds\system\utility\crypt;
+use npds\system\support\editeur;
+use npds\system\language\language;
+use npds\system\language\metalang;
+
 // For More security
 if (!stristr($_SERVER['PHP_SELF'], "modules.php")) die();
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
@@ -35,8 +45,8 @@ include_once("modules/$ModPath/config.php");
 // limite l'utilisation aux membres et admin
 settype($member, 'integer');
 if ($user or $admin) {
-    $tab_groupe = valid_group($user);
-    if (groupe_autorisation($member, $tab_groupe)) {
+    $tab_groupe = groupe::valid_group($user);
+    if (groupe::groupe_autorisation($member, $tab_groupe)) {
         $groupe = $member;
         $auteur = $cookie[1];
     } else {
@@ -52,7 +62,7 @@ if ($user or $admin) {
 } else
     header("location: index.php");
 
-$surlignage = $couleur[hexfromchr($auteur)];
+$surlignage = $couleur[str::hexfromchr($auteur)];
 
 // Paramètres utilisé par le script
 $ThisFile = "modules.php?ModPath=$ModPath&amp;ModStart=$ModStart";
@@ -101,7 +111,7 @@ function Liste_Page()
     $nb_pages = sql_num_rows(sql_query("SELECT COUNT(page) FROM " . $NPDS_Prefix . "wspad WHERE member='$groupe' GROUP BY page"));
     if ($groupe > 0) {
         $gp = sql_fetch_assoc(sql_query("SELECT groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$groupe'"));
-        $aff .= '<span class="badge bg-secondary me-2">' . $nb_pages . '</span>' . wspad_trans("Document(s) et révision(s) disponible(s) pour le groupe") . ' <span class="text-muted">' . aff_langue($gp['groupe_name']) . " [$groupe]</span></h3>";
+        $aff .= '<span class="badge bg-secondary me-2">' . $nb_pages . '</span>' . wspad_trans("Document(s) et révision(s) disponible(s) pour le groupe") . ' <span class="text-muted">' . language::aff_langue($gp['groupe_name']) . " [$groupe]</span></h3>";
     } else
         $aff .= '<span class="badge bg-secondary me-2">' . $nb_pages . '</span>' . wspad_trans("Document(s) et révision(s) disponible(s) pour les administrateurs") . '</h3>';
     $aff .= '<div id="lst_paddoc" class="collapse" style =" padding-left:10px;">';
@@ -201,10 +211,10 @@ function Liste_Page()
                 $aff .= '
                 <tr>
                     <td>' . $ibid . $ranq . '</td>
-                    <td><div class="me-1" style="float: left; margin-top: 0.5rem; width: 1.5rem; height: 1.5rem; border-radius:50%; background-color: ' . $couleur[hexfromchr($editedby)] . ';"></div>' . userpopover($editedby, '40', 2) . '&nbsp;' . $editedby . '</td>
+                    <td><div class="me-1" style="float: left; margin-top: 0.5rem; width: 1.5rem; height: 1.5rem; border-radius:50%; background-color: ' . $couleur[str::hexfromchr($editedby)] . ';"></div>' . userpopover($editedby, '40', 2) . '&nbsp;' . $editedby . '</td>
                     <td class="small">' . date(translate("dateinternal"), $modtime + ((int)$gmt * 3600)) . '</td>';
                 // voir la révision du ranq x
-                $PopUp = JavaPopUp("modules.php?ModPath=$ModPath&amp;ModStart=preview&amp;pad=" . encrypt($page . "#wspad#" . $groupe . "#wspad#" . $ranq), "NPDS_wspad", 500, 400);
+                $PopUp = java::JavaPopUp("modules.php?ModPath=$ModPath&amp;ModStart=preview&amp;pad=" . crypt::encrypt($page . "#wspad#" . $groupe . "#wspad#" . $ranq), "NPDS_wspad", 500, 400);
                 $aff .= '
                     <td>
                         <a class="me-2 fs-5" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . wspad_trans("Prévisualiser") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="bi bi-eye"></i></a>';
@@ -216,7 +226,7 @@ function Liste_Page()
                     $aff .= '
                         <a class="ms-2 fs-5 text-danger" href="' . $ThisFile . '&amp;op=supp&amp;page=' . urlencode($page) . '&amp;member=' . $groupe . '&amp;ranq=' . $ranq . '" title="' . wspad_trans("Supprimer la révision") . '" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="n-danger-tooltip"><i class="bi bi-trash2-fill"></i></a>';
                     // exporter la révision du ranq x
-                    $PopUp = JavaPopUp("modules.php?ModPath=$ModPath&amp;ModStart=export&amp;type=doc&amp;pad=" . encrypt($page . "#wspad#" . $groupe . "#wspad#" . $ranq), "NPDS_wspad", 5, 5);
+                    $PopUp = java::JavaPopUp("modules.php?ModPath=$ModPath&amp;ModStart=export&amp;type=doc&amp;pad=" . crypt::encrypt($page . "#wspad#" . $groupe . "#wspad#" . $ranq), "NPDS_wspad", 5, 5);
                     $aff .= '
                         <a class="ms-2 fs-5" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . wspad_trans("Exporter .doc") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="bi bi-filetype-doc"></i></a>';
                     // exporter en article 
@@ -338,7 +348,7 @@ function Page($page, $ranq)
         <div class="mb-3">
             <textarea class="tin form-control" rows="30" name="content" ><div class="mceEditable">' . $row['content'] . '</div></textarea>
         </div>';
-    echo aff_editeur('content', '');
+    echo editeur::aff_editeur('content', '');
     if ($edition)
         echo '
         <div class="mb-3">
@@ -354,14 +364,14 @@ function Page($page, $ranq)
 settype($op, 'string');
 settype($page, 'string');
 // Filtre les caractères interdits dans les noms de pages
-$page = preg_replace('#[^a-zA-Z0-9\\s\\_\\.\\-]#i', '_', removeHack(stripslashes(urldecode($page))));
+$page = preg_replace('#[^a-zA-Z0-9\\s\\_\\.\\-]#i', '_', hack::removeHack(stripslashes(urldecode($page))));
 settype($ranq, 'integer');
 settype($groupe, 'integer');
 
 switch ($op) {
     case "sauve":
-        $content = removeHack(stripslashes(FixQuotes(dataimagetofileurl($content, 'modules/upload/upload/ws'))));
-        $auteur = removeHack(stripslashes(FixQuotes($auteur)));
+        $content = hack::removeHack(stripslashes(FixQuotes(image::dataimagetofileurl($content, 'modules/upload/upload/ws'))));
+        $auteur = hack::removeHack(stripslashes(FixQuotes($auteur)));
         $row = sql_fetch_assoc(sql_query("SELECT MAX(ranq) AS ranq FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$groupe'"));
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "wspad VALUES ('0', '$page', '$content', '" . time() . "', '$auteur', '" . ($row['ranq'] + 1) . "', '$groupe','')");
         sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='' WHERE verrou='$auteur'");
@@ -369,7 +379,7 @@ switch ($op) {
         $mess = wspad_trans("révision") . " " . ($row['ranq'] + 1) . " " . wspad_trans("sauvegardée");
         break;
     case "supp":
-        $auteur = removeHack(stripslashes(FixQuotes($auteur)));
+        $auteur = hack::removeHack(stripslashes(FixQuotes($auteur)));
         $result = sql_query("DELETE FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$groupe' AND ranq='$ranq'");
         sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='' WHERE verrou='$auteur'");
         break;
@@ -380,7 +390,7 @@ switch ($op) {
         break;
     case "renomer":
         // Filtre les caractères interdits dans les noms de pages
-        $newpage = preg_replace('#[^a-zA-Z0-9\\s\\_\\.\\-]#i', '_', removeHack(stripslashes(urldecode($newpage))));
+        $newpage = preg_replace('#[^a-zA-Z0-9\\s\\_\\.\\-]#i', '_', hack::removeHack(stripslashes(urldecode($newpage))));
         settype($member, 'integer');
         $result = sql_query("UPDATE " . $NPDS_Prefix . "wspad SET page='$newpage', verrou='' WHERE page='$page' AND member='$member'");
         @unlink("modules/$ModPath/storage/locks/$page-vgp-$groupe.txt");
@@ -401,7 +411,7 @@ include("themes/default/header.php");;
 // Head banner de présentation
 if (file_exists("modules/$ModPath/view/head.html")) {
     $Xcontent = join('', file("modules/$ModPath/view/head.html"));
-    $Xcontent = meta_lang(aff_langue($Xcontent));
+    $Xcontent = metalang::meta_lang(language::aff_langue($Xcontent));
     echo $Xcontent;
 }
 
@@ -427,7 +437,7 @@ switch ($op) {
 if (file_exists("modules/$ModPath/view/foot.html")) {
     $Xcontent = join("", file("modules/$ModPath/view/foot.html"));
     $Xcontent .= '<p class="text-end">NPDS WsPad ' . $version . ' by Dev&nbsp;&&nbsp;Jpb&nbsp;</p>';
-    $Xcontent = meta_lang(aff_langue($Xcontent));
+    $Xcontent = metalang::meta_lang(language::aff_langue($Xcontent));
     echo $Xcontent;
 }
 include("themes/default/footer.php");;

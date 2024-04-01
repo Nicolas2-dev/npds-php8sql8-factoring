@@ -14,6 +14,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\assets\css;
+use npds\system\support\editeur;
+use npds\system\language\language;
+
+
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 
 function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
@@ -59,7 +65,7 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
             $sel = '';
             if ($cid == $ccid and $sid == 0) $sel = 'selected';
             echo '
-                <option value="' . $ccid . '" ' . $sel . '>' . aff_langue($ctitle) . '</option>';
+                <option value="' . $ccid . '" ' . $sel . '>' . language::aff_langue($ctitle) . '</option>';
             $result3 = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$ccid' ORDER BY title");
             while (list($ssid, $stitle) = sql_fetch_row($result3)) {
                 $sel = '';
@@ -67,7 +73,7 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
                     $sel = 'selected="selected"';
                 }
                 echo '
-                <option value="' . $ccid . '-' . $ssid . '" ' . $sel . '>' . aff_langue($ctitle . ' / ' . $stitle) . '</option>';
+                <option value="' . $ccid . '-' . $ssid . '" ' . $sel . '>' . language::aff_langue($ctitle . ' / ' . $stitle) . '</option>';
             }
         }
         echo '
@@ -102,7 +108,7 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
                 <textarea class="form-control tin" id="xtext" name="xtext" rows="10">' . $description . '</textarea>
             </div>
         </div>';
-        aff_editeur('xtext', '');
+        editeur::aff_editeur('xtext', '');
         echo '
         <div class="mb-3 row">
             <input type="hidden" name="lid" value="' . $lid . '" />
@@ -115,7 +121,7 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
     </form>';
         $browse_key = $lid;
         include("modules/$ModPath/support/sform/link_maj.php");
-        adminfoot('fv', '', '', 'nodiv');
+        css::adminfoot('fv', '', '', 'nodiv');
         include("themes/default/footer.php");
     } else
         header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath");
@@ -178,7 +184,7 @@ function brokenlink($lid)
 
 function brokenlinkS($lid, $modifysubmitter)
 {
-    global $user, $links_DB, $ModPath, $ModStart;
+    global $user, $links_DB, $ModPath, $ModStart, $anonymous;
     if (isset($user)) {
         global $cookie;
         $ratinguser = $cookie[1];

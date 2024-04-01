@@ -16,6 +16,8 @@
 /* version 1.0 17/02/2016                                               */
 /************************************************************************/
 
+use npds\system\assets\css;
+
 // For More security
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');
@@ -65,7 +67,7 @@ function ListReseaux($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
     echo '
         </tbody>
     </table>';
-    adminfoot('', '', '', '');
+    css::adminfoot('', '', '', '');
 }
 
 function EditReseaux($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg, $rs_id, $rs_url, $rs_ico, $subop, $old_id)
@@ -121,7 +123,7 @@ function EditReseaux($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg, $rs_
         inpandfieldlen("rs_id",50);
         inpandfieldlen("rs_url",100);
         inpandfieldlen("rs_ico",40);';
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 
 function SaveSetReseaux($ModPath, $ModStart, $rs_id, $rs_url, $rs_ico, $subop, $old_id)

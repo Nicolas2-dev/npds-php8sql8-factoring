@@ -13,6 +13,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+
 // For More security
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');
@@ -304,7 +306,7 @@ function upConfigure($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
     inpandfieldlen("xheight_max",3);
     inpandfieldlen("xquota",8);
     ';
-    adminfoot('fv', $fv_parametres, $arg1, '');
+    css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function uploadSave($xmax_size, $xdocumentroot, $xautorise_upload_p, $xracine, $xrep_upload, $xrep_cache, $xrep_log, $xurl_upload, $xurl_upload_css, $xed_profil, $xed_nb_images, $xextension_autorise, $xwidth_max, $xheight_max, $xquota)

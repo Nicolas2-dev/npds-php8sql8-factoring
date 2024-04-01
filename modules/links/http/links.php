@@ -15,7 +15,11 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\date\date;
+use npds\system\auth\users;
+use npds\system\language\language;
 use npds\system\cache\cacheManager;
+use npds\system\pagination\paginator;
 use npds\system\cache\SuperCacheEmpty;
 
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
@@ -35,7 +39,7 @@ function menu()
     echo '
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item"><a class="nav-link ' . $in_l . '" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" >' . translate("Index") . '</a></li>';
-    if (autorisation($links_anonaddlinklock))
+    if (users::autorisation($links_anonaddlinklock))
         echo '
         <li class="nav-item" ><a class="nav-link ' . $ad_l . '" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=AddLink" >' . translate("Ajouter") . '</a></li>';
     echo '
@@ -148,17 +152,17 @@ function index()
                 echo '
             <tr>
                 <td>
-                <h4><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewlink&amp;cid=' . $cid . '">' . aff_langue($title) . '</a> <span class="badge bg-secondary float-end">' . $cnumrows . '</span></h4>';
+                <h4><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewlink&amp;cid=' . $cid . '">' . language::aff_langue($title) . '</a> <span class="badge bg-secondary float-end">' . $cnumrows . '</span></h4>';
                 categorynewlinkgraphic($cid);
                 if ($cdescription)
                     echo '
-                    <p>' . aff_langue($cdescription) . '</p>';
+                    <p>' . language::aff_langue($cdescription) . '</p>';
                 $result2 = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$cid' ORDER BY title $subcat_limit");
                 while (list($sid, $stitle) = sql_fetch_row($result2)) {
                     $cresult3 = sql_query("SELECT lid FROM " . $links_DB . "links_links WHERE sid='$sid'");
                     $cnumrows = sql_num_rows($cresult3);
                     echo '
-                <h5 class="ms-4"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewslink&amp;sid=' . $sid . '">' . aff_langue($stitle) . '</a> <span class="badge bg-secondary float-end">' . $cnumrows . '</span></h5>';
+                <h5 class="ms-4"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewslink&amp;sid=' . $sid . '">' . language::aff_langue($stitle) . '</a> <span class="badge bg-secondary float-end">' . $cnumrows . '</span></h5>';
                 }
                 echo '
                 </td>
@@ -261,7 +265,7 @@ function viewlink($cid, $min, $orderby, $show)
         $result = sql_query("SELECT title FROM " . $links_DB . "links_categories WHERE cid='$cid'");
         list($title) = sql_fetch_row($result);
         echo '
-        <h3 class="mb-3">' . aff_langue($title) . '</h3>';
+        <h3 class="mb-3">' . language::aff_langue($title) . '</h3>';
 
         $subresult = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$cid' ORDER BY title");
         $numrows = sql_num_rows($subresult);
@@ -273,7 +277,7 @@ function viewlink($cid, $min, $orderby, $show)
             $result2 = sql_query("SELECT lid FROM " . $links_DB . "links_links WHERE sid='$sid'");
             $numrows_lst = sql_num_rows($result2);
             $affsouscat .= '
-            <li class="list-group-item list-group-item-action justify-content-between align-self-start"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewslink&amp;sid=' . $sid . '">' . aff_langue($title) . '</a></li>';
+            <li class="list-group-item list-group-item-action justify-content-between align-self-start"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewslink&amp;sid=' . $sid . '">' . language::aff_langue($title) . '</a></li>';
         }
         $affsouscat .= '
         </ul>';
@@ -311,7 +315,7 @@ function viewlink($cid, $min, $orderby, $show)
             $current = $nbPages;
         $start = ($current * $perpage);
 
-        echo paginate('modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewlink&amp;cid=' . $cid . '&amp;min=', '&amp;orderby=' . $orderby . '&amp;show=' . $perpage, $nbPages, $current, $adj = 3, $perpage, $start);
+        echo paginator::paginate('modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewlink&amp;cid=' . $cid . '&amp;min=', '&amp;orderby=' . $orderby . '&amp;show=' . $perpage, $nbPages, $current, $adj = 3, $perpage, $start);
 
         if (isset($sid)) FooterOrderBy($cid, $sid, $orderbyTrans, 'viewlink');
         SearchForm();
@@ -346,7 +350,7 @@ function viewslink($sid, $min, $orderby, $show)
         list($cid, $title) = sql_fetch_row($result2);
 
         echo "<table class=\"table table-bordered\"><tr><td class=\"header\">\n";
-        echo "<a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath\" class=\"box\">" . translate("Index") . "</a> / <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath&amp;op=viewlink&amp;cid=$cid\" class=\"box\">" . aff_langue($title) . "</a> / " . aff_langue($stitle);
+        echo "<a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath\" class=\"box\">" . translate("Index") . "</a> / <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath&amp;op=viewlink&amp;cid=$cid\" class=\"box\">" . language::aff_langue($title) . "</a> / " . language::aff_langue($stitle);
         echo "</td></tr></table>";
 
         $orderbyTrans = convertorderbytrans($orderby);
@@ -371,7 +375,7 @@ function viewslink($sid, $min, $orderby, $show)
             $current = $nbPages;
         $start = ($current * $perpage);
 
-        echo paginate('modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewslink&amp;sid=' . $sid . '&amp;min=', '&amp;orderby=' . $orderby . '&amp;show=' . $show, $nbPages, $current, $adj = 3, $perpage, $start);
+        echo paginator::paginate('modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=viewslink&amp;sid=' . $sid . '&amp;min=', '&amp;orderby=' . $orderby . '&amp;show=' . $show, $nbPages, $current, $adj = 3, $perpage, $start);
         FooterOrderBy($cid, $sid, $orderbyTrans, "viewslink");
     }
     if ($SuperCache)
@@ -409,7 +413,7 @@ function categorynewlinkgraphic($cat)
         $newresult = sql_query("SELECT date FROM " . $links_DB . "links_links WHERE cid='$cat' ORDER BY date DESC LIMIT 1");
         list($time) = sql_fetch_row($newresult);
         if (isset($ime)) {
-            setlocale(LC_TIME, aff_langue($locale));
+            setlocale(LC_TIME, language::aff_langue($locale));
             preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
             $count = round((time() - mktime($datetime[4], $datetime[5], $datetime[6], $datetime[2], $datetime[3], $datetime[1])) / 86400, 0);
             popgraphics($count);
@@ -427,7 +431,7 @@ function popgraphics($count)
 function newlinkgraphic($datetime, $time)
 {
     global $locale;
-    setlocale(LC_TIME, aff_langue($locale));
+    setlocale(LC_TIME, language::aff_langue($locale));
     preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
     $count = round((time() - mktime($datetime[4], $datetime[5], $datetime[6], $datetime[2], $datetime[3], $datetime[1])) / 86400, 0);
     popgraphics($count);
@@ -494,7 +498,7 @@ function viewlinkeditorial($lid, $ttitle)
     echo '
     <div class="card card-body">
     <h3>' . translate("EDITO") . ' : 
-        <span class="text-muted">' . aff_langue($displaytitle) . '</span>';
+        <span class="text-muted">' . language::aff_langue($displaytitle) . '</span>';
     if ($url != '')
         echo '
         <span class="float-end"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=visit&amp;lid=' . $lid . '" target="_blank" title="' . translate("Visiter ce site web") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fas fa-external-link-alt"></i></a></span>';
@@ -504,11 +508,11 @@ function viewlinkeditorial($lid, $ttitle)
         while (list($adminid, $editorialtimestamp, $editorialtext, $editorialtitle) = sql_fetch_row($result)) {
             $editorialtitle = stripslashes($editorialtitle);
             $editorialtext = stripslashes($editorialtext);
-            $formatted_date = formatTimestamp($editorialtimestamp);
+            $formatted_date = date::formatTimestamp($editorialtimestamp);
             echo '
-            <h4>' . aff_langue($editorialtitle) . '</h4>
+            <h4>' . language::aff_langue($editorialtitle) . '</h4>
             <p><span class="text-muted small">' . translate("Editorial par") . ' ' . $adminid . ' - ' . $formatted_date . '</span></p>
-            <hr/>' . aff_langue($editorialtext);
+            <hr/>' . language::aff_langue($editorialtext);
         }
     } else
         echo '<p class="text-center">' . translate("Aucun édito n'est disponible pour ce site") . '</p><br />';
@@ -520,7 +524,7 @@ function viewlinkeditorial($lid, $ttitle)
 function formatTimestampShort($time)
 {
     global $datetime, $locale, $gmt;
-    setlocale(LC_TIME, aff_langue($locale));
+    setlocale(LC_TIME, language::aff_langue($locale));
     preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
     $datetime = strftime("" . translate("linksdatestring") . "", mktime($datetime[4] + (int)$gmt, $datetime[5], $datetime[6], $datetime[2], $datetime[3], $datetime[1]));
     if ('utf-8' != 'utf-8')

@@ -1,5 +1,7 @@
 <?php
 
+use npds\system\fmanager\FileManagement;
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -370,7 +372,7 @@ function delete($del_att)
 
     $rep = $DOCUMENTROOT;
     if (is_array($del_att)) {
-        $del_att = implode($del_att, ',');
+        $del_att = implode(',', $del_att);
         $sql = "SELECT att_id, att_name, att_path FROM $upload_table WHERE att_id IN ($del_att)";
         $result = sql_query($sql);
         while (list($att_id, $att_name, $att_path) = sql_fetch_row($result)) {
@@ -419,7 +421,7 @@ function update_visibilite($visible_att, $visible_list)
 {
     global $upload_table;
     if (is_array($visible_att)) {
-        $visible = implode($visible_att, ',');
+        $visible = implode(',', $visible_att);
         $sql = "UPDATE $upload_table SET visible='1' WHERE att_id IN ($visible)";
         sql_query($sql);
         $visible_lst = explode(',', substr($visible_list, 0, strlen($visible_list) - 1));

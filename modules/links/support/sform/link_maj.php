@@ -12,13 +12,17 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\routing\url;
+use npds\system\language\language;
+use npds\system\sform\form_handler;
+
 global $ModPath, $ModStart;
 $pos = strpos($ModPath, '/admin');
 if ($pos > 0) $ModPathX = substr($ModPath, 0, $pos);
 else $ModPathX = $ModPath;
 global $sform_path;
 $sform_path = 'support/sform/';
-include_once('library/sform/sform.php');
 //********************
 global $m;
 $m = new form_handler();

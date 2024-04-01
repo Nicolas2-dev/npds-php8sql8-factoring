@@ -13,6 +13,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\routing\url;
+use npds\system\theme\theme;
+use npds\system\security\hack;
+
 function marquetapage_add($uri, $topic, $action)
 {
     global $cookie, $NPDS_Prefix, $nuke_url;
@@ -30,20 +34,20 @@ function marquetapage_add($uri, $topic, $action)
         }
 
         sql_query("INSERT INTO " . $NPDS_Prefix . "marquetapage (uid, uri, topic) VALUES ('$cookie[0]', '$uri', '$topic')");
-        redirect_url($uri);
+        url::redirect_url($uri);
     }
     if (($action == "sp_tapage") and ($cookie[0])) {
         $result = sql_query("SELECT uri FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]' AND uri='$uri'");
         if (sql_num_rows($result) > 0) {
             sql_query("DELETE FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]' AND uri='$uri'");
-            redirect_url($uri);
+            url::redirect_url($uri);
         }
     }
     if (($action == 'sp_tespages') and ($cookie[0])) {
         $result = sql_query("SELECT uri FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]'");
         if (sql_num_rows($result) > 0) {
             sql_query("DELETE FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]'");
-            redirect_url($uri);
+            url::redirect_url($uri);
         }
     }
 }
@@ -53,12 +57,12 @@ function marquetapage()
     global $cookie;
     if ($cookie[0] != '') {
         global $REQUEST_URI, $title, $post, $NPDS_Prefix;
-        if ($ibid = theme_image("modules/add.gif")) {
+        if ($ibid = theme::theme_image("modules/add.gif")) {
             $add = $ibid;
         } else {
             $add = "modules/marquetapage/assets/images/add.gif";
         }
-        if ($ibid = theme_image("modules/addj.gif")) {
+        if ($ibid = theme::theme_image("modules/addj.gif")) {
             $addj = $ibid;
         } else {
             $addj = "modules/marquetapage/assets/images/addj.gif";
@@ -95,8 +99,8 @@ function marquetapage()
 }
 settype($op, 'string');
 if ($op == 'add')
-    marquetapage_add(removeHack($uri), removeHack($topic), 'ad_tapage');
+    marquetapage_add(hack::removeHack($uri), hack::removeHack($topic), 'ad_tapage');
 if ($op == 'supp')
-    marquetapage_add(removeHack($uri), '', 'sp_tapage');
+    marquetapage_add(hack::removeHack($uri), '', 'sp_tapage');
 if ($op == 'supp_all')
-    marquetapage_add(removeHack($uri), '', 'sp_tespages');
+    marquetapage_add(hack::removeHack($uri), '', 'sp_tespages');

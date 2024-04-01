@@ -13,6 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\assets\css;
+use npds\system\mail\mailler;
+
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');
 $f_meta_nom = 'session_log';
@@ -169,7 +172,8 @@ if ($subop == 'mailog') {
     ];
     $subject = html_entity_decode(SessionLog_translate("Fichier de Log de"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' ' . $sitename;
     $message = SessionLog_translate("Fichier de Log de") . ' ' . $sitename . "<br /><br />";
-    send_email($adminmail, $subject, $message, $adminmail, true, 'mixed', $file);
+    
+    mailler::send_email($adminmail, $subject, $message, $adminmail, true, 'mixed', $file);
 }
 
 // Vider le répertoire temporaire
@@ -267,4 +271,4 @@ if ($subop == "upload") {
         action_log($ThisFile, "upload");
     }
 }
-adminfoot('', '', '', '');
+css::adminfoot('', '', '', '');

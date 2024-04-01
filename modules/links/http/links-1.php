@@ -14,6 +14,17 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\logs\logs;
+use npds\system\assets\css;
+use npds\system\auth\users;
+use npds\system\routing\url;
+use npds\system\pixels\image;
+use npds\system\utility\spam;
+use npds\system\security\hack;
+use npds\system\support\editeur;
+use npds\system\language\language;
+
 if (!stristr($_SERVER['PHP_SELF'], "modules.php")) die();
 function error_head($class)
 {
@@ -38,7 +49,7 @@ function AddLink()
     include("themes/default/header.php");
     global $user, $ad_l;
     mainheader();
-    if (autorisation($links_anonaddlinklock)) {
+    if (users::autorisation($links_anonaddlinklock)) {
         echo '
     <div class="card card-body mb-3">
         <h3 class="mb-3">Proposer un lien</h3>
@@ -75,11 +86,11 @@ function AddLink()
                 <select class="form-select" id="cat" name="cat">';
         while (list($cid, $title) = sql_fetch_row($result)) {
             echo '
-                    <option value="' . $cid . '">' . aff_langue($title) . '</option>';
+                    <option value="' . $cid . '">' . language::aff_langue($title) . '</option>';
             $result2 = sql_query("select sid, title from " . $links_DB . "links_subcategories WHERE cid='$cid' ORDER BY title");
             while (list($sid, $stitle) = sql_fetch_row($result2)) {
                 echo '
-                    <option value="' . $cid . '-' . $sid . '">' . aff_langue($title . '/' . $stitle) . '</option>';
+                    <option value="' . $cid . '-' . $sid . '">' . language::aff_langue($title . '/' . $stitle) . '</option>';
             }
         }
         echo '
@@ -112,7 +123,7 @@ function AddLink()
                 <textarea class="tin form-control" name="xtext" id="xtext" rows="10"></textarea>
                 </div>
             </div>';
-        echo aff_editeur('xtext', '');
+        echo editeur::aff_editeur('xtext', '');
         global $cookie;
         $nom = isset($cookie) ? $cookie[1] : '';
         echo '
@@ -129,7 +140,7 @@ function AddLink()
                 <span class="help-block text-end" id="countcar_email"></span>
                 </div>
             </div>';
-        echo Q_spambot();
+        echo spam::Q_spambot();
         echo '
             <div class="mb-3 row">
                 <input type="hidden" name="op" value="Add" />
@@ -148,7 +159,7 @@ function AddLink()
         inpandfieldlen("email",254);
         ';
         SearchForm();
-        adminfoot('fv', '', $arg1, '1');
+        css::adminfoot('fv', '', $arg1, '1');
         include("themes/default/footer.php");
     } else {
         echo '
@@ -164,9 +175,9 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
     global $ModPath, $ModStart, $links_DB, $troll_limit, $anonymous, $user, $admin;
     if (!$user and !$admin) {
         //anti_spambot
-        if (!R_spambot($asb_question, $asb_reponse, '')) {
-            Ecr_Log('security', 'Links Anti-Spam : url=' . $url, '');
-            redirect_url("index.php");
+        if (!spam::R_spambot($asb_question, $asb_reponse, '')) {
+            logs::Ecr_Log('security', 'Links Anti-Spam : url=' . $url, '');
+            url::redirect_url("index.php");
             die();
         }
     }
@@ -214,12 +225,12 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
     if (!array_key_exists(1, $cat))
         $cat[1] = 0;
 
-    $title = removeHack(stripslashes(FixQuotes($title)));
-    $url = removeHack(stripslashes(FixQuotes($url)));
-    $description = dataimagetofileurl($description, 'modules/upload/upload/lindes');
-    $description = removeHack(stripslashes(FixQuotes($description)));
-    $name = removeHack(stripslashes(FixQuotes($name)));
-    $email = removeHack(stripslashes(FixQuotes($email)));
+    $title = hack::removeHack(stripslashes(FixQuotes($title)));
+    $url = hack::removeHack(stripslashes(FixQuotes($url)));
+    $description = image::dataimagetofileurl($description, 'modules/upload/upload/lindes');
+    $description = hack::removeHack(stripslashes(FixQuotes($description)));
+    $name = hack::removeHack(stripslashes(FixQuotes($name)));
+    $email = hack::removeHack(stripslashes(FixQuotes($email)));
     sql_query("INSERT INTO " . $links_DB . "links_newlink VALUES (NULL, '$cat[0]', '$cat[1]', '$title', '$url', '$description', '$name', '$email', '$submitter', '$topicL')");
     error_head('alert-success');
     echo translate("Nous avons bien reçu votre demande de lien, merci") . '<br />';
@@ -236,7 +247,7 @@ function links_search($query, $topicL, $min, $max, $offset)
     if (file_exists($filen)) {
         include($filen);
     }
-    $query = removeHack(stripslashes(htmlspecialchars($query, ENT_QUOTES, 'utf-8'))); // Romano et NoSP
+    $query = hack::removeHack(stripslashes(htmlspecialchars($query, ENT_QUOTES, 'utf-8'))); // Romano et NoSP
 
     if ($topicL != '')
         $result = sql_query("SELECT lid, url, title, description, date, hits, topicid_card, cid, sid FROM " . $links_DB . "links_links WHERE topicid_card='$topicL' AND (title LIKE '%$query%' OR description LIKE '%$query%') ORDER BY lid ASC LIMIT $min,$offset");

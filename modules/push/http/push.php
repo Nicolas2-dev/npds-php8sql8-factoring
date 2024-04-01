@@ -13,6 +13,16 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\date\date;
+use npds\system\news\news;
+use npds\system\theme\theme;
+use npds\system\utility\code;
+use npds\system\language\language;
+use npds\system\language\metalang;
+use npds\system\cache\cacheManager;
+use npds\system\cache\SuperCacheEmpty;
+
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
@@ -91,7 +101,7 @@ function push_news()
         $ibid = sql_num_rows($result);
         for ($m = 0; $m < $ibid; $m++) {
             list($sid, $title, $ihome, $catid) = sql_fetch_row($result);
-            if (ctrl_aff($ihome, $catid)) {
+            if (news::ctrl_aff($ihome, $catid)) {
                 $title = str_replace("'", "\'", $title);
                 echo "document.write('&nbsp;-&nbsp;<a href=javascript:onclick=register(\"npds-push\",\"op=new_show&sid=$sid&offset=$m\"); style=\"font-size: 11px;\">" . htmlspecialchars(aff_langue($title), ENT_COMPAT | ENT_HTML401, 'utf-8') . "</a><br />');\n";
             }
@@ -116,20 +126,20 @@ function new_show($sid, $offset)
             list($topictext) = sql_fetch_row($result);
         }
         $title = str_replace("'", "\'", $title);
-        echo "document.write('<span style=\"font-size: 11px;\"><b>.:|<a href=\"$nuke_url/article.php?sid=$sid\" target=\"_blank\">" . aff_langue($title) . "</a>|:.</b></span><br />');\n";
+        echo "document.write('<span style=\"font-size: 11px;\"><b>.:|<a href=\"$nuke_url/article.php?sid=$sid\" target=\"_blank\">" . language::aff_langue($title) . "</a>|:.</b></span><br />');\n";
 
-        formatTimestamp($time);
+        date::formatTimestamp($time);
         $topictext = str_replace("'", "\'", $topictext);
         echo "document.write('" . push_translate("Posted by") . " <b>$informant</b> : $datetime (" . htmlspecialchars($topictext, ENT_COMPAT | ENT_HTML401, 'utf-8') . ")');\n";
         echo "document.write('<br /><br />');\n";
-        echo "document.write('" . links(convert_nl(str_replace("'", "\'", meta_lang(aff_code(aff_langue($hometext)))), "win", "html")) . "<br />');\n";
+        echo "document.write('" . links(convert_nl(str_replace("'", "\'", metalang::meta_lang(code::aff_code(language::aff_langue($hometext)))), "win", "html")) . "<br />');\n";
         if ($bodytext != "") {
             echo "document.write('<br />');\n";
-            echo "document.write('" . links(convert_nl(str_replace("'", "\'", meta_lang(aff_code(aff_langue($bodytext)))), "win", "html")) . "<br />');\n";
+            echo "document.write('" . links(convert_nl(str_replace("'", "\'", metalang::meta_lang(code::aff_code(language::aff_langue($bodytext)))), "win", "html")) . "<br />');\n";
         }
         if ($notes != "") {
             echo "document.write('<br />');\n";
-            echo "document.write('" . links(convert_nl(str_replace("'", "\'", meta_lang(aff_code(aff_langue($notes)))), "win", "html")) . "');\n";
+            echo "document.write('" . links(convert_nl(str_replace("'", "\'", metalang::meta_lang(code::aff_code(language::aff_langue($notes)))), "win", "html")) . "');\n";
         }
         echo "document.write('<br /><span style=\"font-size: 11px;\">.: <a href=\"javascript: history.go(0)\">" . push_translate("Home") . "</a> :.</span>');\n";
         push_footer();
@@ -153,7 +163,7 @@ function push_poll()
         sql_free_result($result);
 
         $result = sql_query("SELECT optionText, optionCount FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$pollID' and optionText != \"\" ORDER BY voteID");
-        echo "document.write('<p align=\"center\"><b>.:|" . aff_langue($polltitle) . "|:.</b></p><table width=\"100%\" border=\"0\">');\n";
+        echo "document.write('<p align=\"center\"><b>.:|" . language::aff_langue($polltitle) . "|:.</b></p><table width=\"100%\" border=\"0\">');\n";
 
         $ibid = sql_num_rows($result);
         for ($m = 0; $m < $ibid; $m++) {
@@ -164,7 +174,7 @@ function push_poll()
                 $percent = 0;
             }
             $optionText = str_replace("'", "\'", $optionText);
-            echo "document.write('<tr><td width=\"50%\" style=\"font-size: 11px;\">" . aff_langue($optionText) . "</td><td width=\"20%\" style=\"font-size: 11px;\">');\n";
+            echo "document.write('<tr><td width=\"50%\" style=\"font-size: 11px;\">" . language::aff_langue($optionText) . "</td><td width=\"20%\" style=\"font-size: 11px;\">');\n";
             echo "document.write('" . sprintf("%.1f%%", $percent) . "');\n";
             echo "document.write('</td><td align=\"center\" style=\"font-size: 11px;\">($optionCount)</td></tr>');\n";
         }
@@ -183,7 +193,7 @@ function push_faq()
     $result = sql_query("SELECT id_cat, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id_cat ASC");
     while (list($id_cat, $categories) = sql_fetch_row($result)) {
         $categories = str_replace("'", "\'", $categories);
-        echo "document.write('&nbsp;-&nbsp;<a href=javascript:onclick=register(\"npds-push\",\"op=faq_show&id_cat=$id_cat\"); style=\"font-size: 11px;\">" . aff_langue($categories) . "</a><br />');\n";
+        echo "document.write('&nbsp;-&nbsp;<a href=javascript:onclick=register(\"npds-push\",\"op=faq_show&id_cat=$id_cat\"); style=\"font-size: 11px;\">" . language::aff_langue($categories) . "</a><br />');\n";
     }
     echo "document.write('<br />');\n";
     sql_free_result($result);
@@ -197,13 +207,13 @@ function faq_show($id_cat)
     $result = sql_query("SELECT categories FROM " . $NPDS_Prefix . "faqcategories WHERE id_cat='$id_cat'");
     list($categories) = sql_fetch_row($result);
     $categories = str_replace("'", "\'", $categories);
-    echo "document.write('<p align=\"center\"><a name=\"$id\"></a><b>" . aff_langue($categories) . "</b></p>');\n";
+    echo "document.write('<p align=\"center\"><a name=\"$id_cat\"></a><b>" . language::aff_langue($categories) . "</b></p>');\n";
 
     $result = sql_query("SELECT id, id_cat, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id_cat='$id_cat'");
     while (list($id, $id_cat, $question, $answer) = sql_fetch_row($result)) {
         $question = str_replace("'", "\'", $question);
-        echo "document.write('<b>" . aff_langue($question) . "</b>');\n";
-        echo "document.write('<p align=\"justify\">" . links(convert_nl(str_replace("'", "\'", meta_lang(aff_code(aff_langue($answer)))), "win", "html")) . "</p><br />');\n";
+        echo "document.write('<b>" . language::aff_langue($question) . "</b>');\n";
+        echo "document.write('<p align=\"justify\">" . links(convert_nl(str_replace("'", "\'", metalang::meta_lang(code::aff_code(language::aff_langue($answer)))), "win", "html")) . "</p><br />');\n";
     }
     echo "document.write('.: <a href=\"javascript: history.go(0)\" style=\"font-size: 11px;\">" . push_translate("Home") . "</a> :.');\n";
     push_footer();
@@ -270,10 +280,10 @@ function push_links()
         $cresult = sql_query("SELECT * FROM " . $NPDS_Prefix . "links_links WHERE cid='$cid'");
         $cnumrows = sql_num_rows($cresult);
         $title = str_replace("'", "\'", $title);
-        echo "document.write('<td width=\"49%\" valign=\"top\"><a href=javascript:onclick=register(\"npds-push\",\"op=viewlink&cid=$cid\"); style=\"font-size: 11px;\"><b>" . aff_langue($title) . "</b></a> ($cnumrows)');\n";
+        echo "document.write('<td width=\"49%\" valign=\"top\"><a href=javascript:onclick=register(\"npds-push\",\"op=viewlink&cid=$cid\"); style=\"font-size: 11px;\"><b>" . language::aff_langue($title) . "</b></a> ($cnumrows)');\n";
         if ($cdescription) {
             $cdescription = links(convert_nl(str_replace("'", "\'", $cdescription), "win", "html"));
-            echo "document.write('<br /><i>" . aff_langue($cdescription) . "</i><br />');\n";
+            echo "document.write('<br /><i>" . language::aff_langue($cdescription) . "</i><br />');\n";
         } else {
             echo "document.write('<br />');\n";
         }
@@ -284,7 +294,7 @@ function push_links()
                 echo "document.write('<br />');\n";
             }
             $title = str_replace("'", "\'", $title);
-            echo "document.write('&nbsp;<a href=javascript:onclick=register(\"npds-push\",\"op=viewslink&sid=$sid\"); style=\"font-size: 11px;\">" . aff_langue($stitle) . "</a>');\n";
+            echo "document.write('&nbsp;<a href=javascript:onclick=register(\"npds-push\",\"op=viewslink&sid=$sid\"); style=\"font-size: 11px;\">" . language::aff_langue($stitle) . "</a>');\n";
             $space++;
         }
         if ($count < 1) {
@@ -315,7 +325,7 @@ function viewlink_show($cid, $min)
     $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "links_categories WHERE cid='$cid'");
     list($title) = sql_fetch_row($result);
     $title = str_replace("'", "\'", $title);
-    echo "document.write('<span  style=\"font-size: 11px;\"><b>" . aff_langue($title) . "</b></span>');\n";
+    echo "document.write('<span  style=\"font-size: 11px;\"><b>" . language::aff_langue($title) . "</b></span>');\n";
     $subresult = sql_query("SELECT sid, title FROM " . $NPDS_Prefix . "links_subcategories WHERE cid='$cid' ORDER BY $orderby");
     $numrows = sql_num_rows($subresult);
     if ($numrows != 0) {
@@ -324,7 +334,7 @@ function viewlink_show($cid, $min)
             $result2 = sql_query("SELECT * FROM " . $NPDS_Prefix . "links_links WHERE sid='$sid'");
             $numrows = sql_num_rows($result2);
             $title = str_replace("'", "\'", $title);
-            echo "document.write('<li><a href=javascript:onclick=register(\"npds-push\",\"op=viewslink&sid=$sid\"); style=\"font-size: 11px;\">" . aff_langue($title) . "</a> ($numrows)</li>');\n";
+            echo "document.write('<li><a href=javascript:onclick=register(\"npds-push\",\"op=viewslink&sid=$sid\"); style=\"font-size: 11px;\">" . language::aff_langue($title) . "</a> ($numrows)</li>');\n";
         }
         echo "document.write('<hr width=\"100%\" noshade=\"noshade\" />');\n";
     } else {
@@ -338,12 +348,12 @@ function viewlink_show($cid, $min)
 
     while (list($lid, $title) = sql_fetch_row($result)) {
         $title = links(convert_nl(str_replace("'", "\'", $title), "win", "html"));
-        echo "document.write('<li><a href=\"$nuke_url/links.php?op=visit&amp;lid=$lid\" target=\"_blank\" style=\"font-size: 11px;\">" . aff_langue($title) . "</a></li><br />');\n";
+        echo "document.write('<li><a href=\"$nuke_url/links.php?op=visit&amp;lid=$lid\" target=\"_blank\" style=\"font-size: 11px;\">" . language::aff_langue($title) . "</a></li><br />');\n";
     }
 
     if (($totalselectedlinks - $min) > $perpage) {
         $min = $min + $perpage;
-        if ($ibid = theme_image("box/right.gif")) {
+        if ($ibid = theme::theme_image("box/right.gif")) {
             $imgtmp = $ibid;
         } else {
             $imgtmp = "assets/images/download/right.gif";
@@ -374,7 +384,7 @@ function viewslink_show($sid, $min)
 
     $title = str_replace("'", "\'", $title);
     $stitle = str_replace("'", "\'", $stitle);
-    echo "document.write('<span style=\"font-size: 11px;\"><b>" . aff_langue($title) . " / SubCat : " . aff_langue($stitle) . "</b>'</span>);\n";
+    echo "document.write('<span style=\"font-size: 11px;\"><b>" . language::aff_langue($title) . " / SubCat : " . language::aff_langue($stitle) . "</b>'</span>);\n";
 
     settype($min, "integer");
     settype($perpage, "integer");
@@ -385,12 +395,12 @@ function viewslink_show($sid, $min)
     echo "document.write('<br />');\n";
     while (list($lid, $title) = sql_fetch_row($result)) {
         $title = links(convert_nl(str_replace("'", "\'", $title), "win", "html"));
-        echo "document.write('<li><a href=\"$nuke_url/links.php?op=visit&amp;lid=$lid\" target=\"_blank\" style=\"font-size: 11px;\">" . aff_langue($title) . "</a></li><br />');\n";
+        echo "document.write('<li><a href=\"$nuke_url/links.php?op=visit&amp;lid=$lid\" target=\"_blank\" style=\"font-size: 11px;\">" . language::aff_langue($title) . "</a></li><br />');\n";
     }
 
     if (($totalselectedlinks - $min) > $perpage) {
         $min = $min + $perpage;
-        if ($ibid = theme_image("box/right.gif")) {
+        if ($ibid = theme::theme_image("box/right.gif")) {
             $imgtmp = $ibid;
         } else {
             $imgtmp = "assets/images/download/right.gif";

@@ -12,6 +12,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\logs\logs;
+
 if (!isset($FILEUPLOAD)) {
     define('_FILEUPLOAD', 1);
     $FILEUPLOAD = 1;
@@ -193,7 +195,7 @@ if (!isset($FILEUPLOAD)) {
                     return FALSE;
                 }
             }
-            Ecr_Log('security', 'Upload File(s) : ' . getip(), $log_filename);
+            logs::Ecr_Log('security', 'Upload File(s) : ' . getip(), $log_filename);
             return TRUE;
         }
 
