@@ -14277,3 +14277,86 @@ Exception information:
 
 ---------
 
+Exception information:
+
+    Date: Apr 02, 2024 11:59AM
+
+    Message: Undefined variable $dbname
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\optimysql.php
+
+    Line: 24
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\optimysql.php(24): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 24)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1393): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 12:02PM
+
+    Message: Erreur de syntaxe près de '' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SHOW TABLE STAT...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\optimysql.php(65): sql_query('SHOW TABLE STAT...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1393): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 12:02PM
+
+    Message: Nom de base de donnée illégal: ''
+
+    Code: 1102
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SHOW TABLE STAT...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\optimysql.php(65): sql_query('SHOW TABLE STAT...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1393): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 12:04PM
+
+    Message: Nom de base de donnée illégal: ''
+
+    Code: 1102
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SHOW TABLE STAT...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\optimysql.php(67): sql_query('SHOW TABLE STAT...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1393): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+

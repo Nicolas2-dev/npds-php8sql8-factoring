@@ -32,9 +32,6 @@ $f_titre = adm_translate("Rubriques");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/sections.html";
-
 function groupe($groupe)
 {
     $les_groupes = explode(',', $groupe);
@@ -499,12 +496,12 @@ function sections()
 
 function new_rub_section($type)
 {
-    global $hlpfile, $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     $arg1 = '';
 
@@ -602,15 +599,15 @@ function new_rub_section($type)
 // Fonction publications connexes
 function publishcompat($article)
 {
-    global $hlpfile, $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     $result2 = sql_query("SELECT title FROM " . $NPDS_Prefix . "seccont WHERE artid='$article'");
     list($titre) = sql_fetch_row($result2);
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT rubid, rubname, enligne, ordre FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre");
     echo '
@@ -704,7 +701,7 @@ function updatecompat($article, $admin_rub, $idx)
 // Fonctions RUBRIQUES
 function rubriquedit($rubid)
 {
-    global $hlpfile, $NPDS_Prefix, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper != 1) {
         Header("Location: admin.php?op=sections");
@@ -719,8 +716,8 @@ function rubriquedit($rubid)
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result2 = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid'");
     $number = sql_num_rows($result2);
@@ -843,12 +840,12 @@ function rubriquechange($rubid, $rubname, $introc, $enligne)
 // Fonctions SECTIONS
 function sectionedit($secid)
 {
-    global $hlpfile, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg, $aid;
+    global $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre, $aid;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT secid, secname, image, userlevel, rubid, intro FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
     list($secid, $secname, $image, $userlevel, $rubref, $intro) = sql_fetch_row($result);
@@ -1013,7 +1010,7 @@ function sectionchange($secid, $secname, $image, $members, $Mmembers, $rubref, $
 // Fonction ARTICLES
 function secartedit($artid)
 {
-    global $radminsuper, $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     $result2 = sql_query("SELECT author, artid, secid, title, content, userlevel FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
     list($author, $artid, $secid, $title, $content, $userlevel) = sql_fetch_row($result2);
@@ -1024,8 +1021,8 @@ function secartedit($artid)
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     $title = stripslashes($title);
     $content = stripslashes(image::dataimagetofileurl($content, 'storage/cache/s'));
@@ -1099,7 +1096,7 @@ function secartedit($artid)
 
 function secartupdate($artid)
 {
-    global $hlpfile, $aid, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $aid, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     $result = sql_query("SELECT author, artid, secid, title, content, userlevel FROM " . $NPDS_Prefix . "seccont_tempo WHERE artid='$artid'");
     list($author, $artid, $secid, $title, $content, $userlevel) = sql_fetch_row($result);
@@ -1147,8 +1144,8 @@ function secartupdate($artid)
     
     include("themes/default/header.php");
     
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -1351,12 +1348,12 @@ function rubriquedelete($rubid, $ok = 0)
 
         Header("Location: admin.php?op=sections");
     } else {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('sections'));
+        adminhead($f_meta_nom, $f_titre);
 
         $result = sql_query("SELECT rubname FROM " . $NPDS_Prefix . "rubriques WHERE rubid='$rubid'");
         list($rubname) = sql_fetch_row($result);
@@ -1401,12 +1398,12 @@ function sectiondelete($secid, $ok = 0)
 
         Header("Location: admin.php?op=sections");
     } else {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('sections'));
+        adminhead($f_meta_nom, $f_titre);
 
         $result = sql_query("SELECT secname FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
         list($secname) = sql_fetch_row($result);
@@ -1456,12 +1453,12 @@ function secartdelete($artid, $ok = 0)
 
         Header("Location: admin.php?op=sections");
     } else {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('sections'));
+        adminhead($f_meta_nom, $f_titre);
 
         $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
         list($title) = sql_fetch_row($result);
@@ -1490,12 +1487,12 @@ function secartdelete2($artid, $ok = 0)
 
         Header("Location: admin.php?op=sections");
     } else {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('sections'));
+        adminhead($f_meta_nom, $f_titre);
 
         $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "seccont_tempo WHERE artid='$artid'");
         list($title) = sql_fetch_row($result);
@@ -1516,7 +1513,7 @@ function secartdelete2($artid, $ok = 0)
 // Fonctions de classement
 function ordremodule()
 {
-    global $hlpfile, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     if ($radminsuper <> 1) {  
         Header("Location: admin.php?op=sections");
@@ -1524,8 +1521,8 @@ function ordremodule()
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     /////////data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-icons-prefix="fa" data-icons="icons"
     
@@ -1591,7 +1588,7 @@ function ordremodule()
 
 function ordrechapitre()
 {
-    global $rubname, $rubid, $NPDS_Prefix, $hlpfile, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $rubname, $rubid, $NPDS_Prefix, $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper <> 1) {
         Header("Location: admin.php?op=sections");
@@ -1599,8 +1596,8 @@ function ordrechapitre()
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -1669,7 +1666,7 @@ function ordrechapitre()
 
 function ordrecours()
 {
-    global $secid, $hlpfile, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $secid, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     if ($radminsuper <> 1) {
         Header("Location: admin.php?op=sections");
@@ -1677,8 +1674,8 @@ function ordrecours()
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT secname FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
     list($secname) = sql_fetch_row($result);
@@ -1790,7 +1787,7 @@ function updateordre($rubid, $artid, $secid, $op, $ordre)
 // Fonctions DROIT des AUTEURS
 function publishrights($author)
 {
-    global $NPDS_Prefix, $hlpfile, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper != 1) {
         Header("Location: admin.php?op=sections");
@@ -1798,8 +1795,8 @@ function publishrights($author)
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />

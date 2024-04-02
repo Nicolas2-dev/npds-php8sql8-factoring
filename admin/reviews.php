@@ -27,9 +27,6 @@ $f_titre = adm_translate("Critiques");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/reviews.html";
-
 function mod_main($title, $description)
 {
     global $NPDS_Prefix;
@@ -44,12 +41,12 @@ function mod_main($title, $description)
 
 function reviews()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('reviews'));
+    adminhead($f_meta_nom, $f_titre);
 
     $resultrm = sql_query("SELECT title, description FROM " . $NPDS_Prefix . "reviews_main");
     list($title, $description) = sql_fetch_row($resultrm);

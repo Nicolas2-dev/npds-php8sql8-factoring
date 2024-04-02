@@ -27,8 +27,7 @@ $f_meta_nom = 'blocks';
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/rightblocks.html";
+manuel('rightblocks');
 
 function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRaide, $SHTML, $css)
 {

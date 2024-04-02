@@ -31,8 +31,6 @@ $f_titre = adm_translate("Petite Lettre D'information");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language, $NPDS_Prefix;
-$hlpfile = "manuels/$language/lnl.html";
 
 function error_handler($ibid)
 {
@@ -50,10 +48,18 @@ function ShowHeader()
     <table data-toggle="table" class="table-no-bordered">
         <thead class="d-none">
             <tr>
-                <th class="n-t-col-xs-1" data-align="">ID</th>
-                <th class="n-t-col-xs-8" data-align="">' . adm_translate("Entête") . '</th>
-                <th class="n-t-col-xs-1" data-align="">Type</th>
-                <th class="n-t-col-xs-2" data-align="right">' . adm_translate("Fonctions") . '</th>
+                <th class="n-t-col-xs-1" data-align="">
+                    ID
+                </th>
+                <th class="n-t-col-xs-8" data-align="">
+                    ' . adm_translate("Entête") . '
+                </th>
+                <th class="n-t-col-xs-1" data-align="">
+                    Type
+                </th>
+                <th class="n-t-col-xs-2" data-align="right">
+                    ' . adm_translate("Fonctions") . '
+                </th>
             </tr>
         </thead>
         <tbody>';
@@ -73,10 +79,23 @@ function ShowHeader()
         
         echo '
             <tr>
-                <td>' . $ref . '</td>
-                <td>' . $text . '</td>
-                <td><code>' . $html . '</code></td>
-                <td><a href="admin.php?op=lnl_Shw_Header&amp;Headerid=' . $ref . '" ><i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a><a href="admin.php?op=lnl_Sup_Header&amp;Headerid=' . $ref . '" class="text-danger"><i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></td>
+                <td>
+                    ' . $ref . '
+                </td>
+                <td>
+                    ' . $text . '
+                </td>
+                <td>
+                    <code>' . $html . '</code>
+                </td>
+                <td>
+                    <a href="admin.php?op=lnl_Shw_Header&amp;Headerid=' . $ref . '" >
+                        <i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                    </a>
+                    <a href="admin.php?op=lnl_Sup_Header&amp;Headerid=' . $ref . '" class="text-danger">
+                        <i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                    </a>
+                </td>
             </tr>';
     }
 
@@ -87,12 +106,12 @@ function ShowHeader()
 
 function Detail_Header_Footer($ibid, $type)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     // $type = HED or FOT
     $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='$type' AND ref='$ibid'");
@@ -129,8 +148,7 @@ function Detail_Header_Footer($ibid, $type)
         </div>';
 
     if ($tmp[1] == 1) {
-        global $tiny_mce_relurl;
-        $tiny_mce_relurl = 'false';
+        Config::get('editeur.tiny_mce_relurl', false);
 
         echo editeur::aff_editeur('xtext', '');
     }
@@ -164,10 +182,18 @@ function ShowBody()
     <table data-toggle="table" class="table-no-bordered">
         <thead class="d-none">
             <tr>
-                <th class="n-t-col-xs-1" data-align="">ID</th>
-                <th class="n-t-col-xs-8" data-align="">' . adm_translate("Corps de message") . '</th>
-                <th class="n-t-col-xs-1" data-align="">Type</th>
-                <th class="n-t-col-xs-2" data-align="right">' . adm_translate("Fonctions") . '</th>
+                <th class="n-t-col-xs-1" data-align="">
+                    ID
+                </th>
+                <th class="n-t-col-xs-8" data-align="">
+                    ' . adm_translate("Corps de message") . '
+                </th>
+                <th class="n-t-col-xs-1" data-align="">
+                    Type
+                </th>
+                <th class="n-t-col-xs-2" data-align="right">
+                    ' . adm_translate("Fonctions") . '
+                </th>
             </tr>
         </thead>
         <tbody>';
@@ -187,10 +213,23 @@ function ShowBody()
 
         echo '
         <tr>
-            <td>' . $ref . '</td>
-            <td>' . $text . '</td>
-            <td><code>' . $html . '</code></td>
-            <td><a href="admin.php?op=lnl_Shw_Body&amp;Bodyid=' . $ref . '"><i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a><a href="admin.php?op=lnl_Sup_Body&amp;Bodyid=' . $ref . '" class="text-danger"><i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></td>
+            <td>
+                ' . $ref . '
+            </td>
+            <td>
+                ' . $text . '
+            </td>
+            <td>
+                <code>' . $html . '</code>
+            </td>
+            <td>
+                <a href="admin.php?op=lnl_Shw_Body&amp;Bodyid=' . $ref . '">
+                    <i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                </a>
+                <a href="admin.php?op=lnl_Sup_Body&amp;Bodyid=' . $ref . '" class="text-danger">
+                    <i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                </a>
+            </td>
         </tr>';
     }
 
@@ -201,12 +240,12 @@ function ShowBody()
 
 function Detail_Body($ibid)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -233,8 +272,7 @@ function Detail_Body($ibid)
         </div>';
 
     if ($tmp[1] == 1) {
-        global $tiny_mce_relurl;
-        $tiny_mce_relurl = "false";
+        Config::get('editeur.tiny_mce_relurl', false);
 
         echo editeur::aff_editeur("xtext", "false");
     }
@@ -255,12 +293,12 @@ function Detail_Body($ibid)
 
 function Add_Body()
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -281,8 +319,7 @@ function Add_Body()
                 </div>
             </div>';
 
-    global $tiny_mce_relurl;
-    $tiny_mce_relurl = "false";
+    config::get('editeru.tiny_mce_relurl', false);
 
     echo editeur::aff_editeur("xtext", "false");
 
@@ -303,12 +340,10 @@ function Add_Body()
                 message: "0 | 1"
             }
         }
-    },
-    ';
+    },';
 
     $arg1 = '
-    var formulid = ["lnlbody"];
-    ';
+    var formulid = ["lnlbody"];';
 
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
@@ -330,10 +365,18 @@ function ShowFooter()
     <table data-toggle="table" class="table-no-bordered">
         <thead class="d-none">
             <tr>
-                <th class="n-t-col-xs-1" data-align="">ID</th>
-                <th class="n-t-col-xs-8" data-align="">' . adm_translate("Pied") . '</th>
-                <th class="n-t-col-xs-1" data-align="">Type</th>
-                <th class="n-t-col-xs-2" data-align="right">' . adm_translate("Fonctions") . '</th>
+                <th class="n-t-col-xs-1" data-align="">
+                    ID
+                </th>
+                <th class="n-t-col-xs-8" data-align="">
+                    ' . adm_translate("Pied") . '
+                </th>
+                <th class="n-t-col-xs-1" data-align="">
+                    Type
+                </th>
+                <th class="n-t-col-xs-2" data-align="right">
+                    ' . adm_translate("Fonctions") . '
+                </th>
             </tr>
         </thead>
         <tbody>';
@@ -353,10 +396,20 @@ function ShowFooter()
 
         echo '
             <tr>
-                <td>' . $ref . '</td>
-                <td>' . $text . '</td>
-                <td><code>' . $html . '</code></td>
-                <td><a href="admin.php?op=lnl_Shw_Footer&amp;Footerid=' . $ref . '" ><i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a><a href="admin.php?op=lnl_Sup_Footer&amp;Footerid=' . $ref . '" class="text-danger"><i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></td>
+                <td>
+                    ' . $ref . '</td>
+                <td>
+                    ' . $text . '</td>
+                <td>
+                    <code>' . $html . '</code></td>
+                <td>
+                    <a href="admin.php?op=lnl_Shw_Footer&amp;Footerid=' . $ref . '" >
+                        <i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                    </a>
+                    <a href="admin.php?op=lnl_Sup_Footer&amp;Footerid=' . $ref . '" class="text-danger">
+                        <i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                    </a>
+                </td>
             </tr>';
     }
 
@@ -367,12 +420,12 @@ function ShowFooter()
 
 function Add_Header_Footer($ibid)
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     if ($ibid == 'HED') {
         $ti = "message d'entête";
@@ -402,8 +455,7 @@ function Add_Header_Footer($ibid)
             </div>
             <div class="mb-3">';
 
-    global $tiny_mce_relurl;
-    $tiny_mce_relurl = 'false';
+    Config::get('editeur.tiny_mce_relurl', false);
 
     echo editeur::aff_editeur('xtext', 'false');
 
@@ -422,12 +474,10 @@ function Add_Header_Footer($ibid)
                 message: "0 | 1"
             }
         }
-    },
-    ';
+    },';
 
     $arg1 = '
-    var formulid = ["lnlheadfooter"];
-    ';
+    var formulid = ["lnlheadfooter"];';
 
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
@@ -445,12 +495,12 @@ function Add_Header_Footer_Submit($ibid, $xtext, $xhtml)
 
 function main()
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -551,16 +601,13 @@ function main()
                 </div>
             </div>';
 
-    $mX = groupe::liste_group();
-
     $tmp_groupe = '';
-    foreach ($mX as $groupe_id => $groupe_name) {
+    foreach (groupe::liste_group() as $groupe_id => $groupe_name) {
         if ($groupe_id == '0') {
             $groupe_id = '';
         }
 
-        $tmp_groupe .= '
-            <option value="' . $groupe_id . '">' . $groupe_name . '</option>';
+        $tmp_groupe .= '<option value="' . $groupe_id . '">' . $groupe_name . '</option>';
     }
 
     echo '
@@ -582,25 +629,23 @@ function main()
                 message: "0 | 1"
                 }
             }
-        },
-        ';
+        },';
 
     $arg1 = '
         var formulid = ["ltesto","lsendo"];
-        inpandfieldlen("Xsubject",255);
-        ';
+        inpandfieldlen("Xsubject",255);';
 
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
 function Del_Question($retour, $param)
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -613,12 +658,12 @@ function Del_Question($retour, $param)
 
 function Test($Yheader, $Ybody, $Yfooter)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='HED' AND ref='$Yheader'");
     $Xheader = sql_fetch_row($result);
@@ -628,10 +673,6 @@ function Test($Yheader, $Ybody, $Yfooter)
 
     $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='FOT' AND html='$Xheader[1]' AND ref='$Yfooter'");
     $Xfooter = sql_fetch_row($result);
-
-    // For Meta-Lang
-    //   global $cookie; // a quoi ca sert
-    //   $uid=$cookie[0]; // a quoi ca sert
 
     if ($Xheader[1] == 1) {
         echo '
@@ -655,20 +696,19 @@ function Test($Yheader, $Ybody, $Yfooter)
     </div>
     <a class="btn btn-secondary my-3" href="javascript:history.go(-1)" >' . adm_translate("Retour en arrière") . '</a>';
 
-    global $adminmail;
-    mailler::send_email($adminmail, 'LNL TEST', $message, $adminmail, true, $Xmime, '');
+    mailler::send_email($adminmail, 'LNL TEST', $message, Config::get('app.adminmail'), true, $Xmime, '');
 
     css::adminfoot('', '', '', '');
 }
 
 function lnl_list()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT ref, header , body, footer, number_send, type_send, date, status FROM " . $NPDS_Prefix . "lnl_send ORDER BY date");
 
@@ -678,14 +718,30 @@ function lnl_list()
     <table data-toggle="table" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
-                <th class="n-t-col-xs-1" data-halign="center" data-align="right">ID</th>
-                <th class="n-t-col-xs-1" data-halign="center" data-align="right">' . adm_translate("Entête") . '</th>
-                <th class="n-t-col-xs-1" data-halign="center" data-align="right">' . adm_translate("Corps") . '</th>
-                <th class="n-t-col-xs-1" data-halign="center" data-align="right">' . adm_translate("Pied") . '</th>
-                <th data-halign="center" data-align="right">' . adm_translate("Nbre d'envois effectués") . '</th>
-                <th data-halign="center" data-align="center">' . adm_translate("Type") . '</th>
-                <th data-halign="center" data-align="right">' . adm_translate("Date") . '</th>
-                <th data-halign="center" data-align="center">' . adm_translate("Etat") . '</th>
+                <th class="n-t-col-xs-1" data-halign="center" data-align="right">
+                    ID
+                </th>
+                <th class="n-t-col-xs-1" data-halign="center" data-align="right">
+                    ' . adm_translate("Entête") . '
+                </th>
+                <th class="n-t-col-xs-1" data-halign="center" data-align="right">
+                    ' . adm_translate("Corps") . '
+                </th>
+                <th class="n-t-col-xs-1" data-halign="center" data-align="right">
+                    ' . adm_translate("Pied") . '
+                </th>
+                <th data-halign="center" data-align="right">
+                    ' . adm_translate("Nbre d'envois effectués") . '
+                </th>
+                <th data-halign="center" data-align="center">
+                    ' . adm_translate("Type") . '
+                </th>
+                <th data-halign="center" data-align="right">
+                    ' . adm_translate("Date") . '
+                </th>
+                <th data-halign="center" data-align="center">
+                    ' . adm_translate("Etat") . '
+                </th>
             </tr>
         </thead>
         <tbody>';
@@ -693,24 +749,35 @@ function lnl_list()
     while (list($ref, $header, $body, $footer, $number_send, $type_send, $date, $status) = sql_fetch_row($result)) {
         echo '
             <tr>
-                <td>' . $ref . '</td>
-                <td>' . $header . '</td>
-                <td>' . $body . '</td>
-                <td>' . $footer . '</td>
-                <td>' . $number_send . '</td>
-                <td>' . $type_send . '</td>
-                <td>' . $date . '</td>';
+                <td>
+                    ' . $ref . '
+                </td>
+                <td>
+                    ' . $header . '
+                </td>
+                <td>
+                    ' . $body . '
+                </td>
+                <td>
+                    ' . $footer . '
+                </td>
+                <td>
+                    ' . $number_send . '
+                </td>
+                <td>
+                    ' . $type_send . '
+                </td>
+                <td>
+                    ' . $date . '
+                </td>';
 
         if ($status == "NOK") {
-            echo '
-                <td class="text-danger">' . $status . '</td>';
+            echo '<td class="text-danger">' . $status . '</td>';
         } else {
-            echo '
-                <td>' . $status . '</td>';
+            echo '<td>' . $status . '</td>';
         }
 
-        echo '
-            </tr>';
+        echo '</tr>';
     }
 
     echo '
@@ -722,12 +789,12 @@ function lnl_list()
 
 function lnl_user_list()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('lnl'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT email, date, status FROM " . $NPDS_Prefix . "lnl_outside_users ORDER BY date");
 
@@ -737,10 +804,18 @@ function lnl_user_list()
     <table id="tad_prospect" data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
-                <th class="n-t-col-xs-5" data-halign="center" data-sortable="true">' . adm_translate("E-mail") . '</th>
-                <th class="n-t-col-xs-3" data-halign="center" data-align="right" data-sortable="true">' . adm_translate("Date") . '</th>
-                <th class="n-t-col-xs-2" data-halign="center" data-align="center" data-sortable="true">' . adm_translate("Etat") . '</th>
-                <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . adm_translate("Fonctions") . '</th>
+                <th class="n-t-col-xs-5" data-halign="center" data-sortable="true">
+                    ' . adm_translate("E-mail") . '
+                </th>
+                <th class="n-t-col-xs-3" data-halign="center" data-align="right" data-sortable="true">
+                    ' . adm_translate("Date") . '
+                </th>
+                <th class="n-t-col-xs-2" data-halign="center" data-align="center" data-sortable="true">
+                    ' . adm_translate("Etat") . '
+                </th>
+                <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">
+                    ' . adm_translate("Fonctions") . '
+                </th>
             </tr>
         </thead>
         <tbody>';
@@ -748,8 +823,12 @@ function lnl_user_list()
     while (list($email, $date, $status) = sql_fetch_row($result)) {
         echo '
             <tr>
-                <td>' . $email . '</td>
-                <td>' . $date . '</td>';
+                <td>
+                    ' . $email . '
+                </td>
+                <td>
+                    ' . $date . '
+                </td>';
 
         if ($status == "NOK") { 
             echo '<td class="text-danger">' . $status . '</td>';
@@ -757,9 +836,12 @@ function lnl_user_list()
             echo '<td class="text-success">' . $status . '</td>';
         }
 
-        echo '
-                <td><a href="admin.php?op=lnl_Sup_User&amp;lnl_user_email=' . $email . '" class="text-danger"><i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="' . adm_translate("Effacer") . '"></i></a></td>
-            </tr>';
+        echo '<td>
+                <a href="admin.php?op=lnl_Sup_User&amp;lnl_user_email=' . $email . '" class="text-danger">
+                    <i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="' . adm_translate("Effacer") . '"></i>
+                </a>
+            </td>
+        </tr>';
     }
 
     echo '
@@ -871,7 +953,10 @@ switch ($op) {
 
     case "Send":
         $deb = 0;
-        $limit = 50; // nombre de messages envoyé par boucle.
+
+        // nombre de messages envoyé par boucle.
+        $limit = 50; 
+        
         if (!isset($debut)) {
             $debut = 0;
         }
@@ -894,7 +979,7 @@ switch ($op) {
         $subject = stripslashes($Xsubject);
         $message = $Yheader[0] . $Ybody[0] . $Yfooter[0];
 
-        $Xmime = $Yheader[1] == 1 ? 'html-nobr' : 'text';
+        $Xmime = (($Yheader[1] == 1) ? 'html-nobr' : 'text');
 
         if ($Xtype == "All") {
             $Xtype = "Out";
@@ -984,6 +1069,7 @@ switch ($op) {
 
         $deb = $debut + $limit;
         $chartmp = '';
+        
         settype($OXtype, 'string');
 
         if ($deb >= $nrows) {

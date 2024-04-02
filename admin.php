@@ -125,7 +125,7 @@ function login()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function GraphicAdmin($hlpfile)
+function GraphicAdmin(string $hlpfile = null)
 {
     global $aid, $NPDS_Prefix, $adm_ent;
     

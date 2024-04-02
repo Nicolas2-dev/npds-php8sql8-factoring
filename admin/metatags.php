@@ -28,14 +28,14 @@ admindroits($aid, $f_meta_nom);
 
 function MetaTagAdmin(bool $meta_saved = false)
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     $tags = GetMetaTags("storage/meta/meta.php");
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('metatags'));
+    adminhead($f_meta_nom, $f_titre);
 
     $sel = ' selected="selected"';
 
@@ -360,9 +360,6 @@ if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) {
 }
 
 include("admin/settings_save.php");
-
-global $language;
-$hlpfile = "manuels/$language/metatags.html";
 
 settype($meta_saved, 'bool');
 

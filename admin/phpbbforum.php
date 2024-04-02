@@ -30,19 +30,16 @@ $f_titre = adm_translate('Gestion des forums');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language, $adminimg, $admf_ext;
-$hlpfile = "manuels/$language/forumcat.html";
-
 include("auth.php");
 
 function ForumAdmin()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forumcat'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -101,12 +98,12 @@ function ForumAdmin()
 
 function ForumGo($cat_id)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forumcat'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT cat_title FROM " . $NPDS_Prefix . "catagories WHERE cat_id='$cat_id'");
     list($cat_title) = sql_fetch_row($result);
@@ -382,12 +379,12 @@ function ForumGo($cat_id)
 
 function ForumGoEdit($forum_id, $ctg)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forumcat'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT forum_id, forum_name, forum_desc, forum_access, forum_moderator, cat_id, forum_type, forum_pass, arbre, attachement, forum_index FROM " . $NPDS_Prefix . "forums WHERE forum_id='$forum_id'");
     list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id_1, $forum_type, $forum_pass, $arbre, $attachement, $forum_index) = sql_fetch_row($result);
@@ -713,12 +710,12 @@ function ForumGoEdit($forum_id, $ctg)
 
 function ForumCatEdit($cat_id)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forumcat'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT cat_id, cat_title FROM " . $NPDS_Prefix . "catagories WHERE cat_id='$cat_id'");
     list($cat_id, $cat_title) = sql_fetch_row($result);
@@ -788,7 +785,7 @@ function ForumCatSave($old_catid, $cat_id, $cat_title)
 
 function ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id, $forum_type, $forum_pass, $arbre, $attachement, $forum_index, $ctg)
 {
-    global $hlpfile, $NPDS_Prefix;
+    global $NPDS_Prefix;
 
     // il faut supprimer le dernier , à cause de l'auto-complete
     $forum_mod = rtrim(chop($forum_mod), ',');
@@ -813,7 +810,7 @@ function ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_
     if ($error_mod != '') {
         include("themes/default/header.php");
         
-        GraphicAdmin($hlpfile);
+        GraphicAdmin(manuel('forumcat'));
         
         echo "<div><p align=\"center\">" . adm_translate("Le Modérateur sélectionné n'existe pas.") . " : $error_mod<br />";
         echo "[ <a href=\"javascript:history.go(-1)\" >" . adm_translate("Retour en arrière") . "</a> ]</p></div>";
@@ -859,7 +856,7 @@ function ForumCatAdd($catagories)
 
 function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id, $forum_type, $forum_pass, $arbre, $attachement, $forum_index, $ctg)
 {
-    global $hlpfile, $NPDS_Prefix;
+    global $NPDS_Prefix;
 
     // il faut supprimer le dernier , à cause de l'auto-complete
     $forum_mod = rtrim(chop($forum_mod), ',');
@@ -884,7 +881,7 @@ function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id
     if ($error_mod != '') {
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
+        GraphicAdmin(manuel('forumcat'));
 
         echo '
         <div class="alert alert-danger">
@@ -913,7 +910,7 @@ function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id
 
 function ForumCatDel($cat_id, $ok = 0)
 {
-    global $NPDS_Prefix, $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     if ($ok == 1) {
         $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE cat_id='$cat_id'");
@@ -939,8 +936,8 @@ function ForumCatDel($cat_id, $ok = 0)
     } else {
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('forumcat'));
+        adminhead($f_meta_nom, $f_titre);
 
         echo '
         <hr />
@@ -956,7 +953,7 @@ function ForumCatDel($cat_id, $ok = 0)
 
 function ForumGoDel($forum_id, $ok = 0)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     if ($ok == 1) {
         sql_query("DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id'");
@@ -976,8 +973,8 @@ function ForumGoDel($forum_id, $ok = 0)
     } else {
         include('themes/default/header.php');
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('forumcat'));
+        adminhead($f_meta_nom, $f_titre);
 
         echo '
         <hr />

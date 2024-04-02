@@ -26,9 +26,6 @@ $f_titre = adm_translate("SuperCache");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/overload.html";
-
 function save_supercache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt_faq, $xt_links, $xt_forum, $xt_memberlist, $xt_modules)
 {
     $line = "/************************************************************************/\n";
@@ -83,12 +80,12 @@ function save_supercache($xsupercache, $xt_index, $xt_article, $xt_sections, $xt
 
 function main()
 {
-    global $hlpfile, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('overload'));
+    adminhead($f_meta_nom, $f_titre);
 
     include("config/cache.timings.php");
 
@@ -99,9 +96,6 @@ function main()
         <legend>' . adm_translate("Activation") . '</legend>
             <div class="mb-3">
                 <div>';
-
-    $cky = '';
-    $ckn = '';
 
     if ($SuperCache == 1) {
         $cky = 'checked="checked"';
@@ -283,8 +277,7 @@ function main()
                 message: "0-9"
                 }
             }
-        },
-    ';
+        },';
 
     $arg1 = '
     var formulid = ["overloadcacheadm"];
@@ -295,8 +288,7 @@ function main()
     inpandfieldlen("xt_links",6);
     inpandfieldlen("xt_forum",6);
     inpandfieldlen("xt_memberlist",6);
-    inpandfieldlen("xt_modules",6);
-    ';
+    inpandfieldlen("xt_modules",6);';
 
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }

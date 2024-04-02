@@ -30,18 +30,15 @@ $f_titre = adm_translate("Préférences");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/config.html";
-
 function Configure()
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre, $adminimg;
 
     include("config/config.php");
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('config'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />

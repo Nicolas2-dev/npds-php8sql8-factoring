@@ -89,3 +89,5 @@
 04/02/2024 10:15:16 admin.php=>ChangeLeftBlock(Carte - 12) by AID : root         IP=>::1   
 04/02/2024 10:15:27 admin.php=>ChangeLeftBlock(Un Bloc ... - 1) by AID : root    IP=>::1   
 04/02/2024 10:20:09 admin.php=>SaveConfigFile(header_after) by AID : root        IP=>::1   
+04/02/2024 12:04:45 admin.php=>OptiMySql() by AID : root                         IP=>::1   
+04/02/2024 12:05:18 admin.php=>OptiMySql() by AID : root                         IP=>::1   

@@ -33,19 +33,16 @@ $f_titre = adm_translate('Maintenance des Forums');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language, $adminimg, $admf_ext;
-$hlpfile = "manuels/$language/forummaint.html";
-
 include("auth.php");
 
 function ForumMaintMarkTopics()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forummaint'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <h3>' . adm_translate("Marquer tous les Topics comme lus") . '</h3>
@@ -108,12 +105,12 @@ function ForumMaintMarkTopics()
 
 function ForumMaintTopics($before, $forum_name)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forummaint'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -174,12 +171,12 @@ function ForumMaintTopics($before, $forum_name)
 
 function ForumMaintTopicDetail($topic, $topic_title)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forummaint'));
+    adminhead($f_meta_nom, $f_titre);
 
     $resultTT = sql_query("SELECT post_text, post_time FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' ORDER BY post_time DESC LIMIT 0,1");
     list($post_text, $post_time) = sql_fetch_row($resultTT);
@@ -313,12 +310,12 @@ function SynchroForum()
 
 function MergeForum()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forummaint'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr/>
@@ -387,8 +384,7 @@ function MergeForum()
 
 function MergeForumAction($oriforum, $destforum)
 {
-    global $upload_table;
-    global $NPDS_Prefix;
+    global $upload_table, $NPDS_Prefix;
 
     $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET forum_id='$destforum' WHERE forum_id='$oriforum'";
 
@@ -418,12 +414,12 @@ function MergeForumAction($oriforum, $destforum)
 
 function ForumMaintAdmin()
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg, $language;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forummaint'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -497,8 +493,7 @@ function ForumMaintAdmin()
             onChange: function() {
                 fvitem.revalidateField(\'before\');
             }
-        });
-    ';
+        });';
 
     $arg1 = '
     var formulid = ["faddeletetop"];';

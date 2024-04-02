@@ -15,28 +15,26 @@
 
 use npds\system\logs\logs;
 use npds\system\assets\css;
+use npds\system\config\Config;
 
 if (!function_exists('admindroits')) {
     include('die.php');
 }
 
 $f_meta_nom = 'OptimySQL';
-$f_titre = adm_translate("Optimisation de la base de données") . ' : ' . $dbname;
+$f_titre = adm_translate("Optimisation de la base de données") . ' : ' . Config::get('database.default.database');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
-
-$hlpfile = 'manuels/' . $language . '/optimysql.html';
 
 $date_opt = date(adm_translate("dateforop"));
 $heure_opt = date("h:i a");
 
 include("themes/default/header.php");
 
-GraphicAdmin($hlpfile);
-
-global $dbname; // non utile ?
+GraphicAdmin(manuel('optimysql'));
+adminhead($f_meta_nom, $f_titre);
 
 // Insertion de valeurs d'initialisation de la table (si nécessaire)
 $result = sql_query("SELECT optid FROM " . $NPDS_Prefix . "optimy");
@@ -62,9 +60,9 @@ $tot_idx = 0;
 $tot_all = 0;
 $li_tab_opti = '';
 
-// si optimysql n'affiche rien - essayer avec la ligne ci-dessous
+;// si optimysql n'affiche rien - essayer avec la ligne ci-dessous
 //$result = sql_query("SHOW TABLE STATUS FROM `$dbname`";);
-$result = sql_query("SHOW TABLE STATUS FROM " . $dbname);
+$result = sql_query("SHOW TABLE STATUS FROM " . Config::get('database.default.database') ."");
 
 if (sql_num_rows($result)) {
 
@@ -120,8 +118,7 @@ $result = sql_query("UPDATE " . $NPDS_Prefix . "optimy SET optgain='$newgain', o
 $result = sql_query("SELECT optgain, optcount FROM " . $NPDS_Prefix . "optimy WHERE optid='1'");
 list($gainopt, $countopt) = sql_fetch_row($result);
 
-// Affichage
-adminhead($f_meta_nom, $f_titre, $adminimg);
+
 
 echo '<hr /><p class="lead">' . adm_translate("Optimisation effectuée") . ' : ' . adm_translate("Gain total réalisé") . ' ' . $total_gain . ' Ko</br>';
 echo $last_opti;

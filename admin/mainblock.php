@@ -29,17 +29,14 @@ $f_titre = adm_translate("Bloc Principal");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/mainblock.html";
-
 function mblock()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('mainblock'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -52,23 +49,23 @@ function mblock()
             echo '
             <form id="fad_mblock" action="admin.php" method="post">
                 <div class="form-floating mb-3">
-                <textarea class="form-control" type="text" id="title" name="title" maxlength="1000" placeholder="' . adm_translate("Titre :") . '" style="height:70px;">' . $title . '</textarea>
-                <label for="title">' . adm_translate("Titre") . '</label>
-                <span class="help-block text-end"><span id="countcar_title"></span></span>
+                    <textarea class="form-control" type="text" id="title" name="title" maxlength="1000" placeholder="' . adm_translate("Titre :") . '" style="height:70px;">' . $title . '</textarea>
+                    <label for="title">' . adm_translate("Titre") . '</label>
+                    <span class="help-block text-end"><span id="countcar_title"></span></span>
                 </div>
                 <div class="form-floating mb-3">
-                <textarea class="form-control" id="content" name="content" style="height:170px;">' . $content . '</textarea>
-                <label for="content">' . adm_translate("Contenu") . '</label>
+                    <textarea class="form-control" id="content" name="content" style="height:170px;">' . $content . '</textarea>
+                    <label for="content">' . adm_translate("Contenu") . '</label>
                 </div>
                 <input type="hidden" name="op" value="changemblock" />
                 <button class="btn btn-primary btn-block" type="submit">' . adm_translate("Valider") . '</button>
             </form>
             <script type="text/javascript">
-            //<![CDATA[
-                $(document).ready(function() {
-                inpandfieldlen("title",1000);
-                });
-            //]]>
+                //<![CDATA[
+                    $(document).ready(function() {
+                    inpandfieldlen("title",1000);
+                    });
+                //]]>
             </script>';
         }
     }

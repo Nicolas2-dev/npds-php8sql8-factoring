@@ -35,13 +35,10 @@ $f_titre = adm_translate("Gestion, Installation Modules");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-$hlpfile = "manuels/$language/modules.html";
-
-global $language, $adminimg, $admf_ext;
-
 include("themes/default/header.php");
 
-GraphicAdmin($hlpfile);
+GraphicAdmin(manuel('modules'));
+adminhead($f_meta_nom, $f_titre);
 
 $handle = opendir('modules');
 $modlist = '';
@@ -71,8 +68,6 @@ foreach ($modlist as $value) {
     }
 }
 
-adminhead($f_meta_nom, $f_titre, $adminimg);
-
 echo '
     <hr />
     <h3>' . adm_translate("Les modules") . '</h3>
@@ -97,14 +92,14 @@ while ($row = sql_fetch_assoc($result)) {
         '<img class="adm_img" src="assets/images/admin/module.png" alt="icon_module" title="" />';
 
     if ($row["minstall"] == 0) {
-        $status_chngac = file_exists("modules/" . $row["mnom"] . "/install.conf.php") ?
-            '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $row["mnom"] . '&amp;subop=install" ><i class="fa fa-compress fa-lg"></i><i class="fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Installer le module") . '" data-bs-toggle="tooltip"></i></a>' :
-            '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $row["mnom"] . '&amp;subop=install"><i class="fa fa-check fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Pas d'installeur disponible") . ' ' . adm_translate("Marquer le module comme installé") . '" data-bs-toggle="tooltip"></i></a>';
+        $status_chngac = file_exists("modules/" . $row["mnom"] . "/install.conf.php") 
+            ? '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $row["mnom"] . '&amp;subop=install" ><i class="fa fa-compress fa-lg"></i><i class="fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Installer le module") . '" data-bs-toggle="tooltip"></i></a>' 
+            : '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $row["mnom"] . '&amp;subop=install"><i class="fa fa-check fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Pas d'installeur disponible") . ' ' . adm_translate("Marquer le module comme installé") . '" data-bs-toggle="tooltip"></i></a>';
         $clatd = 'table-danger';
     } else {
-        $status_chngac =  file_exists("modules/" . $row["mnom"] . "/install.conf.php") ?
-            '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $row["mnom"] . '" ><i class="fa fa-expand fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Désinstaller le module") . '" data-bs-toggle="tooltip"></i></a>' :
-            '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $row["mnom"] . '" ><i class="fa fa fa-ban fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Marquer le module comme désinstallé") . '" data-bs-toggle="tooltip"</i></a>';
+        $status_chngac =  file_exists("modules/" . $row["mnom"] . "/install.conf.php") 
+            ? '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $row["mnom"] . '" ><i class="fa fa-expand fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Désinstaller le module") . '" data-bs-toggle="tooltip"></i></a>' 
+            : '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $row["mnom"] . '" ><i class="fa fa fa-ban fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Marquer le module comme désinstallé") . '" data-bs-toggle="tooltip"</i></a>';
         $clatd = 'table-success';
     }
 

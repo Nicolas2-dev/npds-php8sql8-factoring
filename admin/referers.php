@@ -26,17 +26,14 @@ $f_titre = adm_translate("Sites Référents");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/referer.html";
-
 function hreferer($filter)
 {
-    global $hlpfile, $f_meta_nom, $adminimg, $admf_ext, $f_titre, $NPDS_Prefix;
+    global $f_meta_nom, $f_titre, $NPDS_Prefix;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('referer'));
+    adminhead($f_meta_nom, $f_titre);
 
     settype($filter, 'integer');
 

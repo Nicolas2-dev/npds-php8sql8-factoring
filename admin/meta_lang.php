@@ -27,9 +27,6 @@ $f_titre = 'META-LANG';
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = 'manuels/' . $language . '/meta_lang.html';
-
 function go_back($label)
 {
     if (!$label) {
@@ -127,7 +124,7 @@ function list_type_meta($type_meta)
 
 function List_Meta_Lang()
 {
-    global $hlpfile, $NPDS_Prefix, $meta, $type_meta, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $meta, $type_meta, $f_meta_nom, $f_titre;
 
     if (!empty($meta)) {
         $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang WHERE def = '" . $meta . "' ORDER BY type_meta, def ASC");
@@ -139,8 +136,8 @@ function List_Meta_Lang()
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('meta_lang'));
+    adminhead($f_meta_nom, $f_titre);
 
     $tablmeta = '';
     $tablmeta_c = '';
@@ -165,18 +162,14 @@ function List_Meta_Lang()
 
         if ($type_meta == 'smil') {
             eval($content);
-            $tablmeta_c .= '
-                <td>' . $cmd . '</td>';
+            $tablmeta_c .= '<td>' . $cmd . '</td>';
         } else if ($type_meta == 'mot') {
-            $tablmeta_c .= '
-            <td>' . $content . '</td>';
+            $tablmeta_c .= '<td>' . $content . '</td>';
         } else {
-            $tablmeta_c .= '
-            <td>' . language::aff_langue($description) . '</td>';
+            $tablmeta_c .= '<td>' . language::aff_langue($description) . '</td>';
         }
 
-        $tablmeta_c .= '
-        </tr>';
+        $tablmeta_c .= '</tr>';
         $ibid++;
     }
 
@@ -222,7 +215,7 @@ function List_Meta_Lang()
 
 function Edit_Meta_Lang()
 {
-    global $hlpfile, $NPDS_Prefix, $ml, $local_user_language, $language, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $ml, $local_user_language, $f_meta_nom, $f_titre;
 
     $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang WHERE def = '" . $ml . "'");
     $Q = sql_fetch_assoc($Q);
@@ -230,8 +223,8 @@ function Edit_Meta_Lang()
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('meta_lang'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '<hr />';
     if ($Q['obligatoire'] != true) {
@@ -266,28 +259,28 @@ function Edit_Meta_Lang()
 
     if ($Q['type_meta'] != 'docu' and $Q['type_meta'] != 'them') {
         echo '
-    <div class="row">
-        <div class="text-muted col-sm-12">' . adm_translate("Script") . '</div>
-        <div class=" col-sm-12">
-            <pre class="language-php"><code class="language-php">' . htmlspecialchars($Q['content'], ENT_QUOTES) . '</code></pre>
-        </div>
-    </div>';
+        <div class="row">
+            <div class="text-muted col-sm-12">' . adm_translate("Script") . '</div>
+            <div class=" col-sm-12">
+                <pre class="language-php"><code class="language-php">' . htmlspecialchars($Q['content'], ENT_QUOTES) . '</code></pre>
+            </div>
+        </div>';
     }
 
     if ($Q['obligatoire'] != true) {
         echo '
-    <form id="metalangedit" name="edit_meta_lang" action="admin.php" method="post">
-        <div class="form-floating mb-3">
-            <input class="form-control" type="text" id="def" name="def" value="' . $Q['def'] . '" readonly="readonly" />
-            <label for="def">META</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" type="text" id="typemeta" name="type_meta" value="' . $Q['type_meta'] . '" maxlength="10" readonly="readonly" />
-            <label for="typemeta">' . adm_translate("Type") . '</label>
-        </div>
-        <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="desc">' . adm_translate("Description") . '</label>
-            <div class="col-sm-12">';
+        <form id="metalangedit" name="edit_meta_lang" action="admin.php" method="post">
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" id="def" name="def" value="' . $Q['def'] . '" readonly="readonly" />
+                <label for="def">META</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" id="typemeta" name="type_meta" value="' . $Q['type_meta'] . '" maxlength="10" readonly="readonly" />
+                <label for="typemeta">' . adm_translate("Type") . '</label>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-12" for="desc">' . adm_translate("Description") . '</label>
+                <div class="col-sm-12">';
 
         if ($Q['type_meta'] == 'smil') {
             eval($Q['content']);
@@ -295,19 +288,18 @@ function Edit_Meta_Lang()
         } else {
             echo '
                 <textarea class="form-control" id="desc" name="desc" rows="7" >' . $Q['description'] . '</textarea>
-
-            </div>
-        </div>';
+                </div>
+            </div>';
         }
 
         if ($Q['type_meta'] != "docu" and $Q['type_meta'] != "them") {
             echo '
-        <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="content">' . adm_translate("Script") . '</label>
-            <div class="col-sm-12">
-                <textarea class="form-control" id="content" name="content" rows="20"required="required" >' . $Q['content'] . '</textarea>
-            </div>
-        </div>';
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-12" for="content">' . adm_translate("Script") . '</label>
+                <div class="col-sm-12">
+                    <textarea class="form-control" id="content" name="content" rows="20"required="required" >' . $Q['content'] . '</textarea>
+                </div>
+            </div>';
         }
 
         echo '
@@ -332,36 +324,36 @@ function Edit_Meta_Lang()
         }
 
         echo '
-        <div class="col-sm-8">
-            <select class="form-select" id="typeuri" name="type_uri">
-                <option' . $sel0 . ' value="moins">' . adm_translate("Tous sauf pour ...") . '</option>
-                <option' . $sel1 . ' value="plus">' . adm_translate("Seulement pour ...") . '</option>
-            </select>
-            <div class="help-block">...
-        ' . adm_translate("les URLs que vous aurez renseignés ci-après (ne renseigner que la racine de l'URI)") . '<br />
-        ' . adm_translate("Exemple") . ' : index.php user.php forum.php static.php<br />
-        ' . adm_translate("Par défaut, rien ou Tout sauf pour ... [aucune URI] = aucune restriction") . '
+            <div class="col-sm-8">
+                <select class="form-select" id="typeuri" name="type_uri">
+                    <option' . $sel0 . ' value="moins">' . adm_translate("Tous sauf pour ...") . '</option>
+                    <option' . $sel1 . ' value="plus">' . adm_translate("Seulement pour ...") . '</option>
+                </select>
+                <div class="help-block">...
+            ' . adm_translate("les URLs que vous aurez renseignés ci-après (ne renseigner que la racine de l'URI)") . '<br />
+            ' . adm_translate("Exemple") . ' : index.php user.php forum.php static.php<br />
+            ' . adm_translate("Par défaut, rien ou Tout sauf pour ... [aucune URI] = aucune restriction") . '
+                </div>
+                </div>
             </div>
+            <div class="mb-3 row">
+                <div class="col-sm-12">
+                    <textarea class="form-control" id="uri" name="uri" rows="7" maxlength="255">' . $Q['uri'] . '</textarea>
+                    <span class="help-block text-end"><span id="countcar_uri"></span></span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <div class="col-sm-12">
-                <textarea class="form-control" id="uri" name="uri" rows="7" maxlength="255">' . $Q['uri'] . '</textarea>
-                <span class="help-block text-end"><span id="countcar_uri"></span></span>
+            <div class="mb-3 row">
+                <div class="col-sm-12">
+                    <input type="hidden" name="Maj_Bdd_ML" value="edit_meta" />
+                    <input type="hidden" name="op" value="Valid_Meta_Lang" />
+                    <button class="btn btn-primary" type="submit">' . adm_translate("Valider") . '</button>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <div class="col-sm-12">
-                <input type="hidden" name="Maj_Bdd_ML" value="edit_meta" />
-                <input type="hidden" name="op" value="Valid_Meta_Lang" />
-                <button class="btn btn-primary" type="submit">' . adm_translate("Valider") . '</button>
-            </div>
-        </div>
-    </form>';
+        </form>';
 
         $arg1 = '
-    var formulid = ["metalangedit"];
-    inpandfieldlen("uri",255);';
+        var formulid = ["metalangedit"];
+        inpandfieldlen("uri",255);';
 
         css::adminfoot('fv', '', $arg1, '');
     } else {
@@ -372,12 +364,12 @@ function Edit_Meta_Lang()
 
 function Creat_Meta_Lang()
 {
-    global $hlpfile, $type_meta, $f_meta_nom, $f_titre, $adminimg;
+    global $type_meta, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('meta_lang'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -418,13 +410,12 @@ function Creat_Meta_Lang()
             
             if ($type_meta == "smil") {
                 echo '
-                <input class="form-control" type="text" name="content" id="content" maxlength="255" required="required" />
-                <span class="help-block">' . adm_translate("Chemin et nom de l'image du Smiley") . ' Ex. : forum/smilies/pafmur.gif<span class="float-end ms-1" id="countcar_content"></span></span>
-                </div>
-            </div>';
+                    <input class="form-control" type="text" name="content" id="content" maxlength="255" required="required" />
+                    <span class="help-block">' . adm_translate("Chemin et nom de l'image du Smiley") . ' Ex. : forum/smilies/pafmur.gif<span class="float-end ms-1" id="countcar_content"></span></span>
+                    </div>
+                </div>';
             } else {
-                echo '
-                <textarea class="form-control" name="content" id="content" rows="20" required="required">';
+                echo '<textarea class="form-control" name="content" id="content" rows="20" required="required">';
             }
 
             if ($type_meta == "meta") {
@@ -496,12 +487,12 @@ function kill_Meta_Lang($nbr, $action)
 
 function meta_exist($def)
 {
-    global $hlpfile, $language, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('meta_lang'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />

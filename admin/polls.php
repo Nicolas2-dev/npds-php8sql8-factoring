@@ -28,17 +28,14 @@ $f_titre = adm_translate("Les sondages");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/surveys.html";
-
 function poll_createPoll()
 {
-    global $hlpfile, $maxOptions, $f_meta_nom, $f_titre, $adminimg, $NPDS_Prefix;
+    global $maxOptions, $f_meta_nom, $f_titre, $NPDS_Prefix;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('surveys'));
+    adminhead($f_meta_nom, $f_titre);
 
     global $id; // ??? not used 
 
@@ -147,12 +144,12 @@ function poll_createPosted()
 
 function poll_removePoll()
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg, $NPDS_Prefix;
+    global $f_meta_nom, $f_titre, $NPDS_Prefix;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('surveys'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -225,14 +222,14 @@ function poll_removePosted()
 
 function poll_editPoll()
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg, $NPDS_Prefix;
+    global $f_meta_nom, $f_titre, $NPDS_Prefix;
 
     include("themes/default/header.php");
 
     $result = sql_query("SELECT pollID, pollTitle, timeStamp FROM " . $NPDS_Prefix . "poll_desc ORDER BY timeStamp");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('surveys'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -275,14 +272,13 @@ function poll_editPoll()
 
 function poll_editPollPosted()
 {
-    global $id, $maxOptions, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $id, $maxOptions, $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     if ($id) {
-        global $hlpfile;
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('surveys'));
+        adminhead($f_meta_nom, $f_titre);
 
         $result = sql_query("SELECT pollID, pollTitle, timeStamp FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$id'");
         $holdtitle = sql_fetch_row($result);

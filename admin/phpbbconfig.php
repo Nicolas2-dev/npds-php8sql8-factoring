@@ -28,17 +28,14 @@ $f_titre = adm_translate('Configuration des Forums');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language, $adminimg, $admf_ext;
-$hlpfile = "manuels/$language/forumconfig.html";
-
 function ForumConfigAdmin()
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('forumconfig'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "config");
     list($allow_html, $allow_bbcode, $allow_sig, $posts_per_page, $hot_threshold, $topics_per_page, $allow_upload_forum, $allow_forum_hide, $forum_attachments, $rank1, $rank2, $rank3, $rank4, $rank5, $anti_flood, $solved) = sql_fetch_row($result);
@@ -288,8 +285,7 @@ function ForumConfigAdmin()
                 message: "0-9"
                 }
             }
-        },
-    ';
+        },';
 
     $arg1 = '
     var formulid = ["phpbbconfigforum"];
@@ -301,8 +297,7 @@ function ForumConfigAdmin()
     inpandfieldlen("rank2",255);
     inpandfieldlen("rank3",255);
     inpandfieldlen("rank4",255);
-    inpandfieldlen("rank5",255);
-    ';
+    inpandfieldlen("rank5",255);';
 
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
