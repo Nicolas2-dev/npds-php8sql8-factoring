@@ -50,7 +50,7 @@ $chatbox = DB::table('chatbox')
 
 $thing = '';
 
-if ($result) {
+if ($chatbox) {
     include("themes/themes-dynamic/theme.php");
 
     foreach($chatbox as $instance_chat) {
