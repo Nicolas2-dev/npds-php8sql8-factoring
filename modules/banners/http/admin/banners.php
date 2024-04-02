@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\config\Config;
 use npds\system\language\language;
 
 if (!function_exists('admindroits')) {
@@ -505,7 +506,7 @@ function BannerChange($bid, $cid, $imptotal, $impadded, $imageurl, $clickurl, $u
 
 function BannerClientDelete($cid, $ok = 0)
 {
-    global $NPDS_Prefix, $sitename, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
 
     if ($ok == 1) {
         sql_query("DELETE FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
@@ -532,7 +533,7 @@ function BannerClientDelete($cid, $ok = 0)
         if ($numrows == 0) {
             echo '<br />' . adm_translate("Cet annonceur n'a pas de bannière active pour le moment.") . '</div>';
         } else {
-            echo '<br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . $sitename . '</div>';
+            echo '<br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . Config::get('app.sitename') . '</div>';
         }
 
         while (list($imageurl, $clickurl) = sql_fetch_row($result2)) {

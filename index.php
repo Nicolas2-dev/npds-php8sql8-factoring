@@ -17,6 +17,7 @@ use npds\system\news\news;
 use npds\system\auth\users;
 use npds\system\cache\cache;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\support\edito;
 use npds\system\support\facades\DB;
 
@@ -54,7 +55,9 @@ if (!function_exists("Mysql_Connexion")) {
 // Redirect for default Start Page of the portal - look at Admin Preferences for choice
 function select_start_page($op)
 {
-    global $Start_Page, $index;
+    global $index;
+
+    $Start_Page = Config::get('app.Start_Page');
 
     if (!users::AutoReg()) {
         global $user;

@@ -16,6 +16,7 @@
 use npds\system\assets\css;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -46,7 +47,7 @@ function cache_ctrl()
 
 function show_imm($op)
 {
-    global $smilies, $user, $allow_bbcode, $language, $Default_Theme, $theme, $short_user, $Titlesitename, $NPDS_Prefix; // $Titlesitename ??? not used
+    global $smilies, $user, $allow_bbcode, $language, $theme, $short_user, $Titlesitename, $NPDS_Prefix; // $Titlesitename ??? not used
 
     if (!$user) {
         Header("Location: user.php");
@@ -56,12 +57,12 @@ function show_imm($op)
 
         if ($userdata[9] != '') {
             if (!$file = @opendir("themes/$userdata[9]")) {
-                $theme = $Default_Theme;
+                $theme = Config::get('app.Default_Theme');
             } else {
                 $theme = $userdata[9];
             }
         } else {
-            $theme = $Default_Theme;
+            $theme = Config::get('app.Default_Theme');
         }
 
         include("themes/$theme/theme.php");
@@ -98,8 +99,8 @@ function show_imm($op)
                 <h3>' . translate("Message personnel") . ' ' . translate("de");
 
             if ($posterdata['uid'] == 1) {
-                global $sitename;
-                echo ' <span class="text-muted">' . $sitename . '</span></h3>';
+                
+                echo ' <span class="text-muted">' . Config::get('app.sitename') . '</span></h3>';
             }
 
             if ($posterdata['uid'] <> 1) {

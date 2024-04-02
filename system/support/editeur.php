@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\support;
 
+use npds\system\config\Config;
 use npds\system\language\language;
 
 class editeur
@@ -21,11 +22,9 @@ class editeur
      */
     public static function aff_editeur($Xzone, $Xactiv): string
     {
-        global $language, $tmp_theme, $tiny_mce, $tiny_mce_theme, $tiny_mce_relurl;
-
         $tmp = '';
 
-        if ($tiny_mce) {
+        if (Config::get('app.tiny_mce')) {
             static $tmp_Xzone;
             
             if ($Xzone == 'tiny_mce') {

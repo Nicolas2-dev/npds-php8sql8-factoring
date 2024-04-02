@@ -18,6 +18,7 @@ use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\auth\users;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -866,6 +867,9 @@ switch ($op) {
         }
 
         $user_regdate = time() + ((int)$gmt * 3600);
+
+        $Default_Theme = Config::get('app.Default_Theme');
+        $Default_Skin = Config::get('app.Default_Theme');
 
         $sql = 'INSERT INTO ' . $NPDS_Prefix . 'users ';
         $sql .= "(uid,name,uname,email,femail,url,user_regdate,user_from,user_occ,user_intrest,user_viewemail,user_avatar,user_sig,bio,pass,hashkey,send_email,is_visible,mns,theme) ";

@@ -9,6 +9,7 @@ use npds\system\auth\groupe;
 use npds\system\cache\cache;
 use npds\system\support\str;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\support\edito;
 use npds\system\language\language;
 use npds\system\language\metalang;
@@ -25,7 +26,10 @@ class news
      */
     public static function ultramode(): void
     {
-        global $NPDS_Prefix, $nuke_url, $storyhome;
+        global $NPDS_Prefix;
+        
+        $storyhome = Config::get('app..storyhome');
+        $nuke_url = Config::get('app.nuke_url');
 
         $ultra = "storage/news/ultramode.txt";
         $netTOzone = "storage/news/net2zone.txt";
@@ -230,9 +234,9 @@ class news
      */
     public static function automatednews(): void
     {
-        global $gmt, $NPDS_Prefix;
+        global $NPDS_Prefix;
 
-        $today = getdate(time() + ((int)$gmt * 3600));
+        $today = getdate(time() + ((int) Config::get('app.gmt') * 3600));
         $day = $today['mday'];
 
         if ($day < 10) {
@@ -433,12 +437,12 @@ class news
      */
     public static function prepa_aff_news(string $op, int|string $catid, int $marqeur): array|null
     {
-        global $NPDS_Prefix, $storyhome, $topicname, $topicimage, $topictext, $datetime, $cookie;
+        global $NPDS_Prefix, $topicname, $topicimage, $topictext, $cookie;
 
         if (isset($cookie[3])) {
             $storynum = $cookie[3];
         } else {
-            $storynum = $storyhome;
+            $storynum = Config::get('app.storyhome');
         }
 
         if ($op == "categories") {

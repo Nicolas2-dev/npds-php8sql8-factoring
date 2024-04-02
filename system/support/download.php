@@ -6,6 +6,7 @@ namespace npds\system\support;
 
 use npds\system\auth\users;
 use npds\system\support\str;
+use npds\system\config\Config;
 use npds\system\language\language;
 
 class download
@@ -21,15 +22,15 @@ class download
      */
     public static function topdownload_data(string $form, string $ordre): string
     {
-        global $NPDS_Prefix, $top, $long_chain;
+        global $NPDS_Prefix;
 
-        if (!$long_chain) {
-            $long_chain = 13;
+        if (!Config::get('app.theme.long_chain')) {
+            Config::set('app.theme.long_chain', 13);
         }
 
-        settype($top, 'integer');
+        //settype($top, 'integer');
 
-        $result = sql_query("SELECT did, dcounter, dfilename, dcategory, ddate, perms FROM " . $NPDS_Prefix . "downloads ORDER BY $ordre DESC LIMIT 0, $top");
+        $result = sql_query("SELECT did, dcounter, dfilename, dcategory, ddate, perms FROM " . $NPDS_Prefix . "downloads ORDER BY $ordre DESC LIMIT 0, " .Config::get('app.top'));
         $lugar = 1;
         $ibid = '';
 
@@ -56,8 +57,8 @@ class download
 
                 $ori_dfilename = $dfilename;
                 
-                if (strlen($dfilename) > $long_chain) {
-                    $dfilename = (substr($dfilename, 0, $long_chain)) . " ...";
+                if (strlen($dfilename) > Config::get('app.theme.long_chain')) {
+                    $dfilename = (substr($dfilename, 0, Config::get('app.theme.long_chain'))) . " ...";
                 }
 
                 if ($form == 'short') {

@@ -16,6 +16,7 @@
 
 use npds\system\forum\forum;
 use npds\system\routing\url;
+use npds\system\config\Config;
 
 
 if (!function_exists("Mysql_Connexion"))
@@ -38,12 +39,16 @@ if ($forum >= 0)
 $forum_name = 'comments';
 $forum_type = 0;
 $allow_to_post = false;
-if ($anonpost)
+
+if (Config::get('app.anonpost'))
     $forum_access = 0;
 else
     $forum_access = 1;
 
 global $NPDS_Prefix;
+
+$moderate = Config::get('app.moderate');
+
 if (($moderate == 1) and $admin)
     $Mmod = true;
 elseif ($moderate == 2) {

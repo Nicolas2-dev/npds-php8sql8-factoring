@@ -31,7 +31,7 @@ if (!function_exists("Mysql_Connexion")) {
 
 function geninfo($did, $out_template)
 {
-    global $sitename, $NPDS_Prefix;
+    global $NPDS_Prefix;
 
     settype($did, 'integer');
     settype($out_template, 'integer');
@@ -476,7 +476,7 @@ function listdownloads($dcategory, $sortby, $sortorder)
 
 function main()
 {
-    global $dcategory, $sortby, $sortorder, $sitename;
+    global $dcategory, $sortby, $sortorder;
 
     $dcategory  = hack::removeHack(stripslashes(htmlspecialchars(urldecode((string) $dcategory), ENT_QUOTES, 'utf-8'))); // electrobug
 
@@ -561,11 +561,11 @@ function broken($did)
 
     if ($user) {
         if ($did) {
-            global $notify_email, $notify_message, $notify_from, $nuke_url; // $notify_message ??? not used
+            global $notify_email, $notify_message, $notify_from; // $notify_message ??? not used
             
             settype($did, "integer");
             
-            $message = $nuke_url . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . " $cookie[1] / IP : " . getip() . "\n\n";
+            $message = Config::get('app.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . " $cookie[1] / IP : " . getip() . "\n\n";
             $message .= Config::get('signature.message');
             
             mailler::send_email($notify_email, html_entity_decode(translate("Rapporter un lien rompu"), ENT_COMPAT | ENT_HTML401, 'utf-8'), nl2br($message), $notify_from, false, "html", '');

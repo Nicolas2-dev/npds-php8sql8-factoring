@@ -29,17 +29,14 @@ $f_titre = adm_translate("Edito");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/edito.html";
-
 function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('edito'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '<hr />';
 
@@ -61,18 +58,20 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
         css::adminfoot('', '', '', '');
 
     } else {
-        if ($edito_type == 'G')
+        if ($edito_type == 'G') {
             $edito_typeL = ' ' . adm_translate("Anonyme");
-        elseif ($edito_type == 'M')
+        } elseif ($edito_type == 'M') {
             $edito_typeL = ' ' . adm_translate("Membre");
+        }
 
         if (strpos($contents, '[/jour]') > 0) {
             $contentJ = substr($contents, strpos($contents, '[jour]') + 6, strpos($contents, '[/jour]') - 6);
             $contentN = substr($contents, strpos($contents, '[nuit]') + 6, strpos($contents, '[/nuit]') - 19 - strlen($contentJ));
         }
 
-        if (!$contentJ and !$contentN and !strpos($contents, '[/jour]')) 
+        if (!$contentJ and !$contentN and !strpos($contents, '[/jour]')) {
             $contentJ = $contents;
+        }
 
         echo '
         <form id="admineditomod" action="admin.php" method="post" name="adminForm">

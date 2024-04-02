@@ -16,6 +16,7 @@ use npds\system\assets\css;
 use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\support\str;
+use npds\system\config\Config;
 use npds\system\support\stats;
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) {
@@ -35,8 +36,7 @@ $f_titre = translate("Tableau de bord");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = '/manuels/' . $language . '/abla.html';
+$hlpfile = '/manuels/' . Config::get('app.language') . '/abla.html';
 
 global $admin;
 if ($admin) {
@@ -45,7 +45,6 @@ if ($admin) {
     GraphicAdmin($hlpfile);
     adminhead($f_meta_nom, $f_titre, $adminimg);
 
-    global $startdate;
     list($membres, $totala, $totalb, $totalc, $totald, $totalz) = stats::req_stat();
 
     //LNL Email in outside table
@@ -320,5 +319,6 @@ if ($admin) {
     fclose($file);
 
     css::adminfoot('', '', '', '');
-} else
+} else {
     url::redirect_url("index.php");
+}

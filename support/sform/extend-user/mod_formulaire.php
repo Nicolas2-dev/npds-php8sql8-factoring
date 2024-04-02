@@ -17,7 +17,7 @@ use npds\system\theme\theme;
 use npds\system\mail\mailler;
 use npds\system\language\language;
 
-global $NPDS_Prefix, $minpass;
+global $NPDS_Prefix;
 
 $m->add_title(translate("Utilisateur"));
 $m->add_mess(translate("* Désigne un champ obligatoire"));

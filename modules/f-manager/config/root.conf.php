@@ -1,5 +1,7 @@
 <?php
 
+use npds\system\config\Config;
+
 /************************************************************************/
 /* NPDS DUNE : Net Portal Dynamic System .                              */
 /* ===========================                                          */
@@ -169,6 +171,8 @@ $home_fma = "";
 
 // $NPDS_fma permet d'inclure le files-manager dans le thème de NPDS
 $NPDS_fma = false;
+
+$Default_Theme = Config::get('app.Default_Theme');
 
 // $css_fma permet d'inclure la css d'un thème / Cette option n'a de sens que si $NPDS_fma=false
 if (($NPDS_fma === false) and (file_exists("themes/$Default_Theme/assets/css/f-manager.css")))

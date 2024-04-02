@@ -24,6 +24,7 @@ use npds\system\pixels\image;
 use npds\system\utility\code;
 use npds\system\utility\spam;
 use npds\system\security\hack;
+use npds\system\config\Config;
 
 
 if (!function_exists("Mysql_Connexion"))
@@ -47,8 +48,13 @@ if ($forum >= 0)
 $forum_name = 'comments';
 $forum_type = 0;
 $allow_to_post = false;
-$forum_access = $anonpost ? 0 : 1;
+
+$forum_access = Config::get('app.anonpost') ? 0 : 1;
+
 global $user;
+
+$moderate = Config::get('app.moderate');
+
 if ($moderate == 1 and isset($admin))
     $Mmod = true;
 elseif ($moderate == 2) {
@@ -131,7 +137,10 @@ if (isset($submitS)) {
             sql_query("UPDATE " . $NPDS_Prefix . $comments_req_add);
         // envoi mail alerte
         if ($notify) {
-            global $notify_email, $nuke_url, $notify_from, $url_ret;
+            global $notify_email, $notify_from, $url_ret;
+            
+            $nuke_url = Config::get('app.nuke_url');
+
             $csubject = html_entity_decode(translate("Nouveau commentaire"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' ==> ' . $nuke_url;
             $cmessage = '🔔 ' . translate("Nouveau commentaire") . ' ==> <a href="' . $nuke_url . '/' . $url_ret . '">' . $nuke_url . '/' . $url_ret . '</a>';
             mailler::send_email($notify_email, $csubject, $cmessage, $notify_from, false, "html", '');

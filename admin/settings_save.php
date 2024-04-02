@@ -458,7 +458,6 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     $content .= "# Do not touch the following options !\n";
     $content .= "$line";
     $content .= "\n";
-    $content .= "\$NPDS_Prefix = \"$NPDS_Prefix\";\n";
 
     if ($NPDS_Key == '') {
         $NPDS_Key = uniqid("");
@@ -473,19 +472,62 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     fwrite($file, $content);
     fclose($file);
 
+    //Save Configuration FileManager
+    save_setting_filemanager($xfilemanager);
+
+    // Save Configuration Signature
+    save_setting_signature($xEmailFooter);
+    
+    // Save configuration Mailer
+    save_setting_mailler($xmail_debug, $xsmtp_host, $xsmtp_port, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xdkim_auto);
+    
+    global $aid;
+    logs::Ecr_Log("security", "ConfigSave() by AID : $aid", "");
+
+    cache::SC_Clean();
+
+    Header("Location: admin.php?op=AdminMain");
+}
+
+
+/**
+ * [save_setting_filemanager description]
+ *
+ * @param   int   $xfilemanager  [$xfilemanager description]
+ *
+ * @return  void
+ */
+function save_setting_filemanager(int $xfilemanager): void
+{
     $file = fopen("config/filemanager.php", "w");
     $content = "<?php\n";
-    $content .= "# ========================================\n";
-    $content .= "# DUNE by NPDS : Net Portal Dynamic System\n";
-    $content .= "# ========================================\n";
-    $content .= "\$filemanager= $xfilemanager;\n";
-    $content .= "?>";
+    $content .= "\n";
+    $content .= "return array(\n";
+    $content .= "/**\n";
+    $content .= "* FileManager\n";
+    $content .= "*\n";
+    $content .= "*/\n";
+    $content .= "\n";
+    $content .= "    'manager  => ". (($xfilemanager == 0) ? 'false' : 'true') . ",\n";
+    $content .= "\n";
+    $content .= ");\n";
+    $content .= "\n";
     fwrite($file, $content);
     fclose($file);
+}
 
+/**
+ * [save_setting_signature description]
+ *
+ * @param   string  $xEmailFooter  [$xEmailFooter description]
+ *
+ * @return  void
+ */
+function save_setting_signature(string $xEmailFooter): void
+{
     $xEmailFooter = str_replace(chr(13) . chr(10), "\n", $xEmailFooter);
-    $file = fopen("config/signature.php", "w");
 
+    $file = fopen("config/signature.php", "w");
     $content = "<?php\n";
     $content .= "\n";
     $content .= "return array(\n";
@@ -500,16 +542,6 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     $content .= "\n";
     fwrite($file, $content);
     fclose($file);
-    
-    // save configuration mailer
-    save_setting_mailler($xmail_debug, $xsmtp_host, $xsmtp_port, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xdkim_auto);
-    
-    global $aid;
-    logs::Ecr_Log("security", "ConfigSave() by AID : $aid", "");
-
-    cache::SC_Clean();
-
-    Header("Location: admin.php?op=AdminMain");
 }
 
 /**
@@ -537,7 +569,7 @@ function save_setting_mailler(int $xmail_debug, string $xsmtp_host, int $xsmtp_p
     $content .= "    /**\n";
     $content .= "     * Debug\n";
     $content .= "     */\n";
-    $content .= "    'debug' => ($xmail_debug == 0) ? false : true),\n";
+    $content .= "    'debug' => ". (($xmail_debug == 0) ? 'false' : 'true') .",\n";
     $content .= "\n";
     $content .= "    /**\n";
     $content .= "     * Configurer le serveur SMTP\n";

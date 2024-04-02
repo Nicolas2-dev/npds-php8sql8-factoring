@@ -21,6 +21,7 @@ use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 
@@ -101,7 +102,7 @@ $lock_state = $myrow['topic_status'];
 
 if (isset($user)) {
     if ($cookie[9] == '') {
-        $cookie[9] = $Default_Theme;
+        $cookie[9] = Config::get('app.Default_Theme');
     }
 
     if (isset($theme)) {
@@ -111,10 +112,10 @@ if (isset($user)) {
     $tmp_theme = $cookie[9];
     
     if (!$file = @opendir("themes/$cookie[9]")) {
-        $tmp_theme = $Default_Theme;
+        $tmp_theme = Config::get('app.Default_Theme');
     }
 } else{
-    $tmp_theme = $Default_Theme;
+    $tmp_theme = Config::get('app.Default_Theme');
 }
 
 $post_aff = $Mmod ? ' ' : " AND post_aff='1' ";
@@ -152,6 +153,8 @@ echo '
         <div max-width="640" class="container p-3 n-hyphenate">
             <div>';
 
+$site_logo = Config::get('app.site_logo');
+
 $pos = strpos($site_logo, '/');
 
 if ($pos) {
@@ -186,7 +189,7 @@ if ($smilies) {
     }
 }
 
-echo $myrow['poster_id'] != 0 ? $posterdata['uname'] : $anonymous;
+echo $myrow['poster_id'] != 0 ? $posterdata['uname'] : Config::get('app.anonymous');
 
 echo '
         </div>
@@ -242,9 +245,11 @@ if ($allow_upload_forum and ($att > 0)) {
     echo display_upload("forum_npds", $post_id, $Mmod);
 }
 
+$nuke_url = Config::get('app.nuke_url');
+
 echo '
                 <hr />
-                <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
+                <p class="text-center">' . translate("Cet article provient de") . ' ' . Config::get('app.sitename') . '<br />
                 <a href="' . $nuke_url . '/viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;post_id=' . $post_id . '">' . $nuke_url . '/viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '</a></p>
             </div>
         </div>

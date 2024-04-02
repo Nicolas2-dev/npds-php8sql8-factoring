@@ -1,5 +1,7 @@
 <?php
 
+use npds\system\config\Config;
+
 
 /**
  * load_Driver
@@ -12,9 +14,7 @@ if (! function_exists('load_Driver'))
      */
     function load_Driver() 
     {
-        global $mysql_i;
-
-        if ($mysql_i == 1)
+        if (Config::get('app.database.mysql_i') == 1)
         {
             include("system/database/drivers/mysqli.php");
         }
@@ -74,9 +74,7 @@ if (! function_exists('mysql_Charset'))
      */
     function mysql_Charset($ret_p) 
     {
-        global $mysql_i;
-
-        if ($mysql_i == 1)
+        if (Config::get('app.database.mysql_i') == 1)
         {
             mysqli_set_charset($ret_p, 'utf8mb4');
         }

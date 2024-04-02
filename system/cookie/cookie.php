@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\cookie;
 
+use npds\system\config\Config;
+
 class cookie
 {
 
@@ -16,7 +18,7 @@ class cookie
      */    
     public static function cookiedecode(string $user): array|bool
     {
-        global $NPDS_Prefix, $language;
+        global $NPDS_Prefix;
 
         $stop = false;
 
@@ -44,8 +46,8 @@ class cookie
                     list($pass, $user_langue) = sql_fetch_row($result);
                     
                     if (($cookie[2] == md5($pass)) and ($pass != '')) {
-                        if ($language != $user_langue) {
-                            sql_query("UPDATE " . $NPDS_Prefix . "users SET user_langue='$language' WHERE uname='$cookie[1]'");
+                        if (Config::get('app.language') != $user_langue) {
+                            sql_query("UPDATE " . $NPDS_Prefix . "users SET user_langue='". Config::get('app.language') ."' WHERE uname='$cookie[1]'");
                         }
 
                         return $cookie;

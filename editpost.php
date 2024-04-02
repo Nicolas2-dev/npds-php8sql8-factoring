@@ -19,6 +19,7 @@ use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -232,7 +233,7 @@ if ($submitS) {
     }
 
     if ((($Mmod) or ($userdata[0] == $myrow['uid'])) and ($forum_access != 9)) {
-        $qui = $myrow['poster_id'] == 0 ? $anonymous : $myrow['uname'];
+        $qui = $myrow['poster_id'] == 0 ? Config::get('app.anonymous') : $myrow['uname'];
 
         echo '
         <div>

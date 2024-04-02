@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\assets;
 
+use npds\system\config\Config;
 use npds\system\language\language;
 
 class css
@@ -141,8 +142,6 @@ class css
      */
     public static function adminfoot(string $fv, string $fv_parametres, string $arg1, string $foo): void
     {
-        global $minpass;
-
         if ($fv == 'fv') {
             if ($fv_parametres != '') {
                 $fv_parametres = explode('!###!', $fv_parametres);
@@ -203,12 +202,12 @@ class css
                 if (value.length < 8) {
                    return {
                       valid: false,
-                      message: "' . translate("Le mot de passe doit contenir") . ' ' . $minpass . ' ' . translate("caractères au minimum") . '",
+                      message: "' . translate("Le mot de passe doit contenir") . ' ' . Config::get('app.minpass') . ' ' . translate("caractères au minimum") . '",
                       meta:{score: score-5},
                    };
                 }
  
-                score += ((value.length >= ' . $minpass . ') ? 1 : -1);
+                score += ((value.length >= ' . Config::get('app.minpass') . ') ? 1 : -1);
                 if (/[A-Z]/.test(value)) score += 1;
                 if (/[a-z]/.test(value)) score += 1; 
                 if (/[0-9]/.test(value)) score += 1;

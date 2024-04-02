@@ -16,6 +16,7 @@ use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\pagination\paginator;
 
@@ -201,7 +202,7 @@ function avatar($user_avatar)
 }
 
 include("themes/default/header.php");
-$pagesize = $show_user;
+$pagesize = Config::get('app.show_user');
 
 if (!isset($letter) or ($letter == '')) {
     $letter = translate("Tous");
@@ -340,7 +341,7 @@ if ($letter != 'front') {
 
     if ($num_rows_per_order > 0) {
 
-        global $anonymous, $user;
+        global $user;
         while ($temp_user = sql_fetch_assoc($result)) {
 
             $socialnetworks = array();

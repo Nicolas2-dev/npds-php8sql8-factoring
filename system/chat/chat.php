@@ -9,6 +9,7 @@ use npds\system\block\block;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\support\str;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\utility\crypt;
 
@@ -53,13 +54,13 @@ class chat
     #autodoc makeChatBox($pour) : Bloc ChatBox <br />=> syntaxe : function#makeChatBox <br />params#chat_membres <br /> le parametre doit être en accord avec l'autorisation donc (chat_membres, chat_tous, chat_admin, chat_anonyme)
     public static function makeChatBox($pour)
     {
-        global $user, $admin, $member_list, $long_chain, $NPDS_Prefix;
+        global $user, $admin, $NPDS_Prefix;
 
         $auto = (array) block::autorisation_block('params#' . $pour);
         $dimauto = count($auto);
 
-        if (!$long_chain) {
-            $long_chain = 12;
+        if (!Config::get('app.theme.long_chain')) {
+            Config::get('app.theme.long_chain', 12);
         }
 
         $thing = '';
@@ -79,7 +80,7 @@ class chat
                     
                     if (isset($username)) {
                         if ($dbname == 1) {
-                            $thing .= ((!$user) and ($member_list == 1) and (!$admin)) ?
+                            $thing .= ((!$user) and (Config::get('app.member_list') == 1) and (!$admin)) ?
                                 '<span class="">' . substr($username, 0, 8) . '.</span>' :
                                 "<a href=\"user.php?op=userinfo&amp;uname=$username\">" . substr($username, 0, 8) . ".</a>";
                         } else {
@@ -88,8 +89,8 @@ class chat
                     }
 
                     $une_ligne = true;
-                    $thing .= (strlen($message) > $long_chain)  ?
-                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($message, 0, $long_chain))) . " </span><br />\n" :
+                    $thing .= (strlen($message) > Config::get('app.theme.long_chain'))  ?
+                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($message, 0, Config::get('app.theme.long_chain')))) . " </span><br />\n" :
                         "&gt;&nbsp;<span>" . forum::smilie(stripslashes($message)) . " </span><br />\n";
                 }
             }

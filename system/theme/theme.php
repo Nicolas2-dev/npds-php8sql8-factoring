@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\theme;
 
+use npds\system\config\Config;
 use npds\system\language\metalang;
 
 class theme
@@ -34,7 +35,7 @@ class theme
      */
     public static function getSkin(): string 
     {
-        global $Default_Skin, $user;
+        global $user;
 
         if (isset($user) and $user != '') {
             global $cookie;
@@ -44,13 +45,13 @@ class theme
                 if (array_key_exists(1, $ibix)) {
                     $skin = $ibix[1];
                 } else {
-                    $skin = $Default_Skin;
+                    $skin = Config::get('app.Default_Skin');
                 }
             } else{
-                $skin = $Default_Skin;
+                $skin = Config::get('app.Default_Skin');
             }
         } else {
-            $skin = $Default_Skin;
+            $skin = Config::get('app.Default_Skin');
         }
 
         return $skin;
@@ -63,7 +64,7 @@ class theme
      */
     public static function getTheme(): string
     {
-        global $Default_Theme, $user;
+        global $user;
 
         if (isset($user) and $user != '') {
             global $cookie;
@@ -74,17 +75,17 @@ class theme
                 if (array_key_exists(0, $ibix)) {
                     $theme = $ibix[0];
                 } else {
-                    $theme = $Default_Theme;
+                    $theme = Config::get('app.Default_Theme');
                 }
 
                 if (!@opendir("themes/$theme")) {
-                    $theme = $Default_Theme;
+                    $theme = Config::get('app.Default_Theme');
                 }
             } else {
-                $theme = $Default_Theme;
+                $theme = Config::get('app.Default_Theme');
             }
         } else {
-            $theme = $Default_Theme;
+            $theme = Config::get('app.Default_Theme');
         }
 
         return $theme;

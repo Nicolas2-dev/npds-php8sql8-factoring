@@ -17,6 +17,7 @@ use npds\system\assets\css;
 use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -34,7 +35,7 @@ $hlpfile = "manuels/$language/config.html";
 
 function Configure()
 {
-    global $hlpfile, $filemanager, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     include("config/config.php");
     include("themes/default/header.php");
@@ -54,7 +55,7 @@ function Configure()
 
     $cky = '';
     $ckn = '';
-    if ($parse == 0) {
+    if (Config::get('app.parse') == 0) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -76,9 +77,11 @@ function Configure()
                 <div class="col-md-6 mb-3">
                 <div class="mb-1" for="xfilemanager">FileManager</div>';
 
+    $filemanager = Config::get('filemanager.manager');
+
     $cky = '';
     $ckn = '';
-    if ($filemanager == 1) {
+    if ($filemanager == True) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -100,19 +103,19 @@ function Configure()
             <div class="row gy-0 gx-3">
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control js-dig10" id="xadmin_cook_duration" type="text" name="xadmin_cook_duration" value="' . $admin_cook_duration . '" min="1" maxlength="10" required="required" />
+                    <input class="form-control js-dig10" id="xadmin_cook_duration" type="text" name="xadmin_cook_duration" value="' . Config::get('app.admin_cook_duration') . '" min="1" maxlength="10" required="required" />
                     <label for="xadmin_cook_duration">' . adm_translate("Durée de vie en heure du cookie Admin") . '<span class="text-danger"> *</span></label>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control js-dig10" id="xuser_cook_duration" type="text" name="xuser_cook_duration" value="' . $user_cook_duration . '" min="1" maxlength="10" required="required" />
+                    <input class="form-control js-dig10" id="xuser_cook_duration" type="text" name="xuser_cook_duration" value="' . Config::get('app.user_cook_duration') . '" min="1" maxlength="10" required="required" />
                     <label for="xuser_cook_duration">' . adm_translate("Durée de vie en heure du cookie User") . '<span class="text-danger"> *</span></label>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xsitename" id="xsitename" value="' . $sitename . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xsitename" id="xsitename" value="' . Config::get('app.sitename') . '" maxlength="100" />
                     <label for="xsitename">' . adm_translate("Nom du site") . '</label>
                     <span class="help-block text-end" id="countcar_xsitename"></span>
                 </div>
@@ -126,28 +129,28 @@ function Configure()
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="url" name="xnuke_url" id="xnuke_url" value="' . $nuke_url . '" data-fv-uri___allow-local="true" maxlength="200" />
+                    <input class="form-control" type="url" name="xnuke_url" id="xnuke_url" value="' . Config::get('app.nuke_url') . '" data-fv-uri___allow-local="true" maxlength="200" />
                     <label for="xnuke_url">' . adm_translate("URL du site") . '</label>
                     <span class="help-block text-end" id="countcar_xnuke_url"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xsite_logo" id="xsite_logo" value="' . $site_logo . '" maxlength="255" />
+                    <input class="form-control" type="text" name="xsite_logo" id="xsite_logo" value="' . Config::get('app.site_logo') . '" maxlength="255" />
                     <label for="xsite_logo">' . adm_translate("Logo du site pour les impressions") . '</label>
                     <span class="help-block text-end" id="countcar_xsite_logo"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xslogan" id="xslogan" value="' . $slogan . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xslogan" id="xslogan" value="' . Config::get('app.slogan') . '" maxlength="100" />
                     <label for="xslogan">' . adm_translate("Slogan du site") . '</label> 
                     <span class="help-block text-end" id="countcar_xslogan"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xstartdate" id="xstartdate" value="' . $startdate . '" maxlength="30" />
+                    <input class="form-control" type="text" name="xstartdate" id="xstartdate" value="' . Config::get('app.startdate') . '" maxlength="30" />
                     <label for="xstartdate">' . adm_translate("Date de démarrage du site") . '</label> 
                     <span class="help-block text-end" id="countcar_xstartdate"></span>
                 </div>
@@ -172,7 +175,7 @@ function Configure()
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" id="xanonymous" type="text" name="xanonymous" value="' . $anonymous . '" maxlength="25" />
+                    <input class="form-control" id="xanonymous" type="text" name="xanonymous" value="' . Config::get('app.anonymous') . '" maxlength="25" />
                     <label for="xanonymous">' . adm_translate("Nom d'utilisateur anonyme") . '</label>
                     <span class="help-block text-end" id="countcar_xanonymous"></span>
                 </div>
@@ -182,7 +185,7 @@ function Configure()
                 <div class="mb-1" for="xmod_admin_news">' . adm_translate("Autoriser la création de news pour") . '</div>
                 <div class="form-check form-check-inline">';
 
-    if ($mod_admin_news == 1) {
+    if (Config::get('app.mod_admin_news') == 1) {
         echo '
                     <input type="radio" class="form-check-input" id="xmod_admin_news_a" name="xmod_admin_news" value="1" checked="checked" />
                     <label class="form-check-label" for="xmod_admin_news_a">' . adm_translate("Administrateurs") . ' / ' . adm_translate("Modérateurs") . '</label>
@@ -194,7 +197,7 @@ function Configure()
                 <div class="form-check form-check-inline">
                     <input type="radio" class="form-check-input" id="xmod_admin_news_t" name="xmod_admin_news" value="0" />
                     <label class="form-check-label" for="xmod_admin_news_t">' . adm_translate("Tous") . '</label>';
-    } elseif ($mod_admin_news == 2) {
+    } elseif (Config::get('app.mod_admin_news') == 2) {
         echo '
                     <input type="radio" class="form-check-input" id="xmod_admin_news_a" name="xmod_admin_news" value="1" />
                     <label class="form-check-label" for="xmod_admin_news_a">' . adm_translate("Administrateurs") . ' / ' . adm_translate("Modérateurs") . '</label>
@@ -228,7 +231,7 @@ function Configure()
 
     $cky = '';
     $ckn = '';
-    if ($not_admin_count == 1) {
+    if (Config::get('app.not_admin_count') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -251,7 +254,7 @@ function Configure()
                 <div class="form-floating mb-3">
                     <select class="form-select" id="xDefault_Theme" name="xDefault_Theme">';
 
-    //include("themes/list.php");
+
     $themelist = theme::themeLists(true);
     $themelist = explode(" ", $themelist);
     
@@ -259,7 +262,7 @@ function Configure()
         if ($themelist[$i] != '') {
             echo '<option value="' . $themelist[$i] . '" ';
             
-            if ($themelist[$i] == $Default_Theme) {
+            if ($themelist[$i] == Config::get('app.Default_Theme')) {
                 echo 'selected="selected"';
             }
 
@@ -279,8 +282,19 @@ function Configure()
     // les skins disponibles
     $handle = opendir('themes/_skins');
     while (false !== ($file = readdir($handle))) {
-        if (($file[0] !== '_') and (!strstr($file, '.')) and (!strstr($file, 'assets')) and (!strstr($file, 'fonts'))) {
-            $skins[] = array('name' => $file, 'description' => '', 'thumbnail' => $file . '/thumbnail', 'preview' => $file . '/', 'css' => $file . '/bootstrap.css', 'cssMin' => $file . '/bootstrap.min.css', 'cssxtra' => $file . '/extra.css', 'scss' => $file . '/_bootswatch.scss', 'scssVariables' => $file . '/_variables.scss');
+        if (($file[0] !== '_') 
+        and (!strstr($file, '.')) 
+        and (!strstr($file, 'assets')) 
+        and (!strstr($file, 'fonts'))) {
+            $skins[] = array('name'          => $file, 
+                             'description'   => '', 
+                             'thumbnail'     => $file . '/thumbnail', 
+                             'preview'       => $file . '/', 
+                             'css'           => $file . '/bootstrap.css', 
+                             'cssMin'        => $file . '/bootstrap.min.css', 
+                             'cssxtra'       => $file . '/extra.css', 
+                             'scss'          => $file . '/_bootswatch.scss', 
+                             'scssVariables' => $file . '/_variables.scss');
         }
     }
     closedir($handle);
@@ -309,7 +323,7 @@ function Configure()
             </div>
             <div class="col-md-6">
                 <div class="form-floating mb-3">
-                <input class="form-control" type="text" name="xstart_page" id="xstart_page" value="' . $Start_Page . '" maxlength="100" />
+                <input class="form-control" type="text" name="xstart_page" id="xstart_page" value="' . Config::get('app.Start_Page') . '" maxlength="100" />
                 <label for="xstart_page">' . adm_translate("Page de démarrage") . '</label>
                 <span class="help-block text-end" id="countcar_xstart_page"></span>
                 </div>
@@ -504,19 +518,19 @@ function Configure()
     <legend><a class="tog" id="show_mes_ppage" title="' . adm_translate("Replier la liste") . '"><i id="i_mes_ppage" class="fa fa-caret-down fa-lg text-primary" ></i></a>&nbsp;' . adm_translate("Message de pied de page") . '</legend>
         <div id="mes_ppage" class="adminsidefield card card-body mb-3" style="display:none;">
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="xfoot1" name="xfoot1" style="height:100px;">' . htmlentities(stripslashes($foot1), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control" id="xfoot1" name="xfoot1" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot1')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot1">' . adm_translate("Ligne 1") . '</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="xfoot2" name="xfoot2" style="height:100px;">' . htmlentities(stripslashes($foot2), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control" id="xfoot2" name="xfoot2" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot2')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot2">' . adm_translate("Ligne 2") . '</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control col-sm-12" id="xfoot3" name="xfoot3" style="height:100px;">' . htmlentities(stripslashes($foot3), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control col-sm-12" id="xfoot3" name="xfoot3" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot3')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot3">' . adm_translate("Ligne 3") . '</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="xfoot4" name="xfoot4" style="height:100px;">' . htmlentities(stripslashes($foot4), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control" id="xfoot4" name="xfoot4" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot4')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot4">' . adm_translate("Ligne 4") . '</label>
             </div>
         </div>
@@ -1071,6 +1085,8 @@ function Configure()
                 <label class="col-form-label col-sm-7" for="xmoderate">' . adm_translate("Type de modération") . '</label>
                 <div class="col-sm-5">
                 <select class="form-select" id="xmoderate" name="xmoderate">';
+                
+    $moderate = Config::get('app.moderate');
 
     if ($moderate == 1) {
         echo '
@@ -1099,7 +1115,7 @@ function Configure()
 
     $cky = '';
     $ckn = '';
-    if ($anonpost == 1) {
+    if (Config::get('app.anonpost') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1121,6 +1137,8 @@ function Configure()
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-7" for="xtroll_limit">' . adm_translate("Nombre maximum de commentaire par utilisateur en 24H") . '</label>
                 <div class="col-sm-5">';
+
+    $troll_limit = Config::get('app.troll_limit');
 
     if ($troll_limit == '') {
         $troll_limit = "6";
@@ -1325,7 +1343,7 @@ function Configure()
                 <label class="col-form-label col-sm-8" for="xminpass">' . adm_translate("Longueur minimum du mot de passe des utilisateurs") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xminpass" name="xminpass">
-                    <option value="' . $minpass . '">' . $minpass . '</option>
+                    <option value="' . Config::get('app.minpass') . '">' . Config::get('app.minpass') . '</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
@@ -1338,7 +1356,7 @@ function Configure()
                 <label class="col-form-label col-sm-8" for="xshow_user">' . adm_translate("Nombre d'utilisateurs listés") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xshow_user" name="xshow_user">
-                    <option value="' . $show_user . '">' . $show_user . '</option>
+                    <option value="' . Config::get('app.show_user') . '">' . Config::get('app.show_user') . '</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="30">30</option>
@@ -1616,10 +1634,10 @@ function Configure()
                 <select class="form-select" id="xdownload_cat" name="xdownload_cat">
                     <option value="' . $download_cat . '">' . language::aff_langue($download_cat) . '</option>';
 
-    $result = sql_query("SELECT distinct dcategory FROM " . $NPDS_Prefix . "downloads");
+    $download_categorie = DB::table('downloads')->select('dcategory')->distinct()->get();
 
-    while (list($category) = sql_fetch_row($result)) {
-        $category = stripslashes($category);
+    foreach($download_categorie as $download) {
+        $category = stripslashes($download['dcategory']);
         echo '<option value="' . $category . '">' . language::aff_langue($category) . '</option>';
     }
 

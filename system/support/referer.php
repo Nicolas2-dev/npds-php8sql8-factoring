@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\support;
 
+use npds\system\config\Config;
 use npds\system\security\hack;
 
 class referer
@@ -16,9 +17,9 @@ class referer
      */
     public static function refererUpdate(): void
     {
-        global $httpref, $NPDS_Prefix;
+        global $NPDS_Prefix;
         
-        if ($httpref == 1) {
+        if (Config::get('app.httpref') == 1) {
             
             $http_referer = getenv("HTTP_REFERER");
 

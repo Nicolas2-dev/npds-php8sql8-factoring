@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace npds\system\cache;
 
+use npds\system\config\Config;
+
 
 class cacheManager
 {
@@ -216,7 +218,7 @@ class cacheManager
      */
     function checkCache(string $request, int $refresh): string
     {
-        global $CACHE_CONFIG, $user, $language;
+        global $CACHE_CONFIG, $user;
 
         if (!$CACHE_CONFIG['non_differentiate']) {
             if (isset($user) and $user != '') {
@@ -232,7 +234,7 @@ class cacheManager
             $cookie = '';
         }
 
-        $filename = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . $language;
+        $filename = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('app.language');
         
         // Overload
         if ($this->site_overload) {
@@ -266,7 +268,7 @@ class cacheManager
      */
     function insertIntoCache(string $content, string $request): void
     {
-        global $CACHE_CONFIG, $user, $language;
+        global $CACHE_CONFIG, $user;
 
         if (!$CACHE_CONFIG['non_differentiate']) {
             if (isset($user) and $user != '') {
@@ -289,7 +291,7 @@ class cacheManager
             $affich = true;
         }
 
-        $nombre = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . $language;
+        $nombre = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('app.language');
 
         if ($fp = fopen($nombre, 'w')) {
             flock($fp, LOCK_EX);
@@ -531,7 +533,7 @@ class cacheManager
         global $CACHE_CONFIG;
         
         $filename = $CACHE_CONFIG['data_dir'] . "sql/" . md5($type_req);
-//var_dump($filename);
+
         if (file_exists($filename)) {
             if (filemtime($filename) > time() - $retention) {
                 

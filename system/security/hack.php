@@ -246,7 +246,7 @@ class hack
      */
     public static function MNSremoveHack($Xstring)
     {
-        global $op, $userdata, $tiny_mce, $tiny_mce_theme, $tiny_mce_relurl;
+        global $op, $tiny_mce, $tiny_mce_theme;
 
         static $blog_editor;
 

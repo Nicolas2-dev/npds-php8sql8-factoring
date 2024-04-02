@@ -13,6 +13,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\pagination\paginator;
 
@@ -20,7 +21,7 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-include("language/$language/language-adm.php");
+include('language/'.Config::get('app.language').'/language-adm.php');
 
 function admindroits($aid, $f_meta_nom)
 {
@@ -42,18 +43,18 @@ function admindroits($aid, $f_meta_nom)
     $radminsuper = $supers[0];
 }
 
-function adminhead($f_meta_nom, $f_titre, $adminimg)
+function adminhead($f_meta_nom, $f_titre, $null = '')
 {
-    global $admf_ext, $NPDS_Prefix, $f_meta_nom, $ModPath, $adm_img_mod;
+    global $NPDS_Prefix, $f_meta_nom, $ModPath, $adm_img_mod;
 
     list($furlscript, $ficone) = sql_fetch_row(sql_query("SELECT furlscript, ficone FROM " . $NPDS_Prefix . "fonctions WHERE fnom='$f_meta_nom'"));
 
-    if (file_exists($adminimg . $ficone . '.' . $admf_ext)) {
-        $img_adm = '<img src="' . $adminimg . $ficone . '.' . $admf_ext . '" class="vam " alt="' . $f_titre . '" />';
+    if (file_exists(Config::get('app.adminimg') . $ficone . '.' . Config::get('app.admf_ext'))) {
+        $img_adm = '<img src="' . Config::get('app.adminimg') . $ficone . '.' . Config::get('app.admf_ext') . '" class="vam " alt="' . $f_titre . '" />';
     } elseif (stristr($_SERVER['QUERY_STRING'], "Extend-Admin-SubModule") || $adm_img_mod == 1) {
         
-        if (file_exists('modules/' . $ModPath . '/' . $ModPath . '.' . $admf_ext)) {
-            $img_adm = '<img src="modules/' . $ModPath . '/' . $ModPath . '.' . $admf_ext . '" class="vam" alt="' . $f_titre . '" />';
+        if (file_exists('modules/' . $ModPath . '/' . $ModPath . '.' . Config::get('app.admf_ext'))) {
+            $img_adm = '<img src="modules/' . $ModPath . '/' . $ModPath . '.' . Config::get('app.admf_ext') . '" class="vam" alt="' . $f_titre . '" />';
         } else {
             $img_adm = '';
         }
@@ -66,16 +67,21 @@ function adminhead($f_meta_nom, $f_titre, $adminimg)
     echo $entete_adm;
 }
 
-$filemanager = false;
-
-if (file_exists("config/filemanager.php")) {
-    include_once("config/filemanager.php");
+function manuel($manuel) 
+{
+    return 'manuels/'.Config::get('app.language').'/'.$manuel.'.html';
 }
+
+
+// a revoir 
+// Config::set('filemanager.manager', false);
+
+// if (file_exists("config/filemanager.php")) {
+//     include_once("config/filemanager.php");
+// }
 
 function login()
 {
-    global $adminimg;
-
     include("themes/default/header.php");
 
     echo '
@@ -121,7 +127,7 @@ function login()
 
 function GraphicAdmin($hlpfile)
 {
-    global $aid, $admingraphic, $adminimg, $language, $admin, $banners, $filemanager, $Version_Sub, $Version_Num, $httprefmax, $httpref, $short_menu_admin, $admf_ext, $NPDS_Prefix, $adm_ent, $nuke_url, $Default_Theme;
+    global $aid, $NPDS_Prefix, $adm_ent;
     
     $bloc_foncts = '';
     $bloc_foncts_A = '';
@@ -145,7 +151,7 @@ function GraphicAdmin($hlpfile)
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0',fretour_h='' WHERE fid=37");
     
     //etat filemanager
-    if ($filemanager) 
+    if (Config::get('filemanager.manager')) 
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1' WHERE fid='27'");
     else 
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0' WHERE fid='27'");
@@ -168,8 +174,8 @@ function GraphicAdmin($hlpfile)
     // traitement specifique car message permanent versus
     $versus_info = explode('|', $messages_npds[0]);
 
-    if ($versus_info[1] == $Version_Sub and $versus_info[2] == $Version_Num)
-        sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . $Version_Sub . " " . $Version_Num . "', furlscript='' WHERE fid='36'");
+    if ($versus_info[1] == Config::get('app.Version_Sub') and $versus_info[2] == Config::get('app.Version_Num'))
+        sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . Config::get('app.Version_Sub') . " " . Config::get('app.Version_Num') . "', furlscript='' WHERE fid='36'");
     else
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
 
@@ -236,9 +242,9 @@ function GraphicAdmin($hlpfile)
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='44'");
     
     //référants à gérer
-    if ($httpref == 1) {
+    if (Config::get('app.httpref') == 1) {
         $result = sql_fetch_assoc(sql_query("SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "referer"));
-        if ($result['total'] >= $httprefmax) 
+        if ($result['total'] >= Config::get('app.httprefmax')) 
             sql_query("UPDATE " . $NPDS_Prefix . "fonctions set fetat='1', fretour='!!!' WHERE fid='39'");
         else 
             sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0' WHERE fid='39'");
@@ -334,12 +340,12 @@ function GraphicAdmin($hlpfile)
         $adm_lecture = explode('|', $SAQ['fdroits1_descr']);
 
         if ($SAQ['fcategorie'] == 6 or ($SAQ['fcategorie'] == 9 and strstr($SAQ['furlscript'], "op=Extend-Admin-SubModule"))) {
-            if (file_exists('modules/' . $SAQ['fnom'] . '/assets/images/' . $SAQ['ficone'] . '.' . $admf_ext))
-                $adminico = 'modules/' . $SAQ['fnom'] . '/assets/images/' . $SAQ['ficone'] . '.' . $admf_ext;
+            if (file_exists('modules/' . $SAQ['fnom'] . '/assets/images/' . $SAQ['ficone'] . '.' . Config::get('app.admf_ext')))
+                $adminico = 'modules/' . $SAQ['fnom'] . '/assets/images/' . $SAQ['ficone'] . '.' . Config::get('app.admf_ext');
             else
-                $adminico = $adminimg . 'module.' . $admf_ext;
+                $adminico = Config::get('app.adminimg') . 'module.' . Config::get('app.admf_ext');
         } else
-            $adminico = $adminimg . $SAQ['ficone'] . '.' . $admf_ext;
+            $adminico = Config::get('app.adminimg') . $SAQ['ficone'] . '.' . Config::get('app.admf_ext');
 
         if ($SAQ['fcategorie'] == 9) {
             if (preg_match('#mes_npds_\d#', $SAQ['fnom'])) {
@@ -377,7 +383,7 @@ function GraphicAdmin($hlpfile)
 
             $li_c .= '"><a class="btn btn-outline-primary" ' . $SAQ['furlscript'] . $blank . '>';
 
-            if ($admingraphic == 1)
+            if (Config::get('app.admingraphic') == 1)
                 $li_c .= '<img class="adm_img" src="' . $adminico . '" alt="icon_' . $SAQ['fnom_affich'] . '" loading="lazy" />';
             else
                 $li_c .= $SAQ['fcategorie'] == 6 ? $SAQ['fnom_affich'] : adm_translate($SAQ['fnom_affich']);
@@ -538,9 +544,9 @@ function GraphicAdmin($hlpfile)
                 var button = $(event.relatedTarget); 
                 var id = button.data('id');
                 $('#messageModalId').val(id);
-                $('#messageModalForm').attr('action', '" . $nuke_url . "/admin.php?op=alerte_update');
+                $('#messageModalForm').attr('action', '" . Config::get('app.nuke_url') . "/admin.php?op=alerte_update');
                 $.ajax({
-                url:\"" . $nuke_url . "/admin.php?op=alerte_api\",
+                url:\"" . Config::get('app.nuke_url') . "/admin.php?op=alerte_api\",
                 method: \"POST\",
                 data:{id:id},
                 dataType:\"JSON\",
@@ -591,7 +597,7 @@ function GraphicAdmin($hlpfile)
             </div>
         </div>
         <div id ="mes_perm" class="contenair-fluid text-muted" >
-            <span class="car">' . $Version_Sub . ' ' . $Version_Num . ' ' . $aid . ' </span><span id="tempsconnection" class="car"></span>
+            <span class="car">' . Config::get('app.Version_Sub') . ' ' . Config::get('app.Version_Num') . ' ' . $aid . ' </span><span id="tempsconnection" class="car"></span>
         </div>
             <div class="modal fade" id="versusModal" tabindex="-1" aria-labelledby="versusModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -601,7 +607,7 @@ function GraphicAdmin($hlpfile)
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <p>Vous utilisez NPDS ' . $Version_Sub . ' ' . $Version_Num . '</p>
+                <p>Vous utilisez NPDS ' . Config::get('app.Version_Sub') . ' ' . Config::get('app.Version_Num') . '</p>
                 <p>' . adm_translate("Une nouvelle version de NPDS est disponible !") . '</p>
                 <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
                 <p class="my-3">
@@ -636,7 +642,7 @@ function GraphicAdmin($hlpfile)
     </div>';
 
     echo $adm_ent;
-    if ($short_menu_admin != false) {
+    if (Config::get('app.short_menu_admin') != false) {
         echo '</div>';
         return;
     }
@@ -655,41 +661,38 @@ function GraphicAdmin($hlpfile)
 
 function adminMain($deja_affiches)
 {
-    global $language, $admart, $hlpfile, $aid, $admf_ext, $NPDS_Prefix;
+    global $hlpfile, $aid, $NPDS_Prefix;
 
-    $hlpfile = "manuels/$language/admin.html";
+    $hlpfile = 'manuels/'.Config::get('app.language').'/admin.html';
 
     include("themes/default/header.php");
 
-    global $short_menu_admin;
-
-    $short_menu_admin = false;
+    Config::set('app.short_menu_admin', false);
     $radminsuper = GraphicAdmin($hlpfile); ///????????
 
     echo '
     <div id="adm_men_art" class="adm_workarea">
-    <h2><img src="assets/images/admin/submissions.' . $admf_ext . '" class="adm_img" title="' . adm_translate("Articles") . '" alt="icon_' . adm_translate("Articles") . '" />&nbsp;' . adm_translate("Derniers") . ' ' . $admart . ' ' . adm_translate("Articles") . '</h2>';
+    <h2><img src="assets/images/admin/submissions.' . Config::get('app.admf_ext') . '" class="adm_img" title="' . adm_translate("Articles") . '" alt="icon_' . adm_translate("Articles") . '" />&nbsp;' . adm_translate("Derniers") . ' ' . Config::get('app.admart') . ' ' . adm_translate("Articles") . '</h2>';
 
     $resul = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories");
     $nbre_articles = sql_num_rows($resul);
 
     settype($deja_affiches, "integer");
-    settype($admart, "integer");
 
-    $result = sql_query("SELECT sid, title, hometext, topic, informant, time, archive, catid, ihome FROM " . $NPDS_Prefix . "stories ORDER BY sid DESC LIMIT $deja_affiches,$admart");
+    $result = sql_query("SELECT sid, title, hometext, topic, informant, time, archive, catid, ihome FROM " . $NPDS_Prefix . "stories ORDER BY sid DESC LIMIT $deja_affiches, ".Config::get('app.admart'));
 
-    $nbPages = ceil($nbre_articles / $admart);
+    $nbPages = ceil($nbre_articles / Config::get('app.admart'));
     $current = 1;
 
     if ($deja_affiches >= 1) {
-        $current = $deja_affiches / $admart;
+        $current = $deja_affiches / Config::get('app.admart');
     } else if ($deja_affiches < 1) {
         $current = 0;
     } else {
         $current = $nbPages;
     }
 
-    $start = ($current * $admart);
+    $start = ($current * Config::get('app.admart'));
 
     if ($nbre_articles) {
         echo '
@@ -706,7 +709,7 @@ function adminMain($deja_affiches)
         
         $i = 0;
         
-        while ((list($sid, $title, $hometext, $topic, $informant, $time, $archive, $catid, $ihome) = sql_fetch_row($result)) and ($i < $admart)) {
+        while ((list($sid, $title, $hometext, $topic, $informant, $time, $archive, $catid, $ihome) = sql_fetch_row($result)) and ($i < Config::get('app.admart'))) {
             $affiche = false;
             
             $result2 = sql_query("SELECT topicadmin, topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
@@ -782,7 +785,7 @@ function adminMain($deja_affiches)
             <li class="page-item disabled"><a class="page-link" href="#">' . $nbPages . ' ' . adm_translate("Page(s)") . '</a></li>
         </ul>';
 
-        echo paginator::paginate('admin.php?op=suite_articles&amp;deja_affiches=', '', $nbPages, $current, 1, $admart, $start);
+        echo paginator::paginate('admin.php?op=suite_articles&amp;deja_affiches=', '', $nbPages, $current, 1, Config::get('app.admart'), $start);
 
         echo '
         </div>';
@@ -822,12 +825,12 @@ if ($admintest) {
 
             // FILES MANAGER
         case 'FileManager':
-            if ($admintest and $filemanager)
+            if ($admintest and Config::get('filemanager.manager'))
                 header("location: modules.php?ModPath=f-manager&ModStart=f-manager&FmaRep=$aid");
             break;
 
         case 'FileManagerDisplay':
-            if ($admintest and $filemanager)
+            if ($admintest and Config::get('filemanager.manager'))
                 header("location: modules.php?ModPath=f-manager&ModStart=f-manager&FmaRep=download");
             break;
 
@@ -1486,5 +1489,6 @@ if ($admintest) {
             adminMain(0);
             break;
     }
-} else
+} else {
     login();
+}

@@ -22,6 +22,7 @@ use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 
@@ -146,7 +147,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
 {
     global $imgtmpPI, $imgtmpNE, $user;
     global $smilies, $theme, $forum, $forum_type, $allow_bbcode, $allow_to_post, $forum_access, $Mmod, $topic, $lock_state, $userdata;
-    global $allow_upload_forum, $att, $anonymous, $short_user, $last_read, $toggle;
+    global $allow_upload_forum, $att, $short_user, $last_read, $toggle;
 
     settype($result, 'string');
 
@@ -306,15 +307,15 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                 <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
             } else {
                 echo '
-                <a style="position:absolute; top:1rem;" title="' . $anonymous . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . $anonymous . '" /></a>
-                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $anonymous . '</strong></span>';
+                <a style="position:absolute; top:1rem;" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" /></a>
+                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
             }
 
         } else {
             if ($myrow['poster_id'] !== '0') {
                 echo '<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
             } else {
-                echo '<span class="text-muted"><strong>' . $anonymous . '</strong></span>';
+                echo '<span class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
             }
         }
 
@@ -542,7 +543,7 @@ for ($i = 0; $i < $total_contributeurs; $i++) {
         }
         echo '<img class="img-thumbnail img-fluid n-ava-small me-1 mb-1" src="' . $imgtmp . '" alt="' . $contri['uname'] . '" title="' . $contri['uname'] . '" data-bs-toggle="tooltip" />';
     } else
-        echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="assets/images/forum/avatar/blank.gif" alt="' . $anonymous . '" title="' . $anonymous . '" data-bs-toggle="tooltip" />';
+        echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip" />';
 }
 
 echo '

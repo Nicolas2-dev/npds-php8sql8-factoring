@@ -17,6 +17,7 @@
 /* dev team : Philippe Revilliod (Phr), A.NICOL                         */
 /************************************************************************/
 
+use npds\system\config\Config;
 use npds\system\http\response;
 use npds\system\security\hack;
 
@@ -39,6 +40,9 @@ use npds\system\security\hack;
     sql_query("UPDATE ".$NPDS_Prefix."ip_loc SET ip_visite= ip_visite +1 , ip_visi_pag = \"$ousursit\" WHERE ip_ip LIKE \"$ip\" ");
     else {
     $ibid=false;
+    
+    $nuke_url = Config::get('app.nuke_url');
+    
     if(strstr($nuke_url,'https')) {
     if(response::file_contents_exist($file_path[0])) {
         $loc = file_get_contents($file_path[0]);

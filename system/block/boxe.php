@@ -12,13 +12,14 @@ use npds\system\auth\groupe;
 use npds\system\cache\cache;
 use npds\system\support\str;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\support\stats;
 use npds\system\support\download;
 use npds\system\language\language;
 
 class boxe
 {
- 
+
     /**
      * Bloc activité du site
      * syntaxe : function#Site_Activ
@@ -27,11 +28,9 @@ class boxe
      */
     public static function Site_Activ(): void
     {
-            global $startdate, $top;
-
-            list($membres, $totala, $totalb, $totalc, $totald, $totalz) = stats::req_stat();
-            $aff = '
-        <p class="text-center">' . translate("Pages vues depuis") . ' ' . $startdate . ' : <span class="fw-semibold">' . str::wrh($totalz) . '</span></p>
+        list($membres, $totala, $totalb, $totalc, $totald, $totalz) = stats::req_stat();
+        $aff = '
+        <p class="text-center">' . translate("Pages vues depuis") . ' ' . Config::get('app.startdate') . ' : <span class="fw-semibold">' . str::wrh($totalz) . '</span></p>
         <ul class="list-group mb-3" id="site_active">
         <li class="my-1">' . translate("Nb. de membres") . ' <span class="badge rounded-pill bg-secondary float-end">' . str::wrh(($membres)) . '</span></li>
         <li class="my-1">' . translate("Nb. d'articles") . ' <span class="badge rounded-pill bg-secondary float-end">' . str::wrh($totala) . '</span></li>
@@ -40,32 +39,32 @@ class boxe
         <li class="my-1">' . translate("Nb. de critiques") . ' <span class="badge rounded-pill bg-secondary float-end">' . str::wrh($totalb) . '</span></li>
         </ul>';
 
-            if ($ibid = theme::theme_image("box/top.gif")) {
+        if ($ibid = theme::theme_image("box/top.gif")) {
+            $imgtmp = $ibid;
+        } else {
+            $imgtmp = false;
+        } // no need
+
+        if ($imgtmp) {
+            $aff .= '<p class="text-center"><a href="top.php"><img src="' . $imgtmp . '" alt="' . translate("Top") . ' ' . Config::get('app.top') . '" /></a>&nbsp;&nbsp;';
+
+            if ($ibid = theme::theme_image("box/stat.gif")) {
                 $imgtmp = $ibid;
             } else {
                 $imgtmp = false;
             } // no need
-            
-            if ($imgtmp) {
-                $aff .= '<p class="text-center"><a href="top.php"><img src="' . $imgtmp . '" alt="' . translate("Top") . ' ' . $top . '" /></a>&nbsp;&nbsp;';
-                
-                if ($ibid = theme::theme_image("box/stat.gif")) {
-                    $imgtmp = $ibid;
-                } else {
-                    $imgtmp = false;
-                } // no need
-                
-                $aff .= '<a href="stats.php"><img src="' . $imgtmp . '" alt="' . translate("Statistiques") . '" /></a></p>';
-            } else {
-                $aff .= '<p class="text-center"><a href="top.php">' . translate("Top") . ' ' . $top . '</a>&nbsp;&nbsp;<a href="stats.php" >' . translate("Statistiques") . '</a></p>';
-            }
 
-            global $block_title;
-            $title = $block_title == '' ? translate("Activité du site") : $block_title;
+            $aff .= '<a href="stats.php"><img src="' . $imgtmp . '" alt="' . translate("Statistiques") . '" /></a></p>';
+        } else {
+            $aff .= '<p class="text-center"><a href="top.php">' . translate("Top") . ' ' . Config::get('app.top') . '</a>&nbsp;&nbsp;<a href="stats.php" >' . translate("Statistiques") . '</a></p>';
+        }
 
-            themesidebox($title, $aff);
+        global $block_title;
+        $title = $block_title == '' ? translate("Activité du site") : $block_title;
+
+        themesidebox($title, $aff);
     }
- 
+
     /**
      * Bloc Online (Who_Online)
      * syntaxe : function#online
@@ -94,7 +93,7 @@ class boxe
 
         if ($row = sql_fetch_row($result)) {
             sql_query("UPDATE " . $NPDS_Prefix . "session SET username='$username', time='$ctime', host_addr='$ip', guest='$guest' WHERE username='$username'");
-        } else  {
+        } else {
             sql_query("INSERT INTO " . $NPDS_Prefix . "session (username, time, host_addr, guest) VALUES ('$username', '$ctime', '$ip', '$guest')");
         }
 
@@ -132,7 +131,7 @@ class boxe
      * syntaxe : function#lnlbox
      *
      * @return  void    [return description]
-     */    
+     */
     public static function lnlbox(): void
     {
         global $block_title;
@@ -190,31 +189,32 @@ class boxe
      */
     public static function adminblock(): void
     {
-        global $NPDS_Prefix, $admin, $aid, $admingraphic, $adminimg, $admf_ext, $Version_Sub, $Version_Num, $nuke_url;        
-        
+        global $NPDS_Prefix, $admin, $aid;
+
         $bloc_foncts_A = '';
 
         if ($admin) {
             $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$aid' LIMIT 1"));
-            
+
             $R = $Q['radminsuper'] == 1 ?
                 sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f WHERE f.finterface =1 AND f.fetat != '0' ORDER BY f.fcategorie") :
                 sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f LEFT JOIN " . $NPDS_Prefix . "droits d ON f.fdroits1 = d.d_fon_fid LEFT JOIN " . $NPDS_Prefix . "authors a ON d.d_aut_aid =a.aid WHERE f.finterface =1 AND fetat!=0 AND d.d_aut_aid='$aid' AND d.d_droits REGEXP'^1' ORDER BY f.fcategorie");
-            
+
             while ($SAQ = sql_fetch_assoc($R)) {
                 $arraylecture = explode('|', $SAQ['fdroits1_descr']);
                 $cat[] = $SAQ['fcategorie'];
                 $cat_n[] = $SAQ['fcategorie_nom'];
                 $fid_ar[] = $SAQ['fid'];
 
-                if ($SAQ['fcategorie'] == 9){
-                    $adminico = $adminimg . $SAQ['ficone'] . '.' . $admf_ext;}
+                if ($SAQ['fcategorie'] == 9) {
+                    $adminico = Config::get('app.adminimg') . $SAQ['ficone'] . '.' . Config::get('app.admf_ext');
+                }
 
                 if ($SAQ['fcategorie'] == 9 and strstr($SAQ['furlscript'], "op=Extend-Admin-SubModule")) {
-                    if (file_exists('modules/' . $SAQ['fnom'] . '/' . $SAQ['fnom'] . '.' . $admf_ext)) {
-                        $adminico = 'modules/' . $SAQ['fnom'] . '/' . $SAQ['fnom'] . '.' . $admf_ext;
+                    if (file_exists('modules/' . $SAQ['fnom'] . '/' . $SAQ['fnom'] . '.' . Config::get('app.admf_ext'))) {
+                        $adminico = 'modules/' . $SAQ['fnom'] . '/' . $SAQ['fnom'] . '.' . Config::get('app.admf_ext');
                     } else {
-                        $adminico = $adminimg . 'module.' . $admf_ext;
+                        $adminico = Config::get('app.adminimg') . 'module.' . Config::get('app.admf_ext');
                     }
                 }
 
@@ -232,8 +232,8 @@ class boxe
                             </a>';
                         }
                     } else {
-                        $furlscript = preg_match('#versusModal#', $SAQ['furlscript']) 
-                            ? 'data-bs-toggle="modal" data-bs-target="#bl_versusModal"' 
+                        $furlscript = preg_match('#versusModal#', $SAQ['furlscript'])
+                            ? 'data-bs-toggle="modal" data-bs-target="#bl_versusModal"'
                             : $SAQ['furlscript'];
 
                         if (preg_match('#NPDS#', $SAQ['fretour_h'])) {
@@ -264,8 +264,8 @@ class boxe
 
             // traitement specifique car fonction permanente versus
             $versus_info = explode('|', $messages_npds[0]);
-            if ($versus_info[1] == $Version_Sub and $versus_info[2] == $Version_Num) {
-                sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . $Version_Sub . " " . $Version_Num . "', furlscript='' WHERE fid='36'");
+            if ($versus_info[1] == Config::get('app.Version_Sub') and $versus_info[2] == Config::get('app.Version_Num')) {
+                sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . Config::get('app.Version_Sub') . " " . Config::get('app.Version_Num') . "', furlscript='' WHERE fid='36'");
             } else {
                 sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
             }
@@ -290,7 +290,7 @@ class boxe
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    <p>Vous utilisez NPDS^ ' . $Version_Sub . ' ' . $Version_Num . '</p>
+                    <p>Vous utilisez NPDS^ ' . Config::get('app.Version_Sub') . ' ' . Config::get('app.Version_Num') . '</p>
                     <p>' . translate("Une nouvelle version de NPDS^ est disponible !") . '</p>
                     <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
                     <p class="my-3">
@@ -303,7 +303,7 @@ class boxe
                 </div>
             </div>
         </div>';
-       $content .= '<div class="modal fade" id="bl_messageModal" tabindex="-1" aria-labelledby="bl_messageModalLabel" aria-hidden="true">
+            $content .= '<div class="modal fade" id="bl_messageModal" tabindex="-1" aria-labelledby="bl_messageModalLabel" aria-hidden="true">
           <div class="modal-dialog">
              <div class="modal-content">
                 <div class="modal-header">
@@ -329,9 +329,9 @@ class boxe
                 var button = $(event.relatedTarget); 
                 var id = button.data("id");
                 $("#bl_messageModalId").val(id);
-                $("#bl_messageModalForm").attr("action", "' . $nuke_url . '/admin.php?op=alerte_update");
+                $("#bl_messageModalForm").attr("action", "' . Config::get('app.nuke_url') . '/admin.php?op=alerte_update");
                 $.ajax({
-                   url:"' . $nuke_url . '/admin.php?op=alerte_api",
+                   url:"' . Config::get('app.nuke_url') . '/admin.php?op=alerte_api",
                    method: "POST",
                    data:{id:id},
                    dataType:"JSON",
@@ -382,11 +382,11 @@ class boxe
      */
     public static function ephemblock(): void
     {
-        global $NPDS_Prefix, $gmt;
+        global $NPDS_Prefix;
 
         $cnt = 0;
-        $eday = date("d", time() + ((int)$gmt * 3600));
-        $emonth = date("m", time() + ((int)$gmt * 3600));
+        $eday = date("d", time() + ((int) Config::get('app.gmt') * 3600));
+        $emonth = date("m", time() + ((int) Config::get('app.gmt') * 3600));
 
         $result = sql_query("SELECT yid, content FROM " . $NPDS_Prefix . "ephem WHERE did='$eday' AND mid='$emonth' ORDER BY yid ASC");
         $boxstuff = '<div>' . translate("En ce jour...") . '</div>';
@@ -447,7 +447,7 @@ class boxe
             themesidebox($title, $boxstuff);
         }
     }
- 
+
     /**
      * Bloc membre
      * syntaxe : function#userblock
@@ -490,7 +490,7 @@ class boxe
 
         themesidebox($title, $boxstuff);
     }
- 
+
     /**
      * Bloc lastdownload
      * syntaxe : function#lastdownload
@@ -507,7 +507,7 @@ class boxe
         $boxstuff .= download::topdownload_data('short', 'ddate');
         $boxstuff .= '</ul>';
 
-        if ($boxstuff == '<ul></ul>') { 
+        if ($boxstuff == '<ul></ul>') {
             $boxstuff = '';
         }
 
@@ -526,10 +526,10 @@ class boxe
      */
     public static function oldNews(string $storynum, ?string $typ_aff = ''): void
     {
-        global $locale, $oldnum, $storyhome, $categories, $cat, $user, $cookie, $language;
+        global $locale, $oldnum, $categories, $cat, $user, $cookie;
 
         $boxstuff = '<ul class="list-group">';
-        $storynum = isset($cookie[3]) ? $cookie[3] : $storyhome;
+        $storynum = isset($cookie[3]) ? $cookie[3] : Config::get('app.storyhome');
 
         if (($categories == 1) and ($cat != '')) {
             $sel = $user ? "WHERE catid='$cat'" : "WHERE catid='$cat' AND ihome=0";
@@ -548,14 +548,11 @@ class boxe
             list($sid, $title, $time, $comments, $counter) = $xtab[$story_limit];
             $story_limit++;
 
-            //setlocale(LC_TIME, aff_langue($locale));
-            //preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime2);
-            //$datetime2 = strftime("" . translate("datestring2") . "", @mktime($datetime2[4], $datetime2[5], $datetime2[6], $datetime2[2], $datetime2[3], $datetime2[1]));
-            
+            // a revoir entre locale user et local site
             $locale = language::getLocale();
             $datetime2 = ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring2"), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
 
-            if ($language != 'chinese') {
+            if (Config::get('app.language') != 'chinese') {
                 $datetime2 = ucfirst($datetime2);
             }
 
@@ -579,7 +576,7 @@ class boxe
             $vari++;
 
             if ($vari == $oldnum) {
-                $storynum = isset($cookie[3]) ? $cookie[3] : $storyhome;
+                $storynum = isset($cookie[3]) ? $cookie[3] : Config::get('app.storyhome');
                 $min = $oldnum + $storynum;
                 $boxstuff .= "<li class=\"text-center mt-3\" ><a href=\"search.php?min=$min&amp;type=stories&amp;category=$cat\"><strong>" . translate("Articles plus anciens") . "</strong></a></li>\n";
             }
@@ -605,8 +602,6 @@ class boxe
      */
     public static function bigstory(): void
     {
-        global $cookie; //no need ?
-
         $content = '';
         $today = getdate();
         $day = $today['mday'];
@@ -635,13 +630,13 @@ class boxe
         $content .= ($fsid == '' and $ftitle == '') ?
             '<span class="fw-semibold">' . translate("Il n'y a pas encore d'article du jour.") . '</span>' :
             '<span class="fw-semibold">' . translate("L'article le plus consulté aujourd'hui est :") . '</span><br /><br /><a href="article.php?sid=' . $fsid . '">' . language::aff_langue($ftitle) . '</a>';
-        
-            global $block_title;
+
+        global $block_title;
         $boxtitle = $block_title == '' ? translate("Article du Jour") : $block_title;
 
         themesidebox($boxtitle, $content);
     }
- 
+
     /**
      * Bloc de gestion des catégories
      * syntaxe : function#category
@@ -659,17 +654,17 @@ class boxe
             return;
         } else {
             $boxstuff = '<ul>';
-            
+
             while (list($catid, $title) = sql_fetch_row($result)) {
                 $result2 = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories WHERE catid='$catid' LIMIT 0,1");
                 $numrows = sql_num_rows($result2);
-                
+
                 if ($numrows > 0) {
                     $res = sql_query("SELECT time FROM " . $NPDS_Prefix . "stories WHERE catid='$catid' ORDER BY sid DESC LIMIT 0,1");
                     list($time) = sql_fetch_row($res);
-                    
-                    $boxstuff .= (($cat == $catid) 
-                        ? '<li><strong>' . language::aff_langue($title) . '</strong></li>' 
+
+                    $boxstuff .= (($cat == $catid)
+                        ? '<li><strong>' . language::aff_langue($title) . '</strong></li>'
                         : '<li class="list-group-item list-group-item-action hyphenate"><a href="index.php?op=newcategory&amp;catid=' . $catid . '" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernière contribution") . ' <br />' . date::formatTimestamp($time) . ' ">' . language::aff_langue($title) . '</a></li>'
                     );
                 }
@@ -697,7 +692,7 @@ class boxe
      */
     public static function headlines(string $hid = '', bool $block = true): string|bool
     {
-        global $NPDS_Prefix, $Version_Num, $Version_Id, $rss_host_verif, $long_chain;
+        global $NPDS_Prefix;
 
         if (file_exists("config/proxy.php")) {
             include("config/proxy.php");
@@ -715,7 +710,7 @@ class boxe
             $cache_file = 'storage/cache/' . preg_replace('[^a-z0-9]', '', strtolower($sitename)) . '_' . $hid . '.cache';
             $cache_time = 1200; //3600 origine
 
-            $items = 0; // ?????
+            //$items = 0; // ?????
             $max_items = 6;
             $rss_timeout = 15;
             $rss_font = '<span class="small">';
@@ -723,9 +718,9 @@ class boxe
             if ((!(file_exists($cache_file))) or (filemtime($cache_file) < (time() - $cache_time)) or (!(filesize($cache_file)))) {
                 $rss = parse_url($url);
 
-                if ($rss_host_verif == true) {
+                if (Config::get('app.rss_host_verif') == true) {
                     $verif = fsockopen($rss['host'], 80, $errno, $errstr, $rss_timeout);
-                    
+
                     if ($verif) {
                         fclose($verif);
                         $verif = true;
@@ -735,17 +730,18 @@ class boxe
                 }
 
                 if (!$verif) {
+                    // a revoir ???? pas clair !!!!
                     $cache_file_sec = $cache_file . ".security";
-                    
-                    if (file_exists($cache_file)) { 
+
+                    if (file_exists($cache_file)) {
                         $ibid = rename($cache_file, $cache_file_sec);
                     }
 
                     themesidebox($boxtitle, "Security Error");
                     return true;
                 } else {
-                    if (!$long_chain) {
-                        $long_chain = 15;
+                    if (!Config::get('app.theme.long_chain')) {
+                        Config::set('app.theme.long_chain', 15);
                     }
 
                     $fpwrite = fopen($cache_file, 'w');
@@ -754,8 +750,8 @@ class boxe
                         fputs($fpwrite, "<ul>\n");
                         $flux = simplexml_load_file($headlinesurl, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-                        $namespaces = $flux->getNamespaces(true); // get namespaces ?????
-                        $ic = ''; // ?????
+                        //$namespaces = $flux->getNamespaces(true); // get namespaces ?????
+                        //$ic = ''; // ?????
 
                         //ATOM//
                         if ($flux->entry) {
@@ -766,10 +762,10 @@ class boxe
                                 if ($entry->content) {
                                     $cont = (string) $entry->content;
                                 }
-                                
+
                                 fputs($fpwrite, '<li><a href="' . (string)$entry->link['href'] . '" target="_blank" >' . (string) $entry->title . '</a><br />' . $cont . '</li>');
-                                
-                                if ($j == $max_items) { 
+
+                                if ($j == $max_items) {
                                     break;
                                 }
                                 $j++;
@@ -783,9 +779,9 @@ class boxe
                                 if ($item->description) {
                                     $cont = (string) $item->description;
                                 }
-                                
+
                                 fputs($fpwrite, '<li><a href="' . (string)$item->link['href'] . '"  target="_blank" >' . (string) $item->title . '</a><br /></li>');
-                                
+
                                 if ($j == $max_items) {
                                     break;
                                 }
@@ -801,9 +797,9 @@ class boxe
                                 if ($item->description) {
                                     $cont = (string) $item->description;
                                 }
-                                
+
                                 fputs($fpwrite, '<li><a href="' . (string)$item->link . '"  target="_blank" >' . (string) $item->title . '</a><br />' . $cont . '</li>');
-                                
+
                                 if ($j == $max_items) {
                                     break;
                                 }
@@ -818,7 +814,7 @@ class boxe
 
                         foreach ($flux->item as $item) {
                             fputs($fpwrite, '<li>' . $ico . '<a href="' . (string) $item->link . '" target="_blank" >' . (string) $item->title . '</a></li>');
-                            
+
                             if ($j == $max_items) {
                                 break;
                             }
@@ -831,10 +827,11 @@ class boxe
                 }
             }
 
+            // a revoir ??? pas clair !!!! 
             if (file_exists($cache_file)) {
                 ob_start();
-                    $ibid = readfile($cache_file); // ??????
-                    $boxstuff = $rss_font . ob_get_contents() . '</span>';
+                $ibid = readfile($cache_file); // ??????
+                $boxstuff = $rss_font . ob_get_contents() . '</span>';
                 ob_end_clean();
             }
 
@@ -858,7 +855,7 @@ class boxe
      */
     public static function bloc_rubrique(): void
     {
-        global $NPDS_Prefix, $language, $user;
+        global $NPDS_Prefix;
 
         $result = sql_query("SELECT rubid, rubname, ordre FROM " . $NPDS_Prefix . "rubriques WHERE enligne='1' AND rubname<>'divers' ORDER BY ordre");
         $boxstuff = '<ul>';
@@ -929,7 +926,7 @@ class boxe
 
         themesidebox($title, groupe::fab_espace_groupe($gr, "0", $i_gr));
     }
- 
+
     /**
      * Bloc des groupes
      * syntaxe : function#bloc_groupes
@@ -956,9 +953,9 @@ class boxe
      */
     public static function bloc_langue(): void
     {
-        global $block_title, $multi_langue;
+        global $block_title;
 
-        if ($multi_langue) {
+        if (Config::get('app.multi_langue')) {
             $title = $block_title == '' ? translate("Choisir une langue") : $block_title;
             themesidebox($title, language::aff_local_langue("index.php", "choice_user_language", ''));
         }
@@ -971,17 +968,17 @@ class boxe
      */
     public static function blockSkin(): void
     {
-        global $Default_Skin, $Default_Theme, $user;
+        global $user;
 
         $skinOn = '';
-        
+
         if ($user) {
             $user2 = base64_decode($user);
             $cookie = explode(':', $user2);
             $ibix = explode('+', urldecode($cookie[9]));
             $skinOn = substr($ibix[0], -3) != '_sk' ? '' : $ibix[1];
         } else {
-            $skinOn = substr($Default_Theme, -3) != '_sk' ? '' : $Default_Skin;
+            $skinOn = substr(Config::get('app.Default_Theme'), -3) != '_sk' ? '' : Config::get('app.Default_Skin');;
         }
 
         $content = '';
@@ -1024,7 +1021,7 @@ class boxe
 
         themesidebox('Theme Skin', $content);
     }
- 
+
     /**
      * Construit le bloc sondage
      *
@@ -1036,7 +1033,7 @@ class boxe
      */
     public static function pollMain(string $pollID, string|int $pollClose): void
     {
-        global $NPDS_Prefix, $maxOptions, $boxTitle, $boxContent, $userimg, $language, $pollcomm, $cookie;
+        global $NPDS_Prefix, $boxTitle, $boxContent;
 
         if (!isset($pollID)) {
             $pollID = 1;
@@ -1059,13 +1056,13 @@ class boxe
 
         $boxContent .= '<legend>' . language::aff_langue($pollTitle) . '</legend>';
         $result = sql_query("SELECT pollID, optionText, optionCount, voteID FROM " . $NPDS_Prefix . "poll_data WHERE (pollID='$pollID' AND optionText<>'') ORDER BY voteID");
-           
+
         $sum = 0;
         $j = 0;
-            
+
         if (!$pollClose) {
             $boxContent .= '<div class="mb-3">';
-                
+
             while ($object = sql_fetch_assoc($result)) {
                 $boxContent .= '
                 <div class="form-check">
@@ -1096,19 +1093,19 @@ class boxe
         <a href="pollBooth.php?op=results&amp;pollID=' . $pollID . '" title="' . translate("Résultats") . '">' . translate("Résultats") . '</a>&nbsp;&nbsp;<a href="pollBooth.php">' . translate("Anciens sondages") . '</a>
         <ul class="list-group mt-3">
         <li class="list-group-item">' . translate("Votes : ") . ' <span class="badge rounded-pill bg-secondary float-end">' . $sum . '</span></li>';
-            
-        if ($pollcomm) {
+
+        if (Config::get('app.pollcomm')) {
             if (file_exists("modules/comments/config/pollBoth.conf.php")) {
                 include("modules/comments/config/pollBoth.conf.php");
             }
 
             list($numcom) = sql_fetch_row(sql_query("SELECT COUNT(*) FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$pollID' AND post_aff='1'"));
-                
+
             $boxContent .= '<li class="list-group-item">' . translate("Commentaire(s) : ") . ' <span class="badge rounded-pill bg-secondary float-end">' . $numcom . '</span></li>';
         }
-            
+
         $boxContent .= '</ul>';
-        
+
         themesidebox($boxTitle, $boxContent);
     }
 }

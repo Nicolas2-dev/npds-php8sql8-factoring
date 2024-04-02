@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\support;
 
+use npds\system\config\Config;
+
 class counter
 {
 
@@ -14,9 +16,9 @@ class counter
      */
     public static function counterUpadate(): void
     {
-        global $admin, $not_admin_count, $NPDS_Prefix;;
+        global $admin, $NPDS_Prefix;;
 
-        if ((!$admin) or ($not_admin_count != 1)) {
+        if ((!$admin) or (Config::get('app.not_admin_count') != 1)) {
             $user_agent = getenv("HTTP_USER_AGENT");
 
             if ((stristr($user_agent, "Nav")) 

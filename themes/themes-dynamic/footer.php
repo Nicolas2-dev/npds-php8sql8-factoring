@@ -12,15 +12,15 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\theme\theme;
 use npds\system\language\language;
 use npds\system\language\metalang;
-
-
-global $theme;
 
 $rep = false;
 
 settype($ContainerGlobal, 'string');
+
+$theme = theme::getTheme();
 
 if (file_exists("themes/" . $theme . "/view/footer.html")) {
     $rep = $theme;
@@ -30,7 +30,6 @@ if (file_exists("themes/" . $theme . "/view/footer.html")) {
     echo "footer.html manquant / not find !<br />";
     die();
 }
-
 
 if ($rep) {
 

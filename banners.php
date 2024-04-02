@@ -121,8 +121,7 @@ function clickbanner($bid)
     sql_free_result($bresult);
     
     if ($clickurl == '') {
-        global $nuke_url;
-        $clickurl = $nuke_url;
+        $clickurl = Config::get('app.nuke_url');
     }
 
     Header("Location: " . language::aff_langue($clickurl));
@@ -173,10 +172,10 @@ function IncorrectLogin()
 
 function header_page()
 {
-    global $Titlesitename, $Default_Theme, $language;
-    
     include_once("modules/upload/config/upload.conf.php");
     include("storage/meta/meta.php");
+
+    $language = Config::get('app.language');
 
     if ($url_upload_css) {
         $url_upload_cssX = str_replace('style.css', $language . '-style.css', $url_upload_css);
@@ -191,6 +190,8 @@ function header_page()
     if (file_exists('themes/default/view/include/header_head.inc')) {
         include('themes/default/view/include/header_head.inc');
     }
+
+    $Default_Theme = Config::get('app.Default_Theme');
 
     if (file_exists('themes/' . $Default_Theme . '/include/header_head.inc')) {
         include('themes/' . $Default_Theme . '/include/header_head.inc');
@@ -210,7 +211,7 @@ function header_page()
             <span class="navbar-text">' . translate("Bannières - Publicité") . '</span>
             </div>
         </nav>
-        <h2 class="mt-4">' . translate("Bannières - Publicité") . ' @ ' . $Titlesitename . '</h2>
+        <h2 class="mt-4">' . translate("Bannières - Publicité") . ' @ ' . Config::get('app.Titlesitename') . '</h2>
         <p align="center">';
 }
 
@@ -272,13 +273,11 @@ function bannerstats($login, $pass)
                 </tr>';
             }
 
-            global $nuke_url, $sitename;
-
             echo '
                 </tbody>
             </table>
             <div class="lead my-3">
-                <a href="' . $nuke_url . '" target="_blank">' . $sitename . '</a>
+                <a href="' . Config::get('app.nuke_url') . '" target="_blank">' . Config::get('app.sitename') . '</a>
             </div>';
 
             $result = sql_query("SELECT id, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
@@ -407,11 +406,11 @@ function EmailStats($login, $cid, $bid)
                 $left = $imptotal - $impmade;
             }
 
-            global $sitename, $gmt;
+            global $gmt;
             
             $fecha = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
             
-            $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . $sitename;
+            $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . Config::get('app.sitename');
             
             $message  = "Client : $name\n" . translate("Bannière") . " ID : $bid\n" . translate("Bannière") . " Image : $imageurl\n" . translate("Bannière") . " URL : $clickurl\n\n";
             $message .= "Impressions " . translate("Réservées") . " : $imptotal\nImpressions " . translate("Réalisées") . " : $impmade\nImpressions " . translate("Restantes") . " : $left\nClicks " . translate("Reçus") . " : $clicks\nClicks " . translate("Pourcentage") . " : $percent%\n\n";

@@ -15,6 +15,7 @@
 
 use npds\system\support\str;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
@@ -89,7 +90,7 @@ echo '
     <h2>' . translate("Statistiques") . '</h2>
     <div class="card card-body lead">
         <div>
-        ' . translate("Nos visiteurs ont visualisé") . ' <span class="badge bg-secondary">' . str::wrh($total) . '</span> ' . translate("pages depuis le") . ' ' . $startdate . '
+        ' . translate("Nos visiteurs ont visualisé") . ' <span class="badge bg-secondary">' . str::wrh($total) . '</span> ' . translate("pages depuis le") . ' ' . Config::get('app.startdate') . '
         </div>
     </div>
     <h3 class="my-4">' . translate("Navigateurs web") . '</h3>
@@ -430,13 +431,13 @@ echo '
 
 $resultX = sql_query("SELECT DISTINCT(theme) FROM " . $NPDS_Prefix . "users");
 
-global $Default_Theme;
+
 while (list($themelist) = sql_fetch_row($resultX)) {
     if ($themelist != '') {
         $ibix = explode('+', $themelist);
         $T_exist = is_dir("themes/$ibix[0]") ? '' : '<span class="text-danger">' . translate("Ce fichier n'existe pas ...") . '</span>';
 
-        if ($themelist == $Default_Theme) {
+        if ($themelist == Config::get('app.Default_Theme')) {
             $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE theme='$themelist'");
             $themeD1 = $result ? sql_num_rows($result) : 0;
 

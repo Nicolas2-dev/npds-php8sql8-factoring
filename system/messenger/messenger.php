@@ -61,9 +61,12 @@ class messenger
                 }
             }
 
-            global $subscribe, $nuke_url, $sitename;
+            global $subscribe; 
+
+            $nuke_url = Config::get('app.nuke_url');
+            
             if ($subscribe) {
-                $sujet = html_entity_decode(translate_ml($user_languex, "Notification message privé."), ENT_COMPAT | ENT_HTML401, 'utf-8') . '[' . $from_userid . '] / ' . $sitename;
+                $sujet = html_entity_decode(translate_ml($user_languex, "Notification message privé."), ENT_COMPAT | ENT_HTML401, 'utf-8') . '[' . $from_userid . '] / ' . Config::get('app.sitename');
                 $message = $time . '<br />' . translate_ml($user_languex, "Bonjour") . '<br />' . translate_ml($user_languex, "Vous avez un nouveau message.") . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . $nuke_url . '/viewpmsg.php">' . translate_ml($user_languex, "Cliquez ici pour lire votre nouveau message.") . '</a><br />';
                 $message .= Config::get('signature.message');
                 
@@ -114,12 +117,12 @@ class messenger
     #autodoc instant_members_message() : Bloc MI (Message Interne) <br />=> syntaxe : function#instant_members_message
     public static function instant_members_message()
     {
-        global $user, $admin, $long_chain, $NPDS_Prefix;
+        global $user, $admin, $NPDS_Prefix;
 
         settype($boxstuff, 'string');
 
-        if (!$long_chain) {
-            $long_chain = 13;
+        if (!Config::get('app.theme.long_chain')) {
+            Config::set('app.theme.long_chain', 13);
         }
 
         global $block_title;
@@ -230,8 +233,8 @@ class messenger
 
                     $N = $ibid[$i]['username'];
 
-                    if (strlen($N) > $long_chain) {
-                        $M = substr($N, 0, $long_chain) . '.';
+                    if (strlen($N) > Config::get('app.theme.long_chain')) {
+                        $M = substr($N, 0, Config::get('app.theme.long_chain')) . '.';
                     } else {
                         $M = $N;
                     }
@@ -252,7 +255,11 @@ class messenger
                 if ($ibid[0]) {
                     for ($i = 1; $i <= $ibid[0]; $i++) {
                         $N = $ibid[$i]['username'];
-                        $M = strlen($N) > $long_chain ? substr($N, 0, $long_chain) . '.' : $N;
+                        $M = ((strlen($N) > Config::get('app.theme.long_chain')) 
+                            ? substr($N, 0, Config::get('app.theme.long_chain')) . '.' 
+                            : $N
+                        );
+                        
                         $boxstuff .= $M . '<br />';
                     }
 

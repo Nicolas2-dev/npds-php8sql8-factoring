@@ -16,6 +16,7 @@
 /************************************************************************/
 
 use npds\system\support\str;
+use npds\system\config\Config;
 use npds\system\support\polls;
 use npds\system\language\language;
 
@@ -299,7 +300,7 @@ if (isset($forwarder)) {
                 include("modules/comments/config/pollBoth.conf.php");
                 
                 if ($pollClose == 99) {
-                    $anonpost = 0;
+                    Config::set('app.generale.anonpost', 0);
                 }
 
                 include("modules/comments/http/comments.php");

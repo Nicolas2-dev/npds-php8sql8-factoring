@@ -13,6 +13,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\config\Config;
 use npds\system\utility\crypt;
 
 
@@ -116,8 +117,8 @@ switch ($apli) {
                     // work with mimetypes.php for showing source'code
                     if ($att_type == 'text/source') {
                         include('storage/meta/meta.php');
-                        
-                        echo css::import_css($Default_Theme, $language, '', '', '');
+
+                        echo css::import_css(Config::get('app.Default_Theme'), $language, '', '', '');
                         
                         echo '
                         </head>

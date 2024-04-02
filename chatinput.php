@@ -15,6 +15,8 @@ use npds\system\chat\chat;
 use npds\system\assets\css;
 use npds\system\auth\users;
 use npds\system\forum\forum;
+use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\utility\crypt;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -37,44 +39,11 @@ if (!users::autorisation($id)) {
     die();
 }
 
-global $Default_Theme, $Default_Skin, $user;
-
-if (isset($user) and $user != '') {
-    
-    global $cookie;
-    if ($cookie[9] != '') {
-        $ibix = explode('+', urldecode($cookie[9]));
-        
-        if (array_key_exists(0, $ibix)) {
-            $theme = $ibix[0];
-        } else {
-            $theme = $Default_Theme;}
-        
-        if (array_key_exists(1, $ibix)) { 
-            $skin = $ibix[1];
-        } else {
-            $skin = $Default_Skin; //$skin='';
-        } 
-
-        $tmp_theme = $theme;
-        
-        if (!$file = @opendir("themes/$theme")) {
-            $tmp_theme = $Default_Theme;
-        }
-    } else {
-        $tmp_theme = $Default_Theme;
-    }
-} else {
-    $theme = $Default_Theme;
-    $skin = $Default_Skin;
-    $tmp_theme = $theme;
-}
-
 $Titlesitename = 'NPDS';
 
 include("storage/meta/meta.php");
 
-echo css::import_css($tmp_theme, $language, $skin, basename($_SERVER['PHP_SELF']), '');
+echo css::import_css(theme::getTheme(), Config::get('app.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), '');
 
 include("assets/formhelp.java.php");
 
@@ -92,6 +61,7 @@ echo '
     <input type="hidden" name="id" value="' . $id . '" />
     <input type="hidden" name="auto" value="' . $auto . '" />';
 
+global $cookie;    
 if (!isset($cookie[1])) {
     $pseudo = ((isset($name)) ? ($name) : urldecode(getip()));
 } else {

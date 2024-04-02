@@ -16,6 +16,7 @@
 use npds\system\auth\users;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -171,7 +172,7 @@ if (!$user) {
 
             echo '<td>' . userpopover($posterdata['uname'], 40, 2);
 
-            echo ($posterdata['uid'] <> 1) ? $posterdata['uname'] : $sitename;
+            echo ($posterdata['uid'] <> 1) ? $posterdata['uname'] : Config::get('app.sitename');
 
             echo '</td>
                     <td>' . language::aff_langue($myrow['subject']) . '</td>

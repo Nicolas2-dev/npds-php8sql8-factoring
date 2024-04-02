@@ -44,7 +44,7 @@ function autorisation_section($userlevel)
 
 function listsections($rubric)
 {
-    global $sitename, $admin, $NPDS_Prefix;
+    global $admin, $NPDS_Prefix;
 
     include("themes/default/header.php");
 
@@ -482,7 +482,7 @@ function viewarticle($artid, $page)
 
 function PrintSecPage($artid)
 {
-    global $NPDS_Prefix, $site_logo, $sitename, $nuke_url, $language, $Titlesitename;
+    global $NPDS_Prefix, $language, $Titlesitename;
 
     include("storage/meta/meta.php");
 
@@ -492,6 +492,8 @@ function PrintSecPage($artid)
         <body>
             <div id="print_sect" max-width="640" class="container p-1 n-hyphenate">
                 <p class="text-center">';
+
+    $site_logo = Config::get('app.site_logo');
 
     $pos = strpos($site_logo, "/");
 
@@ -512,10 +514,12 @@ function PrintSecPage($artid)
 
     echo metalang::meta_lang($content);
 
+    $nuke_url = Config::get('app.nuke_url');
+
     echo '
                 <hr />
                 <p class="text-center">
-                ' . translate("Cet article provient de") . ' ' . $sitename . '<br /><br />
+                ' . translate("Cet article provient de") . ' ' . Config::get('app.sitename') . '<br /><br />
                 ' . translate("L'url pour cet article est : ") . '
                 <a href="' . $nuke_url . '/sections.php?op=viewarticle&amp;artid=' . $artid . '">' . $nuke_url . '/sections.php?op=viewarticle&amp;artid=' . $artid . '</a>
                 </p>

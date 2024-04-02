@@ -10,6 +10,7 @@ use npds\system\auth\groupe;
 use npds\system\cache\cache;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
 
@@ -32,7 +33,7 @@ class forum
 
     public static function RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration)
     {
-        global $parse, $user, $NPDS_Prefix;
+        global $user, $NPDS_Prefix;
 
         $topics = 0;
 
@@ -71,7 +72,7 @@ class forum
                     $boxstuff .= '<li><hr /></li>';
                 }
 
-                if ($parse == 0) {
+                if (Config::get('app.parse') == 0) {
                     $forumname = FixQuotes($forumname);
                     $forum_desc = FixQuotes($forum_desc);
                 } else {
@@ -112,7 +113,7 @@ class forum
                         $postername = $myrow['uname'];
                     }
 
-                    if ($parse == 0) {
+                    if (Config::get('app.parse') == 0) {
                         $tt =  strip_tags(FixQuotes($tt));
                         $topictitle = FixQuotes($topictitle);
                     } else {
@@ -134,7 +135,7 @@ class forum
 
         $boxstuff .= '</ul>';
             
-        return ($boxstuff);
+        return $boxstuff;
     }
 
     public static function get_total_topics($forum_id)
@@ -389,7 +390,7 @@ class forum
     public static function smilie($message)
     {
         // Tranforme un :-) en IMG
-        global $theme;
+        $theme = theme::getTheme();
     
         if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/";
@@ -431,7 +432,7 @@ class forum
     public static function smile($message)
     {
         // Tranforme une IMG en :-)
-        global $theme;
+        $theme = theme::getTheme();
     
         if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/";
@@ -541,8 +542,10 @@ class forum
     // ne fonctionne pas dans tous les contextes car on a pas la variable du theme !?
     public static function putitems_more()
     {
-        global $theme, $tmp_theme;
-    
+        global $tmp_theme;
+
+        $theme = theme::getTheme();
+
         if (stristr($_SERVER['PHP_SELF'], "more_emoticon.php")) {
             $theme = $tmp_theme;
         }
@@ -581,8 +584,6 @@ class forum
     #autodoc putitems($targetarea) : appel un popover pour la saisie des emoji (Unicode v13) dans un textarea défini par $targetarea
     public static function putitems($targetarea)
     {
-        global $theme;
-    
         echo '
         <div title="' . translate("Cliquez pour insérer des emoji dans votre message") . '" data-bs-toggle="tooltip">
             <button class="btn btn-link ps-0" type="button" id="button-textOne" data-bs-toggle="emojiPopper" data-bs-target="#' . $targetarea . '">
@@ -592,7 +593,7 @@ class forum
         <script src="assets/shared/emojipopper/js/emojiPopper.min.js"></script>
         <script type="text/javascript">
         //<![CDATA[
-            $(public static function () {
+            $(function() {
                 "use strict"
                 var emojiPopper = $(\'[data-bs-toggle="emojiPopper"]\').emojiPopper({
                     url: "assets/shared/emojipopper/php/emojicontroller.php",
@@ -656,7 +657,7 @@ class forum
     
     public static function emotion_add($image_subject)
     {
-        global $theme;
+        $theme = theme::getTheme();
     
         if ($ibid = theme::theme_image('forum/subject/index.html')) {
             $imgtmp = "themes/$theme/images/forum/subject";
@@ -742,8 +743,6 @@ class forum
     
     public static function member_qualif($poster, $posts, $rank)
     {
-        global $anonymous;
-    
         $tmp = '';
     
         if ($ibid = theme::theme_image('forum/rank/post.gif')) { 
@@ -754,7 +753,7 @@ class forum
     
         $tmp = '<img class="n-smil" src="' . $imgtmpP . '" alt="" loading="lazy" />' . $posts . '&nbsp;';
     
-        if ($poster != $anonymous) {
+        if ($poster != Config::get('app.anonymous')) {
             $nux = 0;
     
             if ($posts >= 10 and $posts < 30) { 
@@ -800,7 +799,8 @@ class forum
     
     public static function forumerror($e_code)
     {
-        global $sitename, $header;
+        global $header;
+
         if ($e_code == "0001") {
             $error_msg = translate("Pas de connexion à la base forums.");
         }
@@ -942,7 +942,7 @@ class forum
         }
     
         echo '
-        <div class="alert alert-danger"><strong>' . $sitename . '<br />' . translate("Erreur du forum") . '</strong><br />';
+        <div class="alert alert-danger"><strong>' . Config::get('app.sitename') . '<br />' . translate("Erreur du forum") . '</strong><br />';
         echo translate("Code d'erreur :") . ' ' . $e_code . '<br /><br />';
         echo $error_msg . '<br /><br />';
         echo '<a href="javascript:history.go(-1)" class="btn btn-secondary">' . translate("Retour en arrière") . '</a><br /></div>';
@@ -954,8 +954,7 @@ class forum
     
     public static function control_efface_post($apli, $post_id, $topic_id, $IdForum)
     {
-        global $upload_table;
-        global $NPDS_Prefix;
+        global $upload_table, $NPDS_Prefix;
     
         include("modules/upload/include_forum/upload.conf.forum.php");
     
@@ -1023,9 +1022,9 @@ class forum
     {
         // anti_flood : nb de post dans les 90 puis 30 dernières minutes / les modérateurs echappent à cette règle
         // security.log est utilisée pour enregistrer les tentatives
-        global $NPDS_Prefix, $anonymous;
+        global $NPDS_Prefix;
     
-        $compte = !array_key_exists('uname', $userdataX) ? $anonymous : $userdataX['uname'];
+        $compte = !array_key_exists('uname', $userdataX) ? Config::get('app.anonymous') : $userdataX['uname'];
     
         if ((!$modoX) and ($paramAFX > 0)) {
             $sql = "SELECT COUNT(poster_ip) AS total FROM " . $NPDS_Prefix . "posts WHERE post_time>'";
@@ -1056,7 +1055,7 @@ class forum
     
     public static function forum($rowQ1)
     {
-        global $user, $subscribe, $theme, $NPDS_Prefix, $admin, $adminforum;
+        global $user, $admin, $adminforum, $NPDS_Prefix;
     
         //==> droits des admin sur les forums (superadmin et admin avec droit gestion forum)
         $adminforum = false;
@@ -1146,6 +1145,9 @@ class forum
                             if ($ok_affich) {
                                 if ($title_aff) {
                                     $title = stripslashes($row['cat_title']);
+
+                                    $theme = theme::getTheme();
+
                                     if ((file_exists("themes/$theme/view/forum-cat" . $row['cat_id'] . ".html")) or (file_exists("themes/default/view/forum-cat" . $row['cat_id'] . ".html"))) {
                                         $ibid .= '
                                 <div class=" mt-3" id="catfo_' . $row['cat_id'] . '" >
@@ -1249,7 +1251,7 @@ class forum
                                     $ibid .= ' ] </span>';
     
                                     // Subscribe
-                                    if (($subscribe) and ($user)) {
+                                    if ((Config::get('app.subscribe')) and ($user)) {
                                         if (!$redirect) {
                                             if (mailler::isbadmailuser($userR[0]) === false) { //proto
                                                 $ibid .= '
@@ -1289,7 +1291,7 @@ class forum
             }
         }
     
-        if (($subscribe) and ($user) and ($ok_affich)) {
+        if ((Config::get('app.subscribe')) and ($user) and ($ok_affich)) {
             if (mailler::isbadmailuser($userR[0]) === false) { //proto
                 $ibid .= '
             <div class="form-check mt-1">

@@ -478,8 +478,8 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
     if ($new == 1) {
         sql_query("DELETE FROM " . $links_DB . "links_newlink WHERE lid='$lid'");
         if ($email != '') {
-            global $sitename, $nuke_url;
-            $subject = html_entity_decode(translate("Votre lien"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " : $sitename";
+            $nuke_url = Config::get('app.nuke_url');
+            $subject = html_entity_decode(translate("Votre lien"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " : " . Config::get('app.sitename');
             $message = translate("Bonjour") . " $name :\n\n" . translate("Nous avons approuvé votre contribution à notre moteur de recherche.") . "\n\n" . translate("Titre de la page : ") . "$title\n" . translate("Url de la page : ") . "<a href=\"$url\">$url</a>\n" . translate("Description : ") . "$description\n" . translate("Vous pouvez utiliser notre moteur de recherche sur : ") . " <a href=\"$nuke_url/modules.php?ModPath=links&ModStart=links\">$nuke_url/modules.php?ModPath=links&ModStart=links</a>\n\n" . translate("Merci pour votre contribution") . "\n";
             $message .= Config::get('signature.message');
             
@@ -1029,7 +1029,7 @@ function LinksListBrokenLinks()
         <tbody>';
         while (list($requestid, $lid, $modifysubmitter) = sql_fetch_row($resultBrok)) {
             $result2 = sql_query("SELECT title, url, submitter FROM " . $links_DB . "links_links WHERE lid='$lid'");
-            if ($modifysubmitter != '$anonymous') {
+            if ($modifysubmitter != Config::get('app.anonymous')) {
                 $result3 = sql_query("SELECT email FROM " . $NPDS_Prefix . "users WHERE uname='$modifysubmitter'");
                 list($email) = sql_fetch_row($result3);
             }

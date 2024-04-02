@@ -21,6 +21,7 @@ use npds\system\auth\users;
 use npds\system\routing\url;
 use npds\system\pixels\image;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\support\editeur;
 use npds\system\language\language;
@@ -172,7 +173,7 @@ function AddLink()
 
 function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_question, $asb_reponse)
 {
-    global $ModPath, $ModStart, $links_DB, $troll_limit, $anonymous, $user, $admin;
+    global $ModPath, $ModStart, $links_DB, $user, $admin;
     if (!$user and !$admin) {
         //anti_spambot
         if (!spam::R_spambot($asb_question, $asb_reponse, '')) {
@@ -184,7 +185,7 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
 
     $result = sql_query("SELECT lid FROM " . $links_DB . "links_newlink");
     $numrows = sql_num_rows($result);
-    if ($numrows >= $troll_limit) {
+    if ($numrows >= Config::get('app.troll_limit')) {
         error_head("alert-danger");
         echo translate("Erreur : cette url est déjà présente dans la base de données") . '<br />';
         error_foot();
@@ -195,7 +196,7 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
         global $cookie;
         $submitter = $cookie[1];
     } else
-        $submitter = $anonymous;
+        $submitter = Config::get('app.anonymous');
     if ($title == '') {
         error_head('alert-danger');
         echo translate("Erreur : vous devez saisir un titre pour votre lien") . '<br />';

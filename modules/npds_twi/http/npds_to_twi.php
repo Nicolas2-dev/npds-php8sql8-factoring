@@ -13,10 +13,16 @@
 /* module npds_twi version 1.0                                          */
 /* npds_to_twi.php file 2015 by Jean Pierre Barbary jpb                 */
 /************************************************************************/
+
+use npds\system\config\Config;
+
 if (!function_exists("Mysql_Connexion")) die();
 
 // Initialisation
-global $nuke_url, $npds_twi, $NPDS_Prefix;
+global $npds_twi, $NPDS_Prefix;
+
+$nuke_url = Config::get('app.nuke_url');
+
 if (!isset($sid)) {
     $result = sql_query("SELECT max(sid) FROM " . $NPDS_Prefix . "stories");
     list($sid) = sql_fetch_row($result);

@@ -55,7 +55,7 @@ function display_score($score)
 
 function write_review()
 {
-    global $admin, $sitename, $user, $cookie, $short_review, $NPDS_Prefix; // $sitename not used
+    global $admin, $user, $cookie, $short_review, $NPDS_Prefix;
 
     include("themes/default/header.php");;
 
@@ -616,7 +616,7 @@ function showcontent($id)
 
     sql_free_result($result);
 
-    global $anonpost, $moderate, $user;
+    global $user;
     if (file_exists("modules/comments/config/reviews.conf.php")) {
         include("modules/comments/config/reviews.conf.php");
         include("modules/comments/http/comments.php");

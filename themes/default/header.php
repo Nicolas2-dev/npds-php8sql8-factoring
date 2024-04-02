@@ -15,6 +15,7 @@
 
 use npds\system\assets\css;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\library\pages\pageref;
 use npds\system\support\counter;
@@ -27,12 +28,14 @@ if (!function_exists("Mysql_Connexion")) {
     die();
 }
 
-function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords)
+function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords)
 {
-    global $slogan, $Titlesitename, $banners, $Default_Theme, $theme, $gzhandler, $language;
-    global $topic, $hlpfile, $user, $hr, $long_chain;
+    global $theme, $language;
 
-    if ($gzhandler == 1) ob_start("ob_gzhandler");
+    if (Config::get('app.gzhandler') == 1) {
+        ob_start("ob_gzhandler");
+    }
+    
     include("themes/$tmp_theme/theme.php");
 
     // Meta
@@ -51,7 +54,8 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
     echo '<link rel="shortcut icon" href="' . $favico . '" type="image/x-icon" />';
 
     // Syndication RSS & autres
-    global $sitename, $nuke_url;
+    $nuke_url = Config::get('app.nuke_url');
+    $sitename = Config::get('app.sitename');
 
     // Canonical
     $scheme = strtolower($_SERVER['REQUEST_SCHEME'] ?? 'http');
@@ -73,7 +77,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
     ';
 
     // Tiny_mce
-    if ($tiny_mce_init) {
+    if (Config::get('editeur.tiny_mce_init')) {
         echo editeur::aff_editeur("tiny_mce", "begin");
     }
 
@@ -267,8 +271,7 @@ if (array_key_exists($pages_ref, $PAGES)) {
 
     // neutralise le bug en dessous bug #4
     if ($Titlesitename == '') {
-        global $sitename;
-        $Titlesitename = $sitename;
+        $Titlesitename = Config::get('app.sitename');
     }
 
     if ($fin_title == "+") {
@@ -278,7 +281,9 @@ if (array_key_exists($pages_ref, $PAGES)) {
     }
 
     // bug #4
-    //if ($Titlesitename == '') $Titlesitename = $sitename; // bug ne fonctionne pas !!!!
+    // if ($Titlesitename == '') {
+    //     $Titlesitename = Config::get('app.sitename'); // bug ne fonctionne pas !!!!
+    // }
 
     // globalisation de la variable title pour marquetapage mais protection pour la zone admin
     if ($pages_ref != "admin.php") {
@@ -310,29 +315,29 @@ if (array_key_exists($pages_ref, $PAGES)) {
 }
 
 // Initialisation de TinyMce
-global $tiny_mce, $tiny_mce_theme, $tiny_mce_relurl;
-if ($tiny_mce) {
+
+if (Config::get('app.tiny_mce')) {
     if (array_key_exists($pages_ref, $PAGES)) {
         if (array_key_exists('TinyMce', $PAGES[$pages_ref])) {
-            $tiny_mce_init = true;
+            Config::set('editeur.tiny_mce_init', true);
 
             if (array_key_exists('TinyMce-theme', $PAGES[$pages_ref])) {
-                $tiny_mce_theme = $PAGES[$pages_ref]['TinyMce-theme'];
+                Config::set('editeur.tiny_mce_theme', $PAGES[$pages_ref]['TinyMce-theme']);
             }
 
             if (array_key_exists('TinyMceRelurl', $PAGES[$pages_ref])) {
-                $tiny_mce_relurl = $PAGES[$pages_ref]['TinyMceRelurl'];
+                Config::set('editeur.tiny_mce_relurl', $PAGES[$pages_ref]['TinyMceRelurl']);
             }
         } else {
-            $tiny_mce_init = false;
-            $tiny_mce = false;
+            Config::set('editeur.tiny_mce_init', false);
+            Config::set('editeur.tiny_mce', false);
         }
     } else {
-        $tiny_mce_init = false;
-        $tiny_mce = false;
+        Config::set('editeur.tiny_mce_init', false);
+        Config::set('editeur.tiny_mce', false);
     }
 } else {
-    $tiny_mce_init = false;
+    Config::set('editeur.tiny_mce_init', false);
 }
 
 // Chargeur de CSS via routes/pages.php
@@ -363,7 +368,7 @@ if (array_key_exists($pages_ref, $PAGES)) {
 } else
     $js = '';
 
-head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords);
+head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords);
 
 // Referer update
 referer::refererUpdate();

@@ -586,7 +586,7 @@ function BannerChange(int $bid, int $cid, int $imptotal, int $impadded, string $
  */
 function BannerClientDelete(int $cid, int $ok = 0): void
 {
-    global $hlpfile, $sitename, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
 
     if ($ok == 1) {
 
@@ -616,7 +616,7 @@ function BannerClientDelete(int $cid, int $ok = 0): void
             echo '<div class="alert alert-danger mt-3">' . adm_translate("Etes-vous sûr de vouloir effacer cet annonceur ?") . '</div>';
         } else {
 
-            echo '<br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . $sitename . '</div>';
+            echo '<br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . Config::get('app.sitename') . '</div>';
         
             foreach($banners as $banner) {
                 echo (($banner['imageurl'] != '') 

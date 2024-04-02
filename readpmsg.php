@@ -16,6 +16,7 @@
 use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
@@ -203,7 +204,7 @@ if (!$user) {
         if ($posterdata['uid'] <> 1) {
             echo '&nbsp;<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
         } else {
-            echo '&nbsp;<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $sitename . '</strong></span>';
+            echo '&nbsp;<span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('app.sitename') . '</strong></span>';
         }
 
         echo '<span class="float-end">';

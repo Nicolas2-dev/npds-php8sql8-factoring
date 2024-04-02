@@ -16,6 +16,7 @@
 use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 use npds\system\support\editeur;
 use npds\system\language\metalang;
 
@@ -879,7 +880,8 @@ switch ($op) {
             $number_send = 0;
         }
 
-        global $nuke_url;
+        $nuke_url = Config::get('app.nuke_url');
+        
         $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='HED' AND ref='$Xheader'");
         $Yheader = sql_fetch_row($result);
 
@@ -892,7 +894,6 @@ switch ($op) {
         $subject = stripslashes($Xsubject);
         $message = $Yheader[0] . $Ybody[0] . $Yfooter[0];
 
-        global $sitename;
         $Xmime = $Yheader[1] == 1 ? 'html-nobr' : 'text';
 
         if ($Xtype == "All") {

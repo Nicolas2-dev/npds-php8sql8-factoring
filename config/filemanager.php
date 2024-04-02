@@ -1,5 +1,10 @@
 <?php
-# ========================================
-# DUNE by NPDS : Net Portal Dynamic System
-# ========================================
-$filemanager = 1;
+
+return array(
+
+    /**
+     * Deutsch
+     */
+    'manager' => true,
+
+);

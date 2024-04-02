@@ -17,10 +17,13 @@
 /* dev team : Philippe Revilliod (Phr), A.NICOL                         */
 /************************************************************************/
 
+use npds\system\config\Config;
 use npds\system\language\language;
 
 $ModPath = 'geoloc';
-global $nuke_url;
+
+$nuke_url = Config::get('app.nuke_url');
+
 $content = '';
 include('modules/' . $ModPath . '/config/geoloc.conf');
 $source_fond = '';

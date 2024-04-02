@@ -14,6 +14,7 @@
 use npds\system\auth\groupe;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\language\language;
 use npds\system\language\metalang;
@@ -45,7 +46,7 @@ function convert_ressources($Xcontent)
 }
 
 // NPDS copyright ... don't remove !
-$copyright = '<span class="blog_sname">' . $sitename . '</span>&nbsp;<span class="blog_npds">NPDS&nbsp;HUB-BLOG&nbsp;<a href="http://www.npds.org">NPDS</a></span>';
+$copyright = '<span class="blog_sname">' . Config::get('app.sitename') . '</span>&nbsp;<span class="blog_npds">NPDS&nbsp;HUB-BLOG&nbsp;<a href="http://www.npds.org">NPDS</a></span>';
 
 // Troll Control for security
 $affich = false;
@@ -135,7 +136,7 @@ if ($affich) {
 
     if (file_exists($fic)) {
         $Titlesitename = "Minisite - $op";
-        $nuke_url = $nuke_url . '/minisite.php?op=' . $op;
+        $nuke_url = Config::get('app.nuke_url') . '/minisite.php?op=' . $op;
 
         include("storage/meta/meta.php");
 

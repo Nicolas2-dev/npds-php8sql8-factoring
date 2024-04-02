@@ -15,6 +15,8 @@ use npds\system\assets\css;
 use npds\system\auth\users;
 use npds\system\forum\forum;
 use npds\system\support\str;
+use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\utility\crypt;
 
@@ -38,37 +40,6 @@ if (!users::autorisation($id)) {
     die();
 }
 
-global $Default_Theme, $Default_Skin, $user;
-if (isset($user) and $user != '') {
-    
-    global $cookie;
-    if ($cookie[9] != '') {
-        $ibix = explode('+', urldecode($cookie[9]));
-        
-        if (array_key_exists(0, $ibix)) { 
-            $theme = $ibix[0];
-        } else {
-            $theme = $Default_Theme;}
-        
-        if (array_key_exists(1, $ibix)) {
-            $skin = $ibix[1];
-        } else {
-            $skin = $Default_Skin; //$skin=''; 
-        }
-        
-        $tmp_theme = $theme;
-        
-        if (!$file = @opendir("themes/$theme")) {
-            $tmp_theme = $Default_Theme;}
-    } else {
-        $tmp_theme = $Default_Theme;
-    }
-} else {
-    $theme = $Default_Theme;
-    $skin = $Default_Skin;
-    $tmp_theme = $theme;
-}
-
 global $NPDS_Prefix;
 
 $result = sql_query("SELECT username, message, dbname, date FROM " . $NPDS_Prefix . "chatbox WHERE id='$id' AND date>'$repere' ORDER BY date ASC");
@@ -79,10 +50,11 @@ if ($result) {
     include("themes/themes-dynamic/theme.php");
 
     while (list($username, $message, $dbname, $date_message) = sql_fetch_row($result)) {
-        $thing .= "<div class='chatmessage'><div class='chatheure'>" . date(translate("Chatdate"), $date_message + ((int)$gmt * 3600)) . "</div>";
+        $thing .= "<div class='chatmessage'><div class='chatheure'>" . date(translate("Chatdate"), $date_message + ((int) config::get('app.gmt') * 3600)) . "</div>";
         
         if ($dbname == 1) {
-            if ((!$user) and ($member_list == 1) and (!$admin)) {
+            global $user;
+            if ((!$user) and (Config::get('app.member_list') == 1) and (!$admin)) {
                 $thing .= "<div class='chatnom'>$username</div>";
             } else {
                 $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', userpopover($username, 36, 1)) . "</div> <a href='user.php?op=userinfo&amp;uname=$username' target='_blank'>$username</a></div>";
@@ -118,7 +90,7 @@ if ($aff_entetes == '1') {
     include("storage/meta/meta.php");
 
     $Xthing .= $l_meta;
-    $Xthing .= str_replace("\n", "", css::import_css_javascript($tmp_theme, $language, $skin, basename($_SERVER['PHP_SELF']), ""));
+    $Xthing .= str_replace("\n", "", css::import_css_javascript(theme::getTheme(), Config::get('app.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), ""));
     $Xthing .= "</head><body id='chat'>";
     $Xthing = "\"" . str_replace("'", "\'", $Xthing) . "\"";
 }

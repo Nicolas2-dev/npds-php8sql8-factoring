@@ -25,7 +25,9 @@ class subscribe
     public static function subscribe_mail(string $Xtype, int $Xtopic, int|string $Xforum, string $Xresume, string $Xsauf): void
     {
         // $Xtype : topic, forum ... / $Xtopic clause WHERE / $Xforum id of forum / $Xresume Text passed / $Xsauf not this userid
-        global $NPDS_Prefix, $sitename, $nuke_url;
+        global $NPDS_Prefix;
+
+        $nuke_url = Config::get('app.nuke_url');
 
         if ($Xtype == 'topic') {
             $result = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$Xtopic'");
@@ -75,7 +77,7 @@ class subscribe
                     }
                 }
 
-                $subject = html_entity_decode(translate_ml($user_langue, "Abonnement"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " / $sitename";
+                $subject = html_entity_decode(translate_ml($user_langue, "Abonnement"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " / " . Config::get('app.sitename');
                 $message = $entete;
                 $message .= $resume;
                 $message .= $url;

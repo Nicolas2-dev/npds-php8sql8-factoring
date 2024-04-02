@@ -22,6 +22,7 @@ use npds\system\mail\mailler;
 use npds\system\pixels\image;
 use npds\system\utility\code;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\support\editeur;
 use npds\system\language\language;
@@ -35,13 +36,13 @@ include("publication.php");
 
 settype($user, 'string');
 
-if ($mod_admin_news > 0) {
+if (Config::get('app.mod_admin_news') > 0) {
     if ($admin == '' and $user == '') {
         Header("Location: index.php");
         exit;
     }
 
-    if ($mod_admin_news == 1) {
+    if (Config::get('app.mod_admin_news') == 1) {
         if ($user != '' and $admin == '') {
             global $cookie;
             $result = sql_query("SELECT level FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'");
@@ -64,7 +65,7 @@ function defaultDisplay()
 
     include("themes/default/header.php");
 
-    global $user, $anonymous;
+    global $user;
     if ($user) {
         $userinfo = users::getusrinfo($user);
     }
@@ -79,8 +80,8 @@ function defaultDisplay()
         echo '<a href="user.php">' . $userinfo['uname'] . '</a> [ <a href="user.php?op=logout">' . translate("Déconnexion") . '</a> ]</p>
         <input type="hidden" name="name" value="' . $userinfo['name'] . '" />';
     } else {
-        echo $anonymous . '[ <a href="user.php">' . translate("Nouveau membre") . '</a> ]</p>
-        <input type="hidden" name="name" value="' . $anonymous . '" />';
+        echo Config::get('app.anonymous') . '[ <a href="user.php">' . translate("Nouveau membre") . '</a> ]</p>
+        <input type="hidden" name="name" value="' . Config::get('app.anonymous') . '" />';
     }
 
     echo '
@@ -281,7 +282,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
 
 function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_finval, $epur, $asb_question, $asb_reponse)
 {
-    global $user, $EditedMessage, $anonymous, $notify, $NPDS_Prefix;
+    global $user, $EditedMessage, $notify, $NPDS_Prefix;
 
     if ($user != '') {
         global $cookie;
@@ -289,7 +290,7 @@ function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_fi
         $name = $cookie[1];
     } else {
         $uid = -1;
-        $name = $anonymous;
+        $name = Config::get('app.anonymous');
 
         //anti_spambot
         if (!spam::R_spambot($asb_question, $asb_reponse, '')) {
@@ -336,7 +337,7 @@ switch ($op) {
             $userinfo = users::getusrinfo($user);
             $name = $userinfo['uname'];
         } else {
-            $name = $anonymous;
+            $name = Config::get('app.anonymous');
         }
 
         PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);

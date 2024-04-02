@@ -17,6 +17,7 @@ use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\auth\users;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
@@ -551,7 +552,7 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
         $chng_pwd = crypt($chng_pwd, $hashpass);
 
         if ($old_pwd) {
-            global $admin, $admin_cook_duration;
+            global $admin;
 
             $Xadmin = base64_decode($admin);
             $Xadmin = explode(':', $Xadmin);
@@ -562,6 +563,8 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
                 if (md5($old_pwd) == $AIpwd and $chng_pwd != '') {
                     $admin = base64_encode("$aid:" . md5($chng_pwd));
                     
+                    $admin_cook_duration = Config::get('app.admin_cook_duration');
+
                     if ($admin_cook_duration <= 0) {
                         $admin_cook_duration = 1;
                     }

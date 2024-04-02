@@ -15,6 +15,7 @@
 
 use npds\system\assets\css;
 use npds\system\forum\forum;
+use npds\system\config\Config;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -23,7 +24,7 @@ if (!function_exists("Mysql_Connexion")) {
 
 if (isset($user)) {
     if ($cookie[9] == '') {
-        $cookie[9] = $Default_Theme;
+        $cookie[9] = Config::get('app.Default_Theme');
     }
 
     if (isset($theme)) {
@@ -33,10 +34,10 @@ if (isset($user)) {
     $tmp_theme = $cookie[9];
 
     if (!$file = @opendir("themes/$cookie[9]")) {
-        $tmp_theme = $Default_Theme;
+        $tmp_theme = Config::get('app.Default_Theme');
     }
 } else {
-    $tmp_theme = $Default_Theme;
+    $tmp_theme = Config::get('app.Default_Theme');
 }
 
 include('storage/meta/meta.php');

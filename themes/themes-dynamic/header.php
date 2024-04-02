@@ -12,15 +12,17 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
 
 
-global $theme, $Start_Page;
-
 $rep = false;
 
-$Start_Page = str_replace('/', '', $Start_Page);
+$Start_Page = str_replace('/', '', Config::get('app.Start_Page'));
+
+$theme = theme::getTheme();
 
 settype($ContainerGlobal, 'string');
 
@@ -49,7 +51,7 @@ if ($rep) {
 
     ob_start();
         // landing page
-        if (stristr($_SERVER['REQUEST_URI'], $Start_Page) and file_exists("themes/" . $rep . "/view/header_landing.html")) {
+        if (stristr($_SERVER['REQUEST_URI'], Config::get('app.Start_Page')) and file_exists("themes/" . $rep . "/view/header_landing.html")) {
             include("themes/" . $rep . "/view/header_landing.html");
         } else {
             include("themes/" . $rep . "/view/header.html");

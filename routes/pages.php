@@ -105,14 +105,18 @@
 // Attention cette faculté n'est pas aussi parfaite que l'intégration de la gestion des droits de NPDS mais rend bien des services
 // ---------------
 
+use npds\system\config\Config;
+
 // DEFINITION et CAST VARIABLES
 settype($title, 'string');
 settype($post, 'string');
-settype($nuke_url, 'string');
+
 settype($api_key, 'string');
 settype($ModPath, 'string');
 settype($title, 'string');
 // ----------------------------
+
+$nuke_url = Config::get('app.nuke_url').'/';
 
 global $PAGES;
 

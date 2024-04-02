@@ -15,11 +15,15 @@
 
 use npds\system\routing\url;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\security\hack;
 
 function marquetapage_add($uri, $topic, $action)
 {
-    global $cookie, $NPDS_Prefix, $nuke_url;
+    global $cookie, $NPDS_Prefix;
+    
+    $nuke_url = Config::get('app.nuke_url');
+
     if (($action == 'ad_tapage') and ($cookie[0])) {
         $drname = dirname($uri);
         if ($drname == '.') {

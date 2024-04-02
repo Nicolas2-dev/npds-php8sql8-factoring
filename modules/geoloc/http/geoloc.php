@@ -18,6 +18,7 @@
 /************************************************************************/
 
 use npds\system\auth\users;
+use npds\system\config\Config;
 use npds\system\security\hack;
 
 /*
@@ -624,6 +625,8 @@ switch ($cartyp) {
         $min_r = '0';
         $layer_id = 'OSM';
 }
+
+$nuke_url = Config::get('app.nuke_url');
 
 //==> construction js
 if (!defined('OL')) {

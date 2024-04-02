@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\auth;
 
 use npds\system\auth\groupe;
+use npds\system\config\Config;
 
 class users
 {
@@ -65,9 +66,9 @@ class users
      */
     public static function AutoReg(): bool
     {
-        global $NPDS_Prefix, $AutoRegUser, $user;
+        global $NPDS_Prefix, $user;
 
-        if (!$AutoRegUser) {
+        if (!Config::get('app.AutoRegUser')) {
             if (isset($user)) {
                 $cookie = explode(':', base64_decode($user));
                 list($test) = sql_fetch_row(sql_query("SELECT open FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'"));

@@ -18,9 +18,9 @@ use npds\system\assets\css;
 use npds\system\routing\url;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
-use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\language\language;
+use npds\system\config\Config;
 
 
 if (!function_exists("Mysql_Connexion"))  {
@@ -116,7 +116,7 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
         }
     }
 
-    global $sitename, $nuke_url, $NPDS_Prefix;
+    global $NPDS_Prefix;
 
     settype($sid, 'integer');
     settype($archive, 'integer');
@@ -127,7 +127,9 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
     $result3 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
     list($topictext) = sql_fetch_row($result3);
 
-    $subject = html_entity_decode(translate("Article intéressant sur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
+    $subject = html_entity_decode(translate("Article intéressant sur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . Config::get('app.sitename');
+
+    $nuke_url = Config::get('app.nuke_url');
 
     $fname = hack::removeHack($fname);
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.") . "\n\n" . language::aff_langue($title) . "\n" . translate("Date :") . " $time\n" . translate("Sujet : ") . " " . language::aff_langue($topictext) . "\n\n" . translate("L'article") . " : <a href=\"$nuke_url/article.php?sid=$sid&amp;archive=$archive\">$nuke_url/article.php?sid=$sid&amp;archive=$archive</a>\n\n";
@@ -251,12 +253,14 @@ function SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse)
         }
     }
 
-    global $sitename, $nuke_url;
+    $nuke_url = Config::get('app.nuke_url');
+    $sitename = Config::get('app.sitename');
 
     $subject = html_entity_decode(translate("Site à découvrir : "), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
     $fname = hack::removeHack($fname);
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé notre site") . " $sitename " . translate("intéressant et a voulu vous le faire connaître.") . "\n\n$sitename : <a href=\"$nuke_url\">$nuke_url</a>\n\n";
-    $message .= Config::get('signature.message');
+    
+    include("config/signat.php");
 
     $fmail = hack::removeHack($fmail);
     $subject = hack::removeHack($subject);

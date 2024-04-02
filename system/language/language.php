@@ -28,12 +28,12 @@ class language
      */
     public static function getLocale(): string
     {
-        global $language, $user_language;
+        global $user_language;
 
         if (isset($user_language)) {
             $locale = $user_language;
         } else {
-            $locale = $language;
+            $locale = Config::get('app.language');
         }
 
         return $locale;
@@ -87,7 +87,7 @@ class language
      */
     public static function aff_langue(string $ibid): string
     {
-        global $language, $tab_langue;
+        global $tab_langue;
 
         // copie du tableau + rajout de transl pour gestion de l'appel à translate(...); - Theme Dynamic
         $tab_llangue = $tab_langue;
@@ -123,7 +123,7 @@ class language
                     $ibid = str_replace("[!$lang]", "[$lang]", $ibid);
                     $pos_deb = $abs_pos_deb;
 
-                    if ($lang != $language) {
+                    if ($lang != Config::get('app.language')) {
                         $trouve_language = true;
                     }
                 }
@@ -166,9 +166,9 @@ class language
      */
     public static function make_tab_langue(): array
     {
-        global $language, $languageslist;
+        global $languageslist;
 
-        $languageslocal = $language . ' ' . str_replace($language, '', $languageslist);
+        $languageslocal = Config::get('app.language') . ' ' . str_replace(Config::get('app.language'), '', $languageslist);
         $languageslocal = trim(str_replace('  ', ' ', $languageslocal));
         $tab_langue = explode(' ', $languageslocal);
 
@@ -242,16 +242,16 @@ class language
      */
     public static function preview_local_langue(?string $local_user_language, string $ibid): string
     {
-        global $language, $tab_langue;
+        global $tab_langue;
 
         if ($local_user_language) {
-            $old_langue = $language;
-            $language = $local_user_language;
+            $old_langue = Config::get('app.language');
+            Config::set('app.language', $local_user_language);
 
             $tab_langue = static::make_tab_langue();
             $ibid = static::aff_langue($ibid);
 
-            $language = $old_langue;
+            Config::set('app.language', $old_langue);
         }
 
         return $ibid;
@@ -273,13 +273,13 @@ class language
      */
     public static function language_iso(string|int $l, string $s, string|int $c): string
     {
-        global $language, $user_language;
+        global $user_language;
 
         $iso_lang = '';
         $iso_country = '';
         $ietf = '';
         $select_lang = '';
-        $select_lang = !empty($user_language) ? $user_language : $language;
+        $select_lang = !empty($user_language) ? $user_language : Config::get('app.language');
         
         switch ($select_lang) {
             case "fr":

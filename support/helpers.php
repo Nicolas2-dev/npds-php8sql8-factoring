@@ -1,5 +1,6 @@
 <?php
 
+use npds\system\chat\chat;
 use npds\system\news\news;
 use npds\system\block\boxe;
 use npds\system\auth\groupe;
@@ -10,13 +11,12 @@ use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\support\edito;
-use npds\system\support\online;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\system\support\polls;
 
 // use npds\system\assets\js;
-use npds\system\chat\chat;
+use npds\system\support\online;
 // use npds\system\date\date;
 // use npds\system\logs\logs;
 // use npds\system\news\news;
@@ -40,7 +40,7 @@ use npds\system\chat\chat;
 // use npds\system\http\response;
 // use npds\system\security\hack;
 // use npds\system\support\edito;
-use npds\system\support\polls;
+use npds\system\support\download;
 // use npds\system\support\stats;
 // use npds\system\utility\crypt;
 // use npds\system\support\online;
@@ -49,9 +49,10 @@ use npds\system\support\polls;
 // use npds\system\support\editeur;
 // use npds\system\support\referer;
 // use npds\system\security\protect;
-use npds\system\support\download;
+use npds\system\language\language;
 // use npds\system\language\language;
 // use npds\system\language\metalang;
+use npds\system\language\metalang;
 use npds\system\messenger\messenger;
 // use npds\system\subscribe\subscribe;
 
@@ -1173,21 +1174,19 @@ function MM_anti_spam($arg)
 
 function MM_msg_foot()
 {
-    global $foot1, $foot2, $foot3, $foot4;
-
-    if ($foot1) {
+    if ($foot1 = Config::get('app.foot1')) {
         $MT_foot = stripslashes($foot1) . "<br />";
     }
 
-    if ($foot2) {
+    if ($foot2 = Config::get('app.foot2')) {
         $MT_foot .= stripslashes($foot2) . "<br />";
     }
 
-    if ($foot3) {
+    if ($foot3 = Config::get('app.foot3')) {
         $MT_foot .= stripslashes($foot3) . "<br />";
     }
 
-    if ($foot4) {
+    if ($foot4 = Config::get('app.foot4')) {
         $MT_foot .= stripslashes($foot4);
     }
 
@@ -1246,12 +1245,12 @@ function MM_search()
 
 function MM_member()
 {
-    global $cookie, $anonymous;
+    global $cookie;
 
     $username = $cookie[1];
 
     if ($username == "") {
-        $username = $anonymous;
+        $username = Config::get('app.anonymous');
     }
 
     ob_start();
@@ -1338,7 +1337,9 @@ function MM_article($arg)
 
 function MM_articleID($arg)
 {
-    global $NPDS_Prefix, $nuke_url;
+    global $NPDS_Prefix; 
+    
+    $nuke_url = Config::get('app.nuke_url');
 
     $arg = metalang::arg_filter($arg);
     
@@ -1827,7 +1828,7 @@ function MM_top_stories($arg)
 
 function MM_comment_system($file_name, $topic)
 {
-    global $NPDS_Prefix, $anonpost, $moderate, $admin, $user;
+    global $NPDS_Prefix, $admin, $user;
 
     ob_start();
         

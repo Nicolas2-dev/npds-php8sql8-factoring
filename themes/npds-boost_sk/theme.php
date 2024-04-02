@@ -12,8 +12,13 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\config\Config;
+
 $theme = 'npds-boost_sk';
 $long_chain = '34'; // Nombre de caractères affichés avant troncature pour certains blocs
+
+Config::set('app.theme.long_chaine', 34);
+
 
 // ne pas supprimer cette ligne / Don't remove this line
 require_once('themes/themes-dynamic/theme.php');

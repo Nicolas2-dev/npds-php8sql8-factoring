@@ -195,11 +195,12 @@ function MetaTagSave($filename, $tags)
 
     global $adminmail, $Version_Id, $Version_Num, $Version_Sub;
 
+    $nuke_url = Config::get('app.nuke_url');
+
     $fh = fopen($filename, "w");
     if ($fh) {
         $content = "<?php\n/* Do not change anything in this file manually. Use the administration interface. */\n";
         $content .= "/* généré le : " . date("d-m-Y H:i:s") . " */\n";
-        $content .= "global \$nuke_url;\n";
         $content .= "\$meta_doctype = isset(\$meta_doctype) ? \$meta_doctype : '' ;\n";
         $content .= "\$nuke_url = isset(\$nuke_url) ? \$nuke_url : '' ;\n";
         $content .= "\$meta_doctype = isset(\$meta_doctype) ? \$meta_doctype : '' ;\n";
@@ -270,7 +271,7 @@ function MetaTagSave($filename, $tags)
         $content .= MetaTagMakeSingleTag('expires', '0', 'http-equiv');
         $content .= MetaTagMakeSingleTag('pragma', 'no-cache', 'http-equiv');
         $content .= MetaTagMakeSingleTag('cache-control', 'no-cache', 'http-equiv');
-        $content .= MetaTagMakeSingleTag('identifier-url', '$nuke_url', 'http-equiv');
+        $content .= MetaTagMakeSingleTag('identifier-url', $nuke_url, 'http-equiv');
 
         if (!empty($tags['author'])) {
             $tags['author'] = htmlspecialchars(stripslashes($tags['author']), ENT_COMPAT | ENT_HTML401, 'utf-8');
@@ -333,10 +334,10 @@ function MetaTagSave($filename, $tags)
 
         //==> OpenGraph Meta Tags
         $content .= MetaTagMakeSingleTag('og:type', 'website', 'property');
-        $content .= MetaTagMakeSingleTag('og:url', '$nuke_url', 'property');
+        $content .= MetaTagMakeSingleTag('og:url', $nuke_url, 'property');
         $content .= MetaTagMakeSingleTag('og:title', '$Titlesitename', 'property');
         $content .= MetaTagMakeSingleTag('og:description', $tags['description'], 'property');
-        $content .= MetaTagMakeSingleTag('og:image', '$nuke_url/images/ogimg.jpg', 'property');
+        $content .= MetaTagMakeSingleTag('og:image', $nuke_url.'/images/ogimg.jpg', 'property');
         $content .= MetaTagMakeSingleTag('twitter:card', 'summary', 'property');
 
         //<== OpenGraph Meta Tags

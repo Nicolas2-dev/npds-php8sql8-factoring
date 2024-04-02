@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\utility;
 
+use npds\system\config\Config;
+
 class crypt
 {
  
@@ -42,9 +44,7 @@ class crypt
      */
     public static function encrypt(string $txt): string
     {
-        global $NPDS_Key;
-
-        return static::encryptK($txt, $NPDS_Key);
+        return static::encryptK($txt, Config::get('app.NPDS_Key'));
     }
  
     /**
@@ -84,9 +84,7 @@ class crypt
      */
     public static function decrypt(string $txt): string
     {
-        global $NPDS_Key;
-
-        return static::decryptK($txt, $NPDS_Key);
+        return static::decryptK($txt, Config::get('app.NPDS_Key'));
     }
 
     /**

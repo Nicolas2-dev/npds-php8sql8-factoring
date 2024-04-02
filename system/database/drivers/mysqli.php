@@ -14,6 +14,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\config\Config;
+
 /**
  * [$sql_nbREQ description]
  *
@@ -58,18 +60,20 @@ if (! function_exists('sql_connect'))
      */
     function sql_connect(): mysqli|bool
     {
-        global $mysql_p, $dbhost, $dbuname, $dbpass, $dbname, $dblink;
+        global $dblink;
 
-        if (($mysql_p) or (!isset($mysql_p))) {
-            $dblink = @mysqli_connect('p:' . $dbhost, $dbuname, $dbpass);
+        $config = Config::get('app.database');
+
+        if (($config['mysql_p']) or (!isset($config['mysql_p']))) {
+            $dblink = @mysqli_connect('p:' . $config['dbhost'], $config['dbuname'], $config['dbpass']);
         } else {
-            $dblink = @mysqli_connect($dbhost, $dbuname, $dbpass);
+            $dblink = @mysqli_connect($config['dbhost'], $config['dbuname'], $config['dbpass']);
         }
 
         if (!$dblink) {
             return false;
         } else {
-            if (!@mysqli_select_db($dblink, $dbname)) {
+            if (!@mysqli_select_db($dblink, $config['dbname'])) {
                 return false;
             } else {
                 return $dblink;

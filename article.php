@@ -14,6 +14,7 @@
 
 use npds\system\news\news;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
 
@@ -62,7 +63,7 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
         : metalang::meta_lang($hometext . '<br />' . $bodytext . '<br />' . $notes);
 
     if ($informant == '') {
-        $informant = $anonymous;
+        $informant = Config::get('app.anonymous');
     }
 
     news::getTopics($sid);

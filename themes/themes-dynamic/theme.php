@@ -17,6 +17,7 @@ use npds\system\auth\users;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
 
@@ -69,9 +70,9 @@ function local_var($Xcontent)
 
 function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext, $notes, $morelink, $topicname, $topicimage, $topictext, $id)
 {
-    global $tipath, $theme, $nuke_url;
-
     $inclusion = false;
+
+    $theme = theme::getTheme();
 
     if (file_exists("themes/" . $theme . "/view/index-news.html")) {
         $inclusion = "themes/" . $theme . "/view/index-news.html";
@@ -123,7 +124,7 @@ function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext,
     $Xsujet = '';
     if ($topicimage != '') {
         if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-            $imgtmp = $tipath . $topicimage;
+            $imgtmp = Config::get('app.tipath') . $topicimage;
         }
 
         $Xsujet = '<a href="search.php?query=&amp;topic=' . $topic . '"><img class="img-fluid" src="' . $imgtmp . '" alt="' . translate("Rechercher dans") . ' : ' . $topicname . '" title="' . translate("Rechercher dans") . ' : ' . $topicname . '<hr />' . $topictext . '" data-bs-toggle="tooltip" data-bs-html="true" /></a>';
@@ -162,9 +163,11 @@ function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext,
 
 function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicname, $topicimage, $topictext, $id, $previous_sid, $next_sid, $archive)
 {
-    global $tipath, $theme, $nuke_url, $counter, $boxtitle, $boxstuff, $short_user, $user;
+    global $counter, $boxtitle, $boxstuff;
 
     $inclusion = false;
+
+    $theme = theme::getTheme();
 
     if (file_exists("themes/" . $theme . "/view/detail-news.html")) {
         $inclusion = "themes/" . $theme . "/view/detail-news.html";
@@ -203,7 +206,7 @@ function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicn
     $sendF = '<a href="friend.php?op=FriendSend&amp;sid=' . $id . '" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-at"></i></a>';
 
     if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-        $imgtmp = $tipath . $topicimage;
+        $imgtmp = Config::get('app.tipath') . $topicimage;
     }
 
     $timage = $imgtmp;
@@ -236,9 +239,11 @@ function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicn
 
 function themesidebox($title, $content)
 {
-    global $theme, $B_class_title, $B_class_content, $bloc_side, $htvar;
+    global $B_class_title, $B_class_content, $bloc_side, $htvar;
 
     $inclusion = false;
+
+    $theme = theme::getTheme();
 
     if (file_exists("themes/" . $theme . "/view/bloc-right.html") and ($bloc_side == "RIGHT")) {
         $inclusion = 'themes/' . $theme . '/view/bloc-right.html';
@@ -283,10 +288,10 @@ function themesidebox($title, $content)
 
 function themedito($content)
 {
-    global $theme;
-
     $inclusion = false;
     
+    $theme = theme::getTheme();
+
     if (file_exists("themes/" . $theme . "/view/editorial.html")) {
         $inclusion = "themes/" . $theme . "/view/editorial.html";
     } elseif (file_exists("themes/default/view/editorial.html")) {
@@ -314,7 +319,7 @@ function themedito($content)
 #autodoc userpopover($who, $dim, $avpop) : à partir du nom de l'utilisateur ($who) $avpop à 1 : affiche son avatar (ou avatar defaut) au dimension ($dim qui défini la class n-ava-$dim)<br /> $avpop à 2 : l'avatar affiché commande un popover contenant diverses info de cet utilisateur et liens associés
 function userpopover($who, $dim, $avpop)
 {
-    global $short_user, $user, $NPDS_Prefix;
+    global $user, $NPDS_Prefix;
 
     $result = sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uname ='$who'");
 
@@ -327,7 +332,7 @@ function userpopover($who, $dim, $avpop)
 
         $my_rs = '';
 
-        if (!$short_user) {
+        if (!Config::get('app.short_user')) {
             if ($temp_user['uid'] != 1) {
                 $posterdata_extend = forum::get_userdata_extend_from_id($temp_user['uid']);
 

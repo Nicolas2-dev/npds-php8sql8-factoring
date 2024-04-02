@@ -16,6 +16,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\config\Config;
 use npds\system\support\editeur;
 use npds\system\language\language;
 
@@ -154,14 +155,14 @@ function modifylinkrequestS($lid, $cat, $title, $url, $description, $modifysubmi
 
 function brokenlink($lid)
 {
-    global $ModPath, $ModStart, $links_DB, $anonymous;
+    global $ModPath, $ModStart, $links_DB;
     include("themes/default/header.php");
     global $user;
     if (isset($user)) {
         global $cookie;
         $ratinguser = $cookie[1];
     } else
-        $ratinguser = $anonymous;
+        $ratinguser = Config::get('app.anonymous');
     mainheader();
     echo '
     <h3>' . translate("Rapporter un lien rompu") . '</h3>
@@ -184,12 +185,12 @@ function brokenlink($lid)
 
 function brokenlinkS($lid, $modifysubmitter)
 {
-    global $user, $links_DB, $ModPath, $ModStart, $anonymous;
+    global $user, $links_DB, $ModPath, $ModStart;
     if (isset($user)) {
         global $cookie;
         $ratinguser = $cookie[1];
     } else
-        $ratinguser = $anonymous;
+        $ratinguser = Config::get('app.anonymous');
     if ($modifysubmitter == $ratinguser) {
         settype($lid, 'integer');
         sql_query("INSERT INTO " . $links_DB . "links_modrequest VALUES (NULL, $lid, 0, 0, '', '', '', '$ratinguser', 1,0)");

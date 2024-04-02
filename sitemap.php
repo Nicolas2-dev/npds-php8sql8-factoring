@@ -13,6 +13,7 @@
 /************************************************************************/
 
 use npds\system\logs\logs;
+use npds\system\config\Config;
 
 
 if (stristr($_SERVER['PHP_SELF'], 'sitemap.php')) {
@@ -21,9 +22,11 @@ if (stristr($_SERVER['PHP_SELF'], 'sitemap.php')) {
 
 function sitemapforum($prio)
 {
-    global $NPDS_Prefix, $nuke_url;
+    global $NPDS_Prefix;
 
     $tmp = '';
+
+    $nuke_url = Config::get('app.nuke_url');
 
     $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE forum_access='0' ORDER BY forum_id");
     while (list($forum_id) = sql_fetch_row($result)) {
@@ -53,9 +56,11 @@ function sitemapforum($prio)
 
 function sitemaparticle($prio)
 {
-    global $NPDS_Prefix, $nuke_url;
+    global $NPDS_Prefix;
 
     $tmp = '';
+
+    $nuke_url = Config::get('app.nuke_url');
 
     $result = sql_query("SELECT sid,time FROM " . $NPDS_Prefix . "stories WHERE ihome='0' AND archive='0' ORDER BY sid");
 
@@ -74,9 +79,11 @@ function sitemaparticle($prio)
 
 function sitemaprub($prio)
 {
-    global $NPDS_Prefix, $nuke_url;
+    global $NPDS_Prefix;
 
     $tmp = '';
+
+    $nuke_url = Config::get('app.nuke_url');
 
     // Sommaire des rubriques
     $tmp .= "<url>\n";
@@ -103,9 +110,11 @@ function sitemaprub($prio)
 
 function sitemapdown($prio)
 {
-    global $NPDS_Prefix, $nuke_url;
+    global $NPDS_Prefix;
 
     $tmp = '';
+
+    $nuke_url = Config::get('app.nuke_url');
 
     // Sommaire des downloads
     $tmp .= "<url>\n";
@@ -131,7 +140,7 @@ function sitemapdown($prio)
 
 function sitemapothers($PAGES)
 {
-    global $nuke_url;
+    $nuke_url = Config::get('app.nuke_url');
 
     $tmp = '';
 

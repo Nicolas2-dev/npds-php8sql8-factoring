@@ -15,6 +15,7 @@
 
 use npds\system\assets\css;
 use npds\system\mail\mailler;
+use npds\system\config\Config;
 
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');
@@ -92,8 +93,7 @@ if ($subop == 'session') {
     $result = sql_query("SELECT username, host_addr, guest, uri, agent FROM " . $NPDS_Prefix . "session");
     while (list($username, $host_addr, $guest, $uri, $agent) = sql_fetch_row($result)) {
         if ($username == $host_addr) {
-            global $anonymous;
-            $username = $anonymous;
+            $username = Config::get('app.anonymous');
         }
         if (preg_match('#(crawl|bot|spider|yahoo)#', strtolower($agent))) $agent = "Bot";
         else $agent = "Browser";
@@ -170,6 +170,9 @@ if ($subop == 'mailog') {
         'file' => $Mylog,
         'name' => 'security.log',
     ];
+
+    $sitename = Config::get('app.sitename');
+
     $subject = html_entity_decode(SessionLog_translate("Fichier de Log de"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' ' . $sitename;
     $message = SessionLog_translate("Fichier de Log de") . ' ' . $sitename . "<br /><br />";
     

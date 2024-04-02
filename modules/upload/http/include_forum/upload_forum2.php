@@ -14,6 +14,7 @@
 
 use npds\system\assets\css;
 use npds\system\forum\forum;
+use npds\system\config\Config;
 
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 
@@ -46,11 +47,11 @@ $userX = base64_decode($user);
 $userdata = explode(':', $userX);
 if ($userdata[9] != '') {
     if (!$file = @opendir("themes/$userdata[9]"))
-        $theme = $Default_Theme;
+        $theme = Config::get('app.Default_Theme');
     else
         $theme = $userdata[9];
 } else
-    $theme = $Default_Theme;
+    $theme = Config::get('app.Default_Theme');
 
 if (isset($user)) {
     global $cookie;

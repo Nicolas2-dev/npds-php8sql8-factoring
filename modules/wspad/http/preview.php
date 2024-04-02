@@ -14,6 +14,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\config\Config;
 use npds\system\utility\crypt;
 use npds\system\language\language;
 
@@ -23,7 +24,7 @@ if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
     die();
 
-global $language, $NPDS_Prefix, $Default_Theme, $Default_Skin, $user;
+global $language, $NPDS_Prefix, $user;
 include_once("modules/$ModPath/language/$language/language.php");
 // For More security
 
@@ -32,16 +33,16 @@ if (isset($user) and $user != '') {
     if ($cookie[9] != '') {
         $ibix = explode('+', urldecode($cookie[9]));
         if (array_key_exists(0, $ibix)) $theme = $ibix[0];
-        else $theme = $Default_Theme;
+        else $theme = Config::get('app.Default_Theme');
         if (array_key_exists(1, $ibix)) $skin = $ibix[1];
-        else $skin = $Default_Skin;
+        else $skin = Config::get('app.Default_Skin');
         $tmp_theme = $theme;
-        if (!$file = @opendir("themes/$theme")) $tmp_theme = $Default_Theme;
+        if (!$file = @opendir("themes/$theme")) $tmp_theme = Config::get('app.Default_Theme');
     } else
-        $tmp_theme = $Default_Theme;
+        $tmp_theme = Config::get('app.Default_Theme');
 } else {
-    $theme = $Default_Theme;
-    $skin = $Default_Skin;
+    $theme = Config::get('app.Default_Theme');
+    $skin = Config::get('app.Default_Skin');
     $tmp_theme = $theme;
 }
 

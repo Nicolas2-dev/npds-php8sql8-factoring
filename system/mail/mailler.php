@@ -33,9 +33,9 @@ class mailler
      */
     public static function send_email(string $email, string $subject, string $message, string $from = "", bool $priority = false, string $mime = "text", string $file = null): bool
     {
-        global $mail_fonction, $adminmail, $sitename, $NPDS_Key, $nuke_url;
+        global $NPDS_Key;
 
-        $From_email = $from != '' ? $from : $adminmail;
+        $From_email = $from != '' ? $from : Config::get('app.adminmail');
 
         if (preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $From_email)) {
             
@@ -72,7 +72,7 @@ class mailler
 
             try {
                 //Server settings config smtp 
-                if ($mail_fonction == 2) {
+                if (Config::get('app.mail_fonction') == 2) {
                     $mail->isSMTP();
                     $mail->Host       = $config['smtp_host'];
                     $mail->SMTPAuth   = $config['smtp_auth'];
@@ -98,7 +98,7 @@ class mailler
                 }
                 
                 //Recipients 
-                $mail->setFrom($adminmail, $sitename);
+                $mail->setFrom(Config::get('app.adminmail'), Config::get('app.sitename'));
                 $mail->addAddress($email, $email);
 
                 //Content 
@@ -134,13 +134,13 @@ class mailler
                 }
                 
                 if ($config['dkim_auto'] == 2) {
-                    $mail->DKIM_domain = str_replace(['http://', 'https://'], ['', ''], $nuke_url);
+                    $mail->DKIM_domain = str_replace(['http://', 'https://'], ['', ''], Config::get('app.nuke_url'));
                     $mail->DKIM_private = $privatekeyfile;;
                     $mail->DKIM_selector = $NPDS_Key;
                     $mail->DKIM_identity = $mail->From;
                 }
 
-                if ($mail_fonction == 2) {
+                if (Config::get('app.mail_fonction') == 2) {
                     if ($config['debug']) {
                         // on génère un journal détaillé après l'envoi du mail 
                         $mail->SMTPDebug = SMTP::DEBUG_SERVER;
@@ -207,8 +207,6 @@ class mailler
      */
     public static function Mess_Check_Mail_interface(string $username, string $class): void
     {
-        global $anonymous;
-        
         if ($ibid = theme::theme_image("fle_b.gif")) {
             $imgtmp = $ibid;
         } else {
@@ -219,7 +217,7 @@ class mailler
             $class = "class=\"$class\"";
         }
         
-        if ($username == $anonymous) {
+        if ($username == Config::get('app.anonymous')) {
             if ($imgtmp) {
                 echo "<img alt=\"\" src=\"$imgtmp\" align=\"center\" />$username - <a href=\"user.php\" $class>" . translate("Votre compte") . "</a>";
             } else {

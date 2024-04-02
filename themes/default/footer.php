@@ -13,6 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\config\Config;
 use npds\system\support\editeur;
 use npds\system\language\language;
 
@@ -22,23 +23,21 @@ if (!function_exists("Mysql_Connexion")) {
 
 function footmsg()
 {
-    global $foot1, $foot2, $foot3, $foot4;
-
     $foot = '<p align="center">';
     
-    if ($foot1) {
+    if ($foot1 = Config::get('app.foot1')) {
         $foot .= stripslashes($foot1) . '<br />';
     }
 
-    if ($foot2) {
+    if ($foot2 = Config::get('app.foot2')) {
         $foot .= stripslashes($foot2) . '<br />';
     }
 
-    if ($foot3) {
+    if ($foot3 = Config::get('app.foot3')) {
         $foot .= stripslashes($foot3) . '<br />';
     }
 
-    if ($foot4){  
+    if ($foot4 = Config::get('app.foot4')){  
         $foot .= stripslashes($foot4);
     }
 
@@ -49,8 +48,10 @@ function footmsg()
 
 function foot()
 {
-    global $user, $Default_Theme, $cookie9;
+    global $user, $cookie9;
     
+    $Default_Theme = Config::get('app.Default_Theme');
+
     if ($user) {
         $user2 = base64_decode($user);
         $cookie = explode(':', $user2);
@@ -74,9 +75,11 @@ function foot()
     }
 }
 
-global $tiny_mce, $cookie9, $Default_Theme;
+global $cookie9; 
 
-if ($tiny_mce) {
+$Default_Theme = Config::get('app.Default_Theme');
+
+if (Config::get('app.tiny_mce')) {
     echo editeur::aff_editeur('tiny_mce', 'end');
 }
 
@@ -112,8 +115,8 @@ echo '
 
 include("sitemap.php");
 
-global $mysql_p, $dblink;
+global $dblink;
 
-if (!$mysql_p) {
+if (!Config::get('app.database.mysql_p')) {
     sql_close($dblink);
 }

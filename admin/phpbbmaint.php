@@ -19,6 +19,7 @@ use npds\system\assets\css;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\support\str;
+use npds\system\config\Config;
 use npds\system\language\language;
 
 if (!function_exists('admindroits')) {
@@ -107,7 +108,7 @@ function ForumMaintMarkTopics()
 
 function ForumMaintTopics($before, $forum_name)
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg, $parse;
+    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
 
     include("themes/default/header.php");
 
@@ -143,7 +144,7 @@ function ForumMaintTopics($before, $forum_name)
 
         while (list($topic_id, $topic_title) = sql_fetch_row($resultT)) {
 
-            $tt = $parse == 0 ? str::FixQuotes($topic_title) : stripslashes($topic_title);
+            $tt = ((Config::get('app.parse') == 0) ? str::FixQuotes($topic_title) : stripslashes($topic_title));
             $oo = urlencode($tt); ///// ???? not used
             
             echo '

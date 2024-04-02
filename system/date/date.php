@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\date;
 
+use npds\system\config\Config;
 use npds\system\language\language;
 
 class date
@@ -16,11 +17,10 @@ class date
      */
     public static function NightDay(): string 
     {
-        global $lever, $coucher;
-
         $Maintenant = strtotime("now");
-        $Jour = strtotime($lever);
-        $Nuit = strtotime($coucher);
+        
+        $Jour = strtotime(Config::get('app.lever'));
+        $Nuit = strtotime(Config::get('app.coucher'));
 
         if ($Maintenant - $Jour < 0 xor $Maintenant - $Nuit > 0) {
             return "Nuit";

@@ -18,6 +18,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\config\Config;
+use npds\system\language\language;
+
 if (version_compare(PHP_VERSION, '5.3.0') >= 0 and extension_loaded('mysqli')) {
     $file = file("config/config.php");
     $file[33] = "\$mysql_p = 1;\n";
@@ -159,12 +162,12 @@ function msg_erreur($message)
 function write_users($adminlogin, $adminpass1, $adminpass2, $NPDS_Prefix)
 {
     include_once('config/config.php');
-    global $minpass, $stage7_ok, $NPDS_Prefix;
+    global $stage7_ok, $NPDS_Prefix;
     if ($adminlogin != '') {
         if ($adminpass1 != $adminpass2)
             $stage7_ok = 2;
         else {
-            if (strlen($adminpass1) < $minpass)
+            if (strlen($adminpass1) < Config::get('app.minpass'))
                 $stage7_ok = 2;
             else {
                 $stage7_ok = 1;
@@ -251,13 +254,12 @@ function language_iso($l, $s, $c)
 
 function formval($fv, $fv_parametres, $arg1, $foo)
 {
-    global $minpass;
     if ($fv == 'fv') {
         if ($fv_parametres != '') $fv_parametres = explode('!###!', $fv_parametres);
         echo '
     <script type="text/javascript" src="assets/js/es6-shim.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/FormValidation.full.min.js"></script>
-    <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/' . language_iso(1, "_", 1) . '.min.js"></script>
+    <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/' . language::language_iso(1, "_", 1) . '.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/L10n.min.js"></script>
     <script type="text/javascript" src="assets/js/checkfieldinp.js"></script>
@@ -308,7 +310,7 @@ function formval($fv, $fv_parametres, $arg1, $foo)
                 if (value.length < 8) {
                     return {
                         valid: false,
-                        message: "' . ins_translate("Le mot de passe doit contenir") . ' ' . $minpass . ' ' . ins_translate("caractères au minimum") . '",
+                        message: "' . ins_translate("Le mot de passe doit contenir") . ' ' . Config::get('app.minpass') . ' ' . ins_translate("caractères au minimum") . '",
                         meta:{score: score-5},
                     };
                 }

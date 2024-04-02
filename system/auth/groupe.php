@@ -11,6 +11,7 @@ use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\utility\crypt;
 use npds\system\support\online;
 use npds\system\language\language;
@@ -118,8 +119,8 @@ class groupe
      */
     public static function fab_espace_groupe(string $gr, string $t_gr, string $i_gr): string
     {
-        global $NPDS_Prefix, $short_user;
-
+        global $NPDS_Prefix;
+        
         $rsql = sql_fetch_assoc(sql_query("SELECT groupe_id, groupe_name, groupe_description, groupe_forum, groupe_mns, groupe_chat, groupe_blocnote, groupe_pad FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$gr'"));
 
         $content = '
@@ -174,7 +175,7 @@ class groupe
             $res_id = array();
             $my_rs = '';
 
-            if (!$short_user) {
+            if (!Config::get('app.short_user')) {
 
                 $posterdata_extend = forum::get_userdata_extend_from_id($uid);
 

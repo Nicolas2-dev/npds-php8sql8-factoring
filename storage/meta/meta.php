@@ -1,5 +1,6 @@
 <?php
 
+use npds\system\config\Config;
 use npds\system\language\language;
 
 /* Do not change anything in this file manually. Use the administration interface. */
@@ -16,7 +17,7 @@ if ($meta_doctype=="")
    $l_meta="<!DOCTYPE html>\n<html lang=\"$lang\">\n<head>\n";
 else
    $l_meta=$meta_doctype."\n<html lang=\"$lang\">\n<head>\n";
-$l_meta.="<title>$Titlesitename</title>\n";
+$l_meta.="<title>".Config::get('app.Titlesitename')."</title>\n";
 $l_meta.="<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\n";
 $l_meta.="<meta http-equiv=\"content-script-type\" content=\"text/javascript\" />\n";
 $l_meta.="<meta http-equiv=\"content-style-type\" content=\"text/css\" />\n";
@@ -44,7 +45,7 @@ $l_meta.="<meta name=\"robots\" content=\"all\" />\n";
 $l_meta.="<meta name=\"generator\" content=\"NPDS v.16.8 REvolution\" />\n";
 $l_meta.="<meta property=\"og:type\" content=\"website\" />\n";
 $l_meta.="<meta property=\"og:url\" content=\"$nuke_url\" />\n";
-$l_meta.="<meta property=\"og:title\" content=\"$Titlesitename\" />\n";
+$l_meta.="<meta property=\"og:title\" content=\"".Config::get('app.Titlesitename')."\" />\n";
 $l_meta.="<meta property=\"og:description\" content=\"Générateur de portail Français en Open-Source sous licence Gnu-Gpl utilisant Php et MySql\" />\n";
 $l_meta.="<meta property=\"og:image\" content=\"$nuke_url/images/ogimg.jpg\" />\n";
 $l_meta.="<meta property=\"twitter:card\" content=\"summary\" />\n";

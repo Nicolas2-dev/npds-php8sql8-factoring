@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -9,9 +10,13 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-global $nuke_url, $multi_langue;
 
-$tinylangmenu = $multi_langue!==false ? 'npds_langue' : '' ;
+use npds\system\config\Config;
+
+$nuke_url = Config::get('app.nuke_url');
+
+$tinylangmenu = Config::get('app.multi_langue') !== false ? 'npds_langue' : '' ;
+
 // skin : "oxide" ou "oxide-dark"
 $tmp.='
             promotion : false,
@@ -67,12 +72,12 @@ $tmp.='
                ],';
 
 // Analyse the type of Theme from routes/pages.php and determine if setup inclusion file is request
-$setup=explode('+',$tiny_mce_theme);
-$tiny_mce_theme=$setup[0];
-if (!array_key_exists(1,$setup)) $setup[1]='';
+$setup = explode('+', Config::get('editeur.tiny_mce_theme'));
+$tiny_mce_theme = $setup[0];
+if (!array_key_exists(1, $setup)) $setup[1]='';
 
 // Full Theme
-if ($tiny_mce_theme=='full') {
+if ($tiny_mce_theme == 'full') {
    $tmp.= "
             plugins: ['quickbars', 'autoresize', 'preview', 'importcss', 'searchreplace', 'autolink', 'autosave', 'save', 'directionality', 'code', 'visualblocks', 'visualchars', 'fullscreen', 'image', 'link', 'media', 'template', 'codesample', 'table', 'charmap', 'pagebreak', 'nonbreaking', 'anchor', 'insertdatetime', 'advlist', 'lists', 'wordcount', 'help', 'charmap', 'emoticons', 'npds'],
 //            extended_valid_elements : 'img[class|src|alt|title|width|loading=lazy]',
@@ -115,7 +120,7 @@ $tmp.="
             convert_newlines_to_brs : false,
             remove_linebreaks : false,";
 
- $tmp.= $tiny_mce_relurl=="false" ? 'relative_urls : false,' : 'relative_urls : true,';
+ $tmp.= Config::get('editeur.tiny_mce_relurl') == "false" ? 'relative_urls : false,' : 'relative_urls : true,';
 
 if ($setup[1]=='setup') {
    global $ModPath;

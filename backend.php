@@ -15,6 +15,7 @@ include('boot/bootstrap.php');
 
 use npds\system\date\date;
 use npds\system\news\news;
+use npds\system\config\Config;
 use npds\system\feed\FeedItem;
 use npds\system\feed\FeedImage;
 use npds\system\language\language;
@@ -23,13 +24,16 @@ use npds\system\feed\UniversalFeedCreator;
 
 function fab_feed($type, $filename, $timeout)
 {
-    global $sitename, $slogan, $nuke_url, $backend_image, $backend_title, $backend_width, $backend_height, $backend_language, $storyhome, $gmt;
+    global $backend_image, $backend_title, $backend_width, $backend_height, $backend_language, $storyhome, $gmt;
 
     $rss = new UniversalFeedCreator();
     $rss->useCached($type, $filename, $timeout);
 
+    $sitename = Config::get('app.sitename');
+    $nuke_url = Config::get('app.nuke_url');
+
     $rss->title = $sitename;
-    $rss->description = $slogan;
+    $rss->description = Config::get('app.slogan');
     $rss->descriptionTruncSize = 250;
     $rss->descriptionHtmlSyndicated = true;
 

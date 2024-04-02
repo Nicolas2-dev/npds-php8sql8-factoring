@@ -11,6 +11,7 @@
 /************************************************************************/
 
 use npds\system\assets\css;
+use npds\system\config\Config;
 use npds\system\utility\crypt;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -26,7 +27,7 @@ function L_encrypt($txt)
     return crypt::encryptK($txt, $key);
 }
 
-global $user, $Default_Theme;
+global $user;
 
 if (!$user) {
     Header("Location: user.php");
@@ -34,6 +35,8 @@ if (!$user) {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
     
+    $Default_Theme = Config::get('app.Default_Theme');
+
     if ($userdata[9] != '') {
         if (!$file = @opendir("themes/$userdata[9]")) {
             $tmp_theme = $Default_Theme;
@@ -51,6 +54,8 @@ if (!$user) {
     include("storage/meta/meta.php");
 
     echo '<link id="bsth" rel="stylesheet" href="themes/_skins/default/bootstrap.min.css" />';
+
+    $language = Config::get('app.language');
 
     echo css::import_css($tmp_theme, $language, "", "", "");
 

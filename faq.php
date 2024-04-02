@@ -25,7 +25,7 @@ if (!function_exists("Mysql_Connexion")) {
 
 function ShowFaq($id_cat, $categories) // cette function ne sert strictement a rien 
 {
-    global $sitename, $NPDS_Prefix;
+    global $NPDS_Prefix;
 
     echo '
     <h2 class="mb-4">' . translate("FAQ - Questions fréquentes") . '</h2>
@@ -44,7 +44,7 @@ function ShowFaqAll($id_cat)
 {
     global $NPDS_Prefix;
 
-    $result = sql_query("SELECT id, id_categorie, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id='$id_cat'");
+    $result = sql_query("SELECT id, id_cat, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id_cat='$id_cat'");
 
     while (list($id, $id_cat, $question, $answer) = sql_fetch_row($result)) {
         echo '
@@ -77,7 +77,7 @@ if (!$myfaq) {
     }
 
     if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
-        $result = sql_query("SELECT id, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id ASC");
+        $result = sql_query("SELECT id_cat, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id_cat ASC");
         
         echo '
         <h2 class="mb-4">' . translate("FAQ - Questions fréquentes") . '</h2>

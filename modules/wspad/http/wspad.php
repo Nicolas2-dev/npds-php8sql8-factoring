@@ -33,7 +33,7 @@ if (!stristr($_SERVER['PHP_SELF'], "modules.php")) die();
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
     die();
 
-global $title, $language, $NPDS_Prefix, $user, $admin, $nuke_url;
+global $title, $language, $NPDS_Prefix, $user, $admin;
 // For More security
 
 if (file_exists("modules/$ModPath/routes/pages.php"))

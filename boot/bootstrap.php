@@ -25,7 +25,7 @@ foreach (glob('config/*.php') as $path) {
     and (!strstr($key, 'config'))
     and (!strstr($key, 'constants'))
     and (!strstr($key, 'doctype'))
-    and (!strstr($key, 'filemanager'))
+    //and (!strstr($key, 'filemanager'))
     //and (!strstr($key, 'languages'))
     //and (!strstr($key, 'mailer'))
     and (!strstr($key, 'pages'))
@@ -39,7 +39,7 @@ foreach (glob('config/*.php') as $path) {
     }  
 }
 
-
+//vd(Config::get('app.database.mysql_i'));
 //vd(Config::get('mailer'));
 //vd(Config::all());
 
@@ -128,7 +128,8 @@ $db = Manager::getInstance();
 $db->connection()->setFetchMode(PDO::FETCH_ASSOC);
 
 
-include("config/config.php");
+//include("config/config.php");
+$NPDS_Prefix = '';
 include_once('config/cache.config.php');
 include_once('config/cache.timings.php');
 
@@ -141,6 +142,9 @@ if (file_exists('storage/language/langcode.php')) {
 
 if (isset($choice_user_language)) {
     if ($choice_user_language != '') {
+
+        $user_cook_duration = Config::get('app.user_cook_duration');
+
         if ($user_cook_duration <= 0) {
             $user_cook_duration = 1;
         }
@@ -154,17 +158,21 @@ if (isset($choice_user_language)) {
     }
 }
 
-if (($multi_langue) && isset($user_language)) {
+
+
+if ((Config::get('app.$multi_langue')) && isset($user_language)) {
     if (($user_language != '') and ($user_language != " ")) {
         $tmpML = stristr($languageslist, $user_language);
         $tmpML = explode(' ', $tmpML);
         
         if ($tmpML[0]) {
-            $language = $tmpML[0];
+            Config::get('app.language', $tmpML[0]);
         }
     }
 }
 // Multi-language
+
+$language = Config::get('app.language');
 
 include("language/$language/language.php");
 

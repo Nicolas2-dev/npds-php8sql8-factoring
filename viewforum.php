@@ -19,6 +19,7 @@ use npds\system\auth\groupe;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\pagination\paginator;
@@ -420,7 +421,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                         if ($rowQ1) {
                             echo '<td>' . userpopover($rowQ1[0]['uname'], 40, 2) . $rowQ1[0]['uname'] . '</td>';
                         } else {
-                            echo '<td>' . $anonymous . '</td>';
+                            echo '<td>' . Config::get('app.anonymous') . '</td>';
                         }
                     }
                     echo '<td>' . $myrow['topic_views'] . '</td>';

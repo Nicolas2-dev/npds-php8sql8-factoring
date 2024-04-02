@@ -8,6 +8,7 @@ use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\utility\code;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\pagination\paginator;
 
 /************************************************************************/
@@ -273,7 +274,7 @@ for ($i = 0; $i < $total_contributeurs; $i++) {
 
         echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="' . $imgtmp . '" alt="' . $contri['uname'] . '" title="' . $contri['uname'] . '" data-bs-toggle="tooltip" />';
     } else
-        echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="assets/images/forum/avatar/blank.gif" alt="' . $anonymous . '" title="' . $anonymous . '" data-bs-toggle="tooltip" />';
+        echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip" />';
 }
 
 echo '
@@ -532,14 +533,14 @@ do {
             <a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'<div class="my-2 border rounded p-2">' . forum::member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '</div><div class="list-group mb-3 text-center">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div> \'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>
             <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
         } else {
-            echo '<a style="position:absolute; top:1rem;" title="' . $anonymous . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . $anonymous . '" /></a>
-                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $anonymous . '</strong></span>';
+            echo '<a style="position:absolute; top:1rem;" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" /></a>
+                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
         }
     } else {
         if ($myrow['poster_id'] !== '0') {
             echo '<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
         } else {
-            echo '<span class="text-muted"><strong>' . $anonymous . '</strong></span>';
+            echo '<span class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
         }
     }
 

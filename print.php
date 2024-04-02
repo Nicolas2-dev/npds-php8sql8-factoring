@@ -16,6 +16,7 @@
 use npds\system\date\date;
 use npds\system\news\news;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\language\language;
 use npds\system\language\metalang;
@@ -28,7 +29,10 @@ if (!function_exists("Mysql_Connexion")) {
 function PrintPage($oper, $DB, $nl, $sid)
 {
     // global $user, $cookie, $theme, $Default_Theme, $language ??? Not used
-    global $user, $cookie, $theme, $Default_Theme, $language, $site_logo, $sitename, $datetime, $nuke_url, $Titlesitename, $NPDS_Prefix;
+    global $user, $cookie, $theme, $language, $datetime, $Titlesitename, $NPDS_Prefix;
+
+    $sitename = Config::get('app.sitename');
+    $nuke_url = Config::get('app.nuke_url');
 
     $aff = true;
     if ($oper == 'news') {
@@ -113,7 +117,7 @@ function PrintPage($oper, $DB, $nl, $sid)
         // not used 
         // if (isset($user)) {
         //     if ($cookie[9] == '') {
-        //         $cookie[9] = $Default_Theme;
+        //         $cookie[9] = Config::get('app.Default_Theme');
         //     }
 
         //     if (isset($theme)) {
@@ -123,11 +127,11 @@ function PrintPage($oper, $DB, $nl, $sid)
         //     $tmp_theme = $cookie[9];
 
         //     if (!$file = @opendir("themes/$cookie[9]")) {
-        //         $tmp_theme = $Default_Theme;
+        //         $tmp_theme = Config::get('app.Default_Theme');
         //     }
 
         // } else {
-        //     $tmp_theme = $Default_Theme;
+        //     $tmp_theme = Config::get('app.Default_Theme');
         // }
 
         echo '
@@ -136,6 +140,8 @@ function PrintPage($oper, $DB, $nl, $sid)
         <body>
             <div max-width="640" class="container p-1 n-hyphenate">
                 <div>';
+
+        $site_logo = Config::get('app.site_logo');
 
         $pos = strpos($site_logo, '/');
 
