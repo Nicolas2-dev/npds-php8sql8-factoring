@@ -47,20 +47,7 @@ echo css::import_css(theme::getTheme(), Config::get('app.language'), theme::getS
 
 include("assets/formhelp.java.php");
 
-echo '</head>';
-
 // cookie chat_info (1 par groupe)
-echo '<script type="text/javascript" src="assets/js/cookies.js"></script>';
-echo "<body id=\"chat\" onload=\"setCookie('chat_info_$id', '1', '');\" onUnload=\"deleteCookie('chat_info_$id');\">";
-echo '
-    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="assets/shared/font-awesome/css/all.min.css">
-    <form name="coolsus" action="chatinput.php" method="post">
-    <input type="hidden" name="op" value="set" />
-    <input type="hidden" name="id" value="' . $id . '" />
-    <input type="hidden" name="auto" value="' . $auto . '" />';
-
 global $cookie;    
 if (!isset($cookie[1])) {
     $pseudo = ((isset($name)) ? ($name) : urldecode(getip()));
@@ -68,29 +55,33 @@ if (!isset($cookie[1])) {
     $pseudo = $cookie[1];
 }
 
-$xJava = 'name="message" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
-
-echo translate("Vous êtes connecté en tant que :") . ' <strong>' . $pseudo . '</strong>&nbsp;';
-
-echo '
-            <input type="hidden" name="name" value="' . $pseudo . '" />
-            <textarea id="chatarea" class="form-control my-3" type="text" rows="2" ' . $xJava . ' placeholder="🖋"></textarea>
+echo '</head>
+    <script type="text/javascript" src="assets/js/cookies.js"></script>
+    <body id=\"chat\" onload=\"setCookie(\'chat_info_$id\', \'1\', \'\');\" onUnload=\"deleteCookie(\'chat_info_'.$id.'\');\">
+        <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="assets/shared/font-awesome/css/all.min.css">
+        <form name="coolsus" action="chatinput.php" method="post">
+        <input type="hidden" name="op" value="set" />
+        <input type="hidden" name="id" value="' . $id . '" />
+        <input type="hidden" name="auto" value="' . $auto . '" />
+        '.translate("Vous êtes connecté en tant que :") . ' <strong>' . $pseudo . '</strong>&nbsp;
+        <input type="hidden" name="name" value="' . $pseudo . '" />
+        <textarea id="chatarea" class="form-control my-3" type="text" rows="2" name="message" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)" placeholder="🖋"></textarea>
             <div class="float-end">';
-
-forum::putitems("chatarea");
-
+                forum::putitems("chatarea");
 echo '
             </div>
             <input class="btn btn-primary btn-sm" type="submit" tabindex="1" value="' . translate("Valider") . '" />
-            </form>
+        </form>
             <script src="assets/js/npds_adapt.js"></script>
             <script type="text/javascript">
             //<![CDATA[
                 document.coolsus.message.focus();
             //]]>
-            </script>
-        </body>
-    </html>';
+        </script>
+    </body>
+</html>';
 
 settype($op, 'string');
 
