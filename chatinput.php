@@ -47,7 +47,6 @@ echo css::import_css(theme::getTheme(), Config::get('app.language'), theme::getS
 
 include("assets/formhelp.java.php");
 
-// cookie chat_info (1 par groupe)
 global $cookie;    
 if (!isset($cookie[1])) {
     $pseudo = ((isset($name)) ? ($name) : urldecode(getip()));
@@ -55,9 +54,10 @@ if (!isset($cookie[1])) {
     $pseudo = $cookie[1];
 }
 
+// cookie chat_info (1 par groupe)
 echo '</head>
     <script type="text/javascript" src="assets/js/cookies.js"></script>
-    <body id=\"chat\" onload=\"setCookie(\'chat_info_$id\', \'1\', \'\');\" onUnload=\"deleteCookie(\'chat_info_'.$id.'\');\">
+    <body id="chat" onload="setCookie(\'chat_info_'.$id.'\', \'1\', \'\');" onUnload="deleteCookie(\'chat_info_'.$id.'\');">
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="assets/shared/font-awesome/css/all.min.css">
