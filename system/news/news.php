@@ -431,11 +431,11 @@ class news
      * 
      * @param   string  $op       [$op description]
      * @param   int|string     $catid    [$catid description]
-     * @param   int     $marqeur  [$marqeur description]
+     * @param   string|int     $marqeur  [$marqeur description]
      *
      * @return  array
      */
-    public static function prepa_aff_news(string $op, int|string $catid, int $marqeur): array|null
+    public static function prepa_aff_news(string $op, int|string $catid, string|int $marqeur): array|null
     {
         global $NPDS_Prefix, $topicname, $topicimage, $topictext, $cookie;
 

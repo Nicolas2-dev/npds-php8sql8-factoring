@@ -86,3 +86,6 @@
 03/31/2024 20:44:10 admin.php=>DesactivateChatWS(3) by AID : Root                IP=>::1   
 03/31/2024 20:44:12 admin.php=>DeleteBlocnoteWS(3) by AID : Root                 IP=>::1   
 03/31/2024 20:47:33 admin.php=>DeleteAllMemberToGroup(3, 2) by AID : Root        IP=>::1   
+04/02/2024 10:15:16 admin.php=>ChangeLeftBlock(Carte - 12) by AID : root         IP=>::1   
+04/02/2024 10:15:27 admin.php=>ChangeLeftBlock(Un Bloc ... - 1) by AID : root    IP=>::1   
+04/02/2024 10:20:09 admin.php=>SaveConfigFile(header_after) by AID : root        IP=>::1   

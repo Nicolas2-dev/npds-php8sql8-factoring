@@ -31,17 +31,14 @@ $f_titre = adm_translate("Edition des Utilisateurs");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/users.html";
-
 function displayUsers()
 {
-    global $hlpfile, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('users'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />

@@ -28,8 +28,9 @@ $f_meta_nom = 'blocks';
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/leftblocks.html";
+// global $language;
+// $hlpfile = "manuels/$language/leftblocks.html";
+//manuel('leftblocks');
 
 /**
  * [makelblock description]
@@ -93,13 +94,13 @@ function makelblock(string $title, string $content, int $members, string $Mmembe
  * @param   string  $Mmember  [$Mmember description]
  * @param   int     $Lindex   [$Lindex description]
  * @param   int     $Scache   [$Scache description]
- * @param   int     $Sactif   [$Sactif description]
+ * @param   int|string     $Sactif   [$Sactif description]
  * @param   string  $BLaide   [$BLaide description]
  * @param   int     $css      [$css description]
  *
  * @return  void
  */
-function changelblock(int $id, string $title, string $content, int $members, string $Mmember, int $Lindex, int $Scache, int $Sactif, string $BLaide, int $css): void
+function changelblock(int $id, string $title, string $content, int $members, string $Mmember, int $Lindex, int $Scache, int|string $Sactif, string $BLaide, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);

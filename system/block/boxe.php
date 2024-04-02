@@ -526,7 +526,7 @@ class boxe
      */
     public static function oldNews(string $storynum, ?string $typ_aff = ''): void
     {
-        global $locale, $oldnum, $categories, $cat, $user, $cookie;
+        global $locale, $categories, $cat, $user, $cookie;
 
         $boxstuff = '<ul class="list-group">';
         $storynum = isset($cookie[3]) ? $cookie[3] : Config::get('app.storyhome');
@@ -539,12 +539,12 @@ class boxe
 
         $sel =  "WHERE ihome=0"; // en dur pour test
         $vari = 0;
-        $xtab = news::news_aff('old_news', $sel, $storynum, $oldnum);
+        $xtab = news::news_aff('old_news', $sel, $storynum, Config::get('app.oldnum'));
         $story_limit = 0;
         $time2 = 0;
         $a = 0;
 
-        while (($story_limit < $oldnum) and ($story_limit < sizeof($xtab))) {
+        while (($story_limit < Config::get('app.oldnum')) and ($story_limit < sizeof($xtab))) {
             list($sid, $title, $time, $comments, $counter) = $xtab[$story_limit];
             $story_limit++;
 
@@ -575,9 +575,9 @@ class boxe
 
             $vari++;
 
-            if ($vari == $oldnum) {
+            if ($vari == Config::get('app.oldnum')) {
                 $storynum = isset($cookie[3]) ? $cookie[3] : Config::get('app.storyhome');
-                $min = $oldnum + $storynum;
+                $min = Config::get('app.oldnum') + $storynum;
                 $boxstuff .= "<li class=\"text-center mt-3\" ><a href=\"search.php?min=$min&amp;type=stories&amp;category=$cat\"><strong>" . translate("Articles plus anciens") . "</strong></a></li>\n";
             }
         }
@@ -686,11 +686,11 @@ class boxe
      *
      * @param   string  $hid    [$hid description]
      * @param   bool    $block  [$block description]
-     * @param   true            [ description]
+     * @param   string|true            [ description]
      *
      * @return  string          [return description]
      */
-    public static function headlines(string $hid = '', bool $block = true): string|bool
+    public static function headlines(string $hid = '', string|bool $block = true): string|bool
     {
         global $NPDS_Prefix;
 

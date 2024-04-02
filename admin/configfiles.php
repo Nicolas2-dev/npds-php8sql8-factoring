@@ -28,9 +28,6 @@ $f_titre = adm_translate("Les fichiers de configuration");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/configfiles.html";
-
 /**
  * [ConfigFiles description]
  *
@@ -41,12 +38,12 @@ $hlpfile = "manuels/$language/configfiles.html";
  */
 function ConfigFiles(string $contents, string $files): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('configfiles'));
+    adminhead($f_meta_nom, $f_titre);
 
     if ($contents == '') {
         echo '
@@ -157,8 +154,7 @@ function ConfigFiles(string $contents, string $files): void
                 <button class="btn btn-primary" type="submit" name="confirm">' . adm_translate("Sauver les modifications") . '</button> 
                 <button href="admin.php?op=ConfigFiles" class="btn btn-secondary">' . adm_translate("Abandonner") . '</button>
             </div>
-        </form>
-        ';
+        </form>';
     }
 
     css::adminfoot('', '', '', '');
@@ -235,16 +231,25 @@ function ConfigFiles_save(string $Xtxt, string $Xfiles): void
  */
 function delete_configfile(string $fileX): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('configfiles'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <div class="alert alert-danger" role="alert">
-        <p><strong>' . adm_translate("Supprimer le fichier") . ' ' . $fileX . ' ? </strong><br /><br /><a class="btn btn-danger btn-sm" href="admin.php?op=ConfigFiles_delete&amp;file=' . $fileX . '">' . adm_translate("Oui") . '</a>&nbsp;&nbsp;<a class="btn btn-secondary btn-sm" href="admin.php?op=ConfigFiles" >' . adm_translate("Non") . '</a></p>
+        <p>
+            <strong>' . adm_translate("Supprimer le fichier") . ' ' . $fileX . ' ? </strong>
+            <br /><br />
+            <a class="btn btn-danger btn-sm" href="admin.php?op=ConfigFiles_delete&amp;file=' . $fileX . '">
+                ' . adm_translate("Oui") . '
+            </a>
+            &nbsp;&nbsp;<a class="btn btn-secondary btn-sm" href="admin.php?op=ConfigFiles" >
+                ' . adm_translate("Non") . '
+            </a>
+        </p>
     </div>';
 
     css::adminfoot('', '', '', '');
@@ -292,19 +297,27 @@ function ConfigFiles_delete(string $modele): void
  */
 function copy_sample(string $fileX): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg, $header;
+    global $f_meta_nom, $f_titre, $header;
 
     if ($header != 1) {
         include("themes/default/header.php");
     }
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('configfiles'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
     <div class="card card-body">
-        <p>' . adm_translate("Créer le fichier en utilisant le modèle") . ' ? <br /><br /><a class="btn btn-primary" href="admin.php?op=ConfigFiles_create&amp;modele=' . $fileX . '" >' . adm_translate("Oui") . '</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="admin.php?op=ConfigFiles" >' . adm_translate("Non") . '</a></p>
+        <p>' . adm_translate("Créer le fichier en utilisant le modèle") . ' ? 
+            <br /><br />
+            <a class="btn btn-primary" href="admin.php?op=ConfigFiles_create&amp;modele=' . $fileX . '" >
+                ' . adm_translate("Oui") . '
+            </a>&nbsp;&nbsp;
+            <a class="btn btn-secondary" href="admin.php?op=ConfigFiles" >
+                ' . adm_translate("Non") . '
+            </a>
+        </p>
     </div>';
 
     css::adminfoot('', '', '', '');
@@ -359,6 +372,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/header_before.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/header_before.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -368,6 +382,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/header_head.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/header_head.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -377,6 +392,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/body_onload.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/body_onload.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -386,6 +402,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/header_after.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/header_after.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -395,6 +412,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/footer_before.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/footer_before.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -404,6 +422,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/footer_after.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/footer_after.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -413,6 +432,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/new_user.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/new_user.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -422,6 +442,7 @@ switch ($op) {
                 $fp = fopen("themes/default/view/include/user.inc", "r");
                 $Xcontents = fread($fp, filesize("themes/default/view/include/user.inc"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             } else {
                 copy_sample($files);
@@ -431,6 +452,7 @@ switch ($op) {
                 $fp = fopen("config/cache.config.php", "r");
                 $Xcontents = fread($fp, filesize("config/cache.config.php"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             }
         } elseif ($files == 'robots') {
@@ -438,6 +460,7 @@ switch ($op) {
                 $fp = fopen("robots.txt", "r");
                 $Xcontents = fread($fp, filesize("robots.txt"));
                 fclose($fp);
+
                 ConfigFiles($Xcontents, $files);
             }
         } elseif ($files == 'humans') {
@@ -445,6 +468,7 @@ switch ($op) {
                 $fp = fopen("humans.txt", "r");
                 $Xcontents = fread($fp, filesize("humans.txt"));
                 fclose($fp);
+                
                 ConfigFiles($Xcontents, $files);
             }
         }

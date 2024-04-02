@@ -33,9 +33,6 @@ $f_titre = adm_translate("Diffusion d'un Message Interne");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/email_user.html";
-
 /**
  * [email_user description]
  *
@@ -43,12 +40,12 @@ $hlpfile = "manuels/$language/email_user.html";
  */
 function email_user(): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('email_user'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
         <hr />
@@ -161,8 +158,7 @@ function email_user(): void
 
     $arg1 = '
     var formulid = ["emailuseradm"];
-    inpandfieldlen("subject",100);
-    ';
+    inpandfieldlen("subject",100);';
 
     echo js::auto_complete('membre', 'uname', 'users', 'username', '86400');
 
@@ -183,7 +179,7 @@ function email_user(): void
  */
 function send_email_to_user(string $username, string $subject, string $message, string $all, string $groupe, string $expediteur): void
 {
-    global $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     if ($subject != '') {
         if ($expediteur == 1) {
@@ -209,11 +205,11 @@ function send_email_to_user(string $username, string $subject, string $message, 
             if ($groupe) {
 
                 $users = DB::table('users_status')
-                ->leftJoin('users', 'users_status.uid', '=', 'users.uid')
-                ->select('users_status.uid', 'users_status.users_groupe', 'users.user_language')
-                ->where('users_status.groupe', '!=', '')
-                ->orderBy('users_status.uid', 'ASC')
-                ->get();
+                            ->leftJoin('users', 'users_status.uid', '=', 'users.uid')
+                            ->select('users_status.uid', 'users_status.users_groupe', 'users.user_language')
+                            ->where('users_status.groupe', '!=', '')
+                            ->orderBy('users_status.uid', 'ASC')
+                            ->get();
 
                 foreach ($users as $user) {
                     $tab_groupe = explode(',', $user['users_groupe']);
@@ -241,8 +237,7 @@ function send_email_to_user(string $username, string $subject, string $message, 
 
         $message = str_replace('\n', '<br />', $message);
 
-        global $gmt;
-        $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
+        $time = date(translate("dateinternal"), time() + ((int) Config::get('app.gmt') * 3600));
         
         $pasfin = false;
         $count = 0;
@@ -269,12 +264,11 @@ function send_email_to_user(string $username, string $subject, string $message, 
                 }
 
                 // A copy in email if necessary
-                global $subscribe;
-                if ($subscribe) {
+                if (Config::get('app.subscribe')) {
                     $old_message = $message;
                     
                     $sujet = translate_ml($to_tmp[1], 'Vous avez un nouveau message.');
-                    $message = translate_ml($to_tmp[1], 'Bonjour') . ",<br /><br /><a href=\"".Config::get('app.nuke_url')."/viewpmsg.php\">" . translate_ml($to_tmp[1], "Cliquez ici pour lire votre nouveau message.") . "</a><br /><br />";
+                    $message = translate_ml($to_tmp[1], 'Bonjour') . ", <br /><br /><a href=\"".Config::get('app.nuke_url')."/viewpmsg.php\">" . translate_ml($to_tmp[1], "Cliquez ici pour lire votre nouveau message.") . "</a><br /><br />";
                     $message .= Config::get('signature.message');
                     
                     mailler::copy_to_email($to_userid, $sujet, $message);
@@ -288,11 +282,10 @@ function send_email_to_user(string $username, string $subject, string $message, 
     global $aid;
     logs::Ecr_Log('security', "SendEmailToUser($subject) by AID : $aid", '');
 
-    global $hlpfile;
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('email_user'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '<hr />';
     

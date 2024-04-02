@@ -22,7 +22,7 @@ return array(
         /**
          * MySQL Password
          */
-        'dbpass' => 'password',
+        'dbpass' => '13Kyl09&72',
         
         /**
          * MySQL Database Name

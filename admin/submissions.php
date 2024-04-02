@@ -28,19 +28,16 @@ $f_titre = adm_translate('Article en attente de validation');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/submissions.html";
-
 function submissions()
 {
-    global $hlpfile, $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $hlpfile, $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     $dummy = 0;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('submissions'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT qid, subject, timestamp, topic, uname FROM " . $NPDS_Prefix . "queue ORDER BY timestamp");
 

@@ -3,7 +3,7 @@
 return array(
 
     /**
-     * Deutsch
+     * File Manager
      */
     'manager' => true,
 

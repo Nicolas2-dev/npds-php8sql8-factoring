@@ -382,7 +382,7 @@ if ($allow_upload_forum) {
 
 // Forum Read
 if (isset($user)) {
-    $time_actu = time() + ((int)$gmt * 3600);
+    $time_actu = time() + ((int) Config::get('app.gmt') * 3600);
 
     $sqlR = "SELECT last_read FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum' AND uid='$userdata[0]' AND topicid='$topic'";
     $result_LR = sql_query($sqlR);
@@ -428,7 +428,7 @@ do {
         $res_id = array();
         $my_rs = '';
         
-        if (!$short_user) {
+        if (!Config::get('app.short_user')) {
             $posterdata_extend = forum::get_userdata_extend_from_id($myrow['poster_id']);
 
             include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
@@ -515,7 +515,7 @@ do {
                 <div class="card">
                 <div class="card-header">';
 
-    if ($smilies) {
+    if (Config::get('app.smilies')) {
         if ($myrow['poster_id'] !== '0') {
             if ($posterdata['user_avatar'] != '') {
                 if (stristr($posterdata['user_avatar'], 'users_private')) {
@@ -715,7 +715,7 @@ if ($forum_access != 9) {
     }
 
     if ((($Mmod) or ($original_poster == $userdata[0])) and (!$lock_state)) {
-        $sec_clef = md5($forum . $topic . md5($NPDS_Key));
+        $sec_clef = md5($forum . $topic . md5(Config::get('app.NPDS_Key')));
         echo '<p><a href="viewforum.php?forum=' . $forum . '&amp;topic_id=' . $topic . '&amp;topic_title=' . rawurlencode($topic_subject) . '&amp;op=solved&amp;sec_clef=' . $sec_clef . '"><i class="fa fa-lock fa-2x align-middle me-1"></i>' . translate("Résolu") . '</a></p>';
         
         unset($sec_clef);

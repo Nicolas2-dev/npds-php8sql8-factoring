@@ -215,12 +215,12 @@ function droits_publication($secid)
 
 function sections()
 {
-    global $hlpfile, $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('sections'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = $radminsuper == 1 
         ? sql_query("SELECT rubid, rubname, enligne, ordre FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre") 

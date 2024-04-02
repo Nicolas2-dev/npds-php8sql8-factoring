@@ -30,7 +30,7 @@ return array(
         /**
          * Password
          */
-        'password'  => 'password',
+        'password'  => '13Kyl09&72',
 
         /**
          * Prefix

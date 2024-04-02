@@ -64,15 +64,19 @@ function edito($edito_type, $contents, $Xaff_jours, $Xaff_jour, $Xaff_nuit)
             $edito_typeL = ' ' . adm_translate("Membre");
         }
 
-        if (strpos($contents, '[/jour]') > 0) {
+        if (strpos($contents, '[/jour]') > 0 && stristr($contents, '[/jour]') && stristr($contents, '[/nuit]')) {
             $contentJ = substr($contents, strpos($contents, '[jour]') + 6, strpos($contents, '[/jour]') - 6);
             $contentN = substr($contents, strpos($contents, '[nuit]') + 6, strpos($contents, '[/nuit]') - 19 - strlen($contentJ));
         }
 
-        if (!$contentJ and !$contentN and !strpos($contents, '[/jour]')) {
+        if (!isset($contentJ) and !strpos($contents, '[/jour]')) {
             $contentJ = $contents;
         }
 
+        if (!isset($contentN) and !strpos($contents, '[/nuit]')) {
+            $contentN = $contents;
+        }
+        
         echo '
         <form id="admineditomod" action="admin.php" method="post" name="adminForm">
             <fieldset>
@@ -195,6 +199,11 @@ switch ($op) {
 
     case 'Edito_load':
         if ($edito_type == 'G') {
+
+            $Xcontents = '';
+            $Xibidout['aff_jours'] = '';
+            $Xibidout['aff_nuit'] = '';
+
             if (file_exists('storage/static/edito.txt')) {
                 $fp = fopen('storage/static/edito.txt', 'r');
                 
@@ -204,6 +213,11 @@ switch ($op) {
                 fclose($fp);
             }
         } elseif ($edito_type == 'M') {
+            
+            $Xcontents = '';
+            $Xibidout['aff_jours'] = '';
+            $Xibidout['aff_nuit'] = '';
+
             if (file_exists('storage/static/edito_membres.txt')) {
                 $fp = fopen('storage/static/edito_membres.txt', 'r');
                 

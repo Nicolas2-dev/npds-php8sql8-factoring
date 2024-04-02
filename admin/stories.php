@@ -166,7 +166,7 @@ function SelectCategory($cat)
 // CATEGORIES
 function AddCategory()
 {
-    global $hlpfile, $language, $aid, $radminsuper, $adminimg;
+    global $hlpfile, $language, $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Articles");
@@ -178,7 +178,7 @@ function AddCategory()
     include("themes/default/header.php");
 
     GraphicAdmin('');
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />

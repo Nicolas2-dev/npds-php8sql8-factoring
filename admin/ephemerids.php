@@ -29,9 +29,6 @@ $f_titre = adm_translate("Ephémérides");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/ephem.html";
-
 /**
  * [Ephemerids description]
  *
@@ -39,12 +36,12 @@ $hlpfile = "manuels/$language/ephem.html";
  */
 function Ephemerids(): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('ephem'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -169,18 +166,23 @@ function Ephemeridsadd(int $did, int $mid, int $yid, string $content): void
  */
 function Ephemeridsmaintenance(int $did, int $mid): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
-    $resultX = DB::table('ephem')->select('eid', 'did', 'mid', 'yid', 'content')->where('did', $did)->where('mid', $mid)->orderBy('yid', 'ASC')->get();
+    $resultX = DB::table('ephem')
+                    ->select('eid', 'did', 'mid', 'yid', 'content')
+                    ->where('did', $did)
+                    ->where('mid', $mid)
+                    ->orderBy('yid', 'ASC')
+                    ->get();
 
-    if (!sql_num_rows($resultX)) {
+    if (!$resultX) {
         header("location: admin.php?op=Ephemerids");
     }
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('ephem'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -188,9 +190,15 @@ function Ephemeridsmaintenance(int $did, int $mid): void
     <table data-toggle="table" data-striped="true" data-mobile-responsive="true" data-search="true" data-show-toggle="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
-                <th class="n-t-col-xs-2" data-sortable="true" data-halign="center" data-align="right" >' . adm_translate('Année') . '</th>
-                <th data-halign="center" >' . adm_translate('Description') . '</th>
-                <th class="n-t-col-xs-2" data-halign="center" data-align="center" >' . adm_translate('Fonctions') . '</th>
+                <th class="n-t-col-xs-2" data-sortable="true" data-halign="center" data-align="right" >
+                    ' . adm_translate('Année') . '
+                </th>
+                <th data-halign="center" >
+                    ' . adm_translate('Description') . '
+                </th>
+                <th class="n-t-col-xs-2" data-halign="center" data-align="center" >
+                    ' . adm_translate('Fonctions') . '
+                </th>
             </tr>
         </thead>
         <tbody>';
@@ -198,9 +206,19 @@ function Ephemeridsmaintenance(int $did, int $mid): void
     foreach ($resultX as $ephem) {
         echo '
             <tr>
-                <td>' . $ephem['yid'] . '</td>
-                <td>' . language::aff_langue($ephem['content']) . '</td>
-                <td><a href="admin.php?op=Ephemeridsedit&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit fa-lg me-2"></i></a>&nbsp;<a href="admin.php?op=Ephemeridsdel&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>
+                <td>
+                    ' . $ephem['yid'] . '
+                </td>
+                <td>
+                    ' . language::aff_langue($ephem['content']) . '
+                </td>
+                <td>
+                    <a href="admin.php?op=Ephemeridsedit&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" >
+                        <i class="fa fa-edit fa-lg me-2"></i>
+                    </a>&nbsp;
+                    <a href="admin.php?op=Ephemeridsdel&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip">
+                        <i class="fas fa-trash fa-lg text-danger"></i>
+                    </a>
             </tr>';
     }
 
@@ -238,12 +256,12 @@ function Ephemeridsdel(int $eid, int $did, int $mid): void
  */
 function Ephemeridsedit(int $eid, int $did, int $mid): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('ephem'));
+    adminhead($f_meta_nom, $f_titre);
 
     $ephem = DB::table('ephem')->select('yid', 'content')->where('eid', $eid)->first();
 

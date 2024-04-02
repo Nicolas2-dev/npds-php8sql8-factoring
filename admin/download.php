@@ -13,7 +13,6 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\assets\js;
 use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\support\editeur;
@@ -31,52 +30,6 @@ $f_titre = adm_translate('Téléchargements');
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
-
-global $language;
-$hlpfile = "manuels/$language/downloads.html";
-
-/**
- * [groupe description]
- *
- * @param   string  $groupe  [$groupe description]
- *
- * @return  string
- */
-function groupe(string $groupe): string 
-{
-    $les_groupes = explode(',', $groupe);
-    $mX = groupe::liste_group();
-    $nbg = 0;
-    $str = '';
-
-    foreach ($mX as $groupe_id => $groupe_name) {
-        $selectionne = 0;
-
-        if ($les_groupes) {
-            foreach ($les_groupes as $groupevalue) {
-                if (($groupe_id == $groupevalue) and ($groupe_id != 0)) $selectionne = 1;
-            }
-        }
-
-        if ($selectionne == 1) {
-            $str .= '<option value="' . $groupe_id . '" selected="selected">' . $groupe_name . '</option>';
-        } else {
-            $str .= '<option value="' . $groupe_id . '">' . $groupe_name . '</option>';
-        }
-
-        $nbg++;
-    }
-
-    if ($nbg > 5) {
-        $nbg = 5;
-    }
-
-    // si on veux traiter groupe multiple multiple="multiple"  et name="Mprivs"
-    return ('
-    <select multiple="multiple" class="form-select" id="mpri" name="Mprivs[]" size="' . $nbg . '">
-    ' . $str . '
-    </select>');
-}
 
 /**
  * [droits description]
@@ -117,7 +70,7 @@ function droits(int|string $member): void
     <div class="mb-3 row">
         <label class="col-form-label col-sm-12" for="mpri">' . adm_translate("Groupes") . '</label>
         <div class="col-sm-12">';
-        echo groupe($member) . '
+        echo groupe::groupe($member) . '
         </div>
     </div>';
     } else {
@@ -134,7 +87,7 @@ function droits(int|string $member): void
     <div class="mb-3 row">
         <label class="col-form-label col-sm-12" for="mpri">' . adm_translate("Groupes") . '</label>
         <div class="col-sm-12">';
-        echo groupe($member) . '
+        echo groupe::groupe($member) . '
         </div>
     </div>';
     }
@@ -147,12 +100,12 @@ function droits(int|string $member): void
  */
 function DownloadAdmin(): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('downloads'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -165,28 +118,54 @@ function DownloadAdmin(): void
     foreach ($downloads as $download) {
 
         echo '
-        <h4 class="mb-2"><a class="tog" id="show_cat_' . $pseudocatid . '" title="Déplier la liste"><i id="i_cat_' . $pseudocatid . '" class="fa fa-caret-down fa-lg text-primary"></i></a>
-        ' . language::aff_langue(stripslashes($download['dcategory'])) . '</h4>';
+        <h4 class="mb-2">
+            <a class="tog" id="show_cat_' . $pseudocatid . '" title="Déplier la liste">
+                <i id="i_cat_' . $pseudocatid . '" class="fa fa-caret-down fa-lg text-primary"></i>
+            </a>
+            ' . language::aff_langue(stripslashes($download['dcategory'])) . '
+        </h4>';
         
         echo '
         <div class="mb-3" id="cat_' . $pseudocatid . '" style="display:none;">
         <table data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-show-columns="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons-prefix="fa" data-icons="icons">
             <thead>
                 <tr>
-                <th data-sortable="true" data-halign="center" data-align="right">' . adm_translate("ID") . '</th>
-                <th data-sortable="true" data-halign="center" data-align="right">' . adm_translate("Compteur") . '</th>
-                <th data-sortable="true" data-halign="center" data-align="center">Typ.</th>
-                <th data-halign="center" data-align="center">' . adm_translate("URL") . '</th>
-                <th data-sortable="true" data-halign="center" >' . adm_translate("Nom de fichier") . '</th>
-                <th data-halign="center" data-align="center">' . adm_translate("Version") . '</th>
-                <th data-halign="center" data-align="right">' . adm_translate("Taille de fichier") . '</th>
-                <th data-halign="center" >' . adm_translate("Date") . '</th>
-                <th data-halign="center" data-align="center">' . adm_translate("Fonctions") . '</th>
+                    <th data-sortable="true" data-halign="center" data-align="right">
+                        ' . adm_translate("ID") . '
+                    </th>
+                    <th data-sortable="true" data-halign="center" data-align="right">
+                        ' . adm_translate("Compteur") . '
+                    </th>
+                    <th data-sortable="true" data-halign="center" data-align="center">
+                        Typ.
+                    </th>
+                    <th data-halign="center" data-align="center">
+                        ' . adm_translate("URL") . '
+                    </th>
+                    <th data-sortable="true" data-halign="center" >
+                        ' . adm_translate("Nom de fichier") . '
+                    </th>
+                    <th data-halign="center" data-align="center">
+                        ' . adm_translate("Version") . '
+                    </th>
+                    <th data-halign="center" data-align="right">
+                        ' . adm_translate("Taille de fichier") . '
+                    </th>
+                    <th data-halign="center" >
+                        ' . adm_translate("Date") . '
+                    </th>
+                    <th data-halign="center" data-align="center">
+                        ' . adm_translate("Fonctions") . '
+                    </th>
                 </tr>
             </thead>
             <tbody>';
 
-        $downloadsX = DB::table('downloads')->select('did', 'dcounter', 'durl', 'dfilename', 'dfilesize', 'ddate', 'dver', 'perms')->where('dcategory', addslashes($download['dcategory']))->orderBy('did', 'ASC')->get();
+        $downloadsX = DB::table('downloads')
+                        ->select('did', 'dcounter', 'durl', 'dfilename', 'dfilesize', 'ddate', 'dver', 'perms')
+                        ->where('dcategory', addslashes($download['dcategory']))
+                        ->orderBy('did', 'ASC')
+                        ->get();
 
         foreach ($downloadsX as $download) {
 
@@ -204,13 +183,26 @@ function DownloadAdmin(): void
 
             echo '
                 <tr>
-                <td>' . $download['did'] . '</td>
-                <td>' . $download['dcounter'] . '</td>
-                <td>' . $dperm . '</td>
-                <td><a href="' . $download['durl'] . '" title="' . adm_translate("Téléchargements") . '<br />' . $download['durl'] . '" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"><i class="fa fa-download fa-2x"></i></a></td>
-                <td>' . $download['dfilename'] . '</td>
-                <td><span class="small">' . $download['dver'] . '</span></td>
-                <td><span class="small">';
+                <td>
+                    ' . $download['did'] . '
+                </td>
+                <td>
+                    ' . $download['dcounter'] . '
+                </td>
+                <td>
+                    ' . $dperm . '
+                </td>
+                <td>
+                    <a href="' . $download['durl'] . '" title="' . adm_translate("Téléchargements") . '<br />' . $download['durl'] . '" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"><i class="fa fa-download fa-2x"></i></a>
+                </td>
+                <td>
+                    ' . $download['dfilename'] . '
+                </td>
+                <td>
+                    <span class="small">' . $download['dver'] . '</span>
+                </td>
+                <td>
+                    <span class="small">';
                 
             $Fichier = new FileManagement;
             
@@ -220,20 +212,26 @@ function DownloadAdmin(): void
                 echo $Fichier->file_size_auto($download['durl'], 2);
             }
 
-            echo '</span></td>
-                <td class="small">' . $download['ddate'] . '</td>
-                <td>
-                    <a href="admin.php?op=DownloadEdit&amp;did=' . $download['did'] . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="admin.php?op=DownloadDel&amp;did=' . $download['did'] . '&amp;ok=0" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-trash fa-lg text-danger ms-2"></i></a>
-                </td>
+            echo '</span>
+                    </td>
+                    <td class="small">
+                        ' . $download['ddate'] . '
+                    </td>
+                    <td>
+                        <a href="admin.php?op=DownloadEdit&amp;did=' . $download['did'] . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="right">
+                            <i class="fa fa-edit fa-lg"></i>
+                        </a>
+                        <a href="admin.php?op=DownloadDel&amp;did=' . $download['did'] . '&amp;ok=0" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="right">
+                            <i class="fas fa-trash fa-lg text-danger ms-2"></i>
+                        </a>
+                    </td>
                 </tr>';
         }
 
         echo '
                 </tbody>
             </table>
-        </div>';
-        echo '
+        </div>
         <script type="text/javascript">
             //<![CDATA[
                 $( document ).ready(function() {
@@ -348,8 +346,7 @@ function DownloadAdmin(): void
             inpandfieldlen("dfilesize",31);
             inpandfieldlen("dweb",255);
             inpandfieldlen("duser",30);
-            inpandfieldlen("dcategory",250);
-    ';
+            inpandfieldlen("dcategory",250);';
 
     css::adminfoot('fv', '', $arg1, '');
 }
@@ -363,12 +360,12 @@ function DownloadAdmin(): void
  */
 function DownloadEdit(int $did): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('downloads'));
+    adminhead($f_meta_nom, $f_titre);
 
     $download = DB::table('downloads')
                     ->select('did', 'dcounter', 'durl', 'dfilename', 'dfilesize', 'ddate', 'dweb', 'duser', 'dver', 'dcategory', 'ddescription', 'perms')
@@ -482,8 +479,7 @@ function DownloadEdit(int $did): void
         inpandfieldlen("dfilesize",31);
         inpandfieldlen("dweb",255);
         inpandfieldlen("duser",30);
-        inpandfieldlen("dcategory",250);
-    ';
+        inpandfieldlen("dcategory",250);';
 
     css::adminfoot('fv', '', $arg1, '');
 }
@@ -619,18 +615,24 @@ function DownloadDel(int $did, int $ok = 0): void
 
         Header("Location: admin.php?op=DownloadAdmin");
     } else {
-        global $hlpfile, $f_titre, $adminimg;
+        global $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('downloads'));
+        adminhead($f_meta_nom, $f_titre);
 
         echo ' 
         <div class="alert alert-danger">
             <strong>' . adm_translate("ATTENTION : êtes-vous sûr de vouloir supprimer ce fichier téléchargeable ?") . '</strong>
         </div>
-        <a class="btn btn-danger" href="admin.php?op=DownloadDel&amp;did=' . $did . '&amp;ok=1" >' . adm_translate("Oui") . '</a>&nbsp;<a class="btn btn-secondary" href="admin.php?op=DownloadAdmin" >' . adm_translate("Non") . '</a>';
+        <a class="btn btn-danger" href="admin.php?op=DownloadDel&amp;did=' . $did . '&amp;ok=1" >
+            ' . adm_translate("Oui") . '
+        </a>
+        &nbsp;
+        <a class="btn btn-secondary" href="admin.php?op=DownloadAdmin" >
+            ' . adm_translate("Non") . '
+        </a>';
         
         css::adminfoot('', '', '', '');
     }

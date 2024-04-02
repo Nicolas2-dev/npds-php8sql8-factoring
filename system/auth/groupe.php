@@ -232,7 +232,7 @@ class groupe
             if ($mns)
                 $useroutils .= '<a class="list-group-item text-primary" href="minisite.php?op=' . $uname . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visitez le minisite") . '</span></a>';
             
-            if (!$short_user)
+            if (!Config::get('app.short_user'))
                 if ($posterdata_extend[$ch_lat] != '')
                     $useroutils .= '<a class="list-group-item text-primary" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u' . $uid . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Localisation") . '</span></a>';
 
@@ -260,8 +260,9 @@ class groupe
                     $timex = time() - $tab[$i]['time'];
             }
             
-            if (($timex !== false) and ($timex < 60))
+            if (($timex !== false) and ($timex < 60)) {
                 $conn = '<i class="fa fa-plug faa-flash animated text-primary" title="' . $uname . ' ' . translate("est connecté") . '" data-bs-toggle="tooltip" ></i>';
+            }
             
             $li_ic .= '<img class="n-smil" src="' . $imgtmp . '" alt="avatar" loading="lazy" />';
             $li_mb .= '
@@ -269,8 +270,9 @@ class groupe
                     <div id="li_mb_' . $uname . '_' . $gr . '" class="n-ellipses">
                        ' . $conn . '<a class="ms-2" tabindex="0" data-bs-title="' . $uname . '" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-content=\'<div class="list-group mb-3">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">';
             
-                       if (!$short_user)
+            if (!Config::get('app.short_user')) {
                 $li_mb .= $my_rsos[$count];
+            }
             
             $li_mb .= '</div>\'>
            <img class=" btn-outline-primary img-thumbnail img-fluid n-ava-small " src="' . $imgtmp . '" alt="avatar" title="' . $uname . '" loading="lazy" /></a>
@@ -469,4 +471,49 @@ class groupe
 
         return $content;
     }
+
+    /**
+     * [groupe description]
+     *
+     * @param   string  $groupe  [$groupe description]
+     *
+     * @return  string
+     */
+    public static function groupe(string $groupe): string
+    {
+        $les_groupes = explode(',', $groupe);
+        $mX = static::liste_group();
+        $nbg = 0;
+        $str = '';
+
+        foreach ($mX as $groupe_id => $groupe_name) {
+            $selectionne = 0;
+
+            if ($les_groupes) {
+                foreach ($les_groupes as $groupevalue) {
+                    if (($groupe_id == $groupevalue) and ($groupe_id != 0)) {
+                        $selectionne = 1;
+                    }
+                }
+            }
+
+            if ($selectionne == 1) {
+                $str .= '<option value="' . $groupe_id . '" selected="selected">' . $groupe_name . '</option>';
+            } else {
+                $str .= '<option value="' . $groupe_id . '">' . $groupe_name . '</option>';
+            }
+
+            $nbg++;
+        }
+
+        if ($nbg > 5) {
+            $nbg = 5;
+        }
+        
+        return ('
+        <select multiple="multiple" class="form-control" name="Mmember[]" size="' . $nbg . '">
+        ' . $str . '
+        </select>');
+    }
+
 }

@@ -29,53 +29,6 @@ $f_titre = adm_translate('Gestion des blocs');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/blocks.html";
-
-/**
- * [groupe description]
- *
- * @param   string  $groupe  [$groupe description]
- *
- * @return  string
- */
-function groupe(string $groupe): string
-{
-    $les_groupes = explode(',', $groupe);
-    $mX = groupe::liste_group();
-    $nbg = 0;
-    $str = '';
-
-    foreach ($mX as $groupe_id => $groupe_name) {
-        $selectionne = 0;
-
-        if ($les_groupes) {
-            foreach ($les_groupes as $groupevalue) {
-                if (($groupe_id == $groupevalue) and ($groupe_id != 0)) {
-                    $selectionne = 1;
-                }
-            }
-        }
-
-        if ($selectionne == 1) {
-            $str .= '<option value="' . $groupe_id . '" selected="selected">' . $groupe_name . '</option>';
-        } else {
-            $str .= '<option value="' . $groupe_id . '">' . $groupe_name . '</option>';
-        }
-
-        $nbg++;
-    }
-
-    if ($nbg > 5) {
-        $nbg = 5;
-    }
-    
-    return ('
-    <select multiple="multiple" class="form-control" name="Mmember[]" size="' . $nbg . '">
-    ' . $str . '
-    </select>');
-}
-
 /**
  * [droits_bloc description]
  *
@@ -109,38 +62,38 @@ function droits_bloc(string $member, string $j, string $lb): void
 
     if ($member > 0) {
         echo '
-            <input type="radio" id="mem' . $j . $lb . '" name="members" value="1" checked="checked" class="form-check-input"/>
-            <label class="form-check-label" for="mem' . $j . $lb . '">' . adm_translate("Membres") . '</label>
+                <input type="radio" id="mem' . $j . $lb . '" name="members" value="1" checked="checked" class="form-check-input"/>
+                <label class="form-check-label" for="mem' . $j . $lb . '">' . adm_translate("Membres") . '</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" id="tous' . $j . $lb . '" name="members" value="0" class="form-check-input" />
+                <label class="form-check-label" for="tous' . $j . $lb . '">' . adm_translate("Tous") . '</label>
+            </div>
         </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" id="tous' . $j . $lb . '" name="members" value="0" class="form-check-input" />
-            <label class="form-check-label" for="tous' . $j . $lb . '">' . adm_translate("Tous") . '</label>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="Mmember[]" class="col-form-label col-sm-12">' . adm_translate("Groupes") . '</label>
-        <div class="col-sm-12">
-            ' . groupe($member) . '
-        </div>
-    </div>';
+        <div class="mb-3 row">
+            <label for="Mmember[]" class="col-form-label col-sm-12">' . adm_translate("Groupes") . '</label>
+            <div class="col-sm-12">
+                ' . groupe::groupe($member) . '
+            </div>
+        </div>';
     } else {
         $checked = $member == 0 ? ' checked="checked"' : '';
 
         echo '
-            <input type="radio" id="mem' . $j . $lb . '" name="members" value="1" class="form-check-input" />
-            <label class="form-check-label" for="mem' . $j . $lb . '">' . adm_translate("Membres") . '</label>
+                <input type="radio" id="mem' . $j . $lb . '" name="members" value="1" class="form-check-input" />
+                <label class="form-check-label" for="mem' . $j . $lb . '">' . adm_translate("Membres") . '</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" id="tous' . $j . $lb . '" name="members" value="0"' . $checked . ' class="form-check-input" />
+                <label class="form-check-label" for="tous' . $j . $lb . '">' . adm_translate("Tous") . '</label>
+            </div>
         </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" id="tous' . $j . $lb . '" name="members" value="0"' . $checked . ' class="form-check-input" />
-            <label class="form-check-label" for="tous' . $j . $lb . '">' . adm_translate("Tous") . '</label>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label for="Mmember[]" class="col-form-label col-sm-12">' . adm_translate("Groupes") . '</label>
-        <div class="col-sm-12">
-            ' . groupe($member) . '
-        </div>
-    </div>';
+        <div class="mb-3 row">
+            <label for="Mmember[]" class="col-form-label col-sm-12">' . adm_translate("Groupes") . '</label>
+            <div class="col-sm-12">
+                ' . groupe::groupe($member) . '
+            </div>
+        </div>';
     }
 }
 
@@ -151,12 +104,12 @@ function droits_bloc(string $member, string $j, string $lb): void
  */
 function blocks(): void
 {
-    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('blocks'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -586,8 +539,7 @@ function blocks(): void
 
     $arg1 = '
         var formulid = ["blocknewblock"];
-        inpandfieldlen("nblock_title",1000);
-    ';
+        inpandfieldlen("nblock_title",1000);';
 
     css::adminfoot('fv', '', $arg1, '');
 }

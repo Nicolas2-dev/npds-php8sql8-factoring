@@ -32,9 +32,6 @@ $f_titre = adm_translate("Faq");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/faqs.html";
-
 /**
  * [FaqAdmin description]
  *
@@ -42,12 +39,12 @@ $hlpfile = "manuels/$language/faqs.html";
  */
 function FaqAdmin(): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('faqs'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -96,8 +93,7 @@ function FaqAdmin(): void
 
     $arg1 = '
         var formulid = ["adminfaqcatad"];
-        inpandfieldlen("categories",255);
-    ';
+        inpandfieldlen("categories",255);';
 
     css::adminfoot('fv', '', $arg1, '');
 }
@@ -111,12 +107,12 @@ function FaqAdmin(): void
  */
 function FaqCatGo(int $id_cat): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('faqs'));
+    adminhead($f_meta_nom, $f_titre);
 
     $lst_qr = '';
 
@@ -213,12 +209,12 @@ function FaqCatGo(int $id_cat): void
  */
 function FaqCatEdit(int $id_cat): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('faqs'));
+    adminhead($f_meta_nom, $f_titre);
 
     $faq_categorie = DB::table('faqcategories')->select('categories')->find($id_cat);
 
@@ -263,12 +259,12 @@ function FaqCatEdit(int $id_cat): void
  */
 function FaqCatGoEdit(int $id): void
 {
-    global $hlpfile, $local_user_language, $f_meta_nom, $f_titre, $adminimg;
+    global $local_user_language, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('faqs'));
+    adminhead($f_meta_nom, $f_titre);
 
     $faq = DB::table('faqanswer')
         ->leftJoin('faqcategories', 'faqanswer.id_categorie', '=', 'faqcategories.id')
@@ -426,12 +422,12 @@ function FaqCatDel(int $id_cat, int $ok = 0): void
 
         Header("Location: admin.php?op=FaqAdmin");
     } else {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('faqs'));
+        adminhead($f_meta_nom, $f_titre);
 
         echo '
         <hr />
@@ -459,12 +455,12 @@ function FaqCatGoDel(int $id, int $ok = 0): void
         
         Header("Location: admin.php?op=FaqAdmin");
     } else {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('faqs'));
+        adminhead($f_meta_nom, $f_titre);
 
         echo '
         <hr />

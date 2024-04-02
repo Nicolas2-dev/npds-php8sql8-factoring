@@ -29,17 +29,14 @@ $f_titre = adm_translate("Bloc Administration");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/adminblock.html";
-
 function ablock()
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('adminblock'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
         <hr />

@@ -30,17 +30,14 @@ $f_titre = adm_translate("Gestion des sujets");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/topics.html";
-
 function topicsmanager()
 {
-    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg, $nook;
+    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $nook;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('topics'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT topicid, topicname, topicimage, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topicname");
 

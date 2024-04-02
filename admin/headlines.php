@@ -27,9 +27,6 @@ $f_titre = adm_translate("Grands Titres de sites de News");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language;
-$hlpfile = "manuels/$language/headlines.html";
-
 /**
  * [HeadlinesAdmin description]
  *
@@ -37,12 +34,12 @@ $hlpfile = "manuels/$language/headlines.html";
  */
 function HeadlinesAdmin(): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('headlines'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -50,11 +47,21 @@ function HeadlinesAdmin(): void
     <table id="tad_headline" data-toggle="table" data-classes="table table-striped table-borderless" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
-            <th class="n-t-col-xs-1" data-sortable="true" data-halign="center" data-align="right">' . adm_translate("ID") . '</th>
-            <th data-sortable="true" data-halign="center" >' . adm_translate("Nom du site") . '</th>
-            <th data-sortable="true" data-halign="center" >' . adm_translate("URL") . '</th>
-            <th data-sortable="true" data-halign="center" data-align="right" >' . adm_translate("Etat") . '</th>
-            <th class="n-t-col-xs-2" data-halign="center" data-align="center" >' . adm_translate("Fonctions") . '</th>
+                <th class="n-t-col-xs-1" data-sortable="true" data-halign="center" data-align="right">
+                    ' . adm_translate("ID") . '
+                </th>
+                <th data-sortable="true" data-halign="center">
+                    ' . adm_translate("Nom du site") . '
+                </th>
+                <th data-sortable="true" data-halign="center">
+                    ' . adm_translate("URL") . '
+                </th>
+                <th data-sortable="true" data-halign="center" data-align="right">
+                    ' . adm_translate("Etat") . '
+                </th>
+                <th class="n-t-col-xs-2" data-halign="center" data-align="center">
+                    ' . adm_translate("Fonctions") . '
+                </th>
             </tr>
         </thead>
         <tbody>';
@@ -64,9 +71,15 @@ function HeadlinesAdmin(): void
     foreach($headlines as $headline) {
         echo '
             <tr>
-                <td>' . $headline['hid'] . '</td>
-                <td>' . $headline['sitename'] . '</td>
-                <td>' . $headline['url'] . '</td>';
+                <td>
+                    ' . $headline['hid'] . '
+                </td>
+                <td>
+                    ' . $headline['sitename'] . '
+                </td>
+                <td>
+                    ' . $headline['url'] . '
+                </td>';
         
         if ($headline['status'] == 1) {
             $status = '<span class="text-success">' . adm_translate("Actif(s)") . '</span>';
@@ -77,9 +90,15 @@ function HeadlinesAdmin(): void
         echo '
                 <td>' . $status . '</td>
                 <td>
-                <a href="admin.php?op=HeadlinesEdit&amp;hid=' . $headline['hid'] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
-                <a href="' . $headline['url'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg" title="' . adm_translate("Visiter") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
-                <a href="admin.php?op=HeadlinesDel&amp;hid=' . $headline['hid'] . '&amp;ok=0" class="text-danger"><i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></i></a>
+                    <a href="admin.php?op=HeadlinesEdit&amp;hid=' . $headline['hid'] . '">
+                        <i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i>
+                    </a>&nbsp;
+                    <a href="' . $headline['url'] . '" target="_blank">
+                        <i class="fas fa-external-link-alt fa-lg" title="' . adm_translate("Visiter") . '" data-bs-toggle="tooltip"></i>
+                    </a>&nbsp;
+                    <a href="admin.php?op=HeadlinesDel&amp;hid=' . $headline['hid'] . '&amp;ok=0" class="text-danger">
+                        <i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></i>
+                    </a>
                 </td>
             </tr>';
     }
@@ -135,12 +154,12 @@ function HeadlinesAdmin(): void
  */
 function HeadlinesEdit(int $hid): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('headlines'));
+    adminhead($f_meta_nom, $f_titre);
 
     $headline = DB::table('headlines')->select('hid', 'sitename', 'url', 'headlinesurl', 'status')->where('hid', $hid)->first();
 
@@ -174,15 +193,9 @@ function HeadlinesEdit(int $hid): void
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="status">' . adm_translate("Etat") . '</label>
                 <div class="col-sm-8">
-                <select class="form-select" name="status">';
-
-    $sel_a = $headline['status'] == 1 ? 'selected="selected"' : '';
-    $sel_i = $headline['status'] == 0 ? 'selected="selected"' : '';
-
-    echo '
-
-                    <option name="status" value="1" ' . $sel_a . '>' . adm_translate("Actif(s)") . '</option>
-                    <option name="status" value="0" ' . $sel_i . '>' . adm_translate("Inactif(s)") . '</option>
+                <select class="form-select" name="status">
+                    <option name="status" value="1" ' . (($headline['status'] == 1) ? 'selected="selected"' : '') . '>' . adm_translate("Actif(s)") . '</option>
+                    <option name="status" value="0" ' . (($headline['status'] == 0) ? 'selected="selected"' : '') . '>' . adm_translate("Inactif(s)") . '</option>
                 </select>
                 </div>
             </div>
@@ -259,24 +272,29 @@ function HeadlinesAdd(string $xsitename, string $url, string $headlinesurl, int 
  */
 function HeadlinesDel(int $hid, int $ok = 0): void
 {
-    global $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     if ($ok == 1) {
         DB::table('headlines')->where('hid', $hid)->delete();
 
         Header("Location: admin.php?op=HeadlinesAdmin");
     } else {
-        global $hlpfile;
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('headlines'));
+        adminhead($f_meta_nom, $f_titre);
 
         echo '
         <hr />
         <p class="alert alert-danger">
             <strong class="d-block mb-1">' . adm_translate("Etes-vous sûr de vouloir supprimer cette boîte de Titres ?") . '</strong>
-            <a class="btn btn-danger btn-sm" href="admin.php?op=HeadlinesDel&amp;hid=' . $hid . '&amp;ok=1" role="button">' . adm_translate("Oui") . '</a>&nbsp;<a class="btn btn-secondary btn-sm" href="admin.php?op=HeadlinesAdmin" role="button">' . adm_translate("Non") . '</a>
+            <a class="btn btn-danger btn-sm" href="admin.php?op=HeadlinesDel&amp;hid=' . $hid . '&amp;ok=1" role="button">
+                ' . adm_translate("Oui") . '
+            </a>
+            &nbsp;
+            <a class="btn btn-secondary btn-sm" href="admin.php?op=HeadlinesAdmin" role="button">
+                ' . adm_translate("Non") . '
+            </a>
         </p>';
 
         include("themes/default/footer.php");

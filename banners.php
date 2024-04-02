@@ -283,7 +283,7 @@ function bannerstats($login, $pass)
             $result = sql_query("SELECT id, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
 
             while (list($bid, $imageurl, $clickurl) = sql_fetch_row($result)) {
-                $numrows = sql_num_rows($result); // ??????
+                //$numrows = sql_num_rows($result); // ??????
                 
                 echo '<div class="card card-body mb-3">';
 
@@ -406,9 +406,7 @@ function EmailStats($login, $cid, $bid)
                 $left = $imptotal - $impmade;
             }
 
-            global $gmt;
-            
-            $fecha = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
+            $fecha = date(translate("dateinternal"), time() + ((int) Config::get('app.gmt') * 3600));
             
             $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . Config::get('app.sitename');
             
@@ -484,7 +482,7 @@ switch ($op) {
         break;
         
     default:
-        if ($banners) {
+        if (Config::get('app.banners')) {
             viewbanner();
         } else {
             url::redirect_url('index.php');

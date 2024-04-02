@@ -9,6 +9,7 @@ use npds\system\utility\code;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
+use npds\system\language\metafunction;
 
 class metalang
 {
@@ -337,18 +338,59 @@ class metalang
                 }
 
                 // Cword commence par function ?
-                if ($Cword != '') {
-                    if (substr($Cword, 0, 9) == "function ") {
-                        $Rword = "MM_" . str_replace("!", "", $Rword);
+                // if ($Cword != '') {
+                //     if (substr($Cword, 0, 9) == "function ") {
+                //         $Rword = "MM_" . str_replace("!", "", $Rword);
                         
-                        if (!function_exists($Rword)) {
-                            @eval($Cword);
-                        }
+                //         if (!function_exists($Rword)) {
+                //             @eval($Cword);
+                //         }
 
-                        $Cword = static::charg($Rword, $arguments);
-                        $Rword = $word;
+                //         $Cword = static::charg($Rword, $arguments);
+                //         $Rword = $word;
+                //     }
+                // }
+
+                // provisoire ne fonctione pas corectement a revoir !!!!!
+                // Cword commence par function ?
+                if (substr($Cword, 0, 9) == "function ") 
+                {
+                    $Rword = "MM_".str_replace("!", "", $Rword);
+                   
+                    $MetaFunction = metafunction::instance();
+
+                    if ((!method_exists($MetaFunction, $Rword)) 
+                        or (!function_exists($Rword))) 
+                    {
+                        @eval($Cword);
                     }
+                   
+                    if (is_array($arguments)) 
+                    {
+                        array_walk($arguments, [metalang::class, 'arg_filter']);
+                        if (method_exists($MetaFunction, $Rword)) 
+                        {              
+                            $Cword = call_user_func_array([$MetaFunction, $Rword], $arguments);
+                        } 
+                        else 
+                        {
+                            $Cword = call_user_func_array($Rword, $arguments);
+                        }
+                    } 
+                    else 
+                    {
+                        if (method_exists($MetaFunction, $Rword)) 
+                        {
+                            $Cword = call_user_func([$MetaFunction, $Rword]);
+                        } 
+                        else 
+                        {
+                            $Cword = call_user_func($Rword);
+                        }
+                    }
+                    $Rword = $word;
                 }
+
 
                 // si le mot se termine par ^ : on supprime ^ | cela permet d'assurer la protection d'un mot (intouchable)
                 if ($car_fin == "^") { 

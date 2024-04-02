@@ -35,77 +35,92 @@ if ($radminsuper != 1) {
     Header("Location: die.php");
 }
 
-global $language, $adminimg, $admf_ext;
+/**
+ * [listdroitsmodulo description]
+ *
+ * @return  array
+ */
+function listdroitsmodulo(): array 
+{
+    $listdroits = '';
+    $listdroitsmodulo = '';
 
-$listdroits = '';
-$listdroitsmodulo = '';
-$hlpfile = "manuels/$language/authors.html";
+    $R = DB::table('fonctions')->select('fid', 'fnom', 'fnom_affich', 'fcategorie')->where('finterface', 1)->where('fcategorie', '<', 7)->orderBy('fcategorie')->get();
 
-$R = DB::table('fonctions')->select('fid', 'fnom', 'fnom_affich', 'fcategorie')->where('finterface', 1)->where('fcategorie', '<', 7)->orderBy('fcategorie')->get();
-
-foreach($R as $func) {
-    if ($func['fcategorie'] == 6) {
-        $listdroitsmodulo .= '
-            <div class="col-md-4 col-sm-6">
-                <div class="form-check">
-                <input class="ckbm form-check-input" id="ad_d_m_' . $func['fnom'] . '" type="checkbox" name="ad_d_m_' . $func['fnom'] . '" value="' . $func['fid'] . '" />
-                <label class="form-check-label" for="ad_d_m_' . $func['fnom'] . '">' . $func['fnom_affich'] . '</label>
-                </div>
-            </div>';
-    } else {
-        if ($func['fid'] != 12) {
-            $listdroits .= '
-            <div class="col-md-4 col-sm-6">
-                <div class="form-check">
-                <input class="ckbf form-check-input" id="ad_d_' . $func['fid'] . '" type="checkbox" name="ad_d_' . $func['fid'] . '" value="' . $func['fid'] . '" />
-                <label class="form-check-label" for="ad_d_' . $func['fid'] . '">' . adm_translate($func['fnom_affich']) . '</label>
-                </div>
-            </div>';
+    foreach($R as $func) {
+        if ($func['fcategorie'] == 6) {
+            $listdroitsmodulo .= '
+                <div class="col-md-4 col-sm-6">
+                    <div class="form-check">
+                    <input class="ckbm form-check-input" id="ad_d_m_' . $func['fnom'] . '" type="checkbox" name="ad_d_m_' . $func['fnom'] . '" value="' . $func['fid'] . '" />
+                    <label class="form-check-label" for="ad_d_m_' . $func['fnom'] . '">' . $func['fnom_affich'] . '</label>
+                    </div>
+                </div>';
+        } else {
+            if ($func['fid'] != 12) {
+                $listdroits .= '
+                <div class="col-md-4 col-sm-6">
+                    <div class="form-check">
+                    <input class="ckbf form-check-input" id="ad_d_' . $func['fid'] . '" type="checkbox" name="ad_d_' . $func['fid'] . '" value="' . $func['fid'] . '" />
+                    <label class="form-check-label" for="ad_d_' . $func['fid'] . '">' . adm_translate($func['fnom_affich']) . '</label>
+                    </div>
+                </div>';
+            }
         }
     }
+
+    return array($listdroitsmodulo, $listdroits);
 }
 
-$scri_check = '
-    <script type="text/javascript">
-    //<![CDATA[
-    $(function () {
-        check = $("#cb_radminsuper").is(":checked");
-        if(check) {
-            $("#adm_droi_f, #adm_droi_m").addClass("collapse");
-        }
-    });
-    $("#cb_radminsuper").on("click", function(){
-        check = $("#cb_radminsuper").is(":checked");
-        if(check) {
-            $("#adm_droi_f, #adm_droi_m").toggleClass("collapse","collapse show");
-            $(".ckbf, .ckbm, #ckball_f, #ckball_m").prop("checked", false);
-        } else {
-            $("#adm_droi_f, #adm_droi_m").toggleClass("collapse","collapse show");
-        }
-    }); 
-    $(document).ready(function(){ 
-        $("#ckball_f").change(function(){
-            check_a_f = $("#ckball_f").is(":checked");
-            if(check_a_f) {
-                $("#ckb_status_f").text("' . html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') . '");
-            } else {
-                $("#ckb_status_f").text("' . adm_translate("Tout cocher") . '");
+/**
+ * [scri_check description]
+ *
+ * @return  string
+ */
+function scri_check(): string
+{
+    return '
+        <script type="text/javascript">
+        //<![CDATA[
+        $(function () {
+            check = $("#cb_radminsuper").is(":checked");
+            if(check) {
+                $("#adm_droi_f, #adm_droi_m").addClass("collapse");
             }
-            $(".ckbf").prop("checked", $(this).prop("checked"));
         });
-        
-        $("#ckball_m").change(function(){
-            check_a_m = $("#ckball_m").is(":checked");
-            if(check_a_m) {
-                $("#ckb_status_m").text("' . html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') . '");
+        $("#cb_radminsuper").on("click", function(){
+            check = $("#cb_radminsuper").is(":checked");
+            if(check) {
+                $("#adm_droi_f, #adm_droi_m").toggleClass("collapse","collapse show");
+                $(".ckbf, .ckbm, #ckball_f, #ckball_m").prop("checked", false);
             } else {
-                $("#ckb_status_m").text("' . adm_translate("Tout cocher") . '");
+                $("#adm_droi_f, #adm_droi_m").toggleClass("collapse","collapse show");
             }
-            $(".ckbm").prop("checked", $(this).prop("checked"));
+        }); 
+        $(document).ready(function(){ 
+            $("#ckball_f").change(function(){
+                check_a_f = $("#ckball_f").is(":checked");
+                if(check_a_f) {
+                    $("#ckb_status_f").text("' . html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') . '");
+                } else {
+                    $("#ckb_status_f").text("' . adm_translate("Tout cocher") . '");
+                }
+                $(".ckbf").prop("checked", $(this).prop("checked"));
+            });
+            
+            $("#ckball_m").change(function(){
+                check_a_m = $("#ckball_m").is(":checked");
+                if(check_a_m) {
+                    $("#ckb_status_m").text("' . html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') . '");
+                } else {
+                    $("#ckb_status_m").text("' . adm_translate("Tout cocher") . '");
+                }
+                $(".ckbm").prop("checked", $(this).prop("checked"));
+            });
         });
-    });
-    //]]>
-    </script>';
+        //]]>
+        </script>';
+}
 
 /**
  * [displayadmins description]
@@ -114,12 +129,12 @@ $scri_check = '
  */
 function displayadmins(): void
 {
-    global $hlpfile, $admf_ext, $listdroits, $listdroitsmodulo, $f_meta_nom, $f_titre, $adminimg, $scri_check;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('authors'));
+    adminhead($f_meta_nom, $f_titre);
 
     $authors = DB::table('authors')->select('aid', 'name', 'url', 'email', 'radminsuper')->get();
 
@@ -161,6 +176,8 @@ function displayadmins(): void
             </tr>';
     }
 
+    list($listdroitsmodulo, $listdroits) = listdroitsmodulo();
+
     echo '
         </tbody>
     </table>
@@ -168,7 +185,7 @@ function displayadmins(): void
     <h3>' . adm_translate("Nouvel administrateur") . '</h3>
     <form id="nou_adm" action="admin.php" method="post">
         <fieldset>
-            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" /> ' . adm_translate("Informations") . ' </legend>
+            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" /> ' . adm_translate("Informations") . ' </legend>
             <div class="form-floating mb-3 mt-3">
                 <input id="add_aid" class="form-control" type="text" name="add_aid" maxlength="30" placeholder="' . adm_translate("Surnom") . '" required="required" />
                 <label for="add_aid">' . adm_translate("Surnom") . ' <span class="text-danger">*</span></label>
@@ -206,7 +223,7 @@ function displayadmins(): void
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
+            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
             <div id="adm_droi_f" class="container-fluid ">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">' . adm_translate("Tout cocher") . '</span>
@@ -217,7 +234,7 @@ function displayadmins(): void
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
+            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
             <div id="adm_droi_m" class="container-fluid">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">' . adm_translate("Tout cocher") . '</span>
@@ -231,7 +248,7 @@ function displayadmins(): void
             <input type="hidden" name="op" value="AddAuthor" />
         </fieldset>
     </form>
-    ' . $scri_check;
+    ' . scri_check();
 
     $arg1 = '
         var formulid = ["nou_adm"];
@@ -241,8 +258,7 @@ function displayadmins(): void
         inpandfieldlen("add_name",50);
         inpandfieldlen("add_email",254);
         inpandfieldlen("add_url",320);
-        inpandfieldlen("add_pwd",20);
-        ';
+        inpandfieldlen("add_pwd",20);';
 
     $fv_parametres = '
     add_aid: {
@@ -289,12 +305,12 @@ function displayadmins(): void
  */
 function modifyadmin(string $chng_aid): void
 {
-    global $hlpfile, $admf_ext, $f_meta_nom, $f_titre, $adminimg, $scri_check, $fv_parametres;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('authors'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -346,7 +362,7 @@ function modifyadmin(string $chng_aid): void
     echo '
     <form id="mod_adm" class="" action="admin.php" method="post">
         <fieldset>
-            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" title="' . $author['aid'] . '" /> ' . adm_translate("Informations") . '</legend>
+            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" title="' . $author['aid'] . '" /> ' . adm_translate("Informations") . '</legend>
             <div class="form-floating mb-3 mt-3">
                 <input id="chng_name" class="form-control" type="text" name="chng_name" value="' . $author['name'] . '" maxlength="30" placeholder="' . adm_translate("Nom") . '" required="required" />
                 <label for="chng_name">' . adm_translate("Nom") . ' <span class="text-danger">*</span></label>
@@ -385,7 +401,7 @@ function modifyadmin(string $chng_aid): void
             <input type="hidden" name="chng_aid" value="' . $author['aid'] . '" />
         </fieldset>
         <fieldset>
-            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
+            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
             <div id="adm_droi_f" class="container-fluid ">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">' . adm_translate("Tout cocher") . '</span>
@@ -396,7 +412,7 @@ function modifyadmin(string $chng_aid): void
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . $adminimg . 'authors.' . $admf_ext . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
+            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
             <div id="adm_droi_m" class="container-fluid ">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">' . adm_translate("Tout cocher") . '</span>
@@ -411,7 +427,7 @@ function modifyadmin(string $chng_aid): void
         </fieldset>
     </form>';
 
-    echo $scri_check;
+    echo scri_check();
 
     $arg1 = '
         var formulid = ["mod_adm"]
@@ -419,8 +435,7 @@ function modifyadmin(string $chng_aid): void
             inpandfieldlen("chng_email",254);
             inpandfieldlen("chng_url",320);
             inpandfieldlen("chng_pwd",20);
-            inpandfieldlen("chng_pwd2",20);
-        ';
+            inpandfieldlen("chng_pwd2",20);';
 
     $fv_parametres = '
     chng_pwd: {
@@ -499,10 +514,9 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
     }
 
     if (mailler::checkdnsmail($chng_email) === false) {
-        global $hlpfile;
         include("themes/default/header.php");
         
-        GraphicAdmin($hlpfile);
+        GraphicAdmin(manuel('authors'));
         
         echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") . '<br />');
         
@@ -534,10 +548,9 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
 
     if ($chng_pwd2 != '') {
         if ($chng_pwd != $chng_pwd2) {
-            global $hlpfile;
             include("themes/default/header.php");
             
-            GraphicAdmin($hlpfile);
+            GraphicAdmin(manuel('authors'));
             
             echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") . '<br />');
             
@@ -661,10 +674,9 @@ switch ($op) {
         settype($add_radminsuper, 'int');
 
         if (!($add_aid && $add_name && $add_email && $add_pwd)) {
-            global $hlpfile;
             include("themes/default/header.php");
 
-            GraphicAdmin($hlpfile);
+            GraphicAdmin(manuel('authors'));
 
             echo error_handler(adm_translate("Vous devez remplir tous les Champs") . '<br />');
 
@@ -673,10 +685,9 @@ switch ($op) {
         }
 
         if (mailler::checkdnsmail($add_email) === false) {
-            global $hlpfile;
             include("themes/default/header.php");
 
-            GraphicAdmin($hlpfile);
+            GraphicAdmin(manuel('authors'));
 
             echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") . '<br />');
 
@@ -715,11 +726,10 @@ switch ($op) {
         break;
 
     case 'deladmin':
-        global $hlpfile;
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('authors'));
+        adminhead($f_meta_nom, $f_titre);
 
         echo '
         <hr />

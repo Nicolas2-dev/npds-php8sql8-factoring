@@ -331,9 +331,8 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
             $replys--;
 
             if ($replys >= 0) {
-                global $smilies;
-
-                if ($smilies) {
+                
+                if (Config::get('app.smilies')) {
                     $rowQ1 = cache::Q_Select("SELECT image FROM " . $NPDS_Prefix . "posts WHERE topic_id='" . $myrow['topic_id'] . "' AND forum_id='$forum' LIMIT 0,1", 86400);
                     $image_subject = $rowQ1[0]['image'];
                 }

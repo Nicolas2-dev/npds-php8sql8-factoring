@@ -531,9 +531,9 @@ $imgtmp = $ibid = theme::theme_image('stats/submissions.png') ? $ibid : 'assets/
 
 echo '
         <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '"  alt="" />' . translate("Article en attente d'édition") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($subnum) . ' </span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Num <span class="badge bg-danger ms-auto">' . $Version_Num . '</span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Id <span class="badge bg-danger ms-auto">' . $Version_Id . '</span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Sub <span class="badge bg-danger ms-auto">' . $Version_Sub . '</span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Num <span class="badge bg-danger ms-auto">' . Config::get('app.Version_Num') . '</span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Id <span class="badge bg-danger ms-auto">' . Config::get('app.Version_Id') . '</span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Sub <span class="badge bg-danger ms-auto">' . Config::get('app.Version_Sub') . '</span></li>
     </ul>
     <br />
     <p class="text-center"><a href="http://www.npds.org" >http://www.npds.org</a> - French Portal Generator Gnu/Gpl Licence</p><br />';

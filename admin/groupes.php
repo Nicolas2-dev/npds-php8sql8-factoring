@@ -33,30 +33,19 @@ $f_titre = adm_translate('Gestion des groupes');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $language, $adminimg, $admf_ext;
-$hlpfile = "manuels/$language/groupes.html";
-
-settype($al, 'string');
-
-if ($al) {
-    if (preg_match('#^mod#', $al)) {
-        $al = explode('_', $al);
-        $mes = adm_translate("Vous ne pouvez pas exclure") . ' ' . $al[1] . ' ' . adm_translate("car il est modérateur unique de forum. Oter ses droits de modération puis retirer le du groupe.");
-    }
-}
-
 /**
  * [group_liste description]
  *
  * @return  void
  */
-function group_liste(): void
+function group_liste(string $al): void
 {
-    global $hlpfile, $al, $mes, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
+    GraphicAdmin(manuel('groupes'));
+    adminhead($f_meta_nom, $f_titre);
 
     $one_gp = false;
     $tab_groupeII = array();
@@ -84,10 +73,15 @@ function group_liste(): void
         }
     }
 
-    adminhead($f_meta_nom, $f_titre, $adminimg);
-
     echo '<script type="text/javascript">
     //<![CDATA[';
+
+    if ($al) {
+        if (preg_match('#^mod#', $al)) {
+            $al = explode('_', $al);
+            $mes = adm_translate("Vous ne pouvez pas exclure") . ' ' . $al[1] . ' ' . adm_translate("car il est modérateur unique de forum. Oter ses droits de modération puis retirer le du groupe.");
+        }
+    }
 
     if ($al) {
         echo 'bootbox.alert("' . $mes . '")';
@@ -391,12 +385,12 @@ function group_liste(): void
  */
 function membre_add(int $gp): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('groupes'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -419,8 +413,7 @@ function membre_add(int $gp): void
 
     $arg1 = '
     var formulid = ["groupesaddmb"];
-    inpandfieldlen("luname",255);
-    ';
+    inpandfieldlen("luname",255);';
 
     echo (mysqli_get_client_info() <= '8.0') 
         ? js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '[[:<:]]' . $gp . '[[:>:]]')->get()) 
@@ -629,12 +622,12 @@ function retiredugroupe_all(int $groupe_id, string $tab_groupe): void
  */
 function groupe_edit(string $groupe_id): void
 {
-    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('groupes'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = DB::table('groupes')->select('groupe_name', 'groupe_description')->where('groupe_id', $groupe_id)->first();
 
@@ -697,8 +690,7 @@ function groupe_edit(string $groupe_id): void
 
     $arg1 = '
     var formulid = ["groupesaddmod"];
-    inpandfieldlen("grname",1000);
-    ';
+    inpandfieldlen("grname",1000);';
 
     css::adminfoot('fv', '', $arg1, '');
 }
@@ -1093,6 +1085,7 @@ function groupe_mns_create(int $groupe_id): void
             if (@mkdir($repertoire, 0777)) {
                 $fp = fopen($repertoire . '/index.html', 'w');
                 fclose($fp);
+
                 $fp = fopen($repertoire . '/.htaccess', 'w');
                 @fputs($fp, 'Deny from All');
                 fclose($fp);
@@ -1103,6 +1096,7 @@ function groupe_mns_create(int $groupe_id): void
         if (@mkdir($repertoire, 0777)) {
             $fp = fopen($repertoire . '/index.html', 'w');
             fclose($fp);
+
             $fp = fopen($repertoire . '/.htaccess', 'w');
             @fputs($fp, 'Deny from All');
             fclose($fp);
@@ -1263,7 +1257,7 @@ function bloc_groupe_create(int $groupe_id): void
  */
 function groupe_member_ask(): void 
 {
-    global $sub_op, $f_meta_nom, $f_titre, $adminimg, $myrow, $hlpfile, $groupe_asked, $user_asked;
+    global $sub_op, $f_meta_nom, $f_titre, $myrow, $groupe_asked, $user_asked;
     
     $directory = "storage/users_private/groupe";
     
@@ -1323,8 +1317,8 @@ function groupe_member_ask(): void
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('groupes'));
+    adminhead($f_meta_nom, $f_titre);
 
     $iterator = new DirectoryIterator($directory);
     $j = 0;
@@ -1465,7 +1459,9 @@ switch ($op) {
             $row = DB::table('groupes')->select(DB::raw('MAX(groupe_id)'))->get();
 
             if ($row[0] < 126) {
-                if ($row[0] == 0) $row[0] = 1;
+                if ($row[0] == 0) {
+                    $row[0] = 1;
+                }
                 $groupe_id = $row[0] + 1;
                 $ok_grp = true;
             }
@@ -1498,6 +1494,8 @@ switch ($op) {
         }
 
     default:
-        group_liste();
+        $al = isset($al) ? $al : '';
+
+        group_liste($al);
         break;
 }

@@ -13,6 +13,7 @@
 
 use npds\system\logs\logs;
 use npds\system\assets\css;
+use npds\system\config\Config;
 
 if (!function_exists('admindroits')) {
     include('die.php');
