@@ -33,7 +33,7 @@ admindroits($aid, $f_meta_nom);
 
 function displayUsers()
 {
-    global $hlpfile, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -143,12 +143,12 @@ function extractUserCSV()
 
 function modifyUser($chng_user)
 {
-    global $hlpfile, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+    global $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('users'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT uid, uname, name, url, email, femail, user_from, user_occ, user_intrest, user_viewemail, user_avatar, user_sig, bio, pass, send_email, is_visible, mns, user_lnl FROM " . $NPDS_Prefix . "users WHERE uid='$chng_user' OR uname='$chng_user'");
     if (sql_num_rows($result) > 0) {
@@ -253,12 +253,12 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
     global $NPDS_Prefix;
 
     if (sql_num_rows(sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid!='$chng_uid' AND uname='$chng_uname'")) > 0) {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
         
         include("themes/default/header.php");
         
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('users'));
+        adminhead($f_meta_nom, $f_titre);
         
         echo error_handler(adm_translate("ERREUR : cet identifiant est déjà utilisé") . '<br />');
         
@@ -270,12 +270,12 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
 
     if ($chng_pass2 != '') {
         if ($chng_pass != $chng_pass2) {
-            global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+            global $f_meta_nom, $f_titre;
             
             include("themes/default/header.php");
             
-            GraphicAdmin($hlpfile);
-            adminhead($f_meta_nom, $f_titre, $adminimg);
+            GraphicAdmin(manuel('users'));
+            adminhead($f_meta_nom, $f_titre);
             
             echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") . '<br />');
             
@@ -287,12 +287,12 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
     }
 
     if (mailler::checkdnsmail($chng_email) === false) {
-        global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+        global $f_meta_nom, $f_titre;
         
         include("themes/default/header.php");
         
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('users'));
+        adminhead($f_meta_nom, $f_titre);
         
         echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") . '<br />');
         
@@ -403,12 +403,12 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
 
 function nonallowedUsers()
 {
-    global $hlpfile, $admf_ext, $f_meta_nom, $f_titre, $adminimg, $NPDS_Prefix;
+    global $f_meta_nom, $f_titre, $NPDS_Prefix;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('users'));
+    adminhead($f_meta_nom, $f_titre);
 
     $newsuti = sql_query("SELECT u.uid, u.uname, u.name, u.user_regdate FROM " . $NPDS_Prefix . "users AS u LEFT JOIN " . $NPDS_Prefix . "users_status AS us ON u.uid = us.uid WHERE us.open='0' ORDER BY u.user_regdate DESC");
     
@@ -449,12 +449,12 @@ function nonallowedUsers()
 
 function checkdnsmailusers()
 {
-    global $hlpfile, $admf_ext, $f_meta_nom, $f_titre, $adminimg, $NPDS_Prefix, $gmt, $adminmail, $page, $end, $autocont;
+    global $f_meta_nom, $f_titre, $NPDS_Prefix, $gmt, $adminmail, $page, $end, $autocont;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('users'));
+    adminhead($f_meta_nom, $f_titre);
 
     if (!isset($page)) {
         $page = 1;
@@ -686,11 +686,10 @@ switch ($op) {
         break;
 
     case 'delUser':
-        global $hlpfile;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
+        GraphicAdmin(manuel('users'));
 
         echo '
         <h3 class="text-danger mb-3">' . adm_translate("Supprimer un utilisateur") . '</h3>
@@ -810,12 +809,11 @@ switch ($op) {
         settype($add_send_email, 'integer');
 
         if (sql_num_rows(sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uname='$add_uname'")) > 0) {
-            global $hlpfile;
 
             include("themes/default/header.php");
 
-            GraphicAdmin($hlpfile);
-            adminhead($f_meta_nom, $f_titre, $adminimg);
+            GraphicAdmin(manuel('users'));
+            adminhead($f_meta_nom, $f_titre);
 
             echo error_handler('<i class="fa fa-exclamation me-2"></i>' . adm_translate("ERREUR : cet identifiant est déjà utilisé") . '<br />');
             
@@ -824,12 +822,11 @@ switch ($op) {
         }
 
         if (!($add_uname && $add_email && $add_pass) or (preg_match('#[^a-zA-Z0-9_-]#', $add_uname))) {
-            global $hlpfile;
 
             include("themes/default/header.php");
 
-            GraphicAdmin($hlpfile);
-            adminhead($f_meta_nom, $f_titre, $adminimg);
+            GraphicAdmin(manuel('users'));
+            adminhead($f_meta_nom, $f_titre);
 
             echo error_handler(adm_translate("Vous devez remplir tous les Champs") . '<br />'); // ce message n'est pas très précis ..
             
@@ -838,12 +835,12 @@ switch ($op) {
         }
 
         if (mailler::checkdnsmail($add_email) === false) {
-            global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+            global $f_meta_nom, $f_titre;
             
             include("themes/default/header.php");
 
-            GraphicAdmin($hlpfile);
-            adminhead($f_meta_nom, $f_titre, $adminimg);
+            GraphicAdmin(manuel('users'));
+            adminhead($f_meta_nom, $f_titre);
             
             echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") . '<br />');
             
@@ -853,7 +850,7 @@ switch ($op) {
 
         $AlgoCrypt = PASSWORD_BCRYPT;
         $min_ms = 100;
-        $options = ['cost' => getOptimalBcryptCostParameter($add_pass, $AlgoCrypt, $min_ms)];
+        $options = ['cost' => users::getOptimalBcryptCostParameter($add_pass, $AlgoCrypt, $min_ms)];
         $hashpass = password_hash($add_pass, $AlgoCrypt, $options);
         $add_pass = crypt($add_pass, $hashpass);
 
@@ -863,7 +860,7 @@ switch ($op) {
             $add_is_visible = '0';
         }
 
-        $user_regdate = time() + ((int)$gmt * 3600);
+        $user_regdate = time() + ((int) Config::get('app.gmt') * 3600);
 
         $Default_Theme = Config::get('app.Default_Theme');
         $Default_Skin = Config::get('app.Default_Theme');

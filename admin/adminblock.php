@@ -29,7 +29,12 @@ $f_titre = adm_translate("Bloc Administration");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function ablock()
+/**
+ * [ablock description]
+ *
+ * @return  void
+ */
+function ablock(): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -68,7 +73,15 @@ function ablock()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function changeablock($title, $content)
+/**
+ * [changeablock description]
+ *
+ * @param   string  $title    [$title description]
+ * @param   string  $content  [$content description]
+ *
+ * @return  void
+ */
+function changeablock(string $title, string $content): void
 {
     $title = stripslashes(str::FixQuotes($title));
     $content = stripslashes(str::FixQuotes($content));

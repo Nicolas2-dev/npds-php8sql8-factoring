@@ -15,6 +15,7 @@
 
 use npds\system\assets\css;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -27,7 +28,14 @@ $f_titre = 'META-LANG';
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function go_back($label)
+/**
+ * [go_back description]
+ *
+ * @param   string  $label  [$label description]
+ *
+ * @return  void
+ */
+function go_back(string $label): void
 {
     if (!$label) {
         $label = adm_translate("Retour en arrière");
@@ -35,49 +43,57 @@ function go_back($label)
 
     echo '
     <script type="text/javascript">
-    //<![CDATA[
-    function precedent() {
-        document.write(\'<div class="mb-3 row"><div class="col-sm-12"><button class="btn btn-secondary my-3" onclick="history.back();" >' . $label . '</button></div></div>\');
-    }
-    precedent();
-    //]]>
+        //<![CDATA[
+            function precedent() {
+                document.write(\'<div class="mb-3 row"><div class="col-sm-12"><button class="btn btn-secondary my-3" onclick="history.back();" >' . $label . '</button></div></div>\');
+            }
+            precedent();
+        //]]>
     </script>';
 }
 
-function list_meta($meta, $type_meta)
+/**
+ * [list_meta description]
+ *
+ * @param   string  $meta       [$meta description]
+ * @param   string  $type_meta  [$type_meta description]
+ *
+ * @return  string
+ */
+function list_meta(string $meta, string $type_meta): string
 {
-    global $NPDS_Prefix;
-
     $sel = '';
     $list = '
     <select class="form-select" name="meta" onchange="window.location=eval(\'this.options[this.selectedIndex].value\')">
         <option value="">META-MOT</option>';
 
     if (!empty($type_meta)) { 
-        $Q = sql_query("SELECT def FROM " . $NPDS_Prefix . "metalang WHERE type_meta = '" . $type_meta . "' ORDER BY type_meta, def ASC");
+        $metas = DB::table('metalang')->select('def')->where('type_meta', $type_meta)->orderBy('type_meta, def', 'asc')->get();
     } else {
-        $Q = sql_query("SELECT def FROM " . $NPDS_Prefix . "metalang ORDER BY 'def' ASC");
+        $metas = DB::table('metalang')->select('def')->orderBy('def', 'asc')->get();
     }
 
-    while ($resultat = sql_fetch_row($Q)) {
-        if ($meta == $resultat[0]) {
+    foreach($metas as $meta) {
+        if ($meta == $meta['def']) {
             $sel = 'selected="selected"';
         }
 
         $list .= '
-        <option ' . $sel . ' value="admin.php?op=Meta-LangAdmin&amp;meta=' . $resultat[0] . '">' . $resultat[0] . '</option>';
+        <option ' . $sel . ' value="admin.php?op=Meta-LangAdmin&amp;meta=' . $meta['def'] . '">' . $meta['def'] . '</option>';
         $sel = '';
     }
 
-    sql_free_result($Q);
-
-    $list .= '
-    </select>';
+    $list .= '</select>';
 
     return $list;
 }
 
-function list_meta_type()
+/**
+ * [list_meta_type description]
+ *
+ * @return  string
+ */
+function list_meta_type(): string
 {
     $list = '
     <select class="form-select" name="type_meta" onchange="window.location=eval(\'this.options[this.selectedIndex].value\')">
@@ -91,10 +107,15 @@ function list_meta_type()
     return $list;
 }
 
-function list_type_meta($type_meta)
+/**
+ * [list_type_meta description]
+ *
+ * @param   string  $type_meta  [$type_meta description]
+ *
+ * @return  string
+ */
+function list_type_meta(string $type_meta): string 
 {
-    global $NPDS_Prefix;
-
     $sel = '';
     settype($url, 'string');
 
@@ -102,36 +123,54 @@ function list_type_meta($type_meta)
     <select class="form-select" name="type_meta" onchange="window.location=eval(\'this.options[this.selectedIndex].value\')">
         <option value="' . $url . '">Type</option>';
 
-    $Q = sql_query("SELECT type_meta FROM " . $NPDS_Prefix . "metalang GROUP BY type_meta ORDER BY 'type_meta' ASC");
+    // $Q = sql_query("SELECT  FROM " . $NPDS_Prefix . " GROUP BY type_meta ORDER BY '' ASC");
+    // faut que je creer la function groupBy dans le builder !
 
-    while ($resultat = sql_fetch_row($Q)) {
-        if ($type_meta == $resultat[0]) {
+    $metas = DB::table('metalang')->select('type_meta')->orderBy('type_meta', 'asc')->get();
+
+    foreach ($metas as $meta) {  
+        if ($type_meta == $meta['type_meta']) {
             $sel = 'selected="selected"';
         }
 
         $list .= '
-        <option ' . $sel . ' value="admin.php?op=Meta-LangAdmin&amp;type_meta=' . $resultat[0] . '">' . $resultat[0] . '</option>';
+        <option ' . $sel . ' value="admin.php?op=Meta-LangAdmin&amp;type_meta=' . $meta['type_meta'] . '">' . $meta['type_meta'] . '</option>';
         $sel = '';
     }
 
-    sql_free_result($Q);
-
-    $list .= '
-    </select>';
+    $list .= '</select>';
 
     return $list;
 }
 
-function List_Meta_Lang()
+/**
+ * [List_Meta_Lang description]
+ *
+ * @return  void
+ */
+function List_Meta_Lang(): void
 {
-    global $NPDS_Prefix, $meta, $type_meta, $f_meta_nom, $f_titre;
+    global $meta, $type_meta, $f_meta_nom, $f_titre;
 
     if (!empty($meta)) {
-        $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang WHERE def = '" . $meta . "' ORDER BY type_meta, def ASC");
+        $metas = DB::table('metalang')
+            ->select('def', 'content', 'type_meta', 'type_uri', 'uri', 'description', 'obligatoire')
+            ->where('def', $meta)
+            ->orderBy('type_meta', 'asc')
+            ->get();
+
     } else if (!empty($type_meta)) {
-        $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang WHERE type_meta = '" . $type_meta . "' ORDER BY type_meta, def ASC");
+        $metas= DB::table('metalang')
+            ->select('def', 'content', 'type_meta', 'type_uri', 'uri', 'description', 'obligatoire')
+            ->where('type_meta', $type_meta)
+            ->orderBy('type_meta', 'asc')
+            ->get();
+
     } else {
-        $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang ORDER BY 'type_meta','def' ASC");
+        $metas = DB::table('metalang')
+            ->select('def', 'content', 'type_meta', 'type_uri', 'uri', 'description', 'obligatoire')
+            ->orderBy('type_meta', 'asc')
+            ->get();
     }
 
     include("themes/default/header.php");
@@ -143,30 +182,30 @@ function List_Meta_Lang()
     $tablmeta_c = '';
     $ibid = 0;
 
-    while (list($def, $content, $type_meta, $type_uri, $uri, $description, $obligatoire) = sql_fetch_row($Q)) {
+    foreach($metas as $meta) {
         $tablmeta_c .= '
             <tr>
                 <td>
                 <input type="hidden" name="nbr" value="' . $ibid . '" />';
 
-        if ($obligatoire == false) {
-            $tablmeta_c .= '<a href="admin.php?op=Edit_Meta_Lang&amp;ml=' . urlencode($def) . '"><i class="fa fa-edit fa-lg" title="Editer ce m&#xE9;ta-mot" data-bs-toggle="tooltip" data-bs-placement="right"></i></a>&nbsp;&nbsp;<i class="fas fa-trash fa-lg text-muted" title="Effacer ce m&#xE9;ta-mot" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<input type="checkbox" name="action[' . $ibid . ']" value="' . $def . '" />';
+        if ($meta['obligatoire'] == false) {
+            $tablmeta_c .= '<a href="admin.php?op=Edit_Meta_Lang&amp;ml=' . urlencode($meta['def']) . '"><i class="fa fa-edit fa-lg" title="Editer ce m&#xE9;ta-mot" data-bs-toggle="tooltip" data-bs-placement="right"></i></a>&nbsp;&nbsp;<i class="fas fa-trash fa-lg text-muted" title="Effacer ce m&#xE9;ta-mot" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<input type="checkbox" name="action[' . $ibid . ']" value="' . $meta['def'] . '" />';
         } else {
-            $tablmeta_c .= '<a href="admin.php?op=Edit_Meta_Lang&amp;ml=' . urlencode($def) . '" ><i class="fa fa-eye fa-lg" title="Voir le code de ce m&#xE9;ta-mot" data-bs-toggle="tooltip" ></i></a>';
+            $tablmeta_c .= '<a href="admin.php?op=Edit_Meta_Lang&amp;ml=' . urlencode($meta['def']) . '" ><i class="fa fa-eye fa-lg" title="Voir le code de ce m&#xE9;ta-mot" data-bs-toggle="tooltip" ></i></a>';
         }
 
         $tablmeta_c .= '
                 </td>
-                <td><code>' . $def . '</code></td>
-                <td>' . $type_meta . '</td>';
+                <td><code>' . $meta['def'] . '</code></td>
+                <td>' . $meta['type_meta'] . '</td>';
 
-        if ($type_meta == 'smil') {
-            eval($content);
+        if ($meta['type_meta'] == 'smil') {
+            eval($meta['content']);
             $tablmeta_c .= '<td>' . $cmd . '</td>';
-        } else if ($type_meta == 'mot') {
-            $tablmeta_c .= '<td>' . $content . '</td>';
+        } else if ($meta['type_meta'] == 'mot') {
+            $tablmeta_c .= '<td>' . $meta['content'] . '</td>';
         } else {
-            $tablmeta_c .= '<td>' . language::aff_langue($description) . '</td>';
+            $tablmeta_c .= '<td>' . language::aff_langue($meta['description']) . '</td>';
         }
 
         $tablmeta_c .= '</tr>';
@@ -181,8 +220,8 @@ function List_Meta_Lang()
     <hr />
     <h3>' . adm_translate("Recherche rapide") . '</h3>
     <div class="row">
-        <div class="col-sm-3">' . list_meta($meta, $type_meta) . '</div>
-        <div class="col-sm-3">' . list_type_meta($type_meta) . '</div>
+        <div class="col-sm-3">' . list_meta($meta, $meta['type_meta']) . '</div>
+        <div class="col-sm-3">' . list_type_meta($meta['type_meta']) . '</div>
     </div>
     <hr />
     <h3>META-MOT <span class="tag tag-default float-end">' . $ibid . '</span></h3>
@@ -213,13 +252,16 @@ function List_Meta_Lang()
     css::adminfoot('', '', '', '');
 }
 
-function Edit_Meta_Lang()
+/**
+ * [Edit_Meta_Lang description]
+ *
+ * @return  void
+ */
+function Edit_Meta_Lang(): void
 {
-    global $NPDS_Prefix, $ml, $local_user_language, $f_meta_nom, $f_titre;
+    global $ml, $local_user_language, $f_meta_nom, $f_titre;
 
-    $Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description, obligatoire FROM " . $NPDS_Prefix . "metalang WHERE def = '" . $ml . "'");
-    $Q = sql_fetch_assoc($Q);
-    sql_free_result($Q);
+    $meta = DB::table('metalang')->select('def', 'content', 'type_meta', 'type_uri', 'uri', 'description', 'obligatoire')->where('def', $ml)->first();
 
     include("themes/default/header.php");
 
@@ -227,7 +269,7 @@ function Edit_Meta_Lang()
     adminhead($f_meta_nom, $f_titre);
 
     echo '<hr />';
-    if ($Q['obligatoire'] != true) {
+    if ($meta['obligatoire'] != true) {
         echo '<h3>' . adm_translate("Modifier un ") . ' META-MOT</h3>';
     }
     
@@ -236,68 +278,68 @@ function Edit_Meta_Lang()
     echo '
     <div class="row">
         <div class="text-muted col-sm-3">META</div>
-        <div class="col-sm-9"><code>' . $Q['def'] . '</code></div>
+        <div class="col-sm-9"><code>' . $meta['def'] . '</code></div>
     </div>
     <div class="row">
         <div class="text-muted col-sm-3">' . adm_translate("Type") . '</div>
-        <div class="col-sm-9">' . $Q['type_meta'] . '</div>
+        <div class="col-sm-9">' . $meta['type_meta'] . '</div>
     </div>
     <div class="row">
         <div class="text-muted col-sm-3">' . adm_translate("Description") . '</div>
         <div class="col-sm-9">';
 
-    if ($Q['type_meta'] == 'smil') {
-        eval($Q['content']);
+    if ($meta['type_meta'] == 'smil') {
+        eval($meta['content']);
         echo $cmd;
     } else {
-        echo language::preview_local_langue($local_user_language, language::aff_langue($Q['description']));
+        echo language::preview_local_langue($local_user_language, language::aff_langue($meta['description']));
     }
 
     echo '
         </div>
     </div>';
 
-    if ($Q['type_meta'] != 'docu' and $Q['type_meta'] != 'them') {
+    if ($meta['type_meta'] != 'docu' and $meta['type_meta'] != 'them') {
         echo '
         <div class="row">
             <div class="text-muted col-sm-12">' . adm_translate("Script") . '</div>
             <div class=" col-sm-12">
-                <pre class="language-php"><code class="language-php">' . htmlspecialchars($Q['content'], ENT_QUOTES) . '</code></pre>
+                <pre class="language-php"><code class="language-php">' . htmlspecialchars($meta['content'], ENT_QUOTES) . '</code></pre>
             </div>
         </div>';
     }
 
-    if ($Q['obligatoire'] != true) {
+    if ($meta['obligatoire'] != true) {
         echo '
         <form id="metalangedit" name="edit_meta_lang" action="admin.php" method="post">
             <div class="form-floating mb-3">
-                <input class="form-control" type="text" id="def" name="def" value="' . $Q['def'] . '" readonly="readonly" />
+                <input class="form-control" type="text" id="def" name="def" value="' . $meta['def'] . '" readonly="readonly" />
                 <label for="def">META</label>
             </div>
             <div class="form-floating mb-3">
-                <input class="form-control" type="text" id="typemeta" name="type_meta" value="' . $Q['type_meta'] . '" maxlength="10" readonly="readonly" />
+                <input class="form-control" type="text" id="typemeta" name="type_meta" value="' . $meta['type_meta'] . '" maxlength="10" readonly="readonly" />
                 <label for="typemeta">' . adm_translate("Type") . '</label>
             </div>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="desc">' . adm_translate("Description") . '</label>
                 <div class="col-sm-12">';
 
-        if ($Q['type_meta'] == 'smil') {
-            eval($Q['content']);
+        if ($meta['type_meta'] == 'smil') {
+            eval($meta['content']);
             echo $cmd . '</div></div>';
         } else {
             echo '
-                <textarea class="form-control" id="desc" name="desc" rows="7" >' . $Q['description'] . '</textarea>
+                <textarea class="form-control" id="desc" name="desc" rows="7" >' . $meta['description'] . '</textarea>
                 </div>
             </div>';
         }
 
-        if ($Q['type_meta'] != "docu" and $Q['type_meta'] != "them") {
+        if ($meta['type_meta'] != "docu" and $meta['type_meta'] != "them") {
             echo '
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="content">' . adm_translate("Script") . '</label>
                 <div class="col-sm-12">
-                    <textarea class="form-control" id="content" name="content" rows="20"required="required" >' . $Q['content'] . '</textarea>
+                    <textarea class="form-control" id="content" name="content" rows="20"required="required" >' . $meta['content'] . '</textarea>
                 </div>
             </div>';
         }
@@ -309,14 +351,14 @@ function Edit_Meta_Lang()
         $sel0 = '';
         $sel1 = '';
 
-        if ($Q['type_uri'] == '+') {
-            if ($Q['obligatoire'] == true) { 
+        if ($meta['type_uri'] == '+') {
+            if ($meta['obligatoire'] == true) { 
                 $sel1 = 'selected="selected"';
             } else {
                 $sel1 = ' selected';
             }
         } else {
-            if ($Q['obligatoire'] == true) {
+            if ($meta['obligatoire'] == true) {
                 $sel0 = 'selected="selected"';
             } else {
                 $sel0 = ' selected';
@@ -362,7 +404,12 @@ function Edit_Meta_Lang()
     }
 }
 
-function Creat_Meta_Lang()
+/**
+ * [Creat_Meta_Lang description]
+ *
+ * @return  void
+ */
+function Creat_Meta_Lang(): void 
 {
     global $type_meta, $f_meta_nom, $f_titre;
 
@@ -470,14 +517,20 @@ function Creat_Meta_Lang()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function kill_Meta_Lang($nbr, $action)
+/**
+ * [kill_Meta_Lang description]
+ *
+ * @param   int     $nbr     [$nbr description]
+ * @param   string  $action  [$action description]
+ *
+ * @return  void
+ */
+function kill_Meta_Lang(int $nbr, string $action): void
 {
-    global $NPDS_Prefix;
-
     $i = 0;
     while ($i <= $nbr) {
         if (!empty($action[$i])) {
-            sql_query("DELETE FROM " . $NPDS_Prefix . "metalang WHERE def='" . $action[$i] . "' ");
+            DB::table('metalang')->where('def', $action[$i])->delete();
         }
         $i++;
     }
@@ -485,7 +538,14 @@ function kill_Meta_Lang($nbr, $action)
     Header("Location: admin.php?op=Meta-LangAdmin");
 }
 
-function meta_exist($def)
+/**
+ * [meta_exist description]
+ *
+ * @param   string  $def  [$def description]
+ *
+ * @return  void
+ */
+function meta_exist(string $def): void 
 {
     global $f_meta_nom, $f_titre;
 
@@ -506,10 +566,21 @@ function meta_exist($def)
     css::adminfoot('', '', '', '');
 }
 
-function Maj_Bdd_ML($Maj_Bdd_ML, $def, $content, $type_meta, $type_uri, $uri, $desc)
+/**
+ * [Maj_Bdd_ML description]
+ *
+ * @param   string  $Maj_Bdd_ML  [$Maj_Bdd_ML description]
+ * @param   string  $def         [$def description]
+ * @param   string  $content     [$content description]
+ * @param   string  $type_meta   [$type_meta description]
+ * @param   string  $type_uri    [$type_uri description]
+ * @param   string  $uri         [$uri description]
+ * @param   string  $desc        [$desc description]
+ *
+ * @return  void
+ */
+function Maj_Bdd_ML(string $Maj_Bdd_ML, string $def, string $content, string $type_meta, string $type_uri, string $uri, string $desc): void
 {
-    global $NPDS_Prefix;
-
     if ($type_uri == 'plus') {
         $type_uri = '+';
     } else {
@@ -519,9 +590,7 @@ function Maj_Bdd_ML($Maj_Bdd_ML, $def, $content, $type_meta, $type_uri, $uri, $d
     if ($Maj_Bdd_ML == 'creat_meta') {
         $def = trim($def);
 
-        $Q = sql_query("SELECT def FROM " . $NPDS_Prefix . "metalang WHERE def='" . $def . "'");
-        $Q = sql_fetch_assoc($Q);
-        sql_free_result($Q);
+        $Q = DB::table('metalang')->select('def')->where('def', $def)->first();
 
         if ($Q['def']) {
             meta_exist($Q['def']);
@@ -531,7 +600,15 @@ function Maj_Bdd_ML($Maj_Bdd_ML, $def, $content, $type_meta, $type_uri, $uri, $d
             }
 
             if ($def != '') {
-                sql_query("INSERT INTO " . $NPDS_Prefix . "metalang SET def='" . $def . "', content='$content', type_meta='" . $type_meta . "', type_uri='" . $type_uri . "', uri='" . $uri . "', description='" . $desc . "', obligatoire='0'");
+                DB::table('metalang')->insert(array(
+                    'def'           => $def,
+                    'content'       => $content,
+                    'type_meta'     => $type_meta,
+                    'type_uri'      => $type_uri,
+                    'uri'           => $uri,
+                    'description'   => $desc,
+                    'obligatoire'   => 0,
+                ));
             }
 
             Header('Location: admin.php?op=Meta-LangAdmin');
@@ -539,8 +616,14 @@ function Maj_Bdd_ML($Maj_Bdd_ML, $def, $content, $type_meta, $type_uri, $uri, $d
     }
 
     if ($Maj_Bdd_ML == 'edit_meta') {
-        sql_query("UPDATE " . $NPDS_Prefix . "metalang SET content='" . $content . "', type_meta='" . $type_meta . "', type_uri='" . $type_uri . "', uri='" . $uri . "', description='" . $desc . "' WHERE def='" . $def . "'");
-        
+        DB::table('metalang')->where('def', $def)->update(array(
+            'content'       => $content,
+            'type_meta'     => $type_meta,
+            'type_uri'      => $type_uri,
+            'uri'           => $uri,
+            'description'   => $desc,
+        ));
+
         Header('Location: admin.php?op=Meta-LangAdmin');
     }
 }

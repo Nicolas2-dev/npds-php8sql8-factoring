@@ -91,3 +91,17 @@
 04/02/2024 10:20:09 admin.php=>SaveConfigFile(header_after) by AID : root        IP=>::1   
 04/02/2024 12:04:45 admin.php=>OptiMySql() by AID : root                         IP=>::1   
 04/02/2024 12:05:18 admin.php=>OptiMySql() by AID : root                         IP=>::1   
+04/03/2024 00:00:57 admin.php=>AddCatLinks(test categ) by AID : root             IP=>::1   
+04/03/2024 00:01:28 admin.php=>AddSubCatLinks(test sous categ) by AID : root     IP=>::1   
+04/03/2024 00:28:32 admin.php=>AddLinks(dfgs) by AID : root                      IP=>::1   
+04/03/2024 00:53:30 admin.php=>AddEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
+04/03/2024 00:54:04 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
+04/03/2024 00:54:33 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
+04/03/2024 00:58:23 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
+04/03/2024 01:04:38 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
+04/03/2024 01:09:32 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
+04/03/2024 01:12:14 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
+04/03/2024 01:12:25 admin.php=>ModEditorialLinks(1, sdfgsd  dfgdfg) by AID : root IP=>::1   
+04/03/2024 01:14:14 admin.php=>DeteteEditorialLinks(1) by AID : root             IP=>::1   
+04/03/2024 01:14:42 admin.php=>AddEditorialLinks(1, dfghdfg) by AID : root       IP=>::1   
+04/03/2024 01:15:41 admin.php=>DeleteLinks(1) by AID : root                      IP=>::1   

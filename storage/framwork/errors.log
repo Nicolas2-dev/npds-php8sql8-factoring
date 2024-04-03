@@ -14360,3 +14360,504 @@ Exception information:
 
 ---------
 
+Exception information:
+
+    Date: Apr 02, 2024 21:37PM
+
+    Message: Erreur de syntaxe près de 'FROM  ORDER BY lid ASC LIMIT 0,1' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SELECT  FROM  O...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(58): sql_query('SELECT  FROM  O...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1296): links()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 21:38PM
+
+    Message: Erreur de syntaxe près de 'FROM  ORDER BY lid ASC LIMIT 0,1' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SELECT  FROM  O...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(58): sql_query('SELECT  FROM  O...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1296): links()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 21:38PM
+
+    Message: Erreur de syntaxe près de 'FROM  ORDER BY lid ASC LIMIT 0,1' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SELECT  FROM  O...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(58): sql_query('SELECT  FROM  O...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1296): links()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 21:38PM
+
+    Message: Erreur de syntaxe près de 'FROM  ORDER BY lid ASC LIMIT 0,1' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SELECT  FROM  O...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(58): sql_query('SELECT  FROM  O...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1296): links()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 21:39PM
+
+    Message: Erreur de syntaxe près de 'FROM  ORDER BY lid ASC LIMIT 0,1' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SELECT  FROM  O...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(58): sql_query('SELECT  FROM  O...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1296): links()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 21:40PM
+
+    Message: Erreur de syntaxe près de 'FROM  ORDER BY lid ASC LIMIT 0,1' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SELECT  FROM  O...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(58): sql_query('SELECT  FROM  O...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1296): links()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 21:40PM
+
+    Message: Erreur de syntaxe près de 'FROM  ORDER BY lid ASC LIMIT 0,1' à la ligne 1
+
+    Code: 1064
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php
+
+    Line: 121
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\drivers\mysqli.php(121): mysqli_query(Object(mysqli), 'SELECT  FROM  O...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(58): sql_query('SELECT  FROM  O...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1296): links()
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#4 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 23:27PM
+
+    Message: Parse error: Unmatched '}'
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 451
+
+    Stack trace:
+
+#0 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 23:58PM
+
+    Message: Parse error: Unclosed '{' on line 38
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 1383
+
+    Stack trace:
+
+#0 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 02, 2024 23:58PM
+
+    Message: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'OFFSET 100' à la ligne 1
+
+    Code: 42000
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php
+
+    Line: 233
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php(233): PDO->prepare('SELECT lid, tit...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Connection.php(121): npds\system\database\Connection->prepare('SELECT lid, tit...')
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Query\Builder.php(134): npds\system\database\Connection->select('SELECT lid, tit...', Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(422): npds\system\database\Query\Builder->get()
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1303): links()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#6 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:01AM
+
+    Message: Undefined array key "stitle"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 225
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(225): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 225)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1315): links()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:01AM
+
+    Message: Undefined array key "stitle"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 225
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(225): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 225)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1315): links()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:08AM
+
+    Message: Undefined array key "stitle"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 225
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(225): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 225)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1315): links()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:23AM
+
+    Message: Undefined variable $submitter
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 1336
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1336): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1336)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:23AM
+
+    Message: Undefined variable $submitter
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 1339
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1339): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1339)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:24AM
+
+    Message: Undefined variable $submitter
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 1339
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1339): npds\system\exception\BaseHandler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 1339)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:27AM
+
+    Message: Call to undefined function FixQuotes()
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 1287
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1341): LinksAddLink('0', '0', 'dfgs', 'http://www.npds...', Array, '<p>sdfgsdsfg</p...', 'nicolas', 'admin@gmail.com', '')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#2 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:50AM
+
+    Message: Undefined array key "lid"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 500
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(500): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 500)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1380): LinksModLink(1)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:51AM
+
+    Message: Undefined array key "lid"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 500
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(500): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 500)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1380): LinksModLink(1)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:51AM
+
+    Message: Undefined array key "lid"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 500
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(500): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 500)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1380): LinksModLink(1)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 0:51AM
+
+    Message: Undefined array key "lid"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php
+
+    Line: 500
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(500): npds\system\exception\BaseHandler->handleError(2, 'Undefined array...', 'E:\\New_Serv_Wam...', 500)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\links.php(1380): LinksModLink(1)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1105): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 4:29AM
+
+    Message: Undefined constant "FOT"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\lnl.php
+
+    Line: 427
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\lnl.php(605): ShowFooter()
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\lnl.php(1354): main()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1266): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 4:31AM
+
+    Message: Method [joint] not found.
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\system\database\Query\Builder.php
+
+    Line: 701
+
+    Stack trace:
+
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\lnl.php(585): npds\system\database\Query\Builder->__call('joint', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\admin\lnl.php(1367): main()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\admin.php(1266): include('E:\\New_Serv_Wam...')
+#3 {main}
+
+---------
+
+Exception information:
+
+    Date: Apr 03, 2024 4:33AM
+
+    Message: Parse error: syntax error, unexpected single-quoted string "", expecting ")"
+
+    Code: 0
+
+    File: E:\New_Serv_Wamp\npds_dune-php8sql8\admin\lnl.php
+
+    Line: 588
+
+    Stack trace:
+
+#0 {main}
+
+---------
+

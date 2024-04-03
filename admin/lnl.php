@@ -19,6 +19,7 @@ use npds\system\mail\mailler;
 use npds\system\config\Config;
 use npds\system\support\editeur;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -31,19 +32,26 @@ $f_titre = adm_translate("Petite Lettre D'information");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-
-function error_handler($ibid)
+/**
+ * [error_handler description]
+ *
+ * @param   string  $ibid  [$ibid description]
+ *
+ * @return  void
+ */
+function error_handler(string $ibid): void
 {
     echo "<p align=\"center\"><span class=\"rouge\">" . adm_translate("Merci d'entrer l'information en fonction des spécifications") . "<br /><br />";
     echo "$ibid</span><br /><a href=\"index.php\" class=\"noir\">" . adm_translate("Retour en arrière") . "</a></p>";
 }
 
-function ShowHeader()
+/**
+ * [ShowHeader description]
+ *
+ * @return  void
+ */
+function ShowHeader(): void 
 {
-    global $NPDS_Prefix;
-
-    $result = sql_query("SELECT ref, text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='HED' ORDER BY ref ");
-
     echo '
     <table data-toggle="table" class="table-no-bordered">
         <thead class="d-none">
@@ -64,35 +72,38 @@ function ShowHeader()
         </thead>
         <tbody>';
 
-    while (list($ref, $text, $html) = sql_fetch_row($result)) {
-        $text = nl2br(htmlspecialchars($text, ENT_COMPAT | ENT_HTML401, 'utf-8'));
+    $lnl_head_foot = DB::table('lnl_head_foot')->select('ref', 'text', 'html')->where('type', 'HED')->orderBy('ref')->get();
+
+    foreach($lnl_head_foot as $head_foot) {
+
+        $text = nl2br(htmlspecialchars($head_foot['text'], ENT_COMPAT | ENT_HTML401, 'utf-8'));
         
         if (strlen($text) > 100) {
             $text = substr($text, 0, 100) . '<span class="text-danger"> .....</span>';
         }
         
-        if ($html == 1) { 
-            $html = 'html';
+        if ($head_foot['html'] == 1) { 
+            $head_foot['html'] = 'html';
         } else {
-            $html = 'txt';
+            $head_foot['html'] = 'txt';
         }
         
         echo '
             <tr>
                 <td>
-                    ' . $ref . '
+                    ' . $head_foot['ref'] . '
                 </td>
                 <td>
                     ' . $text . '
                 </td>
                 <td>
-                    <code>' . $html . '</code>
+                    <code>' . $head_foot['html'] . '</code>
                 </td>
                 <td>
-                    <a href="admin.php?op=lnl_Shw_Header&amp;Headerid=' . $ref . '" >
+                    <a href="admin.php?op=lnl_Shw_Header&amp;Headerid=' . $head_foot['ref'] . '" >
                         <i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
-                    <a href="admin.php?op=lnl_Sup_Header&amp;Headerid=' . $ref . '" class="text-danger">
+                    <a href="admin.php?op=lnl_Sup_Header&amp;Headerid=' . $head_foot['ref'] . '" class="text-danger">
                         <i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                 </td>
@@ -104,18 +115,24 @@ function ShowHeader()
     </table>';
 }
 
-function Detail_Header_Footer($ibid, $type)
+/**
+ * [Detail_Header_Footer description]
+ *
+ * @param   string  $ibid  [$ibid description]
+ * @param   string  $type  [$type description]
+ *
+ * @return  void
+ */
+function Detail_Header_Footer(string $ibid, string $type): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('lnl'));
     adminhead($f_meta_nom, $f_titre);
 
-    // $type = HED or FOT
-    $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='$type' AND ref='$ibid'");
-    $tmp = sql_fetch_row($result);
+    $head_foot = DB::table('lnl_head_foot')->select('text', 'html')->where('type', $type)->where('ref', $ibid)->first();
 
     echo '
     <hr />
@@ -129,12 +146,12 @@ function Detail_Header_Footer($ibid, $type)
 
     echo ' - ' . adm_translate("Prévisualiser");
 
-    if ($tmp[1] == 1) {
+    if ($head_foot['html'] == 1) {
         echo '<code> HTML</code></h3>
-        <div class="card card-body">' . $tmp[0] . '</div>';
+        <div class="card card-body">' . $head_foot['text'] . '</div>';
     } else {
         echo '<code>' . adm_translate("TEXTE") . '</code></h3>
-        <div class="card card-body">' . nl2br($tmp[0]) . '</div>';
+        <div class="card card-body">' . nl2br($head_foot['text']) . '</div>';
     }
 
     echo '
@@ -143,11 +160,11 @@ function Detail_Header_Footer($ibid, $type)
         <div class="mb-3 row">
             <label class="col-form-label col-sm-12" for="xtext">' . adm_translate("Texte") . '</label>
             <div class="col-sm-12">
-                <textarea class="tin form-control" cols="70" rows="20" name="xtext" >' . htmlspecialchars($tmp[0], ENT_COMPAT | ENT_HTML401, 'utf-8') . '</textarea>
+                <textarea class="tin form-control" cols="70" rows="20" name="xtext" >' . htmlspecialchars($head_foot['text'], ENT_COMPAT | ENT_HTML401, 'utf-8') . '</textarea>
             </div>
         </div>';
 
-    if ($tmp[1] == 1) {
+    if ($head_foot['html'] == 1) {
         Config::get('editeur.tiny_mce_relurl', false);
 
         echo editeur::aff_editeur('xtext', '');
@@ -172,12 +189,13 @@ function Detail_Header_Footer($ibid, $type)
     css::adminfoot('', '', '', '');
 }
 
-function ShowBody()
+/**
+ * [ShowBody description]
+ *
+ * @return  void
+ */
+function ShowBody(): void
 {
-    global $NPDS_Prefix;
-
-    $result = sql_query("SELECT ref, text, html FROM " . $NPDS_Prefix . "lnl_body ORDER BY ref ");
-
     echo '
     <table data-toggle="table" class="table-no-bordered">
         <thead class="d-none">
@@ -198,35 +216,37 @@ function ShowBody()
         </thead>
         <tbody>';
 
-    while (list($ref, $text, $html) = sql_fetch_row($result)) {
-        $text = nl2br(htmlspecialchars($text, ENT_COMPAT | ENT_HTML401, 'utf-8'));
+    $lnl_body = DB::table('lnl_body')->select('ref', 'text', 'html')->orderBy('ref')->get();
+
+    foreach ($lnl_body as $body) {
+        $text = nl2br(htmlspecialchars($body['text'], ENT_COMPAT | ENT_HTML401, 'utf-8'));
 
         if (strlen($text) > 200) {
             $text = substr($text, 0, 200) . '<span class="text-danger"> .....</span>';
         }
 
-        if ($html == 1) {
-            $html = 'html';
+        if ($body['html'] == 1) {
+            $body['html'] = 'html';
         } else {
-            $html = 'txt';
+            $body['html'] = 'txt';
         }
 
         echo '
         <tr>
             <td>
-                ' . $ref . '
+                ' . $body['ref'] . '
             </td>
             <td>
                 ' . $text . '
             </td>
             <td>
-                <code>' . $html . '</code>
+                <code>' . $body['html'] . '</code>
             </td>
             <td>
-                <a href="admin.php?op=lnl_Shw_Body&amp;Bodyid=' . $ref . '">
+                <a href="admin.php?op=lnl_Shw_Body&amp;Bodyid=' . $body['ref'] . '">
                     <i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                 </a>
-                <a href="admin.php?op=lnl_Sup_Body&amp;Bodyid=' . $ref . '" class="text-danger">
+                <a href="admin.php?op=lnl_Sup_Body&amp;Bodyid=' . $body['ref'] . '" class="text-danger">
                     <i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                 </a>
             </td>
@@ -238,9 +258,16 @@ function ShowBody()
     </table>';
 }
 
-function Detail_Body($ibid)
+/**
+ * [Detail_Body description]
+ *
+ * @param   string  $ibid  [$ibid description]
+ *
+ * @return  void
+ */
+function Detail_Body(string $ibid): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -251,15 +278,14 @@ function Detail_Body($ibid)
     <hr />
     <h3 class="mb-2">' . adm_translate("Corps de message") . ' - ';
 
-    $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_body WHERE ref='$ibid'");
-    $tmp = sql_fetch_row($result);
+    $body = DB::table('lnl_body')->select('text', 'html')->where('ref', $ibid)->first();
 
-    if ($tmp[1] == 1) {
+    if ($body['html'] == 1) {
         echo adm_translate("Prévisualiser") . ' <code>HTML</code></h3>
-        <div class="card card-body">' . $tmp[0] . '</div>';
+        <div class="card card-body">' . $body['text'] . '</div>';
     } else {
         echo adm_translate("Prévisualiser") . ' <code>' . adm_translate("TEXTE") . '</code></h3>
-        <div class="card card-body">' . nl2br($tmp[0]) . '</div>';
+        <div class="card card-body">' . nl2br($body['text']) . '</div>';
     }
 
     echo '
@@ -267,11 +293,11 @@ function Detail_Body($ibid)
         <div class="mb-3 row">
             <label class="col-form-label col-sm-12" for="xtext">' . adm_translate("Corps de message") . '</label>
             <div class="col-sm-12">
-                <textarea class="tin form-control" rows="30" name="xtext" >' . htmlspecialchars($tmp[0], ENT_COMPAT | ENT_HTML401, 'utf-8') . '</textarea>
+                <textarea class="tin form-control" rows="30" name="xtext" >' . htmlspecialchars($body['text'], ENT_COMPAT | ENT_HTML401, 'utf-8') . '</textarea>
             </div>
         </div>';
 
-    if ($tmp[1] == 1) {
+    if ($body['html'] == 1) {
         Config::get('editeur.tiny_mce_relurl', false);
 
         echo editeur::aff_editeur("xtext", "false");
@@ -291,7 +317,12 @@ function Detail_Body($ibid)
     css::adminfoot('', '', '', '');
 }
 
-function Add_Body()
+/**
+ * [Add_Body description]
+ *
+ * @return  void
+ */
+function Add_Body(): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -348,19 +379,31 @@ function Add_Body()
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function Add_Body_Submit($Ytext, $Yhtml)
+/**
+ * [Add_Body_Submit description]
+ *
+ * @param   string  $Ytext  [$Ytext description]
+ * @param   string  $Yhtml  [$Yhtml description]
+ *
+ * @return  void
+ */
+function Add_Body_Submit(string $Ytext, string $Yhtml): void
 {
-    global $NPDS_Prefix;
-
-    sql_query("INSERT INTO " . $NPDS_Prefix . "lnl_body VALUES ('0', '$Yhtml', '$Ytext', 'OK')");
+    DB::table('lnl_body')->insert(array(
+        'ref'        => 0,
+        'html'       => $Yhtml,
+        'text'       => $Ytext,
+        'status'     => 'OK',
+    ));
 }
 
-function ShowFooter()
+/**
+ * [ShowFooter description]
+ *
+ * @return  void
+ */
+function ShowFooter(): void
 {
-    global $NPDS_Prefix;
-
-    $result = sql_query("SELECT ref, text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='FOT' ORDER BY ref ");
-
     echo '
     <table data-toggle="table" class="table-no-bordered">
         <thead class="d-none">
@@ -381,32 +424,34 @@ function ShowFooter()
         </thead>
         <tbody>';
 
-    while (list($ref, $text, $html) = sql_fetch_row($result)) {
-        $text = nl2br(htmlspecialchars($text, ENT_COMPAT | ENT_HTML401, 'utf-8'));
+    $lnl_head_foot = DB::table('lnl_head_foot')->select('ref', 'text', 'html')->where('type', 'FOT')->orderBy('ref')->get();
+
+    foreach($lnl_head_foot as $head_foot) {
+        $text = nl2br(htmlspecialchars($head_foot['text'], ENT_COMPAT | ENT_HTML401, 'utf-8'));
 
         if (strlen($text) > 100) {
             $text = substr($text, 0, 100) . '<span class="text-danger"> .....</span>';
         }
 
-        if ($html == 1) { 
-            $html = 'html';
+        if ($head_foot['html'] == 1) { 
+            $head_foot['html'] = 'html';
         } else {
-            $html = 'txt';
+            $head_foot['html'] = 'txt';
         }
 
         echo '
             <tr>
                 <td>
-                    ' . $ref . '</td>
+                    ' . $head_foot['ref'] . '</td>
                 <td>
                     ' . $text . '</td>
                 <td>
-                    <code>' . $html . '</code></td>
+                    <code>' . $head_foot['html'] . '</code></td>
                 <td>
-                    <a href="admin.php?op=lnl_Shw_Footer&amp;Footerid=' . $ref . '" >
+                    <a href="admin.php?op=lnl_Shw_Footer&amp;Footerid=' . $head_foot['ref'] . '" >
                         <i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
-                    <a href="admin.php?op=lnl_Sup_Footer&amp;Footerid=' . $ref . '" class="text-danger">
+                    <a href="admin.php?op=lnl_Sup_Footer&amp;Footerid=' . $head_foot['ref'] . '" class="text-danger">
                         <i class="fas fa-trash fa-lg" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                 </td>
@@ -418,7 +463,14 @@ function ShowFooter()
     </table>';
 }
 
-function Add_Header_Footer($ibid)
+/**
+ * [Add_Header_Footer description]
+ *
+ * @param   string  $ibid  [$ibid description]
+ *
+ * @return  void
+ */
+function Add_Header_Footer(string $ibid): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -482,18 +534,43 @@ function Add_Header_Footer($ibid)
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function Add_Header_Footer_Submit($ibid, $xtext, $xhtml)
+/**
+ * [Add_Header_Footer_Submit description]
+ *
+ * @param   string  $ibid   [$ibid description]
+ * @param   string  $xtext  [$xtext description]
+ * @param   string  $xhtml  [$xhtml description]
+ *
+ * @return  void
+ */
+function Add_Header_Footer_Submit(string $ibid, string $xtext, string $xhtml): void 
 {
-    global $NPDS_Prefix;
-
     if ($ibid == "HED") {
-        sql_query("INSERT INTO " . $NPDS_Prefix . "lnl_head_foot VALUES ('0', 'HED','$xhtml', '$xtext', 'OK')");
+        DB::table('lnl_head_foot')->insert(array(
+            'ref'        => 0,
+            'type'       => 'HED',
+            'html'       => $xhtml,
+            'text'       => $xtext,
+            'status'     => 'OK',
+        ));
+
     } else {
-        sql_query("INSERT INTO " . $NPDS_Prefix . "lnl_head_foot VALUES ('0', 'FOT', '$xhtml', '$xtext', 'OK')");
+        DB::table('lnl_head_foot')->insert(array(
+            'ref'        => 0,
+            'type'       => 'FOT',
+            'html'       => $xhtml,
+            'text'       => $xtext,
+            'status'     => 'OK',
+        ));
     }
 }
 
-function main()
+/**
+ * [main description]
+ *
+ * @return  void
+ */
+function main(): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -638,7 +715,15 @@ function main()
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function Del_Question($retour, $param)
+/**
+ * [Del_Question description]
+ *
+ * @param   string  $retour  [$retour description]
+ * @param   string  $param   [$param description]
+ *
+ * @return  void
+ */
+function Del_Question(string $retour, string $param): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -656,23 +741,45 @@ function Del_Question($retour, $param)
     css::adminfoot('', '', '', '');
 }
 
-function Test($Yheader, $Ybody, $Yfooter)
+/**
+ * [Test description]
+ *
+ * @param   string  $Yheader  [$Yheader description]
+ * @param   string  $Ybody    [$Ybody description]
+ * @param   string  $Yfooter  [$Yfooter description]
+ *
+ * @return  void
+ */
+function Test(string $Yheader, string $Ybody, string $Yfooter): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('lnl'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='HED' AND ref='$Yheader'");
+    $result = sql_query("SELECT  FROM " . $NPDS_Prefix . "lnl_head_foot WHERE = AND =''");
     $Xheader = sql_fetch_row($result);
 
-    $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_body WHERE html='$Xheader[1]' AND ref='$Ybody'");
-    $Xbody = sql_fetch_row($result);
+    $lnl_head_foot = DB::table('lnl_head_foot')
+        ->select('text', 'html')
+        ->where('type', 'HED')
+        ->where('ref', $Yheader)
+        ->first();
 
-    $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='FOT' AND html='$Xheader[1]' AND ref='$Yfooter'");
-    $Xfooter = sql_fetch_row($result);
+    $lnl_body = DB::table('lnl_body')
+        ->select('text')
+        ->where('html', $lnl_head_foot['html'])
+        ->where('ref', $Ybody)
+        ->first();
+
+    $head_foot = DB::table('lnl_head_foot')
+        ->select('text')
+        ->where('type', 'FOT')
+        ->where('html', $lnl_head_foot['html'])
+        ->where('ref', $Yfooter)
+        ->first();
 
     if ($Xheader[1] == 1) {
         echo '
@@ -680,14 +787,14 @@ function Test($Yheader, $Ybody, $Yfooter)
         <h3 class="mb-3">' . adm_translate("Prévisualiser") . ' HTML</h3>';
         
         $Xmime = 'html-nobr';
-        $message = metalang::meta_lang($Xheader[0] . $Xbody[0] . $Xfooter[0]);
+        $message = metalang::meta_lang($lnl_head_foot['text'] . $$lnl_body['text'] . $head_foot['text']);
     } else {
         echo '
         <hr />
         <h3 class="mb-3">' . adm_translate("Prévisualiser") . ' ' . adm_translate("TEXTE") . '</h3>';
         
         $Xmime = 'text';
-        $message = metalang::meta_lang(nl2br($Xheader[0]) . nl2br($Xbody[0]) . nl2br($Xfooter[0]));
+        $message = metalang::meta_lang(nl2br($lnl_head_foot['text']) . nl2br($$lnl_body['text']) . nl2br($head_foot['text']));
     }
 
     echo '
@@ -701,16 +808,19 @@ function Test($Yheader, $Ybody, $Yfooter)
     css::adminfoot('', '', '', '');
 }
 
-function lnl_list()
+/**
+ * [lnl_list description]
+ *
+ * @return  void
+ */
+function lnl_list():  void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('lnl'));
     adminhead($f_meta_nom, $f_titre);
-
-    $result = sql_query("SELECT ref, header , body, footer, number_send, type_send, date, status FROM " . $NPDS_Prefix . "lnl_send ORDER BY date");
 
     echo '
     <hr />
@@ -746,35 +856,38 @@ function lnl_list()
         </thead>
         <tbody>';
 
-    while (list($ref, $header, $body, $footer, $number_send, $type_send, $date, $status) = sql_fetch_row($result)) {
+    $lnl_send = DB::table('lnl_send')->select('ref', 'header', 'body', 'footer', 'number_send', 'type_send', 'date', 'status')->orderBy('date')->get();
+
+    foreach($lnl_send as $send) {
+
         echo '
             <tr>
                 <td>
-                    ' . $ref . '
+                    ' . $$send['ref'] . '
                 </td>
                 <td>
-                    ' . $header . '
+                    ' . $$send['header'] . '
                 </td>
                 <td>
-                    ' . $body . '
+                    ' . $$send['body'] . '
                 </td>
                 <td>
-                    ' . $footer . '
+                    ' . $$send['footer'] . '
                 </td>
                 <td>
-                    ' . $number_send . '
+                    ' . $$send['number_send'] . '
                 </td>
                 <td>
-                    ' . $type_send . '
+                    ' . $$send['type_send'] . '
                 </td>
                 <td>
-                    ' . $date . '
+                    ' . $$send['date'] . '
                 </td>';
 
-        if ($status == "NOK") {
-            echo '<td class="text-danger">' . $status . '</td>';
+        if ($$send['status'] == "NOK") {
+            echo '<td class="text-danger">' . $$send['status'] . '</td>';
         } else {
-            echo '<td>' . $status . '</td>';
+            echo '<td>' . $$send['status'] . '</td>';
         }
 
         echo '</tr>';
@@ -787,16 +900,19 @@ function lnl_list()
     css::adminfoot('', '', '', '');
 }
 
-function lnl_user_list()
+/**
+ * [lnl_user_list description]
+ *
+ * @return  void
+ */
+function lnl_user_list(): void 
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('lnl'));
     adminhead($f_meta_nom, $f_titre);
-
-    $result = sql_query("SELECT email, date, status FROM " . $NPDS_Prefix . "lnl_outside_users ORDER BY date");
 
     echo '
     <hr />
@@ -820,24 +936,27 @@ function lnl_user_list()
         </thead>
         <tbody>';
 
-    while (list($email, $date, $status) = sql_fetch_row($result)) {
+    $lnl_outside_users = DB::table('lnl_outside_users')->select('email', 'date', 'status')->orderBy('date')->get();
+
+    foreach ($lnl_outside_users as $outside_users) {
+
         echo '
             <tr>
                 <td>
-                    ' . $email . '
+                    ' . $outside_users['email'] . '
                 </td>
                 <td>
-                    ' . $date . '
+                    ' . $outside_users['date'] . '
                 </td>';
 
-        if ($status == "NOK") { 
-            echo '<td class="text-danger">' . $status . '</td>';
+        if ($outside_users['status'] == "NOK") { 
+            echo '<td class="text-danger">' . $outside_users['status'] . '</td>';
         } else {
-            echo '<td class="text-success">' . $status . '</td>';
+            echo '<td class="text-success">' . $outside_users['status'] . '</td>';
         }
 
         echo '<td>
-                <a href="admin.php?op=lnl_Sup_User&amp;lnl_user_email=' . $email . '" class="text-danger">
+                <a href="admin.php?op=lnl_Sup_User&amp;lnl_user_email=' . $outside_users['email'] . '" class="text-danger">
                     <i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="' . adm_translate("Effacer") . '"></i>
                 </a>
             </td>
@@ -866,17 +985,20 @@ switch ($op) {
         break;
 
     case "Sup_HeaderOK":
-        sql_query("DELETE FROM " . $NPDS_Prefix . "lnl_head_foot WHERE ref='$Headerid'");
+        DB::table('lnl_head_foot')->where('ref', $Headerid)->delete();
+
         header("location: admin.php?op=lnl");
         break;
 
     case "Sup_BodyOK":
-        sql_query("DELETE FROM " . $NPDS_Prefix . "lnl_body WHERE ref='$Bodyid'");
+        DB::table('lnl_body')->where('ref', $Bodyid)->delete();
+
         header("location: admin.php?op=lnl");
         break;
 
     case "Sup_FooterOK":
-        sql_query("DELETE FROM " . $NPDS_Prefix . "lnl_head_foot WHERE ref='$Footerid'");
+        DB::table('lnl_head_foot')->where('ref', $Footerid)->delete();
+
         header("location: admin.php?op=lnl");
         break;
 
@@ -902,7 +1024,10 @@ switch ($op) {
         break;
 
     case "Add_Header_Mod":
-        sql_query("UPDATE " . $NPDS_Prefix . "lnl_head_foot SET text='$xtext' WHERE ref='$ref'");
+        DB::table('lnl_head_foot')->where('ref', $ref)->update(array(
+            'text'  => $xtext,
+        ));
+
         header("location: admin.php?op=lnl_Shw_Header&Headerid=$ref");
         break;
 
@@ -916,7 +1041,10 @@ switch ($op) {
         break;
 
     case "Add_Body_Mod":
-        sql_query("UPDATE " . $NPDS_Prefix . "lnl_body SET text='$xtext' WHERE ref='$ref'");
+        DB::table('lnl_body')->where('ref', $ref)->update(array(
+            'text'  => $xtext,
+        ));
+
         header("location: admin.php?op=lnl_Shw_Body&Bodyid=$ref");
         break;
 
@@ -930,7 +1058,10 @@ switch ($op) {
         break;
 
     case "Add_Footer_Mod":
-        sql_query("UPDATE " . $NPDS_Prefix . "lnl_head_foot SET text='$xtext' WHERE ref='$ref'");
+        DB::table('lnl_head_foot')->where('ref', $ref)->update(array(
+            'text'  => $xtext,
+        ));
+
         header("location: admin.php?op=lnl_Shw_Footer&Footerid=$ref");
         break;
 
@@ -947,7 +1078,8 @@ switch ($op) {
         break;
 
     case "Sup_User":
-        sql_query("DELETE FROM " . $NPDS_Prefix . "lnl_outside_users WHERE email='$lnl_user_email'");
+        DB::table('lnl_outside_users')->where('email', $lnl_user_email)->delete();
+
         header("location: admin.php?op=lnl_User_List");
         break;
 
@@ -966,20 +1098,30 @@ switch ($op) {
         }
 
         $nuke_url = Config::get('app.nuke_url');
-        
-        $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='HED' AND ref='$Xheader'");
-        $Yheader = sql_fetch_row($result);
 
-        $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_body WHERE html='$Yheader[1]' AND ref='$Xbody'");
-        $Ybody = sql_fetch_row($result);
+        $lnl_head_foot = DB::table('lnl_head_foot')
+            ->select('text', 'html')
+            ->where('type', 'HED')
+            ->where('ref', $Xheader)
+            ->first();
 
-        $result = sql_query("SELECT text, html FROM " . $NPDS_Prefix . "lnl_head_foot WHERE type='FOT' AND html='$Yheader[1]' AND ref='$Xfooter'");
-        $Yfooter = sql_fetch_row($result);
+        $lnl_body = DB::table('lnl_body')
+            ->select('text', 'html')
+            ->where('html', $lnl_head_foot['html'])
+            ->where('ref', $Xbody)
+            ->first();
+
+        $head_foot = DB::table('lnl_head_foot')
+            ->select('text', 'html')
+            ->where('type', 'FOT')
+            ->where('html', $lnl_head_foot['html'])
+            ->where('ref', $Xfooter)
+            ->get();
 
         $subject = stripslashes($Xsubject);
-        $message = $Yheader[0] . $Ybody[0] . $Yfooter[0];
+        $message = $lnl_head_foot['text'] . $lnl_body['text'] . $head_foot['text'];
 
-        $Xmime = (($Yheader[1] == 1) ? 'html-nobr' : 'text');
+        $Xmime = (($lnl_head_foot['html'] == 1) ? 'html-nobr' : 'text');
 
         if ($Xtype == "All") {
             $Xtype = "Out";
@@ -988,25 +1130,31 @@ switch ($op) {
 
         // Outside Users
         if ($Xtype == "Out") {
-            $mysql_result = sql_query("SELECT email FROM " . $NPDS_Prefix . "lnl_outside_users WHERE status='OK'");
-            $nrows = sql_num_rows($mysql_result);
+            $nrows = DB::table('lnl_outside_users')->select('email')->where('status', 'OK')->get();
 
-            $result = sql_query("SELECT email FROM " . $NPDS_Prefix . "lnl_outside_users WHERE status='OK' ORDER BY email limit $debut,$limit");
-            
-            while (list($email) = sql_fetch_row($result)) {
-                if (($email != "Anonyme") or ($email != "Anonymous")) {
-                    if ($email != '') {
+            $result_lnl_outside_users = DB::table('lnl_outside_users')
+                                            ->select('email')
+                                            ->where('status', 'OK')
+                                            ->orderBy('email')
+                                            ->limit($limit)
+                                            ->offset($debut)
+                                            ->get();
+
+            foreach ($result_lnl_outside_users as $outside_users) {
+                if (($$outside_users['email'] != "Anonyme") or ($$outside_users['email'] != "Anonymous")) {
+                    
+                    if ($$outside_users['email'] != '') {
                         if (($message != '') and ($subject != '')) {
                             
                             if ($Xmime == "html-nobr") {
                                 $Xmessage = $message . "<br /><br /><hr noshade>";
-                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") . " : <a href=\"$nuke_url/lnl.php?op=unsubscribe&email=$email\">" . adm_translate("Modifier") . "</a>";
+                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") . " : <a href=\"". $nuke_url ."/lnl.php?op=unsubscribe&email=". $outside_users['email'] ."\">" . adm_translate("Modifier") . "</a>";
                             } else {
                                 $Xmessage = $message . "\n\n------------------------------------------------------------------\n";
-                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") . " : $nuke_url/lnl.php?op=unsubscribe&email=$email";
+                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") . " : ". $nuke_url ."/lnl.php?op=unsubscribe&email=". $outside_users['email'] ."";
                             }
 
-                            mailler::send_email($email, $subject, metalang::meta_lang($Xmessage), "", true, $Xmime, '');
+                            mailler::send_email($$outside_users['email'], $subject, metalang::meta_lang($Xmessage), "", true, $Xmime, '');
                             $number_send++;
                         }
                     }
@@ -1017,24 +1165,42 @@ switch ($op) {
         // NPDS Users
         if ($Xtype == 'Mbr') {
             if ($Xgroupe != '') {
-                $result = '';
-                $mysql_result = sql_query("SELECT u.uid FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "users_status s WHERE s.open='1' AND u.uid=s.uid AND u.email!='' AND (s.groupe LIKE '%$Xgroupe,%' OR s.groupe LIKE '%,$Xgroupe' OR s.groupe='$Xgroupe') AND u.user_lnl='1'");
-                $nrows = sql_num_rows($mysql_result);
 
-                $resultGP = sql_query("SELECT u.email, u.uid, s.groupe FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "users_status s WHERE s.open='1' AND u.uid=s.uid AND u.email!='' AND (s.groupe LIKE '%$Xgroupe,%' OR s.groupe LIKE '%,$Xgroupe' OR s.groupe='$Xgroupe') AND u.user_lnl='1' ORDER BY u.email LIMIT $debut,$limit");
-                
-                while (list($email, $uid, $groupe) = sql_fetch_row($resultGP)) {
-                    $tab_groupe = explode(',', $groupe);
+                $nrows = DB::table('users')
+                    ->select('users.uid')
+                    ->join('users_status', 'users.uid', '=', 'users_status.uid')
+                    ->where('users_status.open', 1)
+                    ->where('users.email', '!=', '') 
+                    ->where('users_status.groupe', 'like', '%'.$Xgroupe.',%')
+                    ->orWhere('users_status.groupe', 'like', '%,'.$Xgroupe.'%')
+                    ->orWhere('users_status.groupe', $Xgroupe)
+                    ->where('users.user_lnl', 1)
+                    ->count();
+
+                $resultGP = DB::table('users')
+                    ->select('users.uid', 'users.uid', 'users_status.groupe')
+                    ->join('users_status', 'users.uid', '=', 'users_status.uid')
+                    ->where('users_status.open', 1)
+                    ->where('users.email', '!=', '') 
+                    ->where('users_status.groupe', 'like', '%'.$Xgroupe.',%')
+                    ->orWhere('users_status.groupe', 'like', '%,'.$Xgroupe.'%')
+                    ->orWhere('users_status.groupe', $Xgroupe)
+                    ->where('users.user_lnl', 1)
+                    ->orderBy('users.email')
+                    ->limit($limit)
+                    ->offser($debut)
+                    ->get();
+
+                foreach ($resultGP as $user_groupe) {   
+                    $tab_groupe = explode(',', $user_groupe['groupe']);
 
                     if ($tab_groupe)
                         foreach ($tab_groupe as $groupevalue) {
                             if ($groupevalue == $Xgroupe) {
-                                $result[] = $email;
+                                $result[] = $user_groupe['email'];
                             }
                         }
                 }
-
-                $fonction = "each"; ///???gloups
 
                 if (is_array($result)) { 
                     $boucle = true;
@@ -1043,22 +1209,34 @@ switch ($op) {
                 }
 
             } else {
-                $mysql_result = sql_query("SELECT u.uid FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "users_status s WHERE s.open='1' AND u.uid=s.uid AND u.email!='' AND u.user_lnl='1'");
-                $nrows = sql_num_rows($mysql_result);
+                $nrows = DB::table('users')
+                    ->select('users.uid')
+                    ->join('users_status', 'users.uid', '=', 'users_status.uid')
+                    ->where('users_status.open', 1)
+                    ->where('users.user_lnl', 1)
+                    ->where('users.email', '!=', '')
+                    ->count();
 
-                $result = sql_query("SELECT u.uid, u.email FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "users_status s WHERE s.open='1' AND u.uid=s.uid AND u.user_lnl='1' ORDER BY email LIMIT $debut,$limit");
-                $fonction = "sql_fetch_row";
+                $result = DB::table('users')
+                    ->select('users.email')
+                    ->join('users_status', 'users.uid', '=', 'users_status.uid')
+                    ->where('users_status.open', 1)
+                    ->where('users.user_lnl', 1)
+                    ->orderBy('email')
+                    ->limit($limit)
+                    ->offset($debut)
+                    ->get();
 
                 $boucle = true;
             }
 
             if ($boucle) {
-                while (list($bidon, $email) = $fonction($result)) { ///???gloups réinterprété comme each .. ???
-                    if (($email != "Anonyme") or ($email != "Anonymous")) {
-                        if ($email != '') {
+                foreach ($result as $user_lnl) {  
+                    if (($user_lnl['email'] != "Anonyme") or ($user_lnl['email'] != "Anonymous")) {
+                        if ($user_lnl['email'] != '') {
 
                             if (($message != '') and ($subject != '')) {
-                                mailler::send_email($email, $subject, metalang::meta_lang($message), "", true, $Xmime, '');
+                                mailler::send_email($user_lnl['email'], $subject, metalang::meta_lang($message), "", true, $Xmime, '');
                                 $number_send++;
                             }
                         }
@@ -1085,7 +1263,16 @@ switch ($op) {
                         $Xtype = $Xgroupe;
                     }
 
-                    sql_query("INSERT INTO " . $NPDS_Prefix . "lnl_send VALUES ('0', '$Xheader', '$Xbody', '$Xfooter', '$number_send', '$Xtype', '$timeX', 'OK')");
+                    DB::table('lnl_send')->insert(array(
+                        'ref'           => 0,
+                        'header'        => $Xheader,
+                        'body'          => $Xbody,
+                        'footer'        => $Xfooter,
+                        'number_send'   => $number_send,
+                        'type_send'     => $Xtype,
+                        'date'          => $timeX,
+                        'status'        => 'OK',
+                    ));
                 }
 
                 header("location: admin.php?op=lnl");
@@ -1095,8 +1282,15 @@ switch ($op) {
                     $chartmp = "$Xtype : $nrows / $nrows";
                     $deb = 0;
                     $Xtype = "Mbr";
-                    $mysql_result = sql_query("SELECT u.uid FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "users_status s WHERE s.open='1' and u.uid=s.uid and u.email!='' and u.user_lnl='1'");
-                    $nrows = sql_num_rows($mysql_result);
+
+                    $nrows = DB::table('users')
+                        ->select('users.uid')
+                        ->join('users_status', 'users.uid', '=', 'users_status.uid')
+                        ->where('users_status.open', 1)
+                        ->where('users.user_lnl', 1)
+                        ->where('users.name', '!=', '')
+                        ->where('users.email', '!=', '')
+                        ->count();
                 }
             }
         }

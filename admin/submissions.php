@@ -30,7 +30,7 @@ admindroits($aid, $f_meta_nom);
 
 function submissions()
 {
-    global $hlpfile, $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
+    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     $dummy = 0;
 

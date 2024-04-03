@@ -32,7 +32,7 @@ admindroits($aid, $f_meta_nom);
 
 function topicsmanager()
 {
-    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $nook;
+    global $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $nook;
 
     include("themes/default/header.php");
 
@@ -196,12 +196,12 @@ function topicsmanager()
 
 function topicedit($topicid)
 {
-    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg, $radminsuper;
+    global $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('topics'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT topicid, topicname, topicimage, topictext, topicadmin FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
     list($topicid, $topicname, $topicimage, $topictext, $topicadmin) = sql_fetch_row($result);
@@ -369,12 +369,12 @@ function topicedit($topicid)
 
 function relatededit($tid, $rid)
 {
-    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+    global $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('topics'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT name, url FROM " . $NPDS_Prefix . "related WHERE rid='$rid'");
     list($name, $url) = sql_fetch_row($result);
@@ -579,12 +579,12 @@ function topicdelete($topicid, $ok = 0)
 
         Header("Location: admin.php?op=topicsmanager");
     } else {
-        global $hlpfile, $tipath, $topicimage, $f_meta_nom, $f_titre, $adminimg;
+        global $tipath, $topicimage, $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
-        GraphicAdmin($hlpfile);
-        adminhead($f_meta_nom, $f_titre, $adminimg);
+        GraphicAdmin(manuel('topics'));
+        adminhead($f_meta_nom, $f_titre);
 
         $result2 = sql_query("SELECT topicimage, topicname, topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
         list($topicimage, $topicname, $topictext) = sql_fetch_row($result2);

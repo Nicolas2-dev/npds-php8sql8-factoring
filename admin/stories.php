@@ -527,11 +527,11 @@ function NoMoveCategory($catid, $newcat)
 // NEWS
 function displayStory($qid)
 {
-    global $NPDS_Prefix, $tipath, $hlpfile, $language, $aid, $radminsuper, $adminimg;
+    global $NPDS_Prefix, $tipath, $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Articles");
-    $hlpfile = "manuels/$language/newarticle.html";
+
 
     $result = sql_query("SELECT qid, uid, uname, subject, story, bodytext, topic, date_debval,date_finval,auto_epur FROM " . $NPDS_Prefix . "queue WHERE qid='$qid'");
     list($qid, $uid, $uname, $subject, $story, $bodytext, $topic, $date_debval, $date_finval, $epur) = sql_fetch_row($result);
@@ -567,8 +567,8 @@ function displayStory($qid)
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('newarticle'));
+    adminhead($f_meta_nom, $f_titre);
 
     echo '
     <hr />
@@ -713,11 +713,10 @@ function displayStory($qid)
 
 function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topic, $notes, $catid, $ihome, $members, $Mmembers, $dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
 {
-    global $NPDS_Prefix, $tipath, $hlpfile, $language, $aid, $radminsuper, $adminimg;
+    global $NPDS_Prefix, $tipath, $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Articles");
-    $hlpfile = "manuels/$language/newarticle.html";
 
     $subject = stripslashes(str_replace('"', '&quot;', $subject));
     $hometext = stripslashes(image::dataimagetofileurl($hometext, 'storage/cache/ai'));
@@ -752,8 +751,8 @@ function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topi
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('newarticle'));
+    adminhead($f_meta_nom, $f_titre);
 
     global $local_user_language;
 
@@ -987,7 +986,7 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
 
 function editStory($sid)
 {
-    global $NPDS_Prefix, $tipath, $hlpfile, $language, $aid, $radminsuper, $adminimg, $gmt;
+    global $NPDS_Prefix, $tipath, $aid, $radminsuper, $gmt;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Editer un Article");
@@ -999,8 +998,6 @@ function editStory($sid)
     if (($sid == '') or ($sid == '0')) {
         header("location: admin.php");
     }
-
-    $hlpfile = "manuels/$language/newarticle.html";
 
     $result = sql_query("SELECT catid, title, hometext, bodytext, topic, notes, ihome, date_finval,auto_epur FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
     list($catid, $subject, $hometext, $bodytext, $topic, $notes, $ihome, $date_finval, $epur) = sql_fetch_row($result);
@@ -1035,8 +1032,8 @@ function editStory($sid)
 
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('newarticle'));
+    adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
     list($topictext, $topicimage) = sql_fetch_row($result);
@@ -1299,13 +1296,9 @@ function removeStory($sid, $ok = 0)
 
         Header("Location: admin.php");
     } else {
-        global $hlpfile, $language;
-
-        $hlpfile = "manuels/$language/newarticle.html";
-
         include("themes/default/header.php");;
 
-        GraphicAdmin($hlpfile);
+        GraphicAdmin(manuel('newarticle'));
 
         echo '
         <div class="alert alert-danger">' . adm_translate("Etes-vous sûr de vouloir effacer l'Article N°") . ' ' . $sid . ' ' . adm_translate("et tous ses Commentaires ?") . '</div>
@@ -1387,7 +1380,7 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
 
 function adminStory()
 {
-    global $NPDS_Prefix, $hlpfile, $language, $aid, $radminsuper, $adminimg;
+    global $NPDS_Prefix, $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Nouvel Article");
@@ -1396,12 +1389,10 @@ function adminStory()
     admindroits($aid, $f_meta_nom);
     //<== controle droit
 
-    $hlpfile = "manuels/$language/newarticle.html";
-
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('newarticle'));
+    adminhead($f_meta_nom, $f_titre);
 
     settype($hometext, 'string');
     settype($bodytext, 'string');
@@ -1531,9 +1522,7 @@ function adminStory()
 
 function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihome, $members, $Mmembers, $dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
 {
-    global $NPDS_Prefix, $tipath, $hlpfile, $language, $aid, $radminsuper, $adminimg, $topicimage;
-
-    $hlpfile = "manuels/$language/newarticle.html";
+    global $NPDS_Prefix, $tipath, $aid, $radminsuper, $adminimg, $topicimage;
 
     $subject = stripslashes(str_replace('"', '&quot;', $subject));
     $hometext = stripslashes(image::dataimagetofileurl($hometext, 'storage/cache/ai'));
@@ -1577,10 +1566,8 @@ function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihom
 
     include("themes/default/header.php");;
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg); 
-
-    global $local_user_language;
+    GraphicAdmin(manuel('newarticle'));
+    adminhead($f_meta_nom, $f_titre); 
 
     echo '
     <hr />
