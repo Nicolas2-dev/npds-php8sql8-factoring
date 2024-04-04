@@ -10,6 +10,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\logs\logs;
 use npds\system\assets\css;
@@ -26,7 +27,15 @@ $f_titre = adm_translate("Administration des MétaTags");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function MetaTagAdmin(bool $meta_saved = false)
+/**
+ * [MetaTagAdmin description]
+ *
+ * @param   bool   $meta_saved  [$meta_saved description]
+ * @param   false               [ description]
+ *
+ * @return  void
+ */
+function MetaTagAdmin(bool $meta_saved = false): void 
 {
     global $f_meta_nom, $f_titre;
 
@@ -145,7 +154,14 @@ function MetaTagAdmin(bool $meta_saved = false)
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function GetMetaTags($filename)
+/**
+ * [GetMetaTags description]
+ *
+ * @param   string  $filename  [$filename description]
+ *
+ * @return  array
+ */
+function GetMetaTags(string $filename): array
 {
     if (file_exists($filename)) {
         $temp = file($filename);
@@ -175,7 +191,17 @@ function GetMetaTags($filename)
     return $tags;
 }
 
-function MetaTagMakeSingleTag($name, $content, $type = 'name')
+/**
+ * [MetaTagMakeSingleTag description]
+ *
+ * @param   string  $name     [$name description]
+ * @param   string  $content  [$content description]
+ * @param   string  $type     [$type description]
+ * @param   name              [ description]
+ *
+ * @return  string
+ */
+function MetaTagMakeSingleTag(string $name, string $content, string $type = 'name'): string 
 {
     if ($content != "humans.txt") {
         if ($content != "") {
@@ -188,14 +214,20 @@ function MetaTagMakeSingleTag($name, $content, $type = 'name')
     }
 }
 
-function MetaTagSave($filename, $tags)
+/**
+ * [MetaTagSave description]
+ *
+ * @param   string  $filename  [$filename description]
+ * @param   string  $tags      [$tags description]
+ *
+ * @return  bool
+ */
+function MetaTagSave(string $filename, string $tags): bool
 {
     if (!is_array($tags)) {
         return false;
     }
-
-    global $adminmail, $Version_Id, $Version_Num, $Version_Sub;
-
+    
     $nuke_url = Config::get('app.nuke_url');
 
     $fh = fopen($filename, "w");
@@ -234,25 +266,16 @@ function MetaTagSave($filename, $tags)
         if (!empty($tags['content-type'])) {
             $tags['content-type'] = htmlspecialchars(stripslashes($tags['content-type']), ENT_COMPAT | ENT_HTML401, 'utf-8');
             
-            //$fp = fopen("config/constants.php", "w");
             $fp = fopen("config/doctype.php", "w");
             if ($fp) {
-                // fwrite($fp, "<?php\nif (!defined(\"'cur_charset'\"))\n   define (''utf-8'', \"".substr($tags['content-type'],strpos($tags['content-type'],"charset=")+8)."\");\n");
                 fwrite($fp, "<?php\nif (!defined(\"doctype\"))\n   define ('doctype', \"" . $tags['doctype'] . "\");\n?>");
             }
             fclose($fp);
-
-            // if ($tags['doctype'] == "HTML 5.1") { 
-            //    $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
-            // } else {
-                $content .= MetaTagMakeSingleTag('content-type', $tags['content-type'], 'http-equiv');
-            //}
+            $content .= MetaTagMakeSingleTag('content-type', $tags['content-type'], 'http-equiv');
         } else {
             
-            //$fp = fopen("config/constants.php", "w");
             $fp = fopen("config/doctype.php", "w");
             if ($fp) {
-                //fwrite($fp, "<?php\nif (!defined(\"'cur_charset'\"))\n   define (''utf-8'', \"utf-8\");\n");
                 fwrite($fp, "<?php\nif (!defined(\"doctype\"))\n   define ('doctype', \"" . $tags['doctype'] . "\");\n?>");
             }
             fclose($fp);
@@ -260,9 +283,6 @@ function MetaTagSave($filename, $tags)
             if ($tags['doctype'] == "XHTML 1.0 Transitional" || $tags['doctype'] == "XHTML 1.0 Strict") {
                 $content .= MetaTagMakeSingleTag('content-type', 'text/html; charset=utf-8', 'http-equiv');
             }
-            // } else {
-            //    $content .= MetaTagMakeSingleTag('utf-8', '', 'charset');
-            // }
         }
 
         $content .= "\$l_meta.=\"<title>\$Titlesitename</title>\\n\";\n";
@@ -288,7 +308,7 @@ function MetaTagSave($filename, $tags)
             $tags['reply-to'] = htmlspecialchars(stripslashes($tags['reply-to']), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $content .= MetaTagMakeSingleTag('reply-to', $tags['reply-to']);
         } else {
-            $content .= MetaTagMakeSingleTag('reply-to', $adminmail);
+            $content .= MetaTagMakeSingleTag('reply-to', Config::get('app.adminmail'));
         }
 
         if (!empty($tags['description'])) {
@@ -331,7 +351,7 @@ function MetaTagSave($filename, $tags)
 
         $content .= MetaTagMakeSingleTag('resource-type', "document");
         $content .= MetaTagMakeSingleTag('robots', $tags['robots']);
-        $content .= MetaTagMakeSingleTag('generator', "$Version_Id $Version_Num $Version_Sub");
+        $content .= MetaTagMakeSingleTag('generator', Config::get('app.Version_Id') . Config::get('app.Version_Num') . Config::get('app.Version_Sub') );
 
         //==> OpenGraph Meta Tags
         $content .= MetaTagMakeSingleTag('og:type', 'website', 'property');

@@ -24,10 +24,10 @@ class Connection
      */
     protected $tablePrefix = '';
 
-    /**
-     * @var  string  The table prefix for the connection.
-     */
-    //protected $wrapper = '`';
+
+    protected $errorinfo = [];
+
+    protected $colcount;
 
 
     /**
@@ -39,8 +39,6 @@ class Connection
     public function __construct(array $config)
     {
         $this->tablePrefix = $config['prefix'];
-
-        //$this->wrapper = $config['wrapper'];
 
         $this->pdo = $this->createConnection($config);
 
@@ -75,7 +73,7 @@ class Connection
      * Begin a Fluent Query against a database table.
      *
      * @param  string  $table
-     * @return \System\Database\Query\Builder
+     * @return \npds\system\database\Query\Builder
      */
     public function table($table)
     {
@@ -86,7 +84,7 @@ class Connection
      * Get a new raw query expression.
      *
      * @param  mixed  $value
-     * @return \System\Database\Query\Expression
+     * @return \npds\system\database\Query\Expression
      */
     public function raw($value)
     {
@@ -121,6 +119,8 @@ class Connection
         $statement = $this->prepare($query);
 
         $statement->execute($bindings);
+
+        $this->colcount = $statement->columnCount();
 
         return $statement->fetchAll($this->getFetchMode());
     }
@@ -172,7 +172,22 @@ class Connection
     {
         $statement = $this->prepare($query);
 
-        return $statement->execute($bindings);
+        //return $statement->execute($bindings);
+        try {
+            return $statement->execute($bindings);
+        } catch (\PDOException $e) {
+
+            $this->errorinfo = $e->errorInfo;
+        }
+    }
+
+    /**
+     * [error description]
+     *
+     * @return  array
+     */
+    function error() {
+        return $this->errorinfo;
     }
 
     /**
@@ -188,7 +203,12 @@ class Connection
 
         $statement->execute($bindings);
 
-        return $statement->rowCount();
+        try {
+            return $statement->rowCount();
+        } catch (\PDOException $e) {
+
+            $this->errorinfo = $e->errorInfo;
+        }
     }
 
     /**
@@ -215,8 +235,6 @@ class Connection
 
         $query = preg_replace_callback('#\{(.*?)\}#', function ($matches) use ($prefix)
         {
-
-            //vd($matches);
             //@list ($table, $field) = explode('.', $matches[1], 2);
             $table = $matches[1];
 
@@ -229,8 +247,114 @@ class Connection
             return $result;
 
         }, $query);
-//vd($query);
-        return $this->getPdo()->prepare($query);
+
+        try {
+            return $this->getPdo()->prepare($query);
+        } catch (\PDOException $e) {
+            $this->errorinfo = $e;
+        }
+    }
+
+    /**
+     * return list a database tables 
+     *
+     * @return array 
+     */
+    public function list_tables()
+    {
+        if($this->pdo)
+        {
+            $query = $this->pdo->query('SHOW TABLES');
+            
+            return $query->fetchAll(PDO::FETCH_COLUMN);
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * [columnCount description]
+     *
+     * @return  [type]  [return description]
+     */
+    public function columnCount() {
+        return $this->colcount;
+    }
+
+    /**
+     * [dropTable description]
+     *
+     * @param   [type]  $table  [$table description]
+     *
+     * @return  [type]          [return description]
+     */
+    public function dropTable($table)
+    {
+        if($this->pdo)
+        {
+            $query = $this->pdo->query("DROP TABLE IF EXISTS `$table`");
+            
+            return $query->fetch(PDO::FETCH_COLUMN);
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * [optimyTable description]
+     *
+     * @param   [type]  $table  [$table description]
+     *
+     * @return  [type]          [return description]
+     */
+    public function optimyTable($table)
+    {
+        if($this->pdo)
+        {
+            $query = $this->pdo->query("OPTIMIZE TABLE `$table`");
+            
+            return $query->fetch(PDO::FETCH_COLUMN);
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * [showFiledsTable description]
+     *
+     * @param   [type]  $table  [$table description]
+     *
+     * @return  [type]          [return description]
+     */
+    public function showFiledsTable($table)
+    {
+        if($this->pdo)
+        {
+            $query = $this->pdo->query("SHOW FIELDS FROM `$table`");
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * [showKeysTable description]
+     *
+     * @param   [type]  $table  [$table description]
+     *
+     * @return  [type]          [return description]
+     */
+    public function showKeysTable($table)
+    {
+        if($this->pdo)
+        {
+            $query = $this->pdo->query("SHOW KEYS FROM `$table`");
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return FALSE;
     }
 
     /**
@@ -245,9 +369,6 @@ class Connection
             return $value;
         }
 
-        //$wrapper = $this->getWrapper();
-
-        //return $wrapper .$value .$wrapper;
         return $value;
     }
 
@@ -260,16 +381,6 @@ class Connection
     {
         return $this->pdo;
     }
-
-    /**
-     * Returns the wrapper string.
-     *
-     * @return string
-     */
-    // public function getWrapper()
-    // {
-    //     return $this->wrapper;
-    // }
 
     /**
      * Get the table prefix for the connection.

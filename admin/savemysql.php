@@ -16,8 +16,12 @@
 /* originally inspired by the build_dump librarie of phpMyAdmin (http://www.phpmyadmin.org)  */
 /* Adapted by : M. PASCAL aKa EBH (plan.net@free.fr)                                         */
 /*********************************************************************************************/
+declare(strict_types=1);
 
+use PDO;
 use npds\system\routing\url;
+use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {  
     include('die.php');
@@ -29,13 +33,14 @@ $f_meta_nom = 'SavemySQL';
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-$name = $aid;
-
-include("library/archive.php");
-
-mysqli_set_charset($dblink, "utf8mb4");
-
-function PrepareString($a_string = '')
+/**
+ * [PrepareString description]
+ *
+ * @param   string  $a_string  [$a_string description]
+ *
+ * @return  string
+ */
+function PrepareString(string $a_string = ''): string
 {
     $search       = array('\\', '\'', "\x00", "\x0a", "\x0d", "\x1a"); //\x08\\x09, not required
     $replace      = array('\\\\', '\\\'', '\0', '\n', '\r', '\Z');
@@ -43,7 +48,14 @@ function PrepareString($a_string = '')
     return str_replace($search, $replace, $a_string);
 }
 
-function get_table_def($table)
+/**
+ * [get_table_def description]
+ *
+ * @param   string  $table  [$table description]
+ *
+ * @return  string
+ */
+function get_table_def(string $table): string 
 {
     global $crlf;
 
@@ -51,15 +63,18 @@ function get_table_def($table)
 
     $k = 0;
 
-    $result = sql_query("SELECT * FROM $table LIMIT 1");
-    $count = sql_num_fields($result);
+    DB::setFetchMode(PDO::FETCH_NUM);
+
+    DB::table($table)->select('*')->limit(1)->get();
+
+    $count_line = DB::columnCount();
 
     $schema_create = '';
-    $schema_create .= "DROP TABLE IF EXISTS $table;$crlf";
+    $schema_create .= "DROP TABLE IF EXISTS `$table`;$crlf";
     $schema_create .= "CREATE TABLE $table ($crlf"; //
-    $result = sql_query("SHOW FIELDS FROM $table");
+    
+    foreach (DB::showFiledsTable($table) as $row) {
 
-    while ($row = sql_fetch_assoc($result)) {
         $schema_create .= " " . $row['Field'] . " " . $row['Type'];
 
         if (isset($row['Default']) && (!empty($row['Default']) || $row['Default'] == "0")) {
@@ -74,16 +89,14 @@ function get_table_def($table)
             $schema_create .= " " . $row['Extra'];
         }
 
-        if ($k < ($count - 1)) {
+        if ($k < ($count_line - 1)) {
             $schema_create .= ",$crlf";
         }
 
         $k++;
     }
 
-    $result = sql_query("SHOW KEYS FROM $table");
-
-    while ($row = sql_fetch_assoc($result)) {
+    foreach (DB::showKeysTable($table) as $row) {
         $kname = $row['Key_name'];
 
         if (($kname != "PRIMARY") && ($row['Non_unique'] == 0)) {
@@ -111,50 +124,69 @@ function get_table_def($table)
 
     $schema_create .= "$crlf)";
     $schema_create = stripslashes($schema_create);
-    $schema_create .= " ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;";
+    $schema_create .= " ENGINE=MyISAM DEFAULT CHARSET=" . Config::get('database.default.charset') .";";
 
-    sql_free_result($result);
-
-    return ($schema_create);
+    return $schema_create;
 }
 
-
-function get_table_content($table)
+/**
+ * [get_table_content description]
+ *
+ * @param   string  $table  [$table description]
+ *
+ * @return  string
+ */
+function get_table_content(string $table): string|bool
 {
+    global $crlf;
+
     $schema_insert = '';
 
-    $result = sql_query("SELECT * FROM $table");
-    $count = sql_num_fields($result);
+    DB::setFetchMode(PDO::FETCH_NUM);
 
-    while ($row = sql_fetch_row($result)) {
-        $schema_insert .= "INSERT INTO $table VALUES (";
+    foreach(DB::table($table)->select('*')->get() as $row) {
+        $schema_insert = "INSERT INTO $table VALUES (";
 
-        for ($j = 0; $j < $count; $j++) {
-            if (!isset($row[$j]))
+        $count_line = DB::columnCount();
+
+        for ($j = 0; $j < $count_line; $j++) {
+            if (!isset($row[$j])) {
                 $schema_insert .= " NULL";
-            else
+            } else {
                 if ($row[$j] != "") {
                     $schema_insert .= " '" . PrepareString($row[$j]) . "'";
                 } else {
                     $schema_insert .= " ''";
                 }
 
-                if ($j < ($count - 1)) {
+                if ($j < ($count_line - 1)) {
                     $schema_insert .= ",";
                 }
+            }
         }
-        $schema_insert .= ");$crlf"; // $crlf ?????
+
+        $schema_insert .= ");". $crlf;
     }
 
     if ($schema_insert != "") {
         $schema_insert = trim($schema_insert);
-        return ($schema_insert);
+        
+        return $schema_insert;
     }
+
+    return false;
 }
 
-function dbSave()
+/**
+ * [dbSave description]
+ *
+ * @return  void
+ */
+function dbSave(): void
 {
-    global $dbname, $name, $MSos, $crlf;
+    global $aid, $MSos, $crlf;
+
+    $dbname = Config::get('database.default.database');
 
     @set_time_limit(600);
 
@@ -163,32 +195,34 @@ function dbSave()
     $date_op = date("mdy");
     $filename = $dbname . "-" . $date_op;
 
-    $tables = sql_list_tables($dbname);
-    $num_tables = sql_num_rows($tables);
+    $tables = DB::list_tables();
 
-    if ($num_tables == 0) {
+    if ($tables == 0) {
         echo "&nbsp;" . adm_translate("Aucune table n'a été trouvée") . "\n";
     } else {
         $heure_jour = date("H:i");
+        
         $data = "# ========================================================$crlf"
             . "# $crlf"
             . "# " . adm_translate("Sauvegarde de la base de données") . " : " . $dbname . " $crlf"
-            . "# " . adm_translate("Effectuée le") . " " . $date_jour . " : " . $heure_jour . " " . adm_translate("par") . " " . $name . " $crlf"
+            . "# " . adm_translate("Effectuée le") . " " . $date_jour . " : " . $heure_jour . " " . adm_translate("par") . " " . $aid . " $crlf"
             . "# $crlf"
             . "# ========================================================$crlf";
 
-        while ($row = sql_fetch_row($tables)) {
-            $table = $row[0];
+        foreach ($tables as $table) {
+
             $data .= "$crlf"
                 . "# --------------------------------------------------------$crlf"
                 . "# $crlf"
                 . "# " . adm_translate("Structure de la table") . " '" . $table . "' $crlf"
                 . "# $crlf$crlf";
+
             $data .= get_table_def($table)
                 . "$crlf$crlf"
                 . "# $crlf"
                 . "# " . adm_translate("Contenu de la table") . " '" . $table . "' $crlf"
                 . "# $crlf$crlf";
+
             $data .= get_table_content($table)
                 . "$crlf$crlf"
                 . "# --------------------------------------------------------$crlf";
@@ -198,20 +232,32 @@ function dbSave()
     send_file($data, $filename, "sql", $MSos);
 }
 
-function dbSave_tofile($repertoire, $linebyline = 0, $savemysql_size = 256)
+/**
+ * [dbSave_tofile description]
+ *
+ * @param   string  $repertoire      [$repertoire description]
+ * @param   int     $linebyline      [$linebyline description]
+ * @param   int     $savemysql_size  [$savemysql_size description]
+ *
+ * @return  void
+ */
+function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_size = 256): void
 {
-    global $dbname, $name, $MSos, $crlf;
+    global $aid, $MSos, $crlf;
 
     @set_time_limit(600);
+
+    $dbname = Config::get('database.default.database');
 
     $date_jour = date(adm_translate("dateforop"));
 
     $date_op = date("ymd");
+    
     $filename = $dbname . "-" . $date_op;
-    $tables = sql_list_tables($dbname);
-    $num_tables = sql_num_rows($tables);
 
-    if ($num_tables == 0) {
+    $tables = DB::list_tables();
+
+    if ($tables == 0) {
         echo "&nbsp;" . adm_translate("Aucune table n'a été trouvée") . "\n";
     } else {
         if ((!isset($repertoire)) or ($repertoire == "")) {
@@ -229,31 +275,33 @@ function dbSave_tofile($repertoire, $linebyline = 0, $savemysql_size = 256)
         $data0 = "# ========================================================$crlf"
             . "# $crlf"
             . "# Sauvegarde de la base de données : " . $dbname . " $crlf"
-            . "# Effectuée le " . $date_jour . " : " . $heure_jour . " par " . $name . " $crlf"
+            . "# Effectuée le " . $date_jour . " : " . $heure_jour . " par " . $aid . " $crlf"
             . "# $crlf"
             . "# ========================================================$crlf";
         $data1 = "";
         $ifile = 0;
 
-        while ($row = sql_fetch_row($tables)) {
-            $table = $row[0];
+        foreach ($tables as $table) {
+            
             $data1 .= "$crlf"
                 . "# --------------------------------------------------------$crlf"
                 . "# $crlf"
                 . "# Structure de la table '" . $table . "' $crlf"
                 . "# $crlf$crlf";
+
             $data1 .= get_table_def($table)
                 . "$crlf$crlf"
                 . "# $crlf"
                 . "# Contenu de la table '" . $table . "' $crlf"
                 . "# $crlf$crlf";
 
-            $result = sql_query("SELECT * FROM $table");
-            $count_line = sql_num_fields($result);
+            DB::setFetchMode(PDO::FETCH_NUM);
 
-            while ($row = sql_fetch_row($result)) {
+            foreach(DB::table($table)->select('*')->get() as $row) {
                 $schema_insert = "INSERT INTO $table VALUES (";
-                
+
+                $count_line = DB::columnCount();
+
                 for ($j = 0; $j < $count_line; $j++) {
                     if (!isset($row[$j])) {
                         $schema_insert .= " NULL";
@@ -275,7 +323,7 @@ function dbSave_tofile($repertoire, $linebyline = 0, $savemysql_size = 256)
                 $data1 .= $schema_insert;
 
                 if ($linebyline == 1) {
-                    if (strlen($data1) > ($savemysql_size * 1024)) {
+                    if (strlen($data1) > ($savemysql_size*1024)) {
                         send_tofile($data0 . $data1, $repertoire, $filename . "-" . sprintf("%03d", $ifile), "sql", $MSos);
                         $data1 = "";
                         $ifile++;
@@ -306,6 +354,7 @@ function dbSave_tofile($repertoire, $linebyline = 0, $savemysql_size = 256)
 switch ($op) {
     case "SavemySQL":
         $MSos = get_os();
+
         if ($MSos) {
             $crlf = "\r\n";
             $crlf2 = "\\r\\n";
@@ -313,6 +362,9 @@ switch ($op) {
             $crlf = "\n";
             $crlf2 = "\\n";
         }
+
+        $savemysql_mode = isset($savemysql_mode) ? $savemysql_mode : '';
+        $savemysql_size = isset($savemysql_size) ? $savemysql_size : 256;
 
         if ($savemysql_mode == 2) {
             dbSave_tofile("slogs", 0, $savemysql_size);

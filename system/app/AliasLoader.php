@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 namespace npds\system\app;
-
-
 
 use RuntimeException;
 use npds\system\config\Config;

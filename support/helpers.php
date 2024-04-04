@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use npds\system\chat\chat;
 use npds\system\news\news;

@@ -18,6 +18,7 @@
 /* Fermeture : div > div"#corps"> $ContainerGlobal>                     */
 /*                    ouverts dans le Header.php                        */
 /* =====================================================================*/
+declare(strict_types=1);
 
 use npds\system\block\block;
 

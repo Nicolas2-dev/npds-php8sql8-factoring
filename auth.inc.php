@@ -11,6 +11,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\logs\logs;
 use npds\system\auth\users;

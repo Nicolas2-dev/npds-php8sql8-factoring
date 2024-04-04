@@ -13,6 +13,7 @@
 /************************************************************************/
 /* Dont modify this file iF you dont know what you make                 */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\auth\groupe;

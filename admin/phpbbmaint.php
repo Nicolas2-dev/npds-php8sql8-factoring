@@ -12,6 +12,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\js;
 use npds\system\date\date;
@@ -21,6 +22,7 @@ use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -35,9 +37,14 @@ admindroits($aid, $f_meta_nom);
 
 include("auth.php");
 
-function ForumMaintMarkTopics()
+/**
+ * [ForumMaintMarkTopics description]
+ *
+ * @return  void
+ */
+function ForumMaintMarkTopics(): void 
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -56,44 +63,45 @@ function ForumMaintMarkTopics()
         </thead>
         <tbody>';
 
-    if (!$r = sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read")) {
+    if (!DB::table('forum_read')->delete()) {
         forum::forumerror('0001');
     } else {
-        $resultF = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums ORDER BY forum_id ASC");
-        $time_actu = time() + ((int)$gmt * 3600);
+        $time_actu = time() + ((int) Config::get('app.gmt') * 3600);
 
-        while (list($forum_id) = sql_fetch_row($resultF)) {
+        $forums = DB::table('forums')->select('forum_id')->orderBy('forum_id', 'asc')->get();
+
+        foreach ($forums as $forum) {
             echo '
             <tr>
-                <td align="center">' . $forum_id . '</td>
+                <td align="center">' . $forum['forum_id'] . '</td>
                 <td align="left">';
 
-            $resultT = sql_query("SELECT topic_id FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id' ORDER BY topic_id ASC");
+            $forumtopic = DB::table('forumtopics')->select('topic_id')->where('forum_id', $forum['forum_id'])->orderBy('topic_id', 'asc')->get();
 
-            while (list($topic_id) = sql_fetch_row($resultT)) {
+            foreach ($forumtopic as $ftopic) {
+                $users = DB::table('users')->select('uid')->orderBy('uid', 'desc')->get();
 
-                $resultU = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users ORDER BY uid DESC");
-                while (list($uid) = sql_fetch_row($resultU)) {
-                    
+                foreach ($users as $user) {  
                     if ($uid > 1) {
-                        $r = sql_query("INSERT INTO " . $NPDS_Prefix . "forum_read (forum_id, topicid, uid, last_read, status) VALUES ('$forum_id', '$topic_id', '$uid', '$time_actu', '1')");
+                        DB::table('forum_read')->insert(array(
+                            'forum_id'      => $forum['forum_id'],
+                            'topicid'       => $ftopic['topic_id'],
+                            'uid'           => $user['uid'],
+                            'last_read'     => $time_actu,
+                            'status'        => 1,
+                        ));
+                    
                     }
                 }
 
-                sql_free_result($resultU);
-
-                echo $topic_id . ' ';
+                echo $ftopic['topic_id'] . ' ';
             }
-
-            sql_free_result($resultT);
 
             echo '
                 </td>
                 <td align="center">' . translate("Ok") . '</td>
             </tr>';
         }
-
-        sql_free_result($resultF);
     }
 
     echo '
@@ -103,9 +111,17 @@ function ForumMaintMarkTopics()
     css::adminfoot('', '', '', '');
 }
 
-function ForumMaintTopics($before, $forum_name)
+/**
+ * [ForumMaintTopics description]
+ *
+ * @param   string  $before      [$before description]
+ * @param   string  $forum_name  [$forum_name description]
+ *
+ * @return  void
+ */
+function ForumMaintTopics(string $before, string $forum_name): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -118,46 +134,48 @@ function ForumMaintTopics($before, $forum_name)
 
     if ($before != '') {
         echo '&nbsp;<span class="text-danger">< ' . $before . '</span>';
-        $add_sql = "AND topic_time<'$before'";
         $topic_check = ' checked="checked"';
     } else {
-        $add_sql = '';
         $topic_check = '';
     }
-
-    $add_sql2 = $forum_name != '' ? "WHERE forum_name='$forum_name'" : '';
 
     echo '
     <form action="admin.php" method="post">';
 
-    $resultF = sql_query("SELECT forum_id, forum_name FROM " . $NPDS_Prefix . "forums $add_sql2 ORDER BY forum_id ASC");
+    $query = DB::table('forums')->select('forum_id', 'forum_name');
 
-    while (list($forum_id, $forum_name) = sql_fetch_row($resultF)) {
+    if ($forum_name != '') {
+        $query->where('forum_name', $forum_name);
+    }
+
+    $forums = $query->orderBy('forum_id', 'asc')->get();
+
+    foreach ($forums as $forum) {
         echo '
-        <h4>' . $forum_name . '</h4>
+        <h4>' . $forum['forum_name'] . '</h4>
         <div class="mb-3 border p-4">';
 
-        $resultT = sql_query("SELECT topic_id, topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id' $add_sql ORDER BY topic_id ASC");
+        $query = DB::table('forumtopics')->select('topic_id', 'topic_title')->where('forum_id', $forum['forum_id']);
+        
+        if ($before != '') {
+            $query->where('topic_time', '>', $before);
+        }
+        
+        $forumtopic = $query->orderBy('topic_id', 'asc')->get();
 
-        while (list($topic_id, $topic_title) = sql_fetch_row($resultT)) {
+        foreach ($forumtopic as $ftopic) {
 
-            $tt = ((Config::get('app.parse') == 0) ? str::FixQuotes($topic_title) : stripslashes($topic_title));
-            $oo = urlencode($tt); ///// ???? not used
+            $topic_title = ((Config::get('app.parse') == 0) ? str::FixQuotes($ftopic['topic_title']) : stripslashes($ftopic['topic_title']));
             
             echo '
             <div class="form-check form-check-inline">
-                <input type="checkbox" class="form-check-input" name="topics[' . $topic_id . ']" id="topics' . $topic_id . '" ' . $topic_check . '/>
-                <label class="form-check-label" for="topics' . $topic_id . '"><a href="admin.php?op=MaintForumTopicDetail&amp;topic=' . $topic_id . '&amp;topic_title=' . $tt . '" data-bs-toggle="tooltip" title="' . $tt . '" >' . $topic_id . '</a></label>
+                <input type="checkbox" class="form-check-input" name="topics[' . $ftopic['topic_id'] . ']" id="topics' . $ftopic['topic_id'] . '" ' . $topic_check . '/>
+                <label class="form-check-label" for="topics' . $ftopic['topic_id'] . '"><a href="admin.php?op=MaintForumTopicDetail&amp;topic=' . $ftopic['topic_id'] . '&amp;topic_title=' . $topic_title . '" data-bs-toggle="tooltip" title="' . $topic_title . '" >' . $ftopic['topic_id'] . '</a></label>
             </div>';
         }
 
-        sql_free_result($resultT);
-
-        echo '
-        </div>';
+        echo '</div>';
     }
-
-    sql_free_result($resultF);
 
     echo '
         <div class="mb-3>"
@@ -169,24 +187,37 @@ function ForumMaintTopics($before, $forum_name)
     css::adminfoot('', '', '', '');
 }
 
-function ForumMaintTopicDetail($topic, $topic_title)
+/**
+ * [ForumMaintTopicDetail description]
+ *
+ * @param   int     $topic        [$topic description]
+ * @param   string  $topic_title  [$topic_title description]
+ *
+ * @return  void
+ */
+function ForumMaintTopicDetail(int $topic, string $topic_title): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('forummaint'));
     adminhead($f_meta_nom, $f_titre);
 
-    $resultTT = sql_query("SELECT post_text, post_time FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' ORDER BY post_time DESC LIMIT 0,1");
-    list($post_text, $post_time) = sql_fetch_row($resultTT);
+    $post = DB::table('posts')
+        ->select('post_text', 'post_time')
+        ->where('topic_id', $topic)
+        ->orderBy('post_time', 'desc')
+        ->limite(1)
+        ->offset(0)
+        ->first();
 
     echo '
     <hr />
     <h3 class="mb-3 text-danger">' . adm_translate("Supprimer massivement les Topics") . '</h3>
-    <div class="lead">Topic : ' . $topic . ' | ' . stripslashes($topic_title) . '</div>
+    <div class="lead">Topic : ' . $topic . ' | ' . stripslashes($post['topic_title']) . '</div>
     <div class="card p-4 my-3 border-danger">
-        <p class="text-end small text-muted">[ ' . date::convertdate($post_time) . ' ]</p>' . stripslashes($post_text) . '
+        <p class="text-end small text-muted">[ ' . date::convertdate($post['post_time']) . ' ]</p>' . stripslashes($post['post_text']) . '
     </div>
     <form action="admin.php" method="post">
         <input type="hidden" name="op" value="ForumMaintTopicSup" />
@@ -194,34 +225,37 @@ function ForumMaintTopicDetail($topic, $topic_title)
         <input class="btn btn-danger" type="submit" name="Topics_Del" value="' . adm_translate("Effacer") . '" />
     </form>';
 
-    sql_free_result($resultTT);
-
     css::adminfoot('', '', '', '');
 }
 
-function ForumMaintTopicMassiveSup($topics)
+/**
+ * [ForumMaintTopicMassiveSup description]
+ *
+ * @param   array   $topics  [$topics description]
+ *
+ * @return  void
+ */
+function ForumMaintTopicMassiveSup(array $topics): void
 {
-    global $NPDS_Prefix;
-
     if ($topics) {
         foreach ($topics as $topic_id => $value) {
             
             if ($value == 'on') {
-                $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE topic_id = '$topic_id'";
-                
-                if (!$result = sql_query($sql)) {
+                $r = DB::table('posts')->where('topic_id', $topic_id)->delete();
+
+                if (!$r) {
                     forum::forumerror('0009');
                 }
                 
-                $sql = "DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic_id'";
-                
-                if (!$result = sql_query($sql)) {
+                $r = DB::table('forumtopics')->where('topic_id', $topic_id)->delete();
+
+                if (!$r) {
                     forum::forumerror('0010');
                 }
 
-                $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid = '$topic_id'";
+                $r = DB::table('forum_read')->where('topicid', $topic_id)->delete();
 
-                if (!$r = sql_query($sql)) {
+                if (!$r) {
                     forum::forumerror('0001');
                 }
 
@@ -235,25 +269,24 @@ function ForumMaintTopicMassiveSup($topics)
     header("location: admin.php?op=MaintForumAdmin");
 }
 
-function ForumMaintTopicSup($topic)
+/**
+ * [ForumMaintTopicSup description]
+ *
+ * @param   int   $topic  [$topic description]
+ *
+ * @return  void
+ */
+function ForumMaintTopicSup(int $topic): void
 {
-    global $NPDS_Prefix;
-
-    $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE topic_id = '$topic'";
-
-    if (!$result = sql_query($sql)) {
+    if (!DB::table('posts')->where('topic_id', $topic)->delete()) {
         forum::forumerror('0009');
     }
 
-    $sql = "DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
-
-    if (!$result = sql_query($sql)) {
+    if (!DB::table('forumtopics')->where('topic_id', $topic)->delete()) {
         forum::forumerror('0010');
     }
 
-    $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid = '$topic'";
-
-    if (!$r = sql_query($sql)) {
+    if (!DB::table('forum_read')->where('topicid', $topic)->delete()) {
         forum::forumerror('0001');
     }
 
@@ -264,53 +297,60 @@ function ForumMaintTopicSup($topic)
     header("location: admin.php?op=MaintForumTopics");
 }
 
-function SynchroForum()
+/**
+ * [SynchroForum description]
+ *
+ * @return  void
+ */
+function SynchroForum(): void 
 {
-    global $NPDS_Prefix;
     // affectation d'un topic à un forum
-    if (!$result1 = sql_query("SELECT topic_id, forum_id FROM " . $NPDS_Prefix . "forumtopics ORDER BY topic_id ASC")) {
+    $result = DB::table('forumtopics')->select('topic_id', 'forum_id')->orderBy('topic_id', 'asc')->get();
+
+    if (!$result) {
         forum::forumerror('0009');
     }
 
-    while (list($topi_cid, $foru_mid) = sql_fetch_row($result1)) {
-        sql_query("UPDATE " . $NPDS_Prefix . "posts SET forum_id='$foru_mid' WHERE topic_id='$topi_cid' and forum_id>0");
+    foreach ($result as $forumtopic) {
+        DB::table('posts')->where('topic_id', $forumtopic['topic_id'])->where('forum_id', '>', 0)->update(array(
+            'forum_id'  => $forumtopic['foru_mid'],
+        ));
     }
-
-    sql_free_result($result1);
 
     // table forum_read et contenu des topic
-    if (!$result1 = sql_query("SELECT topicid, uid, rid FROM " . $NPDS_Prefix . "forum_read ORDER BY topicid ASC")) {
+    $result = DB::table('forum_read')->select('topicid', 'uid', 'rid')->orderBy('topicid', 'asc')->get();
+
+    if (!$result) {
         forum::forumerror('0009');
     }
 
-    while (list($topicid, $uid, $rid) = sql_fetch_row($result1)) {
-
+    foreach ($result as $forum_read) {
+        
+        // a controller et confirmer !!!!
+        //$tmp = $topicid . $uid;
         /// ???????? $tmp do not exist
-        // if (($topicid . $uid) == $tmp) {
-        //     sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topicid' and uid='$uid' and rid='$rid'");
+        // if (($forumtopic['topicid'] . $forum_read['uid']) == $tmp) {
+        //    DB::table('forum_read')->where('topicid', $forum_read['topicid'])->where('uid', $forum_read['uid'])->where('rid', $forum_read['rid'])->delete();
         // }
 
-        $tmp = $topicid . $uid;
-
-        if ($result2 = sql_query("SELECT topic_id FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topicid'")) {
-            list($topic_id) = sql_fetch_row($result2);
-            
-            if (!$topic_id) {
-                sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topicid'");
+        if ($result = DB::table('forumtopics')->select('topic_id')->where('topic_id', $forum_read['topicid'])->first()) {
+            if (!$result['topic_id']) {
+                DB::table('forum_read')->where('topicid', $forum_read['topicid'])->delete();
             }
         }
-
-        sql_free_result($result2);
     }
-
-    sql_free_result($result1);
 
     header("location: admin.php?op=MaintForumAdmin");
 }
 
-function MergeForum()
+/**
+ * [MergeForum description]
+ *
+ * @return  void
+ */
+function MergeForum(): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -327,16 +367,15 @@ function MergeForum()
                 <div class="col-sm-8">
                 <select class="form-select" id="oriforum" name="oriforum">';
 
-    $sql = "SELECT forum_id, forum_name FROM " . $NPDS_Prefix . "forums ORDER BY forum_index,forum_id";
+    $result = DB::table('forums')->select('forum_id', 'forum_name')->orderBy('forum_index, forum_id')->get();
 
-    if ($result = sql_query($sql)) {
-        if ($myrow = sql_fetch_assoc($result)) {
-            do {
+    if ($result) {
+        foreach($result as $myrow) {
+            if ($myrow['forum_id']) {
                 echo '<option value="' . $myrow['forum_id'] . '">' . $myrow['forum_name'] . '</option>';
-            } while ($myrow = sql_fetch_assoc($result));
-
-        } else {
-            echo '<option value="-1">' . translate("No More Forums") . '</option>';
+            } else {
+                echo '<option value="-1">' . translate("No More Forums") . '</option>';
+            }
         }
     } else {
         echo '<option value="-1">Database Error</option>';
@@ -351,14 +390,13 @@ function MergeForum()
                 <div class="col-sm-8">
                 <select class="form-select" id="destforum" name="destforum">';
 
-    if ($result = sql_query($sql)) {
-        if ($myrow = sql_fetch_assoc($result)) {
-            do {
+    if ($result) {
+        foreach($result as $myrow) {
+            if ($myrow['forum_id']) {
                 echo '<option value="' . $myrow['forum_id'] . '">' . $myrow['forum_name'] . '</option>';
-            } while ($myrow = sql_fetch_assoc($result));
-
-        } else {
-            echo '<option value="-1">' . translate("No More Forums") . '</option>';
+            } else {
+                echo '<option value="-1">' . translate("No More Forums") . '</option>';
+            }
         }
     } else {
         echo '<option value="-1">Database Error</option>';
@@ -377,42 +415,60 @@ function MergeForum()
         </fieldset>
     </form>';
 
-    sql_free_result($result);
-
     css::adminfoot('', '', '', '');
 }
 
-function MergeForumAction($oriforum, $destforum)
+/**
+ * [MergeForumAction description]
+ *
+ * @param   int   $oriforum   [$oriforum description]
+ * @param   int   $destforum  [$destforum description]
+ *
+ * @return  void
+ */
+function MergeForumAction(int $oriforum, int $destforum): void
 {
-    global $upload_table, $NPDS_Prefix;
+    global $upload_table;
 
-    $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET forum_id='$destforum' WHERE forum_id='$oriforum'";
+    $r = DB::table('forumtopics')->where('forum_id', $oriforum)->update(array(
+        'forum_id'  => $destforum,
+    ));
 
-    if (!$r = sql_query($sql)) {
+    if (!$r) {
         forum::forumerror('0010');
     }
 
-    $sql = "UPDATE " . $NPDS_Prefix . "posts SET forum_id='$destforum' WHERE forum_id='$oriforum'";
+    $r = DB::table('posts')->where('forum_id', $oriforum)->update(array(
+        'forum_id'  => $destforum,
+    ));
 
-    if (!$r = sql_query($sql)) {
+    if (!$r) {
         forum::forumerror('0010');
     }
 
-    $sql = "UPDATE " . $NPDS_Prefix . "forum_read SET forum_id='$destforum' WHERE forum_id='$oriforum'";
+    $r = DB::table('forum_read')->where('forum_id', $oriforum)->update(array(
+        'forum_id'  => $destforum,
+    ));
 
-    if (!$r = sql_query($sql)) {
+    if (!$r) {
         forum::forumerror('0001');
     }
 
-    $sql = "UPDATE $upload_table SET forum_id='$destforum' WHERE apli='forum_npds' and forum_id='$oriforum'";
-    sql_query($sql);
+    DB::table($upload_table)->where('apli', 'forum_npds')->where('forum_id', $oriforum)->update(array(
+        'forum_id'  => $destforum,
+    ));
 
     cache::Q_Clean();
 
     header("location: admin.php?op=MaintForumAdmin");
 }
 
-function ForumMaintAdmin()
+/**
+ * [ForumMaintAdmin description]
+ *
+ * @return  void
+ */
+function ForumMaintAdmin(): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -498,7 +554,7 @@ function ForumMaintAdmin()
     $arg1 = '
     var formulid = ["faddeletetop"];';
     
-    echo js::auto_complete("forname", "forum_name", "forums", "titreforum", "86400");
+    echo js::auto_complete('forname', 'forum_name', 'forums', 'titreforum', 86400);
 
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }

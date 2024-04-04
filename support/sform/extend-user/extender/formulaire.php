@@ -35,6 +35,7 @@
     ==> Le nom des champs (C1, C2, M1, T1 ...) est IMPERATIF
     ==> un formulaire valide doit contenir au moins C1 ou M1 ou T1
     */
+declare(strict_types=1);
 
 use npds\system\language\language;
 

@@ -1,6 +1,5 @@
 <?php
 
-
 // superCache contantes
 
 if (!defined("LOCK_EX")) {

@@ -15,7 +15,7 @@ class Manager
     /**
      * The Connection instances.
      *
-     * @var \System\Database\Connection[]
+     * @var \npds\system\database\Connection[]
      */
     protected $instances = array();
 
@@ -23,7 +23,7 @@ class Manager
     /**
      * Get a Database Manager instance.
      *
-     * @return \System\Database\Manager
+     * @return \npds\system\database\Manager
      */
     public static function getInstance()
     {

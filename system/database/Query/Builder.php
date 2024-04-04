@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace npds\system\database\Query;
-
 
 
 use Closure;
@@ -13,7 +13,7 @@ use npds\system\database\Query\JoinClause;
 class Builder
 {
     /**
-     * @var \System\Database\Connection
+     * @var \npds\system\database\Connection
      */
     protected $connection; // The Connection instance.
              
@@ -43,7 +43,7 @@ class Builder
     /**
      * Create a new Builder instance.
      *
-     * @param  \System\Database\Connection $connection
+     * @param  \npds\system\database\Connection $connection
      * @param string $table
      * @return void
      */

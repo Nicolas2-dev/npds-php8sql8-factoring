@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace npds\system\exception;
 
 use Exception;
-use ErrorException;
+use PDOException;
 
+use ErrorException;
 use npds\system\exception\HttpException;
 use npds\system\exception\FatalThrowableError;
 
@@ -82,7 +83,7 @@ class BaseHandler
     {
         if (! $e instanceof Exception) {
             $e = new FatalThrowableError($e);
-        }
+        }   
 
         if (! $e instanceof HttpException) {
             $this->report($e);

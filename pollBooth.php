@@ -14,6 +14,7 @@
 /************************************************************************/
 /* 2003 by snipe / vote unique, implémentation de la table appli_log    */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\support\str;
 use npds\system\config\Config;

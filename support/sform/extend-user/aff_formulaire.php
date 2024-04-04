@@ -11,6 +11,7 @@
 /************************************************************************/
 /* Dont modify this file if you dont know what you make                 */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\theme\theme;
 

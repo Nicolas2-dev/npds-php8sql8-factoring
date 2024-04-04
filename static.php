@@ -40,8 +40,8 @@
 /*    execute nl2br(str_replace(" ","&nbsp;",htmlentities($remp)))      */
 /*    avant d'afficher le fichier                                       */
 /************************************************************************/
+declare(strict_types=1);
 
-//use npds\system\logs\logs;
 use npds\system\utility\code;
 use npds\system\language\language;
 use npds\system\language\metalang;

@@ -77,7 +77,7 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
 
 <url>
 <loc>http://www.npds.local/viewforum.php?forum=1</loc>
-<lastmod>2024-04-03</lastmod>
+<lastmod>2024-04-04</lastmod>
 <changefreq>hourly</changefreq>
 <priority>0.9</priority>
 </url>
@@ -91,7 +91,7 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
 
 <url>
 <loc>http://www.npds.local/viewforum.php?forum=2</loc>
-<lastmod>2024-04-03</lastmod>
+<lastmod>2024-04-04</lastmod>
 <changefreq>hourly</changefreq>
 <priority>0.9</priority>
 </url>
@@ -105,14 +105,14 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
 
 <url>
 <loc>http://www.npds.local/sections.php</loc>
-<lastmod>2024-04-03</lastmod>
+<lastmod>2024-04-04</lastmod>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>
 </url>
 
 <url>
 <loc>http://www.npds.local/download.php</loc>
-<lastmod>2024-04-03</lastmod>
+<lastmod>2024-04-04</lastmod>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>
 </url>
@@ -126,21 +126,21 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
 
 <url>
 <loc>http://www.npds.local/index.php</loc>
-<lastmod>2024-04-03</lastmod>
+<lastmod>2024-04-04</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.8</priority>
 </url>
 
 <url>
 <loc>http://www.npds.local/top.php</loc>
-<lastmod>2024-04-03</lastmod>
+<lastmod>2024-04-04</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.npds.local/stats.php</loc>
-<lastmod>2024-04-03</lastmod>
+<lastmod>2024-04-04</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

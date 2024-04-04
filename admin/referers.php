@@ -12,8 +12,10 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -26,9 +28,16 @@ $f_titre = adm_translate("Sites Référents");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function hreferer($filter)
+/**
+ * [hreferer description]
+ *
+ * @param   int   $filter  [$filter description]
+ *
+ * @return  void
+ */
+function hreferer(int $filter): void
 {
-    global $f_meta_nom, $f_titre, $NPDS_Prefix;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -64,29 +73,35 @@ function hreferer($filter)
     </thead>
     <tbody>';
 
-    $hresult = sql_query("SELECT url, COUNT(url) AS TheCount, substring(url,1,$filter) AS filter FROM " . $NPDS_Prefix . "referer GROUP BY filter ORDER BY TheCount DESC");
+    // faire la function groupeBy() dans builder
+    //$hresult = sql_query("SELECT ,  FROM " . $NPDS_Prefix . " GROUP BY filter ORDER BY  DESC");
     
-    while (list($url, $TheCount) = sql_fetch_row($hresult)) {
+    $referers = DB::table('referer')
+        ->select('url', DB::raw('COUNT(url) AS TheCount, substring(url, 1, '. $filter .' ) AS filter'))
+        ->orderBy('TheCount', 'desc')
+        ->get();
+
+    foreach ($referers as $referer) {
         echo '
         <tr>
             <td>';
 
-        if ($TheCount == 1) {
-            echo '<a href="' . $url . '" target="_blank">';
+        if ($referer['TheCount'] == 1) {
+            echo '<a href="' . $referer['url'] . '" target="_blank">';
         }
 
         if ($filter != 2048) {
-            echo '<span>' . substr($url, 0, $filter) . '</span><span class="text-muted">' . substr($url, $filter) . '</span>';
+            echo '<span>' . substr($referer['url'], 0, $filter) . '</span><span class="text-muted">' . substr($referer['url'], $filter) . '</span>';
         } else {
-            echo $url;
+            echo $referer['url'];
         }
         
-        if ($TheCount == 1) {
+        if ($referer['TheCount'] == 1) {
             echo '</a>';
         }
 
         echo '</a></td>
-            <td>' . $TheCount . '</td>
+            <td>' . $referer['TheCount'] . '</td>
         </tr>';
     }
 
@@ -102,27 +117,34 @@ function hreferer($filter)
     css::adminfoot('', '', '', '');
 }
 
-function delreferer()
+/**
+ * [delreferer description]
+ *
+ * @return  void
+ */
+function delreferer(): void
 {
-    global $NPDS_Prefix;
-
-    sql_query("DELETE FROM " . $NPDS_Prefix . "referer");
+    DB::table('referer')->delete();
 
     Header("Location: admin.php?op=AdminMain");
 }
 
-function archreferer($filter)
+/**
+ * [archreferer description]
+ *
+ * @param   int  $filter  [$filter description]
+ *
+ * @return  void
+ */
+function archreferer(int $filter): void
 {
-    global $NPDS_Prefix;
-
     $file = fopen("storage/logs/referers.log", "w");
     $content = "===================================================\n";
     $content .= "Date : " . date("d-m-Y") . "-/- NPDS - HTTP Referers\n";
     $content .= "===================================================\n";
-    $result = sql_query("SELECT url FROM " . $NPDS_Prefix . "referer");
 
-    while (list($url) = sql_fetch_row($result)) {
-        $content .= "$url\n";
+    foreach (DB::table('referer')->select('url')->get() as $referer) {
+        $content .= $referer['url'] ."\n";
     }
 
     $content .= "===================================================\n";

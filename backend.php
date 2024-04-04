@@ -11,7 +11,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-include('boot/bootstrap.php');
+declare(strict_types=1);
 
 use npds\system\date\date;
 use npds\system\news\news;
@@ -21,6 +21,9 @@ use npds\system\feed\FeedImage;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\feed\UniversalFeedCreator;
+
+include('boot/bootstrap.php');
+
 
 function fab_feed($type, $filename, $timeout)
 {

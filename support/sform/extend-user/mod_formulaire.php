@@ -11,6 +11,7 @@
 /************************************************************************/
 /* Dont modify this file if you dont know what you do                   */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\theme\theme;

@@ -104,6 +104,7 @@
 
 // Attention cette faculté n'est pas aussi parfaite que l'intégration de la gestion des droits de NPDS mais rend bien des services
 // ---------------
+declare(strict_types=1);
 
 use npds\system\config\Config;
 

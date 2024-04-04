@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use npds\system\config\Config;
 use npds\system\cookie\cookie;
@@ -11,7 +12,6 @@ use npds\system\support\str;
 use npds\system\utility\spam;
 use npds\system\security\protect;
 use npds\system\exception\ExceptionHandler;
-
 
 require 'vendor/autoload.php';
 

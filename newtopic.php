@@ -13,12 +13,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\logs\logs;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\routing\url;
-//use npds\system\utility\code;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
 use npds\system\config\Config;

@@ -12,10 +12,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\support\str;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -28,16 +30,19 @@ $f_titre = adm_translate("Les sondages");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function poll_createPoll()
+/**
+ * [poll_createPoll description]
+ *
+ * @return  void
+ */
+function poll_createPoll(): void
 {
-    global $maxOptions, $f_meta_nom, $f_titre, $NPDS_Prefix;
+    global $maxOptions, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('surveys'));
     adminhead($f_meta_nom, $f_titre);
-
-    global $id; // ??? not used 
 
     echo '
         <hr />
@@ -53,22 +58,22 @@ function poll_createPoll()
             </thead>
             <tbody>';
 
-    $result = sql_query("SELECT pollID, pollTitle, voters FROM " . $NPDS_Prefix . "poll_desc ORDER BY timeStamp");
+    $poll_desc = DB::table('poll_desc')->select('pollID', 'pollTitle', 'voters')->orderBy('timeStamp')->get();
 
-    while ($object = sql_fetch_assoc($result)) {
+    foreach ($poll_desc as $poll) {
         echo '
                 <tr>
-                <td>' . $object["pollID"] . '</td>
-                <td>' . language::aff_langue($object["pollTitle"]) . '</td>
-                <td>' . $object["voters"] . '</td>
+                <td>' . $poll['pollID'] . '</td>
+                <td>' . language::aff_langue($poll['pollTitle']) . '</td>
+                <td>' . $poll['voters'] . '</td>
                 <td>
-                    <a href="admin.php?op=editpollPosted&amp;id=' . $object["pollID"] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer ce sondage") . '" data-bs-toggle="tooltip"></i></a>
-                    <a href="admin.php?op=removePosted&amp;id=' . $object["pollID"] . '"><i class="fas fa-trash fa-lg text-danger ms-2" title="' . adm_translate("Effacer ce sondage") . '" data-bs-toggle="tooltip"></i></a>
+                    <a href="admin.php?op=editpollPosted&amp;id=' . $poll['pollID'] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer ce sondage") . '" data-bs-toggle="tooltip"></i></a>
+                    <a href="admin.php?op=removePosted&amp;id=' . $poll['pollID'] . '"><i class="fas fa-trash fa-lg text-danger ms-2" title="' . adm_translate("Effacer ce sondage") . '" data-bs-toggle="tooltip"></i></a>
                 </td>
                 </tr>';
 
-        $result2 = sql_query("SELECT SUM(optionCount) AS SUM FROM " . $NPDS_Prefix . "poll_data WHERE pollID='" . $object["pollID"] . "'");
-        list($sum) = sql_fetch_row($result2);
+        // not used sum
+        //$sum = DB::table('poll_data')->select(DB::raw('SUM(optionCount) AS SUM'))->where('pollID', $poll['pollID'])->get();
     }
 
     echo '
@@ -112,37 +117,57 @@ function poll_createPoll()
     inpandfieldlen("pollTitle",100)';
 
     for ($i = 1; $i <= $maxOptions; $i++) {
-        $arg1 .= '
-    inpandfieldlen("optionText' . $i . '",255)';
+        $arg1 .= 'inpandfieldlen("optionText' . $i . '",255)';
     }
 
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function poll_createPosted()
+/**
+ * [poll_createPosted description]
+ *
+ * @return  void
+ */
+function poll_createPosted(): void 
 {
-    global $maxOptions, $pollTitle, $optionText, $poll_type, $NPDS_Prefix;
+    global $maxOptions, $pollTitle, $optionText, $poll_type;
 
     $timeStamp = time();
     $pollTitle = str::FixQuotes($pollTitle);
 
-    $result = sql_query("INSERT INTO " . $NPDS_Prefix . "poll_desc VALUES (NULL, '$pollTitle', '$timeStamp', 0)");
-    $object = sql_fetch_assoc(sql_query("SELECT pollID FROM " . $NPDS_Prefix . "poll_desc WHERE pollTitle='$pollTitle'"));
+    DB::table('poll_desc')->insert(array(
+        'pollTitle'    => $pollTitle,
+        'timeStamp'    => $timeStamp,
+        'voters'       => 0,
+    ));
 
-    $id = $object['pollID'];
+    $poll_desc = DB::table('poll_desc')->select('pollID')->where('pollTitle', $pollTitle)->first();
+
+    $id = $poll_desc['pollID'];
 
     for ($i = 1; $i <= sizeof($optionText); $i++) {
         if ($optionText[$i] != '') {
             $optionText[$i] = str::FixQuotes($optionText[$i]);
         }
 
-        $result = sql_query("INSERT INTO " . $NPDS_Prefix . "poll_data (pollID, optionText, optionCount, voteID, pollType) VALUES ('$id', '$optionText[$i]', 0, '$i', '$poll_type')");
+        DB::table('poll_data')->insert(array(
+            'pollID'       => $id,
+            'optionText'   => $optionText[$i],
+            'optionCount'  => 0,
+            'voteID'       => $i,
+            'pollType'     => $poll_type,
+        ));
     }
 
     Header("Location: admin.php?op=adminMain");
 }
 
-function poll_removePoll()
+/**
+ * [poll_removePoll description]
+ *
+ * @return  void
+ */
+function poll_removePoll(): void
 {
     global $f_meta_nom, $f_titre, $NPDS_Prefix;
 
@@ -171,14 +196,14 @@ function poll_removePoll()
             </thead>
             <tbody>';
 
-    $result = sql_query("SELECT pollID, pollTitle FROM " . $NPDS_Prefix . "poll_desc ORDER BY timeStamp");
+    $poll_desc = DB::table('poll_desc')->select('pollID', 'pollTitle')->orderBy('timeStamp')->get();
 
-    while ($object = sql_fetch_assoc($result)) {
+    foreach ($poll_desc as $poll) {
         echo '
                 <tr>
-                <td><input type="radio" name="id" value="' . $object['pollID'] . '" /></td>
-                <td> ' . $object['pollTitle'] . '</td>
-                <td>ID : ' . $object['pollID'] . '</td>
+                <td><input type="radio" name="id" value="' . $poll['pollID'] . '" /></td>
+                <td> ' . $poll['pollTitle'] . '</td>
+                <td>ID : ' . $poll['pollID'] . '</td>
                 </tr>
         ';
     }
@@ -195,9 +220,14 @@ function poll_removePoll()
     include("themes/default/footer.php");;
 }
 
-function poll_removePosted()
+/**
+ * [poll_removePosted description]
+ *
+ * @return  void
+ */
+function poll_removePosted(): void 
 {
-    global $id, $setCookies, $NPDS_Prefix;
+    global $id, $setCookies;
 
     // ----------------------------------------------------------------------------
     // Specified the index and the name off the application for the table appli_log
@@ -206,27 +236,29 @@ function poll_removePosted()
     // ----------------------------------------------------------------------------
 
     if ($setCookies == '1') {
-        $sql = "DELETE FROM " . $NPDS_Prefix . "appli_log WHERE al_id='$al_id' AND al_subid='$id'";
-        sql_query($sql);
+        DB::table('appli_log')->where('al_id', $al_id)->where('al_subid', $id)->delete();
     }
 
-    sql_query("DELETE FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$id'");
-    sql_query("DELETE FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$id'");
+    DB::table('poll_desc')->where('pollID', $id)->delete();
+    DB::table('poll_data')->where('pollID', $id)->delete();
 
     include('modules/comments/config/pollBoth.conf.php');
 
-    sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE topic_id='$id' AND forum_id='$forum'");
+    DB::table('posts')->where('topic_id', $id)->where('forum_id', $forum)->delete();
 
     Header("Location: admin.php?op=create");
 }
 
-function poll_editPoll()
+/**
+ * [poll_editPoll description]
+ *
+ * @return  void
+ */
+function poll_editPoll(): void
 {
-    global $f_meta_nom, $f_titre, $NPDS_Prefix;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
-
-    $result = sql_query("SELECT pollID, pollTitle, timeStamp FROM " . $NPDS_Prefix . "poll_desc ORDER BY timeStamp");
 
     GraphicAdmin(manuel('surveys'));
     adminhead($f_meta_nom, $f_titre);
@@ -247,12 +279,14 @@ function poll_editPoll()
             </thead>
             <tbody>';
 
-    while ($object = sql_fetch_assoc($result)) {
+    $poll_desc = DB::table('poll_desc')->select('pollID', 'pollTitle', 'timeStamp')->orderBy('timeStamp')->get();
+
+    foreach ($poll_desc as $poll) {
         echo '
                 <tr>
-                <td><input type="radio" name="id" value="' . $object['pollID'] . '" /></td>
-                <td>' . $object['pollTitle'] . '</td>
-                <td>ID : ' . $object['pollID'] . '</td>
+                <td><input type="radio" name="id" value="' . $poll['pollID'] . '" /></td>
+                <td>' . $poll['pollTitle'] . '</td>
+                <td>ID : ' . $poll['pollID'] . '</td>
                 </tr>';
     }
 
@@ -270,9 +304,14 @@ function poll_editPoll()
     include("themes/default/footer.php");;
 }
 
-function poll_editPollPosted()
+/**
+ * [poll_editPollPosted description]
+ *
+ * @return  void
+ */
+function poll_editPollPosted(): void
 {
-    global $id, $maxOptions, $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $id, $maxOptions, $f_meta_nom, $f_titre;
 
     if ($id) {
         include("themes/default/header.php");
@@ -280,23 +319,22 @@ function poll_editPollPosted()
         GraphicAdmin(manuel('surveys'));
         adminhead($f_meta_nom, $f_titre);
 
-        $result = sql_query("SELECT pollID, pollTitle, timeStamp FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$id'");
-        $holdtitle = sql_fetch_row($result);
-
-        $result = sql_query("SELECT optionText, voteID, pollType FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$id' ORDER BY voteID ASC");
+        $holdtitle = DB::table('poll_desc')->select('pollID', 'pollTitle', 'timeStamp')->where('pollID', $id)->first();
 
         echo '
-    <hr />
-    <h3 class="mb-3">' . adm_translate("Edition des sondages") . '</h3>
-    <form id="pollssondageed" method="post" action="admin.php">
-        <input type="hidden" name="op" value="SendEditPoll">
-        <input type="hidden" name="pollID" value="' . $id . '" />
-        <div class="form-floating mb-3">
-            <input class="form-control" type="text" id="pollTitle" name="pollTitle" value="' . $holdtitle[1] . '" maxlength="100" required="required" />
-            <label for="pollTitle">' . adm_translate("Intitulé du Sondage") . '</label>
-            <span class="help-block">' . adm_translate("S.V.P. entrez chaque option disponible dans un seul champ") . '</span>
-            <span class="help-block text-end"><span id="countcar_pollTitle"></span></span>
-        </div>';
+        <hr />
+        <h3 class="mb-3">' . adm_translate("Edition des sondages") . '</h3>
+        <form id="pollssondageed" method="post" action="admin.php">
+            <input type="hidden" name="op" value="SendEditPoll">
+            <input type="hidden" name="pollID" value="' . $id . '" />
+            <div class="form-floating mb-3">
+                <input class="form-control" type="text" id="pollTitle" name="pollTitle" value="' . $holdtitle['pollTitle'] . '" maxlength="100" required="required" />
+                <label for="pollTitle">' . adm_translate("Intitulé du Sondage") . '</label>
+                <span class="help-block">' . adm_translate("S.V.P. entrez chaque option disponible dans un seul champ") . '</span>
+                <span class="help-block text-end"><span id="countcar_pollTitle"></span></span>
+            </div>';
+
+        $poll_data = DB::table('poll_data')->select('optionText', 'voteID', 'pollType')->where('pollID', $id)->orderBy('voteID', 'asc')->first();
 
         $requi = '';
         for ($i = 1; $i <= $maxOptions; $i++) {
@@ -306,19 +344,17 @@ function poll_editPollPosted()
                 $requi = '';
             }
             
-            list($optionText, $voteID, $pollType) = sql_fetch_row($result);
-
             echo '
             <div class="form-floating mb-3">
-                <input class="form-control" type="text" id="optionText' . $i . '" name="optionText[' . $voteID . ']" maxlength="255" value="' . $optionText . '" ' . $requi . ' />
+                <input class="form-control" type="text" id="optionText' . $i . '" name="optionText[' . $poll_data['voteID'] . ']" maxlength="255" value="' . $poll_data['optionText'] . '" ' . $requi . ' />
                 <label for="optionText' . $i . '">' . adm_translate("Option") . ' ' . $i . '</label>
                 <span class="help-block text-end"><span id="countcar_optionText' . $i . '"></span></span>
             </div>';
 
         }
 
-        $pollClose = (($pollType / 128) >= 1 ? 1 : 0);
-        $pollType = $pollType % 128;
+        $pollClose = (($poll_data['pollType'] / 128) >= 1 ? 1 : 0);
+        $pollType = $poll_data['pollType'] % 128;
 
         echo '
         <div class="mb-3">
@@ -342,17 +378,17 @@ function poll_editPollPosted()
         }
 
         echo ' />
-                <label class="form-check-label" for="poll_close">' . adm_translate("Vote fermé") . '</label>
+                    <label class="form-check-label" for="poll_close">' . adm_translate("Vote fermé") . '</label>
+                </div>
             </div>
-        </div>
-        <div class="mb-3">
-                <button class="btn btn-primary" type="submit">Ok</button>
-        </div>
-    </form>';
+            <div class="mb-3">
+                    <button class="btn btn-primary" type="submit">Ok</button>
+            </div>
+        </form>';
 
         $arg1 = '
-    var formulid = ["pollssondageed"];
-    inpandfieldlen("pollTitle",100)';
+        var formulid = ["pollssondageed"];
+        inpandfieldlen("pollTitle",100)';
 
         for ($i = 1; $i <= $maxOptions; $i++) {
             $arg1 .= '
@@ -365,19 +401,31 @@ function poll_editPollPosted()
     }
 }
 
-function poll_SendEditPoll()
+/**
+ * [poll_SendEditPoll description]
+ *
+ * @return  void
+ */
+function poll_SendEditPoll(): void
 {
-    global $pollTitle, $optionText, $poll_type, $pollID, $poll_close, $NPDS_Prefix;
+    global $pollTitle, $optionText, $poll_type, $pollID, $poll_close;
 
-    sql_query("UPDATE " . $NPDS_Prefix . "poll_desc SET pollTitle='$pollTitle' WHERE pollID='$pollID'");
     $poll_type = $poll_type + 128 * $poll_close;
+
+    DB::table('poll_desc')->where('pollID', $pollID)->update(array(
+        'pollTitle'       => $pollTitle,
+    ));
 
     for ($i = 1; $i <= sizeof($optionText); $i++) {
         if ($optionText[$i] != '') {
             $optionText[$i] = str::FixQuotes($optionText[$i]);
         }
 
-        sql_query("UPDATE " . $NPDS_Prefix . "poll_data SET optionText='$optionText[$i]', pollType='$poll_type' WHERE pollID='$pollID' and voteID='$i'");
+        DB::table('poll_data')->where('pollID', $pollID)->where('voteID', $i)->update(array(
+            'optionText'     => $optionText[$i],
+            'pollType'       => $poll_type,
+        ));
+
     }
 
     Header("Location: admin.php?op=create");

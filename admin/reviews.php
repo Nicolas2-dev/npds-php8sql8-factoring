@@ -11,10 +11,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\support\str;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -27,29 +29,39 @@ $f_titre = adm_translate("Critiques");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function mod_main($title, $description)
+/**
+ * [mod_main description]
+ *
+ * @param   string  $title        [$title description]
+ * @param   string  $description  [$description description]
+ *
+ * @return  void
+ */
+function mod_main(string $title, string $description): void
 {
-    global $NPDS_Prefix;
-
-    $title = stripslashes(str::FixQuotes($title));
-    $description = stripslashes(str::FixQuotes($description));
-
-    sql_query("UPDATE " . $NPDS_Prefix . "reviews_main SET title='$title', description='$description'");
+    DB::table('reviews_main')->update(array(
+        'title'         => stripslashes(str::FixQuotes($title)),
+        'description'   => stripslashes(str::FixQuotes($description)),
+    ));
 
     Header("Location: admin.php?op=reviews");
 }
 
-function reviews()
+/**
+ * [reviews description]
+ *
+ * @return  void
+ */
+function reviews(): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('reviews'));
     adminhead($f_meta_nom, $f_titre);
 
-    $resultrm = sql_query("SELECT title, description FROM " . $NPDS_Prefix . "reviews_main");
-    list($title, $description) = sql_fetch_row($resultrm);
+    $main = DB::table('reviews_main')->select('title', 'description')->first();
 
     echo '
     <hr />
@@ -59,14 +71,14 @@ function reviews()
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="tit_cri">' . adm_translate("Titre de la Page des Critiques") . '</label>
                 <div class="col-sm-12">
-                <input class="form-control" type="text" id="tit_cri" name="title" value="' . $title . '" maxlength="100" />
+                <input class="form-control" type="text" id="tit_cri" name="title" value="' . $main['title'] . '" maxlength="100" />
                 <span class="help-block text-end" id="countcar_tit_cri"></span>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="description">' . adm_translate("Description de la Page des Critiques") . '</label>
                 <div class="col-sm-12">
-                <textarea class="form-control" id="description" name="description" rows="10">' . $description . '</textarea>
+                <textarea class="form-control" id="description" name="description" rows="10">' . $main['description'] . '</textarea>
                 </div>
             </div>
             <div class="mb-3 row">
@@ -79,109 +91,108 @@ function reviews()
     </form>
     <hr />';
 
-    $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "reviews_add ORDER BY id");
-    $numrows = sql_num_rows($result);
+    $reviews_add = DB::table('')->select('id', 'date', 'title', 'text', 'reviewer', 'email', 'score', 'url', 'url_title')->orderBy('id')->get();
 
     echo '<h3>' . adm_translate("Critiques en attente de validation") . '<span class="badge bg-danger float-end">' . $numrows . '</span></h3>';
 
     $jsfvc = '';
     $jsfvf = '';
 
-    if ($numrows > 0) {
-        while (list($id, $date, $title, $text, $reviewer, $email, $score, $url, $url_title) = sql_fetch_row($result)) {
-            $title = stripslashes($title);
-            $text = stripslashes($text);
+    if ($reviews_add > 0) {
+        foreach ($reviews_add as $add) {
+            $title = stripslashes($add['title']);
+            $text = stripslashes($add['text']);
             
             echo '
-    <h4 class="my-3">' . adm_translate("Ajouter la critique N° : ") . ' ' . $id . '</h4>
-    <form id="reviewsaddcr' . $id . '" action="admin.php" method="post">
-    <input type="hidden" name="id" value="' . $id . '" />
+    <h4 class="my-3">' . adm_translate("Ajouter la critique N° : ") . ' ' . $add['id'] . '</h4>
+    <form id="reviewsaddcr' . $add['id'] . '" action="admin.php" method="post">
+    <input type="hidden" name="id" value="' . $add['id'] . '" />
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="reviewdate">' . adm_translate("Date") . '</label>
             <div class="col-sm-8">
                 <div class="input-group">
                 <span class="input-group-text"><i class="far fa-calendar-check fa-lg"></i></span>
-                <input class="form-control reviewdate-js" type="text" id="reviewdate" name="date" value="' . $date . '" maxlength="10" required="required" />
+                <input class="form-control reviewdate-js" type="text" id="reviewdate" name="date" value="' . $add['date'] . '" maxlength="10" required="required" />
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="title' . $id . '">' . adm_translate("Nom du produit") . '</label>
+            <label class="col-form-label col-sm-4" for="title' . $add['id'] . '">' . adm_translate("Nom du produit") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="title' . $id . '" name="title" value="' . $title . '" maxlength="40" required="required" />
-                <span class="help-block text-end" id="countcar_title' . $id . '"></span>
+                <input class="form-control" type="text" id="title' . $add['id'] . '" name="title" value="' . $title . '" maxlength="40" required="required" />
+                <span class="help-block text-end" id="countcar_title' . $add['id'] . '"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="text' . $id . '">' . adm_translate("Texte") . '</label>
+            <label class="col-form-label col-sm-4 " for="text' . $add['id'] . '">' . adm_translate("Texte") . '</label>
             <div class="col-sm-8">
-                <textarea class="form-control" id="text' . $id . ' name="text" rows="6">' . $text . '</textarea>
+                <textarea class="form-control" id="text' . $add['id'] . ' name="text" rows="6">' . $text . '</textarea>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="reviewer' . $id . '">' . adm_translate("Le critique") . '</label>
+            <label class="col-form-label col-sm-4 " for="reviewer' . $add['id'] . '">' . adm_translate("Le critique") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="reviewer' . $id . '" name="reviewer" value="' . $reviewer . '" maxlength="20" required="required" />
-                <span class="help-block text-end" id="countcar_reviewer' . $id . '"></span>
+                <input class="form-control" type="text" id="reviewer' . $add['id'] . '" name="reviewer" value="' . $add['reviewer'] . '" maxlength="20" required="required" />
+                <span class="help-block text-end" id="countcar_reviewer' . $add['id'] . '"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="email' . $id . '">' . adm_translate("E-mail") . '</label>
+            <label class="col-form-label col-sm-4 " for="email' . $add['id'] . '">' . adm_translate("E-mail") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="email" id="email' . $id . '" name="email" value="' . $email . '" maxlength="60" required="required" />
-                <span class="help-block text-end" id="countcar_email' . $id . '"></span>
+                <input class="form-control" type="email" id="email' . $add['id'] . '" name="email" value="' . $add['email'] . '" maxlength="60" required="required" />
+                <span class="help-block text-end" id="countcar_email' . $add['id'] . '"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="score' . $id . '">' . adm_translate("Note") . '</label>
+            <label class="col-form-label col-sm-4 " for="score' . $add['id'] . '">' . adm_translate("Note") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="number" id="score' . $id . '" name="score" value="' . $score . '"  min="1" max="10" />
+                <input class="form-control" type="number" id="score' . $add['id'] . '" name="score" value="' . $add['score'] . '"  min="1" max="10" />
             </div>
         </div>';
 
-            if ($url != '') {
+            if ($add['url'] != '') {
                 echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="url' . $id . '">' . adm_translate("Liens relatifs") . '</label>
+            <label class="col-form-label col-sm-4 " for="url' . $add['id'] . '">' . adm_translate("Liens relatifs") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="url" id="url' . $id . '" name="url" value="' . $url . '" maxlength="100" />
-                <span class="help-block text-end" id="countcar_url' . $id . '"></span>
+                <input class="form-control" type="url" id="url' . $add['id'] . '" name="url" value="' . $add['url'] . '" maxlength="100" />
+                <span class="help-block text-end" id="countcar_url' . $add['id'] . '"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="url_title' . $id . '">' . adm_translate("Titre du lien") . '</label>
+            <label class="col-form-label col-sm-4 " for="url_title' . $add['id'] . '">' . adm_translate("Titre du lien") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="url_title' . $id . '" name="url_title" value="' . $url_title . '" maxlength="50" />
-                <span class="help-block text-end" id="countcar_url_title' . $id . '"></span>
+                <input class="form-control" type="text" id="url_title' . $add['id'] . '" name="url_title" value="' . $add['url_title'] . '" maxlength="50" />
+                <span class="help-block text-end" id="countcar_url_title' . $add['id'] . '"></span>
             </div>
         </div>';
             }
 
             echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="cover' . $id . '">' . adm_translate("Image de garde") . '</label>
+            <label class="col-form-label col-sm-4" for="cover' . $add['id'] . '">' . adm_translate("Image de garde") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="cover' . $id . '" name="cover" maxlength="100" />
-                <span class="help-block">150*150 pixel => images/covers<span class="float-end ms-1" id="countcar_cover' . $id . '"></span></span>
+                <input class="form-control" type="text" id="cover' . $add['id'] . '" name="cover" maxlength="100" />
+                <span class="help-block">150*150 pixel => images/covers<span class="float-end ms-1" id="countcar_cover' . $add['id'] . '"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
                 <input type="hidden" name="op" value="add_review">
                 <button class="btn btn-primary" type="submit">' . adm_translate("Ajouter") . '</button>
-                <a href="admin.php?op=deleteNotice&amp;id=' . $id . '&amp;op_back=reviews" class="btn btn-danger" role="button">' . adm_translate("Supprimer") . '</a>
+                <a href="admin.php?op=deleteNotice&amp;id=' . $add['id'] . '&amp;op_back=reviews" class="btn btn-danger" role="button">' . adm_translate("Supprimer") . '</a>
             </div>
         </div>
     </form>';
 
-            $jsfvf .= ',"reviewsaddcr' . $id . '"';
+            $jsfvf .= ',"reviewsaddcr' . $add['id'] . '"';
             $jsfvc .= '
-            inpandfieldlen("title' . $id . '",40);
-            inpandfieldlen("reviewer' . $id . '",20);
-            inpandfieldlen("email' . $id . '",60);
-            inpandfieldlen("url' . $id . '",100);
-            inpandfieldlen("url_title' . $id . '",50);
-            inpandfieldlen("cover' . $id . '",100);';
+            inpandfieldlen("title' . $add['id'] . '",40);
+            inpandfieldlen("reviewer' . $add['id'] . '",20);
+            inpandfieldlen("email' . $add['id'] . '",60);
+            inpandfieldlen("url' . $add['id'] . '",100);
+            inpandfieldlen("url_title' . $add['id'] . '",50);
+            inpandfieldlen("cover' . $add['id'] . '",100);';
         }
 
         $arg1 = '
@@ -228,18 +239,38 @@ function reviews()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function add_review($id, $date, $title, $text, $reviewer, $email, $score, $cover, $url, $url_title)
+/**
+ * [add_review description]
+ *
+ * @param   int     $id         [$id description]
+ * @param   int     $date       [$date description]
+ * @param   int     $title      [$title description]
+ * @param   int     $text       [$text description]
+ * @param   string  $reviewer   [$reviewer description]
+ * @param   string  $email      [$email description]
+ * @param   int     $score      [$score description]
+ * @param   string  $cover      [$cover description]
+ * @param   string  $url        [$url description]
+ * @param   string  $url_title  [$url_title description]
+ *
+ * @return  void
+ */
+function add_review(int $id, int $date, int $title, int $text, string $reviewer, string $email, int $score, string $cover, string $url, string $url_title): void
 {
-    global $NPDS_Prefix;
+    DB::table('reviews')->insert(array(
+        'date'          => $date,
+        'title'         => stripslashes(str::FixQuotes($title)),
+        'text'          => stripslashes(str::FixQuotes($text)),
+        'reviewer'      => stripslashes(str::FixQuotes($reviewer)),
+        'email'         => stripslashes(str::FixQuotes($email)),
+        'score'         => $score,
+        'cover'         => $cover,
+        'url'           => $url,
+        'url_title'     => $url_title,
+        'hits'          => 1,
+    ));
 
-    $title = stripslashes(str::FixQuotes($title));
-    $text = stripslashes(str::FixQuotes($text));
-    $reviewer = stripslashes(str::FixQuotes($reviewer));
-    $email = stripslashes(str::FixQuotes($email));
-
-    sql_query("INSERT INTO " . $NPDS_Prefix . "reviews VALUES (NULL, '$date', '$title', '$text', '$reviewer', '$email', '$score', '$cover', '$url', '$url_title', '1')");
-    
-    sql_query("DELETE FROM " . $NPDS_Prefix . "reviews_add WHERE id = '$id'");
+    DB::table('reviews_add')->where('id', $id)->delete();
 
     Header("Location: admin.php?op=reviews");
 }

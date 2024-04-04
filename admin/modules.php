@@ -21,8 +21,10 @@
 /* Modifié par jpb et phr pour le rendre compatible avec Evolution      */
 /* Version 1.3 - 2015                                                   */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -52,19 +54,20 @@ while (false !== ($file = readdir($handle))) {
 closedir($handle);
 $modlist = explode(' ', rtrim($modlist));
 
-$whatondb = sql_query("SELECT mnom FROM " . $NPDS_Prefix . "modules");
-while ($row = sql_fetch_row($whatondb)) {
-    if (!in_array($row[0], $modlist)) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "modules WHERE mnom='" . $row[0] . "'");
+foreach (DB::table('modules')->select('mnom')->get() as $module) {
+    if (!in_array($module['mnom'], $modlist)) {
+        DB::table('modules')->where('mnom', $module['mnom'])->delete();
     }
 }
 
 foreach ($modlist as $value) {
-    $queryexiste = sql_query("SELECT mnom FROM " . $NPDS_Prefix . "modules WHERE mnom='" . $value . "'");
-    $moexiste = sql_num_rows($queryexiste);
-    
+    $moexiste = DB::table('modules')->select('mnom')->where('mnom', $value)->first();
+
     if ($moexiste !== 1) {
-        sql_query("INSERT INTO " . $NPDS_Prefix . "modules VALUES (NULL, '" . $value . "', '0')");
+        DB::table('modules')->insert(array(
+            'mnom'       => $value,
+            'minstall'   => 0,
+        ));
     }
 }
 
@@ -81,32 +84,32 @@ echo '
         </thead>
         <tbody>';
 
-$result = sql_query("SELECT * FROM " . $NPDS_Prefix . "modules ORDER BY mid");
+DB::table('modules')->select('mid', 'mnom', 'minstall')->orderBy('mid')->get();
 
-while ($row = sql_fetch_assoc($result)) {
+foreach ($modules as $module) {
     $icomod = '';
     $clatd = '';
 
-    $icomod = file_exists("modules/" . $row["mnom"] . "/" . $row["mnom"] . ".png") ?
-        '<img class="adm_img" src="modules/' . $row["mnom"] . '/' . $row["mnom"] . '.png" alt="icon_' . $row["mnom"] . '" title="" />' :
+    $icomod = file_exists("modules/" . $module["mnom"] . "/" . $module["mnom"] . ".png") ?
+        '<img class="adm_img" src="modules/' . $module["mnom"] . '/' . $module["mnom"] . '.png" alt="icon_' . $module["mnom"] . '" title="" />' :
         '<img class="adm_img" src="assets/images/admin/module.png" alt="icon_module" title="" />';
 
-    if ($row["minstall"] == 0) {
-        $status_chngac = file_exists("modules/" . $row["mnom"] . "/install.conf.php") 
-            ? '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $row["mnom"] . '&amp;subop=install" ><i class="fa fa-compress fa-lg"></i><i class="fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Installer le module") . '" data-bs-toggle="tooltip"></i></a>' 
-            : '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $row["mnom"] . '&amp;subop=install"><i class="fa fa-check fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Pas d'installeur disponible") . ' ' . adm_translate("Marquer le module comme installé") . '" data-bs-toggle="tooltip"></i></a>';
+    if ($module["minstall"] == 0) {
+        $status_chngac = file_exists("modules/" . $module["mnom"] . "/install.conf.php") 
+            ? '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $module["mnom"] . '&amp;subop=install" ><i class="fa fa-compress fa-lg"></i><i class="fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Installer le module") . '" data-bs-toggle="tooltip"></i></a>' 
+            : '<a class="text-success" href="admin.php?op=Module-Install&amp;ModInstall=' . $module["mnom"] . '&amp;subop=install"><i class="fa fa-check fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Pas d'installeur disponible") . ' ' . adm_translate("Marquer le module comme installé") . '" data-bs-toggle="tooltip"></i></a>';
         $clatd = 'table-danger';
     } else {
-        $status_chngac =  file_exists("modules/" . $row["mnom"] . "/install.conf.php") 
-            ? '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $row["mnom"] . '" ><i class="fa fa-expand fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Désinstaller le module") . '" data-bs-toggle="tooltip"></i></a>' 
-            : '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $row["mnom"] . '" ><i class="fa fa fa-ban fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Marquer le module comme désinstallé") . '" data-bs-toggle="tooltip"</i></a>';
+        $status_chngac =  file_exists("modules/" . $module["mnom"] . "/install.conf.php") 
+            ? '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $module["mnom"] . '" ><i class="fa fa-expand fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Désinstaller le module") . '" data-bs-toggle="tooltip"></i></a>' 
+            : '<a class="text-danger" href="admin.php?op=Module-Install&amp;ModDesinstall=' . $module["mnom"] . '" ><i class="fa fa fa-ban fa-lg"></i><i class="fa fa fa-puzzle-piece fa-2x fa-rotate-90" title="' . adm_translate("Marquer le module comme désinstallé") . '" data-bs-toggle="tooltip"</i></a>';
         $clatd = 'table-success';
     }
 
     echo '
             <tr>
                 <td class="' . $clatd . '">' . $icomod . '</td>
-                <td class="' . $clatd . '">' . $row["mnom"] . '</td>
+                <td class="' . $clatd . '">' . $module["mnom"] . '</td>
                 <td class="' . $clatd . '">' . $status_chngac . '</td>
             </tr>';
 }

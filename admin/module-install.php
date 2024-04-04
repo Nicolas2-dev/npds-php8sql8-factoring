@@ -24,10 +24,12 @@
 /* --------------------------                                           */
 /* Version 2.0 - 30/08/2015 by jpb                                      */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\routing\url;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -43,7 +45,12 @@ admindroits($aid, $f_meta_nom);
 $hlpfile = '';
 $display = '';
 
-function nmig_copyright()
+/**
+ * [nmig_copyright description]
+ *
+ * @return  string
+ */
+function nmig_copyright(): string 
 {
     global $ModInstall, $ModDesinstall;
 
@@ -52,6 +59,7 @@ function nmig_copyright()
     if ($ModInstall == '' && $ModDesinstall != '') {
         $clspin = ' text-danger';
     }
+    
     $display = '
         <hr class="mt-4" />
         <div class="d-flex align-items-center">
@@ -63,7 +71,16 @@ function nmig_copyright()
 }
 
 // e1
-function nmig_Start($name_module, $txtdeb)
+
+/**
+ * [nmig_Start description]
+ *
+ * @param   string  $name_module  [$name_module description]
+ * @param   string  $txtdeb       [$txtdeb description]
+ *
+ * @return  void
+ */
+function nmig_Start(string $name_module, string $txtdeb): void 
 {
     include("themes/default/header.php");
 
@@ -93,7 +110,16 @@ function nmig_Start($name_module, $txtdeb)
 }
 
 // e2
-function nmig_License($licence_file, $name_module)
+
+/**
+ * [nmig_License description]
+ *
+ * @param   string  $licence_file  [$licence_file description]
+ * @param   string  $name_module   [$name_module description]
+ *
+ * @return  void
+ */
+function nmig_License(string $licence_file, string $name_module): void
 {
     include("themes/default/header.php");
 
@@ -118,11 +144,20 @@ function nmig_License($licence_file, $name_module)
 }
 
 //e3
-function nmig_AlertSql($sql, $name_module)
+
+/**
+ * [nmig_AlertSql description]
+ *
+ * @param   aray  $sql          [$sql description]
+ * @param   string  $name_module  [$name_module description]
+ *
+ * @return  void
+ */
+function nmig_AlertSql(array $sql, string $name_module): void 
 {
     include("themes/default/header.php");
 
-    global $ModInstall, $display, $NPDS_Prefix;
+    global $ModInstall, $display;
 
     $reqsql = '';
 
@@ -130,9 +165,9 @@ function nmig_AlertSql($sql, $name_module)
         preg_match('#^(CREATE TABLE |CREATE TABLE IF NOT EXISTS) (\w+)#', $v, $tables);
     }
 
-    for ($i = 0; $i < count($sql); $i++) {
+    for ($i = 0; $i < count( (array) $sql); $i++) {
         for ($j = 0; $j < count($tables); $j++) {
-            $sql[$i] = preg_replace("#$tables[$j]#i", $NPDS_Prefix . $tables[$j], $sql[$i]);
+            $sql[$i] = preg_replace("#$tables[$j]#i", DB::getTablePrefix() . $tables[$j], $sql[$i]);
         }
 
         $reqsql .= '<pre class="language-sql"><code class="language-sql">' . $sql[$i] . '</code></pre><br />';
@@ -157,11 +192,23 @@ function nmig_AlertSql($sql, $name_module)
 }
 
 // e4
-function nmig_WriteSql($sql, $path_adm_module, $name_module, $affich, $icon)
+
+/**
+ * [nmig_WriteSql description]
+ *
+ * @param   array  $sql              [$sql description]
+ * @param   string  $path_adm_module  [$path_adm_module description]
+ * @param   string  $name_module      [$name_module description]
+ * @param   string  $affich           [$affich description]
+ * @param   string  $icon             [$icon description]
+ *
+ * @return  void
+ */
+function nmig_WriteSql(array $sql, string $path_adm_module, string $name_module, string $affich, string $icon): void
 {
     include("themes/default/header.php");
 
-    global $ModInstall, $display, $NPDS_Prefix, $path_adm_module, $name_module, $affich, $icon;
+    global $ModInstall, $display, $path_adm_module, $name_module, $affich, $icon;
 
     $reqsql = '';
     $display = '
@@ -172,7 +219,7 @@ function nmig_WriteSql($sql, $path_adm_module, $name_module, $affich, $icon)
     <div class="">';
 
     for ($i = 0; $i < count($sql) && !isset($erreur); $i++) {
-        sql_query($sql[$i]) or $erreur = sql_error();
+        DB::statement($sql[$i]) or $erreur = DB::error();
     }
 
     if (isset($erreur)) {
@@ -193,24 +240,56 @@ function nmig_WriteSql($sql, $path_adm_module, $name_module, $affich, $icon)
     } else {
         if ($path_adm_module != '') {
             //controle si on a pas déja la fonction (si oui on efface sinon on renseigne)
-            $ck = sql_query("SELECT fnom FROM " . $NPDS_Prefix . "fonctions WHERE fnom = '" . $name_module . "'");
-            
+            $ck = DB::table('fonctions')->select('fnom')->where('fnom', $name_module)->first();
+
             if ($ck) {
-                sql_query("DELETE FROM " . $NPDS_Prefix . "fonctions WHERE fnom='" . $name_module . "'");
+                DB::table('fonctions')->where('fnom', $name_module)->delete();
             }
 
-            sql_query("INSERT INTO " . $NPDS_Prefix . "fonctions (fid,fnom,fdroits1,fdroits1_descr,finterface,fetat,fretour,fretour_h,fnom_affich,ficone,furlscript,fcategorie,fcategorie_nom,fordre) VALUES (0, '" . $ModInstall . "', 0, '', 1, 1, '', '', '" . $affich . "', '" . $icon . "', 'href=\"admin.php?op=Extend-Admin-SubModule&ModPath=" . $ModInstall . "&ModStart=" . $path_adm_module . "\"', 6, 'Modules', 0)") or sql_error();
-            $ibid = sql_last_id();
+            $ibid = DB::table('fonctions')->insertGetId(array(
+                'fid'               => 0,
+                'fnom'              => $ModInstall,
+                'fdroits1'          => 0,
+                'fdroits1_descr'    => '',
+                'finterface'        => 1,
+                'fetat'             => 1,
+                'fretour'           => '',
+                'fretour_h'         => '',
+                'fnom_affich'       => $affich,
+                'ficone'            => $icon,
+                'furlscript'        => 'href=\"admin.php?op=Extend-Admin-SubModule&ModPath=" . $ModInstall . "&ModStart=" . $path_adm_module . "\"',
+                'fcategorie'        => 6,
+                'fcategorie_nom'    => 'Modules',
+                'fordre'            => 0,
+            ));
             
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fdroits1 = " . $ibid . " WHERE fid=" . $ibid . "");
-            
+            DB::table('fonctions')->where('fid', $ibid)->update(array(
+                'fdroits1'       => $ibid,
+            ));
+
             //==> ajout des alertesadmin
             if (file_exists("modules/" . $name_module . "/admin/adm_alertes.php")) {
                 include("modules/" . $name_module . "/admin/adm_alertes.php");
                 
                 if (count($reqalertes) != 0) {
                     foreach ($reqalertes as $v) {
-                        sql_query("INSERT INTO " . $NPDS_Prefix . "fonctions (fid,fnom,fdroits1,fdroits1_descr,finterface,fetat,fretour,fretour_h,fnom_affich,ficone,furlscript,fcategorie,fcategorie_nom,fordre) VALUES (0, '" . $ModInstall . "', " . $ibid . ", '', 1, 1, '', '', '" . $affich . "', '" . $icon . "', 'href=\"admin.php?op=Extend-Admin-SubModule&ModPath=" . $ModInstall . "&ModStart=" . $path_adm_module . "\"', 9, 'Modules', 0)") or sql_error();
+                        DB::table('bannerclient')->insert(array(
+                            'fid'               => 0,
+                            'fnom'              => $ModInstall,
+                            'fdroits1'          => $ibid,
+                            'fdroits1_descr'    => '',
+                            'finterface'        => 1,
+                            'fetat'             => 1,
+                            'fretour'           => '',
+                            'fretour_h'         => '',
+                            'fnom_affich'       => $affich,
+                            'ficone'            => $icon,
+                            'furlscript'        => 'href=\"admin.php?op=Extend-Admin-SubModule&ModPath=" . $ModInstall . "&ModStart=" . $path_adm_module . "\"',
+                            'fcategorie'        => 9,
+                            'fcategorie_nom'    => 'Modules',
+                            'fordre'            => 0,
+
+                        ));
                     }
                 }
             }
@@ -228,7 +307,15 @@ function nmig_WriteSql($sql, $path_adm_module, $name_module, $affich, $icon)
 }
 
 // e5
-function nmig_AlertConfig($list_fich)
+
+/**
+ * [nmig_AlertConfig description]
+ *
+ * @param   array  $list_fich  [$list_fich description]
+ *
+ * @return  void
+ */
+function nmig_AlertConfig(array $list_fich): void
 {
     include("themes/default/header.php");
 
@@ -252,7 +339,16 @@ function nmig_AlertConfig($list_fich)
 }
 
 // e6
-function nmig_WriteConfig($list_fich, $try_Chmod)
+
+/**
+ * [nmig_WriteConfig description]
+ *
+ * @param   array   $list_fich  [$list_fich description]
+ * @param   string  $try_Chmod  [$try_Chmod description]
+ *
+ * @return  void
+ */
+function nmig_WriteConfig(array $list_fich, string $try_Chmod): void
 {
     include("themes/default/header.php");
 
@@ -356,7 +452,16 @@ function nmig_WriteConfig($list_fich, $try_Chmod)
 }
 
 // e7
-function nmig_AlertBloc($blocs, $name_module)
+
+/**
+ * [nmig_AlertBloc description]
+ *
+ * @param   array   $blocs        [$blocs description]
+ * @param   string  $name_module  [$name_module description]
+ *
+ * @return  void
+ */
+function nmig_AlertBloc(array $blocs, string $name_module): void
 {
     include("themes/default/header.php");
 
@@ -397,11 +502,21 @@ function nmig_AlertBloc($blocs, $name_module)
 }
 
 // e8
-function nmig_WriteBloc($blocs, $posbloc, $name_module)
+
+/**
+ * [nmig_WriteBloc description]
+ *
+ * @param   array   $blocs        [$blocs description]
+ * @param   string  $posbloc      [$posbloc description]
+ * @param   string  $name_module  [$name_module description]
+ *
+ * @return  void
+ */
+function nmig_WriteBloc(array $blocs, string $posbloc, string $name_module): void
 {
     include("themes/default/header.php");
 
-    global $ModInstall, $display, $NPDS_Prefix;
+    global $ModInstall, $display;
 
     $display = '
     <hr />
@@ -423,7 +538,17 @@ function nmig_WriteBloc($blocs, $posbloc, $name_module)
         }
 
         for ($i = 0; $i < count($blocs[0]) && !isset($erreur); $i++) {
-            sql_query("INSERT INTO " . $NPDS_Prefix . $posbloc . "blocks (`id`, `title`, `content`, `member`, `" . $posblocM . "index`, `cache`, `actif`, `aide`) VALUES (0, '" . $blocs[0][$i] . "', '" . $blocs[1][$i] . "', '" . $blocs[2][$i] . "', '" . $blocs[4][$i] . "', '" . $blocs[5][$i] . "', '" . $blocs[6][$i] . "', '" . $blocs[7][$i] . "');") or $erreur = sql_error();
+            DB::table($posbloc)->insert(array(
+                'id'                => 0,
+                'title'             => $blocs[0][$i],
+                'content'           => $blocs[1][$i],
+                'member'            => $blocs[2][$i],
+                 $posblocM.'index'  => $blocs[4][$i],
+                'cache'             => $blocs[5][$i],
+                'actif'             => $blocs[6][$i],
+                'aide'              => $blocs[7][$i],
+            ));
+        
         }
 
         if (isset($erreur)) {
@@ -472,7 +597,15 @@ function nmig_WriteBloc($blocs, $posbloc, $name_module)
 }
 
 // e9 étape à fusionner avec la 10 ....
-function nmig_txt($txtfin)
+
+/**
+ * [nmig_txt description]
+ *
+ * @param   string  $txtfin  [$txtfin description]
+ *
+ * @return  void
+ */
+function nmig_txt(string $txtfin): void 
 {
     include("themes/default/header.php");
 
@@ -487,13 +620,24 @@ function nmig_txt($txtfin)
 }
 
 // e10 étape à fusionner avec la 9 ....
-function nmig_End($name_module, $end_link)
+
+/**
+ * [nmig_End description]
+ *
+ * @param   string  $name_module  [$name_module description]
+ * @param   string  $end_link     [$end_link description]
+ *
+ * @return  void
+ */
+function nmig_End(string $name_module, string $end_link): void
 {
     include("themes/default/header.php");
 
-    global $ModInstall, $display, $NPDS_Prefix;
+    global $ModInstall, $display;
 
-    sql_query("UPDATE " . $NPDS_Prefix . "modules SET minstall='1' WHERE mnom='" . $ModInstall . "'");
+    DB::table('modules')->where('mnom', $ModInstall)->update(array(
+        'minstall'       => 1,
+    ));
 
     $display = '
     <hr /> 
@@ -504,7 +648,14 @@ function nmig_End($name_module, $end_link)
     ' . nmig_copyright();
 }
 
-function nmig_clean($ModDesinstall)
+/**
+ * [nmig_clean description]
+ *
+ * @param   string  $ModDesinstall  [$ModDesinstall description]
+ *
+ * @return  void
+ */
+function nmig_clean(string $ModDesinstall): void
 {
     //==> a compléter
 }
@@ -522,7 +673,9 @@ if (!isset($try_Chmod)) {
 
 if ($ModInstall != '' && $ModDesinstall == '') {
     if ($subop == 'install') {
-        $result = sql_query("UPDATE " . $NPDS_Prefix . "modules SET minstall='1' WHERE mnom= '" . $ModInstall . "'");
+        DB::table('modules')->where('mnom', $ModInstall)->update(array(
+            'minstall'       => 1,
+        ));
     }
 
     if (file_exists("modules/" . $ModInstall . "/install.conf.php")) {
@@ -653,11 +806,12 @@ if ($ModInstall != '' && $ModDesinstall == '') {
             $tabsblocs = 'include#modules/' . $ModDesinstall . '/';
         }
 
-        $lbmod = sql_num_rows(sql_query("SELECT id FROM " . $NPDS_Prefix . "lblocks WHERE content LIKE '$tabsblocs%'"));
-        $rbmod = sql_num_rows(sql_query("SELECT id FROM " . $NPDS_Prefix . "rblocks WHERE content LIKE '$tabsblocs%'"));
+        $lbmod = DB::table('lblocks')->select('id')->where('content', 'LIKE', $tabsblocs . '%')->count();
 
-        $fonct = sql_num_rows(sql_query("SELECT fid FROM " . $NPDS_Prefix . "fonctions WHERE fnom='" . $ModDesinstall . "'"));
-        
+        $rbmod = DB::table('rblocks')->select('id')->where('content', 'LIKE', $tabsblocs .'%')->count();
+
+        $fonct = DB::table('fonctions')->select('id')->where('fnom', $ModDesinstall)->count();
+
         if ($fonct > 0) {
             array_push($othertabinsert, 'fonctions', 'droits');
         }
@@ -666,36 +820,40 @@ if ($ModInstall != '' && $ModDesinstall == '') {
     //nettoyage
     if ($subop == "desinst") {
         if (file_exists("modules/" . $ModDesinstall . "/install.conf.php")) {
-            list($fid) = sql_fetch_row(sql_query("SELECT fid FROM " . $NPDS_Prefix . "fonctions WHERE fnom='" . $ModDesinstall . "'"));
             
-            if (isset($fid) and $fid != '') {
-                sql_query("DELETE FROM " . $NPDS_Prefix . "droits WHERE d_fon_fid=" . $fid . "");
-                sql_query("DELETE FROM " . $NPDS_Prefix . "fonctions WHERE fnom='" . $ModDesinstall . "'");
+            $fonctions = DB::table('fonctions')->select('fid')->where('fnom', $ModDesinstall)->first();
+
+            if (isset($fonctions['fid']) and $fonctions['fid'] != '') {
+                DB::table('droits')->where('d_fon_fid', $fid)->delete();
+                DB::table('fonctions')->where('fnom', $ModDesinstall)->delete();
             }
 
             // nettoyage table(s) créé(s)
             if (count($tabcreated) > 0) {
                 foreach ($tabcreated as $v) {
-                    sql_query("DROP TABLE IF EXISTS `$v`;");
+                    DB::dropTable($v);
                 }
             }
 
             // nettoyage metamot
             if (count($modulemetamot) > 0) {
                 foreach ($modulemetamot as $v) {
-                    sql_query("DELETE FROM " . $NPDS_Prefix . "metalang WHERE metalang.def='" . $v . "'");
+                    DB::table('metalang')->where('metalang.def', $v)->delete();
                 }
             }
 
             // nettoyage blocs
             if ($tabsblocs != '') {
-                sql_query("DELETE FROM " . $NPDS_Prefix . "lblocks WHERE content LIKE '" . $tabsblocs . "%'");
-                sql_query("DELETE FROM " . $NPDS_Prefix . "rblocks WHERE content LIKE '" . $tabsblocs . "%'");
+                DB::table('lblocks')->where('content', 'LIKE', $tabsblocs . '%')->delete();
+                DB::table('rblocks')->where('content', 'LIKE', $tabsblocs . '%')->delete();
+
             }
         }
 
         // maj etat d'installation
-        sql_query("UPDATE " . $NPDS_Prefix . "modules SET minstall='0' WHERE mnom= '" . $ModDesinstall . "'");
+        DB::table('modules')->where('mnom', $ModDesinstall)->update(array(
+            'minstall'       => 0,
+        ));
 
         url::redirect_url("admin.php?op=modules");
     }
@@ -763,4 +921,5 @@ if ($ModInstall == '' && $ModDesinstall != '') {
 }
 
 echo $display;
+
 css::adminfoot('', '', '', '');

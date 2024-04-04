@@ -13,6 +13,7 @@
 // Pour le lancement du Chat : chat.php?id=gp_id&auto=token_de_securite
 // gp_id=ID du groupe au sens NPDS du terme => 0 : tous / -127 : Admin / -1 : Anonyme / 1 : membre / 2 ... 126 : groupe de membre
 // token_de_securite = encrypt(serialize(gp_id)) => Permet d'éviter le lancement du Chat sans autorisation
+declare(strict_types=1);
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');

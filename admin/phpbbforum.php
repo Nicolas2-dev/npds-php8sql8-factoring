@@ -1,5 +1,4 @@
 <?php
-
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -12,12 +11,14 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\js;
 use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -32,9 +33,14 @@ admindroits($aid, $f_meta_nom);
 
 include("auth.php");
 
-function ForumAdmin()
+/**
+ * [ForumAdmin description]
+ *
+ * @return  void
+ */
+function ForumAdmin(): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -55,19 +61,21 @@ function ForumAdmin()
         </thead>
         <tbody>';
 
-    $result = sql_query("SELECT cat_id, cat_title FROM " . $NPDS_Prefix . "catagories ORDER BY cat_id");
+    $categories = DB::table('catagories')->select('cat_id', 'cat_title')->orderBy('cat_id')->get();
 
-    while (list($cat_id, $cat_title) = sql_fetch_row($result)) {
+    foreach($categories as $categ) {    
         
-        $gets = sql_query("SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "forums WHERE cat_id='$cat_id'");
-        $numbers = sql_fetch_assoc($gets);
+        // $gets = sql_query("SELECT  FROM " . $NPDS_Prefix . "forums WHERE =''");
+        // $numbers = sql_fetch_assoc($gets);
         
+        $numbers = DB::table('')->select(DB::raw('COUNT(*) AS total'))->where('cat_id', $categ['cat_id'])->get();
+
         echo '
             <tr>
-                <td>' . $cat_id . '</td>
-                <td>' . StripSlashes($cat_title) . '</td>
-                <td>' . $numbers['total'] . ' <a href="admin.php?op=ForumGo&amp;cat_id=' . $cat_id . '"><i class="fa fa-eye fa-lg align-middle" title="' . adm_translate("Voir les forums de cette catégorie") . ': ' . StripSlashes($cat_title) . '." data-bs-toggle="tooltip" data-bs-placement="right"></i></a></td>
-                <td><a href="admin.php?op=ForumCatEdit&amp;cat_id=' . $cat_id . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=ForumCatDel&amp;cat_id=' . $cat_id . '&amp;ok=0"><i class="fas fa-trash fa-lg text-danger ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
+                <td>' . $categ['cat_id'] . '</td>
+                <td>' . StripSlashes($categ['cat_title']) . '</td>
+                <td>' . $numbers['total'] . ' <a href="admin.php?op=ForumGo&amp;cat_id=' . $categ['cat_id'] . '"><i class="fa fa-eye fa-lg align-middle" title="' . adm_translate("Voir les forums de cette catégorie") . ': ' . StripSlashes($categ['cat_title']) . '." data-bs-toggle="tooltip" data-bs-placement="right"></i></a></td>
+                <td><a href="admin.php?op=ForumCatEdit&amp;cat_id=' . $categ['cat_id'] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=ForumCatDel&amp;cat_id=' . $categ['cat_id'] . '&amp;ok=0"><i class="fas fa-trash fa-lg text-danger ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
             </tr>';
     }
 
@@ -96,23 +104,29 @@ function ForumAdmin()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function ForumGo($cat_id)
+/**
+ * [ForumGo description]
+ *
+ * @param   int   $cat_id  [$cat_id description]
+ *
+ * @return  void
+ */
+function ForumGo(int $cat_id): void 
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('forumcat'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT cat_title FROM " . $NPDS_Prefix . "catagories WHERE cat_id='$cat_id'");
-    list($cat_title) = sql_fetch_row($result);
+    $catagorie = DB::table('catagories')->select('cat_title')->where('cat_id', $cat_id)->first();
 
-    $ctg = StripSlashes($cat_title);
+    $categorie_title = StripSlashes($cat_title);
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Forum classé en") . ' ' . $ctg . '</h3>
+    <h3 class="mb-3">' . adm_translate("Forum classé en") . ' ' . $categorie_title . '</h3>
     <table data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-show-columns="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
@@ -128,18 +142,22 @@ function ForumGo($cat_id)
         </thead>
         <tbody>';
 
-    $result = sql_query("SELECT forum_id, forum_name, forum_access, forum_moderator, forum_type, arbre, attachement, forum_index FROM " . $NPDS_Prefix . "forums WHERE cat_id='$cat_id' ORDER BY forum_index,forum_id");
-    
-    while (list($forum_id, $forum_name, $forum_access, $forum_moderator, $forum_type, $arbre, $attachement, $forum_index) = sql_fetch_row($result)) {
-        $moderator = str_replace(' ', ', ', forum::get_moderator($forum_moderator));
+    $forums = DB::table('forums')
+        ->select('forum_id', 'forum_name', 'forum_access', 'forum_moderator', 'forum_type', 'arbre', 'attachement', 'forum_index')
+        ->where('cat_id', $cat_id)
+        ->orderBy('forum_index, forum_id')
+        ->get();
+
+    foreach ($forums as $forum) {
+        $moderator = str_replace(' ', ', ', forum::get_moderator($forum['forum_moderator']));
         
         echo '
             <tr>
-                <td>' . $forum_index . '</td>
-                <td>' . $forum_name . '</td>
+                <td>' . $forum['forum_index'] . '</td>
+                <td>' . $forum['forum_name'] . '</td>
                 <td><i class="fa fa-balance-scale fa-lg fa-fw me-1"></i>' . $moderator . '</td>';
         
-        switch ($forum_access) {
+        switch ($forum['forum_access']) {
             case (0):
                 echo '
                 <td>' . adm_translate("Publication Anonyme autorisée") . '</td>';
@@ -161,43 +179,43 @@ function ForumGo($cat_id)
                 break;
         }
 
-        if ($forum_type == 0) {
+        if ($forum['forum_type'] == 0) {
             echo '<td>' . adm_translate("Public") . '</td>';
-        } elseif ($forum_type == 1) {
+        } elseif ($forum['forum_type'] == 1) {
             echo '<td>' . adm_translate("Privé") . '</td>';
-        } elseif ($forum_type == 5) {
+        } elseif ($forum['forum_type'] == 5) {
             echo '<td>PHP + ' . adm_translate("Groupe") . '</td>';
-        } elseif ($forum_type == 6) {
+        } elseif ($forum['forum_type'] == 6) {
             echo '<td>PHP</td>';
-        } elseif ($forum_type == 7) {
+        } elseif ($forum['forum_type'] == 7) {
             echo '<td>' . adm_translate("Groupe") . '</td>';
-        } elseif ($forum_type == 8) {
+        } elseif ($forum['forum_type'] == 8) {
             echo '<td>' . adm_translate("Texte étendu") . '</td>';
         } else {
             echo '<td>' . adm_translate("Caché") . '</td>';
         }
 
-        if ($arbre) {
+        if ($forum['arbre']) {
             echo '<td>' . adm_translate("Arbre") . '</td>';
         } else {
             echo '<td>' . adm_translate("Standard") . '</td>';
         }
 
-        if ($attachement) {
+        if ($forum['attachement']) {
             echo '<td class="text-danger">' . adm_translate("Oui") . '</td>';
         } else {
             echo '<td>' . adm_translate("Non") . '</td>';
         }
 
         echo '
-                <td><a href="admin.php?op=ForumGoEdit&amp;forum_id=' . $forum_id . '&amp;ctg=' . urlencode($ctg) . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=ForumGoDel&amp;forum_id=' . $forum_id . '&amp;ok=0"><i class="fas fa-trash fa-lg text-danger ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
+                <td><a href="admin.php?op=ForumGoEdit&amp;forum_id=' . $forum['forum_id'] . '&amp;ctg=' . urlencode($categorie_title) . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=ForumGoDel&amp;forum_id=' . $forum['forum_id'] . '&amp;ok=0"><i class="fas fa-trash fa-lg text-danger ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
             </tr>';
     }
 
     echo '
         </tbody>
     </table>
-    <h3 class="my-3">' . adm_translate("Ajouter plus de Forum pour") . ' : <span class="text-muted">' . $ctg . '</span></h3>
+    <h3 class="my-3">' . adm_translate("Ajouter plus de Forum pour") . ' : <span class="text-muted">' . $categorie_title . '</span></h3>
     <form id="fadaddforu" action="admin.php" method="post">
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="forum_index">' . adm_translate("Index") . '</label>
@@ -277,7 +295,7 @@ function ForumGo($cat_id)
         </div>
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
-                <input type="hidden" name="ctg" value="' . $ctg . '" />
+                <input type="hidden" name="ctg" value="' . $categorie_title . '" />
                 <input type="hidden" name="cat_id" value="' . $cat_id . '" />
                 <input type="hidden" name="op" value="ForumGoAdd" />
                 <button class="btn btn-primary col-12" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;' . adm_translate("Ajouter") . ' </button>
@@ -377,17 +395,27 @@ function ForumGo($cat_id)
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function ForumGoEdit($forum_id, $ctg)
+/**
+ * [ForumGoEdit description]
+ *
+ * @param   int   $forum_id  [$forum_id description]
+ * @param   int   $ctg       [$ctg description]
+ *
+ * @return  void
+ */
+function ForumGoEdit(int $forum_id, int $ctg): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('forumcat'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT forum_id, forum_name, forum_desc, forum_access, forum_moderator, cat_id, forum_type, forum_pass, arbre, attachement, forum_index FROM " . $NPDS_Prefix . "forums WHERE forum_id='$forum_id'");
-    list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id_1, $forum_type, $forum_pass, $arbre, $attachement, $forum_index) = sql_fetch_row($result);
+    $forum = DB::table('forums')
+        ->select('forum_id', 'forum_name', 'forum_desc', 'forum_access', 'forum_moderator', 'cat_id', 'forum_type', 'forum_pass', 'arbre', 'attachement', 'forum_index')
+        ->where('forum_id', $forum_id)
+        ->first();
 
     settype($sel0, 'string');
     settype($sel1, 'string');
@@ -400,32 +428,32 @@ function ForumGoEdit($forum_id, $ctg)
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Editer") . ' : <span class="text-muted">' . $forum_name . '</span></h3>
+    <h3 class="mb-3">' . adm_translate("Editer") . ' : <span class="text-muted">' . $forum['forum_name'] . '</span></h3>
     <form id="fadeditforu" action="admin.php" method="post">
-    <input type="hidden" name="forum_id" value="' . $forum_id . '" />
+    <input type="hidden" name="forum_id" value="' . $forum['forum_id'] . '" />
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="forum_index">' . adm_translate("Index") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="forum_index" name="forum_index" value="' . $forum_index . '" required="required" />
+                <input class="form-control" type="text" id="forum_index" name="forum_index" value="' . $forum['forum_index'] . '" required="required" />
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="forum_name">' . adm_translate("Nom du forum") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="forum_name" name="forum_name" value="' . $forum_name . '" required="required" />
+                <input class="form-control" type="text" id="forum_name" name="forum_name" value="' . $forum['forum_name'] . '" required="required" />
                 <span class="help-block">' . adm_translate("(Redirection sur un forum externe : <.a href...)") . '<span class="float-end" id="countcar_forum_name"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="forum_desc">' . adm_translate("Description") . '</label>
             <div class="col-sm-8">
-                <textarea class="form-control" id="forum_desc" name="forum_desc" rows="5">' . $forum_desc . '</textarea>
+                <textarea class="form-control" id="forum_desc" name="forum_desc" rows="5">' . $forum['forum_desc'] . '</textarea>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="forum_mod">' . adm_translate("Modérateur(s)") . '</label>';
 
-    $moderator = str_replace(' ', ',', forum::get_moderator($forum_mod));
+    $moderator = str_replace(' ', ',', forum::get_moderator($forum['forum_mod']));
 
     echo '
             <div class="col-sm-8">
@@ -438,10 +466,21 @@ function ForumGoEdit($forum_id, $ctg)
             <div class="col-sm-8">
                 <select class="form-select" id="forum_access" name="forum_access">';
 
-    if ($forum_access == 0) $sel0 = ' selected="selected"';
-    if ($forum_access == 1) $sel1 = ' selected="selected"';
-    if ($forum_access == 2) $sel2 = ' selected="selected"';
-    if ($forum_access == 9) $sel9 = ' selected="selected"';
+    if ($forum['forum_access'] == 0) {
+        $sel0 = ' selected="selected"';
+    }
+
+    if ($forum['forum_access'] == 1) {
+        $sel1 = ' selected="selected"';
+    }
+
+    if ($forum['forum_access'] == 2) {
+        $sel2 = ' selected="selected"';
+    }
+
+    if ($forum['forum_access'] == 9) {
+        $sel9 = ' selected="selected"';
+    }
 
     echo '
                 <option value="0"' . $sel0 . '>' . adm_translate("Publication Anonyme autorisée") . '</option>
@@ -456,13 +495,13 @@ function ForumGoEdit($forum_id, $ctg)
             <div class="col-sm-8">
                 <select class="form-select" id="cat_id" name="cat_id">';
 
-    $result = sql_query("SELECT cat_id, cat_title FROM " . $NPDS_Prefix . "catagories");
+    $catagories = DB::table('catagories')->select('cat_id', 'cat_title')->get();
 
-    while (list($cat_id, $cat_title) = sql_fetch_row($result)) {
-        if ($cat_id == $cat_id_1) {
-            echo '<option value="' . $cat_id . '" selected="selected">' . StripSlashes($cat_title) . '</option>';
+    foreach ($catagories as $categ) {
+        if ($categ['cat_id'] == $cat_id_1) {
+            echo '<option value="' . $categ['cat_id'] . '" selected="selected">' . StripSlashes($categ['cat_title']) . '</option>';
         } else {
-            echo '<option value="' . $cat_id . '">' . StripSlashes($cat_title) . '</option>';
+            echo '<option value="' . $categ['cat_id'] . '">' . StripSlashes($categ['cat_title']) . '</option>';
         }
     }
 
@@ -475,43 +514,43 @@ function ForumGoEdit($forum_id, $ctg)
             <div class="col-sm-8">
                 <select class="form-select" id="forum_type" name="forum_type">';
 
-    if ($forum_type == 0) {
+    if ($forum['forum_type'] == 0) {
         $sel0 = ' selected="selected"';
     } else {
         $sel0 = '';
     }
 
-    if ($forum_type == 1) {
+    if ($forum['forum_type'] == 1) {
         $sel1 = ' selected="selected"';
     } else {
         $sel1 = '';
     }
 
-    if ($forum_type == 5) {
+    if ($forum['forum_type'] == 5) {
         $sel5 = ' selected="selected"';
     } else {
         $sel5 = '';
     }
 
-    if ($forum_type == 6) {
+    if ($forum['forum_type'] == 6) {
         $sel6 = ' selected="selected"';
     } else {
         $sel6 = '';
     }
 
-    if ($forum_type == 7) {
+    if ($forum['forum_type'] == 7) {
         $sel7 = ' selected="selected"';
     } else {
         $sel7 = '';
     }
 
-    if ($forum_type == 8) {
+    if ($forum['forum_type'] == 8) {
         $sel8 = ' selected="selected"';
     } else {
         $sel8 = '';
     }
 
-    if ($forum_type == 9) {
+    if ($forum['forum_type'] == 9) {
         $sel9 = ' selected="selected"';
     } else {
         $sel9 = '';
@@ -522,7 +561,7 @@ function ForumGoEdit($forum_id, $ctg)
     $attinp = 'type="text" ';
     $helpinp = '';
 
-    switch ($forum_type) {
+    switch ($forum['forum_type']) {
         case '1':
             $dinp = 'd-flex';
             $lana = 'Mot de Passe';
@@ -566,7 +605,7 @@ function ForumGoEdit($forum_id, $ctg)
         <div class="mb-3 row ' . $dinp . '" id="the_multi_input">
             <label id="labmulti" class="col-form-label col-sm-4" for="forum_pass">' . adm_translate($lana) . '</label>
             <div class="col-sm-8">
-                <input class="form-control" ' . $attinp . ' id="forum_pass" name="forum_pass" value="' . $forum_pass . '" />
+                <input class="form-control" ' . $attinp . ' id="forum_pass" name="forum_pass" value="' . $forum['forum_pass'] . '" />
                 <span id="help_forum_pass" class="help-block">' . $helpinp . '<span class="float-end" id="countcar_forum_pass"></span></span>
             </div>
         </div>
@@ -575,7 +614,7 @@ function ForumGoEdit($forum_id, $ctg)
             <div class="col-sm-8">
                 <select class="form-select" id="arbre" name="arbre">';
 
-    if ($arbre) {
+    if ($forum['arbre']) {
         echo '
                 <option value="0">' . adm_translate("Standard") . '</option>
                 <option value="1" selected="selected">' . adm_translate("Arbre") . '</option>';
@@ -594,7 +633,7 @@ function ForumGoEdit($forum_id, $ctg)
             <div class="col-sm-8">
                 <select class="form-select" id="attachement" name="attachement">';
 
-    if ($attachement) {
+    if ($forum['attachement']) {
         echo '
                 <option value="0">' . adm_translate("Non") . '</option>
                 <option value="1" selected="selected">' . adm_translate("Oui") . '</option>';
@@ -708,17 +747,23 @@ function ForumGoEdit($forum_id, $ctg)
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function ForumCatEdit($cat_id)
+/**
+ * [ForumCatEdit description]
+ *
+ * @param   int   $cat_id  [$cat_id description]
+ *
+ * @return  void
+ */
+function ForumCatEdit(int $cat_id): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('forumcat'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT cat_id, cat_title FROM " . $NPDS_Prefix . "catagories WHERE cat_id='$cat_id'");
-    list($cat_id, $cat_title) = sql_fetch_row($result);
+    $categorie = DB::table('catagories')->select('cat_id', 'cat_title')->where('cat_id', $cat_id)->first();
 
     echo '
     <hr />
@@ -727,17 +772,17 @@ function ForumCatEdit($cat_id)
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="cat_id">ID</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" name="cat_id" id="cat_id" value="' . $cat_id . '" required="required" />
+                <input class="form-control" type="text" name="cat_id" id="cat_id" value="' . $categorie['cat_id'] . '" required="required" />
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="cat_title">' . adm_translate("Catégorie") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="cat_title" name="cat_title" value="' . StripSlashes($cat_title) . '" required="required" />
+                <input class="form-control" type="text" id="cat_title" name="cat_title" value="' . StripSlashes($categorie['cat_title']) . '" required="required" />
             </div>
         </div>
         <div class="mb-3 row">
-            <input type="hidden" name="old_cat_id" value="' . $cat_id . '" />
+            <input type="hidden" name="old_cat_id" value="' . $categorie['cat_id'] . '" />
             <input type="hidden" name="op" value="ForumCatSave" />
             <div class="col-sm-8 ms-sm-auto">
                 <button class="btn btn-primary col-sm-12" type="submit"><i class="fa fa-check-square fa-lg"></i>&nbsp;' . adm_translate("Sauver les modifications") . '</button>
@@ -766,13 +811,26 @@ function ForumCatEdit($cat_id)
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function ForumCatSave($old_catid, $cat_id, $cat_title)
+/**
+ * [ForumCatSave description]
+ *
+ * @param   int     $old_catid  [$old_catid description]
+ * @param   int     $cat_id     [$cat_id description]
+ * @param   string  $cat_title  [$cat_title description]
+ *
+ * @return  void
+ */
+function ForumCatSave(int $old_catid, int $cat_id, string $cat_title): void 
 {
-    global $NPDS_Prefix;
-
-    $return = sql_query("UPDATE " . $NPDS_Prefix . "catagories SET cat_id='$cat_id', cat_title='" . AddSlashes($cat_title) . "' WHERE cat_id='$old_catid'");
+    DB::table('catagories')->where('cat_id', $old_catid)->update(array(
+        'cat_id'       => $cat_id,
+        'cat_title'    => AddSlashes($cat_title),
+    ));
+    
     if ($return) {
-        sql_query("UPDATE " . $NPDS_Prefix . "forums SET cat_id='$cat_id' WHERE cat_id='$old_catid'");
+        DB::table('forums')->where('cat_id', $old_catid)->update(array(
+            'cat_id'       => $cat_id,
+        ));       
     }
 
     cache::Q_Clean();
@@ -783,10 +841,26 @@ function ForumCatSave($old_catid, $cat_id, $cat_title)
     Header("Location: admin.php?op=ForumAdmin");
 }
 
-function ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id, $forum_type, $forum_pass, $arbre, $attachement, $forum_index, $ctg)
+/**
+ * [ForumGoSave description]
+ *
+ * @param   int     $forum_id      [$forum_id description]
+ * @param   int     $forum_name    [$forum_name description]
+ * @param   string  $forum_desc    [$forum_desc description]
+ * @param   int     $forum_access  [$forum_access description]
+ * @param   string  $forum_mod     [$forum_mod description]
+ * @param   int     $cat_id        [$cat_id description]
+ * @param   int     $forum_type    [$forum_type description]
+ * @param   string  $forum_pass    [$forum_pass description]
+ * @param   int     $arbre         [$arbre description]
+ * @param   int     $attachement   [$attachement description]
+ * @param   int     $forum_index   [$forum_index description]
+ * @param   int     $ctg           [$ctg description]
+ *
+ * @return  void
+ */
+function ForumGoSave(int $forum_id, int $forum_name, string $forum_desc, int $forum_access, string $forum_mod, int $cat_id, int $forum_type, string $forum_pass, int $arbre, int $attachement, int $forum_index, int $ctg): void
 {
-    global $NPDS_Prefix;
-
     // il faut supprimer le dernier , à cause de l'auto-complete
     $forum_mod = rtrim(chop($forum_mod), ',');
     $moderator = explode(',', $forum_mod);
@@ -795,13 +869,15 @@ function ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_
     $error_mod = '';
 
     for ($i = 0; $i < count($moderator); $i++) {
-        $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='" . trim($moderator[$i]) . "'");
-        list($forum_moderator) = sql_fetch_row($result);
-        
-        if ($forum_moderator != '') {
-            $forum_mod .= $forum_moderator . ' ';
 
-            sql_query("UPDATE " . $NPDS_Prefix . "users_status SET level='2' WHERE uid='$forum_moderator'");
+        $forum_moderator = DB::table('users')->select('uid')->where('uname', trim($moderator[$i]))->first();
+
+        if ($forum_moderator['uid'] != '') {
+            $forum_mod .= $forum_moderator['uid'] . ' ';
+
+            DB::table('users_status')->where('level', 2)->update(array(
+                'uid'       => $forum_moderator['uid'],
+            ));
         } else {
             $error_mod .= $moderator[$i] . ' ';
         }
@@ -828,9 +904,31 @@ function ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_
                 $forum_access = 1;
             }
 
-            sql_query("UPDATE " . $NPDS_Prefix . "forums SET forum_name='$forum_name', forum_desc='$forum_desc', forum_access='$forum_access', forum_moderator='$forum_mod', cat_id='$cat_id', forum_type='$forum_type', forum_pass='$forum_pass', arbre='$arbre', attachement='$attachement', forum_index='$forum_index' WHERE forum_id='$forum_id'");
+            DB::table('forums')->where('forum_id', $forum_id)->update(array(
+                'forum_name'        => $forum_name,
+                'forum_desc'        => $forum_desc,
+                'forum_access'      => $forum_access,
+                'forum_moderator'   => $forum_mod,
+                'cat_id'            => $cat_id,
+                'forum_type'        => $forum_type,
+                'forum_pass'        => $forum_pass,
+                'arbre'             => $arbre,
+                'attachement'       => $attachement,
+                'forum_index'       => $forum_index,
+            ));
         } else {
-            sql_query("UPDATE " . $NPDS_Prefix . "forums SET forum_name='$forum_name', forum_desc='$forum_desc', forum_access='$forum_access', forum_moderator='$forum_mod', cat_id='$cat_id', forum_type='$forum_type', forum_pass='', arbre='$arbre', attachement='$attachement', forum_index='$forum_index' WHERE forum_id='$forum_id'");
+            DB::table('forums')->where('forum_id', $forum_id)->update(array(
+                'forum_name'        => $forum_name,
+                'forum_desc'        => $forum_desc,
+                'forum_access'      => $forum_access,
+                'forum_moderator'   => $forum_mod,
+                'cat_id'            => $cat_id,
+                'forum_type'        => $forum_type,
+                'forum_pass'        => '',
+                'arbre'             => $arbre,
+                'attachement'       => $attachement,
+                'forum_index'       => $forum_index,
+            ));
         }
 
         cache::Q_Clean();
@@ -842,11 +940,18 @@ function ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_
     }
 }
 
-function ForumCatAdd($catagories)
+/**
+ * [ForumCatAdd description]
+ *
+ * @param   string  $catagories  [$catagories description]
+ *
+ * @return  void
+ */
+function ForumCatAdd(string $catagories): void
 {
-    global $NPDS_Prefix;
-
-    sql_query("INSERT INTO " . $NPDS_Prefix . "catagories VALUES (NULL, '$catagories')");
+    DB::table('catagories')->insert(array(
+        'cat_title'       => $catagories,
+    ));
 
     global $aid;
     logs::Ecr_Log('security', "AddForumCat($catagories) by AID : $aid", '');
@@ -854,10 +959,25 @@ function ForumCatAdd($catagories)
     Header("Location: admin.php?op=ForumAdmin");
 }
 
-function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id, $forum_type, $forum_pass, $arbre, $attachement, $forum_index, $ctg)
+/**
+ * [ForumGoAdd description]
+ *
+ * @param   int     $forum_name    [$forum_name description]
+ * @param   int     $forum_desc    [$forum_desc description]
+ * @param   int     $forum_access  [$forum_access description]
+ * @param   string  $forum_mod     [$forum_mod description]
+ * @param   int     $cat_id        [$cat_id description]
+ * @param   int     $forum_type    [$forum_type description]
+ * @param   string  $forum_pass    [$forum_pass description]
+ * @param   int     $arbre         [$arbre description]
+ * @param   int     $attachement   [$attachement description]
+ * @param   int     $forum_index   [$forum_index description]
+ * @param   int     $ctg           [$ctg description]
+ *
+ * @return  void
+ */
+function ForumGoAdd(int $forum_name, int $forum_desc, int $forum_access, string $forum_mod, int $cat_id, int $forum_type, string $forum_pass, int $arbre, int $attachement, int $forum_index, int $ctg): void
 {
-    global $NPDS_Prefix;
-
     // il faut supprimer le dernier , à cause de l'auto-complete
     $forum_mod = rtrim(chop($forum_mod), ',');
     $moderator = explode(",", $forum_mod);
@@ -866,13 +986,15 @@ function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id
     $error_mod = '';
 
     for ($i = 0; $i < count($moderator); $i++) {
-        $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='" . trim($moderator[$i]) . "'");
-        list($forum_moderator) = sql_fetch_row($result);
 
-        if ($forum_moderator != '') {
-            $forum_mod .= $forum_moderator . ' ';
+        $forum_moderator = DB::table('users')->select('uid')->where('uname', trim($moderator[$i]))->first();
 
-            sql_query("UPDATE " . $NPDS_Prefix . "users_status SET level='2' WHERE uid='$forum_moderator'");
+        if ($forum_moderator['uid'] != '') {
+            $forum_mod .= $forum_moderator['uid'] . ' ';
+
+            DB::table('users_status')->where('uid', $forum_moderator['uid'])->update(array(
+                'level'       => 2,
+            ));
         } else {
             $error_mod .= $moderator[$i] . ' ';
         }
@@ -895,10 +1017,19 @@ function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id
             $arbre = 1;
         }
 
-        $forum_mod = str_replace(' ', ',', chop($forum_mod));
+        DB::table('forums')->insert(array(
+            'forum_name'        => $forum_name,
+            'forum_desc'        => $forum_desc,
+            'forum_access'      => $forum_access,
+            'forum_moderator'   => str_replace(' ', ',', chop($forum_mod)),
+            'cat_id'            => $cat_id,
+            'forum_type'        => $forum_type,
+            'forum_pass'        => $forum_pass,
+            'arbre'             => $arbre,
+            'attachement'       => $attachement,
+            'forum_index'       => $forum_index,
+        ));
 
-        sql_query("INSERT INTO " . $NPDS_Prefix . "forums VALUES (NULL, '$forum_name', '$forum_desc', '$forum_access', '$forum_mod', '$cat_id', '$forum_type', '$forum_pass', '$arbre', '$attachement', '$forum_index')");
-        
         cache::Q_Clean();
 
         global $aid;
@@ -908,24 +1039,32 @@ function ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id
     }
 }
 
-function ForumCatDel($cat_id, $ok = 0)
+/**
+ * [ForumCatDel description]
+ *
+ * @param   int   $cat_id  [$cat_id description]
+ * @param   int   $ok      [$ok description]
+ *
+ * @return  void
+ */
+function ForumCatDel(int $cat_id, int $ok = 0): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     if ($ok == 1) {
-        $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE cat_id='$cat_id'");
+        $forums = DB::table('forums')->select('forum_id')->where('cat_id', $cat_id)->get();
 
-        while (list($forum_id) = sql_fetch_row($result)) {
-            sql_query("DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id'");
-            sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum_id'");
+        foreach ($forums as $forum) {
+            DB::table('forumtopics')->where('forum_id', $forums['forum_id'])->delete();
+            DB::table('forum_read')->where('forum_id', $forums['forum_id'])->delete();
 
-            forum::control_efface_post("forum_npds", "", "", $forum_id);
+            forum::control_efface_post("forum_npds", "", "", $forums['forum_id']);
 
-            sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum_id'");
+            DB::table('posts')->where('forum_id', $forums['forum_id'])->delete();
         }
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "forums WHERE cat_id='$cat_id'");
-        sql_query("DELETE FROM " . $NPDS_Prefix . "catagories WHERE cat_id='$cat_id'");
+        DB::table('forums')->where('cat_id', $cat_id)->delete();
+        DB::table('catagories')->where('cat_id', $cat_id)->delete();
 
         cache::Q_Clean();
 
@@ -951,18 +1090,26 @@ function ForumCatDel($cat_id, $ok = 0)
     }
 }
 
-function ForumGoDel($forum_id, $ok = 0)
+/**
+ * [ForumGoDel description]
+ *
+ * @param   int   $forum_id  [$forum_id description]
+ * @param   int   $ok        [$ok description]
+ *
+ * @return  void
+ */
+function ForumGoDel(int $forum_id, int $ok = 0): void
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     if ($ok == 1) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id'");
-        sql_query("DELETE FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum_id'");
+        DB::table('forumtopics')->where('forum_id', $forum_id)->delete();
+        DB::table('forum_read')->where('forum_id', $forum_id)->delete();
 
         forum::control_efface_post('forum_npds', '', '', $forum_id);
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "forums WHERE forum_id='$forum_id'");
-        sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum_id'");
+        DB::table('forums')->where('forum_id', $forum_id)->delete();
+        DB::table('posts')->where('forum_id', $forum_id)->delete();
 
         cache::Q_Clean();
 

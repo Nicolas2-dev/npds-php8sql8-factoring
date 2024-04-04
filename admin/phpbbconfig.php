@@ -13,9 +13,11 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\cache\cache;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) { 
     include('die.php');
@@ -28,18 +30,22 @@ $f_titre = adm_translate('Configuration des Forums');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function ForumConfigAdmin()
+/**
+ * [ForumConfigAdmin description]
+ *
+ * @return  void
+ */
+function ForumConfigAdmin(): void 
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('forumconfig'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "config");
-    list($allow_html, $allow_bbcode, $allow_sig, $posts_per_page, $hot_threshold, $topics_per_page, $allow_upload_forum, $allow_forum_hide, $forum_attachments, $rank1, $rank2, $rank3, $rank4, $rank5, $anti_flood, $solved) = sql_fetch_row($result);
-    
+    $config = DB::table('config')->select('*')->first();
+
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Configuration des Forums") . '</h3>
@@ -50,7 +56,7 @@ function ForumConfigAdmin()
 
     $cky = '';
     $ckn = '';
-    if ($allow_html == 1) {
+    if ($config['allow_html'] == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -75,7 +81,7 @@ function ForumConfigAdmin()
 
     $cky = '';
     $ckn = '';
-    if ($allow_bbcode == 1) {
+    if ($config['allow_bbcode'] == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -100,7 +106,7 @@ function ForumConfigAdmin()
 
     $cky = '';
     $ckn = '';
-    if ($allow_sig == 1) {
+    if ($config['allow_sig'] == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -122,28 +128,28 @@ function ForumConfigAdmin()
         <div class="mb-3 row">
             <label class="col-form-label col-sm-5" for="hot_threshold">' . adm_translate("Seuil pour les Sujet 'chauds'") . '</label>
             <div class="col-sm-7">
-                <input class="form-control" type="text" min="0" id="hot_threshold" name="hot_threshold" maxlength="6" value="' . $hot_threshold . '" />
+                <input class="form-control" type="text" min="0" id="hot_threshold" name="hot_threshold" maxlength="6" value="' . $config['hot_threshold'] . '" />
                 <span class="help-block text-end" id="countcar_hot_threshold"></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-form-label col-sm-5" for="posts_per_page">' . adm_translate("Nombre de contributions par page") . '</label>
             <div class="col-sm-7">
-                <input class="form-control" type="text" min="0" id="posts_per_page" name="posts_per_page" maxlength="6" value="' . $posts_per_page . '" />
+                <input class="form-control" type="text" min="0" id="posts_per_page" name="posts_per_page" maxlength="6" value="' . $config['posts_per_page'] . '" />
                 <span class="help-block">' . adm_translate("(C'est le nombre de contributions affichées pour chaque page relative à un Sujet)") . '<span class="float-end ms-1" id="countcar_posts_per_page"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-form-label col-sm-5" for="topics_per_page">' . adm_translate("Sujets par forum") . '</label>
             <div class="col-sm-7">
-                <input class="form-control" type="text" min="0" id="topics_per_page" name="topics_per_page" maxlength="6" value="' . $topics_per_page . '" />
+                <input class="form-control" type="text" min="0" id="topics_per_page" name="topics_per_page" maxlength="6" value="' . $config['topics_per_page'] . '" />
                 <span class="help-block">' . adm_translate("(C'est le nombre de Sujets affichés pour chaque page relative à un Forum)") . '<span class="float-end ms-1" id="countcar_topics_per_page"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-form-label col-sm-5" for="anti_flood">' . adm_translate("Nombre maximum de contributions par IP et par période de 30 minutes (0=système inactif)") . '</label>
             <div class="col-sm-7">
-                <input class="form-control" type="text" min="0" id="anti_flood" name="anti_flood" maxlength="6" value="' . $anti_flood . '" />
+                <input class="form-control" type="text" min="0" id="anti_flood" name="anti_flood" maxlength="6" value="' . $config['anti_flood'] . '" />
                 <span class="help-block text-end" id="countcar_anti_flood"></span>
             </div>
         </div>
@@ -153,7 +159,7 @@ function ForumConfigAdmin()
 
     $cky = '';
     $ckn = '';
-    if ($solved == 1) {
+    if ($config['solved'] == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -178,7 +184,7 @@ function ForumConfigAdmin()
 
     $cky = '';
     $ckn = '';
-    if ($allow_upload_forum == 1) {
+    if ($config['allow_upload_forum'] == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -203,7 +209,7 @@ function ForumConfigAdmin()
 
     $cky = '';
     $ckn = '';
-    if ($allow_forum_hide == 1) {
+    if ($config['allow_forum_hide'] == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -224,27 +230,27 @@ function ForumConfigAdmin()
         </div>
         <div class="mb-3">
             <label class="col-form-label" for="rank1">' . adm_translate("Texte pour le rôle") . ' 1 </label>
-            <textarea class="form-control" id="rank1" name="rank1" rows="3" maxlength="255">' . $rank1 . '</textarea>
+            <textarea class="form-control" id="rank1" name="rank1" rows="3" maxlength="255">' . $config['rank1'] . '</textarea>
             <span class="help-block text-end" id="countcar_rank1"></span>
         </div>
         <div class="mb-3">
             <label class="col-form-label" for="rank2">' . adm_translate("Texte pour le rôle") . ' 2 </label>
-            <textarea class="form-control" id="rank2" name="rank2" rows="3" maxlength="255">' . $rank2 . '</textarea>
+            <textarea class="form-control" id="rank2" name="rank2" rows="3" maxlength="255">' . $config['rank2'] . '</textarea>
             <span class="help-block text-end" id="countcar_rank2"></span>
         </div>
         <div class="mb-3">
             <label class="col-form-label" for="rank3">' . adm_translate("Texte pour le rôle") . ' 3 </label>
-            <textarea class="form-control" id="rank3" name="rank3" rows="3" maxlength="255">' . $rank3 . '</textarea>
+            <textarea class="form-control" id="rank3" name="rank3" rows="3" maxlength="255">' . $config['rank3'] . '</textarea>
             <span class="help-block text-end" id="countcar_rank3"></span>
         </div>
         <div class="mb-3">
             <label class="col-form-label" for="rank4">' . adm_translate("Texte pour le rôle") . ' 4 </label>
-            <textarea class="form-control" id="rank4" name="rank4" rows="3" maxlength="255">' . $rank4 . '</textarea>
+            <textarea class="form-control" id="rank4" name="rank4" rows="3" maxlength="255">' . $config['rank4'] . '</textarea>
             <span class="help-block text-end" id="countcar_rank4"></span>
         </div>
         <div class="mb-3">
             <label class="col-form-label" for="rank5">' . adm_translate("Texte pour le rôle") . ' 5 </label>
-            <textarea class="form-control" id="rank5" name="rank5" rows="3" maxlength="255">' . $rank5 . '</textarea>
+            <textarea class="form-control" id="rank5" name="rank5" rows="3" maxlength="255">' . $config['rank5'] . '</textarea>
             <span class="help-block text-end" id="countcar_rank5"></span>
         </div>
         <input type="hidden" name="op" value="ForumConfigChange" />
@@ -302,12 +308,47 @@ function ForumConfigAdmin()
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function ForumConfigChange($allow_html, $allow_bbcode, $allow_sig, $posts_per_page, $hot_threshold, $topics_per_page, $allow_upload_forum, $allow_forum_hide, $rank1, $rank2, $rank3, $rank4, $rank5, $anti_flood, $solved)
+/**
+ * [ForumConfigChange description]
+ *
+ * @param   int     $allow_html          [$allow_html description]
+ * @param   int     $allow_bbcode        [$allow_bbcode description]
+ * @param   int     $allow_sig           [$allow_sig description]
+ * @param   int     $posts_per_page      [$posts_per_page description]
+ * @param   int     $hot_threshold       [$hot_threshold description]
+ * @param   int     $topics_per_page     [$topics_per_page description]
+ * @param   int     $allow_upload_forum  [$allow_upload_forum description]
+ * @param   int     $allow_forum_hide    [$allow_forum_hide description]
+ * @param   string  $rank1               [$rank1 description]
+ * @param   string  $rank2               [$rank2 description]
+ * @param   string  $rank3               [$rank3 description]
+ * @param   string  $rank4               [$rank4 description]
+ * @param   string  $rank5               [$rank5 description]
+ * @param   int     $anti_flood          [$anti_flood description]
+ * @param   int     $solved              [$solved description]
+ *
+ * @return  void
+ */
+function ForumConfigChange(int $allow_html, int $allow_bbcode, int $allow_sig, int $posts_per_page, int $hot_threshold, int $topics_per_page, int $allow_upload_forum, int $allow_forum_hide, string $rank1, string $rank2, string $rank3, string $rank4, string $rank5, int $anti_flood, int $solved): void
 {
-    global $NPDS_Prefix;
+    DB::table('config')->update(array(
+        'allow_html'            => $allow_html,
+        'allow_bbcode'          => $allow_bbcode,
+        'allow_sig'             => $allow_sig,
+        'posts_per_page'        => $posts_per_page,
+        'hot_threshold'         => $hot_threshold,
+        'topics_per_page'       => $topics_per_page,
+        'allow_upload_forum'    => $allow_upload_forum,
+        'allow_forum_hide'      => $allow_forum_hide,
+        'rank1'                 => $rank1,
+        'rank2'                 => $rank2,
+        'rank3'                 => $rank3,
+        'rank4'                 => $rank4,
+        'rank5'                 => $rank5,
+        'anti_flood'            => $anti_flood,
+        'solved'                => $solved,
+    ));
 
-    sql_query("UPDATE " . $NPDS_Prefix . "config SET allow_html='$allow_html', allow_bbcode='$allow_bbcode', allow_sig='$allow_sig', posts_per_page='$posts_per_page', hot_threshold='$hot_threshold', topics_per_page='$topics_per_page', allow_upload_forum='$allow_upload_forum', allow_forum_hide='$allow_forum_hide', rank1='$rank1', rank2='$rank2', rank3='$rank3', rank4='$rank4', rank5='$rank5', anti_flood='$anti_flood', solved='$solved'");
-    
     cache::Q_Clean();
     
     Header("Location: admin.php?op=ForumConfigAdmin");

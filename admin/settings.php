@@ -30,7 +30,12 @@ $f_titre = adm_translate("Préférences");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function Configure()
+/**
+ * [Configure description]
+ *
+ * @return  void
+ */
+function Configure(): void 
 {
     global $f_meta_nom, $f_titre, $adminimg;
 
