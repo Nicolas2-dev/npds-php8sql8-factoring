@@ -329,6 +329,6 @@ if ($affiche) {
 
 sql_free_result($result);
 
-echo js::auto_complete('membre', 'uname', 'users', 'username', '86400');
+echo js::auto_complete('membre', 'uname', 'users', 'username', 86400);
 
 include('themes/default/footer.php');

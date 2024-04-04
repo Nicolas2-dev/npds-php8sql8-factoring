@@ -123,7 +123,7 @@ if ($submitS) {
     // Either valid user/pass, or valid session. continue with post.
     if ($stop != 1) {
         $poster_ip =  getip();
-        $hostname = $dns_verif ? @gethostbyaddr($poster_ip) : '';
+        $hostname = Config::get('npds.dns_verif') ? @gethostbyaddr($poster_ip) : '';
         
         // anti flood
         forum::anti_flood($modo, $anti_flood, $poster_ip, $userdata, $gmt);
@@ -243,7 +243,7 @@ if ($submitS) {
 
     $posterdata = forum::get_userdata_from_id($userdata[0]);
 
-    if ($smilies) {
+    if (Config::get('npds.smilies')) {
         if (isset($user)) {
             if ($posterdata['user_avatar'] != '') {
                 
@@ -343,7 +343,7 @@ if ($submitS) {
 
         settype($image_subject, 'string');
 
-        if ($smilies) {
+        if (Config::get('npds.smilies')) {
             echo '
         <div class="d-none d-sm-block mb-3 row">
             <label class="form-label">' . translate("Icone du message") . '</label>
@@ -516,7 +516,7 @@ if ($submitS) {
                 $res_id = array();
                 $my_rs = '';
 
-                if (!$short_user) {
+                if (!Config::get('npds.short_user')) {
                     $posterdata_extend = forum::get_userdata_extend_from_id($myrow['poster_id']);
 
                     include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
@@ -584,7 +584,7 @@ if ($submitS) {
                     $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="minisite.php?op=' . $posterdata['uname'] . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
             }
 
-            if ($smilies) {
+            if (Config::get('npds.smilies')) {
                 if ($myrow['poster_id'] !== '0') {
                     if ($posterdata['user_avatar'] != '') {
                         

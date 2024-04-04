@@ -32,8 +32,6 @@ manuel('rightblocks');
 
 function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRaide, $SHTML, $css)
 {
-    global $NPDS_Prefix;
-
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
         if ($members == 0) { 
@@ -54,6 +52,10 @@ function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRa
 
     sql_query("INSERT INTO " . $NPDS_Prefix . "rblocks VALUES (NULL,'$title','$content', '$members', '$Rindex', '$Scache', '1', '$css', '$BRaide')");
 
+    DB::table('')->insert(array(
+        ''       => ,
+    ));
+
     global $aid;
     logs::Ecr_Log('security', "MakeRightBlock(" . language::aff_langue($title) . ") by AID : $aid", '');
 
@@ -62,8 +64,6 @@ function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRa
 
 function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scache, $Sactif, $BRaide, $css)
 {
-    global $NPDS_Prefix;
-
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
         if ($members == 0) { 
@@ -87,6 +87,10 @@ function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scach
     
     sql_query("UPDATE " . $NPDS_Prefix . "rblocks SET title='$title', content='$content', member='$members', Rindex='$Rindex', cache='$Scache', actif='$Sactif', css='$css', aide='$BRaide' WHERE id='$id'");
 
+    DB::table('')->where('', )->update(array(
+        ''       => ,
+    ));
+
     global $aid;
     logs::Ecr_Log('security', "ChangeRightBlock(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
 
@@ -95,8 +99,6 @@ function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scach
 
 function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, $Scache, $Sactif, $BRaide, $css)
 {
-    global $NPDS_Prefix;
-
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
         if ($members == 0) {
@@ -119,7 +121,14 @@ function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, 
     $content = stripslashes(str::FixQuotes($content));
 
     sql_query("INSERT INTO " . $NPDS_Prefix . "lblocks VALUES (NULL,'$title','$content','$members', '$Rindex', '$Scache', '$Sactif', '$css', '$BRaide')");
+
+    DB::table('')->insert(array(
+        ''       => ,
+    ));
+
     sql_query("DELETE FROM " . $NPDS_Prefix . "rblocks WHERE id='$id'");
+
+    DB::table('')->where('', )->delete();
 
     global $aid;
     logs::Ecr_Log('security', "MoveRightBlockToLeft(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
@@ -129,9 +138,9 @@ function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, 
 
 function deleterblock($id)
 {
-    global $NPDS_Prefix;
-
     sql_query("DELETE FROM " . $NPDS_Prefix . "rblocks WHERE id='$id'");
+
+    DB::table('')->where('', )->delete();
 
     global $aid;
     logs::Ecr_Log('security', "DeleteRightBlock($id) by AID : $aid", '');

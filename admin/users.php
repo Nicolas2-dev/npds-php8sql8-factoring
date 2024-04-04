@@ -73,9 +73,9 @@ function displayUsers()
         <h3>' . adm_translate("Créer utilisateur") . '</h3>';
 
     $op = 'displayUsers';
-    include("modules/sform/extend-user/adm_extend-user.php");
+    include("support/sform/extend-user/adm_extend-user.php");
 
-    echo js::auto_complete('membre', 'uname', 'users', 'chng_uid', '86400');
+    echo js::auto_complete('membre', 'uname', 'users', 'chng_uid', 86400);
 
     echo '<hr />
         <h3 class="mb-3">' . adm_translate("Fonctions") . '</h3>
@@ -87,8 +87,6 @@ function displayUsers()
 
 function extractUserCSV()
 {
-    global $NPDS_Prefix;
-
     include("library/archive.php");
 
     $MSos = get_os();
@@ -144,7 +142,7 @@ function extractUserCSV()
 
 function modifyUser($chng_user)
 {
-    global $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -197,12 +195,12 @@ function Minisites($chng_mns, $chng_uname)
         $repertoire = $user_dir . "/mns";
 
         if (!is_dir($user_dir)) {
-            @umask("0000");
+            @umask(0000);
             
             if (@mkdir($user_dir, 0777)) {
                 $fp = fopen($user_dir . '/index.html', 'w');
                 fclose($fp);
-                @umask("0000");
+                @umask(0000);
                 
                 if (@mkdir($repertoire, 0777)) {
                     $fp = fopen($repertoire . '/index.html', 'w');
@@ -214,7 +212,7 @@ function Minisites($chng_mns, $chng_uname)
                 }
             }
         } else {
-            @umask("0000");
+            @umask(0000);
             if (@mkdir($repertoire, 0777)) {
                 $fp = fopen($repertoire . '/index.html', 'w');
                 fclose($fp);
@@ -251,8 +249,6 @@ function Minisites($chng_mns, $chng_uname)
 
 function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, $chng_femail, $chng_user_from, $chng_user_occ, $chng_user_intrest, $chng_user_viewemail, $chng_avatar, $chng_user_sig, $chng_bio, $chng_pass, $chng_pass2, $level, $open_user, $chng_groupe, $chng_send_email, $chng_is_visible, $chng_mns, $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1, $raz_avatar, $chng_rank, $chng_lnl)
 {
-    global $NPDS_Prefix;
-
     if (sql_num_rows(sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid!='$chng_uid' AND uname='$chng_uname'")) > 0) {
         global $f_meta_nom, $f_titre;
         
@@ -404,7 +400,7 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
 
 function nonallowedUsers()
 {
-    global $f_meta_nom, $f_titre, $NPDS_Prefix;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -450,7 +446,7 @@ function nonallowedUsers()
 
 function checkdnsmailusers()
 {
-    global $f_meta_nom, $f_titre, $NPDS_Prefix, $gmt, $adminmail, $page, $end, $autocont;
+    global $f_meta_nom, $f_titre, $gmt, $adminmail, $page, $end, $autocont;
 
     include("themes/default/header.php");
 
@@ -475,6 +471,8 @@ function checkdnsmailusers()
     $resource = sql_query("SELECT COUNT(uid) FROM " . $NPDS_Prefix . "users WHERE uid>1;");
     list($total) = sql_fetch_row($resource);
 
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     settype($total, 'integer');
 
     if (($page * $pagesize) > $total) {
@@ -483,6 +481,8 @@ function checkdnsmailusers()
 
     $result = sql_query("SELECT uid, uname, email FROM " . $NPDS_Prefix . "users WHERE uid>1 ORDER BY uid LIMIT $min,$max;");
     $userchecked = sql_num_rows($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $wrongdnsmail = 0;
     $arrayusers = array();
@@ -540,7 +540,7 @@ function checkdnsmailusers()
                 $re = '/#' . $uid . '\|(\d+)/m';
                 preg_match($re, $contents, $res);
 
-                $datenvoi = date('d/m/Y', $res[1]);
+                $datenvoi = date('d/m/Y', (int) $res[1]);
                 $datelimit = date('d/m/Y', $res[1] + 5184000);
             }
 
@@ -627,6 +627,8 @@ function checkdnsmailusers()
 
         $result = sql_query("SELECT uid, uname FROM " . $NPDS_Prefix . "users WHERE uid IN ($whereInParameters)");
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         while ($names = sql_fetch_array($result)) {
             $unames[] = $names['uname'];
             $uids[] = $names['uid'];
@@ -643,7 +645,7 @@ function checkdnsmailusers()
         <ul>';
 
             for ($row = 0; $row < $nbu; $row++) {
-                $dateenvoi = date('d/m/Y', $t[$row]);
+                $dateenvoi = date('d/m/Y', (int) $t[$row]);
                 $datelimit = date('d/m/Y', $t[$row] + 5184000);
                 echo '
                 <li>' . adm_translate("DNS ou serveur de mail incorrect") . ' <i class="fa fa-user-o me-1 "></i> : <a class="alert-link" href="admin.php?chng_uid=' . $uids[$row] . '&amp;op=modifyUser">' . $unames[$row] . '</a><span class="float-end"><i class="far fa-envelope me-1 align-middle"></i><small>' . $dateenvoi . '</small><i class="fa fa-ban mx-1 align-middle"></i><small>' . $datelimit . '</small></span></li>';
@@ -715,6 +717,8 @@ switch ($op) {
         $result = sql_query("SELECT uid, uname FROM " . $NPDS_Prefix . "users WHERE uid='$del_uid' or uname='$del_uid'");
         list($del_uid, $del_uname) = sql_fetch_row($result);
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if ($del_uid != 1) {
             sql_query("DELETE FROM " . $NPDS_Prefix . "users WHERE uid='$del_uid'");
             sql_query("DELETE FROM " . $NPDS_Prefix . "users_status WHERE uid='$del_uid'");
@@ -765,6 +769,8 @@ switch ($op) {
 
             $res = sql_query("SELECT forum_id, forum_moderator FROM " . $NPDS_Prefix . "forums");
 
+            = DB::table('')->select()->where('', )->orderBy('')->get();
+
             while ($row = sql_fetch_row($res)) {
                 $tmp_moder = explode(',', $row[1]);
 
@@ -808,6 +814,8 @@ switch ($op) {
         settype($B1, 'string');
         settype($raz_avatar, 'integer');
         settype($add_send_email, 'integer');
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         if (sql_num_rows(sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uname='$add_uname'")) > 0) {
 
@@ -874,6 +882,8 @@ switch ($op) {
         list($usr_id) = sql_fetch_row(sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$add_uname'"));
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users_extend VALUES ('$usr_id','$C1','$C2','$C3','$C4','$C5','$C6','$C7','$C8','$M1','$M2','$T1','$T2', '$B1')");
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if ($add_user_viewemail) {
             $attach = 1;
         } else {
@@ -899,6 +909,8 @@ switch ($op) {
     case 'unsubUser':
         $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uid='$chng_uid' OR uname='$chng_uid'");
         list($chng_uid) = sql_fetch_row($result);
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         if ($chng_uid != 1) {
             sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$chng_uid'");

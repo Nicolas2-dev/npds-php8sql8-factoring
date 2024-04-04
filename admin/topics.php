@@ -34,7 +34,7 @@ admindroits($aid, $f_meta_nom);
 
 function topicsmanager()
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre, $nook;
+    global $f_meta_nom, $f_titre, $nook;
 
     include("themes/default/header.php");
 
@@ -42,6 +42,8 @@ function topicsmanager()
     adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT topicid, topicname, topicimage, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topicname");
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     settype($topicadmin, 'string');
 
@@ -198,7 +200,7 @@ function topicsmanager()
 
 function topicedit($topicid)
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -207,6 +209,8 @@ function topicedit($topicid)
 
     $result = sql_query("SELECT topicid, topicname, topicimage, topictext, topicadmin FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
     list($topicid, $topicname, $topicimage, $topictext, $topicadmin) = sql_fetch_row($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     echo '
     <hr />
@@ -292,6 +296,8 @@ function topicedit($topicid)
 
     $res = sql_query("SELECT rid, name, url FROM " . $NPDS_Prefix . "related WHERE tid='$topicid'");
 
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     echo '
     <table id="tad_linkrel" data-toggle="table" data-striped="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
@@ -371,7 +377,7 @@ function topicedit($topicid)
 
 function relatededit($tid, $rid)
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -381,8 +387,12 @@ function relatededit($tid, $rid)
     $result = sql_query("SELECT name, url FROM " . $NPDS_Prefix . "related WHERE rid='$rid'");
     list($name, $url) = sql_fetch_row($result);
 
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result2 = sql_query("SELECT topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$tid'");
     list($topictext, $topicimage) = sql_fetch_row($result2);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     echo '
     <hr />
@@ -439,8 +449,6 @@ function relatededit($tid, $rid)
 
 function relatedsave($tid, $rid, $name, $url)
 {
-    global $NPDS_Prefix;
-
     sql_query("UPDATE " . $NPDS_Prefix . "related SET name='$name', url='$url' WHERE rid='$rid'");
 
     Header("Location: admin.php?op=topicedit&topicid=$tid");
@@ -448,8 +456,6 @@ function relatedsave($tid, $rid, $name, $url)
 
 function relateddelete($tid, $rid)
 {
-    global $NPDS_Prefix;
-
     sql_query("DELETE FROM " . $NPDS_Prefix . "related WHERE rid='$rid'");
 
     Header("Location: admin.php?op=topicedit&topicid=$tid");
@@ -457,11 +463,11 @@ function relateddelete($tid, $rid)
 
 function topicmake($topicname, $topicimage, $topictext, $topicadmin)
 {
-    global $NPDS_Prefix;
-
     $topicname = stripslashes(FixQuotes($topicname));
 
     $istopicname = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "topics WHERE topicname='$topicname'"));
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if ($istopicname !== 0) {
         Header("Location: admin.php?op=topicsmanager&nook=nook#addtopic");
@@ -484,6 +490,8 @@ function topicmake($topicname, $topicimage, $topictext, $topicadmin)
 
         $nres = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "droits WHERE d_aut_aid='$topicadminX[$i]' and d_droits=11112"));
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if ($nres == 0) {
             sql_query("INSERT INTO " . $NPDS_Prefix . "droits VALUES ('$topicadminX[$i]', '2', '11112')");
         }
@@ -494,12 +502,12 @@ function topicmake($topicname, $topicimage, $topictext, $topicadmin)
 
 function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin, $name, $url)
 {
-    global $NPDS_Prefix;
-
     $topicadminX = explode(',', $topicadmin);
     array_pop($topicadminX);
 
     $res = sql_query("SELECT * FROM " . $NPDS_Prefix . "droits WHERE d_droits=11112 AND d_fon_fid=2");
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $d = array();
     $topad = array();
@@ -519,7 +527,12 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
             //on cherche si il administre un autre sujet
             $resu =  mysqli_get_client_info() <= '8.0' 
                 ? sql_query("SELECT * FROM " . $NPDS_Prefix . "topics WHERE topicadmin REGEXP '[[:<:]]" . $value . "[[:>:]]'") 
+
+                = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 : sql_query("SELECT * FROM " . $NPDS_Prefix . "topics WHERE topicadmin REGEXP '\\b" . $value . "\\b'");
+
+                = DB::table('')->select()->where('', )->orderBy('')->get();
             
             $nbrow = sql_num_rows($resu);
             list($tid) = sql_fetch_row($resu);
@@ -550,13 +563,13 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
 
 function topicdelete($topicid, $ok = 0)
 {
-    global $NPDS_Prefix;
-
     if ($ok == 1) {
         global $aid;
 
         $result = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories WHERE topic='$topicid'");
         list($sid) = sql_fetch_row($result);
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         sql_query("DELETE FROM " . $NPDS_Prefix . "stories WHERE topic='$topicid'");
 
@@ -590,6 +603,8 @@ function topicdelete($topicid, $ok = 0)
 
         $result2 = sql_query("SELECT topicimage, topicname, topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
         list($topicimage, $topicname, $topictext) = sql_fetch_row($result2);
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         echo '
     <h3 class=""><span class="text-danger">' . adm_translate("Effacer le Sujet") . ' : </span>' . language::aff_langue($topicname) . '</h3>';

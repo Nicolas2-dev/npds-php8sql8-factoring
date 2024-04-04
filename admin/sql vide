@@ -11,7 +11,7 @@
     ));
 
 
-    = DB::table('')->count();
+    = DB::table('')->count(); //
 
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    = DB::table('')->select()->where('', )->orderBy('')->get(); //

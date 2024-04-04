@@ -202,7 +202,8 @@ if ($chng_avatar != '')
     $m->add_field('add_avatar', '', $chng_avatar, 'hidden', false);
 else
     $m->add_field('add_avatar', '', 'blank.gif', 'hidden', false);
-include_once('modules/geoloc/config/geoloc.conf');
+
+include('modules/geoloc/config/geoloc.conf');
 
 $m->add_extra('
         <div class="mb-3 row">

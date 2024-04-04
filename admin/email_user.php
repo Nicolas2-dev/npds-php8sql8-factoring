@@ -161,7 +161,7 @@ function email_user(): void
     var formulid = ["emailuseradm"];
     inpandfieldlen("subject",100);';
 
-    echo js::auto_complete('membre', 'uname', 'users', 'username', '86400');
+    echo js::auto_complete('membre', 'uname', 'users', 'username', 86400);
 
     css::adminfoot('fv', '', $arg1, '');
 }

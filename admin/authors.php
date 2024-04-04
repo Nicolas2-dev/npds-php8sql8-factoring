@@ -253,8 +253,8 @@ function displayadmins(): void
 
     $arg1 = '
         var formulid = ["nou_adm"];
-        ' . js::auto_complete('admin', 'aid', 'authors', '', '0') . '
-        ' . js::auto_complete('adminname', 'name', 'authors', '', '0') . '
+        ' . js::auto_complete('admin', 'aid', 'authors', '', 0) . '
+        ' . js::auto_complete('adminname', 'name', 'authors', '', 0) . '
         inpandfieldlen("add_aid",30);
         inpandfieldlen("add_name",50);
         inpandfieldlen("add_email",254);

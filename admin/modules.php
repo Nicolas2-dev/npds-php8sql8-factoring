@@ -84,7 +84,7 @@ echo '
         </thead>
         <tbody>';
 
-DB::table('modules')->select('mid', 'mnom', 'minstall')->orderBy('mid')->get();
+$modules = DB::table('modules')->select('mid', 'mnom', 'minstall')->orderBy('mid')->get();
 
 foreach ($modules as $module) {
     $icomod = '';

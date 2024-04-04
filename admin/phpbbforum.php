@@ -18,6 +18,7 @@ use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
+use npds\system\support\str;
 use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
@@ -65,16 +66,14 @@ function ForumAdmin(): void
 
     foreach($categories as $categ) {    
         
-        // $gets = sql_query("SELECT  FROM " . $NPDS_Prefix . "forums WHERE =''");
-        // $numbers = sql_fetch_assoc($gets);
-        
-        $numbers = DB::table('')->select(DB::raw('COUNT(*) AS total'))->where('cat_id', $categ['cat_id'])->get();
+        //$numbers = DB::table('forums')->select(DB::raw('COUNT(*) AS total'))->where('cat_id', $categ['cat_id'])->get();
+        $numbers = DB::table('forums')->select('total')->where('cat_id', $categ['cat_id'])->count();
 
         echo '
             <tr>
                 <td>' . $categ['cat_id'] . '</td>
                 <td>' . StripSlashes($categ['cat_title']) . '</td>
-                <td>' . $numbers['total'] . ' <a href="admin.php?op=ForumGo&amp;cat_id=' . $categ['cat_id'] . '"><i class="fa fa-eye fa-lg align-middle" title="' . adm_translate("Voir les forums de cette catégorie") . ': ' . StripSlashes($categ['cat_title']) . '." data-bs-toggle="tooltip" data-bs-placement="right"></i></a></td>
+                <td>' . $numbers . ' <a href="admin.php?op=ForumGo&amp;cat_id=' . $categ['cat_id'] . '"><i class="fa fa-eye fa-lg align-middle" title="' . adm_translate("Voir les forums de cette catégorie") . ': ' . StripSlashes($categ['cat_title']) . '." data-bs-toggle="tooltip" data-bs-placement="right"></i></a></td>
                 <td><a href="admin.php?op=ForumCatEdit&amp;cat_id=' . $categ['cat_id'] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a><a href="admin.php?op=ForumCatDel&amp;cat_id=' . $categ['cat_id'] . '&amp;ok=0"><i class="fas fa-trash fa-lg text-danger ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
             </tr>';
     }
@@ -107,11 +106,11 @@ function ForumAdmin(): void
 /**
  * [ForumGo description]
  *
- * @param   int   $cat_id  [$cat_id description]
+ * @param   int|string   $cat_id  [$cat_id description]
  *
  * @return  void
  */
-function ForumGo(int $cat_id): void 
+function ForumGo(int|string $cat_id): void 
 {
     global $f_meta_nom, $f_titre;
 
@@ -120,9 +119,9 @@ function ForumGo(int $cat_id): void
     GraphicAdmin(manuel('forumcat'));
     adminhead($f_meta_nom, $f_titre);
 
-    $catagorie = DB::table('catagories')->select('cat_title')->where('cat_id', $cat_id)->first();
+    $categorie = DB::table('catagories')->select('cat_title')->where('cat_id', $cat_id)->first();
 
-    $categorie_title = StripSlashes($cat_title);
+    $categorie_title = StripSlashes($categorie['cat_title']);
 
     echo '
     <hr />
@@ -398,12 +397,12 @@ function ForumGo(int $cat_id): void
 /**
  * [ForumGoEdit description]
  *
- * @param   int   $forum_id  [$forum_id description]
- * @param   int   $ctg       [$ctg description]
+ * @param   int      $forum_id  [$forum_id description]
+ * @param   string   $ctg       [$ctg description]
  *
  * @return  void
  */
-function ForumGoEdit(int $forum_id, int $ctg): void
+function ForumGoEdit(int $forum_id, string $ctg): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -453,7 +452,7 @@ function ForumGoEdit(int $forum_id, int $ctg): void
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="forum_mod">' . adm_translate("Modérateur(s)") . '</label>';
 
-    $moderator = str_replace(' ', ',', forum::get_moderator($forum['forum_mod']));
+    $moderator = str_replace(' ', ',', forum::get_moderator($forum['forum_moderator']));
 
     echo '
             <div class="col-sm-8">
@@ -495,10 +494,10 @@ function ForumGoEdit(int $forum_id, int $ctg): void
             <div class="col-sm-8">
                 <select class="form-select" id="cat_id" name="cat_id">';
 
-    $catagories = DB::table('catagories')->select('cat_id', 'cat_title')->get();
+    $categories = DB::table('catagories')->select('cat_id', 'cat_title')->get();
 
-    foreach ($catagories as $categ) {
-        if ($categ['cat_id'] == $cat_id_1) {
+    foreach ($categories as $categ) {
+        if ($categ['cat_id'] == $forum['cat_id']) {
             echo '<option value="' . $categ['cat_id'] . '" selected="selected">' . StripSlashes($categ['cat_title']) . '</option>';
         } else {
             echo '<option value="' . $categ['cat_id'] . '">' . StripSlashes($categ['cat_title']) . '</option>';
@@ -822,12 +821,12 @@ function ForumCatEdit(int $cat_id): void
  */
 function ForumCatSave(int $old_catid, int $cat_id, string $cat_title): void 
 {
-    DB::table('catagories')->where('cat_id', $old_catid)->update(array(
+    $r = DB::table('catagories')->where('cat_id', $old_catid)->update(array(
         'cat_id'       => $cat_id,
         'cat_title'    => AddSlashes($cat_title),
     ));
     
-    if ($return) {
+    if ($r) {
         DB::table('forums')->where('cat_id', $old_catid)->update(array(
             'cat_id'       => $cat_id,
         ));       
@@ -845,7 +844,7 @@ function ForumCatSave(int $old_catid, int $cat_id, string $cat_title): void
  * [ForumGoSave description]
  *
  * @param   int     $forum_id      [$forum_id description]
- * @param   int     $forum_name    [$forum_name description]
+ * @param   string  $forum_name    [$forum_name description]
  * @param   string  $forum_desc    [$forum_desc description]
  * @param   int     $forum_access  [$forum_access description]
  * @param   string  $forum_mod     [$forum_mod description]
@@ -855,11 +854,11 @@ function ForumCatSave(int $old_catid, int $cat_id, string $cat_title): void
  * @param   int     $arbre         [$arbre description]
  * @param   int     $attachement   [$attachement description]
  * @param   int     $forum_index   [$forum_index description]
- * @param   int     $ctg           [$ctg description]
+ * @param   string  $ctg           [$ctg description]
  *
  * @return  void
  */
-function ForumGoSave(int $forum_id, int $forum_name, string $forum_desc, int $forum_access, string $forum_mod, int $cat_id, int $forum_type, string $forum_pass, int $arbre, int $attachement, int $forum_index, int $ctg): void
+function ForumGoSave(int $forum_id, string $forum_name, string $forum_desc, int $forum_access, string $forum_mod, int $cat_id, int $forum_type, string $forum_pass, int $arbre, int $attachement, int $forum_index, string $ctg): void
 {
     // il faut supprimer le dernier , à cause de l'auto-complete
     $forum_mod = rtrim(chop($forum_mod), ',');
@@ -875,8 +874,8 @@ function ForumGoSave(int $forum_id, int $forum_name, string $forum_desc, int $fo
         if ($forum_moderator['uid'] != '') {
             $forum_mod .= $forum_moderator['uid'] . ' ';
 
-            DB::table('users_status')->where('level', 2)->update(array(
-                'uid'       => $forum_moderator['uid'],
+            DB::table('users_status')->where('uid', $forum_moderator['uid'])->update(array(
+                'level'       => 2,
             ));
         } else {
             $error_mod .= $moderator[$i] . ' ';
@@ -906,7 +905,7 @@ function ForumGoSave(int $forum_id, int $forum_name, string $forum_desc, int $fo
 
             DB::table('forums')->where('forum_id', $forum_id)->update(array(
                 'forum_name'        => $forum_name,
-                'forum_desc'        => $forum_desc,
+                'forum_desc'        => stripslashes($forum_desc),
                 'forum_access'      => $forum_access,
                 'forum_moderator'   => $forum_mod,
                 'cat_id'            => $cat_id,
@@ -919,7 +918,7 @@ function ForumGoSave(int $forum_id, int $forum_name, string $forum_desc, int $fo
         } else {
             DB::table('forums')->where('forum_id', $forum_id)->update(array(
                 'forum_name'        => $forum_name,
-                'forum_desc'        => $forum_desc,
+                'forum_desc'        => stripslashes($forum_desc),
                 'forum_access'      => $forum_access,
                 'forum_moderator'   => $forum_mod,
                 'cat_id'            => $cat_id,
@@ -962,8 +961,8 @@ function ForumCatAdd(string $catagories): void
 /**
  * [ForumGoAdd description]
  *
- * @param   int     $forum_name    [$forum_name description]
- * @param   int     $forum_desc    [$forum_desc description]
+ * @param   string  $forum_name    [$forum_name description]
+ * @param   string  $forum_desc    [$forum_desc description]
  * @param   int     $forum_access  [$forum_access description]
  * @param   string  $forum_mod     [$forum_mod description]
  * @param   int     $cat_id        [$cat_id description]
@@ -972,11 +971,11 @@ function ForumCatAdd(string $catagories): void
  * @param   int     $arbre         [$arbre description]
  * @param   int     $attachement   [$attachement description]
  * @param   int     $forum_index   [$forum_index description]
- * @param   int     $ctg           [$ctg description]
+ * @param   string  $ctg           [$ctg description]
  *
  * @return  void
  */
-function ForumGoAdd(int $forum_name, int $forum_desc, int $forum_access, string $forum_mod, int $cat_id, int $forum_type, string $forum_pass, int $arbre, int $attachement, int $forum_index, int $ctg): void
+function ForumGoAdd(string $forum_name, string $forum_desc, int $forum_access, string $forum_mod, int $cat_id, int $forum_type, string $forum_pass, int $arbre, int $attachement, int $forum_index, string $ctg): void
 {
     // il faut supprimer le dernier , à cause de l'auto-complete
     $forum_mod = rtrim(chop($forum_mod), ',');
@@ -1055,12 +1054,12 @@ function ForumCatDel(int $cat_id, int $ok = 0): void
         $forums = DB::table('forums')->select('forum_id')->where('cat_id', $cat_id)->get();
 
         foreach ($forums as $forum) {
-            DB::table('forumtopics')->where('forum_id', $forums['forum_id'])->delete();
-            DB::table('forum_read')->where('forum_id', $forums['forum_id'])->delete();
+            DB::table('forumtopics')->where('forum_id', $forum['forum_id'])->delete();
+            DB::table('forum_read')->where('forum_id', $forum['forum_id'])->delete();
 
-            forum::control_efface_post("forum_npds", "", "", $forums['forum_id']);
+            forum::control_efface_post("forum_npds", "", "", $forum['forum_id']);
 
-            DB::table('posts')->where('forum_id', $forums['forum_id'])->delete();
+            DB::table('posts')->where('forum_id', $forum['forum_id'])->delete();
         }
 
         DB::table('forums')->where('cat_id', $cat_id)->delete();

@@ -957,7 +957,7 @@ class forum
     {
         global $upload_table, $NPDS_Prefix;
     
-        include("modules/upload/include_forum/upload.conf.forum.php");
+        include("modules/upload/config/upload.conf.php");
     
         $sql1 = "SELECT att_id, att_name, att_path FROM " . $NPDS_Prefix . "$upload_table WHERE apli='$apli' AND";
         $sql2 = "DELETE FROM " . $NPDS_Prefix . "$upload_table WHERE apli='$apli' AND";
@@ -1170,7 +1170,7 @@ class forum
                                         $Mmod = true;
                                     }
                                 }
-    
+                                
                                 $last_post = static::get_last_post($myrow['forum_id'], "forum", "infos", $Mmod);
                                 $ibid .= '
                                     <p class="mb-0 list-group-item list-group-item-action flex-column align-items-start">

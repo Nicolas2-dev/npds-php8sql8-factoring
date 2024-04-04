@@ -139,7 +139,7 @@ function droits($member)
 
 function sousrub_select($secid)
 {
-    global $radminsuper, $aid, $NPDS_Prefix;
+    global $radminsuper, $aid;
     
     $ok_pub = false;
     
@@ -147,14 +147,20 @@ function sousrub_select($secid)
             <select name="secid" class="form-select">';
     $result = sql_query("SELECT distinct rubid, rubname, ordre FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre");
     
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     while (list($rubid, $rubname) = sql_fetch_row($result)) {
         $rubname = language::aff_langue($rubname);
         $tmp .= '<optgroup label="' . language::aff_langue($rubname) . '">';
 
         if ($radminsuper == 1) {
             $result2 = sql_query("SELECT secid, secname, ordre FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
+
+            = DB::table('')->select()->where('', )->orderBy('')->get();
         } else {
             $result2 = sql_query("SELECT distinct sections.secid, sections.secname, sections.ordre FROM " . $NPDS_Prefix . "sections, " . $NPDS_Prefix . "publisujet WHERE sections.rubid='$rubid' and sections.secid=publisujet.secid2 and publisujet.aid='$aid' and publisujet.type='1' ORDER BY ordre");
+        
+            = DB::table('')->select()->where('', )->orderBy('')->get();
         }
 
         while (list($secid2, $secname) = sql_fetch_row($result2)) {
@@ -191,13 +197,15 @@ function sousrub_select($secid)
 
 function droits_publication($secid)
 {
-    global $radminsuper, $aid, $NPDS_Prefix;
+    global $radminsuper, $aid;
 
     $droits = 0; // 3=mod - 4=delete
 
     if ($radminsuper != 1) {
         $result = sql_query("SELECT type FROM " . $NPDS_Prefix . "publisujet WHERE secid2='$secid' AND aid='$aid' AND type in(3,4) ORDER BY type");
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if (sql_num_rows($result) > 0) {
             while (list($type) = sql_fetch_row($result)) {
                 $droits = $droits + $type;
@@ -213,7 +221,7 @@ function droits_publication($secid)
 
 function sections()
 {
-    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
+    global $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -222,8 +230,13 @@ function sections()
 
     $result = $radminsuper == 1 
         ? sql_query("SELECT rubid, rubname, enligne, ordre FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre") 
+        
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+        
         : sql_query("SELECT DISTINCT r.rubid, r.rubname, r.enligne, r.ordre FROM " . $NPDS_Prefix . "rubriques r, " . $NPDS_Prefix . "sections s, " . $NPDS_Prefix . "publisujet p WHERE (r.rubid=s.rubid AND s.secid=p.secid2 AND p.aid='$aid') ORDER BY ordre");
     
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $nb_rub = sql_num_rows($result);
 
     echo '
@@ -292,8 +305,12 @@ function sections()
 
             if ($radminsuper == 1) {
                 $result2 = sql_query("SELECT DISTINCT secid, secname, ordre FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
+            
+                = DB::table('')->select()->where('', )->orderBy('')->get();
             } else {
                 $result2 = sql_query("SELECT DISTINCT sections.secid, sections.secname, sections.ordre FROM " . $NPDS_Prefix . "sections, " . $NPDS_Prefix . "publisujet WHERE sections.rubid='$rubid' AND sections.secid=publisujet.secid2 AND publisujet.aid='$aid' ORDER BY ordre");
+            
+                = DB::table('')->select()->where('', )->orderBy('')->get();
             }
 
             if (sql_num_rows($result2) > 0) {
@@ -312,6 +329,8 @@ function sections()
                     $secname = language::aff_langue($secname);
 
                     $result3 = sql_query("SELECT artid, title FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid' ORDER BY ordre");
+
+                    = DB::table('')->select()->where('', )->orderBy('')->get();
 
                     echo '
                 <div class="list-group-item d-flex py-2">';
@@ -445,6 +464,8 @@ function sections()
         $result = sql_query("SELECT distinct artid, secid, title, content, author FROM " . $NPDS_Prefix . "seccont_tempo ORDER BY artid");
         $nb_enattente = sql_num_rows($result);
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         while (list($artid, $secid, $title, $content, $author) = sql_fetch_row($result)) {
             $enattente .= '
             <li class="list-group-item list-group-item-action" ><div class="d-flex flex-row align-items-center"><span class="flex-grow-1 pe-4">' . language::aff_langue($title) . '<br /><span class="text-muted"><i class="fa fa-user fa-lg me-1"></i>[' . $author . ']</span></span><span class="text-center"><a href="admin.php?op=secartupdate&amp;artid=' . $artid . '">' . adm_translate("Editer") . '<br /><i class="fa fa-edit fa-lg"></i></a></span></div>';
@@ -454,6 +475,8 @@ function sections()
         $result = sql_query("SELECT distinct seccont_tempo.artid, seccont_tempo.title, seccont_tempo.author FROM " . $NPDS_Prefix . "seccont_tempo, " . $NPDS_Prefix . "publisujet WHERE seccont_tempo.secid=publisujet.secid2 AND publisujet.aid='$aid' AND (publisujet.type='1' OR publisujet.type='2')");
         $nb_enattente = sql_num_rows($result);
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         while (list($artid, $title, $author) = sql_fetch_row($result)) {
             $enattente .= '
             <li class="list-group-item list-group-item-action" ><div class="d-flex flex-row align-items-center"><span class="flex-grow-1 pe-4">' . language::aff_langue($title) . '<br /><span class="text-muted"><i class="fa fa-user fa-lg me-1"></i>[' . $author . ']</span></span><span class="text-center"><a href="admin.php?op=secartupdate&amp;artid=' . $artid . '">' . adm_translate("Editer") . '<br /><i class="fa fa-edit fa-lg"></i></a></span></div>';
@@ -474,6 +497,8 @@ function sections()
         
         $result = sql_query("SELECT aid, name, radminsuper FROM " . $NPDS_Prefix . "authors");
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         echo '<div class="row">';
         
         while (list($Xaid, $name, $Xradminsuper) = sql_fetch_row($result)) {
@@ -497,7 +522,7 @@ function sections()
 
 function new_rub_section($type)
 {
-    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
+    global $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -518,8 +543,12 @@ function new_rub_section($type)
 
         if ($radminsuper == 1) {
             $result = sql_query("SELECT rubid, rubname FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre");
+
+            = DB::table('')->select()->where('', )->orderBy('')->get();
         } else {
             $result = sql_query("SELECT DISTINCT r.rubid, r.rubname FROM " . $NPDS_Prefix . "rubriques r LEFT JOIN " . $NPDS_Prefix . "sections s on r.rubid= s.rubid LEFT JOIN " . $NPDS_Prefix . "publisujet p on s.secid= p.secid2 WHERE p.aid='$aid'");
+        
+            = DB::table('')->select()->where('', )->orderBy('')->get();
         }
 
         while (list($rubid, $rubname) = sql_fetch_row($result)) {
@@ -600,10 +629,12 @@ function new_rub_section($type)
 // Fonction publications connexes
 function publishcompat($article)
 {
-    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
+    global $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     $result2 = sql_query("SELECT title FROM " . $NPDS_Prefix . "seccont WHERE artid='$article'");
     list($titre) = sql_fetch_row($result2);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     include("themes/default/header.php");
 
@@ -611,6 +642,9 @@ function publishcompat($article)
     adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT rubid, rubname, enligne, ordre FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre");
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Publications connexes") . ' : <span class="text-muted">' . language::aff_langue($titre) . '</span></h3>
@@ -634,8 +668,12 @@ function publishcompat($article)
 
         if ($radminsuper == 1) {
             $result2 = sql_query("SELECT secid, secname FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
+
+            = DB::table('')->select()->where('', )->orderBy('')->get();
         } else {
             $result2 = sql_query("SELECT DISTINCT sections.secid, sections.secname, sections.ordre FROM " . $NPDS_Prefix . "sections, " . $NPDS_Prefix . "publisujet WHERE sections.rubid='$rubid' AND sections.secid=publisujet.secid2 AND publisujet.aid='$aid' AND publisujet.type='1' ORDER BY ordre");
+        
+            = DB::table('')->select()->where('', )->orderBy('')->get();
         }
         
         if (sql_num_rows($result2) > 0) {
@@ -647,11 +685,15 @@ function publishcompat($article)
                 
                 $result3 = sql_query("SELECT artid, title FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid' ORDER BY ordre");
                 
+                = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 if (sql_num_rows($result3) > 0) {
                     while (list($artid, $title) = sql_fetch_row($result3)) {
                         $i++;
                         $result4 = sql_query("SELECT id2 FROM " . $NPDS_Prefix . "compatsujet WHERE id2='$artid' AND id1='$article'");
                         
+                        = DB::table('')->select()->where('', )->orderBy('')->get();
+
                         echo '<li class="list-group-item list-group-item-action"><div class="form-check ms-3">';
                         
                         if (sql_num_rows($result4) > 0) {
@@ -682,8 +724,6 @@ function publishcompat($article)
 
 function updatecompat($article, $admin_rub, $idx)
 {
-    global $NPDS_Prefix;
-
     $result = sql_query("DELETE FROM " . $NPDS_Prefix . "compatsujet WHERE id1='$article'");
 
     for ($j = 1; $j < ($idx + 1); $j++) {
@@ -702,7 +742,7 @@ function updatecompat($article, $admin_rub, $idx)
 // Fonctions RUBRIQUES
 function rubriquedit($rubid)
 {
-    global $NPDS_Prefix, $radminsuper, $f_meta_nom, $f_titre;
+    global $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper != 1) {
         Header("Location: admin.php?op=sections");
@@ -710,6 +750,8 @@ function rubriquedit($rubid)
 
     $result = sql_query("SELECT rubid, rubname, intro, enligne, ordre FROM " . $NPDS_Prefix . "rubriques WHERE rubid='$rubid'");
     list($rubid, $rubname, $intro, $enligne, $ordre) = sql_fetch_row($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if (!sql_num_rows($result)) { 
         Header("Location: admin.php?op=sections");
@@ -722,6 +764,9 @@ function rubriquedit($rubid)
 
     $result2 = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid'");
     $number = sql_num_rows($result2);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $rubname = stripslashes($rubname);
     $intro = stripslashes($intro);
     
@@ -793,7 +838,7 @@ function rubriquedit($rubid)
 
 function rubriquemake($rubname, $introc)
 {
-    global $NPDS_Prefix, $radminsuper, $aid;
+    global $radminsuper, $aid;
 
     $rubname = stripslashes(str::FixQuotes($rubname));
     $introc = stripslashes(str::FixQuotes(image::dataimagetofileurl($introc, 'modules/upload/upload/rub')));
@@ -805,8 +850,12 @@ function rubriquemake($rubname, $introc)
         $result = sql_query("SELECT rubid FROM " . $NPDS_Prefix . "rubriques ORDER BY rubid DESC LIMIT 1");
         list($rublast) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         sql_query("INSERT INTO " . $NPDS_Prefix . "sections VALUES (NULL,'A modifier !', '', '', '$rublast', '<p>Cette sous-rubrique a été créé automatiquement. <br />Vous pouvez la personaliser et ensuite rattacher les publications que vous souhaitez.</p>','99','0')");
         $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections ORDER BY secid DESC LIMIT 1");
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         list($seclast) = sql_fetch_row($result);
 
@@ -823,8 +872,6 @@ function rubriquemake($rubname, $introc)
 
 function rubriquechange($rubid, $rubname, $introc, $enligne)
 {
-    global $NPDS_Prefix;
-
     $rubname = stripslashes(str::FixQuotes($rubname));
     $introc = image::dataimagetofileurl($introc, 'modules/upload/upload/rub');
     $introc = stripslashes(str::FixQuotes($introc));
@@ -841,7 +888,7 @@ function rubriquechange($rubid, $rubname, $introc, $enligne)
 // Fonctions SECTIONS
 function sectionedit($secid)
 {
-    global $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre, $aid;
+    global $radminsuper, $f_meta_nom, $f_titre, $aid;
 
     include("themes/default/header.php");
 
@@ -850,6 +897,8 @@ function sectionedit($secid)
 
     $result = sql_query("SELECT secid, secname, image, userlevel, rubid, intro FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
     list($secid, $secname, $image, $userlevel, $rubref, $intro) = sql_fetch_row($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $secname = stripslashes($secname);
     $intro = stripslashes($intro);
@@ -860,6 +909,8 @@ function sectionedit($secid)
 
     $result2 = sql_query("SELECT artid FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid'");
     $number = sql_num_rows($result2);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if ($number)    {
         echo '<span class="badge bg-secondary p-2 me-2">' . $number . ' </span>' . adm_translate("publication(s) attachée(s)");
@@ -873,8 +924,12 @@ function sectionedit($secid)
 
     if ($radminsuper == 1) {
         $result = sql_query("SELECT rubid, rubname FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre");
+        
+        = DB::table('')->select()->where('', )->orderBy('')->get();
     } else {
         $result = sql_query("SELECT DISTINCT r.rubid, r.rubname FROM " . $NPDS_Prefix . "rubriques r LEFT JOIN " . $NPDS_Prefix . "sections s on r.rubid= s.rubid LEFT JOIN " . $NPDS_Prefix . "publisujet p on s.secid= p.secid2 WHERE p.aid='$aid'");
+    
+        = DB::table('')->select()->where('', )->orderBy('')->get();
     }
     
     echo '<select class="form-select" id="rubref" name="rubref">';
@@ -896,6 +951,8 @@ function sectionedit($secid)
                 <select class="form-select" id="rubref" name="rubref">';
         $result = sql_query("SELECT rubid, rubname FROM ".$NPDS_Prefix."rubriques ORDER BY ordre");
         
+= DB::table('')->select()->where('', )->orderBy('')->get();
+
         while(list($rubid, $rubname) = sql_fetch_row($result)) {
             $sel = $rubref==$rubid?'selected="selected"':'';
             echo '<option value="'.$rubid.'" '.$sel.'>'.language::aff_langue($rubname).'</option>';
@@ -908,6 +965,9 @@ function sectionedit($secid)
         echo '<input type="hidden" name="rubref" value="'.$rubref.'" />';
         $result = sql_query("SELECT rubname FROM ".$NPDS_Prefix."rubriques WHERE rubid='$rubref'");
         list($rubname) = sql_fetch_row($result);
+
+= DB::table('')->select()->where('', )->orderBy('')->get();
+
         echo '<pan class="ms-2">'.language::aff_langue($rubname).'</span>';
     }
     */
@@ -956,7 +1016,7 @@ function sectionedit($secid)
 
 function sectionmake($secname, $image, $members, $Mmembers, $rubref, $introd)
 {
-    global $NPDS_Prefix, $radminsuper, $aid;
+    global $radminsuper, $aid;
 
     if (is_array($Mmembers) and ($members == 1)) {
         $members = implode(',', $Mmembers);
@@ -976,6 +1036,8 @@ function sectionmake($secname, $image, $members, $Mmembers, $rubref, $introd)
         $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections ORDER BY secid DESC LIMIT 1");
         list($secid) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         droitsalacreation($aid, $secid);
     }
 
@@ -986,8 +1048,6 @@ function sectionmake($secname, $image, $members, $Mmembers, $rubref, $introd)
 
 function sectionchange($secid, $secname, $image, $members, $Mmembers, $rubref, $introd)
 {
-    global $NPDS_Prefix;
-
     if (is_array($Mmembers) and ($members == 1)) {
         $members = implode(',', $Mmembers);
         if ($members == 0) {
@@ -1011,10 +1071,12 @@ function sectionchange($secid, $secname, $image, $members, $Mmembers, $rubref, $
 // Fonction ARTICLES
 function secartedit($artid)
 {
-    global $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $f_meta_nom, $f_titre;
 
     $result2 = sql_query("SELECT author, artid, secid, title, content, userlevel FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
     list($author, $artid, $secid, $title, $content, $userlevel) = sql_fetch_row($result2);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if (!$artid) {
         Header("Location: admin.php?op=sections");
@@ -1045,6 +1107,8 @@ function secartedit($artid)
     } else {
         $result = sql_query("SELECT secname FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
         list($secname) = sql_fetch_row($result);
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         echo "<b>" . language::aff_langue($secname) . "</b>";
         echo '<input type="hidden" name="secid" value="' . $secid . '" />';
@@ -1097,13 +1161,17 @@ function secartedit($artid)
 
 function secartupdate($artid)
 {
-    global $aid, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     $result = sql_query("SELECT author, artid, secid, title, content, userlevel FROM " . $NPDS_Prefix . "seccont_tempo WHERE artid='$artid'");
     list($author, $artid, $secid, $title, $content, $userlevel) = sql_fetch_row($result);
 
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $testpubli = sql_query("SELECT type FROM " . $NPDS_Prefix . "publisujet WHERE secid2='$secid' AND aid='$aid' AND type='1'");
     list($test_publi) = sql_fetch_row($testpubli);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if ($test_publi == 1) {
         $debut = '
@@ -1123,6 +1191,8 @@ function secartupdate($artid)
 
     $testpubli = sql_query("SELECT type FROM " . $NPDS_Prefix . "publisujet WHERE secid2='$secid' AND aid='$aid' AND type='2'");
     list($test_publi) = sql_fetch_row($testpubli);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if (($test_publi == 2) or ($radminsuper == 1)) {
         $debut = '
@@ -1171,6 +1241,8 @@ function secartupdate($artid)
         $result = sql_query("SELECT secname FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
         list($secname) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         echo '
                 <strong>' . language::aff_langue($secname) . '</strong>
                 <input type="hidden" name="secid" value="' . $secid . '" />';
@@ -1204,7 +1276,7 @@ function secartupdate($artid)
 
 function secarticleadd($secid, $title, $content, $autho, $members, $Mmembers)
 {
-    global $NPDS_Prefix, $radminsuper;
+    global $radminsuper;
 
     // pas de removehack pour l'entrée des données ???????
     if (is_array($Mmembers) and ($members == 1)) {
@@ -1237,8 +1309,6 @@ function secarticleadd($secid, $title, $content, $autho, $members, $Mmembers)
 
 function secartchange($artid, $secid, $title, $content, $members, $Mmembers)
 {
-    global $NPDS_Prefix
-    ;
     if (is_array($Mmembers) and ($members == 1)) {
         $members = implode(',', $Mmembers);
     }
@@ -1259,8 +1329,6 @@ function secartchange($artid, $secid, $title, $content, $members, $Mmembers)
 
 function secartchangeup($artid, $secid, $title, $content, $members, $Mmembers)
 {
-    global $NPDS_Prefix;
-
     if (is_array($Mmembers) and ($members == 1)) {
         $members = implode(',', $Mmembers);
     }
@@ -1280,8 +1348,6 @@ function secartchangeup($artid, $secid, $title, $content, $members, $Mmembers)
 
 function secartpublish($artid, $secid, $title, $content, $author, $members, $Mmembers)
 {
-    global $NPDS_Prefix;
-
     if (is_array($Mmembers) and ($members == 1)) {
         $members = implode(',', $Mmembers);
     }
@@ -1302,6 +1368,8 @@ function secartpublish($artid, $secid, $title, $content, $author, $members, $Mme
         $result = sql_query("SELECT email FROM " . $NPDS_Prefix . "authors WHERE aid='$author'");
         list($lemail) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $sujet = html_entity_decode(adm_translate("Validation de votre publication"), ENT_COMPAT | ENT_HTML401, 'utf-8');
         $message = adm_translate("La publication que vous aviez en attente vient d'être validée");
 
@@ -1316,8 +1384,6 @@ function secartpublish($artid, $secid, $title, $content, $author, $members, $Mme
 // Fonctions de DELETE
 function rubriquedelete($rubid, $ok = 0)
 {
-    global $NPDS_Prefix;
-
     // protection
     global $radminsuper;
     if (!$radminsuper) {
@@ -1327,11 +1393,15 @@ function rubriquedelete($rubid, $ok = 0)
     if ($ok == 1) {
         $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid'");
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if (sql_num_rows($result) > 0) {
             while (list($secid) = sql_fetch_row($result)) {
 
                 $result2 = sql_query("SELECT artid FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid'");
                 if (sql_num_rows($result2) > 0) {
+
+                    = DB::table('')->select()->where('', )->orderBy('')->get();
 
                     while (list($artid) = sql_fetch_row($result2)) {
                         sql_query("DELETE FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
@@ -1359,6 +1429,8 @@ function rubriquedelete($rubid, $ok = 0)
         $result = sql_query("SELECT rubname FROM " . $NPDS_Prefix . "rubriques WHERE rubid='$rubid'");
         list($rubname) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         echo '
         <hr />
         <h3 class="mb-3 text-danger">' . adm_translate("Effacer la Rubrique : ") . '<span class="text-muted">' . language::aff_langue($rubname) . '</span></h3>
@@ -1373,8 +1445,6 @@ function rubriquedelete($rubid, $ok = 0)
 
 function sectiondelete($secid, $ok = 0)
 {
-    global $NPDS_Prefix;
-
     // protection
     $tmp = droits_publication($secid);
 
@@ -1385,6 +1455,8 @@ function sectiondelete($secid, $ok = 0)
     if ($ok == 1) {
         $result = sql_query("SELECT artid FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid'");
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if (sql_num_rows($result) > 0) {
             while (list($artid) = sql_fetch_row($result)) {
                 sql_query("DELETE FROM " . $NPDS_Prefix . "compatsujet WHERE id1='$artid'");
@@ -1409,6 +1481,8 @@ function sectiondelete($secid, $ok = 0)
         $result = sql_query("SELECT secname FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
         list($secname) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         echo '
         <hr />
         <h3 class="mb-3 text-danger">' . adm_translate("Effacer la sous-rubrique : ") . '<span class="text-muted">' . language::aff_langue($secname) . '</span></h3>
@@ -1423,11 +1497,11 @@ function sectiondelete($secid, $ok = 0)
 
 function secartdelete($artid, $ok = 0)
 {
-    global $NPDS_Prefix;
-
     // protection
     $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
     list($secid) = sql_fetch_row($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $tmp = droits_publication($secid);
 
@@ -1439,6 +1513,8 @@ function secartdelete($artid, $ok = 0)
         $res = sql_query("SELECT content FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
         list($content) = sql_fetch_row($res);
         
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $rechuploadimage = '#modules/upload/upload/s\d+_\d+_\d+.[a-z]{3,4}#m';
         preg_match_all($rechuploadimage, $content, $uploadimages);
         
@@ -1464,6 +1540,8 @@ function secartdelete($artid, $ok = 0)
         $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
         list($title) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         echo '
         <hr />
         <h3 class="mb-3 text-danger">' . adm_translate("Effacer la publication :") . ' <span class="text-muted">' . language::aff_langue($title) . '</span></h3>
@@ -1478,8 +1556,6 @@ function secartdelete($artid, $ok = 0)
 
 function secartdelete2($artid, $ok = 0)
 {
-    global $NPDS_Prefix;
-
     if ($ok == 1) {
         sql_query("DELETE FROM " . $NPDS_Prefix . "seccont_tempo WHERE artid='$artid'");
 
@@ -1498,6 +1574,8 @@ function secartdelete2($artid, $ok = 0)
         $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "seccont_tempo WHERE artid='$artid'");
         list($title) = sql_fetch_row($result);
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         echo '
         <hr />
         <h3 class="mb-3 text-danger">' . adm_translate("Effacer la publication :") . ' <span class="text-muted">' . language::aff_langue($title) . '</span></h3>
@@ -1514,7 +1592,7 @@ function secartdelete2($artid, $ok = 0)
 // Fonctions de classement
 function ordremodule()
 {
-    global $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper <> 1) {  
         Header("Location: admin.php?op=sections");
@@ -1542,6 +1620,8 @@ function ordremodule()
 
     $result = sql_query("SELECT rubid, rubname, ordre FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre");
     $numrow = sql_num_rows($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $i = 0;
     $fv_parametres = '';
@@ -1589,7 +1669,7 @@ function ordremodule()
 
 function ordrechapitre()
 {
-    global $rubname, $rubid, $NPDS_Prefix, $radminsuper, $f_meta_nom, $f_titre;
+    global $rubname, $rubid, $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper <> 1) {
         Header("Location: admin.php?op=sections");
@@ -1615,6 +1695,8 @@ function ordrechapitre()
 
     $result = sql_query("SELECT secid, secname, ordre FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
     $numrow = sql_num_rows($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $i = 0;
     $fv_parametres = '';
@@ -1667,7 +1749,7 @@ function ordrechapitre()
 
 function ordrecours()
 {
-    global $secid, $radminsuper, $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $secid, $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper <> 1) {
         Header("Location: admin.php?op=sections");
@@ -1680,6 +1762,8 @@ function ordrecours()
 
     $result = sql_query("SELECT secname FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
     list($secname) = sql_fetch_row($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     echo '
     <hr />
@@ -1696,6 +1780,8 @@ function ordrecours()
 
     $result = sql_query("SELECT artid, title, ordre FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid' ORDER BY ordre");
     $numrow = sql_num_rows($result);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $i = 0;
     $fv_parametres = '';
@@ -1747,7 +1833,7 @@ function ordrecours()
 
 function updateordre($rubid, $artid, $secid, $op, $ordre)
 {
-    global $NPDS_Prefix, $radminsuper;
+    global $radminsuper;
 
     if ($radminsuper != 1) {
         Header("Location: admin.php?op=sections");
@@ -1788,7 +1874,7 @@ function updateordre($rubid, $artid, $secid, $op, $ordre)
 // Fonctions DROIT des AUTEURS
 function publishrights($author)
 {
-    global $NPDS_Prefix, $radminsuper, $f_meta_nom, $f_titre;
+    global $radminsuper, $f_meta_nom, $f_titre;
 
     if ($radminsuper != 1) {
         Header("Location: admin.php?op=sections");
@@ -1806,6 +1892,8 @@ function publishrights($author)
 
     $result1 = sql_query("SELECT rubid, rubname FROM " . $NPDS_Prefix . "rubriques ORDER BY ordre");
     $numrow = sql_num_rows($result1);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $i = 0;
     $scrr = '';
@@ -1833,8 +1921,12 @@ function publishrights($author)
 
         $result2 = sql_query("SELECT secid, secname FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
 
+        = DB::table('')->select()->where('', )->orderBy('')->get();
+
         while (list($secid, $secname) = sql_fetch_row($result2)) {
             $result3 = sql_query("SELECT type FROM " . $NPDS_Prefix . "publisujet WHERE secid2='$secid' AND aid='$author'");
+
+            = DB::table('')->select()->where('', )->orderBy('')->get();
 
             $i++;
             $crea = '';
@@ -1899,8 +1991,6 @@ function publishrights($author)
 
 function droitsalacreation($chng_aid, $secid)
 {
-    global $NPDS_Prefix;
-
     $lesdroits = array('1', '2', '3');
 
     // if($secid > 0)
@@ -1914,7 +2004,7 @@ function droitsalacreation($chng_aid, $secid)
 
 function updaterights($chng_aid, $maxindex, $creation, $publication, $modification, $suppression)
 {
-    global $NPDS_Prefix, $radminsuper;
+    global $radminsuper;
 
     if ($radminsuper != 1) {
         Header("Location: admin.php?op=sections");

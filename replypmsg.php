@@ -572,7 +572,7 @@ if (isset($user)) {
             echo '
                 <input class="btn btn-danger ms-2" type="submit" name="cancel" value="' . translate("Annuler l'envoi") . '" />';
 
-            echo js::auto_complete('membre', 'uname', 'users', 'to_user', '86400');
+            echo js::auto_complete('membre', 'uname', 'users', 'to_user', 86400);
         }
 
         echo '

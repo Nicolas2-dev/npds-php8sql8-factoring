@@ -31,7 +31,7 @@ admindroits($aid, $f_meta_nom);
 
 function submissions()
 {
-    global $NPDS_Prefix, $aid, $radminsuper, $f_meta_nom, $f_titre;
+    global $aid, $radminsuper, $f_meta_nom, $f_titre;
 
     $dummy = 0;
 
@@ -41,6 +41,8 @@ function submissions()
     adminhead($f_meta_nom, $f_titre);
 
     $result = sql_query("SELECT qid, subject, timestamp, topic, uname FROM " . $NPDS_Prefix . "queue ORDER BY timestamp");
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if (sql_num_rows($result) == 0) {
         echo '

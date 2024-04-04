@@ -206,6 +206,6 @@ $fv_parametres = '
             ';
 $arg1 = '
             var formulid = ["register"];
-            ' . js::auto_complete('aruser', 'uname', 'users', '', '0');
+            ' . js::auto_complete('aruser', 'uname', 'users', '', 0);
 
 // ----------------------------------------------------------------

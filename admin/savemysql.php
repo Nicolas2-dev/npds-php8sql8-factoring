@@ -36,16 +36,16 @@ admindroits($aid, $f_meta_nom);
 /**
  * [PrepareString description]
  *
- * @param   string  $a_string  [$a_string description]
+ * @param   string  $a_string|int  [$a_string description]
  *
- * @return  string
+ * @return  array
  */
-function PrepareString(string $a_string = ''): string
+function PrepareString(string|int $a_string = ''): string
 {
     $search       = array('\\', '\'', "\x00", "\x0a", "\x0d", "\x1a"); //\x08\\x09, not required
     $replace      = array('\\\\', '\\\'', '\0', '\n', '\r', '\Z');
 
-    return str_replace($search, $replace, $a_string);
+    return str_replace($search, $replace, (string) $a_string);
 }
 
 /**

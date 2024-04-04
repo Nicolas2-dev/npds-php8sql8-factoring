@@ -34,12 +34,12 @@ admindroits($aid, $f_meta_nom);
  * [droits_bloc description]
  *
  * @param   string  $member  [$member description]
- * @param   string  $j       [$j description]
+ * @param   int     $j       [$j description]
  * @param   string  $lb      [$lb description]
  *
  * @return  void
  */
-function droits_bloc(string $member, string $j, string $lb): void
+function droits_bloc(string $member, int $j, string $lb): void
 {
     echo '
     <div class="mb-3">
@@ -492,7 +492,7 @@ function blocks(): void
                 <fieldset>
                 <legend>' . adm_translate("Droits") . '</legend>';
 
-    echo droits_bloc('0', '', '');
+    echo droits_bloc('0', 0, '');
 
     echo '
                 </fieldset>

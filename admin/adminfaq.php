@@ -381,7 +381,7 @@ function FaqCatGoSave(int $id, string $question, string $answer): void
 function FaqCatAdd(string $categories): void
 {
     DB::table('faqcategories')->insert(array(
-        'categorie' => stripslashes(str::FixQuotes($categories)),
+        'categories' => stripslashes(str::FixQuotes($categories)),
     ));
 
     Header("Location: admin.php?op=FaqAdmin");

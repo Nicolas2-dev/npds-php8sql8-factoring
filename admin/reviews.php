@@ -91,9 +91,9 @@ function reviews(): void
     </form>
     <hr />';
 
-    $reviews_add = DB::table('')->select('id', 'date', 'title', 'text', 'reviewer', 'email', 'score', 'url', 'url_title')->orderBy('id')->get();
+    $reviews_add = DB::table('reviews_add')->select('id', 'date', 'title', 'text', 'reviewer', 'email', 'score', 'url', 'url_title')->orderBy('id')->get();
 
-    echo '<h3>' . adm_translate("Critiques en attente de validation") . '<span class="badge bg-danger float-end">' . $numrows . '</span></h3>';
+    echo '<h3>' . adm_translate("Critiques en attente de validation") . '<span class="badge bg-danger float-end">' . count($reviews_add) . '</span></h3>';
 
     $jsfvc = '';
     $jsfvf = '';
@@ -234,8 +234,6 @@ function reviews(): void
         . adm_translate("Vous pouvez simplement Effacer / Modifier les Critiques en naviguant sur") . ' <a href="reviews.php" >reviews.php</a> ' . adm_translate("en tant qu'Administrateur.") . '
     </div>';
 
-    sql_free_result($result);
-
     css::adminfoot('fv', '', $arg1, '');
 }
 
@@ -244,8 +242,8 @@ function reviews(): void
  *
  * @param   int     $id         [$id description]
  * @param   int     $date       [$date description]
- * @param   int     $title      [$title description]
- * @param   int     $text       [$text description]
+ * @param   string  $title      [$title description]
+ * @param   string  $text       [$text description]
  * @param   string  $reviewer   [$reviewer description]
  * @param   string  $email      [$email description]
  * @param   int     $score      [$score description]
@@ -255,7 +253,7 @@ function reviews(): void
  *
  * @return  void
  */
-function add_review(int $id, int $date, int $title, int $text, string $reviewer, string $email, int $score, string $cover, string $url, string $url_title): void
+function add_review(int $id, int $date, string $title, string $text, string $reviewer, string $email, int $score, string $cover, string $url, string $url_title): void
 {
     DB::table('reviews')->insert(array(
         'date'          => $date,

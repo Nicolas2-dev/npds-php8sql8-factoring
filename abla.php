@@ -37,14 +37,13 @@ $f_titre = translate("Tableau de bord");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-$hlpfile = '/manuels/' . Config::get('npds.language') . '/abla.html';
 
 global $admin;
 if ($admin) {
     include("themes/default/header.php");
 
-    GraphicAdmin($hlpfile);
-    adminhead($f_meta_nom, $f_titre, $adminimg);
+    GraphicAdmin(manuel('abla'));
+    adminhead($f_meta_nom, $f_titre);
 
     list($membres, $totala, $totalb, $totalc, $totald, $totalz) = stats::req_stat();
 

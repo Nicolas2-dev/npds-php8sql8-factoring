@@ -22,9 +22,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-
-//vd(Config::get('npds.tiny_mce'), config::get('npds.savemysql_size'));
-
 include('language/'.Config::get('npds.language').'/language-adm.php');
 
 function admindroits($aid, $f_meta_nom)
@@ -73,16 +70,10 @@ function adminhead($f_meta_nom, $f_titre, $null = '')
 
 function manuel($manuel) 
 {
-    return 'manuels/'.Config::get('npds.language').'/'.$manuel.'.html';
+    return 'modules/manuels/view/'.Config::get('npds.language').'/'.$manuel.'.html';
 }
-
-
-// a revoir 
+ 
 Config::set('filemanager.manager', false);
-
-// if (file_exists("config/filemanager.php")) {
-//     include_once("config/filemanager.php");
-// }
 
 function login()
 {
@@ -464,7 +455,7 @@ function GraphicAdmin(string $hlpfile = null)
     });
     */
     function openwindow(){
-        window.open (\"$hlpfile\",\"Help\",\"toolbar=no,location=no,directories=no,status=no,scrollbars=yes,resizable=no,copyhistory=no,width=600,height=400\");
+        window.open (\"$hlpfile\", \"Help\", \"toolbar=no,location=no,directories=no,status=no,scrollbars=yes,resizable=no,copyhistory=no,width=600,height=400\");
     }
 
         $( document ).ready(function () {
@@ -665,14 +656,13 @@ function GraphicAdmin(string $hlpfile = null)
 
 function adminMain($deja_affiches)
 {
-    global $hlpfile, $aid, $NPDS_Prefix;
-
-    $hlpfile = 'manuels/'.Config::get('npds.language').'/admin.html';
+    global $aid, $NPDS_Prefix;
 
     include("themes/default/header.php");
 
     Config::set('npds.short_menu_admin', false);
-    $radminsuper = GraphicAdmin($hlpfile); ///????????
+    
+    $radminsuper = GraphicAdmin(manuel('admin'));
 
     echo '
     <div id="adm_men_art" class="adm_workarea">
@@ -817,7 +807,7 @@ if ($admintest) {
 
     switch ($op) {
         case 'GraphicAdmin':
-            GraphicAdmin($hlpfile);
+            GraphicAdmin();
             break;
 
         case 'logout':
@@ -829,13 +819,15 @@ if ($admintest) {
 
             // FILES MANAGER
         case 'FileManager':
-            if ($admintest and Config::get('filemanager.manager'))
+            if ($admintest and Config::get('filemanager.manager')) {
                 header("location: modules.php?ModPath=f-manager&ModStart=f-manager&FmaRep=$aid");
+            }
             break;
 
         case 'FileManagerDisplay':
-            if ($admintest and Config::get('filemanager.manager'))
+            if ($admintest and Config::get('filemanager.manager')) {
                 header("location: modules.php?ModPath=f-manager&ModStart=f-manager&FmaRep=download");
+            }
             break;
 
             //BLACKBOARD
@@ -863,6 +855,23 @@ if ($admintest) {
 
         case "ForumConfigChange":
             include("admin/phpbbconfig.php");
+
+            settype($allow_html, 'int');
+            settype($allow_bbcode, 'int');
+            settype($allow_sig, 'int');
+            settype($posts_per_page, 'int');
+            settype($hot_threshold, 'int');
+            settype($topics_per_page, 'int');
+            settype($allow_upload_forum, 'int');
+            settype($allow_forum_hide, 'int');
+            settype($rank1, 'string');
+            settype($rank2, 'string');
+            settype($rank3, 'string');
+            settype($rank4, 'string');
+            settype($rank5, 'string');
+            settype($anti_flood, 'int');
+            settype($solved, 'int');
+
             ForumConfigChange($allow_html, $allow_bbcode, $allow_sig, $posts_per_page, $hot_threshold, $topics_per_page, $allow_upload_forum, $allow_forum_hide, $rank1, $rank2, $rank3, $rank4, $rank5, $anti_flood, $solved);
             break;
 
@@ -878,11 +887,19 @@ if ($admintest) {
 
         case "MaintForumTopics":
             include("admin/phpbbmaint.php");
+
+            settype($before, 'int');
+            settype($forum_name, 'string');
+
             ForumMaintTopics($before, $forum_name);
             break;
 
         case "MaintForumTopicDetail":
             include("admin/phpbbmaint.php");
+
+            settype($topic, 'int');
+            settype($topic_title, 'string');
+
             ForumMaintTopicDetail($topic, $topic_title);
             break;
 
@@ -893,11 +910,17 @@ if ($admintest) {
 
         case "ForumMaintTopicSup":
             include("admin/phpbbmaint.php");
+
+            settype($topic, 'int');
+
             ForumMaintTopicSup($topic);
             break;
 
         case "ForumMaintTopicMassiveSup":
             include("admin/phpbbmaint.php");
+
+            settype($topic, 'int');
+
             ForumMaintTopicMassiveSup($topics);
             break;
 
@@ -908,52 +931,107 @@ if ($admintest) {
 
         case "MergeForumAction":
             include("admin/phpbbmaint.php");
+
+            settype($oriforum, 'int');
+            settype($destforum, 'int');
+
             MergeForumAction($oriforum, $destforum);
             break;
 
         case "ForumGoAdd":
             settype($forum_pass, 'string');
+            settype($forum_desc, 'string');
+            settype($forum_access, 'int');
+            settype($forum_mod, 'string');
+            settype($cat_id, 'int');
+            settype($forum_type, 'int');
+            settype($forum_pass, 'string');
+            settype($arbre, 'int');
+            settype($attachement, 'int');
+            settype($forum_index, 'int');
+            settype($ctg, 'string');
+
             include("admin/phpbbforum.php");
             ForumGoAdd($forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id, $forum_type, $forum_pass, $arbre, $attachement, $forum_index, $ctg);
             break;
 
         case "ForumGoSave":
             include("admin/phpbbforum.php");
+
+            settype($forum_id, 'int');
+            settype($forum_name, 'string');
+            settype($forum_desc, 'string');
+            settype($forum_access, 'int');
+            settype($forum_mod, 'string');
+            settype($cat_id, 'int');
+            settype($forum_type, 'int');
+            settype($forum_pass, 'string');
+            settype($arbre, 'int');
+            settype($attachement, 'int');
+            settype($forum_index, 'int');
+            settype($ctg, 'string');
+
             ForumGoSave($forum_id, $forum_name, $forum_desc, $forum_access, $forum_mod, $cat_id, $forum_type, $forum_pass, $arbre, $attachement, $forum_index, $ctg);
             break;
 
         case "ForumCatDel":
             include("admin/phpbbforum.php");
+
+            settype($cat_id, 'int');
+            settype($ok, 'int');
+
             ForumCatDel($cat_id, $ok);
             break;
 
         case "ForumGoDel":
             include("admin/phpbbforum.php");
+
+            settype($forum_id, 'int');
+            settype($ok, 'int');
+
             ForumGoDel($forum_id, $ok);
             break;
 
         case "ForumCatSave":
             include("admin/phpbbforum.php");
+
+            settype($old_cat_id, 'int');
+            settype($cat_id, 'int');
+            settype($cat_title, 'string');
+
             ForumCatSave($old_cat_id, $cat_id, $cat_title);
             break;
 
         case "ForumCatEdit":
             include("admin/phpbbforum.php");
+
+            settype($cat_id, 'int');
+
             ForumCatEdit($cat_id);
             break;
 
         case "ForumGoEdit":
             include("admin/phpbbforum.php");
+
+            settype($forum_id, 'int');
+            settype($ctg, 'string');
+
             ForumGoEdit($forum_id, $ctg);
             break;
 
         case "ForumGo":
             include("admin/phpbbforum.php");
+
+            settype($cat_id, 'int');
+
             ForumGo($cat_id);
             break;
 
         case "ForumCatAdd":
             include("admin/phpbbforum.php");
+
+            settype($categories, 'string');
+
             ForumCatAdd($catagories);
             break;
 
@@ -995,41 +1073,73 @@ if ($admintest) {
             // FAQ
         case "FaqCatSave":
             include("admin/adminfaq.php");
+
+            settype($old_id_cat, 'int');
+            settype($id_cat, 'int');
+            settype($categories, 'string');
+
             FaqCatSave($old_id_cat, $id_cat, $categories);
             break;
 
         case "FaqCatGoSave":
             include("admin/adminfaq.php");
+
+            settype($id, 'int');
+            settype($question, 'string');
+            settype($answer, 'string');
+
             FaqCatGoSave($id, $question, $answer);
             break;
 
         case "FaqCatAdd":
             include("admin/adminfaq.php");
+
+            settype($categories, 'string');
+
             FaqCatAdd($categories);
             break;
 
         case "FaqCatGoAdd":
             include("admin/adminfaq.php");
+
+            settype($id_cat, 'int');
+            settype($question, 'string');
+            settype($answer, 'string');
+
             FaqCatGoAdd($id_cat, $question, $answer);
             break;
 
         case "FaqCatEdit":
             include("admin/adminfaq.php");
+
+            settype($id_cat, 'int');
+
             FaqCatEdit($id_cat);
             break;
 
         case "FaqCatGoEdit":
             include("admin/adminfaq.php");
+
+            settype($id, 'int');
+
             FaqCatGoEdit($id);
             break;
 
         case "FaqCatDel":
             include("admin/adminfaq.php");
+
+            settype($id_cat, 'int');
+            settype($ok, 'int');
+
             FaqCatDel($id_cat, $ok);
             break;
 
         case "FaqCatGoDel":
             include("admin/adminfaq.php");
+
+            settype($id, 'int');
+            settype($ok, 'int');
+
             FaqCatGoDel($id, $ok);
             break;
 
@@ -1040,6 +1150,9 @@ if ($admintest) {
 
         case "FaqCatGo":
             include("admin/adminfaq.php");
+
+            settype($id_cat, 'int');
+
             FaqCatGo($id_cat);
             break;
 
@@ -1485,6 +1598,8 @@ if ($admintest) {
 
             // NPDS-Admin-Main
         case 'suite_articles':
+            settype($deja_affiches, 'int');
+
             adminMain($deja_affiches);
             break;
             

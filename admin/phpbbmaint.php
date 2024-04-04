@@ -82,7 +82,7 @@ function ForumMaintMarkTopics(): void
                 $users = DB::table('users')->select('uid')->orderBy('uid', 'desc')->get();
 
                 foreach ($users as $user) {  
-                    if ($uid > 1) {
+                    if ($user['uid'] > 1) {
                         DB::table('forum_read')->insert(array(
                             'forum_id'      => $forum['forum_id'],
                             'topicid'       => $ftopic['topic_id'],
@@ -313,7 +313,7 @@ function SynchroForum(): void
 
     foreach ($result as $forumtopic) {
         DB::table('posts')->where('topic_id', $forumtopic['topic_id'])->where('forum_id', '>', 0)->update(array(
-            'forum_id'  => $forumtopic['foru_mid'],
+            'forum_id'  => $forumtopic['forum_id'],
         ));
     }
 
