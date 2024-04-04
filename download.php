@@ -566,7 +566,7 @@ function broken($did)
             
             settype($did, "integer");
             
-            $message = Config::get('app.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . " $cookie[1] / IP : " . getip() . "\n\n";
+            $message = Config::get('npds.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . " $cookie[1] / IP : " . getip() . "\n\n";
             $message .= Config::get('signature.message');
             
             mailler::send_email($notify_email, html_entity_decode(translate("Rapporter un lien rompu"), ENT_COMPAT | ENT_HTML401, 'utf-8'), nl2br($message), $notify_from, false, "html", '');

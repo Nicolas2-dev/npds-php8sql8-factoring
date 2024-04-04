@@ -18,7 +18,7 @@ class counter
     {
         global $admin, $NPDS_Prefix;;
 
-        if ((!$admin) or (Config::get('app.not_admin_count') != 1)) {
+        if ((!$admin) or (Config::get('npds.not_admin_count') != 1)) {
             $user_agent = getenv("HTTP_USER_AGENT");
 
             if ((stristr($user_agent, "Nav")) 

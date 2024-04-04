@@ -173,7 +173,7 @@ if (!$user) {
 
             echo '<td>' . userpopover($posterdata['uname'], 40, 2);
 
-            echo ($posterdata['uid'] <> 1) ? $posterdata['uname'] : Config::get('app.sitename');
+            echo ($posterdata['uid'] <> 1) ? $posterdata['uname'] : Config::get('npds.sitename');
 
             echo '</td>
                     <td>' . language::aff_langue($myrow['subject']) . '</td>

@@ -22,7 +22,7 @@ use npds\system\language\language;
 
 $ModPath = 'geoloc';
 
-$nuke_url = Config::get('app.nuke_url');
+$nuke_url = Config::get('npds.nuke_url');
 
 $content = '';
 include('modules/' . $ModPath . '/config/geoloc.conf');

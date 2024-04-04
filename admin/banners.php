@@ -785,7 +785,7 @@ function BannerClientDelete(int $cid, int $ok = 0): void
                 <span class="text-danger">
                     <b>' . adm_translate("ATTENTION !!!") . '</b>
                 </span>
-                <br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . Config::get('app.sitename') . '
+                <br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . Config::get('npds.sitename') . '
             </div>';
         
             foreach($banners as $banner) {

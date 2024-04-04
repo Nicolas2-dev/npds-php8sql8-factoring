@@ -32,11 +32,11 @@ function fab_feed($type, $filename, $timeout)
     $rss = new UniversalFeedCreator();
     $rss->useCached($type, $filename, $timeout);
 
-    $sitename = Config::get('app.sitename');
-    $nuke_url = Config::get('app.nuke_url');
+    $sitename = Config::get('npds.sitename');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $rss->title = $sitename;
-    $rss->description = Config::get('app.slogan');
+    $rss->description = Config::get('npds.slogan');
     $rss->descriptionTruncSize = 250;
     $rss->descriptionHtmlSyndicated = true;
 

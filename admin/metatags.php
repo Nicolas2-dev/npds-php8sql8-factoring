@@ -228,7 +228,7 @@ function MetaTagSave(string $filename, string $tags): bool
         return false;
     }
     
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $fh = fopen($filename, "w");
     if ($fh) {
@@ -308,7 +308,7 @@ function MetaTagSave(string $filename, string $tags): bool
             $tags['reply-to'] = htmlspecialchars(stripslashes($tags['reply-to']), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $content .= MetaTagMakeSingleTag('reply-to', $tags['reply-to']);
         } else {
-            $content .= MetaTagMakeSingleTag('reply-to', Config::get('app.adminmail'));
+            $content .= MetaTagMakeSingleTag('reply-to', Config::get('npds.adminmail'));
         }
 
         if (!empty($tags['description'])) {
@@ -351,7 +351,7 @@ function MetaTagSave(string $filename, string $tags): bool
 
         $content .= MetaTagMakeSingleTag('resource-type', "document");
         $content .= MetaTagMakeSingleTag('robots', $tags['robots']);
-        $content .= MetaTagMakeSingleTag('generator', Config::get('app.Version_Id') . Config::get('app.Version_Num') . Config::get('app.Version_Sub') );
+        $content .= MetaTagMakeSingleTag('generator', Config::get('versioning.Version_ID') . Config::get('versioning.Version_Num') . Config::get('versioning.Version_Sub') );
 
         //==> OpenGraph Meta Tags
         $content .= MetaTagMakeSingleTag('og:type', 'website', 'property');

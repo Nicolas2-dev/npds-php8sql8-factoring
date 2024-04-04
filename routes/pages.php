@@ -117,7 +117,7 @@ settype($ModPath, 'string');
 settype($title, 'string');
 // ----------------------------
 
-$nuke_url = Config::get('app.nuke_url').'/';
+$nuke_url = Config::get('npds.nuke_url').'/';
 
 global $PAGES;
 

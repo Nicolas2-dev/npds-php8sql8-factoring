@@ -15,11 +15,115 @@
 use npds\system\logs\logs;
 use npds\system\cache\cache;
 use npds\system\support\str;
+use npds\system\config\ConfigSaveFile;
 
-function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xstartdate, $xadminmail, $xtop, $xstoryhome, $xoldnum, $xultramode, $xanonpost, $xDefault_Theme, $xbanners, $xmyIP, $xfoot1, $xfoot2, $xfoot3, $xfoot4, $xbackend_title, $xbackend_language, $xbackend_image, $xbackend_width, $xbackend_height, $xlanguage, $xlocale, $xperpage, $xpopular, $xnewlinks, $xtoplinks, $xlinksresults, $xlinks_anonaddlinklock, $xnotify, $xnotify_email, $xnotify_subject, $xnotify_message, $xnotify_from, $xmoderate, $xanonymous, $xmaxOptions, $xsetCookies, $xtipath, $xuserimg, $xadminimg, $xadmingraphic, $xadmart, $xminpass, $xhttpref, $xhttprefmax, $xpollcomm, $xlinkmainlogo, $xstart_page, $xsmilies, $xOnCatNewLink, $xEmailFooter, $xshort_user, $xgzhandler, $xrss_host_verif, $xcache_verif, $xmember_list, $xdownload_cat, $xmod_admin_news, $xgmt, $xAutoRegUser, $xTitlesitename, $xfilemanager, $xshort_review, $xnot_admin_count, $xadmin_cook_duration, $xuser_cook_duration, $xtroll_limit, $xsubscribe, $xCloseRegUser, $xshort_menu_admin, $xmail_fonction, $xmemberpass, $xshow_user, $xdns_verif, $xmember_invisible, $xavatar_size, $xlever, $xcoucher, $xmulti_langue, $xadmf_ext, $xsavemysql_size, $xsavemysql_mode, $xtiny_mce, $xnpds_twi, $xnpds_fcb, $xDefault_Skin, $xmail_debug, $xsmtp_host, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xsmtp_port, $xdkim_auto)
+/**
+ * [ConfigSave description]
+ *
+ * @param   int     $xparse                  [$xparse description]
+ * @param   string  $xsitename               [$xsitename description]
+ * @param   string  $xnuke_url               [$xnuke_url description]
+ * @param   string  $xsite_logo              [$xsite_logo description]
+ * @param   string  $xslogan                 [$xslogan description]
+ * @param   string  $xstartdate              [$xstartdate description]
+ * @param   string  $xadminmail              [$xadminmail description]
+ * @param   int     $xtop                    [$xtop description]
+ * @param   int     $xstoryhome              [$xstoryhome description]
+ * @param   int     $xoldnum                 [$xoldnum description]
+ * @param   int     $xultramode              [$xultramode description]
+ * @param   int     $xanonpost               [$xanonpost description]
+ * @param   string  $xDefault_Theme          [$xDefault_Theme description]
+ * @param   int     $xbanners                [$xbanners description]
+ * @param   string  $xmyIP                   [$xmyIP description]
+ * @param   string  $xfoot1                  [$xfoot1 description]
+ * @param   string  $xfoot2                  [$xfoot2 description]
+ * @param   string  $xfoot3                  [$xfoot3 description]
+ * @param   string  $xfoot4                  [$xfoot4 description]
+ * @param   string  $xbackend_title          [$xbackend_title description]
+ * @param   string  $xbackend_language       [$xbackend_language description]
+ * @param   string  $xbackend_image          [$xbackend_image description]
+ * @param   int     $xbackend_width          [$xbackend_width description]
+ * @param   int     $xbackend_height         [$xbackend_height description]
+ * @param   string  $xlanguage               [$xlanguage description]
+ * @param   string  $xlocale                 [$xlocale description]
+ * @param   int     $xperpage                [$xperpage description]
+ * @param   int     $xpopular                [$xpopular description]
+ * @param   int     $xnewlinks               [$xnewlinks description]
+ * @param   int     $xtoplinks               [$xtoplinks description]
+ * @param   int     $xlinksresults           [$xlinksresults description]
+ * @param   int     $xlinks_anonaddlinklock  [$xlinks_anonaddlinklock description]
+ * @param   int     $xnotify                 [$xnotify description]
+ * @param   string  $xnotify_email           [$xnotify_email description]
+ * @param   string  $xnotify_subject         [$xnotify_subject description]
+ * @param   string  $xnotify_message         [$xnotify_message description]
+ * @param   string  $xnotify_from            [$xnotify_from description]
+ * @param   int     $xmoderate               [$xmoderate description]
+ * @param   string  $xanonymous              [$xanonymous description]
+ * @param   int     $xmaxOptions             [$xmaxOptions description]
+ * @param   int     $xsetCookies             [$xsetCookies description]
+ * @param   string  $xtipath                 [$xtipath description]
+ * @param   string  $xuserimg                [$xuserimg description]
+ * @param   string  $xadminimg               [$xadminimg description]
+ * @param   int     $xadmingraphic           [$xadmingraphic description]
+ * @param   int     $xadmart                 [$xadmart description]
+ * @param   int     $xminpass                [$xminpass description]
+ * @param   int     $xhttpref                [$xhttpref description]
+ * @param   int     $xhttprefmax             [$xhttprefmax description]
+ * @param   int     $xpollcomm               [$xpollcomm description]
+ * @param   int     $xlinkmainlogo           [$xlinkmainlogo description]
+ * @param   string  $xstart_page             [$xstart_page description]
+ * @param   int     $xsmilies                [$xsmilies description]
+ * @param   int     $xOnCatNewLink           [$xOnCatNewLink description]
+ * @param   string  $xEmailFooter            [$xEmailFooter description]
+ * @param   int     $xshort_user             [$xshort_user description]
+ * @param   int     $xgzhandler              [$xgzhandler description]
+ * @param   bool    $xrss_host_verif         [$xrss_host_verif description]
+ * @param   bool    $xcache_verif            [$xcache_verif description]
+ * @param   int     $xmember_list            [$xmember_list description]
+ * @param   string  $xdownload_cat           [$xdownload_cat description]
+ * @param   int     $xmod_admin_news         [$xmod_admin_news description]
+ * @param   int     $xgmt                    [$xgmt description]
+ * @param   int     $xAutoRegUser            [$xAutoRegUser description]
+ * @param   string  $xTitlesitename          [$xTitlesitename description]
+ * @param   bool    $xfilemanager            [$xfilemanager description]
+ * @param   int     $xshort_review           [$xshort_review description]
+ * @param   int     $xnot_admin_count        [$xnot_admin_count description]
+ * @param   int     $xadmin_cook_duration    [$xadmin_cook_duration description]
+ * @param   int     $xuser_cook_duration     [$xuser_cook_duration description]
+ * @param   int     $xtroll_limit            [$xtroll_limit description]
+ * @param   int     $xsubscribe              [$xsubscribe description]
+ * @param   int     $xCloseRegUser           [$xCloseRegUser description]
+ * @param   int     $xshort_menu_admin       [$xshort_menu_admin description]
+ * @param   int     $xmail_fonction          [$xmail_fonction description]
+ * @param   int     $xmemberpass             [$xmemberpass description]
+ * @param   int     $xshow_user              [$xshow_user description]
+ * @param   bool    $xdns_verif              [$xdns_verif description]
+ * @param   int     $xmember_invisible       [$xmember_invisible description]
+ * @param   string  $xavatar_size            [$xavatar_size description]
+ * @param   string  $xlever                  [$xlever description]
+ * @param   string  $xcoucher                [$xcoucher description]
+ * @param   bool    $xmulti_langue           [$xmulti_langue description]
+ * @param   string  $xadmf_ext               [$xadmf_ext description]
+ * @param   int     $xsavemysql_size         [$xsavemysql_size description]
+ * @param   int     $xsavemysql_mode         [$xsavemysql_mode description]
+ * @param   bool    $xtiny_mce               [$xtiny_mce description]
+ * @param   int     $xnpds_twi               [$xnpds_twi description]
+ * @param   int     $xnpds_fcb               [$xnpds_fcb description]
+ * @param   string  $xDefault_Skin           [$xDefault_Skin description]
+ * @param   bool    $xmail_debug             [$xmail_debug description]
+ * @param   string  $xsmtp_host              [$xsmtp_host description]
+ * @param   int     $xsmtp_auth              [$xsmtp_auth description]
+ * @param   string  $xsmtp_username          [$xsmtp_username description]
+ * @param   string  $xsmtp_password          [$xsmtp_password description]
+ * @param   int     $xsmtp_secure            [$xsmtp_secure description]
+ * @param   string  $xsmtp_crypt             [$xsmtp_crypt description]
+ * @param   string  $xsmtp_port              [$xsmtp_port description]
+ * @param   int     $xdkim_auto              [$xdkim_auto description]
+ *
+ * @return  void                             [return description]
+ */
+function ConfigSave(int $xparse, string $xsitename, string $xnuke_url, string $xsite_logo, string $xslogan, string $xstartdate, string $xadminmail, int $xtop, int $xstoryhome, int $xoldnum, int $xultramode, int $xanonpost, string $xDefault_Theme, int $xbanners, string $xmyIP, string $xfoot1, string $xfoot2, string $xfoot3, string $xfoot4, string $xbackend_title, string $xbackend_language, string $xbackend_image, int $xbackend_width, int $xbackend_height, string $xlanguage, string $xlocale, int $xperpage, int $xpopular, int $xnewlinks, int $xtoplinks, int $xlinksresults, int $xlinks_anonaddlinklock, int $xnotify, string $xnotify_email, string $xnotify_subject,  string $xnotify_message, string $xnotify_from, int $xmoderate, string $xanonymous, int $xmaxOptions, int $xsetCookies, string $xtipath, string $xuserimg, string $xadminimg, int $xadmingraphic, int $xadmart, int $xminpass, int $xhttpref, int $xhttprefmax, int $xpollcomm, int $xlinkmainlogo, string $xstart_page, int $xsmilies, int $xOnCatNewLink, string $xEmailFooter, int  $xshort_user, int $xgzhandler, bool $xrss_host_verif, bool $xcache_verif, int $xmember_list, string $xdownload_cat, int $xmod_admin_news, int $xgmt, int $xAutoRegUser, string $xTitlesitename, bool $xfilemanager, int $xshort_review, int $xnot_admin_count, int $xadmin_cook_duration, int $xuser_cook_duration, int $xtroll_limit, int $xsubscribe, int $xCloseRegUser, int $xshort_menu_admin, int $xmail_fonction, int $xmemberpass, int $xshow_user, bool $xdns_verif, int $xmember_invisible, string $xavatar_size, string $xlever, string $xcoucher, bool $xmulti_langue, string $xadmf_ext, int $xsavemysql_size, int $xsavemysql_mode, bool $xtiny_mce, int $xnpds_twi, int $xnpds_fcb, string $xDefault_Skin, bool $xmail_debug, string $xsmtp_host, int $xsmtp_auth, string $xsmtp_username, string $xsmtp_password, int $xsmtp_secure, string $xsmtp_crypt, string $xsmtp_port, int $xdkim_auto): void
 {
-    include("config/config.php");
-
     if ($xparse == 0) {
         $xsitename =  str::FixQuotes($xsitename);
         $xTitlesitename = str::FixQuotes($xTitlesitename);
@@ -32,7 +136,7 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     $xsite_logo = str::FixQuotes($xsite_logo);
 
     if ($xparse == 0) {
-        $xslogan = FixQuotes($xslogan);
+        $xslogan = str::FixQuotes($xslogan);
         $xstartdate = str::FixQuotes($xstartdate);
     } else {
         $xslogan = stripslashes($xslogan);
@@ -40,7 +144,7 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     }
 
     // Theme
-    $xDefault_Theme = str::FixQuotes($xDefault_Theme);
+    $Default_Theme = str::FixQuotes($xDefault_Theme);
 
     if ($xDefault_Theme != $Default_Theme) {
         include("config/cache.config.php");
@@ -56,7 +160,7 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
         }
     }
 
-    $xmyIP = FixQuotes($xmyIP);
+    $xmyIP = str::FixQuotes($xmyIP);
 
     $xfoot1 = str_replace(chr(13) . chr(10), "\n", $xfoot1);
     $xfoot2 = str_replace(chr(13) . chr(10), "\n", $xfoot2);
@@ -92,394 +196,28 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
     $xtipath = str::FixQuotes($xtipath);
     $xuserimg = str::FixQuotes($xuserimg);
     $xadminimg = str::FixQuotes($xadminimg);
-    $file = fopen("config/config.php", "w");
-    $line = "######################################################################\n";
-    $content = "<?php\n";
-    $content .= "$line";
-    $content .= "# DUNE by NPDS : Net Portal Dynamic System\n";
-    $content .= "# ===================================================\n";
-    $content .= "#\n";
-    $content .= "# This version name NPDS Copyright (c) 2001-" . date("Y") . " by Philippe Brunier\n";
-    $content .= "#\n";
-    $content .= "# This module is to configure the main options for your site\n";
-    $content .= "#\n";
-    $content .= "# This program is free software. You can redistribute it and/or modify\n";
-    $content .= "# it under the terms of the GNU General Public License as published by\n";
-    $content .= "# the Free Software Foundation; either version 2 of the License.\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# ========================\n";
-    $content .= "# Database & System Config\n";
-    $content .= "# ========================\n";
-    $content .= "# dbhost:      MySQL Database Hostname\n";
-    $content .= "# dbuname:     MySQL Username\n";
-    $content .= "# dbpass:      MySQL Password\n";
-    $content .= "# dbname:      MySQL Database Name\n";
-    $content .= "# mysql_p:     Persistent connection to MySQL Server (1) or Not (0)\n";
-    $content .= "# mysql_i:     Use MySQLi (1) instead of MySQL interface (0)\n";
-    $content .= "# =======================\n";
-    $content .= "# not_used1:  unused\n";
-    $content .= "# not_used2:  unused\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$dbhost = \"$dbhost\";\n";
-    $content .= "\$dbuname = \"$dbuname\";\n";
-    $content .= "\$dbpass = \"$dbpass\";\n";
-    $content .= "\$dbname = \"$dbname\";\n";
 
-    if (!isset($mysql_p)) {
-        $mysql_p = 1;
-    }
+    ConfigSaveFile::save_setting_npds($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xstartdate, $xadminmail, $xtop, $xstoryhome, $xoldnum, 
+    $xultramode, $xanonpost, $xDefault_Theme, $xbanners, $xmyIP, $xfoot1, $xfoot2, $xfoot3, $xfoot4, $xbackend_title, $xbackend_language, $xbackend_image, 
+    $xbackend_width, $xbackend_height, $xlanguage, $xlocale, $xperpage, $xpopular, $xnewlinks, $xtoplinks, $xlinksresults, $xlinks_anonaddlinklock, $xnotify, 
+    $xnotify_email, $xnotify_subject, $xnotify_message, $xnotify_from, $xmoderate, $xanonymous, $xmaxOptions, $xsetCookies, $xtipath, $xuserimg, $xadminimg, 
+    $xadmingraphic, $xadmart, $xminpass, $xhttpref, $xhttprefmax, $xpollcomm, $xlinkmainlogo, $xstart_page, $xsmilies, $xOnCatNewLink, $xshort_user, 
+    $xgzhandler, $xrss_host_verif, $xcache_verif, $xmember_list, $xdownload_cat, $xmod_admin_news, $xgmt, $xAutoRegUser, $xTitlesitename, 
+    $xshort_review, $xnot_admin_count, $xadmin_cook_duration, $xuser_cook_duration, $xtroll_limit, $xsubscribe, $xCloseRegUser, $xshort_menu_admin, $xmail_fonction, 
+    $xmemberpass, $xshow_user, $xdns_verif, $xmember_invisible, $xavatar_size, $xlever, $xcoucher, $xmulti_langue, $xadmf_ext, $xsavemysql_size, $xsavemysql_mode, 
+    $xtiny_mce, $xnpds_twi, $xnpds_fcb, $xDefault_Skin);
 
-    $content .= "\$mysql_p = $mysql_p;\n";
-
-    if (!isset($mysql_i)) {
-        $mysql_i = 0;
-    }
-
-    $content .= "\$mysql_i = $mysql_i;\n";
-    $content .= "# =======================\n";
-    $content .= "\$not_used1 = '';\n";
-    $content .= "\$not_used2 = '';\n";
-    $content .= "\n";
-    $content .= "/*********************************************************************/\n";
-    $content .= "/* You finished to configure the Database. Now you can change all    */\n";
-    $content .= "/* you want in the Administration Section.   To enter just launch    */\n";
-    $content .= "/* you web browser pointing to http://yourdomain.com/admin.php       */\n";
-    $content .= "/*                                                                   */\n";
-    $content .= "/* At the prompt use the following ID to login (case sensitive):     */\n";
-    $content .= "/*                                                                   */\n";
-    $content .= "/* AdminID: Root                                                     */\n";
-    $content .= "/* Password: Password                                                */\n";
-    $content .= "/*                                                                   */\n";
-    $content .= "/* Be sure to change inmediately the Root login & password clicking  */\n";
-    $content .= "/* on Edit Admin in the Admin menu. After that, click on Preferences */\n";
-    $content .= "/* to configure your new site. In that menu you can change all you   */\n";
-    $content .= "/* need to change.                                                   */\n";
-    $content .= "/*                                                                   */\n";
-    $content .= "/*********************************************************************/\n";
-    $content .= "\n\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# General Site Configuration\n";
-    $content .= "#\n";
-    $content .= "# \$parse:          Select the parse function you want to use for preference\n";
-    $content .= "# \$gzhandler:      PHP > 5.x : default 0 / PHP < 5.x sending compressed html with zlib : 1 - be careful\n";
-    $content .= "# \$admin_cook_duration : Duration in hour for Admin cookie (default 24)\n";
-    $content .= "# \$user_cook_duration: Duration in hour for Admin cookie (default 24)\n";
-    $content .= "# \$sitename:       Your Site Name\n";
-    $content .= "# \$Titlesitename:  Your Site Phrase for the Title (html Title Tag) off the HTML Page\n";
-    $content .= "# \$nuke_url:       Complete URL for your site (Do not put / at end)\n";
-    $content .= "# \$site_logo:      Logo for Printer Friendly Page (It's good to have a Black/White graphic)\n";
-    $content .= "# \$slogan:         Your site's slogan\n";
-    $content .= "# \$startdate:      Start Date to display in Statistic Page\n";
-    $content .= "# \$moderate:       Moderation of comments\n";
-    $content .= "# \$anonpost:       Allow Anonymous to Post Comments? (1=Yes 0=No)\n";
-    $content .= "# \$troll_limit:    Maximum Number off Comments per user (24H)\n";
-    $content .= "# \$mod_admin_news  Allow only Moderator and Admin to Post News? (1=Yes 0=No)\n";
-    $content .= "# \$not_admin_count Don't record Admin's Hits in stats (1=Yes=>don't rec 0=No=>rec)\n";
-    $content .= "# \$Default_Theme:  Default Theme for your site (See /themes directory for the complete list, case sensitive!)\n";
-    $content .= "# \$Default_Skin:   Default Skin for Theme ... with skins (See /themes/_skins directory for the complete list, case sensitive!)\n";
-    $content .= "# \$Start_Page:     Default Page for your site (default : index.php but you can use : topics.php, links.php ...)\n";
-    $content .= "# \$foot(x):        Messages for all footer pages (Can include HTML code)\n";
-    $content .= "# \$anonymous:      Anonymous users Default Name\n";
-    $content .= "# \$not_used3:      unused\n";
-    $content .= "# \$minpass:        Minimum character for users passwords\n";
-    $content .= "# \$show_user:      Number off user showed in memberslist page\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$parse = \"$xparse\";\n";
-    $content .= "\$gzhandler = \"$xgzhandler\";\n";
-    $content .= "\$admin_cook_duration = \"$xadmin_cook_duration\";\n";
-    $content .= "\$user_cook_duration = \"$xuser_cook_duration\";\n";
-    $content .= "\$sitename = \"$xsitename\";\n";
-    $content .= "\$Titlesitename = \"$xTitlesitename\";\n";
-    $content .= "\$nuke_url = \"$xnuke_url\";\n";
-    $content .= "\$site_logo = \"$xsite_logo\";\n";
-    $content .= "\$slogan = \"$xslogan\";\n";
-    $content .= "\$startdate = \"$xstartdate\";\n";
-    $content .= "\$anonpost = $xanonpost;\n";
-
-    if (!$xtroll_limit) {
-        $xtroll_limit = 6;
-    }
-
-    $content .= "\$troll_limit = $xtroll_limit;\n";
-    $content .= "\$moderate = $xmoderate;\n";
-    $content .= "\$mod_admin_news = $xmod_admin_news;\n";
-    $content .= "\$not_admin_count = $xnot_admin_count;\n";
-    $content .= "\$Default_Theme = \"$xDefault_Theme\";\n";
-
-    if (substr($xDefault_Theme, -3) != "_sk") { 
-        $xDefault_Skin = '';
-    }
-
-    $content .= "\$Default_Skin = \"$xDefault_Skin\";\n";
-    $content .= "\$Start_Page = \"$xstart_page\";\n";
-    $content .= "\$foot1 = \"$xfoot1\";\n";
-    $content .= "\$foot2 = \"$xfoot2\";\n";
-    $content .= "\$foot3 = \"$xfoot3\";\n";
-    $content .= "\$foot4 = \"$xfoot4\";\n";
-    $content .= "\$anonymous = \"$xanonymous\";\n";
-    $content .= "\$not_used3 = '';\n";
-    $content .= "\$minpass = $xminpass;\n";
-    $content .= "\$show_user = $xshow_user;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# General Stories Options\n";
-    $content .= "#\n";
-    $content .= "# \$top:       How many items in Top Page?\n";
-    $content .= "# \$storyhome: How many stories to display in Home Page?\n";
-    $content .= "# \$oldnum:    How many stories in Old Articles Box?\n";
-    $content .= "$line";
-    $content .= "\n";
-
-    if (!$xtop) {
-        $xtop = 10;
-    }
-
-    $content .= "\$top = $xtop;\n";
-
-    if (!$xstoryhome) {
-        $xstoryhome = 10;
-    }
-
-    $content .= "\$storyhome = $xstoryhome;\n";
-
-    if (!$xoldnum) {
-        $xoldnum = 10;
-    }
-
-    $content .= "\$oldnum = $xoldnum;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Banners/Advertising Configuration\n";
-    $content .= "#\n";
-    $content .= "# \$banners: Activate Banners Ads for your site? (1=Yes 0=No)\n";
-    $content .= "# \$myIP:    Write your IP number to not count impressions, be fair about this!\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$banners = $xbanners;\n";
-    $content .= "\$myIP = \"$xmyIP\";\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# XML/RDF Backend Configuration & Social Networks\n";
-    $content .= "#\n";
-    $content .= "# \$backend_title:    Backend title, can be your site's name and slogan\n";
-    $content .= "# \$backend_language: Language format of your site\n";
-    $content .= "# \$backend_image:    Image logo for your site\n";
-    $content .= "# \$backend_width:    Image logo width\n";
-    $content .= "# \$backend_height:   Image logo height\n";
-    $content .= "# \$ultramode:        Activate ultramode plain text and XML files backend syndication? (1=Yes 0=No). locate in /cache directory\n";
-    $content .= "# \$npds_twi:         Activate the Twitter syndication? (1=Yes 0=No).\n";
-    $content .= "# \$npds_fcb:         Activate the Facebook syndication? (1=Yes 0=No).\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$backend_title = \"$xbackend_title\";\n";
-    $content .= "\$backend_language = \"$xbackend_language\";\n";
-    $content .= "\$backend_image = \"$xbackend_image\";\n";
-    $content .= "\$backend_width = \"$xbackend_width\";\n";
-    $content .= "\$backend_height = \"$xbackend_height\";\n";
-    $content .= "\$ultramode = $xultramode;\n";
-
-    if (!$xnpds_twi) {
-        $xnpds_twi = 0;
-    }
-
-    $content .= "\$npds_twi = $xnpds_twi;\n";
-
-    if (!$xnpds_fcb) {
-        $xnpds_fcb = 0;
-    }
-
-    $content .= "\$npds_fcb = $xnpds_fcb;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Site Language Preferences\n";
-    $content .= "#\n";
-    $content .= "# \$language:     Language of your site (You need to have lang-xxxxxx.php file for your selected language in the /language directory of your site)\n";
-    $content .= "# \$locale:       Locale configuration to correctly display date with your country format. (See /usr/share/locale)\n";
-    $content .= "# \$gmt:          Locale configuration to correctly display date with your GMT offset.\n";
-    $content .= "# \$lever:        HH:MM where Day become.\n";
-    $content .= "# \$coucher:      HH:MM where Night become.\n";
-    $content .= "# \$multi_langue: Activate Multi-langue NPDS'capability.\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$language = \"$xlanguage\";\n";
-    $content .= "\$multi_langue = $xmulti_langue;\n";
-    $content .= "\$locale = \"$xlocale\";\n";
-    $content .= "\$gmt = \"$xgmt\";\n";
-    $content .= "\$lever = \"$xlever\";\n";
-    $content .= "\$coucher = \"$xcoucher\";\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Web Links Preferences\n";
-    $content .= "#\n";
-    $content .= "# \$perpage:                  How many links to show on each page?\n";
-    $content .= "# \$popular:                  How many hits need a link to be listed as popular?\n";
-    $content .= "# \$newlinks:                 How many links to display in the New Links Page?\n";
-    $content .= "# \$toplinks:                 How many links to display in The Best Links Page? (Most Popular)\n";
-    $content .= "# \$linksresults:             How many links to display on each search result page?\n";
-    $content .= "# \$links_anonaddlinklock:    Is Anonymous autorise to post new links? (0=Yes 1=No)\n";
-    $content .= "# \$linkmainlogo:             Activate Logo on Main web Links Page (1=Yes 0=No)\n";
-    $content .= "# \$OnCatNewLink:             Activate Icon for New Categorie on Main web Links Page (1=Yes 0=No)\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$perpage = $xperpage;\n";
-    $content .= "\$popular = $xpopular;\n";
-    $content .= "\$newlinks = $xnewlinks;\n";
-    $content .= "\$toplinks = $xtoplinks;\n";
-    $content .= "\$linksresults = $xlinksresults;\n";
-    $content .= "\$links_anonaddlinklock = $xlinks_anonaddlinklock;\n";
-    $content .= "\$linkmainlogo = $xlinkmainlogo;\n";
-    $content .= "\$OnCatNewLink = $xOnCatNewLink;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Function Mail and Notification of News Submissions\n";
-    $content .= "#\n";
-    $content .= "# \$adminmail:      Site Administrator's Email\n";
-    $content .= "# \$mail_fonction:  What Mail function to be used (1=mail, 2=email)\n";
-    $content .= "# \$notify:         Notify you each time your site receives a news submission? (1=Yes 0=No)\n";
-    $content .= "# \$notify_email:   Email, address to send the notification\n";
-    $content .= "# \$notify_subject: Email subject\n";
-    $content .= "# \$notify_message: Email body, message\n";
-    $content .= "# \$notify_from:    account name to appear in From field of the Email\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$adminmail = \"$xadminmail\";\n";
-    $content .= "\$mail_fonction = \"$xmail_fonction\";\n";
-    $content .= "\$notify = $xnotify;\n";
-    $content .= "\$notify_email = \"$xnotify_email\";\n";
-    $content .= "\$notify_subject = \"$xnotify_subject\";\n";
-    $content .= "\$notify_message = \"$xnotify_message\";\n";
-    $content .= "\$notify_from = \"$xnotify_from\";\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Survey/Polls Config\n";
-    $content .= "#\n";
-    $content .= "# \$maxOptions: Number of maximum options for each poll\n";
-    $content .= "# \$setCookies: Set cookies to prevent visitors vote twice in a period of 24 hours? (0=Yes 1=No)\n";
-    $content .= "# \$pollcomm:   Activate comments in Polls? (1=Yes 0=No)\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$maxOptions = $xmaxOptions;\n";
-    $content .= "\$setCookies = $xsetCookies;\n";
-    $content .= "\$pollcomm = $xpollcomm;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Some Graphics Options\n";
-    $content .= "#\n";
-    $content .= "# \$tipath:       Topics images path (put / only at the end, not at the begining)\n";
-    $content .= "# \$userimg:      User images path (put / only at the end, not at the begining)\n";
-    $content .= "# \$adminimg:     Administration system images path (put / only at the end, not at the begining)\n";
-    $content .= "# \$admingraphic: Activate graphic menu for Administration Menu? (1=Yes 0=No)\n";
-    $content .= "# \$short_menu_admin: Activate short Administration Menu? (1=Yes 0=No)\n";
-    $content .= "# \$admf_ext:     Image Files'extesion for admin menu (default: gif)\n";
-    $content .= "# \$admart:       How many articles to show in the admin section?\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$tipath = \"$xtipath\";\n";
-    $content .= "\$userimg = \"$xuserimg\";\n";
-    $content .= "\$adminimg = \"$xadminimg\";\n";
-    $content .= "\$short_menu_admin = $xshort_menu_admin;\n";
-    $content .= "\$admingraphic = $xadmingraphic;\n";
-
-    if (!$xadmf_ext) {
-        $xadmf_ext = "gif";
-    }
-
-    $content .= "\$admf_ext = \"$xadmf_ext\";\n";
-    $content .= "\$admart = $xadmart;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# HTTP Referers Options\n";
-    $content .= "#\n";
-    $content .= "# \$httpref:    Activate HTTP referer logs to know who is linking to our site? (1=Yes 0=No)";
-    $content .= "# \$httprefmax: Maximum number of HTTP referers to store in the Database (Try to not set this to a high number, 500 ~ 1000 is Ok)\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$httpref = $xhttpref;\n";
-    $content .= "\$httprefmax = $xhttprefmax;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Miscelaneous Options\n";
-    $content .= "#\n";
-    $content .= "# \$smilies:          Activate Avatar? (1=Yes 0=No)\n";
-    $content .= "# \$avatar_size:      Maximum size for uploaded avatars in pixel (width*height) \n";
-    $content .= "# \$short_user:       Activate Short User registration (without ICQ, MSN, ...)? (1=Yes 0=No)\n";
-    $content .= "# \$member_list:      Make the members List Private (only for members) or Public (Private=Yes Public=No)\n";
-    $content .= "# \$download_cat:     Witch category do you want to show first in download section?\n";
-    $content .= "# \$AutoRegUser:      Allow automated new-user creation (sending email and allowed connection)\n";
-    $content .= "# \$short_review:     For transform reviews like \"gold book\" (1=Yes, 0=no)\n";
-    $content .= "# \$subscribe:        Allow your members to subscribe to topics, ... (1=Yes, 0=no)\n";
-    $content .= "# \$member_invisible: Allow members to hide from other members, ... (1=Yes, 0=no)\n";
-    $content .= "# \$CloseRegUser:     Allow you to close New Member Registration (from Gawax Idea), ... (1=Yes, 0=no)\n";
-    $content .= "# \$memberpass:       Allow user to choose alone the password (1=Yes, 0=no)\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$smilies = $xsmilies;\n";
-    $content .= "\$avatar_size = \"$xavatar_size\";\n";
-    $content .= "\$short_user = $xshort_user;\n";
-    $content .= "\$member_list = $xmember_list;\n";
-    $content .= "\$download_cat = \"$xdownload_cat\";\n";
-    $content .= "\$AutoRegUser = $xAutoRegUser;\n";
-    $content .= "\$short_review = $xshort_review;\n";
-    $content .= "\$subscribe = $xsubscribe;\n";
-    $content .= "\$member_invisible = $xmember_invisible;\n";
-    $content .= "\$CloseRegUser = $xCloseRegUser;\n";
-    $content .= "\$memberpass = $xmemberpass;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# HTTP Miscelaneous Options\n";
-    $content .= "#\n";
-    $content .= "# \$rss_host_verif: Activate the validation of the existance of a web on Port 80 for Headlines (true=Yes false=No)\n";
-    $content .= "# \$cache_verif:    Activate the Advance Caching Meta Tag (pragma ...) (true=Yes false=No)\n";
-    $content .= "# \$dns_verif:      Activate the DNS resolution for posts (forum ...), IP-Ban, ... (true=Yes false=No)\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$rss_host_verif = $xrss_host_verif;\n";
-    $content .= "\$cache_verif = $xcache_verif;\n";
-    $content .= "\$dns_verif = $xdns_verif;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# SYSTEM Miscelaneous Options\n";
-    $content .= "#\n";
-    $content .= "# \$savemysql_size:  Determine the maximum size for one file in the SaveMysql process\n";
-    $content .= "# \$savemysql_mode:  Type of Myql process (1, 2 or 3)\n";
-    $content .= "# \$tiny_mce:        true=Yes or false=No to use tiny_mce Editor or NO Editor\n";
-    $content .= "$line";
-    $content .= "\n";
-    $content .= "\$savemysql_size = $xsavemysql_size;\n";
-    $content .= "\$savemysql_mode = $xsavemysql_mode;\n";
-    $content .= "\$tiny_mce = $xtiny_mce;\n";
-    $content .= "\n";
-    $content .= "$line";
-    $content .= "# Do not touch the following options !\n";
-    $content .= "$line";
-    $content .= "\n";
-
-    if ($NPDS_Key == '') {
-        $NPDS_Key = uniqid("");
-    }
-
-    $content .= "\$NPDS_Key = \"$NPDS_Key\";\n";
-    $content .= "\$Version_Num = \"v.16.8\";\n";
-    $content .= "\$Version_Id = \"NPDS\";\n";
-    $content .= "\$Version_Sub = \"REvolution\";\n";
-    $content .= "\n";
-    $content .= "?>";
-    fwrite($file, $content);
-    fclose($file);
+    // Versioning npds core
+    ConfigSaveFile::save_setting_versioning();
 
     //Save Configuration FileManager
-    save_setting_filemanager($xfilemanager);
+    ConfigSaveFile::save_setting_filemanager($xfilemanager);
 
     // Save Configuration Signature
-    save_setting_signature($xEmailFooter);
+    ConfigSaveFile::save_setting_signature($xEmailFooter);
     
     // Save configuration Mailer
-    save_setting_mailler($xmail_debug, $xsmtp_host, $xsmtp_port, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xdkim_auto);
+    ConfigSaveFile::save_setting_mailler($xmail_debug, $xsmtp_host, $xsmtp_port, $xsmtp_auth, $xsmtp_username, $xsmtp_password, $xsmtp_secure, $xsmtp_crypt, $xdkim_auto);
     
     global $aid;
     logs::Ecr_Log("security", "ConfigSave() by AID : $aid", "");
@@ -490,131 +228,4 @@ function ConfigSave($xparse, $xsitename, $xnuke_url, $xsite_logo, $xslogan, $xst
 }
 
 
-/**
- * [save_setting_filemanager description]
- *
- * @param   int   $xfilemanager  [$xfilemanager description]
- *
- * @return  void
- */
-function save_setting_filemanager(int $xfilemanager): void
-{
-    $file = fopen("config/filemanager.php", "w");
-    $content = "<?php\n";
-    $content .= "\n";
-    $content .= "return array(\n";
-    $content .= "/**\n";
-    $content .= "* FileManager\n";
-    $content .= "*\n";
-    $content .= "*/\n";
-    $content .= "\n";
-    $content .= "    'manager  => ". (($xfilemanager == 0) ? 'false' : 'true') . ",\n";
-    $content .= "\n";
-    $content .= ");\n";
-    $content .= "\n";
-    fwrite($file, $content);
-    fclose($file);
-}
 
-/**
- * [save_setting_signature description]
- *
- * @param   string  $xEmailFooter  [$xEmailFooter description]
- *
- * @return  void
- */
-function save_setting_signature(string $xEmailFooter): void
-{
-    $xEmailFooter = str_replace(chr(13) . chr(10), "\n", $xEmailFooter);
-
-    $file = fopen("config/signature.php", "w");
-    $content = "<?php\n";
-    $content .= "\n";
-    $content .= "return array(\n";
-    $content .= "/**\n";
-    $content .= "* Signature\n";
-    $content .= "*\n";
-    $content .= "*/\n";
-    $content .= "\n";
-    $content .= "    'message  => '". $xEmailFooter . "',\n";
-    $content .= "\n";
-    $content .= ");\n";
-    $content .= "\n";
-    fwrite($file, $content);
-    fclose($file);
-}
-
-/**
- * [save_setting_mailler description]
- *
- * @param   int     $xmail_debug     [$xmail_debug description]
- * @param   string  $xsmtp_host      [$xsmtp_host description]
- * @param   int     $xsmtp_port      [$xsmtp_port description]
- * @param   int     $xsmtp_auth      [$xsmtp_auth description]
- * @param   string  $xsmtp_username  [$xsmtp_username description]
- * @param   string  $xsmtp_password  [$xsmtp_password description]
- * @param   int     $xsmtp_secure    [$xsmtp_secure description]
- * @param   string  $xsmtp_crypt     [$xsmtp_crypt description]
- * @param   int     $xdkim_auto      [$xdkim_auto description]
- *
- * @return  void
- */
-function save_setting_mailler(int $xmail_debug, string $xsmtp_host, int $xsmtp_port, int $xsmtp_auth, string $xsmtp_username, string $xsmtp_password, int $xsmtp_secure, string $xsmtp_crypt, int $xdkim_auto): void
-{
-    $file = fopen("config/mailer.php", "w");
-    $content = "<?php\n";
-    $content .= "\n";
-    $content .= "return array(\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Debug\n";
-    $content .= "     */\n";
-    $content .= "    'debug' => ". (($xmail_debug == 0) ? 'false' : 'true') .",\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Configurer le serveur SMTP\n";
-    $content .= "     *\n";
-    $content .= "     * @var [type]\n";
-    $content .= "     */\n";
-    $content .= "    'smtp_host' => '".$xsmtp_host."',\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Port TCP, utilisez 587 si vous avez activé le chiffrement TLS\n";
-    $content .= "     */\n";
-    $content .= "    'smtp_port' => '".$xsmtp_port."',\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Activer l'authentification SMTP\n";
-    $content .= "     */\n";
-    $content .= "    'smtp_auth' => $xsmtp_auth,\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Nom d'utilisateur SMTP\n";
-    $content .= "     */\n";
-    $content .= "    'smtp_username' => '".$xsmtp_username."',\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Mot de passe SMTP\n";
-    $content .= "     */\n";
-    $content .= "    'smtp_password' => '".$xsmtp_password."',\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Activer le chiffrement TLS\n";
-    $content .= "     */\n";
-    $content .= "    'smtp_secure' => $xsmtp_secure,\n";
-    $content .= "\n";
-    $content .= "    /**\n";
-    $content .= "     * Type du chiffrement TLS\n";
-    $content .= "     */\n";
-    $content .= "    'smtp_crypt' => '".$xsmtp_crypt."',\n";
-    $content .= " \n";
-    $content .= "    /**\n";
-    $content .= "     * DKIM 1 pour celui du dns 2 pour une génération automatique\n";
-    $content .= "     */\n";
-    $content .= "    'dkim_auto' => $xdkim_auto,\n";
-    $content .= "\n";
-    $content .= ");\n";
-    $content .= "\n";
-    fwrite($file, $content);
-    fclose($file);
-}

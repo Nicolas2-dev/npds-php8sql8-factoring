@@ -21,7 +21,7 @@ if (!function_exists("Mysql_Connexion")) die();
 // Initialisation
 global $npds_twi, $NPDS_Prefix;
 
-$nuke_url = Config::get('app.nuke_url');
+$nuke_url = Config::get('npds.nuke_url');
 
 if (!isset($sid)) {
     $result = sql_query("SELECT max(sid) FROM " . $NPDS_Prefix . "stories");

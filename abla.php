@@ -37,7 +37,7 @@ $f_titre = translate("Tableau de bord");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-$hlpfile = '/manuels/' . Config::get('app.language') . '/abla.html';
+$hlpfile = '/manuels/' . Config::get('npds.language') . '/abla.html';
 
 global $admin;
 if ($admin) {

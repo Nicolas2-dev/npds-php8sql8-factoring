@@ -33,7 +33,7 @@ class language
         if (isset($user_language)) {
             $locale = $user_language;
         } else {
-            $locale = Config::get('app.language');
+            $locale = Config::get('npds.language');
         }
 
         return $locale;
@@ -123,7 +123,7 @@ class language
                     $ibid = str_replace("[!$lang]", "[$lang]", $ibid);
                     $pos_deb = $abs_pos_deb;
 
-                    if ($lang != Config::get('app.language')) {
+                    if ($lang != Config::get('npds.language')) {
                         $trouve_language = true;
                     }
                 }
@@ -168,7 +168,7 @@ class language
     {
         global $languageslist;
 
-        $languageslocal = Config::get('app.language') . ' ' . str_replace(Config::get('app.language'), '', $languageslist);
+        $languageslocal = Config::get('npds.language') . ' ' . str_replace(Config::get('npds.language'), '', $languageslist);
         $languageslocal = trim(str_replace('  ', ' ', $languageslocal));
         $tab_langue = explode(' ', $languageslocal);
 
@@ -245,13 +245,13 @@ class language
         global $tab_langue;
 
         if ($local_user_language) {
-            $old_langue = Config::get('app.language');
-            Config::set('app.language', $local_user_language);
+            $old_langue = Config::get('npds.language');
+            Config::set('npds.language', $local_user_language);
 
             $tab_langue = static::make_tab_langue();
             $ibid = static::aff_langue($ibid);
 
-            Config::set('app.language', $old_langue);
+            Config::set('npds.language', $old_langue);
         }
 
         return $ibid;
@@ -279,7 +279,7 @@ class language
         $iso_country = '';
         $ietf = '';
         $select_lang = '';
-        $select_lang = !empty($user_language) ? $user_language : Config::get('app.language');
+        $select_lang = !empty($user_language) ? $user_language : Config::get('npds.language');
         
         switch ($select_lang) {
             case "fr":

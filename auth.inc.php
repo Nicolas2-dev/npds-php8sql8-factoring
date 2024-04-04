@@ -81,7 +81,7 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
 
             $admin = base64_encode("$aid:" . md5($CryptpPWD));
 
-            $admin_cook_duration = Config::get('app.admin_cook_duration');
+            $admin_cook_duration = Config::get('npds.admin_cook_duration');
 
             if ($admin_cook_duration <= 0) {
                 $admin_cook_duration = 1;

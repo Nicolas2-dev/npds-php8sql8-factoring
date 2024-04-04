@@ -28,8 +28,8 @@ class news
     {
         global $NPDS_Prefix;
         
-        $storyhome = Config::get('app..storyhome');
-        $nuke_url = Config::get('app.nuke_url');
+        $storyhome = Config::get('npds..storyhome');
+        $nuke_url = Config::get('npds.nuke_url');
 
         $ultra = "storage/news/ultramode.txt";
         $netTOzone = "storage/news/net2zone.txt";
@@ -236,7 +236,7 @@ class news
     {
         global $NPDS_Prefix;
 
-        $today = getdate(time() + ((int) Config::get('app.gmt') * 3600));
+        $today = getdate(time() + ((int) Config::get('npds.gmt') * 3600));
         $day = $today['mday'];
 
         if ($day < 10) {
@@ -442,7 +442,7 @@ class news
         if (isset($cookie[3])) {
             $storynum = $cookie[3];
         } else {
-            $storynum = Config::get('app.storyhome');
+            $storynum = Config::get('npds.storyhome');
         }
 
         if ($op == "categories") {

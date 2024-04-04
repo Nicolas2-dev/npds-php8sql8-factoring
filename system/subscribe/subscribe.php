@@ -27,7 +27,7 @@ class subscribe
         // $Xtype : topic, forum ... / $Xtopic clause WHERE / $Xforum id of forum / $Xresume Text passed / $Xsauf not this userid
         global $NPDS_Prefix;
 
-        $nuke_url = Config::get('app.nuke_url');
+        $nuke_url = Config::get('npds.nuke_url');
 
         if ($Xtype == 'topic') {
             $result = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$Xtopic'");
@@ -77,7 +77,7 @@ class subscribe
                     }
                 }
 
-                $subject = html_entity_decode(translate_ml($user_langue, "Abonnement"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " / " . Config::get('app.sitename');
+                $subject = html_entity_decode(translate_ml($user_langue, "Abonnement"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " / " . Config::get('npds.sitename');
                 $message = $entete;
                 $message .= $resume;
                 $message .= $url;

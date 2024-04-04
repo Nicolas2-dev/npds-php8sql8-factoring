@@ -533,7 +533,7 @@ function BannerClientDelete($cid, $ok = 0)
         if ($numrows == 0) {
             echo '<br />' . adm_translate("Cet annonceur n'a pas de bannière active pour le moment.") . '</div>';
         } else {
-            echo '<br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . Config::get('app.sitename') . '</div>';
+            echo '<br /><span class="text-danger"><b>' . adm_translate("ATTENTION !!!") . '</b></span><br />' . adm_translate("Cet annonceur a les BANNIERES ACTIVES suivantes dans") . ' ' . Config::get('npds.sitename') . '</div>';
         }
 
         while (list($imageurl, $clickurl) = sql_fetch_row($result2)) {

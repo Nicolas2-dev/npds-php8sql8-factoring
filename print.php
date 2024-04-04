@@ -32,8 +32,8 @@ function PrintPage($oper, $DB, $nl, $sid)
     // global $user, $cookie, $theme, $Default_Theme, $language ??? Not used
     global $user, $cookie, $theme, $language, $datetime, $Titlesitename, $NPDS_Prefix;
 
-    $sitename = Config::get('app.sitename');
-    $nuke_url = Config::get('app.nuke_url');
+    $sitename = Config::get('npds.sitename');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $aff = true;
     if ($oper == 'news') {
@@ -118,7 +118,7 @@ function PrintPage($oper, $DB, $nl, $sid)
         // not used 
         // if (isset($user)) {
         //     if ($cookie[9] == '') {
-        //         $cookie[9] = Config::get('app.Default_Theme');
+        //         $cookie[9] = Config::get('npds.Default_Theme');
         //     }
 
         //     if (isset($theme)) {
@@ -128,11 +128,11 @@ function PrintPage($oper, $DB, $nl, $sid)
         //     $tmp_theme = $cookie[9];
 
         //     if (!$file = @opendir("themes/$cookie[9]")) {
-        //         $tmp_theme = Config::get('app.Default_Theme');
+        //         $tmp_theme = Config::get('npds.Default_Theme');
         //     }
 
         // } else {
-        //     $tmp_theme = Config::get('app.Default_Theme');
+        //     $tmp_theme = Config::get('npds.Default_Theme');
         // }
 
         echo '
@@ -142,7 +142,7 @@ function PrintPage($oper, $DB, $nl, $sid)
             <div max-width="640" class="container p-1 n-hyphenate">
                 <div>';
 
-        $site_logo = Config::get('app.site_logo');
+        $site_logo = Config::get('npds.site_logo');
 
         $pos = strpos($site_logo, '/');
 

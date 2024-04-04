@@ -736,7 +736,7 @@ function LinksListBrokenLinks(): void
 
             $link = DB::table('links_links')->select('title', 'url', 'submitter')->where('lid', $lid)->first();
 
-            if ($brokenlinks['modifysubmitter'] != Config::get('app.anonymous')) {
+            if ($brokenlinks['modifysubmitter'] != Config::get('npds.anonymous')) {
                 $user = DB::table('users')->select('email')->where('uname', $brokenlinks['modifysubmitter'])->first();
             }
 
@@ -1448,9 +1448,9 @@ function LinksAddLink(int $new, int $lid, string $title, string $url, string $ca
             DB::table('links_newlink')->where('lid', $lid)->delete();
 
             if ($email != '') {
-                $nuke_url = Config::get('app.nuke_url');
+                $nuke_url = Config::get('npds.nuke_url');
                 
-                $subject = html_entity_decode(adm_translate("Votre Lien"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " : " . Config::get('app.sitename');
+                $subject = html_entity_decode(adm_translate("Votre Lien"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " : " . Config::get('npds.sitename');
                 $message = adm_translate("Bonjour") . " $name :\n\n" . adm_translate("Nous avons approuvé votre contribution à notre moteur de recherche.") . "\n\n" . adm_translate("Titre de la page") . " : $title\n" . adm_translate("URL de la Page : ") . "<a href=\"$url\">$url</a>\n" . adm_translate("Description : ") . "$xtext\n" . adm_translate("Vous pouvez utiliser notre moteur de recherche sur : ") . " <a href=\"$nuke_url/modules.php?ModPath=links&ModStart=links\">$nuke_url/modules.php?ModPath=links&ModStart=links</a>\n\n" . adm_translate("Merci pour votre Contribution !") . "\n";
                 $message .= Config::get('signature.message');
                 

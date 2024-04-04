@@ -44,7 +44,7 @@ $Titlesitename = 'NPDS';
 
 include("storage/meta/meta.php");
 
-echo css::import_css(theme::getTheme(), Config::get('app.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), '');
+echo css::import_css(theme::getTheme(), Config::get('npds.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), '');
 
 include("assets/formhelp.java.php");
 

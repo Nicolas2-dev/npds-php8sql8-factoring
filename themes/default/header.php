@@ -33,7 +33,7 @@ function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_k
 {
     global $theme, $language;
 
-    if (Config::get('app.gzhandler') == 1) {
+    if (Config::get('npds.gzhandler') == 1) {
         ob_start("ob_gzhandler");
     }
     
@@ -55,8 +55,8 @@ function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_k
     echo '<link rel="shortcut icon" href="' . $favico . '" type="image/x-icon" />';
 
     // Syndication RSS & autres
-    $nuke_url = Config::get('app.nuke_url');
-    $sitename = Config::get('app.sitename');
+    $nuke_url = Config::get('npds.nuke_url');
+    $sitename = Config::get('npds.sitename');
 
     // Canonical
     $scheme = strtolower($_SERVER['REQUEST_SCHEME'] ?? 'http');
@@ -272,7 +272,7 @@ if (array_key_exists($pages_ref, $PAGES)) {
 
     // neutralise le bug en dessous bug #4
     if ($Titlesitename == '') {
-        $Titlesitename = Config::get('app.sitename');
+        $Titlesitename = Config::get('npds.sitename');
     }
 
     if ($fin_title == "+") {
@@ -283,7 +283,7 @@ if (array_key_exists($pages_ref, $PAGES)) {
 
     // bug #4
     // if ($Titlesitename == '') {
-    //     $Titlesitename = Config::get('app.sitename'); // bug ne fonctionne pas !!!!
+    //     $Titlesitename = Config::get('npds.sitename'); // bug ne fonctionne pas !!!!
     // }
 
     // globalisation de la variable title pour marquetapage mais protection pour la zone admin
@@ -317,7 +317,7 @@ if (array_key_exists($pages_ref, $PAGES)) {
 
 // Initialisation de TinyMce
 
-if (Config::get('app.tiny_mce')) {
+if (Config::get('npds.tiny_mce')) {
     if (array_key_exists($pages_ref, $PAGES)) {
         if (array_key_exists('TinyMce', $PAGES[$pages_ref])) {
             Config::set('editeur.tiny_mce_init', true);

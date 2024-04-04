@@ -274,7 +274,7 @@ for ($i = 0; $i < $total_contributeurs; $i++) {
 
         echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="' . $imgtmp . '" alt="' . $contri['uname'] . '" title="' . $contri['uname'] . '" data-bs-toggle="tooltip" />';
     } else
-        echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip" />';
+        echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('npds.anonymous') . '" title="' . Config::get('npds.anonymous') . '" data-bs-toggle="tooltip" />';
 }
 
 echo '
@@ -382,7 +382,7 @@ if ($allow_upload_forum) {
 
 // Forum Read
 if (isset($user)) {
-    $time_actu = time() + ((int) Config::get('app.gmt') * 3600);
+    $time_actu = time() + ((int) Config::get('npds.gmt') * 3600);
 
     $sqlR = "SELECT last_read FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum' AND uid='$userdata[0]' AND topicid='$topic'";
     $result_LR = sql_query($sqlR);
@@ -428,7 +428,7 @@ do {
         $res_id = array();
         $my_rs = '';
         
-        if (!Config::get('app.short_user')) {
+        if (!Config::get('npds.short_user')) {
             $posterdata_extend = forum::get_userdata_extend_from_id($myrow['poster_id']);
 
             include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
@@ -515,7 +515,7 @@ do {
                 <div class="card">
                 <div class="card-header">';
 
-    if (Config::get('app.smilies')) {
+    if (Config::get('npds.smilies')) {
         if ($myrow['poster_id'] !== '0') {
             if ($posterdata['user_avatar'] != '') {
                 if (stristr($posterdata['user_avatar'], 'users_private')) {
@@ -533,14 +533,14 @@ do {
             <a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'<div class="my-2 border rounded p-2">' . forum::member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '</div><div class="list-group mb-3 text-center">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div> \'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>
             <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
         } else {
-            echo '<a style="position:absolute; top:1rem;" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" /></a>
-                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
+            echo '<a style="position:absolute; top:1rem;" title="' . Config::get('npds.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('npds.anonymous') . '" /></a>
+                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('npds.anonymous') . '</strong></span>';
         }
     } else {
         if ($myrow['poster_id'] !== '0') {
             echo '<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
         } else {
-            echo '<span class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
+            echo '<span class="text-muted"><strong>' . Config::get('npds.anonymous') . '</strong></span>';
         }
     }
 
@@ -715,7 +715,7 @@ if ($forum_access != 9) {
     }
 
     if ((($Mmod) or ($original_poster == $userdata[0])) and (!$lock_state)) {
-        $sec_clef = md5($forum . $topic . md5(Config::get('app.NPDS_Key')));
+        $sec_clef = md5($forum . $topic . md5(Config::get('npds.NPDS_Key')));
         echo '<p><a href="viewforum.php?forum=' . $forum . '&amp;topic_id=' . $topic . '&amp;topic_title=' . rawurlencode($topic_subject) . '&amp;op=solved&amp;sec_clef=' . $sec_clef . '"><i class="fa fa-lock fa-2x align-middle me-1"></i>' . translate("Résolu") . '</a></p>';
         
         unset($sec_clef);

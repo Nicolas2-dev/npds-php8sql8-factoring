@@ -128,9 +128,9 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
     $result3 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
     list($topictext) = sql_fetch_row($result3);
 
-    $subject = html_entity_decode(translate("Article intéressant sur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . Config::get('app.sitename');
+    $subject = html_entity_decode(translate("Article intéressant sur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . Config::get('npds.sitename');
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $fname = hack::removeHack($fname);
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.") . "\n\n" . language::aff_langue($title) . "\n" . translate("Date :") . " $time\n" . translate("Sujet : ") . " " . language::aff_langue($topictext) . "\n\n" . translate("L'article") . " : <a href=\"$nuke_url/article.php?sid=$sid&amp;archive=$archive\">$nuke_url/article.php?sid=$sid&amp;archive=$archive</a>\n\n";
@@ -254,8 +254,8 @@ function SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse)
         }
     }
 
-    $nuke_url = Config::get('app.nuke_url');
-    $sitename = Config::get('app.sitename');
+    $nuke_url = Config::get('npds.nuke_url');
+    $sitename = Config::get('npds.sitename');
 
     $subject = html_entity_decode(translate("Site à découvrir : "), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
     $fname = hack::removeHack($fname);

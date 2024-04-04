@@ -3,8 +3,9 @@
 return array(
 
     /**
-     * File Manager
-     */
-    'manager' => true,
+    * FileManager
+    *
+    */
+    'manager'  => true,
 
 );

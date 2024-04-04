@@ -167,7 +167,7 @@ function write_users($adminlogin, $adminpass1, $adminpass2, $NPDS_Prefix)
         if ($adminpass1 != $adminpass2)
             $stage7_ok = 2;
         else {
-            if (strlen($adminpass1) < Config::get('app.minpass'))
+            if (strlen($adminpass1) < Config::get('npds.minpass'))
                 $stage7_ok = 2;
             else {
                 $stage7_ok = 1;
@@ -310,7 +310,7 @@ function formval($fv, $fv_parametres, $arg1, $foo)
                 if (value.length < 8) {
                     return {
                         valid: false,
-                        message: "' . ins_translate("Le mot de passe doit contenir") . ' ' . Config::get('app.minpass') . ' ' . ins_translate("caractères au minimum") . '",
+                        message: "' . ins_translate("Le mot de passe doit contenir") . ' ' . Config::get('npds.minpass') . ' ' . ins_translate("caractères au minimum") . '",
                         meta:{score: score-5},
                     };
                 }

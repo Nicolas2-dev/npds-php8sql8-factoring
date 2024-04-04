@@ -68,7 +68,7 @@ class users
     {
         global $NPDS_Prefix, $user;
 
-        if (!Config::get('app.AutoRegUser')) {
+        if (!Config::get('npds.AutoRegUser')) {
             if (isset($user)) {
                 $cookie = explode(':', base64_decode($user));
                 list($test) = sql_fetch_row(sql_query("SELECT open FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'"));

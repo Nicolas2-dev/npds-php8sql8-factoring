@@ -33,16 +33,16 @@ if (isset($user) and $user != '') {
     if ($cookie[9] != '') {
         $ibix = explode('+', urldecode($cookie[9]));
         if (array_key_exists(0, $ibix)) $theme = $ibix[0];
-        else $theme = Config::get('app.Default_Theme');
+        else $theme = Config::get('npds.Default_Theme');
         if (array_key_exists(1, $ibix)) $skin = $ibix[1];
-        else $skin = Config::get('app.Default_Skin');
+        else $skin = Config::get('npds.Default_Skin');
         $tmp_theme = $theme;
-        if (!$file = @opendir("themes/$theme")) $tmp_theme = Config::get('app.Default_Theme');
+        if (!$file = @opendir("themes/$theme")) $tmp_theme = Config::get('npds.Default_Theme');
     } else
-        $tmp_theme = Config::get('app.Default_Theme');
+        $tmp_theme = Config::get('npds.Default_Theme');
 } else {
-    $theme = Config::get('app.Default_Theme');
-    $skin = Config::get('app.Default_Skin');
+    $theme = Config::get('npds.Default_Theme');
+    $skin = Config::get('npds.Default_Skin');
     $tmp_theme = $theme;
 }
 

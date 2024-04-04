@@ -112,8 +112,8 @@ function subscribe_ok($xemail)
                 sql_query("INSERT INTO " . $NPDS_Prefix . "lnl_outside_users VALUES ('$xemail', '$host_name', '$timeX', 'OK')");
 
                 // Email validation + url to unsubscribe
-                $subject = html_entity_decode(translate("La lettre"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' / ' . Config::get('app.sitename');
-                $message = translate("Merci d'avoir consacré du temps pour vous enregistrer.") . '<br /><br />' . translate("Pour supprimer votre abonnement à notre lettre, merci d'utiliser") . ' : <br />' . Config::get('app.nuke_url') . '/lnl.php?op=unsubscribe&email=' . $xemail . '<br /><br />';
+                $subject = html_entity_decode(translate("La lettre"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' / ' . Config::get('npds.sitename');
+                $message = translate("Merci d'avoir consacré du temps pour vous enregistrer.") . '<br /><br />' . translate("Pour supprimer votre abonnement à notre lettre, merci d'utiliser") . ' : <br />' . Config::get('npds.nuke_url') . '/lnl.php?op=unsubscribe&email=' . $xemail . '<br /><br />';
                 $message .= Config::get('signature.message');
 
                 mailler::send_email($xemail, $subject, $message, '', true, 'html', '');

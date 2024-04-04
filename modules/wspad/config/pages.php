@@ -21,4 +21,4 @@ $PAGES['modules.php?ModPath=' . $ModPath . '&ModStart=wspad*']['run'] = "yes";
 $PAGES['modules.php?ModPath=' . $ModPath . '&ModStart=wspad*']['blocs'] = "0";
 $PAGES['modules.php?ModPath=' . $ModPath . '&ModStart=wspad*']['TinyMce'] = 1;
 $PAGES['modules.php?ModPath=' . $ModPath . '&ModStart=wspad*']['TinyMce-theme'] = "full+setup";
-$PAGES['modules.php?ModPath=' . $ModPath . '&ModStart=wspad']['css'] = [Config::get('app.nuke_url') . "/assets/shared/bootstrap/dist/css/bootstrap-icons.css+"];
+$PAGES['modules.php?ModPath=' . $ModPath . '&ModStart=wspad']['css'] = [Config::get('npds.nuke_url') . "/assets/shared/bootstrap/dist/css/bootstrap-icons.css+"];

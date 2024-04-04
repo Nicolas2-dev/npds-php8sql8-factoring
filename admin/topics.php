@@ -18,6 +18,7 @@ use npds\system\assets\js;
 use npds\system\logs\logs;
 use npds\system\assets\css;
 use npds\system\support\str;
+use npds\system\config\Config;
 use npds\system\language\language;
 
 if (!function_exists('admindroits')) {
@@ -33,7 +34,7 @@ admindroits($aid, $f_meta_nom);
 
 function topicsmanager()
 {
-    global $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $nook;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre, $nook;
 
     include("themes/default/header.php");
 
@@ -56,9 +57,9 @@ function topicsmanager()
             <div class="">';
 
             if (($topicimage) or ($topicimage != '')) {
-                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . $tipath . $topicimage . '" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topicname . '" /></a>';
+                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . $topicimage . '" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topicname . '" /></a>';
             } else {
-                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . $tipath . 'topics.png" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topicname . '" /></a>';
+                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . 'topics.png" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topicname . '" /></a>';
             }
 
             echo '
@@ -102,7 +103,7 @@ function topicsmanager()
             <label class="col-form-label col-sm-4" for="topicimage">' . adm_translate("Image") . '</label>
             <div class="col-sm-8">
                 <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topicimage . '" placeholder="genial.png" />
-                <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . $tipath . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
+                <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . Config::get('npds.tipath') . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
@@ -197,7 +198,7 @@ function topicsmanager()
 
 function topicedit($topicid)
 {
-    global $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -213,7 +214,7 @@ function topicedit($topicid)
 
     if ($topicimage != '') {
         echo '
-    <div class="card card-body my-4 py-3"><img class="img-fluid mx-auto d-block" src="' . $tipath . $topicimage . '" alt="image-sujet" /></div>';
+    <div class="card card-body my-4 py-3"><img class="img-fluid mx-auto d-block" src="' . Config::get('npds.tipath') . $topicimage . '" alt="image-sujet" /></div>';
     }
 
     echo '
@@ -237,7 +238,7 @@ function topicedit($topicid)
                 <label class="col-form-label col-sm-4" for="topicimage">' . adm_translate("Image") . '</label>
                 <div class="col-sm-8">
                 <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topicimage . '" placeholder="genial.png" />
-                <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . $tipath . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
+                <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . Config::get('npds.tipath') . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
@@ -370,7 +371,7 @@ function topicedit($topicid)
 
 function relatededit($tid, $rid)
 {
-    global $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre;
+    global $NPDS_Prefix, $f_meta_nom, $f_titre;
 
     include("themes/default/header.php");
 
@@ -391,7 +392,7 @@ function relatededit($tid, $rid)
     if ($topicimage != "") {  
         echo '
     <div class="thumbnail">
-        <img class="img-fluid " src="' . $tipath . $topicimage . '" alt="' . $topictext . '" />
+        <img class="img-fluid " src="' . Config::get('npds.tipath') . $topicimage . '" alt="' . $topictext . '" />
     </div>';
     }
 
@@ -580,7 +581,7 @@ function topicdelete($topicid, $ok = 0)
 
         Header("Location: admin.php?op=topicsmanager");
     } else {
-        global $tipath, $topicimage, $f_meta_nom, $f_titre;
+        global $topicimage, $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
@@ -597,7 +598,7 @@ function topicdelete($topicid, $ok = 0)
         if ($topicimage != "") {
             echo '
     <div class="thumbnail">
-        <img class="img-fluid" src="' . $tipath . $topicimage . '" alt="logo-topic" />
+        <img class="img-fluid" src="' . Config::get('npds.tipath') . $topicimage . '" alt="logo-topic" />
     </div>';
         }
 

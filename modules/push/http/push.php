@@ -116,7 +116,7 @@ function new_show($sid, $offset)
 {
     global $follow_links, $datetime, $NPDS_Prefix;
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $result = sql_query("SELECT hometext, bodytext, notes, title, time, informant, topic FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
     if ($result) {
@@ -226,7 +226,7 @@ function push_members()
 {
     global $push_member_col, $push_member_limit, $page, $NPDS_Prefix;
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     echo "document.write('<a name=\"member\"></a>');\n";
     echo "document.write('<li><b>" . push_translate("Member(s)") . "</b></li><br />');\n";
@@ -241,7 +241,7 @@ function push_members()
     $result = sql_query("SELECT uname FROM " . $NPDS_Prefix . "users ORDER BY uname ASC LIMIT $page,$push_member_limit");
     while (list($uname) = sql_fetch_row($result)) {
         $offset = $offset + 1;
-        if ($uname != Config::get('app.anonymous')) {
+        if ($uname != Config::get('npds.anonymous')) {
             echo "document.write('<td><a href=\"$nuke_url/user.php?op=userinfo&amp;uname=$uname\" target=\"_blank\" style=\"font-size: 11px;\">$uname</a></td>');\n";
         } else {
             echo "document.write('<td style=\"font-size: 11px;\">$uname</td>');\n";
@@ -316,7 +316,7 @@ function viewlink_show($cid, $min)
 {
     global $follow_links, $NPDS_Prefix, $push_view_perpage, $push_orderby;
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     push_header("suite");
 
@@ -371,7 +371,7 @@ function viewslink_show($sid, $min)
 {
     global $follow_links, $NPDS_Prefix, $push_view_perpage, $push_orderby;
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     push_header("suite");
 
@@ -446,7 +446,7 @@ function links($ibid)
 
     if ((stristr($ibid, "<img src"))) {
         if ((!stristr($ibid, "<img src=http")) and (!stristr($ibid, "<img src=\"http"))) {
-            $ibid = str_replace("<img src=", "<img src=".Config::get('app.nuke_url')."/", $ibid);
+            $ibid = str_replace("<img src=", "<img src=".Config::get('npds.nuke_url')."/", $ibid);
         }
     }
     return $ibid;

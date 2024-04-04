@@ -26,7 +26,7 @@ settype($act, 'string');
 settype($des, 'string');
 settype($subok, 'string');
 
-$nuke_url = Config::get('app.nuke_url');
+$nuke_url = Config::get('npds.nuke_url');
 
 $m->add_title("[fr]Contactez-nous[/fr][en]Contact us[/en][es]Cont&aacute;ctenos[/es][de]Melden Sie sich[/de][zh]&#x8054;&#x7CFB;&#x6211;&#x4EEC;[/zh]");
 $m->add_field('nom', "[fr]Nom / Raison Sociale[/fr][en]Name/Corporate name[/en][es]Nombre/ Raz&oacute;n Social[/es][de]Name / Name der Firma oder Organisation[/de][zh]&#x540D;&#x79F0;/&#x516C;&#x53F8;&#x540D;&#x79F0;[/zh]", $nom, 'text', true, 150, '', '');

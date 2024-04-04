@@ -47,11 +47,11 @@ $userX = base64_decode($user);
 $userdata = explode(':', $userX);
 if ($userdata[9] != '') {
     if (!$file = @opendir("themes/$userdata[9]"))
-        $theme = Config::get('app.Default_Theme');
+        $theme = Config::get('npds.Default_Theme');
     else
         $theme = $userdata[9];
 } else
-    $theme = Config::get('app.Default_Theme');
+    $theme = Config::get('npds.Default_Theme');
 
 if (isset($user)) {
     global $cookie;

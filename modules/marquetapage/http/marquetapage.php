@@ -22,7 +22,7 @@ function marquetapage_add($uri, $topic, $action)
 {
     global $cookie, $NPDS_Prefix;
     
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     if (($action == 'ad_tapage') and ($cookie[0])) {
         $drname = dirname($uri);

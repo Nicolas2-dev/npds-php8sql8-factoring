@@ -45,13 +45,13 @@ class theme
                 if (array_key_exists(1, $ibix)) {
                     $skin = $ibix[1];
                 } else {
-                    $skin = Config::get('app.Default_Skin');
+                    $skin = Config::get('npds.Default_Skin');
                 }
             } else{
-                $skin = Config::get('app.Default_Skin');
+                $skin = Config::get('npds.Default_Skin');
             }
         } else {
-            $skin = Config::get('app.Default_Skin');
+            $skin = Config::get('npds.Default_Skin');
         }
 
         return $skin;
@@ -75,17 +75,17 @@ class theme
                 if (array_key_exists(0, $ibix)) {
                     $theme = $ibix[0];
                 } else {
-                    $theme = Config::get('app.Default_Theme');
+                    $theme = Config::get('npds.Default_Theme');
                 }
 
                 if (!@opendir("themes/$theme")) {
-                    $theme = Config::get('app.Default_Theme');
+                    $theme = Config::get('npds.Default_Theme');
                 }
             } else {
-                $theme = Config::get('app.Default_Theme');
+                $theme = Config::get('npds.Default_Theme');
             }
         } else {
-            $theme = Config::get('app.Default_Theme');
+            $theme = Config::get('npds.Default_Theme');
         }
 
         return $theme;

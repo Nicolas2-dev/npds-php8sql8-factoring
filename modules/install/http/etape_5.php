@@ -31,8 +31,8 @@ function etape_5()
 
     include_once('config/config.php');
 
-    $slogan = Config::get('app.slogan');
-    $nuke_url = Config::get('app.nuke_url');
+    $slogan = Config::get('npds.slogan');
+    $nuke_url = Config::get('npds.nuke_url');
     
     echo '
                 <h3 class="mb-3">' . ins_translate('Autres paramètres') . '</h3>
@@ -44,7 +44,7 @@ function etape_5()
                         <div class="d-flex justify-content-start w-100 small text-help py-1"><div>' . ins_translate('Exemples :') . ' http://www.monsite.com | http://www.monsite.com/npds | http://127.0.0.1/</div><div class="ms-auto" id="countcar_new_nuke_url"></div></div>
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="form-control" type="text" name="new_sitename" id="new_sitename" maxlength="80" value="' . Config::get('app.sitename') . '" />
+                        <input class="form-control" type="text" name="new_sitename" id="new_sitename" maxlength="80" value="' . Config::get('npds.sitename') . '" />
                         <label for="new_sitename">' . ins_translate('Nom de votre site') . '</label>
                         <div class="d-flex justify-content-end w-100 small text-help py-1" id="countcar_new_sitename"></div>
                     </div>

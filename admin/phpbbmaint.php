@@ -66,7 +66,7 @@ function ForumMaintMarkTopics(): void
     if (!DB::table('forum_read')->delete()) {
         forum::forumerror('0001');
     } else {
-        $time_actu = time() + ((int) Config::get('app.gmt') * 3600);
+        $time_actu = time() + ((int) Config::get('npds.gmt') * 3600);
 
         $forums = DB::table('forums')->select('forum_id')->orderBy('forum_id', 'asc')->get();
 
@@ -165,7 +165,7 @@ function ForumMaintTopics(string $before, string $forum_name): void
 
         foreach ($forumtopic as $ftopic) {
 
-            $topic_title = ((Config::get('app.parse') == 0) ? str::FixQuotes($ftopic['topic_title']) : stripslashes($ftopic['topic_title']));
+            $topic_title = ((Config::get('npds.parse') == 0) ? str::FixQuotes($ftopic['topic_title']) : stripslashes($ftopic['topic_title']));
             
             echo '
             <div class="form-check form-check-inline">

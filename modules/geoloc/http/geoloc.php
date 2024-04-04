@@ -626,7 +626,7 @@ switch ($cartyp) {
         $layer_id = 'OSM';
 }
 
-$nuke_url = Config::get('app.nuke_url');
+$nuke_url = Config::get('npds.nuke_url');
 
 //==> construction js
 if (!defined('OL')) {

@@ -3,50 +3,57 @@
 return array(
 
     /**
-     * Debug
-     */
-    'debug' => false,
-    
-    /**
-     * Configurer le serveur SMTP
-     *
-     * @var [type]
-     */
-    'smtp_host' => "",
+    * Debug
+    *
+    */
+    'debug'  => false,
 
     /**
-     * Port TCP, utilisez 587 si vous avez activé le chiffrement TLS
-     */
-    'smtp_port' => "",
+    * Configurer le serveur SMTP
+    *
+    */
+    'smtp_host'  => '',
 
     /**
-     * Activer l'authentification SMTP
-     */
-    'smtp_auth' => 0,
+    * Port TCP, utilisez 587 si vous avez activé le chiffrement TLS
+    *
+    */
+    'smtp_port'  => '',
 
     /**
-     * Nom d'utilisateur SMTP
-     */
-    'smtp_username' => "",
+    * Activer l'authentification SMTP
+    *
+    */
+    'smtp_auth'  => 0,
 
     /**
-     * Mot de passe SMTP
-     */
-    'smtp_password' => "",
+    * Nom d'utilisateur SMTP
+    *
+    */
+    'smtp_username'  => '',
 
     /**
-     * Activer le chiffrement TLS
-     */
-    'smtp_secure' => 0,
+    * Mot de passe SMTP
+    *
+    */
+    'smtp_password'  => '',
 
     /**
-     * Type du chiffrement TLS
-     */
-    'smtp_crypt' => "tls",
- 
+    * Activer le chiffrement TLS
+    *
+    */
+    'smtp_secure'  => 0,
+
     /**
-     * DKIM 1 pour celui du dns 2 pour une génération automatique
-     */
-    'dkim_auto' => 1,
+    * Type du chiffrement TLS
+    *
+    */
+    'smtp_crypt'  => 'tls',
+
+    /**
+    * DKIM 1 pour celui du dns 2 pour une génération automatique
+    *
+    */
+    'dkim_auto'  => 1,
 
 );

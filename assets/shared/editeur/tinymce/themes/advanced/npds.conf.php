@@ -13,9 +13,9 @@
 
 use npds\system\config\Config;
 
-$nuke_url = Config::get('app.nuke_url');
+$nuke_url = Config::get('npds.nuke_url');
 
-$tinylangmenu = Config::get('app.multi_langue') !== false ? 'npds_langue' : '' ;
+$tinylangmenu = Config::get('npds.multi_langue') !== false ? 'npds_langue' : '' ;
 
 // skin : "oxide" ou "oxide-dark"
 $tmp.='

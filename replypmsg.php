@@ -127,8 +127,8 @@ if (isset($user)) {
                     global $subscribe;
                     if ($subscribe) {
                         $old_message = $message; // what this
-                        $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('app.sitename');
-                        $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . Config::get('app.nuke_url') . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
+                        $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('npds.sitename');
+                        $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . Config::get('npds.nuke_url') . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
                         $message .= Config::get('signature.message');
 
                         mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
@@ -161,8 +161,8 @@ if (isset($user)) {
 
                 global $subscribe;
                 if ($subscribe) {
-                    $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('app.sitename');
-                    $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . Config::get('app.nuke_url') . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
+                    $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('npds.sitename');
+                    $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . Config::get('npds.nuke_url') . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
                     $message .= Config::get('signature.message');
 
                     mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
@@ -246,12 +246,12 @@ if (isset($user)) {
     if ($full_interface == 'short') {
         if ($userdataX[9] != '') {
             if (!$file = @opendir("themes/$userdataX[9]")) {
-                $tmp_theme = Config::get('app.Default_Theme');
+                $tmp_theme = Config::get('npds.Default_Theme');
             } else {
                 $tmp_theme = $userdataX[9];
             }
         } else{
-            $tmp_theme = Config::get('app.Default_Theme');
+            $tmp_theme = Config::get('npds.Default_Theme');
         }
 
         include("themes/$tmp_theme/theme.php");

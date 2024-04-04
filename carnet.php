@@ -36,7 +36,7 @@ if (!$user) {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
     
-    $Default_Theme = Config::get('app.Default_Theme');
+    $Default_Theme = Config::get('npds.Default_Theme');
 
     if ($userdata[9] != '') {
         if (!$file = @opendir("themes/$userdata[9]")) {
@@ -56,7 +56,7 @@ if (!$user) {
 
     echo '<link id="bsth" rel="stylesheet" href="themes/_skins/default/bootstrap.min.css" />';
 
-    $language = Config::get('app.language');
+    $language = Config::get('npds.language');
 
     echo css::import_css($tmp_theme, $language, "", "", "");
 

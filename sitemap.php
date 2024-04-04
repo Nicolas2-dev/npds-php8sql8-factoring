@@ -27,7 +27,7 @@ function sitemapforum($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE forum_access='0' ORDER BY forum_id");
     while (list($forum_id) = sql_fetch_row($result)) {
@@ -61,7 +61,7 @@ function sitemaparticle($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $result = sql_query("SELECT sid,time FROM " . $NPDS_Prefix . "stories WHERE ihome='0' AND archive='0' ORDER BY sid");
 
@@ -84,7 +84,7 @@ function sitemaprub($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     // Sommaire des rubriques
     $tmp .= "<url>\n";
@@ -115,7 +115,7 @@ function sitemapdown($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     // Sommaire des downloads
     $tmp .= "<url>\n";
@@ -141,7 +141,7 @@ function sitemapdown($prio)
 
 function sitemapothers($PAGES)
 {
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     $tmp = '';
 

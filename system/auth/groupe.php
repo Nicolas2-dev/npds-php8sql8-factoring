@@ -175,7 +175,7 @@ class groupe
             $res_id = array();
             $my_rs = '';
 
-            if (!Config::get('app.short_user')) {
+            if (!Config::get('npds.short_user')) {
 
                 $posterdata_extend = forum::get_userdata_extend_from_id($uid);
 
@@ -232,7 +232,7 @@ class groupe
             if ($mns)
                 $useroutils .= '<a class="list-group-item text-primary" href="minisite.php?op=' . $uname . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visitez le minisite") . '</span></a>';
             
-            if (!Config::get('app.short_user'))
+            if (!Config::get('npds.short_user'))
                 if ($posterdata_extend[$ch_lat] != '')
                     $useroutils .= '<a class="list-group-item text-primary" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u' . $uid . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Localisation") . '</span></a>';
 
@@ -270,7 +270,7 @@ class groupe
                     <div id="li_mb_' . $uname . '_' . $gr . '" class="n-ellipses">
                        ' . $conn . '<a class="ms-2" tabindex="0" data-bs-title="' . $uname . '" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-content=\'<div class="list-group mb-3">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">';
             
-            if (!Config::get('app.short_user')) {
+            if (!Config::get('npds.short_user')) {
                 $li_mb .= $my_rsos[$count];
             }
             

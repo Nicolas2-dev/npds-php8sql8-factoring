@@ -258,8 +258,8 @@ function confirmNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fr
     if ($memberpass) {
         if ((isset($pass)) and ($pass != $vpass)) {
             $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Les mots de passe sont différents. Ils doivent être identiques.");
-        } elseif (strlen($pass) < Config::get('app.minpass')) {
-            $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Désolé, votre mot de passe doit faire au moins") . ' <strong>' . Config::get('app.minpass') . '</strong> ' . translate("caractères");
+        } elseif (strlen($pass) < Config::get('npds.minpass')) {
+            $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Désolé, votre mot de passe doit faire au moins") . ' <strong>' . Config::get('npds.minpass') . '</strong> ' . translate("caractères");
         }
     }
 
@@ -307,7 +307,7 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
 {
     global $NPDS_Prefix, $makepass, $adminmail, $AutoRegUser, $memberpass, $gmt, $NPDS_Key;
 
-    $sitename = Config::get('app.sitename');
+    $sitename = Config::get('npds.sitename');
 
     if (!isset($_SERVER['HTTP_REFERER'])) {
         logs::Ecr_Log('security', 'Ghost form in user.php registration. => NO REFERER', '');
@@ -315,7 +315,7 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
         include('admin/die.php');
         die();
 
-    } else if ($_SERVER['HTTP_REFERER'] . $NPDS_Key !== Config::get('app.nuke_url') . '/user.php' . $NPDS_Key) {
+    } else if ($_SERVER['HTTP_REFERER'] . $NPDS_Key !== Config::get('npds.nuke_url') . '/user.php' . $NPDS_Key) {
         logs::Ecr_Log('security', 'Ghost form in user.php registration. => ' . $_SERVER["HTTP_REFERER"], '');
         spam::L_spambot('', "false");
         include('admin/die.php');
@@ -341,8 +341,8 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
         $cryptpass = crypt($makepass, $hashpass);
         $hashkey = 1;
 
-        $Default_Theme = Config::get('app.Default_Theme');
-        $Default_Skin = Config::get('app.Default_Skin');
+        $Default_Theme = Config::get('npds.Default_Theme');
+        $Default_Skin = Config::get('npds.Default_Skin');
 
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users VALUES (NULL,'$name','$uname','$email','','','$user_avatar','$user_regdate','$user_occ','$user_from','$user_intrest','$user_sig','$user_viewemail','','','$cryptpass', '1', '10','','0','0','0','','0','','$Default_Theme+$Default_Skin','10','0','0','1','0','','','$user_lnl')");
 
@@ -1016,9 +1016,9 @@ function mail_password($uname, $code)
         list($uname, $email, $pass) = $tmp_result;
 
         // On envoie une URL avec dans le contenu : username, email, le MD5 du passwd retenu et le timestamp
-        $url = Config::get('app.nuke_url'). "/user.php?op=validpasswd&code=" . urlencode(crypt::encrypt($uname) . "#fpwd#" . crypt::encryptK($email . "#fpwd#" . $code . "#fpwd#" . time(), $pass));
+        $url = Config::get('npds.nuke_url'). "/user.php?op=validpasswd&code=" . urlencode(crypt::encrypt($uname) . "#fpwd#" . crypt::encryptK($email . "#fpwd#" . $code . "#fpwd#" . time(), $pass));
 
-        $message = translate("Le compte utilisateur") . ' ' . $uname . ' ' . translate("at") . ' ' . Config::get('app.sitename') . ' ' . translate("est associé à votre Email.") . "\n\n";
+        $message = translate("Le compte utilisateur") . ' ' . $uname . ' ' . translate("at") . ' ' . Config::get('npds.sitename') . ' ' . translate("est associé à votre Email.") . "\n\n";
         $message .= translate("Un utilisateur web ayant l'adresse IP ") . " $host_name " . translate("vient de demander une confirmation pour changer de mot de passe.") . "\n\n" . translate("Votre url de confirmation est :") . " <a href=\"$url\">$url</a> \n\n" . translate("Si vous n'avez rien demandé, ne vous inquiétez pas. Effacez juste ce Email. ") . "\n\n";
         $message .= Config::get('signature.message');
 
@@ -1137,7 +1137,7 @@ function docookie($setuid, $setuname, $setpass, $setstorynum, $setumode, $setuor
 {
     $info = base64_encode("$setuid:$setuname:" . md5($setpass) . ":$setstorynum:$setumode:$setuorder:$setthold:$setnoscore:$setublockon:$settheme:$setcommentmax");
 
-    $user_cook_duration = Config::get('app.user_cook_duration');
+    $user_cook_duration = Config::get('npds.user_cook_duration');
 
     if ($user_cook_duration <= 0) {
         $user_cook_duration = 1;
@@ -1249,8 +1249,8 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
     if (($check == $uname) and ($uid == $vuid)) {
         if ((isset($pass)) && ("$pass" != "$vpass")) {
             message_error('<i class="fa fa-exclamation me-2"></i>' . translate("Les mots de passe sont différents. Ils doivent être identiques.") . '<br />', '');
-        } elseif (($pass != '') && (strlen($pass) < Config::get('app.minpass'))) {
-            message_error('<i class="fa fa-exclamation me-2"></i>' . translate("Désolé, votre mot de passe doit faire au moins") . ' <strong>' . Config::get('app.minpass') . '</strong> ' . translate("caractères") . '<br />', '');
+        } elseif (($pass != '') && (strlen($pass) < Config::get('npds.minpass'))) {
+            message_error('<i class="fa fa-exclamation me-2"></i>' . translate("Désolé, votre mot de passe doit faire au moins") . ' <strong>' . Config::get('npds.minpass') . '</strong> ' . translate("caractères") . '<br />', '');
         } else {
             $stop = userCheck('edituser', $email);
 
@@ -1401,8 +1401,8 @@ function edithome()
     $userinfo = users::getusrinfo($user);
     users::member_menu($userinfo['mns'], $userinfo['uname']);
 
-    $Default_Theme = Config::get('app.Default_Theme');
-    $Default_Skin = Config::get('app.Default_Skin');
+    $Default_Theme = Config::get('npds.Default_Theme');
+    $Default_Skin = Config::get('npds.Default_Skin');
 
     if ($userinfo['theme'] == '') {
         $userinfo['theme'] = "$Default_Theme+$Default_Skin";
@@ -1534,7 +1534,7 @@ function chgtheme()
         if ($themelist[$i] != '') {
             echo '<option value="' . $themelist[$i] . '" ';
             
-            if ((($theme == '') && ($themelist[$i] == Config::get('app.Default_Theme'))) || ($theme == $themelist[$i])) {
+            if ((($theme == '') && ($themelist[$i] == Config::get('npds.Default_Theme'))) || ($theme == $themelist[$i])) {
                 echo 'selected="selected"';
             }
 
@@ -1762,7 +1762,7 @@ switch ($op) {
 
     case "mailpasswd":
         if ($uname != '' and $code != '') {
-            if (strlen($code) >= Config::get('app.minpass')) {
+            if (strlen($code) >= Config::get('npds.minpass')) {
                 mail_password($uname, $code);
             } else {
                 message_error("<i class=\"fa fa-exclamation\"></i>&nbsp;" . translate("Mot de passe erroné, refaites un essai.") . "<br /><br />", "");

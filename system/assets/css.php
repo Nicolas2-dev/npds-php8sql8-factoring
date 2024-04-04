@@ -202,12 +202,12 @@ class css
                 if (value.length < 8) {
                    return {
                       valid: false,
-                      message: "' . translate("Le mot de passe doit contenir") . ' ' . Config::get('app.minpass') . ' ' . translate("caractères au minimum") . '",
+                      message: "' . translate("Le mot de passe doit contenir") . ' ' . Config::get('npds.minpass') . ' ' . translate("caractères au minimum") . '",
                       meta:{score: score-5},
                    };
                 }
  
-                score += ((value.length >= ' . Config::get('app.minpass') . ') ? 1 : -1);
+                score += ((value.length >= ' . Config::get('npds.minpass') . ') ? 1 : -1);
                 if (/[A-Z]/.test(value)) score += 1;
                 if (/[a-z]/.test(value)) score += 1; 
                 if (/[0-9]/.test(value)) score += 1;

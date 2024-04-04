@@ -185,7 +185,7 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
 
     $result = sql_query("SELECT lid FROM " . $links_DB . "links_newlink");
     $numrows = sql_num_rows($result);
-    if ($numrows >= Config::get('app.troll_limit')) {
+    if ($numrows >= Config::get('npds.troll_limit')) {
         error_head("alert-danger");
         echo translate("Erreur : cette url est déjà présente dans la base de données") . '<br />';
         error_foot();
@@ -196,7 +196,7 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
         global $cookie;
         $submitter = $cookie[1];
     } else
-        $submitter = Config::get('app.anonymous');
+        $submitter = Config::get('npds.anonymous');
     if ($title == '') {
         error_head('alert-danger');
         echo translate("Erreur : vous devez saisir un titre pour votre lien") . '<br />';

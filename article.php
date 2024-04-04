@@ -64,7 +64,7 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
         : metalang::meta_lang($hometext . '<br />' . $bodytext . '<br />' . $notes);
 
     if ($informant == '') {
-        $informant = Config::get('app.anonymous');
+        $informant = Config::get('npds.anonymous');
     }
 
     news::getTopics($sid);

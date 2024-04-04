@@ -218,7 +218,7 @@ if ($submitS) {
             $resultZ = sql_query("SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'");
             list($title_topic) = sql_fetch_row($resultZ);
 
-            $nuke_url = Config::get('app.nuke_url');
+            $nuke_url = Config::get('npds.nuke_url');
 
             $subject = strip_tags($forum_name) . "/" . $title_topic . " : " . html_entity_decode(translate_ml($m['user_langue'], "Une réponse à votre dernier Commentaire a été posté."), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $message = $m['uname'] . "\n\n";
@@ -353,7 +353,7 @@ if ($submitS) {
         if (isset($user)) {
             echo $userdata[1] . '</span>';
         } else {
-            echo Config::get('app.anonymous') . '</span>';
+            echo Config::get('npds.anonymous') . '</span>';
         }
 
         settype($image_subject, 'string');

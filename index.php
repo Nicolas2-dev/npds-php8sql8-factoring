@@ -20,45 +20,20 @@ use npds\system\cache\cache;
 use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\support\edito;
-use npds\system\support\facades\DB;
-
-
-// Modification pour IZ-Xinstall - EBH - JPB & PHR
-if (file_exists("storage/install/IZ-Xinstall.ok")) {
-    if (file_exists("install.php") or is_dir("install")) {
-        echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-        <html xmlns="http://www.w3.org/1999/xhtml">
-            <head>
-                <title>NPDS IZ-Xinstall - Installation Configuration</title>
-            </head>
-            <body>
-                <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #000000"><br />
-                    NPDS IZ-Xinstall - Installation &amp; Configuration
-                </div>
-                <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #ff0000"><br />
-                    Vous devez supprimer le r&eacute;pertoire "install" ET le fichier "install.php" avant de poursuivre !<br />
-                    You must remove the directory "install" as well as the file "install.php" before continuing!
-                </div>
-            </body>
-        </html>';
-        die();
-    }
-} else {
-    if (file_exists("install.php") and is_dir("install")) {
-        header("location: install.php");
-    }
-}
+use npds\modules\install\support\install;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
+
+install::checkInstall();
 
 // Redirect for default Start Page of the portal - look at Admin Preferences for choice
 function select_start_page($op)
 {
     global $index;
 
-    $Start_Page = Config::get('app.Start_Page');
+    $Start_Page = Config::get('npds.Start_Page');
 
     if (!users::AutoReg()) {
         global $user;
@@ -80,17 +55,6 @@ function select_start_page($op)
 function theindex($op, $catid, $marqeur)
 {
     include("themes/default/header.php");
-
-
-    // $users = DB::table('users')->where('uname', '!=', 'Anonyme')
-    //     ->limit(2)
-    //     ->orderBy('uname', 'desc')
-    //     ->get(array('uid', 'name', 'uname', 'email'));
-    
-    
-    // var_dump($users, $users[0]->uname);
-
-//td();
 
     // start Caching page
     if (cache::cacheManagerStart2()) {

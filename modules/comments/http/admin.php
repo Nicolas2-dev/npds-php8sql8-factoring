@@ -40,14 +40,14 @@ $forum_name = 'comments';
 $forum_type = 0;
 $allow_to_post = false;
 
-if (Config::get('app.anonpost'))
+if (Config::get('npds.anonpost'))
     $forum_access = 0;
 else
     $forum_access = 1;
 
 global $NPDS_Prefix;
 
-$moderate = Config::get('app.moderate');
+$moderate = Config::get('npds.moderate');
 
 if (($moderate == 1) and $admin)
     $Mmod = true;

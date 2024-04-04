@@ -203,7 +203,7 @@ function avatar($user_avatar)
 }
 
 include("themes/default/header.php");
-$pagesize = Config::get('app.show_user');
+$pagesize = Config::get('npds.show_user');
 
 if (!isset($letter) or ($letter == '')) {
     $letter = translate("Tous");

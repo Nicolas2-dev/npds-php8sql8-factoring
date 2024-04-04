@@ -24,13 +24,13 @@ class download
     {
         global $NPDS_Prefix;
 
-        if (!Config::get('app.theme.long_chain')) {
-            Config::set('app.theme.long_chain', 13);
+        if (!Config::get('npds.theme.long_chain')) {
+            Config::set('npds.theme.long_chain', 13);
         }
 
         //settype($top, 'integer');
 
-        $result = sql_query("SELECT did, dcounter, dfilename, dcategory, ddate, perms FROM " . $NPDS_Prefix . "downloads ORDER BY $ordre DESC LIMIT 0, " .Config::get('app.top'));
+        $result = sql_query("SELECT did, dcounter, dfilename, dcategory, ddate, perms FROM " . $NPDS_Prefix . "downloads ORDER BY $ordre DESC LIMIT 0, " .Config::get('npds.top'));
         $lugar = 1;
         $ibid = '';
 
@@ -57,8 +57,8 @@ class download
 
                 $ori_dfilename = $dfilename;
                 
-                if (strlen($dfilename) > Config::get('app.theme.long_chain')) {
-                    $dfilename = (substr($dfilename, 0, Config::get('app.theme.long_chain'))) . " ...";
+                if (strlen($dfilename) > Config::get('npds.theme.long_chain')) {
+                    $dfilename = (substr($dfilename, 0, Config::get('npds.theme.long_chain'))) . " ...";
                 }
 
                 if ($form == 'short') {

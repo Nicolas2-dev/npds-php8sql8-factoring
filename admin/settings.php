@@ -37,9 +37,8 @@ admindroits($aid, $f_meta_nom);
  */
 function Configure(): void 
 {
-    global $f_meta_nom, $f_titre, $adminimg;
+    global $f_meta_nom, $f_titre;
 
-    include("config/config.php");
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('config'));
@@ -57,7 +56,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if (Config::get('app.parse') == 0) {
+    if (Config::get('npds.parse') == 0) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -105,79 +104,79 @@ function Configure(): void
             <div class="row gy-0 gx-3">
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control js-dig10" id="xadmin_cook_duration" type="text" name="xadmin_cook_duration" value="' . Config::get('app.admin_cook_duration') . '" min="1" maxlength="10" required="required" />
+                    <input class="form-control js-dig10" id="xadmin_cook_duration" type="text" name="xadmin_cook_duration" value="' . Config::get('npds.admin_cook_duration') . '" min="1" maxlength="10" required="required" />
                     <label for="xadmin_cook_duration">' . adm_translate("Durée de vie en heure du cookie Admin") . '<span class="text-danger"> *</span></label>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control js-dig10" id="xuser_cook_duration" type="text" name="xuser_cook_duration" value="' . Config::get('app.user_cook_duration') . '" min="1" maxlength="10" required="required" />
+                    <input class="form-control js-dig10" id="xuser_cook_duration" type="text" name="xuser_cook_duration" value="' . Config::get('npds.user_cook_duration') . '" min="1" maxlength="10" required="required" />
                     <label for="xuser_cook_duration">' . adm_translate("Durée de vie en heure du cookie User") . '<span class="text-danger"> *</span></label>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xsitename" id="xsitename" value="' . Config::get('app.sitename') . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xsitename" id="xsitename" value="' . Config::get('npds.sitename') . '" maxlength="100" />
                     <label for="xsitename">' . adm_translate("Nom du site") . '</label>
                     <span class="help-block text-end" id="countcar_xsitename"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xTitlesitename" id="xTitlesitename" value="' . $Titlesitename . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xTitlesitename" id="xTitlesitename" value="' . Config::get('npds.Titlesitename') . '" maxlength="100" />
                     <label for="xTitlesitename">' . adm_translate("Nom du site pour la balise title") . '</label>
                     <span class="help-block text-end" id="countcar_xTitlesitename"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="url" name="xnuke_url" id="xnuke_url" value="' . Config::get('app.nuke_url') . '" data-fv-uri___allow-local="true" maxlength="200" />
+                    <input class="form-control" type="url" name="xnuke_url" id="xnuke_url" value="' . Config::get('npds.nuke_url') . '" data-fv-uri___allow-local="true" maxlength="200" />
                     <label for="xnuke_url">' . adm_translate("URL du site") . '</label>
                     <span class="help-block text-end" id="countcar_xnuke_url"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xsite_logo" id="xsite_logo" value="' . Config::get('app.site_logo') . '" maxlength="255" />
+                    <input class="form-control" type="text" name="xsite_logo" id="xsite_logo" value="' . Config::get('npds.site_logo') . '" maxlength="255" />
                     <label for="xsite_logo">' . adm_translate("Logo du site pour les impressions") . '</label>
                     <span class="help-block text-end" id="countcar_xsite_logo"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xslogan" id="xslogan" value="' . Config::get('app.slogan') . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xslogan" id="xslogan" value="' . Config::get('npds.slogan') . '" maxlength="100" />
                     <label for="xslogan">' . adm_translate("Slogan du site") . '</label> 
                     <span class="help-block text-end" id="countcar_xslogan"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xstartdate" id="xstartdate" value="' . Config::get('app.startdate') . '" maxlength="30" />
+                    <input class="form-control" type="text" name="xstartdate" id="xstartdate" value="' . Config::get('npds.startdate') . '" maxlength="30" />
                     <label for="xstartdate">' . adm_translate("Date de démarrage du site") . '</label> 
                     <span class="help-block text-end" id="countcar_xstartdate"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control js-dig4" id="xtop" type="text" name="xtop" value="' . $top . '" min="1" maxlength="4" required="required" />
+                    <input class="form-control js-dig4" id="xtop" type="text" name="xtop" value="' . Config::get('npds.top') . '" min="1" maxlength="4" required="required" />
                     <label for="xtop">' . adm_translate("Nombre d'éléments dans la page top") . '<span class="text-danger"> *</span></label> 
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control js-dig4" id="xstoryhome" type="text" name="xstoryhome" value="' . $storyhome . '" min="1" maxlength="4" required="required" />
+                    <input class="form-control js-dig4" id="xstoryhome" type="text" name="xstoryhome" value="' . Config::get('npds.storyhome') . '" min="1" maxlength="4" required="required" />
                     <label for="xstoryhome">' . adm_translate("Nombre d'articles en page principale") . '<span class="text-danger"> *</span></label>
                 </div>
                 </div>
                 <div class="col-12">
                 <div class="form-floating mb-3">
-                    <input class="form-control js-dig4" id="xoldnum" type="text" name="xoldnum" value="' . $oldnum . '" min="1" maxlength="4" required="required" />
+                    <input class="form-control js-dig4" id="xoldnum" type="text" name="xoldnum" value="' . Config::get('npds.oldnum') . '" min="1" maxlength="4" required="required" />
                     <label for="xoldnum">' . adm_translate("Nombre d'articles dans le bloc des anciens articles") . '<span class="text-danger"> *</span></label>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" id="xanonymous" type="text" name="xanonymous" value="' . Config::get('app.anonymous') . '" maxlength="25" />
+                    <input class="form-control" id="xanonymous" type="text" name="xanonymous" value="' . Config::get('npds.anonymous') . '" maxlength="25" />
                     <label for="xanonymous">' . adm_translate("Nom d'utilisateur anonyme") . '</label>
                     <span class="help-block text-end" id="countcar_xanonymous"></span>
                 </div>
@@ -187,7 +186,7 @@ function Configure(): void
                 <div class="mb-1" for="xmod_admin_news">' . adm_translate("Autoriser la création de news pour") . '</div>
                 <div class="form-check form-check-inline">';
 
-    if (Config::get('app.mod_admin_news') == 1) {
+    if (Config::get('npds.mod_admin_news') == 1) {
         echo '
                     <input type="radio" class="form-check-input" id="xmod_admin_news_a" name="xmod_admin_news" value="1" checked="checked" />
                     <label class="form-check-label" for="xmod_admin_news_a">' . adm_translate("Administrateurs") . ' / ' . adm_translate("Modérateurs") . '</label>
@@ -199,7 +198,7 @@ function Configure(): void
                 <div class="form-check form-check-inline">
                     <input type="radio" class="form-check-input" id="xmod_admin_news_t" name="xmod_admin_news" value="0" />
                     <label class="form-check-label" for="xmod_admin_news_t">' . adm_translate("Tous") . '</label>';
-    } elseif (Config::get('app.mod_admin_news') == 2) {
+    } elseif (Config::get('npds.mod_admin_news') == 2) {
         echo '
                     <input type="radio" class="form-check-input" id="xmod_admin_news_a" name="xmod_admin_news" value="1" />
                     <label class="form-check-label" for="xmod_admin_news_a">' . adm_translate("Administrateurs") . ' / ' . adm_translate("Modérateurs") . '</label>
@@ -233,7 +232,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if (Config::get('app.not_admin_count') == 1) {
+    if (Config::get('npds.not_admin_count') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -264,7 +263,7 @@ function Configure(): void
         if ($themelist[$i] != '') {
             echo '<option value="' . $themelist[$i] . '" ';
             
-            if ($themelist[$i] == Config::get('app.Default_Theme')) {
+            if ($themelist[$i] == Config::get('npds.Default_Theme')) {
                 echo 'selected="selected"';
             }
 
@@ -301,8 +300,9 @@ function Configure(): void
     }
     closedir($handle);
 
+    $Default_Skin = Config::get('npds.Default_Skin');
     if (!isset($Default_Skin)) {
-        $Default_Skin = "";
+        $Default_Skin = '';
     }
 
     asort($skins);
@@ -325,7 +325,7 @@ function Configure(): void
             </div>
             <div class="col-md-6">
                 <div class="form-floating mb-3">
-                <input class="form-control" type="text" name="xstart_page" id="xstart_page" value="' . Config::get('app.Start_Page') . '" maxlength="100" />
+                <input class="form-control" type="text" name="xstart_page" id="xstart_page" value="' . Config::get('npds.Start_Page') . '" maxlength="100" />
                 <label for="xstart_page">' . adm_translate("Page de démarrage") . '</label>
                 <span class="help-block text-end" id="countcar_xstart_page"></span>
                 </div>
@@ -342,7 +342,7 @@ function Configure(): void
         if ($languageslist[$i] != '') {
             echo '<option value="' . $languageslist[$i] . '" ';
 
-            if ($languageslist[$i] == $language) {
+            if ($languageslist[$i] == Config::get('npds.language')) {
                 echo 'selected="selected"';
             }
 
@@ -361,7 +361,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($multi_langue == true) {
+    if (Config::get('npds.multi_langue') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -371,42 +371,42 @@ function Configure(): void
 
     echo '
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xmulti_langue_y" name="xmulti_langue" value="true" ' . $cky . ' />
+                    <input type="radio" class="form-check-input" id="xmulti_langue_y" name="xmulti_langue" value="1" ' . $cky . ' />
                     <label class="form-check-label" for="xmulti_langue_y">' . adm_translate("Oui") . '</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xmulti_langue_n" name="xmulti_langue" value="false" ' . $ckn . ' />
+                    <input type="radio" class="form-check-input" id="xmulti_langue_n" name="xmulti_langue" value="0" ' . $ckn . ' />
                     <label class="form-check-label" for="xmulti_langue_n">' . adm_translate("Non") . '</label>
                 </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating mb-3">
-                <input class="form-control" type="text" name="xlocale" id="xlocale" value="' . $locale . '" maxlength="100" />
+                <input class="form-control" type="text" name="xlocale" id="xlocale" value="' . Config::get('npds.locale') . '" maxlength="100" />
                 <label for="xlocale">' . adm_translate("Heure locale") . '</label>
                 <span class="help-block text-end" id="countcar_xlocale"></span>
                 </div>
             </div>';
 
-    if ($lever == '') {
-        $lever = '08:00';
+    if (Config::get('npds.lever') == '') {
+        Config::set('npds.lever', '08:00');
     }
 
-    if ($coucher == '') {
-        $coucher = '20:00';
+    if (Config::get('npds.coucher') == '') {
+        Config::set('npds.coucher', '20:00');
     }
 
     echo '
             <div class="col-md-6">
                 <div class="form-floating mb-3">
-                <input class="form-control js-hhmm" type="text" name="xlever" id="xlever" value="' . $lever . '" maxlength="5" required="required" />
+                <input class="form-control js-hhmm" type="text" name="xlever" id="xlever" value="' . Config::get('npds.lever') . '" maxlength="5" required="required" />
                 <label for="xlever">' . adm_translate("Le jour commence à") . '</label>
                 <span class="help-block">(HH:MM)<span class="float-end ms-1" id="countcar_xlever"></span></span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating mb-3">
-                <input class="form-control js-hhmm" type="text" name="xcoucher" id="xcoucher" value="' . $coucher . '" maxlength="5" required="required" />
+                <input class="form-control js-hhmm" type="text" name="xcoucher" id="xcoucher" value="' . Config::get('npds.coucher') . '" maxlength="5" required="required" />
                 <label for="xcoucher">' . adm_translate("La nuit commence à") . '</label>
                 <span class="help-block">(HH:MM)<span class="float-end ms-1" id="countcar_xcoucher"></span></span>
                 </div>
@@ -414,7 +414,7 @@ function Configure(): void
             <div class="col-md-6">
                 <div class="form-floating mb-3">
                 <select class="form-select" id="xgmt" name="xgmt">
-                    <option value="' . $gmt . '" selected="selected">' . $gmt . '</option>
+                    <option value="' . Config::get('npds.gmt') . '" selected="selected">' . Config::get('npds.gmt') . '</option>
                     <option value="-1">UTC-01:00</option>
                     <option value="-2">UTC-02:00</option>
                     <option value="-3">UTC-03:00</option>
@@ -484,7 +484,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($banners == 1) {
+    if (Config::get('npds.banners') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -506,7 +506,7 @@ function Configure(): void
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-8" for="xbanners">' . adm_translate("Votre adresse IP (= ne pas comptabiliser les hits qui en proviennent)") . '</label>
                 <div class="col-sm-4">
-                <input class="form-control" type="text" name="xmyIP" id="xmyIP" value="' . $myIP . '" />
+                <input class="form-control" type="text" name="xmyIP" id="xmyIP" value="' . Config::get('npds.myIP') . '" />
                 </div>
             </div>
         </div>
@@ -520,19 +520,19 @@ function Configure(): void
     <legend><a class="tog" id="show_mes_ppage" title="' . adm_translate("Replier la liste") . '"><i id="i_mes_ppage" class="fa fa-caret-down fa-lg text-primary" ></i></a>&nbsp;' . adm_translate("Message de pied de page") . '</legend>
         <div id="mes_ppage" class="adminsidefield card card-body mb-3" style="display:none;">
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="xfoot1" name="xfoot1" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot1')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control" id="xfoot1" name="xfoot1" style="height:100px;">' . htmlentities(stripslashes(Config::get('npds.foot1')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot1">' . adm_translate("Ligne 1") . '</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="xfoot2" name="xfoot2" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot2')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control" id="xfoot2" name="xfoot2" style="height:100px;">' . htmlentities(stripslashes(Config::get('npds.foot2')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot2">' . adm_translate("Ligne 2") . '</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control col-sm-12" id="xfoot3" name="xfoot3" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot3')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control col-sm-12" id="xfoot3" name="xfoot3" style="height:100px;">' . htmlentities(stripslashes(Config::get('npds.foot3')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot3">' . adm_translate("Ligne 3") . '</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="xfoot4" name="xfoot4" style="height:100px;">' . htmlentities(stripslashes(Config::get('app.foot4')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
+                <textarea class="form-control" id="xfoot4" name="xfoot4" style="height:100px;">' . htmlentities(stripslashes(Config::get('npds.foot4')), ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8') . '</textarea>
                 <label for="xfoot4">' . adm_translate("Ligne 4") . '</label>
             </div>
         </div>
@@ -548,34 +548,34 @@ function Configure(): void
             <div class="row gy-0 gx-3">
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xbackend_title" id="xbackend_title" value="' . $backend_title . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xbackend_title" id="xbackend_title" value="' . Config::get('npds.backend_title') . '" maxlength="100" />
                     <label for="xbackend_title">' . adm_translate("Titre du backend") . '</label>
                     <span class="help-block text-end" id="countcar_xbackend_title"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xbackend_language" id="xbackend_language" value="' . $backend_language . '" maxlength="10" />
+                    <input class="form-control" type="text" name="xbackend_language" id="xbackend_language" value="' . Config::get('npds.backend_language') . '" maxlength="10" />
                     <label for="xbackend_language">' . adm_translate("Langue du backend") . '</label>
                     <span class="help-block text-end" id="countcar_xbackend_language"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="url" name="xbackend_image" id="xbackend_image" value="' . $backend_image . '" maxlength="200" />
+                    <input class="form-control" type="url" name="xbackend_image" id="xbackend_image" value="' . Config::get('npds.backend_image') . '" maxlength="200" />
                     <label for="xbackend_image">' . adm_translate("URL de l'image du backend") . '</label>
                     <span class="help-block text-end" id="countcar_xbackend_image"></span>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="number" id="xbackend_width" name="xbackend_width" value="' . $backend_width . '" min="0" max="9999" />
+                    <input class="form-control" type="number" id="xbackend_width" name="xbackend_width" value="' . Config::get('npds.backend_width') . '" min="0" max="9999" />
                     <label for="xbackend_width">' . adm_translate("Largeur de l'image du backend") . '</label>
                 </div>
                 </div>
                 <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="number" id="xbackend_height" name="xbackend_height" value="' . $backend_height . '" min="0" max="9999" />
+                    <input class="form-control" type="number" id="xbackend_height" name="xbackend_height" value="' . Config::get('npds.backend_height') . '" min="0" max="9999" />
                     <label for="xbackend_height">' . adm_translate("Hauteur de l'image du backend") . '</label>
                 </div>
                 </div>
@@ -586,7 +586,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($ultramode == 1) {
+    if (Config::get('npds.ultramode') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -611,7 +611,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($npds_twi == 1) {
+    if (Config::get('npds.npds_twi') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -636,7 +636,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($npds_fcb == 1) {
+    if (Config::get('npds.npds_fcb') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -669,7 +669,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xperpage">' . adm_translate("Nombre de liens par page") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xperpage" name="xperpage">
-                    <option  value="' . $perpage . '" selected="selected">' . $perpage . '</option>
+                    <option  value="' . Config::get('npds.perpage') . '" selected="selected">' . Config::get('npds.perpage') . '</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -683,7 +683,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xpopular">' . adm_translate("Nombre de clics sur un lien pour qu'il soit populaire") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xpopular" name="xpopular">
-                    <option value="' . $popular . '" selected="selected">' . $popular . '</option>
+                    <option value="' . Config::get('npds.popular') . '" selected="selected">' . Config::get('npds.popular') . '</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="50">50</option>
@@ -697,7 +697,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xnewlinks">' . adm_translate("Nombre de Liens 'Nouveaux'") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xnewlinks" name="xnewlinks">
-                    <option value="' . $newlinks . '" selected="selected">' . $newlinks . '</option>
+                    <option value="' . Config::get('npds.newlinks') . '" selected="selected">' . Config::get('npds.newlinks') . '</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -711,7 +711,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xtoplinks">' . adm_translate("Nombre de Liens 'Meilleur'") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xtoplinks" name="xtoplinks">
-                    <option value="' . $toplinks . '" selected="selected">' . $toplinks . '</option>
+                    <option value="' . Config::get('npds.toplinks') . '" selected="selected">' . Config::get('npds.toplinks') . '</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -725,7 +725,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xlinksresults">' . adm_translate("Nombre de liens dans les résultats des recherches") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xlinksresults" name="xlinksresults">
-                    <option value="' . $linksresults . '" selected="selected">' . $linksresults . '</option>
+                    <option value="' . Config::get('npds.linksresults') . '" selected="selected">' . Config::get('npds.linksresults') . '</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -741,7 +741,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($links_anonaddlinklock == 0) {
+    if (Config::get('npds.links_anonaddlinklock') == 0) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -766,7 +766,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($linkmainlogo == 1) {
+    if (Config::get('npds.linkmainlogo') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -791,7 +791,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($OnCatNewLink == 1) {
+    if (Config::get('npds.OnCatNewLink') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -821,7 +821,7 @@ function Configure(): void
     <legend><a class="tog" id="show_sys_mes" title="' . adm_translate("Replier la liste") . '"><i id="i_sys_mes" class="fa fa-caret-down fa-lg text-primary" ></i></a>&nbsp;' . adm_translate("Système de Messagerie (Email)") . '</legend>
         <div id="sys_mes" class="adminsidefield card card-body mb-3" style="display:none;">
             <div class="form-floating mb-3">
-                <input class="form-control" type="email" name="xadminmail" id="xadminmail" value="' . $adminmail . '" maxlength="254" required="required" />
+                <input class="form-control" type="email" name="xadminmail" id="xadminmail" value="' . Config::get('npds.adminmail') . '" maxlength="254" required="required" />
                 <label for="xadminmail">' . adm_translate("Adresse E-mail de l'administrateur") . '</label> 
                 <span class="help-block text-end">' . adm_translate("Adresse E-mail valide, autorisée et associée au serveur d'envoi.") . '<span id="countcar_xadminmail float-end"></span></span>
             </div>';
@@ -859,8 +859,11 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if (!$mail_fonction) $mail_fonction = 1;
-    if ($mail_fonction == 1) {
+    if (!Config::get('npds.mail_fonction')) {
+        Config::set('npds.mail_fonction', 1);
+    }
+    
+    if (Config::get('npds.mail_fonction') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1027,7 +1030,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($notify == 1) {
+    if (Config::get('npds.notify') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1049,27 +1052,27 @@ function Configure(): void
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="xnotify_email">' . adm_translate("Adresse E-mail où envoyer le message") . '</label>
                 <div class="col-sm-8">
-                <input class="form-control" type="email" name="xnotify_email" id="xnotify_email" value="' . $notify_email . '" maxlength="254" required="required" />
+                <input class="form-control" type="email" name="xnotify_email" id="xnotify_email" value="' . Config::get('npds.notify_email') . '" maxlength="254" required="required" />
                 <span class="help-block text-end" id="countcar_xnotify_email"></span>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="xnotify_subject">' . adm_translate("Sujet de l'E-mail") . '</label>
                 <div class="col-sm-8">
-                <input class="form-control" type="text" name="xnotify_subject" id="xnotify_subject" value="' . $notify_subject . '" maxlength="100" required="required" />
+                <input class="form-control" type="text" name="xnotify_subject" id="xnotify_subject" value="' . Config::get('npds.notify_subject') . '" maxlength="100" required="required" />
                 <span class="help-block text-end" id="countcar_xnotify_subject"></span>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="xnotify_message">' . adm_translate("Message de l'E-mail") . '</label>
                 <div class="col-sm-8">
-                <textarea class="form-control" id="xnotify_message" name="xnotify_message" rows="8">' . $notify_message . '</textarea>
+                <textarea class="form-control" id="xnotify_message" name="xnotify_message" rows="8">' . Config::get('npds.notify_message') . '</textarea>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="xnotify_from">' . adm_translate("Compte E-mail (Provenance)") . '</label>
                 <div class="col-sm-8">
-                <input class="form-control" type="email" name="xnotify_from" id="xnotify_from" value="' . $notify_from . '" maxlength="100" required="required" />
+                <input class="form-control" type="email" name="xnotify_from" id="xnotify_from" value="' . Config::get('npds.notify_from') . '" maxlength="100" required="required" />
                 <span class="help-block text-end">' . adm_translate("Adresse E-mail valide, autorisée et associée au serveur d'envoi.") . ' <span id="countcar_xnotify_from"></span></span>
                 </div>
             </div>
@@ -1088,7 +1091,7 @@ function Configure(): void
                 <div class="col-sm-5">
                 <select class="form-select" id="xmoderate" name="xmoderate">';
                 
-    $moderate = Config::get('app.moderate');
+    $moderate = Config::get('npds.moderate');
 
     if ($moderate == 1) {
         echo '
@@ -1117,7 +1120,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if (Config::get('app.anonpost') == 1) {
+    if (Config::get('npds.anonpost') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1140,7 +1143,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-7" for="xtroll_limit">' . adm_translate("Nombre maximum de commentaire par utilisateur en 24H") . '</label>
                 <div class="col-sm-5">';
 
-    $troll_limit = Config::get('app.troll_limit');
+    $troll_limit = Config::get('npds.troll_limit');
 
     if ($troll_limit == '') {
         $troll_limit = "6";
@@ -1164,7 +1167,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xmaxOptions">' . adm_translate("Nombre maximum de choix pour les sondages") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xmaxOptions" name="xmaxOptions">
-                    <option value="' . $maxOptions . '">' . $maxOptions . '</option>
+                    <option value="' . Config::get('npds.maxOptions') . '">' . Config::get('npds.maxOptions') . '</option>
                     <option value="10">10</option>
                     <option value="12">12</option>
                     <option value="15">15</option>
@@ -1178,7 +1181,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = ''; //???? valeur inversé ???
-    if ($setCookies == 0) {
+    if (Config::get('npds.setCookies') == 0) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1203,7 +1206,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($pollcomm == 1) {
+    if (Config::get('npds.pollcomm') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1235,21 +1238,21 @@ function Configure(): void
             <div class="row">
                 <div class="col-lg-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xtipath" id="xtipath" value="' . $tipath . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xtipath" id="xtipath" value="' . Config::get('npds.tipath') . '" maxlength="100" />
                     <label for="xtipath">' . adm_translate("Chemin des images des sujets") . '</label>
                     <span class="help-block text-end" id="countcar_xtipath"></span>
                 </div>
                 </div>
                 <div class="col-lg-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xuserimg" id="xuserimg" value="' . $userimg . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xuserimg" id="xuserimg" value="' . Config::get('npds.userimg') . '" maxlength="100" />
                     <label for="xuserimg">' . adm_translate("Chemin de certaines images (vote, ...)") . '</label>
                     <span class="help-block text-end" id="countcar_xuserimg"></span>
                 </div>
                 </div>
                 <div class="col-lg-6">
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" name="xadminimg" id="xadminimg" value="' . $adminimg . '" maxlength="100" />
+                    <input class="form-control" type="text" name="xadminimg" id="xadminimg" value="' . Config::get('npds.adminimg') . '" maxlength="100" />
                     <label for="xadminimg">' . adm_translate("Chemin des images du menu administrateur") . '</label>
                     <span class="help-block text-end" id="countcar_xadminimg"></span>
                 </div>
@@ -1261,7 +1264,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($admingraphic == 1) {
+    if (Config::get('npds.admingraphic') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1281,15 +1284,15 @@ function Configure(): void
                 </div>
             </div>';
 
-    if (!$admf_ext) {
-        $admf_ext = "gif";
+    if (!Config::get('npds.admf_ext')) {
+        Config::set('npds.admf_ext', 'gif');
     }
 
     echo '
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="xadmf_ext">' . adm_translate("Extension des fichiers d'image") . '</label>
                 <div class="col-sm-8">
-                <input class="form-control" type="text" name="xadmf_ext" id="xadmf_ext" value="' . $admf_ext . '" maxlength="3" />
+                <input class="form-control" type="text" name="xadmf_ext" id="xadmf_ext" value="' . Config::get('npds.admf_ext') . '" maxlength="3" />
                 <span class="help-block text-end" id="countcar_xadmf_ext"></span>
                 </div>
             </div>
@@ -1299,7 +1302,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($short_menu_admin == 1) {
+    if (Config::get('npds.short_menu_admin') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1332,7 +1335,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xadmart">' . adm_translate("Nombres d'articles en mode administration") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xadmart" name="xadmart">
-                    <option value="' . $admart . '">' . $admart . '</option>
+                    <option value="' . Config::get('npds.admart') . '">' . Config::get('npds.admart') . '</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
@@ -1345,7 +1348,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xminpass">' . adm_translate("Longueur minimum du mot de passe des utilisateurs") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xminpass" name="xminpass">
-                    <option value="' . Config::get('app.minpass') . '">' . Config::get('app.minpass') . '</option>
+                    <option value="' . Config::get('npds.minpass') . '">' . Config::get('npds.minpass') . '</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
@@ -1358,7 +1361,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xshow_user">' . adm_translate("Nombre d'utilisateurs listés") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xshow_user" name="xshow_user">
-                    <option value="' . Config::get('app.show_user') . '">' . Config::get('app.show_user') . '</option>
+                    <option value="' . Config::get('npds.show_user') . '">' . Config::get('npds.show_user') . '</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="30">30</option>
@@ -1372,7 +1375,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($smilies == 1) {
+    if (Config::get('npds.smilies') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1395,12 +1398,12 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xavatar_size">' . adm_translate("Taille maximum des avatars personnels (largeur * hauteur / 60*80) en pixel") . '</label>
                 <div class="col-sm-4">';
 
-    if (!$avatar_size) {
-        $avatar_size = "60*80";
+    if (!Config::get('npds.avatar_size')) {
+        Config::get('npds.avatar_size', '60*80');
     }
 
     echo '
-                <input class="form-control" type="text" id="xavatar_size" name="xavatar_size" value="' . $avatar_size . '" size="11" maxlength="10" />
+                <input class="form-control" type="text" id="xavatar_size" name="xavatar_size" value="' . Config::get('npds.avatar_size') . '" size="11" maxlength="10" />
                 </div>
             </div>
             <div class="mb-3 row">
@@ -1409,7 +1412,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($short_user == 1) {
+    if (Config::get('npds.short_user') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1434,11 +1437,11 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if (($AutoRegUser == '') and ($AutoRegUser != 0)) {
-        $AutoRegUser = 1;
+    if ( (Config::get('npds.AutoRegUser') == '') and (Config::get('npds.AutoRegUser') != 0) ) {
+        Config::set('npds.AutoRegUser', 1);
     }
 
-    if ($AutoRegUser == 1) {
+    if (Config::get('npds.AutoRegUser') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1463,11 +1466,11 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if (($memberpass == '') and ($memberpass != 0)) {
+    if ((Config::get('npds.memberpass') == '') and (Config::get('npds.memberpass') != 0)) {
         
     }
 
-    if ($memberpass == 1) {
+    if (Config::get('npds.memberpass') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1492,7 +1495,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($subscribe == 1) {
+    if (Config::get('npds.subscribe') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1517,7 +1520,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($member_invisible == 1) {
+    if (Config::get('npds.member_invisible') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1540,13 +1543,13 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xCloseRegUser">' . adm_translate("Fermer les nouvelles inscriptions") . '</label>
                 <div class="col-sm-4 my-2">';
 
-    if (($CloseRegUser == '') and ($CloseRegUser != 1)) { 
-        $AutoRegUser = 0; // ????????
+    if ((Config::get('npds.CloseRegUser') == '') and (Config::get('npds.CloseRegUser') != 1)) { 
+        Config::get('npds.AutoRegUser', 0); // ????????
     }
 
     $cky = '';
     $ckn = '';
-    if ($CloseRegUser == 1) {
+    if (Config::get('npds.CloseRegUser') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1571,7 +1574,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($httpref == 1) {
+    if (Config::get('npds.httpref') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1594,7 +1597,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xhttprefmax">' . adm_translate("Combien de référants au maximum") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xhttprefmax" name="xhttprefmax">
-                    <option value="' . $httprefmax . '">' . $httprefmax . '</option>
+                    <option value="' . Config::get('npds.httprefmax') . '">' . Config::get('npds.httprefmax') . '</option>
                     <option value="100">100</option>
                     <option value="250">250</option>
                     <option value="500">500</option>
@@ -1611,7 +1614,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($member_list == 1) {
+    if (Config::get('npds.member_list') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1634,7 +1637,7 @@ function Configure(): void
                 <label class="col-form-label col-sm-8" for="xdownload_cat">' . adm_translate("Rubrique de téléchargement") . '</label>
                 <div class="col-sm-4">
                 <select class="form-select" id="xdownload_cat" name="xdownload_cat">
-                    <option value="' . $download_cat . '">' . language::aff_langue($download_cat) . '</option>';
+                    <option value="' . Config::get('npds.download_cat') . '">' . language::aff_langue(Config::get('npds.download_cat')) . '</option>';
 
     $download_categorie = DB::table('downloads')->select('dcategory')->distinct()->get();
 
@@ -1655,7 +1658,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($short_review == 1) {
+    if (Config::get('npds.short_review') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1690,7 +1693,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($rss_host_verif == true) {
+    if (Config::get('npds.rss_host_verif') == 1) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1700,11 +1703,11 @@ function Configure(): void
 
     echo '
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xrss_host_verif_y" name="xrss_host_verif" value="true" ' . $cky . ' />
+                    <input type="radio" class="form-check-input" id="xrss_host_verif_y" name="xrss_host_verif" value="1" ' . $cky . ' />
                     <label class="form-check-label" for="xrss_host_verif_y">' . adm_translate("Oui") . '</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xrss_host_verif_n" name="xrss_host_verif" value="false" ' . $ckn . ' />
+                    <input type="radio" class="form-check-input" id="xrss_host_verif_n" name="xrss_host_verif" value="0" ' . $ckn . ' />
                     <label class="form-check-label" for="xrss_host_verif_n">' . adm_translate("Non") . '</label>
                 </div>
                 </div>
@@ -1715,7 +1718,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($cache_verif == true) {
+    if (Config::get('npds.cache_verif') == true) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1725,11 +1728,11 @@ function Configure(): void
 
     echo '
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xcache_verif_y" name="xcache_verif" value="true" ' . $cky . ' />
+                    <input type="radio" class="form-check-input" id="xcache_verif_y" name="xcache_verif" value="1" ' . $cky . ' />
                     <label class="form-check-label" for="xcache_verif_y">' . adm_translate("Oui") . '</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xcache_verif_n" name="xcache_verif" value="false" ' . $ckn . ' />
+                    <input type="radio" class="form-check-input" id="xcache_verif_n" name="xcache_verif" value="0" ' . $ckn . ' />
                     <label class="form-check-label" for="xcache_verif_n">' . adm_translate("Non") . '</label> <span class="small help-text">(Multimania)</span>
                 </div>
                 </div>
@@ -1739,7 +1742,7 @@ function Configure(): void
     
     $cky = '';
     $ckn = '';
-    if ($dns_verif == true) {
+    if (Config::get('npds.dns_verif') == true) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1749,11 +1752,11 @@ function Configure(): void
 
     echo '<div class="col-sm-4 my-2">
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xdns_verif_y" name="xdns_verif" value="true" ' . $cky . ' />
+                    <input type="radio" class="form-check-input" id="xdns_verif_y" name="xdns_verif" value="1" ' . $cky . ' />
                     <label class="form-check-label" for="xdns_verif_y">' . adm_translate("Oui") . '</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="xdns_verif_n" name="xdns_verif" value="false" ' . $ckn . ' />
+                    <input type="radio" class="form-check-input" id="xdns_verif_n" name="xdns_verif" value="0" ' . $ckn . ' />
                     <label class="form-check-label" for="xdns_verif_n">' . adm_translate("Non") . '</label>
                 </div>
                 </div>
@@ -1769,22 +1772,22 @@ function Configure(): void
         <legend><a class="tog" id="show_divers_syst" title="' . adm_translate("Replier la liste") . '"><i id="i_divers_syst" class="fa fa-caret-down fa-lg text-primary" ></i>&nbsp;</a>' . adm_translate("Divers") . ' SYSTEM</legend>
         <div id="divers_syst" class="adminsidefield card card-body mb-3" style="display:none;">';
     
-    if (!$savemysql_size) {
-        $savemysql_size = '256';
+    if (!Config::get('npds.savemysql_size')) {
+        Config::get('npds.savemysql_size', 256);
     } else {
-        if ($savemysql_size == '256') {
+        if (Config::get('npds.savemysql_size') == '256') {
             $sel_size256 = 'selected="selected"';
         } else {
             $sel_size256 = '';
         }
 
-        if ($savemysql_size == '512') {
+        if (Config::get('npds.savemysql_size') == '512') {
             $sel_size512 = 'selected="selected"';
         } else {
             $sel_size512 = '';
         }
 
-        if ($savemysql_size == '1024') {
+        if (Config::get('npds.savemysql_size') == '1024') {
             $sel_size1024 = 'selected="selected"';
         } else {
             $sel_size1024 = '';
@@ -1801,20 +1804,20 @@ function Configure(): void
         <label class="text-primary" for="xsavemysql_size">' . adm_translate("Taille maximum des fichiers de sauvegarde SaveMysql") . '</label>
     </div>';
 
-    if (!$savemysql_mode) {
-        $savemysql_mode = '1';
+    if (!Config::get('npds.savemysql_mode')) {
+        Config::set('npds.savemysql_mode', 1);
     } else {
-        $type_save1 = $savemysql_mode == '1' ? 'selected="selected"' : '';
-        $type_save2 = $savemysql_mode == '2' ? 'selected="selected"' : '';
-        $type_save3 = $savemysql_mode == '3' ? 'selected="selected"' : '';
+        $type_save1 = Config::get('npds.savemysql_mode') == '1' ? 'selected="selected"' : '';
+        $type_save2 = Config::get('npds.savemysql_mode') == '2' ? 'selected="selected"' : '';
+        $type_save3 = Config::get('npds.savemysql_mode') == '3' ? 'selected="selected"' : '';
     }
 
     echo '
     <div class="form-floating mb-3">
         <select class="form-select" id="xsavemysql_mode" name="xsavemysql_mode">
             <option value="1" ' . $type_save1 . '>' . adm_translate("Toute tables. Fichier envoyé au navigateur. Pas de limite de taille") . '</option>
-            <option value="2" ' . $type_save2 . '>' . adm_translate("Fichiers dans /slogs. table par table, tables non scindées : limite") . '&nbsp;' . $savemysql_size . ' Ko</option>
-            <option value="3" ' . $type_save3 . '>' . adm_translate("Fichiers dans /slogs. table par table, lignes par lignes, tables scindées : limite") . '&nbsp;' . $savemysql_size . ' Ko</option>
+            <option value="2" ' . $type_save2 . '>' . adm_translate("Fichiers dans /slogs. table par table, tables non scindées : limite") . '&nbsp;' . Config::get('npds.savemysql_size') . ' Ko</option>
+            <option value="3" ' . $type_save3 . '>' . adm_translate("Fichiers dans /slogs. table par table, lignes par lignes, tables scindées : limite") . '&nbsp;' . Config::get('npds.savemysql_size') . ' Ko</option>
         </select>
         <label class="text-primary" for="xsavemysql_mode">' . adm_translate("Type de sauvegarde SaveMysql") . '</label>
     </div>
@@ -1823,7 +1826,7 @@ function Configure(): void
 
     $cky = '';
     $ckn = '';
-    if ($tiny_mce) {
+    if (Config::get('npds.tiny_mce')) {
         $cky = 'checked="checked"';
         $ckn = '';
     } else {
@@ -1834,11 +1837,11 @@ function Configure(): void
     echo '
         <div class="col-sm-8 my-2">
             <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="xtiny_mce_y" name="xtiny_mce" value="true" ' . $cky . ' />
+                <input type="radio" class="form-check-input" id="xtiny_mce_y" name="xtiny_mce" value="1" ' . $cky . ' />
                 <label class="form-check-label" for="xtiny_mce_y">' . adm_translate("Oui") . '</label>
             </div>
             <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="xtiny_mce_n" name="xtiny_mce" value="false" ' . $ckn . ' />
+                <input type="radio" class="form-check-input" id="xtiny_mce_n" name="xtiny_mce" value="0" ' . $ckn . ' />
                 <label class="form-check-label" for="xtiny_mce_n">' . adm_translate("Non") . '</label>
             </div>
         </div>

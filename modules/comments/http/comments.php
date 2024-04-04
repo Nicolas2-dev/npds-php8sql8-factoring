@@ -37,12 +37,12 @@ $forum_name = 'comments';
 $forum_type = 0;
 $allow_to_post = false;
 
-if (Config::get('app.anonpost'))
+if (Config::get('npds.anonpost'))
     $forum_access = 0;
 else
     $forum_access = 1;
 
-$moderate = Config::get('app.moderate');
+$moderate = Config::get('npds.moderate');
 
 if (($moderate == 1) and $admin)
     $Mmod = true;
@@ -203,12 +203,12 @@ if ($mycount) {
                 <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
             } else
                 echo '
-                <a style="position:absolute; top:1rem;" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" loading="lazy" /></a>
-                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
+                <a style="position:absolute; top:1rem;" title="' . Config::get('npds.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('npds.anonymous') . '" loading="lazy" /></a>
+                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('npds.anonymous') . '</strong></span>';
         } else
             echo $myrow['poster_id'] !== '0' ?
                 '<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>' :
-                '<span class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
+                '<span class="text-muted"><strong>' . Config::get('npds.anonymous') . '</strong></span>';
         $imgtmp = $ibid = theme::theme_image("forum/subject/00.png") ? $ibid : 'assets/images/forum/subject/00.png';
         echo '
                     <span class="float-end"><img class="n-smil" src="' . $imgtmp . '" alt="" /></span>

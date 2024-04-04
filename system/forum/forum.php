@@ -8,6 +8,7 @@ use npds\system\date\date;
 use npds\system\logs\logs;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
+use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
@@ -72,9 +73,9 @@ class forum
                     $boxstuff .= '<li><hr /></li>';
                 }
 
-                if (Config::get('app.parse') == 0) {
-                    $forumname = FixQuotes($forumname);
-                    $forum_desc = FixQuotes($forum_desc);
+                if (Config::get('npds.parse') == 0) {
+                    $forumname = str::FixQuotes($forumname);
+                    $forum_desc = str::FixQuotes($forum_desc);
                 } else {
                     $forumname = stripslashes($forumname);
                     $forum_desc = stripslashes($forum_desc);
@@ -113,7 +114,7 @@ class forum
                         $postername = $myrow['uname'];
                     }
 
-                    if (Config::get('app.parse') == 0) {
+                    if (Config::get('npds.parse') == 0) {
                         $tt =  strip_tags(FixQuotes($tt));
                         $topictitle = FixQuotes($topictitle);
                     } else {
@@ -753,7 +754,7 @@ class forum
     
         $tmp = '<img class="n-smil" src="' . $imgtmpP . '" alt="" loading="lazy" />' . $posts . '&nbsp;';
     
-        if ($poster != Config::get('app.anonymous')) {
+        if ($poster != Config::get('npds.anonymous')) {
             $nux = 0;
     
             if ($posts >= 10 and $posts < 30) { 
@@ -942,7 +943,7 @@ class forum
         }
     
         echo '
-        <div class="alert alert-danger"><strong>' . Config::get('app.sitename') . '<br />' . translate("Erreur du forum") . '</strong><br />';
+        <div class="alert alert-danger"><strong>' . Config::get('npds.sitename') . '<br />' . translate("Erreur du forum") . '</strong><br />';
         echo translate("Code d'erreur :") . ' ' . $e_code . '<br /><br />';
         echo $error_msg . '<br /><br />';
         echo '<a href="javascript:history.go(-1)" class="btn btn-secondary">' . translate("Retour en arrière") . '</a><br /></div>';
@@ -1024,7 +1025,7 @@ class forum
         // security.log est utilisée pour enregistrer les tentatives
         global $NPDS_Prefix;
     
-        $compte = !array_key_exists('uname', $userdataX) ? Config::get('app.anonymous') : $userdataX['uname'];
+        $compte = !array_key_exists('uname', $userdataX) ? Config::get('npds.anonymous') : $userdataX['uname'];
     
         if ((!$modoX) and ($paramAFX > 0)) {
             $sql = "SELECT COUNT(poster_ip) AS total FROM " . $NPDS_Prefix . "posts WHERE post_time>'";
@@ -1251,7 +1252,7 @@ class forum
                                     $ibid .= ' ] </span>';
     
                                     // Subscribe
-                                    if ((Config::get('app.subscribe')) and ($user)) {
+                                    if ((Config::get('npds.subscribe')) and ($user)) {
                                         if (!$redirect) {
                                             if (mailler::isbadmailuser($userR[0]) === false) { //proto
                                                 $ibid .= '
@@ -1291,7 +1292,7 @@ class forum
             }
         }
     
-        if ((Config::get('app.subscribe')) and ($user) and ($ok_affich)) {
+        if ((Config::get('npds.subscribe')) and ($user) and ($ok_affich)) {
             if (mailler::isbadmailuser($userR[0]) === false) { //proto
                 $ibid .= '
             <div class="form-check mt-1">

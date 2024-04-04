@@ -301,7 +301,7 @@ if (isset($forwarder)) {
                 include("modules/comments/config/pollBoth.conf.php");
                 
                 if ($pollClose == 99) {
-                    Config::set('app.generale.anonpost', 0);
+                    Config::set('npds.generale.anonpost', 0);
                 }
 
                 include("modules/comments/http/comments.php");

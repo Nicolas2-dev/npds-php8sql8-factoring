@@ -36,7 +36,7 @@ function etape_7()
                             <div class="d-flex justify-content-end w-100 small text-help py-1" id="countcar_adminlogin"></div>
                         </div>
                         <div class="form-floating mb-3">
-                            <input class="form-control" type="password" name="adminpass1" id="adminpass1" minlength="' . Config::get('app.minpass') . '" maxlength="20" required="required" />
+                            <input class="form-control" type="password" name="adminpass1" id="adminpass1" minlength="' . Config::get('npds.minpass') . '" maxlength="20" required="required" />
                             <label for="adminpass1">' . ins_translate('Mot de passe') . '</label>
                             <div class="progress mt-2" style="height: 10px;">
                                 <div id="passwordMeter_cont" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -44,7 +44,7 @@ function etape_7()
                             <div class="d-flex justify-content-start w-100 small text-help py-1"><div class="ms-auto" id="countcar_adminpass1"></div></div>
                         </div>
                         <div class="form-floating mb-3">
-                            <input class="form-control" type="password" name="adminpass2" id="adminpass2" minlength="' . Config::get('app.minpass') . '" maxlength="20" required="required" />
+                            <input class="form-control" type="password" name="adminpass2" id="adminpass2" minlength="' . Config::get('npds.minpass') . '" maxlength="20" required="required" />
                             <label for="adminpass2">' . ins_translate('Mot de passe') . '... ' . ins_translate("Une seconde fois") . '</label>
                             <div class="d-flex justify-content-start w-100 small text-help py-1"><div class="ms-auto" id="countcar_adminpass2"></div></div>
                         </div>

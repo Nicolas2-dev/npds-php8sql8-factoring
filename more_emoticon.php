@@ -25,7 +25,7 @@ if (!function_exists("Mysql_Connexion")) {
 
 if (isset($user)) {
     if ($cookie[9] == '') {
-        $cookie[9] = Config::get('app.Default_Theme');
+        $cookie[9] = Config::get('npds.Default_Theme');
     }
 
     if (isset($theme)) {
@@ -35,10 +35,10 @@ if (isset($user)) {
     $tmp_theme = $cookie[9];
 
     if (!$file = @opendir("themes/$cookie[9]")) {
-        $tmp_theme = Config::get('app.Default_Theme');
+        $tmp_theme = Config::get('npds.Default_Theme');
     }
 } else {
-    $tmp_theme = Config::get('app.Default_Theme');
+    $tmp_theme = Config::get('npds.Default_Theme');
 }
 
 include('storage/meta/meta.php');

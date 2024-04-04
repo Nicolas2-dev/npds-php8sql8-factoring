@@ -18,7 +18,7 @@ use npds\system\config\Config;
 $theme = 'npds-boost_sk';
 $long_chain = '34'; // Nombre de caractères affichés avant troncature pour certains blocs
 
-Config::set('app.theme.long_chaine', 34);
+Config::set('npds.theme.long_chaine', 34);
 
 
 // ne pas supprimer cette ligne / Don't remove this line

@@ -39,7 +39,7 @@ foreach (glob('config/*.php') as $path) {
     }  
 }
 
-//vd(Config::get('app.database.mysql_i'));
+//vd(Config::get('npds.database.mysql_i'));
 //vd(Config::get('mailer'));
 //vd(Config::all());
 
@@ -143,7 +143,7 @@ if (file_exists('storage/language/langcode.php')) {
 if (isset($choice_user_language)) {
     if ($choice_user_language != '') {
 
-        $user_cook_duration = Config::get('app.user_cook_duration');
+        $user_cook_duration = Config::get('npds.user_cook_duration');
 
         if ($user_cook_duration <= 0) {
             $user_cook_duration = 1;
@@ -160,19 +160,19 @@ if (isset($choice_user_language)) {
 
 
 
-if ((Config::get('app.$multi_langue')) && isset($user_language)) {
+if ((Config::get('npds.$multi_langue')) && isset($user_language)) {
     if (($user_language != '') and ($user_language != " ")) {
         $tmpML = stristr($languageslist, $user_language);
         $tmpML = explode(' ', $tmpML);
         
         if ($tmpML[0]) {
-            Config::get('app.language', $tmpML[0]);
+            Config::get('npds.language', $tmpML[0]);
         }
     }
 }
 // Multi-language
 
-$language = Config::get('app.language');
+$language = Config::get('npds.language');
 
 include("language/$language/language.php");
 

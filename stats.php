@@ -91,7 +91,7 @@ echo '
     <h2>' . translate("Statistiques") . '</h2>
     <div class="card card-body lead">
         <div>
-        ' . translate("Nos visiteurs ont visualisé") . ' <span class="badge bg-secondary">' . str::wrh($total) . '</span> ' . translate("pages depuis le") . ' ' . Config::get('app.startdate') . '
+        ' . translate("Nos visiteurs ont visualisé") . ' <span class="badge bg-secondary">' . str::wrh($total) . '</span> ' . translate("pages depuis le") . ' ' . Config::get('npds.startdate') . '
         </div>
     </div>
     <h3 class="my-4">' . translate("Navigateurs web") . '</h3>
@@ -438,7 +438,7 @@ while (list($themelist) = sql_fetch_row($resultX)) {
         $ibix = explode('+', $themelist);
         $T_exist = is_dir("themes/$ibix[0]") ? '' : '<span class="text-danger">' . translate("Ce fichier n'existe pas ...") . '</span>';
 
-        if ($themelist == Config::get('app.Default_Theme')) {
+        if ($themelist == Config::get('npds.Default_Theme')) {
             $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE theme='$themelist'");
             $themeD1 = $result ? sql_num_rows($result) : 0;
 
@@ -532,9 +532,9 @@ $imgtmp = $ibid = theme::theme_image('stats/submissions.png') ? $ibid : 'assets/
 
 echo '
         <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '"  alt="" />' . translate("Article en attente d'édition") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($subnum) . ' </span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Num <span class="badge bg-danger ms-auto">' . Config::get('app.Version_Num') . '</span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Id <span class="badge bg-danger ms-auto">' . Config::get('app.Version_Id') . '</span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Sub <span class="badge bg-danger ms-auto">' . Config::get('app.Version_Sub') . '</span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Num <span class="badge bg-danger ms-auto">' . Config::get('versioning.Version_Num') . '</span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Id <span class="badge bg-danger ms-auto">' . Config::get('versioning.Version_ID') . '</span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Sub <span class="badge bg-danger ms-auto">' . Config::get('versioning.Version_Sub') . '</span></li>
     </ul>
     <br />
     <p class="text-center"><a href="http://www.npds.org" >http://www.npds.org</a> - French Portal Generator Gnu/Gpl Licence</p><br />';

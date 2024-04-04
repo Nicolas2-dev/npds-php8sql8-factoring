@@ -59,8 +59,8 @@ class chat
         $auto = (array) block::autorisation_block('params#' . $pour);
         $dimauto = count($auto);
 
-        if (!Config::get('app.theme.long_chain')) {
-            Config::get('app.theme.long_chain', 12);
+        if (!Config::get('npds.theme.long_chain')) {
+            Config::get('npds.theme.long_chain', 12);
         }
 
         $thing = '';
@@ -80,7 +80,7 @@ class chat
                     
                     if (isset($username)) {
                         if ($dbname == 1) {
-                            $thing .= ((!$user) and (Config::get('app.member_list') == 1) and (!$admin)) ?
+                            $thing .= ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) ?
                                 '<span class="">' . substr($username, 0, 8) . '.</span>' :
                                 "<a href=\"user.php?op=userinfo&amp;uname=$username\">" . substr($username, 0, 8) . ".</a>";
                         } else {
@@ -89,8 +89,8 @@ class chat
                     }
 
                     $une_ligne = true;
-                    $thing .= (strlen($message) > Config::get('app.theme.long_chain'))  ?
-                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($message, 0, Config::get('app.theme.long_chain')))) . " </span><br />\n" :
+                    $thing .= (strlen($message) > Config::get('npds.theme.long_chain'))  ?
+                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($message, 0, Config::get('npds.theme.long_chain')))) . " </span><br />\n" :
                         "&gt;&nbsp;<span>" . forum::smilie(stripslashes($message)) . " </span><br />\n";
                 }
             }

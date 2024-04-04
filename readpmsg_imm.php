@@ -58,12 +58,12 @@ function show_imm($op)
 
         if ($userdata[9] != '') {
             if (!$file = @opendir("themes/$userdata[9]")) {
-                $theme = Config::get('app.Default_Theme');
+                $theme = Config::get('npds.Default_Theme');
             } else {
                 $theme = $userdata[9];
             }
         } else {
-            $theme = Config::get('app.Default_Theme');
+            $theme = Config::get('npds.Default_Theme');
         }
 
         include("themes/$theme/theme.php");
@@ -101,7 +101,7 @@ function show_imm($op)
 
             if ($posterdata['uid'] == 1) {
                 
-                echo ' <span class="text-muted">' . Config::get('app.sitename') . '</span></h3>';
+                echo ' <span class="text-muted">' . Config::get('npds.sitename') . '</span></h3>';
             }
 
             if ($posterdata['uid'] <> 1) {

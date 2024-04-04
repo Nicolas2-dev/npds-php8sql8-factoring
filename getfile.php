@@ -119,7 +119,7 @@ switch ($apli) {
                     if ($att_type == 'text/source') {
                         include('storage/meta/meta.php');
 
-                        echo css::import_css(Config::get('app.Default_Theme'), $language, '', '', '');
+                        echo css::import_css(Config::get('npds.Default_Theme'), $language, '', '', '');
                         
                         echo '
                         </head>

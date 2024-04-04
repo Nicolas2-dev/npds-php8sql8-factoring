@@ -21,7 +21,7 @@ use npds\system\language\metalang;
 
 $rep = false;
 
-$Start_Page = str_replace('/', '', Config::get('app.Start_Page'));
+$Start_Page = str_replace('/', '', Config::get('npds.Start_Page'));
 
 $theme = theme::getTheme();
 
@@ -52,7 +52,7 @@ if ($rep) {
 
     ob_start();
         // landing page
-        if (stristr($_SERVER['REQUEST_URI'], Config::get('app.Start_Page')) and file_exists("themes/" . $rep . "/view/header_landing.html")) {
+        if (stristr($_SERVER['REQUEST_URI'], Config::get('npds.Start_Page')) and file_exists("themes/" . $rep . "/view/header_landing.html")) {
             include("themes/" . $rep . "/view/header_landing.html");
         } else {
             include("themes/" . $rep . "/view/header.html");

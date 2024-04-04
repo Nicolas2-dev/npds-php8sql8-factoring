@@ -205,7 +205,7 @@ if (!$user) {
         if ($posterdata['uid'] <> 1) {
             echo '&nbsp;<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
         } else {
-            echo '&nbsp;<span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('app.sitename') . '</strong></span>';
+            echo '&nbsp;<span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('npds.sitename') . '</strong></span>';
         }
 
         echo '<span class="float-end">';

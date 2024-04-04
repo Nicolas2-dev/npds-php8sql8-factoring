@@ -494,7 +494,7 @@ function PrintSecPage($artid)
             <div id="print_sect" max-width="640" class="container p-1 n-hyphenate">
                 <p class="text-center">';
 
-    $site_logo = Config::get('app.site_logo');
+    $site_logo = Config::get('npds.site_logo');
 
     $pos = strpos($site_logo, "/");
 
@@ -515,12 +515,12 @@ function PrintSecPage($artid)
 
     echo metalang::meta_lang($content);
 
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
 
     echo '
                 <hr />
                 <p class="text-center">
-                ' . translate("Cet article provient de") . ' ' . Config::get('app.sitename') . '<br /><br />
+                ' . translate("Cet article provient de") . ' ' . Config::get('npds.sitename') . '<br /><br />
                 ' . translate("L'url pour cet article est : ") . '
                 <a href="' . $nuke_url . '/sections.php?op=viewarticle&amp;artid=' . $artid . '">' . $nuke_url . '/sections.php?op=viewarticle&amp;artid=' . $artid . '</a>
                 </p>

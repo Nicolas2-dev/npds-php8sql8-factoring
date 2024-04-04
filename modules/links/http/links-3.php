@@ -162,7 +162,7 @@ function brokenlink($lid)
         global $cookie;
         $ratinguser = $cookie[1];
     } else
-        $ratinguser = Config::get('app.anonymous');
+        $ratinguser = Config::get('npds.anonymous');
     mainheader();
     echo '
     <h3>' . translate("Rapporter un lien rompu") . '</h3>
@@ -190,7 +190,7 @@ function brokenlinkS($lid, $modifysubmitter)
         global $cookie;
         $ratinguser = $cookie[1];
     } else
-        $ratinguser = Config::get('app.anonymous');
+        $ratinguser = Config::get('npds.anonymous');
     if ($modifysubmitter == $ratinguser) {
         settype($lid, 'integer');
         sql_query("INSERT INTO " . $links_DB . "links_modrequest VALUES (NULL, $lid, 0, 0, '', '', '', '$ratinguser', 1,0)");

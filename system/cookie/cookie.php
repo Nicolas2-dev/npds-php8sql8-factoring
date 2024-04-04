@@ -46,8 +46,8 @@ class cookie
                     list($pass, $user_langue) = sql_fetch_row($result);
                     
                     if (($cookie[2] == md5($pass)) and ($pass != '')) {
-                        if (Config::get('app.language') != $user_langue) {
-                            sql_query("UPDATE " . $NPDS_Prefix . "users SET user_langue='". Config::get('app.language') ."' WHERE uname='$cookie[1]'");
+                        if (Config::get('npds.language') != $user_langue) {
+                            sql_query("UPDATE " . $NPDS_Prefix . "users SET user_langue='". Config::get('npds.language') ."' WHERE uname='$cookie[1]'");
                         }
 
                         return $cookie;

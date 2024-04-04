@@ -41,7 +41,7 @@ use npds\system\security\hack;
     else {
     $ibid=false;
     
-    $nuke_url = Config::get('app.nuke_url');
+    $nuke_url = Config::get('npds.nuke_url');
     
     if(strstr($nuke_url,'https')) {
     if(response::file_contents_exist($file_path[0])) {

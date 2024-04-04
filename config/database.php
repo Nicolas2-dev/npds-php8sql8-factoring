@@ -30,7 +30,7 @@ return array(
         /**
          * Password
          */
-        'password'  => '',
+        'password'  => 'password',
 
         /**
          * Prefix

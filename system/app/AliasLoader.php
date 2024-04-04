@@ -18,7 +18,7 @@ class AliasLoader
      */
     public static function initialize()
     {
-        $classes = Config::get('app.aliases', array());
+        $classes = Config::get('npds.aliases', array());
 
         foreach ($classes as $classAlias => $className) {
             // This ensures the alias is created in the global namespace.

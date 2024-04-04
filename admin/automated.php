@@ -338,7 +338,7 @@ function autoEdit(int $anid): void
     
     if ($topics['topicimage'] !== '') {
         if (!$imgtmp = theme::theme_image('topics/' . $topics['topicimage'])) {
-            $imgtmp = Config::get('app.tipath') . $topics['topicimage'];
+            $imgtmp = Config::get('npds.tipath') . $topics['topicimage'];
         }
 
         if (file_exists($imgtmp)) {
@@ -527,7 +527,7 @@ function autoSaveEdit(int $anid, string $title, string $hometext, string $bodyte
         'auto_epur'     => $epur,
     ));
 
-    if (Config::get('app.ultramode')) {
+    if (Config::get('npds.ultramode')) {
         news::ultramode();
     }
     

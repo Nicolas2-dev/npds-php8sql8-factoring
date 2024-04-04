@@ -248,7 +248,7 @@ if ($submitS) {
     $userdata = explode(':', $userX);
     $posterdata = forum::get_userdata_from_id($userdata[0]);
 
-    if (Config::get('app.smilies')) {
+    if (Config::get('npds.smilies')) {
         if (isset($user)) {
             if ($posterdata['user_avatar'] != '') {
                 
@@ -391,7 +391,7 @@ if ($submitS) {
                 </div>
             </div>';
 
-            if (Config::get('app.smilies')) {
+            if (Config::get('npds.smilies')) {
                 settype($image_subject, 'string');
 
                 echo '

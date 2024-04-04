@@ -35,7 +35,7 @@ class mailler
     {
         global $NPDS_Key;
 
-        $From_email = $from != '' ? $from : Config::get('app.adminmail');
+        $From_email = $from != '' ? $from : Config::get('npds.adminmail');
 
         if (preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $From_email)) {
             
@@ -72,7 +72,7 @@ class mailler
 
             try {
                 //Server settings config smtp 
-                if (Config::get('app.mail_fonction') == 2) {
+                if (Config::get('npds.mail_fonction') == 2) {
                     $mail->isSMTP();
                     $mail->Host       = $config['smtp_host'];
                     $mail->SMTPAuth   = $config['smtp_auth'];
@@ -98,7 +98,7 @@ class mailler
                 }
                 
                 //Recipients 
-                $mail->setFrom(Config::get('app.adminmail'), Config::get('app.sitename'));
+                $mail->setFrom(Config::get('npds.adminmail'), Config::get('npds.sitename'));
                 $mail->addAddress($email, $email);
 
                 //Content 
@@ -134,13 +134,13 @@ class mailler
                 }
                 
                 if ($config['dkim_auto'] == 2) {
-                    $mail->DKIM_domain = str_replace(['http://', 'https://'], ['', ''], Config::get('app.nuke_url'));
+                    $mail->DKIM_domain = str_replace(['http://', 'https://'], ['', ''], Config::get('npds.nuke_url'));
                     $mail->DKIM_private = $privatekeyfile;;
                     $mail->DKIM_selector = $NPDS_Key;
                     $mail->DKIM_identity = $mail->From;
                 }
 
-                if (Config::get('app.mail_fonction') == 2) {
+                if (Config::get('npds.mail_fonction') == 2) {
                     if ($config['debug']) {
                         // on génère un journal détaillé après l'envoi du mail 
                         $mail->SMTPDebug = SMTP::DEBUG_SERVER;
@@ -217,7 +217,7 @@ class mailler
             $class = "class=\"$class\"";
         }
         
-        if ($username == Config::get('app.anonymous')) {
+        if ($username == Config::get('npds.anonymous')) {
             if ($imgtmp) {
                 echo "<img alt=\"\" src=\"$imgtmp\" align=\"center\" />$username - <a href=\"user.php\" $class>" . translate("Votre compte") . "</a>";
             } else {

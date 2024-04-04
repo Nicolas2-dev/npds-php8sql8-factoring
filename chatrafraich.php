@@ -55,13 +55,13 @@ if ($chatbox) {
     include("themes/themes-dynamic/theme.php");
 
     foreach($chatbox as $instance_chat) {
-        $thing .= "<div class='chatmessage'><div class='chatheure'>" . date(translate("Chatdate"), $instance_chat['date'] + ((int) config::get('app.gmt') * 3600)) . "</div>";
+        $thing .= "<div class='chatmessage'><div class='chatheure'>" . date(translate("Chatdate"), $instance_chat['date'] + ((int) Config::get('npds.gmt') * 3600)) . "</div>";
         
         $username = $instance_chat['username'];
 
         if ($instance_chat['dbname'] == 1) {
             global $user;
-            if ((!$user) and (Config::get('app.member_list') == 1) and (!$admin)) {
+            if ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) {
                 $thing .= "<div class='chatnom'>".$username."</div>";
             } else {
                 $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', userpopover($username, 36, 1)) . "</div> <a href='user.php?op=userinfo&amp;uname=$username' target='_blank'>$username</a></div>";
@@ -98,7 +98,7 @@ if ($aff_entetes == '1') {
     include("storage/meta/meta.php");
 
     $Xthing .= $l_meta;
-    $Xthing .= str_replace("\n", "", css::import_css_javascript(theme::getTheme(), Config::get('app.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), ""));
+    $Xthing .= str_replace("\n", "", css::import_css_javascript(theme::getTheme(), Config::get('npds.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), ""));
     $Xthing .= "</head><body id='chat'>";
     $Xthing = "\"" . str_replace("'", "\'", $Xthing) . "\"";
 }

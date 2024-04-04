@@ -191,7 +191,7 @@ if ($submitS) {
             $resultZ = sql_query("SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'");
             list($title_topic) = sql_fetch_row($resultZ);
 
-            $nuke_url = Config::get('app.nuke_url');
+            $nuke_url = Config::get('npds.nuke_url');
 
             $subject = strip_tags($forum_name) . "/" . $title_topic . " : " . html_entity_decode(translate_ml($m['user_langue'], "Une réponse à votre dernier Commentaire a été posté."), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $message = $m['uname'] . "\n\n";
@@ -604,13 +604,13 @@ if ($submitS) {
                 <span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
                 } else {
                     echo '
-                <a style="position:absolute; top:1rem;" title="' . Config::get('app.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('app.anonymous') . '" /></a>
-                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
+                <a style="position:absolute; top:1rem;" title="' . Config::get('npds.anonymous') . '" data-bs-toggle="tooltip"><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="' . Config::get('npds.anonymous') . '" /></a>
+                <span style="position:absolute; left:6em;" class="text-muted"><strong>' . Config::get('npds.anonymous') . '</strong></span>';
                 }
             } else {
                 echo $myrow['poster_id'] !== '0' ?
                     '<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>' :
-                    '<span class="text-muted"><strong>' . Config::get('app.anonymous') . '</strong></span>';
+                    '<span class="text-muted"><strong>' . Config::get('npds.anonymous') . '</strong></span>';
             }
 
             echo '

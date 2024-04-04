@@ -861,10 +861,10 @@ switch ($op) {
             $add_is_visible = '0';
         }
 
-        $user_regdate = time() + ((int) Config::get('app.gmt') * 3600);
+        $user_regdate = time() + ((int) Config::get('npds.gmt') * 3600);
 
-        $Default_Theme = Config::get('app.Default_Theme');
-        $Default_Skin = Config::get('app.Default_Theme');
+        $Default_Theme = Config::get('npds.Default_Theme');
+        $Default_Skin = Config::get('npds.Default_Theme');
 
         $sql = 'INSERT INTO ' . $NPDS_Prefix . 'users ';
         $sql .= "(uid,name,uname,email,femail,url,user_regdate,user_from,user_occ,user_intrest,user_viewemail,user_avatar,user_sig,bio,pass,hashkey,send_email,is_visible,mns,theme) ";

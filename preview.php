@@ -174,11 +174,11 @@ if ($smilies) {
             echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-html="true" data-bs-title="' . $theposterdata['uname'] . '" data-bs-content=\'' . forum::member_qualif($theposterdata['uname'], $theposterdata['posts'], $theposterdata['rang']) . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $theposterdata['uname'] . '" /></a>';
         }
     } else {
-        echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-html="true" data-bs-title="' . Config::get('app.anonymous') . '" data-bs-content=\'' . Config::get('app.anonymous') . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="icone ' . Config::get('app.anonymous') . '" /></a>';
+        echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-html="true" data-bs-title="' . Config::get('npds.anonymous') . '" data-bs-content=\'' . Config::get('npds.anonymous') . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="assets/images/forum/avatar/blank.gif" alt="icone ' . Config::get('npds.anonymous') . '" /></a>';
     }
 }
 
-$postername = array_key_exists('1', $userdatat) ? $userdatat[1] : Config::get('app.anonymous');
+$postername = array_key_exists('1', $userdatat) ? $userdatat[1] : Config::get('npds.anonymous');
 
 echo '&nbsp;<span style="position:absolute; left:6rem;" class="text-muted"><strong>' . $postername . '</strong></span>
 <span class="float-end">';

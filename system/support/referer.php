@@ -19,7 +19,7 @@ class referer
     {
         global $NPDS_Prefix;
         
-        if (Config::get('app.httpref') == 1) {
+        if (Config::get('npds.httpref') == 1) {
             
             $http_referer = getenv("HTTP_REFERER");
 

@@ -26,19 +26,19 @@ function footmsg()
 {
     $foot = '<p align="center">';
     
-    if ($foot1 = Config::get('app.foot1')) {
+    if ($foot1 = Config::get('npds.foot1')) {
         $foot .= stripslashes($foot1) . '<br />';
     }
 
-    if ($foot2 = Config::get('app.foot2')) {
+    if ($foot2 = Config::get('npds.foot2')) {
         $foot .= stripslashes($foot2) . '<br />';
     }
 
-    if ($foot3 = Config::get('app.foot3')) {
+    if ($foot3 = Config::get('npds.foot3')) {
         $foot .= stripslashes($foot3) . '<br />';
     }
 
-    if ($foot4 = Config::get('app.foot4')){  
+    if ($foot4 = Config::get('npds.foot4')){  
         $foot .= stripslashes($foot4);
     }
 
@@ -51,7 +51,7 @@ function foot()
 {
     global $user, $cookie9;
     
-    $Default_Theme = Config::get('app.Default_Theme');
+    $Default_Theme = Config::get('npds.Default_Theme');
 
     if ($user) {
         $user2 = base64_decode($user);
@@ -78,9 +78,9 @@ function foot()
 
 global $cookie9; 
 
-$Default_Theme = Config::get('app.Default_Theme');
+$Default_Theme = Config::get('npds.Default_Theme');
 
-if (Config::get('app.tiny_mce')) {
+if (Config::get('npds.tiny_mce')) {
     echo editeur::aff_editeur('tiny_mce', 'end');
 }
 
@@ -118,6 +118,6 @@ include("sitemap.php");
 
 global $dblink;
 
-if (!Config::get('app.database.mysql_p')) {
+if (!Config::get('npds.database.mysql_p')) {
     sql_close($dblink);
 }

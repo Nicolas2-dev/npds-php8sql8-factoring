@@ -96,19 +96,19 @@ class metafunction
     
     public function MM_msg_foot()
     {
-        if ($foot1 = Config::get('app.foot1')) {
+        if ($foot1 = Config::get('npds.foot1')) {
             $MT_foot = stripslashes($foot1) . "<br />";
         }
     
-        if ($foot2 = Config::get('app.foot2')) {
+        if ($foot2 = Config::get('npds.foot2')) {
             $MT_foot .= stripslashes($foot2) . "<br />";
         }
     
-        if ($foot3 = Config::get('app.foot3')) {
+        if ($foot3 = Config::get('npds.foot3')) {
             $MT_foot .= stripslashes($foot3) . "<br />";
         }
     
-        if ($foot4 = Config::get('app.foot4')) {
+        if ($foot4 = Config::get('npds.foot4')) {
             $MT_foot .= stripslashes($foot4);
         }
     
@@ -126,7 +126,7 @@ class metafunction
     {
         global $hlpfile;
     
-        if ((Config::get('app.banners')) and (!$hlpfile)) {
+        if ((Config::get('npds.banners')) and (!$hlpfile)) {
             ob_start();
                 include("banners.php");
                 $MT_banner = ob_get_contents();
@@ -172,7 +172,7 @@ class metafunction
         $username = $cookie[1];
     
         if ($username == "") {
-            $username = Config::get('app.anonymous');
+            $username = Config::get('npds.anonymous');
         }
     
         ob_start();
@@ -261,7 +261,7 @@ class metafunction
     {
         global $NPDS_Prefix; 
         
-        $nuke_url = Config::get('app.nuke_url');
+        $nuke_url = Config::get('npds.nuke_url');
     
         $arg = metalang::arg_filter($arg);
         

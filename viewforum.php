@@ -333,7 +333,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
             if ($replys >= 0) {
                 
-                if (Config::get('app.smilies')) {
+                if (Config::get('npds.smilies')) {
                     $rowQ1 = cache::Q_Select("SELECT image FROM " . $NPDS_Prefix . "posts WHERE topic_id='" . $myrow['topic_id'] . "' AND forum_id='$forum' LIMIT 0,1", 86400);
                     $image_subject = $rowQ1[0]['image'];
                 }
@@ -421,7 +421,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                         if ($rowQ1) {
                             echo '<td>' . userpopover($rowQ1[0]['uname'], 40, 2) . $rowQ1[0]['uname'] . '</td>';
                         } else {
-                            echo '<td>' . Config::get('app.anonymous') . '</td>';
+                            echo '<td>' . Config::get('npds.anonymous') . '</td>';
                         }
                     }
                     echo '<td>' . $myrow['topic_views'] . '</td>';

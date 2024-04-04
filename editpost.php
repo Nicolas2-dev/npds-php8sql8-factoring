@@ -234,7 +234,7 @@ if ($submitS) {
     }
 
     if ((($Mmod) or ($userdata[0] == $myrow['uid'])) and ($forum_access != 9)) {
-        $qui = $myrow['poster_id'] == 0 ? Config::get('app.anonymous') : $myrow['uname'];
+        $qui = $myrow['poster_id'] == 0 ? Config::get('npds.anonymous') : $myrow['uname'];
 
         echo '
         <div>

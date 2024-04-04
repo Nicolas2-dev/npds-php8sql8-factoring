@@ -125,7 +125,7 @@ function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext,
     $Xsujet = '';
     if ($topicimage != '') {
         if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-            $imgtmp = Config::get('app.tipath') . $topicimage;
+            $imgtmp = Config::get('npds.tipath') . $topicimage;
         }
 
         $Xsujet = '<a href="search.php?query=&amp;topic=' . $topic . '"><img class="img-fluid" src="' . $imgtmp . '" alt="' . translate("Rechercher dans") . ' : ' . $topicname . '" title="' . translate("Rechercher dans") . ' : ' . $topicname . '<hr />' . $topictext . '" data-bs-toggle="tooltip" data-bs-html="true" /></a>';
@@ -207,7 +207,7 @@ function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicn
     $sendF = '<a href="friend.php?op=FriendSend&amp;sid=' . $id . '" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-at"></i></a>';
 
     if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-        $imgtmp = Config::get('app.tipath') . $topicimage;
+        $imgtmp = Config::get('npds.tipath') . $topicimage;
     }
 
     $timage = $imgtmp;
@@ -333,7 +333,7 @@ function userpopover($who, $dim, $avpop)
 
         $my_rs = '';
 
-        if (!Config::get('app.short_user')) {
+        if (!Config::get('npds.short_user')) {
             if ($temp_user['uid'] != 1) {
                 $posterdata_extend = forum::get_userdata_extend_from_id($temp_user['uid']);
 

@@ -234,7 +234,7 @@ class cacheManager
             $cookie = '';
         }
 
-        $filename = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('app.language');
+        $filename = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('npds.language');
         
         // Overload
         if ($this->site_overload) {
@@ -291,7 +291,7 @@ class cacheManager
             $affich = true;
         }
 
-        $nombre = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('app.language');
+        $nombre = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('npds.language');
 
         if ($fp = fopen($nombre, 'w')) {
             flock($fp, LOCK_EX);

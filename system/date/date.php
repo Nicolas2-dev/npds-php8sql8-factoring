@@ -19,8 +19,8 @@ class date
     {
         $Maintenant = strtotime("now");
         
-        $Jour = strtotime(Config::get('app.lever'));
-        $Nuit = strtotime(Config::get('app.coucher'));
+        $Jour = strtotime(Config::get('npds.lever'));
+        $Nuit = strtotime(Config::get('npds.coucher'));
 
         if ($Maintenant - $Jour < 0 xor $Maintenant - $Nuit > 0) {
             return "Nuit";

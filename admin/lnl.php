@@ -804,7 +804,7 @@ function Test(string $Yheader, string $Ybody, string $Yfooter): void
     </div>
     <a class="btn btn-secondary my-3" href="javascript:history.go(-1)" >' . adm_translate("Retour en arrière") . '</a>';
 
-    mailler::send_email($adminmail, 'LNL TEST', $message, Config::get('app.adminmail'), true, $Xmime, '');
+    mailler::send_email($adminmail, 'LNL TEST', $message, Config::get('npds.adminmail'), true, $Xmime, '');
 
     css::adminfoot('', '', '', '');
 }
@@ -1098,7 +1098,7 @@ switch ($op) {
             $number_send = 0;
         }
 
-        $nuke_url = Config::get('app.nuke_url');
+        $nuke_url = Config::get('npds.nuke_url');
 
         $lnl_head_foot = DB::table('lnl_head_foot')
             ->select('text', 'html')

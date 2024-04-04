@@ -186,7 +186,7 @@ function displayadmins(): void
     <h3>' . adm_translate("Nouvel administrateur") . '</h3>
     <form id="nou_adm" action="admin.php" method="post">
         <fieldset>
-            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" /> ' . adm_translate("Informations") . ' </legend>
+            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" /> ' . adm_translate("Informations") . ' </legend>
             <div class="form-floating mb-3 mt-3">
                 <input id="add_aid" class="form-control" type="text" name="add_aid" maxlength="30" placeholder="' . adm_translate("Surnom") . '" required="required" />
                 <label for="add_aid">' . adm_translate("Surnom") . ' <span class="text-danger">*</span></label>
@@ -224,7 +224,7 @@ function displayadmins(): void
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
+            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
             <div id="adm_droi_f" class="container-fluid ">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">' . adm_translate("Tout cocher") . '</span>
@@ -235,7 +235,7 @@ function displayadmins(): void
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
+            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
             <div id="adm_droi_m" class="container-fluid">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">' . adm_translate("Tout cocher") . '</span>
@@ -363,7 +363,7 @@ function modifyadmin(string $chng_aid): void
     echo '
     <form id="mod_adm" class="" action="admin.php" method="post">
         <fieldset>
-            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" title="' . $author['aid'] . '" /> ' . adm_translate("Informations") . '</legend>
+            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" title="' . $author['aid'] . '" /> ' . adm_translate("Informations") . '</legend>
             <div class="form-floating mb-3 mt-3">
                 <input id="chng_name" class="form-control" type="text" name="chng_name" value="' . $author['name'] . '" maxlength="30" placeholder="' . adm_translate("Nom") . '" required="required" />
                 <label for="chng_name">' . adm_translate("Nom") . ' <span class="text-danger">*</span></label>
@@ -402,7 +402,7 @@ function modifyadmin(string $chng_aid): void
             <input type="hidden" name="chng_aid" value="' . $author['aid'] . '" />
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
+            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
             <div id="adm_droi_f" class="container-fluid ">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">' . adm_translate("Tout cocher") . '</span>
@@ -413,7 +413,7 @@ function modifyadmin(string $chng_aid): void
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('app.adminimg') . 'authors.' . Config::get('app.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
+            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
             <div id="adm_droi_m" class="container-fluid ">
                 <div class="mb-3">
                 <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">' . adm_translate("Tout cocher") . '</span>
@@ -577,7 +577,7 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
                 if (md5($old_pwd) == $AIpwd and $chng_pwd != '') {
                     $admin = base64_encode("$aid:" . md5($chng_pwd));
                     
-                    $admin_cook_duration = Config::get('app.admin_cook_duration');
+                    $admin_cook_duration = Config::get('npds.admin_cook_duration');
 
                     if ($admin_cook_duration <= 0) {
                         $admin_cook_duration = 1;

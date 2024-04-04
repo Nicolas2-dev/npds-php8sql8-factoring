@@ -49,11 +49,11 @@ $forum_name = 'comments';
 $forum_type = 0;
 $allow_to_post = false;
 
-$forum_access = Config::get('app.anonpost') ? 0 : 1;
+$forum_access = Config::get('npds.anonpost') ? 0 : 1;
 
 global $user;
 
-$moderate = Config::get('app.moderate');
+$moderate = Config::get('npds.moderate');
 
 if ($moderate == 1 and isset($admin))
     $Mmod = true;
@@ -139,7 +139,7 @@ if (isset($submitS)) {
         if ($notify) {
             global $notify_email, $notify_from, $url_ret;
             
-            $nuke_url = Config::get('app.nuke_url');
+            $nuke_url = Config::get('npds.nuke_url');
 
             $csubject = html_entity_decode(translate("Nouveau commentaire"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' ==> ' . $nuke_url;
             $cmessage = '🔔 ' . translate("Nouveau commentaire") . ' ==> <a href="' . $nuke_url . '/' . $url_ret . '">' . $nuke_url . '/' . $url_ret . '</a>';

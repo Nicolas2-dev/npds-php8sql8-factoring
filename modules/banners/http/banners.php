@@ -130,7 +130,7 @@ function clickbanner($bid)
     sql_free_result($bresult);
     
     if ($clickurl == '') {
-        $clickurl = Config::get('app.nuke_url');
+        $clickurl = Config::get('npds.nuke_url');
     }
 
     Header("Location: " . language::aff_langue($clickurl));
@@ -186,7 +186,7 @@ function header_page()
     include_once("modules/upload/config/upload.conf.php");
     include("storage/meta/meta.php");
     
-    $Default_Theme = Config::get('app.Default_Theme');
+    $Default_Theme = Config::get('npds.Default_Theme');
 
     if ($url_upload_css) {
         $url_upload_cssX = str_replace('style.css', $language . '-style.css', $url_upload_css);
@@ -286,7 +286,7 @@ function bannerstats($login, $pass)
                 </tbody>
             </table>
             <div class="lead my-3">
-                <a href="' . Config::get('app.nuke_url') . '" target="_blank">' . Config::get('app.sitename') . '</a>
+                <a href="' . Config::get('npds.nuke_url') . '" target="_blank">' . Config::get('npds.sitename') . '</a>
             </div>';
             
             $result = sql_query("SELECT bid, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
@@ -418,7 +418,7 @@ function EmailStats($login, $cid, $bid)
             global $gmt;
 
             $fecha = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
-            $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . Config::get('app.sitename');
+            $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . Config::get('npds.sitename');
             
             $message  = "Client : $name\n" . translate("Bannière") . " ID : $bid\n" . translate("Bannière") . " Image : $imageurl\n" . translate("Bannière") . " URL : $clickurl\n\n";
             $message .= "Impressions " . translate("Réservées") . " : $imptotal\nImpressions " . translate("Réalisées") . " : $impmade\nImpressions " . translate("Restantes") . " : $left\nClicks " . translate("Reçus") . " : $clicks\nClicks " . translate("Pourcentage") . " : $percent%\n\n";

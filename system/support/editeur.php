@@ -24,7 +24,7 @@ class editeur
     {
         $tmp = '';
 
-        if (Config::get('app.tiny_mce')) {
+        if (Config::get('npds.tiny_mce')) {
             static $tmp_Xzone;
             
             if ($Xzone == 'tiny_mce') {
