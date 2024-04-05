@@ -312,14 +312,6 @@ $PAGES['modules.php?ModPath=reseaux-sociaux&ModStart=reseaux-sociaux*']['blocs']
 // $PAGES['forum=1']['title']="forum.php";
 // $PAGES['forum=1']['run']="user";
 
-$PAGES['modules.php?ModPath=npds_galerie&ModStart=gal*']['title'] = "[fr]Galerie d'images[/fr][en]Pictures galery[/en][es]Galeria de imagenes[/es]+";
-$PAGES['modules.php?ModPath=npds_galerie&ModStart=gal*']['js'] = array($nuke_url . '/modules/npds_galerie/js/jquery.watermark.min.js');
-$PAGES['modules.php?ModPath=npds_galerie&ModStart=gal*']['run'] = "yes";
-$PAGES['modules.php?ModPath=npds_galerie&ModStart=gal*']['blocs'] = "0";
-$PAGES['modules.php?ModPath=npds_galerie&ModStart=gal*']['TinyMce'] = 1;
-$PAGES['modules.php?ModPath=npds_galerie&ModStart=gal*']['TinyMce-theme'] = "short";
-$PAGES['modules.php?ModPath=npds_galerie&ModStart=gal*']['css'] = array($nuke_url . '/modules/npds_galerie/css/galerie.css+');
-
 global $language;
 
 $PAGES['modules.php?ModPath=geoloc&ModStart=geoloc*']['title'] = "[fr]Localisation[/fr][en]Geolocation[/en][es]Geolocalizaci&oacute;n[/es][de]Geolocation[/de][zh]&#22320;&#29702;&#20301;&#32622;[/zh]+|$title+";

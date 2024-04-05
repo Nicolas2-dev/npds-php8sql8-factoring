@@ -25,6 +25,7 @@ use npds\system\pixels\image;
 use npds\system\support\editeur;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 use npds\system\subscribe\subscribe;
 
 if (!function_exists('admindroits')) {

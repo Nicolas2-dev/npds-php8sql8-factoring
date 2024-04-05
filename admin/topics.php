@@ -20,6 +20,7 @@ use npds\system\assets\css;
 use npds\system\support\str;
 use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -41,13 +42,11 @@ function topicsmanager()
     GraphicAdmin(manuel('topics'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT topicid, topicname, topicimage, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topicname");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $result = DB::table('topics')->select('topicid', 'topicname', 'topicimage', 'topictext')->orderBy('topicname')->get();
 
     settype($topicadmin, 'string');
 
-    if (sql_num_rows($result) > 0) {
+    if ($result > 0) {
         echo '
     <hr />
     <h3 class="my-3">' . adm_translate("Sujets actifs") . '<span class="badge bg-secondary float-end">' . sql_num_rows($result) . '</span></h3>';

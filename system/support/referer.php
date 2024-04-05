@@ -6,6 +6,7 @@ namespace npds\system\support;
 
 use npds\system\config\Config;
 use npds\system\security\hack;
+use npds\system\support\facades\DB;
 
 class referer
 {
@@ -17,8 +18,6 @@ class referer
      */
     public static function refererUpdate(): void
     {
-        global $NPDS_Prefix;
-        
         if (Config::get('npds.httpref') == 1) {
             
             $http_referer = getenv("HTTP_REFERER");
@@ -29,7 +28,9 @@ class referer
                 if ($referer != '' 
                 and !strstr($referer, "unknown") 
                 and !stristr($referer, $_SERVER['SERVER_NAME'])) {
-                    sql_query("INSERT INTO ".$NPDS_Prefix."referer VALUES (NULL, '$referer')");
+                    DB::table('referer')->insert(array(
+                        'url'       => $referer,
+                    ));
                 }
             }
         }   

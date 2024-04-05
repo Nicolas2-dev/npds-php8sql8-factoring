@@ -21,6 +21,7 @@ use npds\system\mail\mailler;
 use npds\system\pixels\image;
 use npds\system\support\editeur;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -971,7 +972,7 @@ function sectionedit($secid)
                 <select class="form-select" id="rubref" name="rubref">';
         $result = sql_query("SELECT rubid, rubname FROM ".$NPDS_Prefix."rubriques ORDER BY ordre");
         
-= DB::table('')->select()->where('', )->orderBy('')->get();
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
         while(list($rubid, $rubname) = sql_fetch_row($result)) {
             $sel = $rubref==$rubid?'selected="selected"':'';
@@ -986,7 +987,7 @@ function sectionedit($secid)
         $result = sql_query("SELECT rubname FROM ".$NPDS_Prefix."rubriques WHERE rubid='$rubref'");
         list($rubname) = sql_fetch_row($result);
 
-= DB::table('')->select()->where('', )->orderBy('')->get();
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         echo '<pan class="ms-2">'.language::aff_langue($rubname).'</span>';
     }

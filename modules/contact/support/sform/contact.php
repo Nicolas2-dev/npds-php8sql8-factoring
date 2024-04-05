@@ -18,28 +18,24 @@ use npds\system\assets\css;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
 use npds\system\language\language;
-use npds\system\sform\form_handler;
+use npds\system\support\facades\Sform;
 
 global $ModPath, $ModStart;
 
-$sform_path = 'support/sform/';
-
-global $m;
-$m = new form_handler();
-//********************
-$m->add_form_title('contact');
-$m->add_form_id('formcontact');
-$m->add_form_method('post');
-$m->add_form_check('false');
-$m->add_url('modules.php');
-$m->add_field('ModStart', '', $ModStart, 'hidden', false);
-$m->add_field('ModPath', '', $ModPath, 'hidden', false);
-$m->add_submit_value('subok');
-$m->add_field('subok', '', 'Submit', 'hidden', false);
+Sform::add_form_title('contact');
+Sform::add_form_id('formcontact');
+Sform::add_form_method('post');
+Sform::add_form_check('false');
+Sform::add_url('modules.php');
+Sform::add_field('ModStart', '', $ModStart, 'hidden', false);
+Sform::add_field('ModPath', '', $ModPath, 'hidden', false);
+Sform::add_submit_value('subok');
+Sform::add_field('subok', '', 'Submit', 'hidden', false);
 
 /************************************************/
-include($sform_path . 'contact/formulaire.php');
-css::adminfoot('fv', '', 'var formulid = ["' . $m->form_id . '"];', '1');
+include('support/sform/contact/formulaire.php');
+
+css::adminfoot('fv', '', 'var formulid = ["' . Sform::$form_id . '"];', '1');
 /************************************************/
 // Manage the <form>
 switch ($subok) {
@@ -47,13 +43,13 @@ switch ($subok) {
         settype($message, 'string');
         settype($sformret, 'string');
         if (!$sformret) {
-            $m->make_response();
+            Sform::make_response();
             //anti_spambot
             if (!spam::R_spambot($asb_question, $asb_reponse, $message)) {
                 logs::Ecr_Log('security', 'Contact', '');
                 $subok = '';
             } else {
-                $message = $m->aff_response('', 'not_echo', '');
+                $message = Sform::aff_response('', 'not_echo', '');
                 global $notify_email;
                 mailler::send_email($notify_email, "Contact site", language::aff_langue($message), '', '', "html", '');
                 echo '
@@ -66,6 +62,6 @@ switch ($subok) {
             $subok = '';
 
     default:
-        echo language::aff_langue($m->print_form(''));
+        echo language::aff_langue(Sform::print_form(''));
         break;
 }

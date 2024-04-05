@@ -1,5 +1,4 @@
 <?php
-
 /************************************************************************/
 /* SFORM Extender for NPDS USER                                         */
 /* ===========================                                          */
@@ -14,20 +13,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\sform\form_handler;
+use npds\system\support\facades\Sform;
 
-$sform_path = 'support/sform/';
+Sform::add_form_title('Register');
+Sform::add_form_id('Register');
+Sform::add_form_method('post');
+Sform::add_form_check('false');
+Sform::add_url('admin.php');
 
-global $m;
-$m = new form_handler();
-//********************
-$m->add_form_title('Register');
-$m->add_form_id('Register');
-$m->add_form_method('post');
-$m->add_form_check('false');
-$m->add_url('admin.php');
+include('support/sform/extend-user/adm_formulaire.php');
 
-/************************************************/
-include($sform_path . 'extend-user/adm_formulaire.php');
-/************************************************/
-echo $m->print_form('');
+echo Sform::print_form('');

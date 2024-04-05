@@ -14,25 +14,20 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\sform\form_handler;
+use npds\system\support\facades\Sform;
 
-$sform_path = 'support/sform/';
 
-global $m;
-$m = new form_handler();
-//********************
-$m->add_form_title("Bugs_Report");
-$m->add_form_method("post");
-$m->add_form_check("false");
-$m->add_mess(" * d&eacute;signe un champ obligatoire ");
-$m->add_submit_value("submitS");
-$m->add_url("newtopic.php");
+Sform::add_form_title("Bugs_Report");
+Sform::add_form_method("post");
+Sform::add_form_check("false");
+Sform::add_mess(" * d&eacute;signe un champ obligatoire ");
+Sform::add_submit_value("submitS");
+Sform::add_url("newtopic.php");
 
-/************************************************/
-include($sform_path . "forum/$formulaire");
-/************************************************/
+include("support/sform/forum/$formulaire");
 
-if (!$submitS)
-    echo $m->print_form('');
-else
-    $message = $m->aff_response('', 'not_echo', '');
+if (!$submitS) {
+    echo Sform::print_form('');
+} else {
+    $message = Sform::aff_response('', 'not_echo', '');
+}

@@ -19,7 +19,7 @@ class theme
      */
     public static function theme_image(string $theme_img): string|bool
     {
-        global $theme;
+        $theme = static::getTheme();
         
         if (@file_exists("themes/$theme/assets/images/$theme_img")) {
             return ("themes/$theme/assets/images/$theme_img");
@@ -138,4 +138,5 @@ class theme
     {
         echo "$title<br />" . metalang::meta_lang($hometext) . "<br />" . metalang::meta_lang($bodytext) . "<br />" . metalang::meta_lang($notes);
     }
+    
 }

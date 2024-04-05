@@ -38,6 +38,7 @@
 declare(strict_types=1);
 
 use npds\system\language\language;
+use npds\system\support\facades\Sform;
 
 if (!isset($C1)) $C1 = '';
 if (!isset($C2)) $C2 = '';
@@ -51,18 +52,18 @@ if (!isset($T1)) $T1 = '';
 if (!isset($T1)) $T2 = '';
 if (!isset($M2)) $M2 = '';
 
-$m->add_comment(language::aff_langue('<div class="row"><p class="lead">[fr]En savoir plus[/fr][en]More[/en][es]M&#xE1;s[/es][de]Mehr[/de]</p></div>'));
-$m->add_field('C1', language::aff_langue('[fr]Activit&#x00E9; professionnelle[/fr][en]Professional activity[/en][es]Actividad profesional[/es][de]Berufliche T&#xE4;tigkeit[/de]'), $C1, 'text', false, 100, '', '');
-$m->add_extender('C1', '', '<span class="help-block text-end" id="countcar_C1"></span>');
-$m->add_field('C2', language::aff_langue('[fr]Code postal[/fr][en]Postal code[/en][es]C&#xF3;digo postal[/es][de]Postleitzahl[/de]'), $C2, 'text', false, 5, '', '');
-$m->add_extender('C2', '', '<span class="help-block text-end" id="countcar_C2"></span>');
-$m->add_date('T1', language::aff_langue('[fr]Date de naissance[/fr][en]Birth date[/en][es]Fecha de nacimiento[/es][de]Geburtsdatum[/de]'), $T1, 'text', '', false, 20);
-$m->add_extender('T1', '', '<span class="help-block">JJ/MM/AAAA</span>');
-$m->add_field('M2', "R&#x00E9;seaux sociaux", $M2, 'hidden', false);
+Sform::add_comment(language::aff_langue('<div class="row"><p class="lead">[fr]En savoir plus[/fr][en]More[/en][es]M&#xE1;s[/es][de]Mehr[/de]</p></div>'));
+Sform::add_field('C1', language::aff_langue('[fr]Activit&#x00E9; professionnelle[/fr][en]Professional activity[/en][es]Actividad profesional[/es][de]Berufliche T&#xE4;tigkeit[/de]'), $C1, 'text', false, 100, '', '');
+Sform::add_extender('C1', '', '<span class="help-block text-end" id="countcar_C1"></span>');
+Sform::add_field('C2', language::aff_langue('[fr]Code postal[/fr][en]Postal code[/en][es]C&#xF3;digo postal[/es][de]Postleitzahl[/de]'), $C2, 'text', false, 5, '', '');
+Sform::add_extender('C2', '', '<span class="help-block text-end" id="countcar_C2"></span>');
+Sform::add_date('T1', language::aff_langue('[fr]Date de naissance[/fr][en]Birth date[/en][es]Fecha de nacimiento[/es][de]Geburtsdatum[/de]'), $T1, 'text', '', false, 20);
+Sform::add_extender('T1', '', '<span class="help-block">JJ/MM/AAAA</span>');
+Sform::add_field('M2', "R&#x00E9;seaux sociaux", $M2, 'hidden', false);
 include('modules/geoloc/config/geoloc.conf');
-$m->add_comment(language::aff_langue('<div class="row"><p class="lead"><a href="modules.php?ModPath=geoloc&amp;ModStart=geoloc"><i class="fas fa-map-marker-alt fa-2x" title="[fr]Modifier ou d&#xE9;finir votre position[/fr][en]Define or change your geolocation[/en][zh]Define or change your geolocation[/zh][es]Definir o cambiar la geolocalizaci&#243;n[/es][de]Definieren oder &#xE4;ndern Sie Ihre Geolokalisierung[/de]" data-bs-toggle="tooltip" data-bs-placement="right"></i></a>&nbsp;[fr]G&#xE9;olocalisation[/fr][en]Geolocation[/en][zh]&#x5730;&#x7406;&#x5B9A;&#x4F4D;[/zh][es]Geolocalizaci&#243;n[/es][de]Geolokalisierung[/de]</p></div>'));
-$m->add_field($ch_lat, language::aff_langue('[fr]Latitude[/fr][en]Latitude[/en][zh]&#x7ECF;&#x5EA6;[/zh][es]Latitud[/es][de]Breitengrad[/de]'), $$ch_lat, 'text', false, '', '', 'lat');
-$m->add_field($ch_lon, language::aff_langue('[fr]Longitude[/fr][en]Longitude[/en][zh]&#x7EAC;&#x5EA6;[/zh][es]Longitud[/es][de]L&#228;ngengrad[/de]'), $$ch_lon, 'text', false, '', '', 'long');
+Sform::add_comment(language::aff_langue('<div class="row"><p class="lead"><a href="modules.php?ModPath=geoloc&amp;ModStart=geoloc"><i class="fas fa-map-marker-alt fa-2x" title="[fr]Modifier ou d&#xE9;finir votre position[/fr][en]Define or change your geolocation[/en][zh]Define or change your geolocation[/zh][es]Definir o cambiar la geolocalizaci&#243;n[/es][de]Definieren oder &#xE4;ndern Sie Ihre Geolokalisierung[/de]" data-bs-toggle="tooltip" data-bs-placement="right"></i></a>&nbsp;[fr]G&#xE9;olocalisation[/fr][en]Geolocation[/en][zh]&#x5730;&#x7406;&#x5B9A;&#x4F4D;[/zh][es]Geolocalizaci&#243;n[/es][de]Geolokalisierung[/de]</p></div>'));
+Sform::add_field($ch_lat, language::aff_langue('[fr]Latitude[/fr][en]Latitude[/en][zh]&#x7ECF;&#x5EA6;[/zh][es]Latitud[/es][de]Breitengrad[/de]'), $$ch_lat, 'text', false, '', '', 'lat');
+Sform::add_field($ch_lon, language::aff_langue('[fr]Longitude[/fr][en]Longitude[/en][zh]&#x7EAC;&#x5EA6;[/zh][es]Longitud[/es][de]L&#228;ngengrad[/de]'), $$ch_lon, 'text', false, '', '', 'long');
 
 // Les champ B1 et M2 sont utilisé par NPDS dans le cadre des fonctions USERs
 // Si vous avez besoin d'un ou de champs ci-dessous - le(s) définir selon vos besoins et l'(les) enlever du tableau $fielddispo
@@ -71,10 +72,10 @@ $geofield = array($ch_lat, $ch_lon);
 $fieldrest = array_diff($fielddispo, $geofield);
 //reset($fieldrest);
 foreach ($fieldrest as $k => $v) {
-    $m->add_field($v, $v, '', 'hidden', false);
+    Sform::add_field($v, $v, '', 'hidden', false);
 }
 
-$m->add_extra('
+Sform::add_extra('
         <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
         <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/' . language::language_iso(1, '', '') . '.js"></script>
         <script type="text/javascript">

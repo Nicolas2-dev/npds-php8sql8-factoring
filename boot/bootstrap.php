@@ -13,6 +13,7 @@ use npds\system\utility\spam;
 use npds\system\security\protect;
 use npds\system\exception\ExceptionHandler;
 
+// Load autolad
 require 'vendor/autoload.php';
 
 // Load the configuration files.
@@ -32,9 +33,11 @@ foreach (glob('config/*.php') as $path) {
     }  
 }
 
+// grab global
 if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     define('NPDS_GRAB_GLOBALS_INCLUDED', 1);
 
+    // initialisation du schek spam boot
     spam::spam_logs();
 
     // include current charset
@@ -42,6 +45,7 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         include(__DIR__."/constants.php");
     }
 
+    // include doctype
     if (file_exists(__DIR__."/doctype.php")) {
         include(__DIR__."/doctype.php");
     }
@@ -55,6 +59,7 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         extract($_GET, EXTR_OVERWRITE);
     }
 
+    // Post values, slash, filter and extract
     if (!empty($_POST)) {
         array_walk_recursive($_POST, [str::class, 'addslashes_GPC']);
         extract($_POST, EXTR_OVERWRITE);
@@ -65,18 +70,21 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         extract($_COOKIE, EXTR_OVERWRITE);
     }
 
+    // extract cookie user
     if (isset($user)) {
         $ibid = explode(':', base64_decode($user));
         array_walk($ibid, [protect::class, 'url']);
         $user = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
     }
 
+    // extract cookie user_language
     if (isset($user_language)) {
         $ibid = explode(':', $user_language);
         array_walk($ibid, [protect::class, 'url']);
         $user_language = str_replace("%3A", ":", urlencode($user_language));
     }
 
+    // extract cookie admin
     if (isset($admin)) {
         $ibid = explode(':', base64_decode($admin));
         array_walk($ibid, [protect::class, 'url']);
@@ -88,10 +96,12 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         extract($_SERVER, EXTR_OVERWRITE);
     }
 
+    // Env
     if (!empty($_ENV)) {
         extract($_ENV, EXTR_OVERWRITE);
     }
 
+    // Files
     if (!empty($_FILES)) {
         foreach ($_FILES as $key => $value) {
             $$key = $value['tmp_name'];
@@ -99,26 +109,21 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     }
 }
 
+// initialise errror reporting
 error_reporting(-1);
-
 ini_set('display_errors', 'Off');
 
 // Initialize the Exceptions Handler.
 ExceptionHandler::initialize(true);
 
-
 // Initialize the Aliases Loader.
 AliasLoader::initialize();
 
-//vd(Config::all());
-
+// initialisation de la database 
 $db = Manager::getInstance();
-
 $db->connection()->setFetchMode(PDO::FETCH_ASSOC);
 
-
-//include("config/config.php");
-$NPDS_Prefix = '';
+// include des fichier pour le cache !!!! A revoir ces fichiers !!!!
 include_once('config/cache.config.php');
 include_once('config/cache.timings.php');
 
@@ -129,6 +134,7 @@ if (file_exists('storage/language/langcode.php')) {
     $languageslist = language::languageList();
 }
 
+// choix de du language utilisateur via block language
 if (isset($choice_user_language)) {
     if ($choice_user_language != '') {
 
@@ -147,8 +153,7 @@ if (isset($choice_user_language)) {
     }
 }
 
-
-
+// si multilanguage est actif
 if ((Config::get('npds.$multi_langue')) && isset($user_language)) {
     if (($user_language != '') and ($user_language != " ")) {
         $tmpML = stristr($languageslist, $user_language);
@@ -159,34 +164,41 @@ if ((Config::get('npds.$multi_langue')) && isset($user_language)) {
         }
     }
 }
-// Multi-language
 
+// on recupre la language du site 
 $language = Config::get('npds.language');
-
 include("language/$language/language.php");
 
+
+// db ancien system qui va disparaitre !!!!
 include('system/database/connexion.php');
 
-/****************/
 $dblink = Mysql_Connexion();
 
-$mainfile = 1;
+$NPDS_Prefix = '';
 
+// controle de la connection admin 
 require_once("auth.inc.php");
 
+// extract les donnée du cookie user ! va disparaitre prochainement !!!!
 if (isset($user)) {
     $cookie = cookie::cookiedecode($user);
 }
 
+// inbitilisation de la session
 session::session_manage();
 
+// tableau des language a  revoir va disparaitre prochainement !!!!
 $tab_langue = language::make_tab_langue();
 
+// gestion metalang a revoir !!!!
 global $meta_glossaire;
 $meta_glossaire = metalang::charg_metalang();
 
+// initilisation du time zone A revoir avec la estion des dates a finaliser !!!!
 if (function_exists("date_default_timezone_set")) {
     date_default_timezone_set("Europe/Paris");
 }
 
+// initialisation de la  locale du site A revoir !!!!
 language::initLocale();

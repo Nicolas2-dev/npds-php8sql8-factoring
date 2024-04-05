@@ -13,20 +13,16 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\sform\form_handler;
+use npds\system\support\facades\Sform;
 
-$sform_path = 'support/sform/';
+$sform_path = '';
 
-global $m;
-$m = new form_handler();
-//********************
-$m->add_form_title('Register');
-$m->add_form_id('register');
-$m->add_form_method('post');
-$m->add_form_check('false');
-$m->add_url('user.php');
+Sform::add_form_title('Register');
+Sform::add_form_id('register');
+Sform::add_form_method('post');
+Sform::add_form_check('false');
+Sform::add_url('user.php');
 
-/************************************************/
-include($sform_path . 'extend-user/formulaire.php');
-/************************************************/
-echo $m->print_form('');
+include('support/sform/extend-user/formulaire.php');
+
+echo Sform::print_form('');

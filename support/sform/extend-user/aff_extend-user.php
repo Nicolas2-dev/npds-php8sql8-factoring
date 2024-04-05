@@ -14,19 +14,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\sform\form_handler;
+use npds\system\support\facades\Sform;
 
-$sform_path = 'support/sform/';
 
-global $m;
-$m = new form_handler();
-//********************
-$m->add_form_title('Register');
-$m->add_form_method('post');
-$m->add_form_check('false');
-$m->add_url('user.php');
+Sform::add_form_title('Register');
+Sform::add_form_method('post');
+Sform::add_form_check('false');
+Sform::add_url('user.php');
 
-/************************************************/
-include($sform_path . 'extend-user/aff_formulaire.php');
-/************************************************/
-echo $m->aff_response('');
+include($sform_path . 'support/sform/extend-user/aff_formulaire.php');
+
+echo Sform::aff_response('');

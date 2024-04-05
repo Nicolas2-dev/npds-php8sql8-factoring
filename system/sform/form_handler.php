@@ -25,64 +25,148 @@ use npds\system\language\language;
 
 class form_handler
 {
+    /**
+     * form fields
+     *
+     * @var [type]
+     */
+    var $form_fields = array();
 
-    
-    var $form_fields = array(); // form fields
+    /**
+     * form title
+     *
+     * @var [type]
+     */
+    var $title;
+
+    /**
+     * obligatoire message
+     *
+     * @var [type]
+     */
+    var $mess;
+
+    /**
+     * form title
+     *
+     * @var [type]
+     */
+    var $form_title;
+
+    /**
+     * Form id (for custom css) Jireck add
+     *
+     * @var [type]
+     */
+    var $form_id;
+
+    /**
+     * form method (Post or Get)
+     *
+     * @var [type]
+     */
+    var $form_method;
+
+    /**
+     * form key (for mysql stockage)
+     *
+     * @var [type]
+     */
+    var $form_key;
+
+    /**
+     * value of the form key (for mysql stockage)
+     *
+     * @var [type]
+     */
+    var $form_key_value;
+
+    /**
+     * Status of the key (open or close)
+     *
+     * @var [type]
+     */
+    var $form_key_status = 'open';
+
+    /**
+     * the name off all submit buttons of the form
+     *
+     * @var [type]
+     */
+    var $submit_value = '';
+
+    /**
+     * Protect the data with a password
+     *
+     * @var [type]
+     */
+    var $form_password_access = '';
+
+    /**
+     * answer table
+     *
+     * @var [type]
+     */
+    var $answer = array();
+
+    /**
+     * sring which will be inserted into javascript check function
+     *
+     * @var [type]
+     */
+    var $form_check = 'true';
+
+    /**
+     * path at 'action' option of form
+     *
+     * @var [type]
+     */
+    var $url;
+
+    /**
+     * Value of the size attribute of a form-field
+     *
+     * @var [type]
+     */
+    var $field_size = 50;
 
 
-    var $title; // form title
+    /**
+     * The orm_handler instance
+     *
+     * @var orm_handler
+     */
+    private static ?form_handler $instance = null;
 
 
-    var $mess; // obligatoire message
+    function __construct()
+    {
+    }
 
+    /**
+     * instance form_handler
+     *
+     *
+     * @return form_handler
+     */
+    public static function instance(): form_handler
+    {
+        if (static::$instance === null) {
+            static::$instance = new self();
+        }
 
-    var $form_title; // form title
+        return static::$instance;
+    }
 
-
-    var $form_id;  // Form id (for custom css) Jireck add
-
-
-    var $form_method; // form method (Post or Get)
-
-
-    var $form_key; // form key (for mysql stockage)
-
-
-    var $form_key_value; // value of the form key (for mysql stockage)
-
-
-    var $form_key_status = 'open'; // Status of the key (open or close)
-
-
-    var $submit_value = ''; // the name off all submit buttons of the form
-
-
-    var $form_password_access = ''; // Protect the data with a password
-
-
-    var $answer = array(); // answer table
-
-
-    var $form_check = 'true'; // sring which will be inserted into javascript check function
-
-
-    var $url; // path at 'action' option of form
-
-
-    var $field_size = 50; // Value of the size attribute of a form-field
-
-
-    var $sform_path;
-
-
-    // function __construct(?string $sform_path)
-    // {
-    //     if (!isset($sform_path)) {
-    //         $this->sform_path = '';
-    //     } else {
-    //         $this->sform_path = $sform_path;
-    //     }
-    // }
+    /**
+     * Get singleton instance
+     *
+     * @return form_handler
+     */
+    public static function getInstance(): form_handler
+    {
+        return static::$instance;
+    }
 
 
     /**************************************************************************************/

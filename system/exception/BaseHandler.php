@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace npds\system\exception;
 
 use Exception;
-use PDOException;
-
 use ErrorException;
+
 use npds\system\exception\HttpException;
 use npds\system\exception\FatalThrowableError;
 
