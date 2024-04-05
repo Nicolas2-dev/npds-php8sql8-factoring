@@ -17,6 +17,7 @@ declare(strict_types=1);
 use npds\system\logs\logs;
 use npds\system\support\str;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -30,7 +31,22 @@ admindroits($aid, $f_meta_nom);
 
 manuel('rightblocks');
 
-function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRaide, $SHTML, $css)
+/**
+ * [makerblock description]
+ *
+ * @param   string  $title    [$title description]
+ * @param   string  $content  [$content description]
+ * @param   int     $members  [$members description]
+ * @param   string  $Mmember  [$Mmember description]
+ * @param   int     $Rindex   [$Rindex description]
+ * @param   int     $Scache   [$Scache description]
+ * @param   string  $BRaide   [$BRaide description]
+ * @param   int     $SHTML    [$SHTML description]
+ * @param   int     $css      [$css description]
+ *
+ * @return  void
+ */
+function makerblock(string $title, string $content, int $members, string $Mmember, int $Rindex, int $Scache, string $BRaide, int $SHTML, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
@@ -50,10 +66,15 @@ function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRa
         $content = strip_tags(str_replace('<br />', "\n", $content));
     }
 
-    sql_query("INSERT INTO " . $NPDS_Prefix . "rblocks VALUES (NULL,'$title','$content', '$members', '$Rindex', '$Scache', '1', '$css', '$BRaide')");
-
-    DB::table('')->insert(array(
-        ''       => ,
+    DB::table('rblocks')->insert(array(
+        'title'       => $title,
+        'content'     => $content,
+        'memeber'     => $members,
+        'Rindex'      => $Rindex,
+        'cache'       => $Scache,
+        'actif'       => 1,
+        'css'         => $css,
+        'aide'        => $BRaide
     ));
 
     global $aid;
@@ -62,7 +83,23 @@ function makerblock($title, $content, $members, $Mmember, $Rindex, $Scache, $BRa
     Header("Location: admin.php?op=blocks");
 }
 
-function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scache, $Sactif, $BRaide, $css)
+/**
+ * [changerblock description]
+ *
+ * @param   int     $id       [$id description]
+ * @param   string  $title    [$title description]
+ * @param   string  $content  [$content description]
+ * @param   int     $members  [$members description]
+ * @param   string  $Mmember  [$Mmember description]
+ * @param   int     $Rindex   [$Rindex description]
+ * @param   int     $Scache   [$Scache description]
+ * @param   int     $Sactif   [$Sactif description]
+ * @param   string  $BRaide   [$BRaide description]
+ * @param   int     $css      [$css description]
+ *
+ * @return  void
+ */
+function changerblock(int $id, string $title, string $content, int $members, string $Mmember, int $Rindex, int $Scache, int $Sactif, string $BRaide, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
@@ -85,10 +122,15 @@ function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scach
 
     $content = stripslashes(str::FixQuotes($content));
     
-    sql_query("UPDATE " . $NPDS_Prefix . "rblocks SET title='$title', content='$content', member='$members', Rindex='$Rindex', cache='$Scache', actif='$Sactif', css='$css', aide='$BRaide' WHERE id='$id'");
-
-    DB::table('')->where('', )->update(array(
-        ''       => ,
+    DB::table('rblocks')->where('id', $id)->update(array(
+        'title'       => $title,
+        'content'     => $content,
+        'member'      => $members,
+        'Rindex'      => $Rindex,
+        'cache'       => $Scache,
+        'actif'       => $Sactif,
+        'css'         => $css,
+        'aide'        => $BRaide
     ));
 
     global $aid;
@@ -97,7 +139,23 @@ function changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scach
     Header("Location: admin.php?op=blocks");
 }
 
-function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, $Scache, $Sactif, $BRaide, $css)
+/**
+ * [changegaucherblock description]
+ *
+ * @param   int     $id       [$id description]
+ * @param   string  $title    [$title description]
+ * @param   string  $content  [$content description]
+ * @param   int     $members  [$members description]
+ * @param   string  $Mmember  [$Mmember description]
+ * @param   int     $Rindex   [$Rindex description]
+ * @param   int     $Scache   [$Scache description]
+ * @param   int     $Sactif   [$Sactif description]
+ * @param   string  $BRaide   [$BRaide description]
+ * @param   int     $css      [$css description]
+ *
+ * @return  void
+ */
+function changegaucherblock(int $id, string $title, string $content, int $members, string $Mmember, int $Rindex, int $Scache, int $Sactif, string $BRaide, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
@@ -120,15 +178,18 @@ function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, 
 
     $content = stripslashes(str::FixQuotes($content));
 
-    sql_query("INSERT INTO " . $NPDS_Prefix . "lblocks VALUES (NULL,'$title','$content','$members', '$Rindex', '$Scache', '$Sactif', '$css', '$BRaide')");
-
     DB::table('')->insert(array(
-        ''       => ,
+        'title'         => $title,
+        'content'       => $content,
+        'member'        => $members,
+        'Lindex'        => $Rindex,
+        'cache'         => $Scache,
+        'actif'         => $Sactif,
+        'css'           => $css,
+        'aide'          => $BRaide
     ));
 
-    sql_query("DELETE FROM " . $NPDS_Prefix . "rblocks WHERE id='$id'");
-
-    DB::table('')->where('', )->delete();
+    DB::table('rblocks')->where('id', $id)->delete();
 
     global $aid;
     logs::Ecr_Log('security', "MoveRightBlockToLeft(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
@@ -136,11 +197,16 @@ function changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, 
     Header("Location: admin.php?op=blocks");
 }
 
-function deleterblock($id)
+/**
+ * [deleterblock description]
+ *
+ * @param   int   $id  [$id description]
+ *
+ * @return  void
+ */
+function deleterblock(int $id): void
 {
-    sql_query("DELETE FROM " . $NPDS_Prefix . "rblocks WHERE id='$id'");
-
-    DB::table('')->where('', )->delete();
+    DB::table('rblocks')->where('id', $id)->delete();
 
     global $aid;
     logs::Ecr_Log('security', "DeleteRightBlock($id) by AID : $aid", '');

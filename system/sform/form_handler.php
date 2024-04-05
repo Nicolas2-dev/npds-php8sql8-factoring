@@ -564,7 +564,7 @@ class form_handler
                         </div>';
 
                     case 'hidden':
-                        $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', $this->form_fields[$i]['value']);
+                        $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', (string) $this->form_fields[$i]['value']);
                         $str .= '
                         <input type="hidden" name="' . $this->form_fields[$i]['name'] . '" value="' . $this->form_fields[$i]['value'] . '" />';
                         break;

@@ -17,6 +17,7 @@ declare(strict_types=1);
 use npds\system\date\date;
 use npds\system\assets\css;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -29,7 +30,12 @@ $f_titre = adm_translate('Article en attente de validation');
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function submissions()
+/**
+ * [submissions description]
+ *
+ * @return  void
+ */
+function submissions(): void
 {
     global $aid, $radminsuper, $f_meta_nom, $f_titre;
 
@@ -40,11 +46,9 @@ function submissions()
     GraphicAdmin(manuel('submissions'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT qid, subject, timestamp, topic, uname FROM " . $NPDS_Prefix . "queue ORDER BY timestamp");
+    $queues = DB::table('queue')->select('qid', 'subject', 'timestamp', 'topic', 'uname')->orderBy('timestamp')->get();
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    if (sql_num_rows($result) == 0) {
+    if ($queues == 0) {
         echo '
     <hr />
     <h3>' . adm_translate("Pas de nouveaux Articles postés") . '</h3>';
@@ -64,20 +68,19 @@ function submissions()
         </thead>
         <tbody>';
 
-        while (list($qid, $subject, $timestamp, $topic, $uname) = sql_fetch_row($result)) {
-            if ($topic < 1) {
-                $topic = 1;
+        foreach($queues as $queue) {
+            if ($queue['topic'] < 1) {
+                $$queue['topic'] = 1;
             }
 
             $affiche = false;
 
-            $result2 = sql_query("SELECT topicadmin, topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-            list($topicadmin, $topictext, $topicimage) = sql_fetch_row($result2);
-            
+            $topics = DB::table('topics')->select('topicadmin', 'topictext', 'topicimage')->where('topicid', $queue['topic'])->first();
+
             if ($radminsuper) {
                 $affiche = true;
             } else {
-                $topicadminX = explode(',', $topicadmin);
+                $topicadminX = explode(',', $topics['topicadmin']);
                 
                 for ($i = 0; $i < count($topicadminX); $i++) {
                     if (trim($topicadminX[$i]) == $aid) {
@@ -88,29 +91,29 @@ function submissions()
 
             echo '
             <tr>
-                <td>' . userpopover($uname, '40', 2) . ' ' . $uname . '</td>
+                <td>' . userpopover($queue['uname'], '40', 2) . ' ' . $queue['uname'] . '</td>
                 <td>';
 
-            if ($subject == '') {
-                $subject = adm_translate("Aucun Sujet");
+            if ($queue['subject'] == '') {
+                $queue['subject'] = adm_translate("Aucun Sujet");
             }
 
-            $subject = language::aff_langue($subject);
+            $subject = language::aff_langue($queue['subject']);
 
             if ($affiche) {
-                echo '<img class=" " src="assets/images/topics/' . $topicimage . '" height="30" width="30" alt="avatar" />&nbsp;<a href="admin.php?op=topicedit&amp;topicid=' . $topic . '" class="adm_tooltip">' . language::aff_langue($topictext) . '</a></td>
-                <td align="left"><a href="admin.php?op=DisplayStory&amp;qid=' . $qid . '">' . ucfirst($subject) . '</a></td>';
+                echo '<img class=" " src="assets/images/topics/' . $topics['topicimage'] . '" height="30" width="30" alt="avatar" />&nbsp;<a href="admin.php?op=topicedit&amp;topicid=' . $queue['topic'] . '" class="adm_tooltip">' . language::aff_langue($topics['topictext']) . '</a></td>
+                <td align="left"><a href="admin.php?op=DisplayStory&amp;qid=' . $queue['qid'] . '">' . ucfirst($subject) . '</a></td>';
             } else {
-                echo language::aff_langue($topictext) . '</td>
+                echo language::aff_langue($topics['topictext']) . '</td>
                 <td><i>' . ucfirst($subject) . '</i></td>';
             }
 
             echo '
-                <td class="small">' . date::formatTimestamp($timestamp) . '</td>';
+                <td class="small">' . date::formatTimestamp($queue['timestamp']) . '</td>';
 
             if ($affiche) {
                 echo '
-                <td><a class="" href="admin.php?op=DisplayStory&amp;qid=' . $qid . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" ></i></a><a class="text-danger" href="admin.php?op=DeleteStory&amp;qid=' . $qid . '"><i class="fas fa-trash fa-lg ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
+                <td><a class="" href="admin.php?op=DisplayStory&amp;qid=' . $queue['qid'] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" ></i></a><a class="text-danger" href="admin.php?op=DeleteStory&amp;qid=' . $queue['qid'] . '"><i class="fas fa-trash fa-lg ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
             </tr>';
             } else {
                 echo '

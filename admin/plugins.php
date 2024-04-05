@@ -23,8 +23,8 @@ if (!function_exists('admindroits')) {
 include("themes/default/header.php");
 
 if ($ModPath != '') {
-    if (file_exists("modules/$ModPath/$ModStart.php")) {
-        include("modules/$ModPath/$ModStart.php"); 
+    if (file_exists("modules/$ModPath/http/$ModStart.php")) {
+        include("modules/$ModPath/http/$ModStart.php"); 
     } 
 
 } else {

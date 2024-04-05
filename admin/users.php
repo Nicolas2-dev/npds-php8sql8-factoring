@@ -20,6 +20,7 @@ use npds\system\assets\css;
 use npds\system\auth\users;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {
     include('die.php');
@@ -32,7 +33,12 @@ $f_titre = adm_translate("Edition des Utilisateurs");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function displayUsers()
+/**
+ * [displayUsers description]
+ *
+ * @return  void
+ */
+function displayUsers(): void
 {
     global $f_meta_nom, $f_titre;
 
@@ -73,6 +79,7 @@ function displayUsers()
         <h3>' . adm_translate("Créer utilisateur") . '</h3>';
 
     $op = 'displayUsers';
+
     include("support/sform/extend-user/adm_extend-user.php");
 
     echo js::auto_complete('membre', 'uname', 'users', 'chng_uid', 86400);
@@ -85,10 +92,13 @@ function displayUsers()
     css::adminfoot('', '', '', '');
 }
 
-function extractUserCSV()
+/**
+ * [extractUserCSV description]
+ *
+ * @return  void
+ */
+function extractUserCSV(): void
 {
-    include("library/archive.php");
-
     $MSos = get_os();
 
     if ($MSos) {
@@ -100,12 +110,11 @@ function extractUserCSV()
     $deliminator = ';';
     $line = "UID;UNAME;NAME;URL;EMAIL;FEMAIL;C1;C2;C3;C4;C5;C6;C7;C8;M1;M2;T1;T2" . $crlf;
 
-    $result = sql_query("SELECT uid, uname, name, url, email, femail FROM " . $NPDS_Prefix . "users WHERE uid!='1' ORDER BY uid");
+    $users = DB::table('users')->select('uid', 'uname', 'name', 'url', 'email', 'femail')->where('uid', '!=', 1)->orderBy('uid')->get();
 
-    while ($temp_user = sql_fetch_row($result)) {
-
+    foreach ($users as $temp_user) {
         foreach ($temp_user as $val) {
-            $val = str_replace("\r\n", "\n", $val);
+            $val = str_replace("\r\n", "\n", (string) $val);
 
             if (preg_match("#[$deliminator\"\n\r]#", $val)) {
                 $val = '"' . str_replace('"', '""', $val) . '"';
@@ -114,19 +123,20 @@ function extractUserCSV()
             $line .= $val . $deliminator;
         }
 
-        $result2 = sql_query("SELECT C1, C2, C3, C4, C5, C6, C7, C8, M1, M2, T1, T2 FROM " . $NPDS_Prefix . "users_extend WHERE uid='$temp_user[0]'");
-        $temp_user2 = sql_fetch_row($result2);
+        $users_extend = DB::table('users_extend')->select('C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'M1', 'M2', 'T1', 'T2')->where('uid', $temp_user['uid'])->get();
 
-        if ($temp_user2) {
+        if ($users_extend) {
+            foreach ($users_extend as $temp_extend) {
+                foreach ($temp_extend as $val2) {
 
-            foreach ($temp_user2 as $val2) {
-                $val2 = str_replace("\r\n", "\n", $val2);
+                    $val2 = str_replace("\r\n", "\n", $val2);
 
-                if (preg_match("#[$deliminator\"\n\r]#", $val2)) {
-                    $val2 = '"' . str_replace('"', '""', $val2) . '"';
+                    if (preg_match("#[$deliminator\"\n\r]#", (string) $val2)) {
+                        $val2 = '"' . str_replace('"', '""', $val2) . '"';
+                    }
+
+                    $line .= $val2 . $deliminator;
                 }
-
-                $line .= $val2 . $deliminator;
             }
         }
 
@@ -140,7 +150,14 @@ function extractUserCSV()
     logs::Ecr_Log('security', "ExtractUserCSV() by AID : $aid", '');
 }
 
-function modifyUser($chng_user)
+/**
+ * [modifyUser description]
+ *
+ * @param   string|int   $chng_user  [$chng_user description]
+ *
+ * @return  void
+ */
+function modifyUser(string|int $chng_user): void 
 {
     global $f_meta_nom, $f_titre;
 
@@ -149,22 +166,72 @@ function modifyUser($chng_user)
     GraphicAdmin(manuel('users'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT uid, uname, name, url, email, femail, user_from, user_occ, user_intrest, user_viewemail, user_avatar, user_sig, bio, pass, send_email, is_visible, mns, user_lnl FROM " . $NPDS_Prefix . "users WHERE uid='$chng_user' OR uname='$chng_user'");
-    if (sql_num_rows($result) > 0) {
-        list($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, $chng_femail, $chng_user_from, $chng_user_occ, $chng_user_intrest, $chng_user_viewemail, $chng_avatar, $chng_user_sig, $chng_bio, $chng_pass, $chng_send_email, $chng_is_visible, $mns, $user_lnl) = sql_fetch_row($result);
+    // peut mieux faire avec une jointure des tables
+    $result = DB::table('users')
+        ->select('uid', 'uname', 'name', 'url', 'email', 'femail', 'user_from', 'user_occ', 'user_intrest', 'user_viewemail', 'user_avatar', 'user_sig', 'bio', 'pass', 'send_email', 'is_visible', 'mns', 'user_lnl')
+        ->where('uid', $chng_user)
+        ->orWhere('uname', '=', $chng_user)
+        ->first();
+    
+    if ($result > 0) {
         
+        // pour sform en attente de modif de sform 
+        $chng_uid            = $result['uid'];
+        $chng_uname          = $result['uname'];
+        $chng_name           = $result['name'];
+        $chng_url            = $result['url'];
+        $chng_email          = $result['email'];
+        $chng_femail         = $result['femail'];
+        $chng_user_from      = $result['user_from'];
+        $chng_user_occ       = $result['user_occ'];
+        $chng_user_intrest   = $result['user_intrest'];
+        $chng_user_viewemail = $result['user_viewemail'];
+        $chng_user_avatar    = $result['user_avatar'];
+        $chng_user_sig       = $result['user_sig'];
+        $chng_bio            = $result['bio'];
+        $chng_pass           = $result['pass'];
+        $chng_send_email     = $result['send_email'];
+        $chng_is_visible     = $result['is_visible'];
+        $chng_mns            = $result['mns'];
+        $chng_user_lnl       = $result['user_lnl'];
+
         echo '
         <hr />
-        <h3>' . adm_translate("Modifier un utilisateur") . ' : ' . $chng_uname . ' / ' . $chng_uid . '</h3>';
+        <h3>' . adm_translate("Modifier un utilisateur") . ' : ' . $chng_uname . ' / ' . $result['uid'] . '</h3>';
 
+        // ppour sform
         $op = 'ModifyUser';
-        $result = sql_query("SELECT level, open, groupe, attachsig, rang FROM " . $NPDS_Prefix . "users_status WHERE uid='$chng_uid'");
-        list($chng_level, $open_user, $groupe, $attach, $chng_rank) = sql_fetch_row($result);
 
-        $result = sql_query("SELECT C1, C2, C3, C4, C5, C6, C7, C8, M1, M2, T1, T2, B1 FROM " . $NPDS_Prefix . "users_extend WHERE uid='$chng_uid'");
-        list($C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1) = sql_fetch_row($result);
+        $users_status = DB::table('users_status')->select('level', 'open', 'groupe', 'attachsig', 'rang')->where('uid', $result['uid'])->first();
 
-        include("modules/sform/extend-user/adm_extend-user.php");
+        // pour sform en attente de modif de sform
+        $level       = $users_status['level']; 
+        $open        = $users_status['open'];
+        $groupe      = $users_status['groupe']; 
+        $attachsig   = $users_status['attachsig']; 
+        $rang        = $users_status['rang'];
+
+        $users_extend = DB::table('users_extend')
+            ->select('C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'M1', 'M2', 'T1', 'T2', 'B1')
+            ->where('uid', $result['uid'])
+            ->first();
+
+        // pour sform en attente de modif de sform 
+        $C1 = $users_extend['C1']; 
+        $C2 = $users_extend['C2']; 
+        $C3 = $users_extend['C3']; 
+        $C4 = $users_extend['C4']; 
+        $C5 = $users_extend['C5']; 
+        $C6 = $users_extend['C6']; 
+        $C7 = $users_extend['C7']; 
+        $C8 = $users_extend['C8']; 
+        $M1 = $users_extend['M1']; 
+        $M2 = $users_extend['M2']; 
+        $T1 = $users_extend['T1']; 
+        $T2 = $users_extend['T2']; 
+        $B1 = $users_extend['B1'];
+
+        include("support/sform/extend-user/adm_extend-user.php");
     } else {
         error_handler("Utilisateur inexistant !" . "<br />");
     }
@@ -172,7 +239,14 @@ function modifyUser($chng_user)
     css::adminfoot('', '', '', '');
 }
 
-function error_handler($ibid)
+/**
+ * [error_handler description]
+ *
+ * @param   [type]  $ibid  [$ibid description]
+ *
+ * @return  void
+ */
+function error_handler($ibid): void
 {
     echo '
     <div class="alert alert-danger" align="center">' . adm_translate("Merci d'entrer l'information en fonction des spécifications") . '<br />
@@ -180,7 +254,15 @@ function error_handler($ibid)
     </div>';
 }
 
-function Minisites($chng_mns, $chng_uname)
+/**
+ * [Minisites description]
+ *
+ * @param   int     $chng_mns    [$chng_mns description]
+ * @param   string  $chng_uname  [$chng_uname description]
+ *
+ * @return  void
+ */
+function Minisites(int $chng_mns, string $chng_uname): void
 {
     // Création de la structure pour les MiniSites dans storage/users_private/$chng_uname
     if ($chng_mns) {
@@ -247,9 +329,58 @@ function Minisites($chng_mns, $chng_uname)
     }
 }
 
-function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, $chng_femail, $chng_user_from, $chng_user_occ, $chng_user_intrest, $chng_user_viewemail, $chng_avatar, $chng_user_sig, $chng_bio, $chng_pass, $chng_pass2, $level, $open_user, $chng_groupe, $chng_send_email, $chng_is_visible, $chng_mns, $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1, $raz_avatar, $chng_rank, $chng_lnl)
+/**
+ * [updateUser description]
+ *
+ * @param   int     $chng_uid             [$chng_uid description]
+ * @param   string  $chng_uname           [$chng_uname description]
+ * @param   string  $chng_name            [$chng_name description]
+ * @param   string  $chng_url             [$chng_url description]
+ * @param   string  $chng_email           [$chng_email description]
+ * @param   string  $chng_femail          [$chng_femail description]
+ * @param   string  $chng_user_from       [$chng_user_from description]
+ * @param   string  $chng_user_occ        [$chng_user_occ description]
+ * @param   string  $chng_user_intrest    [$chng_user_intrest description]
+ * @param   string  $chng_user_viewemail  [$chng_user_viewemail description]
+ * @param   string  $chng_avatar          [$chng_avatar description]
+ * @param   string  $chng_user_sig        [$chng_user_sig description]
+ * @param   int     $chng_bio             [$chng_bio description]
+ * @param   string  $chng_pass            [$chng_pass description]
+ * @param   string  $chng_pass2           [$chng_pass2 description]
+ * @param   int     $level                [$level description]
+ * @param   int     $open_user            [$open_user description]
+ * @param   string  $chng_groupe          [$chng_groupe description]
+ * @param   string  $chng_send_email      [$chng_send_email description]
+ * @param   int     $chng_is_visible      [$chng_is_visible description]
+ * @param   int     $chng_mns             [$chng_mns description]
+ * @param   mixed   $C1                   [$C1 description]
+ * @param   mixed   $C2                   [$C2 description]
+ * @param   mixed   $C3                   [$C3 description]
+ * @param   mixed   $C4                   [$C4 description]
+ * @param   mixed   $C5                   [$C5 description]
+ * @param   mixed   $C6                   [$C6 description]
+ * @param   mixed   $C7                   [$C7 description]
+ * @param   mixed   $C8                   [$C8 description]
+ * @param   mixed   $M1                   [$M1 description]
+ * @param   mixed   $M2                   [$M2 description]
+ * @param   mixed   $T1                   [$T1 description]
+ * @param   mixed   $T2                   [$T2 description]
+ * @param   mixed   $B1                   [$B1 description]
+ * @param   int     $raz_avatar           [$raz_avatar description]
+ * @param   int     $chng_rank            [$chng_rank description]
+ * @param   int     $chng_lnl             [$chng_lnl description]
+ *
+ * @return  void                          [return description]
+ */
+function updateUser(int $chng_uid, string $chng_uname, string $chng_name, string $chng_url, string $chng_email, string $chng_femail, string $chng_user_from, string $chng_user_occ, 
+string $chng_user_intrest, string $chng_user_viewemail, string $chng_avatar, string $chng_user_sig, int $chng_bio, string $chng_pass, string $chng_pass2, int $level, 
+int $open_user, string $chng_groupe, string $chng_send_email, int $chng_is_visible, int $chng_mns, mixed $C1, mixed $C2, mixed $C3, mixed $C4, mixed $C5, mixed $C6, 
+mixed $C7, mixed $C8, mixed $M1, mixed $M2, mixed $T1, mixed $T2, mixed $B1, int $raz_avatar, int $chng_rank, int $chng_lnl): void
 {
-    if (sql_num_rows(sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid!='$chng_uid' AND uname='$chng_uname'")) > 0) {
+
+    $result = DB::table('users')->select('uname')->where('uid', '!=', $chng_uid)->where('uname', $chng_uname)->first();
+
+    if ($result > 0) {
         global $f_meta_nom, $f_titre;
         
         include("themes/default/header.php");
@@ -298,10 +429,9 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
         return;
     }
 
-    $result = sql_query("SELECT mns FROM " . $NPDS_Prefix . "users WHERE uid='$chng_uid'");
-    list($tmp_mns) = sql_fetch_row($result);
-    
-    if ($tmp_mns == 0 and $chng_mns == 1) {
+    $tmp_mns = DB::table('users')->select('mns')->where('uid', $chng_uid)->first();
+
+    if ($tmp_mns['mns'] == 0 and $chng_mns == 1) {
         Minisites($chng_mns, $chng_uname);
     }
 
@@ -320,7 +450,24 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
     }
 
     if ($tmp == 0) {
-        sql_query("UPDATE " . $NPDS_Prefix . "users SET uname='$chng_uname', name='$chng_name', email='$chng_email', femail='$chng_femail', url='$chng_url', user_from='$chng_user_from', user_occ='$chng_user_occ', user_intrest='$chng_user_intrest', user_viewemail='$chng_user_viewemail', user_avatar='$chng_avatar', user_sig='$chng_user_sig', bio='$chng_bio', send_email='$chng_send_email', is_visible='$chng_is_visible', mns='$chng_mns', user_lnl='$chng_lnl' WHERE uid='$chng_uid'");
+        DB::table('users')->where('uid', $chng_uid)->update(array(
+            'uname'             => $chng_uname,
+            'name'              => $chng_name,
+            'email'             => $chng_email,
+            'femail'            => $chng_femail,
+            'url'               => $chng_url,
+            'user_from'         => $chng_user_from,
+            'user_occ'          => $chng_user_occ,
+            'user_intrest'      => $chng_user_intrest,
+            'user_viewemail'    => $chng_user_viewemail,
+            'user_avatar'       => $chng_avatar,
+            'user_sig'          => $chng_user_sig,
+            'bio'               => $chng_bio,
+            'send_email'        => $chng_send_email,
+            'is_visible'        => $chng_is_visible,
+            'mns'               => $chng_mns,
+            'user_lnl'          => $chng_lnl,
+        ));
     }
 
     if ($tmp == 1) {
@@ -330,7 +477,27 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
         $hashpass = password_hash($chng_pass, $AlgoCrypt, $options);
         $cpass = crypt($chng_pass, $hashpass);
 
-        sql_query("UPDATE " . $NPDS_Prefix . "users SET uname='$chng_uname', name='$chng_name', email='$chng_email', femail='$chng_femail', url='$chng_url', user_from='$chng_user_from', user_occ='$chng_user_occ', user_intrest='$chng_user_intrest', user_viewemail='$chng_user_viewemail', user_avatar='$chng_avatar', user_sig='$chng_user_sig', bio='$chng_bio', send_email='$chng_send_email', is_visible='$chng_is_visible', mns='$chng_mns', pass='$cpass', hashkey='1', user_lnl='$chng_lnl' WHERE uid='$chng_uid'");
+        DB::table('users')->where('uid', $chng_uid)->update(array(
+            'uname'             => $chng_uname,
+            'name'              => $chng_name,
+            'email'             => $chng_email,
+            'femail'            => $chng_femail,
+            'url'               => $chng_url,
+            'user_from'         => $chng_user_from,
+            'user_occ'          => $chng_user_occ,
+            'user_intrest'      => $chng_user_intrest,
+            'user_viewemail'    => $chng_user_viewemail,
+            'user_avatar'       => $chng_avatar,
+            'user_sig'          => $chng_user_sig,
+            'bio'               => $chng_bio,
+            'send_email'        => $chng_send_email,
+            'is_visible'        => $chng_is_visible,
+            'mns'               => $chng_mns,
+            'pass'              => $cpass,
+            'hashkey'           => 1,
+            'user_lnl'          => $chng_lnl,
+        ));
+    
     }
 
     if ($chng_user_viewemail) {
@@ -367,8 +534,29 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
         }
     }
 
-    sql_query("UPDATE " . $NPDS_Prefix . "users_status SET attachsig='$attach', level='$level', open='$open_user', groupe='$chng_groupe', rang='$chng_rank' WHERE uid='$chng_uid'");
-    sql_query("UPDATE " . $NPDS_Prefix . "users_extend SET C1='$C1', C2='$C2', C3='$C3', C4='$C4', C5='$C5', C6='$C6', C7='$C7', C8='$C8', M1='$M1', M2='$M2', T1='$T1', T2='$T2', B1='$B1' WHERE uid='$chng_uid'");
+    DB::table('users_status')->where('uid', $chng_uid)->update(array(
+        'attachsig'      => $attach,
+        'level'         => $level,
+        'open'          => $open_user,
+        'groupe'        => $chng_groupe,
+        'rang'          => $chng_rank
+    ));
+    
+    DB::table('users_extend')->where('uid', $chng_uid)->update(array(
+        'C1'       => $C1,
+        'C2'       => $C2,
+        'C3'       => $C3,
+        'C4'       => $C4,
+        'C5'       => $C5,
+        'C6'       => $C6,
+        'C7'       => $C7,
+        'C8'       => $C8,
+        'M1'       => $M1,
+        'M2'       => $M2,
+        'T1'       => $T1,
+        'T2'       => $T2,
+        'B1'       => $B1,
+    ));
 
     $contents = '';
     $filename = "storage/users_private/usersbadmail.txt";
@@ -398,7 +586,12 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
     }
 }
 
-function nonallowedUsers()
+/**
+ * [nonallowedUsers description]
+ *
+ * @return  void
+ */
+function nonallowedUsers(): void 
 {
     global $f_meta_nom, $f_titre;
 
@@ -407,11 +600,15 @@ function nonallowedUsers()
     GraphicAdmin(manuel('users'));
     adminhead($f_meta_nom, $f_titre);
 
-    $newsuti = sql_query("SELECT u.uid, u.uname, u.name, u.user_regdate FROM " . $NPDS_Prefix . "users AS u LEFT JOIN " . $NPDS_Prefix . "users_status AS us ON u.uid = us.uid WHERE us.open='0' ORDER BY u.user_regdate DESC");
-    
+    $users = DB::table('users')
+        ->leftJoin('users_status', 'users_status.uid', '=', 'users.uid')
+        ->select('users.uid', 'users.uname', 'users.name', 'users.user_regdate')
+        ->where('users_status.open', 0)->orderBy('users.user_regdate')
+        ->get();
+
     echo '
     <hr />
-    <h3>' . adm_translate("Utilisateur(s) en attente de validation") . '<span class="badge bg-secondary float-end">' . sql_num_rows($newsuti) . '</span></h3>
+    <h3>' . adm_translate("Utilisateur(s) en attente de validation") . '<span class="badge bg-secondary float-end">' . count($users) . '</span></h3>
     <table class="table table-no-bordered table-sm " data-toggle="table" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa" data-show-columns="true">
         <thead>
             <tr>
@@ -424,15 +621,15 @@ function nonallowedUsers()
         </thead>
         <tbody>';
 
-    while ($unallowed_users = sql_fetch_assoc($newsuti)) {
+    foreach($users as $user) {  
         echo '
             <tr class="table-danger">
-                <td>' . $unallowed_users['uid'] . '</td>
-                <td>' . $unallowed_users['uname'] . '</td>
-                <td>' . $unallowed_users['name'] . '</td>
-                <td>' . date('d/m/Y @ h:m', $unallowed_users['user_regdate']) . '</td>
+                <td>' . $user['uid'] . '</td>
+                <td>' . $user['uname'] . '</td>
+                <td>' . $user['name'] . '</td>
+                <td>' . date('d/m/Y @ h:m', (int) $user['user_regdate']) . '</td>
                 <td>
-                <a class="me-3" href="admin.php?chng_uid=' . $unallowed_users['uid'] . '&amp;op=modifyUser#add_open_user" ><i class="fa fa-edit fa-lg" title="' . translate("Edit") . '" data-bs-toggle="tooltip"></i></a>
+                <a class="me-3" href="admin.php?chng_uid=' . $user['uid'] . '&amp;op=modifyUser#add_open_user" ><i class="fa fa-edit fa-lg" title="' . translate("Edit") . '" data-bs-toggle="tooltip"></i></a>
                 </td>
             </tr>';
     }
@@ -444,9 +641,14 @@ function nonallowedUsers()
     css::adminfoot('', '', '', '');
 }
 
-function checkdnsmailusers()
+/**
+ * [checkdnsmailusers description]
+ *
+ * @return  void
+ */
+function checkdnsmailusers(): void 
 {
-    global $f_meta_nom, $f_titre, $gmt, $adminmail, $page, $end, $autocont;
+    global $f_meta_nom, $f_titre, $page, $end, $autocont;
 
     include("themes/default/header.php");
 
@@ -468,10 +670,7 @@ function checkdnsmailusers()
     $max = $pagesize;
     $next_page = $page + 1;
 
-    $resource = sql_query("SELECT COUNT(uid) FROM " . $NPDS_Prefix . "users WHERE uid>1;");
-    list($total) = sql_fetch_row($resource);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $total = DB::table('users')->select('uid')->where('uid', '>', 1)->count();
 
     settype($total, 'integer');
 
@@ -479,18 +678,13 @@ function checkdnsmailusers()
         $end = 1;
     }
 
-    $result = sql_query("SELECT uid, uname, email FROM " . $NPDS_Prefix . "users WHERE uid>1 ORDER BY uid LIMIT $min,$max;");
-    $userchecked = sql_num_rows($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     $wrongdnsmail = 0;
     $arrayusers = array();
     $image = '18.png';
 
     $subject = adm_translate("Votre adresse Email est incorrecte.");
-    $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
-    $message = adm_translate("Votre adresse Email est incorrecte.") . ' (' . adm_translate("DNS ou serveur de mail incorrect") . ').<br />' . adm_translate("Tous vos abonnements vers cette adresse Email ont été suspendus.") . '<br /><a href="user.php?op=edituser">' . adm_translate("Merci de fournir une nouvelle adresse Email valide.") . ' <i class="fa fa-user fa-2x align-middle fa-fw"></i></a><br />' . adm_translate("Sans réponse de votre part sous 60 jours vous ne pourrez plus vous connecter en tant que membre sur ce site.") . ' ' . adm_translate("Puis votre compte pourra être supprimé.") . '<br /><br />' . adm_translate("Contacter l'administration du site.") . '<a href="mailto:' . $adminmail . '" target="_blank"><i class="fa fa-at fa-2x align-middle fa-fw"></i>';
+    $time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
+    $message = adm_translate("Votre adresse Email est incorrecte.") . ' (' . adm_translate("DNS ou serveur de mail incorrect") . ').<br />' . adm_translate("Tous vos abonnements vers cette adresse Email ont été suspendus.") . '<br /><a href="user.php?op=edituser">' . adm_translate("Merci de fournir une nouvelle adresse Email valide.") . ' <i class="fa fa-user fa-2x align-middle fa-fw"></i></a><br />' . adm_translate("Sans réponse de votre part sous 60 jours vous ne pourrez plus vous connecter en tant que membre sur ce site.") . ' ' . adm_translate("Puis votre compte pourra être supprimé.") . '<br /><br />' . adm_translate("Contacter l'administration du site.") . '<a href="mailto:' . Config::get('npds.adminmail') . '" target="_blank"><i class="fa fa-at fa-2x align-middle fa-fw"></i>';
     
     $output = '';
     $contents = '';
@@ -505,7 +699,14 @@ function checkdnsmailusers()
     $datenvoi = '';
     $datelimit = '';
 
-    while (list($uid, $uname, $email) = sql_fetch_row($result)) {
+    $userchecked = DB::table('users')->select('uid', 'uname', 'email')->where('uid', '>', 1)->orderBy('uid')->limit($min)->offset($max)->get();
+    
+    foreach ($userchecked as $user) { 
+
+        $uid    = $user['uid'];
+        $uname  = $user['uname'];
+        $email  = $user['email'];
+
         if (mailler::checkdnsmail($email) === true and mailler::isbadmailuser($uid) === true) {
             $re = '/#' . $uid . '\|(\d+)/m';
             $maj = preg_replace($re, '', $contents);
@@ -520,17 +721,26 @@ function checkdnsmailusers()
                 $arrayusers[] = '#' . $uid . '|' . time();
 
                 //suspension des souscriptions
-                sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$uid'");
+                DB::table('subscribe')->where('uid', $uid)->delete();
 
                 global $aid;
                 logs::Ecr_Log("security", "UnsubUser($uid) by AID : $aid", "");
 
                 //suspension de l'envoi des mails pour PM suspension lnl
-                sql_query("UPDATE " . $NPDS_Prefix . "users SET send_email='0', user_lnl='0' WHERE uid='$uid'");
-                
+                DB::table('users')->where('uid', $uid)->update(array(
+                    'send_email'     => 0,
+                    'user_lnl'       => 0,
+                ));
+
                 //envoi private message
-                $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) VALUES ('$image', '$subject', '1', '$uid', '$time', '<br /><code>$email</code><br /><br />$message');";
-                sql_query($sql);
+                DB::table('priv_msgs')->insert(array(
+                    'msg_image'         => $image,
+                    'subject'           => $subject,
+                    'from_userid'       => 1,
+                    'to_userid'         => $uid,
+                    'msg_time'          => $time,
+                    'msg_text'          => '<br /><code>$email</code><br /><br />$message',
+                ));
 
                 $datenvoi = date('d/m/Y');
                 $datelimit = date('d/m/Y', time() + 5184000);
@@ -545,7 +755,15 @@ function checkdnsmailusers()
             }
 
             $wrongdnsmail++;
-            $output .= '<li>' . adm_translate("DNS ou serveur de mail incorrect") . ' : <a class="alert-link" href="admin.php?chng_uid=' . $uid . '&amp;op=modifyUser">' . $uname . '</a><span class="float-end"><i class="far fa-envelope me-1 align-middle"></i><small>' . $datenvoi . '</small><i class="fa fa-ban mx-1 align-middle"></i><small>' . $datelimit . '</small></span></li>';
+            $output .= '<li>' . adm_translate("DNS ou serveur de mail incorrect") . ' : 
+                <a class="alert-link" href="admin.php?chng_uid=' . $uid . '&amp;op=modifyUser">
+                    ' . $uname . '
+                </a>
+                <span class="float-end"><i class="far fa-envelope me-1 align-middle"></i>
+                    <small>' . $datenvoi . '</small>
+                    <i class="fa fa-ban mx-1 align-middle"></i><small>' . $datelimit . '</small>
+                </span>
+            </li>';
         }
     }
 
@@ -619,17 +837,17 @@ function checkdnsmailusers()
     if ($end == 1) {
         $re = '/#(\d+)\|(\d+)/m';
         preg_match_all($re, $contents, $matches);
+
         $u = $matches[1];
         $t = $matches[2];
+
         $nbu = count($u);
         $unames = array();
-        $whereInParameters  = implode(',', $u); //
+        $whereInParameters  = implode(',', $u);
 
-        $result = sql_query("SELECT uid, uname FROM " . $NPDS_Prefix . "users WHERE uid IN ($whereInParameters)");
+        $result = DB::table('users')->select('uid', 'uname')->where('uid', 'IN', $whereInParameters)->get();
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        while ($names = sql_fetch_array($result)) {
+        foreach ($result as $names) {
             $unames[] = $names['uname'];
             $uids[] = $names['uid'];
         }
@@ -714,20 +932,28 @@ switch ($op) {
         break;
 
     case 'delUserConf':
-        $result = sql_query("SELECT uid, uname FROM " . $NPDS_Prefix . "users WHERE uid='$del_uid' or uname='$del_uid'");
-        list($del_uid, $del_uname) = sql_fetch_row($result);
-        
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $users = DB::table('users')->select('uid', 'uname')->where('uid', $del_uid)->orWhere('uname', '=', $del_uid)->first();
 
+        $del_uid = $users['uid'];
+        $del_uname = $users['uname'];
+        
         if ($del_uid != 1) {
-            sql_query("DELETE FROM " . $NPDS_Prefix . "users WHERE uid='$del_uid'");
-            sql_query("DELETE FROM " . $NPDS_Prefix . "users_status WHERE uid='$del_uid'");
-            sql_query("DELETE FROM " . $NPDS_Prefix . "users_extend WHERE uid='$del_uid'");
-            sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$del_uid'");
+            DB::table('users')->where('uid', $del_uid)->delete();
+
+            DB::table('users_status')->where('uid', $del_uid)->delete();
+
+            DB::table('users_extend')->where('uid', $del_uid)->delete();
+
+            DB::table('subscribe')->where('uid', $del_uid)->delete();
 
             //  Changer les articles et reviews pour les affecter à un pseudo utilisateurs  ( 0 comme uid et ' ' comme uname )
-            sql_query("UPDATE " . $NPDS_Prefix . "stories SET informant=' ' WHERE informant='$del_uname'");
-            sql_query("UPDATE " . $NPDS_Prefix . "reviews SET reviewer=' ' WHERE reviewer='$del_uname'");
+            DB::table('stories')->where('informant', $del_uname)->update(array(
+                'informant'       => ' ',
+            )); 
+            
+            DB::table('reviews')->where('reviewer', $del_uname)->update(array(
+                'reviewer'       => ' ',
+            ));
 
             include("modules/upload/config/upload.conf.php");
 
@@ -762,21 +988,24 @@ switch ($op) {
             }
 
             // Changer les posts, les commentaires, ... pour les affecter à un pseudo utilisateurs  ( 0 comme uid et ' ' comme uname)
-            sql_query("UPDATE " . $NPDS_Prefix . "posts SET poster_id='0' WHERE poster_id='$del_uid'");
+            DB::table('posts')->where('poster_id', $del_uid)->update(array(
+                'poster_id'       => 0,
+            ));
 
             // Met à jour les modérateurs des forums
             $pat = '#\b' . $del_uid . '\b#';
 
-            $res = sql_query("SELECT forum_id, forum_moderator FROM " . $NPDS_Prefix . "forums");
+            $forums = DB::table('forums')->select('forum_id', 'forum_moderator')->get();
 
-            = DB::table('')->select()->where('', )->orderBy('')->get();
+            foreach($forums as $forum) {
+                $tmp_moder = explode(',', $forum['forum_moderator']);
 
-            while ($row = sql_fetch_row($res)) {
-                $tmp_moder = explode(',', $row[1]);
-
-                if (preg_match($pat, $row[1])) {
+                if (preg_match($pat, $forum['forum_moderator'])) {
                     unset($tmp_moder[array_search($del_uid, $tmp_moder)]);
-                    sql_query("UPDATE " . $NPDS_Prefix . "forums SET forum_moderator='" . implode(',', $tmp_moder) . "' WHERE forum_id='$row[0]'");
+                    
+                    DB::table('forums')->where('forum_id', $forum['forum_id'])->update(array(
+                        'forum_moderator'       => implode(',', $tmp_moder),
+                    ));
                 }
             }
 
@@ -815,9 +1044,7 @@ switch ($op) {
         settype($raz_avatar, 'integer');
         settype($add_send_email, 'integer');
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        if (sql_num_rows(sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uname='$add_uname'")) > 0) {
+        if (DB::table('users')->select('uname')->where('uname', $add_uname)->first() > 0) {
 
             include("themes/default/header.php");
 
@@ -874,16 +1101,46 @@ switch ($op) {
         $Default_Theme = Config::get('npds.Default_Theme');
         $Default_Skin = Config::get('npds.Default_Theme');
 
-        $sql = 'INSERT INTO ' . $NPDS_Prefix . 'users ';
-        $sql .= "(uid,name,uname,email,femail,url,user_regdate,user_from,user_occ,user_intrest,user_viewemail,user_avatar,user_sig,bio,pass,hashkey,send_email,is_visible,mns,theme) ";
-        $sql .= "VALUES (NULL,'$add_name','$add_uname','$add_email','$add_femail','$add_url','$user_regdate','$add_user_from','$add_user_occ','$add_user_intrest','$add_user_viewemail','$add_avatar','$add_user_sig','$add_bio','$add_pass','1','$add_send_email','$add_is_visible','$add_mns','$Default_Theme+$Default_Skin')";
-        $result = sql_query($sql);
+        $usr_id = DB::table('users')->insertGetId(array(
+            'name'          => $add_name,
+            'uname'         => $add_uname,
+            'email'         => $add_email,
+            'femail'        => $add_femail,
+            'url'           => $add_url,
+            'user_regdate'  => $user_regdate,
+            'user_from'     => $add_user_from,
+            'user_occ'      => $add_user_occ,
+            'user_intrest'  => $add_user_intrest,
+            'user_viewemail'=> $add_user_viewemail,
+            'user_avatar'   => $add_avatar,
+            'user_sig'      => $add_user_sig,
+            'bio'           => $add_bio,
+            'pass'          => $add_pass,
+            'hashkey'       => 1,
+            'send_email'    => $add_send_email,
+            'is_visible'    => $add_is_visible,
+            'mns'           => $add_mns,
+            'theme'         => ($Default_Theme+$Default_Skin),
+        ));
 
-        list($usr_id) = sql_fetch_row(sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$add_uname'"));
-        $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users_extend VALUES ('$usr_id','$C1','$C2','$C3','$C4','$C5','$C6','$C7','$C8','$M1','$M2','$T1','$T2', '$B1')");
+        //$user = DB::table('users')->select(uid)->where('uname', $add_uname)->first(); /// recup id sur retour insertGetId
+        DB::table('users_extend')->insert(array(
+            'uid'       => $usr_id,
+            'C1'       => $C1,
+            'C2'       => $C2,
+            'C3'       => $C3,
+            'C4'       => $C4,
+            'C5'       => $C5,
+            'C6'       => $C6,
+            'C7'       => $C7,
+            'C8'       => $C8,
+            'M1'       => $M1,
+            'M2'       => $M2,
+            'T1'       => $T1,
+            'T2'       => $T2,
+            'B1'       => $B1,
+        ));
         
-        = DB::table('')->select()->where('', )->orderBy('')->get();
-
         if ($add_user_viewemail) {
             $attach = 1;
         } else {
@@ -896,7 +1153,15 @@ switch ($op) {
             $add_group = '';
         }
 
-        $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users_status VALUES ('$usr_id','0','$attach','$chng_rank','$add_level','1','$add_group')");
+        DB::table('users_status')->insert(array(
+            'uid'           => $usr_id,
+            'posts'         => 0,
+            'attachsig'     => $attach,
+            'rang'          => $chng_rank,
+            'level'         => $add_level,
+            'open'          => 1,
+            'groupe'        => $add_group,
+        ));
 
         Minisites($add_mns, $add_uname);
 
@@ -907,13 +1172,10 @@ switch ($op) {
         break;
 
     case 'unsubUser':
-        $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uid='$chng_uid' OR uname='$chng_uid'");
-        list($chng_uid) = sql_fetch_row($result);
+        $users = DB::table('users')->select('uid')->where('uid', $chng_uid)->orWhere('uname', '=', $chng_uid)->first();
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        if ($chng_uid != 1) {
-            sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$chng_uid'");
+        if ($users != 1) {
+            DB::table('subscribe')->where('uid', $users['chng_uid'])->delete();
 
             global $aid;
             logs::Ecr_Log("security", "UnsubUser($chng_uid) by AID : $aid", "");

@@ -449,14 +449,17 @@ function relatededit($tid, $rid)
 
 function relatedsave($tid, $rid, $name, $url)
 {
-    sql_query("UPDATE " . $NPDS_Prefix . "related SET name='$name', url='$url' WHERE rid='$rid'");
+    DB::table('related')->where('rid', $rid)->update(array(
+        'name'      => $name,
+        'url'       => $url,
+    ));
 
     Header("Location: admin.php?op=topicedit&topicid=$tid");
 }
 
 function relateddelete($tid, $rid)
 {
-    sql_query("DELETE FROM " . $NPDS_Prefix . "related WHERE rid='$rid'");
+    DB::table('related')->where('rid', $rid)->delete();
 
     Header("Location: admin.php?op=topicedit&topicid=$tid");
 }
@@ -477,7 +480,13 @@ function topicmake($topicname, $topicimage, $topictext, $topicadmin)
     $topicimage = stripslashes(FixQuotes($topicimage));
     $topictext = stripslashes(FixQuotes($topictext));
 
-    sql_query("INSERT INTO " . $NPDS_Prefix . "topics VALUES (NULL,'$topicname','$topicimage','$topictext','0', '$topicadmin')");
+    DB::table('topics')->insert(array(
+        'topicname'         => $topicname,
+        'topicimage'        => $topicimage,
+        'topictext'         => $topictext,
+        'counter'           => 0,
+        'topicadmin	'       => $topicadmin,
+    ));
 
     global $aid;
     logs::Ecr_Log("security", "topicMake ($topicname) by AID : $aid", "");
@@ -493,7 +502,12 @@ function topicmake($topicname, $topicimage, $topictext, $topicadmin)
         = DB::table('')->select()->where('', )->orderBy('')->get();
 
         if ($nres == 0) {
-            sql_query("INSERT INTO " . $NPDS_Prefix . "droits VALUES ('$topicadminX[$i]', '2', '11112')");
+            DB::table('droits')->insert(array(
+                'd_aut_aid'       => $topicadminX[$i],
+                'd_fon_fid'       => 2,
+                'd_droits'       => 11112,
+            ));
+
         }
     }
 
@@ -518,7 +532,11 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
 
     foreach ($topicadminX as $value) {
         if (!in_array($value, $topad)) {
-            sql_query("INSERT INTO " . $NPDS_Prefix . "droits VALUES ('$value', '2', '11112')");
+            DB::table('')->insert(array(
+                'd_aut_aid'      => $value,
+                'd_fon_fid'      => 2,
+                'd_droits'       => 11112,
+            ));
         }
     }
 
@@ -538,7 +556,7 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
             list($tid) = sql_fetch_row($resu);
             
             if (($nbrow == 1) and ($topicid == $tid)) {
-                sql_query("DELETE FROM " . $NPDS_Prefix . "droits WHERE d_aut_aid='$value' AND d_droits=11112 AND d_fon_fid=2");
+                DB::table('droits')->where('d_aut_aid', $value)->where('d_droits', 11112)->wxhere('d_fon_fid', 2)->delete();
             }
         }
     }
@@ -549,13 +567,22 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
     $name = stripslashes(str::FixQuotes($name));
     $url = stripslashes(str::FixQuotes($url));
 
-    sql_query("UPDATE " . $NPDS_Prefix . "topics SET topicname='$topicname', topicimage='$topicimage', topictext='$topictext', topicadmin='$topicadmin' WHERE topicid='$topicid'");
-    
+    DB::table('topics')->where('topicid', $topicid)->update(array(
+        'topicname'       => $topicname,
+        'topicimage'       => $topicimage,
+        'topictext'       => $topictext,
+        'topicadmin'       => $topicadmin,
+    ));
+
     global $aid;
     logs::Ecr_Log("security", "topicChange ($topicname, $topicid) by AID : $aid", "");
     
     if ($name) {
-        sql_query("INSERT INTO " . $NPDS_Prefix . "related VALUES (NULL, '$topicid','$name','$url')");
+        DB::table('related')->insert(array(
+            'tid'       => $topicid,
+            'name'      => $name,
+            'url'       => $url,
+        ));
     }
 
     Header("Location: admin.php?op=topicedit&topicid=$topicid");
@@ -571,15 +598,15 @@ function topicdelete($topicid, $ok = 0)
 
         = DB::table('')->select()->where('', )->orderBy('')->get();
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "stories WHERE topic='$topicid'");
+        DB::table('stories')->where('topic', $topicid)->delete();
 
         logs::Ecr_Log("security", "topicDelete (stories, $topicid) by AID : $aid", "");
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
+        DB::table('topics')->where('topicid', $topicid)->delete();
 
         logs::Ecr_Log("security", "topicDelete (topic, $topicid) by AID : $aid", "");
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "related WHERE tid='$topicid'");
+        DB::table('related')->where('tid', $topicid)->delete();
 
         logs::Ecr_Log("security", "topicDelete (related, $topicid) by AID : $aid", '');
 
@@ -587,8 +614,8 @@ function topicdelete($topicid, $ok = 0)
         if (file_exists("modules/comments/config/article.conf.php")) {
             include("modules/comments/config/article.conf.php");
             
-            sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' and topic_id='$topic'");
-            
+            DB::table('posts')->where('forum_id', $forum)->where('topic_id', $topic)->delete();
+
             logs::Ecr_Log("security", "topicDelete (comments, $topicid) by AID : $aid", "");
         }
 

@@ -1174,7 +1174,7 @@ switch ($op) {
                     ->where('users.email', '!=', '') 
                     ->where('users_status.groupe', 'like', '%'.$Xgroupe.',%')
                     ->orWhere('users_status.groupe', 'like', '%,'.$Xgroupe.'%')
-                    ->orWhere('users_status.groupe', $Xgroupe)
+                    ->orWhere('users_status.groupe', '=', $Xgroupe)
                     ->where('users.user_lnl', 1)
                     ->count();
 
@@ -1185,7 +1185,7 @@ switch ($op) {
                     ->where('users.email', '!=', '') 
                     ->where('users_status.groupe', 'like', '%'.$Xgroupe.',%')
                     ->orWhere('users_status.groupe', 'like', '%,'.$Xgroupe.'%')
-                    ->orWhere('users_status.groupe', $Xgroupe)
+                    ->orWhere('users_status.groupe', '=', $Xgroupe)
                     ->where('users.user_lnl', 1)
                     ->orderBy('users.email')
                     ->limit($limit)

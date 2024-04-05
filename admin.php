@@ -14,6 +14,7 @@
 declare(strict_types=1);
 
 use npds\system\assets\css;
+use npds\system\routing\url;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\pagination\paginator;
@@ -1552,6 +1553,17 @@ if ($admintest) {
         case 'Extend-Admin-Module':
         case 'Extend-Admin-SubModule':
             include("admin/plugins.php");
+            // include("themes/default/header.php");
+            
+            // if ($ModPath != '') {
+            //     if (file_exists("modules/$ModPath/http/$ModStart.php")) {
+            //         include("modules/$ModPath/http/$ModStart.php"); 
+            //     } 
+            
+            // } else {
+            //     url::redirect_url(urldecode($ModStart));
+            // }
+
             break;
 
             // NPDS-Admin-Groupe

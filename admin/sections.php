@@ -724,11 +724,15 @@ function publishcompat($article)
 
 function updatecompat($article, $admin_rub, $idx)
 {
-    $result = sql_query("DELETE FROM " . $NPDS_Prefix . "compatsujet WHERE id1='$article'");
+    DB::table('compatsujet')->where('id1', $article)->delete();
 
     for ($j = 1; $j < ($idx + 1); $j++) {
         if ($admin_rub[$j] != '') {
-            $result = sql_query("INSERT INTO " . $NPDS_Prefix . "compatsujet VALUES ('$article','$admin_rub[$j]')");
+            DB::table('compatsujet')->insert(array(
+                'id1'       => $article,
+                'id2'       => $admin_rub[$j],
+            ));
+
         }
     }
 
@@ -843,16 +847,28 @@ function rubriquemake($rubname, $introc)
     $rubname = stripslashes(str::FixQuotes($rubname));
     $introc = stripslashes(str::FixQuotes(image::dataimagetofileurl($introc, 'modules/upload/upload/rub')));
 
-    sql_query("INSERT INTO " . $NPDS_Prefix . "rubriques VALUES (NULL,'$rubname','$introc','0','0')");
+    DB::table('rubriques')->insert(array(
+        'rubname'       => $rubname,
+        'intro'         => $introc,
+        'enligne'       => 0,
+        'orde'          => 0,
+    ));
 
     //mieux ? création automatique d'une sous rubrique avec droits ... ?
     if ($radminsuper != 1) {
         $result = sql_query("SELECT rubid FROM " . $NPDS_Prefix . "rubriques ORDER BY rubid DESC LIMIT 1");
         list($rublast) = sql_fetch_row($result);
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        sql_query("INSERT INTO " . $NPDS_Prefix . "sections VALUES (NULL,'A modifier !', '', '', '$rublast', '<p>Cette sous-rubrique a été créé automatiquement. <br />Vous pouvez la personaliser et ensuite rattacher les publications que vous souhaitez.</p>','99','0')");
+        DB::table('sections')->insert(array(
+            'secname'       => 'A modifier !',
+            'image'         => '',
+            'userlevel'     => '',
+            'rubid'         => $rublast,
+            'intro'         => '<p>Cette sous-rubrique a été créé automatiquement. <br />Vous pouvez la personaliser et ensuite rattacher les publications que vous souhaitez.</p>',
+            'ordre'         => 99,
+            'counter'       => 0,
+        )); 
+        
         $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections ORDER BY secid DESC LIMIT 1");
 
         = DB::table('')->select()->where('', )->orderBy('')->get();
@@ -876,7 +892,11 @@ function rubriquechange($rubid, $rubname, $introc, $enligne)
     $introc = image::dataimagetofileurl($introc, 'modules/upload/upload/rub');
     $introc = stripslashes(str::FixQuotes($introc));
 
-    sql_query("UPDATE " . $NPDS_Prefix . "rubriques SET rubname='$rubname', intro='$introc', enligne='$enligne' WHERE rubid='$rubid'");
+    DB::table('rubriques')->where('rubid', $rubid)->update(array(
+        'rubname'       => $rubname,
+        'intro'         => $introc,
+        'enligne'       => $enligne,
+    ));
 
     global $aid;
     logs::Ecr_Log("security", "UpdateRubriques($rubid, $rubname) by AID : $aid", "");
@@ -1030,7 +1050,15 @@ function sectionmake($secname, $image, $members, $Mmembers, $rubref, $introd)
     $image = stripslashes(str::FixQuotes($image));
     $introd = stripslashes(str::FixQuotes(image::dataimagetofileurl($introd, 'modules/upload/upload/sec')));
 
-    sql_query("INSERT INTO " . $NPDS_Prefix . "sections VALUES (NULL,'$secname', '$image', '$members', '$rubref', '$introd','99','0')");
+    DB::table('sections')->insert(array(
+        'secname'       => $secname,
+        'image'         => $image,
+        'userlevel'     => $members,
+        'ribid'         => $rubref,
+        'intro'         => $introd,
+        'ordre'         => 99,
+        'counter'       => 0,
+    ));
 
     if ($radminsuper != 1) {
         $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections ORDER BY secid DESC LIMIT 1");
@@ -1059,7 +1087,13 @@ function sectionchange($secid, $secname, $image, $members, $Mmembers, $rubref, $
     $image = stripslashes(str::FixQuotes($image));
     $introd = stripslashes(str::FixQuotes(image::dataimagetofileurl($introd, 'modules/upload/upload/sec')));
 
-    sql_query("UPDATE " . $NPDS_Prefix . "sections SET secname='$secname', image='$image', userlevel='$members', rubid='$rubref', intro='$introd' WHERE secid='$secid'");
+    DB::table('sections')->where('secid', $secid)->update(array(
+        'secname'       => $secname,
+        'image'         => $image,
+        'userlevel'     => $members,
+        'rubid'         => $rubref,
+        'intro'         => $introd,
+    ));
 
     global $aid;
     logs::Ecr_Log('security', "UpdateSections($secid, $secname) by AID : $aid", '');
@@ -1290,14 +1324,31 @@ function secarticleadd($secid, $title, $content, $autho, $members, $Mmembers)
             $timestamp = time();
             $content = stripslashes(str::FixQuotes(image::dataimagetofileurl($content, 'modules/upload/upload/s')));
 
-            sql_query("INSERT INTO " . $NPDS_Prefix . "seccont VALUES (NULL,'$secid','$title','$content','0','$autho','99','$members', '$timestamp')");
+            DB::table('seccont')->insert(array(
+                'secid'         => $secid,
+                'title'         => $title,
+                'content'       => $content,
+                'counter'       => 0,
+                'author'        => $autho,
+                'ordre'         => 99,
+                'userlevel'     => $members,
+                'timestamp'     => $timestamp,
+            ));
 
             global $aid;
             logs::Ecr_Log("security", "CreateArticleSections($secid, $title) by AID : $aid", "");
         } else {
             $content = stripslashes(str::FixQuotes(image::dataimagetofileurl($content, 'storage/cache/s')));
 
-            sql_query("INSERT INTO " . $NPDS_Prefix . "seccont_tempo VALUES (NULL,'$secid','$title','$content','0','$autho','99','$members')");
+            DB::table('seccont_tempo')->insert(array(
+                'secid'         => $secid,
+                'title'         => $title,
+                'content'       => $content,
+                'counter'       => 0,
+                'author'        => $autho,
+                'ordre'         => 99,
+                'userlevel'     => $members,
+            ));
 
             global $aid;
             logs::Ecr_Log('security', "CreateArticleSectionsTempo($secid, $title) by AID : $aid", '');
@@ -1318,8 +1369,14 @@ function secartchange($artid, $secid, $title, $content, $members, $Mmembers)
     $timestamp = time();
 
     if ($secid != '0') {
-        sql_query("UPDATE " . $NPDS_Prefix . "seccont SET secid='$secid', title='$title', content='$content', userlevel='$members', timestamp='$timestamp' WHERE artid='$artid'");
-        
+        DB::table('seccont')->where('artid', $artid)->update(array(
+            'secid'         => $secid,
+            'title'         => $title,
+            'content'       => $content,
+            'userlevel'     => $members,
+            'timestamp'     => $timestamp,
+        ));
+
         global $aid;
         logs::Ecr_Log("security", "UpdateArticleSections($artid, $secid, $title) by AID : $aid", "");
     }
@@ -1337,8 +1394,13 @@ function secartchangeup($artid, $secid, $title, $content, $members, $Mmembers)
     $content = stripslashes(str::FixQuotes(image::dataimagetofileurl($content, 'storage/cache/s')));
     
     if ($secid != '0') {
-        sql_query("UPDATE " . $NPDS_Prefix . "seccont_tempo SET secid='$secid', title='$title', content='$content', userlevel='$members' WHERE artid='$artid'");
-        
+        DB::table('seccont_tempo')->where('artid', $artid)->update(array(
+            'secid'         => $secid,
+            'title'         => $title,
+            'content'       => $content,
+            'userlevel'     => $members,
+        ));
+
         global $aid;
         logs::Ecr_Log('security', "UpdateArticleSectionsTempo($artid, $secid, $title) by AID : $aid", '');
     }
@@ -1356,11 +1418,20 @@ function secartpublish($artid, $secid, $title, $content, $author, $members, $Mme
     $title = stripslashes(str::FixQuotes($title));
 
     if ($secid != '0') {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "seccont_tempo WHERE artid='$artid'");
+        DB::table('seccont_tempo')->where('artid', $artid)->delete();
 
         $timestamp = time();
 
-        sql_query("INSERT INTO " . $NPDS_Prefix . "seccont VALUES (NULL,'$secid','$title','$content', '0', '$author', '99', '$members', '$timestamp')");
+        DB::table('seccont')->insert(array(
+            'secid'         => $secid,
+            'title'         => $title,
+            'content'       => $content,
+            'counter'       => 0,
+            'author'        => $author,
+            'ordre'         => 99,
+            'userlevl'      => $members,
+            'timestamp'     => $timestamp,
+        ));
 
         global $aid;
         logs::Ecr_Log('security', "PublicateArticleSections($artid, $secid, $title) by AID : $aid", '');
@@ -1404,15 +1475,15 @@ function rubriquedelete($rubid, $ok = 0)
                     = DB::table('')->select()->where('', )->orderBy('')->get();
 
                     while (list($artid) = sql_fetch_row($result2)) {
-                        sql_query("DELETE FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
-                        sql_query("DELETE FROM " . $NPDS_Prefix . "compatsujet WHERE id1='$artid'");
+                        DB::table('seccont')->where('artid', $artid)->delete();
+                        DB::table('compatsujet')->where('id1', $artid)->delete();
                     }
                 }
             }
         }
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid'");
-        sql_query("DELETE FROM " . $NPDS_Prefix . "rubriques WHERE rubid='$rubid'");
+        DB::table('sections')->where('rubid', $rubid)->delete();
+        DB::table('rubriques')->where('rubid', $rubid)->delete();
 
         global $aid;
         logs::Ecr_Log("security", "DeleteRubriques($rubid) by AID : $aid", "");
@@ -1459,12 +1530,12 @@ function sectiondelete($secid, $ok = 0)
 
         if (sql_num_rows($result) > 0) {
             while (list($artid) = sql_fetch_row($result)) {
-                sql_query("DELETE FROM " . $NPDS_Prefix . "compatsujet WHERE id1='$artid'");
+                DB::table('compatsujet')->where('id1', $artid)->delete();
             }
         }
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid'");
-        sql_query("DELETE FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
+        DB::table('seccont')->where('secid', $secid)->delete();
+        DB::table('sections')->where('secid', $secid)->delete();
 
         global $aid;
         logs::Ecr_Log("security", "DeleteSections($secid) by AID : $aid", "");
@@ -1522,8 +1593,8 @@ function secartdelete($artid, $ok = 0)
             unlink($imagetodelete);
         }
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
-        sql_query("DELETE FROM " . $NPDS_Prefix . "compatsujet WHERE id1='$artid'");
+        DB::table('seccont')->where('artid', $artid)->delete();
+        DB::table('compatsujet')->where('id1', $artid)->delete();
 
         global $aid;
         logs::Ecr_Log("security", "DeleteArticlesSections($artid) by AID : $aid", "");
@@ -1557,7 +1628,7 @@ function secartdelete($artid, $ok = 0)
 function secartdelete2($artid, $ok = 0)
 {
     if ($ok == 1) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "seccont_tempo WHERE artid='$artid'");
+        DB::table('seccont_tempo')->where('artid', $artid)->delete();
 
         global $aid;
         logs::Ecr_Log('security', "DeleteArticlesSectionsTempo($artid) by AID : $aid", '');
@@ -1845,7 +1916,9 @@ function updateordre($rubid, $artid, $secid, $op, $ordre)
         for ($j = 1; $j < ($i + 1); $j++) {
             $rub = $rubid[$j];
             $ord = $ordre[$j];
-            $result = sql_query("UPDATE " . $NPDS_Prefix . "rubriques SET ordre='$ord' WHERE rubid='$rub'");
+            DB::table('rubriques')->where('rubid', $rub)->update(array(
+                'ordre'       => $ord,
+            ));
         }
     }
 
@@ -1854,7 +1927,9 @@ function updateordre($rubid, $artid, $secid, $op, $ordre)
         for ($j = 1; $j < ($i + 1); $j++) {
             $sec = $secid[$j];
             $ord = $ordre[$j];
-            $result = sql_query("UPDATE " . $NPDS_Prefix . "sections SET ordre='$ord' WHERE secid='$sec'");
+            DB::table('sections')->where('secid', $sec)->update(array(
+                'ordre'       => $ord,
+            ));
         }
     }
 
@@ -1863,7 +1938,9 @@ function updateordre($rubid, $artid, $secid, $op, $ordre)
         for ($j = 1; $j < ($i + 1); $j++) {
             $art = $artid[$j];
             $ord = $ordre[$j];
-            $result = sql_query("UPDATE " . $NPDS_Prefix . "seccont SET ordre='$ord' WHERE artid='$art'");
+            DB::table('seccont')->where('artid', $art)->update(array(
+                'ordre'       => $ord,
+            ));
         }
     }
 
@@ -1995,10 +2072,19 @@ function droitsalacreation($chng_aid, $secid)
 
     // if($secid > 0)
     foreach ($lesdroits as $droit) {
-        sql_query("INSERT INTO " . $NPDS_Prefix . "publisujet VALUES ('$chng_aid','$secid','$droit')");
+        DB::table('publisujet')->insert(array(
+            'aid'       => $chng_aid,
+            'secid2'       => $secid,
+            'type'       => $droit,
+        ));        
     }
     //  else {
-    //     sql_query("INSERT INTO ".$NPDS_Prefix."publisujet VALUES ('$chng_aid','$secid','1')");
+        // DB::table('publisujet')->insert(array(
+        //     'aid'       => $chng_aid,
+        //     'secid2'       => $secid,
+        //     'type'       => 1,
+        // ));
+
     // }
 }
 
@@ -2010,30 +2096,46 @@ function updaterights($chng_aid, $maxindex, $creation, $publication, $modificati
         Header("Location: admin.php?op=sections");
     }
 
-    $result = sql_query("DELETE FROM " . $NPDS_Prefix . "publisujet WHERE aid='$chng_aid'");
+    DB::table('publisujet')->where('aid', $chng_aid)->delete();
 
     for ($j = 1; $j < ($maxindex + 1); $j++) {
         if (array_key_exists($j, $creation)) {
             if ($creation[$j] != '') {
-                $result = sql_query("INSERT INTO " . $NPDS_Prefix . "publisujet VALUES ('$chng_aid','$creation[$j]','1')");
+                DB::table('publisujet')->insert(array(
+                    'aid'       => $chng_aid,
+                    'secid2'    => $creation[$j],
+                    'type'      => 1,
+                ));
             }
         }
 
         if (array_key_exists($j, $publication)) {
             if ($publication[$j] != '') {
-                $result = sql_query("INSERT INTO " . $NPDS_Prefix . "publisujet VALUES ('$chng_aid','$publication[$j]','2')");
+                DB::table('publisujet')->insert(array(
+                    'aid'       => $chng_aid,
+                    'secid2'    => $publication[$j],
+                    'type'      => 2,
+                ));
             }
         }
 
         if (array_key_exists($j, $modification)) {
             if ($modification[$j] != '') {
-                $result = sql_query("INSERT INTO " . $NPDS_Prefix . "publisujet VALUES ('$chng_aid','$modification[$j]','3')");
+                DB::table('publisujet')->insert(array(
+                    'aid'       => $chng_aid,
+                    'secid2'    => $modification[$j],
+                    'type'      => 3,
+                ));
             }
         }
 
         if (array_key_exists($j, $suppression)) {
             if ($suppression[$j] != '') {
-                $result = sql_query("INSERT INTO " . $NPDS_Prefix . "publisujet VALUES ('$chng_aid','$suppression[$j]','4')");
+                DB::table('publisujet')->insert(array(
+                    'aid'       => $chng_aid,
+                    'secid2'    => $suppression[$j],
+                    'type'      => 4,
+                ));
             }
         }
     }

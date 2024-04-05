@@ -227,7 +227,10 @@ function SaveCategory($title)
         $what1 = '<div class="alert alert-danger lead" role="alert">' . adm_translate("Cette Catégorie existe déjà !") . '<br /><a href="javascript:history.go(-1)" class="btn btn-secondary  mt-2">' . adm_translate("Retour en arrière, pour changer le Nom") . '</a></div>';
     } else {
         $what1 = '<div class="alert alert-success lead" role="alert">' . adm_translate("Nouvelle Catégorie ajoutée") . '</div>';
-        $result = sql_query("INSERT INTO " . $NPDS_Prefix . "stories_cat VALUES (NULL, '$title', '0')");
+        DB::table('stories_cat')->insert(array(
+            'title'       => $title,
+            'counter'     => 0,
+        ));
     }
 
     include("themes/default/header.php");
@@ -341,8 +344,10 @@ function SaveEditCategory($catid, $title)
         $what1 = '<div class="alert alert-danger lead" role="alert">' . adm_translate("Cette Catégorie existe déjà !") . '<br /><a href="javascript:history.go(-2)" class="btn btn-secondary  mt-2">' . adm_translate("Retour en arrière, pour changer le Nom") . '</a></div>';
     } else {
         $what1 = '<div class="alert alert-success lead" role="alert">' . adm_translate("Catégorie sauvegardée") . '</div>';
-        $result = sql_query("UPDATE " . $NPDS_Prefix . "stories_cat SET title='$title' WHERE catid='$catid'");
-        
+        DB::table('stories_cat')->where('catid', $catid)->update(array(
+            'title'       => $title,
+        ));
+
         global $aid;
         logs::Ecr_Log("security", "SaveEditCategory($catid, $title) by AID : $aid", "");
     }
@@ -420,7 +425,7 @@ function DelCategory($cat)
         = DB::table('')->select()->where('', )->orderBy('')->get();
 
         if ($numrows == 0) {
-            sql_query("DELETE FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$cat'");
+            DB::table('stories_cat')->where('catid', $cat)->delete();
 
             global $aid;
             logs::Ecr_Log('security', "DelCategory($cat) by AID : $aid", '');
@@ -445,20 +450,20 @@ function DelCategory($cat)
 
 function YesDelCategory($catid)
 {
-    sql_query("DELETE FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$catid'");
+    DB::table('stories_cat')->where('catid', $catid)->delete();
 
     $result = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories WHERE catid='$catid'");
 
     = DB::table('')->select()->where('', )->orderBy('')->get();
 
     while (list($sid) = sql_fetch_row($result)) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "stories WHERE catid='$catid'");
+        DB::table('stories')->where('catid', $catid)->delete();
 
         // commentaires
         if (file_exists("modules/comments/config/article.conf.php")) {
             include("modules/comments/config/article.conf.php");
 
-            sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$topic'");
+            DB::table('posts')->where('forum_id', $forum)->where('topic_id', $topic)->delete();
         }
     }
 
@@ -531,10 +536,12 @@ function NoMoveCategory($catid, $newcat)
         = DB::table('')->select()->where('', )->orderBy('')->get();
 
         while (list($sid) = sql_fetch_row($resultm)) {
-            sql_query("UPDATE " . $NPDS_Prefix . "stories SET catid='$newcat' WHERE sid='$sid'");
+            DB::table('stories')->where('sid', $sid)->update(array(
+                'catid'       => $newcat,
+            ));
         }
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$catid'");
+        DB::table('stories_cat')->where('catid', $catid)->delete();
 
         global $aid;
         logs::Ecr_Log("security", "NoMoveCategory($catid, $newcat) by AID : $aid", "");
@@ -962,20 +969,53 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
     }
 
     if ($type_pub == 'pub_immediate') {
-        $result = sql_query("INSERT INTO " . $NPDS_Prefix . "stories VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '0', '0', '$topic','$author', '$notes', '$ihome', '0', '$date_finval','$epur')");
-        
+        DB::table('stories')->insert(array(
+            'catid'         => $catid,
+            'aid'           => $subject,
+            'title'         => 'now()',
+            'time'          => $hometext,
+            'hometext'      => $bodytext,
+            'bodytext'      => 0,
+            'comments'      => 0,
+            'counter'       => $topic,
+            'topic'         => $author,
+            'informant'     => $notes,
+            'notes'         => $ihome,
+            'ihome'         => 0,
+            'date_finval'   => $date_finval,
+            'auto_epur'     => $epur,
+        ));
+
         logs::Ecr_Log("security", "postStory (pub_immediate, $subject) by AID : $aid", "");
     } else {
-        $result = sql_query("INSERT INTO " . $NPDS_Prefix . "autonews VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '$topic', '$author', '$notes', '$ihome','$date_debval','$date_finval','$epur')");
-       
+        DB::table('autonews')->insert(array(
+            'catid'         => $catid,
+            'aid'           => $aid,
+            'title'         => $subject,
+            'time'          => 'now()',
+            'hometext'      => $hometext,
+            'bodytext'      => $bodytext,
+            'topic'         => $topic,
+            'informant'     => $author,
+            'notes'         => $notes,
+            'ihome'         => $ihome,
+            'date_debval'   => $date_debval,
+            'date_finval'   => $date_finval,
+            'auto_epur'     => $epur,
+        ));
+
         logs::Ecr_Log("security", "postStory (autonews, $subject) by AID : $aid", "");
     }
 
     if (($uid != 1) and ($uid != '')) {
-        sql_query("UPDATE " . $NPDS_Prefix . "users SET counter=counter+1 WHERE uid='$uid'");
+        DB::table('users')->where('uid', $uid)->update(array(
+            'counter'       => DB::raw(counter+1),
+        ));
     }
 
-    sql_query("UPDATE " . $NPDS_Prefix . "authors SET counter=counter+1 WHERE aid='$aid'");
+    DB::table('authors')->where('aid', $aid)->update(array(
+        'counter'       => DB::raw('counter+1'),
+    ));
 
     if ($ultramode) {
         news::ultramode();
@@ -1262,7 +1302,7 @@ function deleteStory($qid)
         unlink($imagetodelete);
     }
 
-    $result = sql_query("DELETE FROM " . $NPDS_Prefix . "queue WHERE qid='$qid'");
+    DB::table('queue')->where('qid', $qid)->delete();
 
     global $aid;
     logs::Ecr_Log("security", "deleteStoryfromQueue($qid) by AID : $aid", "");
@@ -1319,13 +1359,13 @@ function removeStory($sid, $ok = 0)
             unlink($imagetodelete);
         }
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
+        DB::table('stories')->where('sid', $sid)->delete();
 
         // commentaires
         if (file_exists("modules/comments/config/article.conf.php")) {
             include("modules/comments/config/article.conf.php");
 
-            sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$topic'");
+            DB::table('posts')->where('forum_id', $forum)->where('topic_id', $topic)->delete();
         }
 
         global $aid;
@@ -1367,25 +1407,54 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
     }
 
     if ($Cdate) {
-        sql_query("UPDATE " . $NPDS_Prefix . "stories SET catid='$catid', title='$subject', hometext='$hometext', bodytext='$bodytext', topic='$topic', notes='$notes', ihome='$ihome',time=now(), date_finval='$date_finval', auto_epur='$epur', archive='0' WHERE sid='$sid'");
+        DB::table('stories')->where('sid', $sid)->update(array(
+            'catid'         => $catid,
+            'title'         => $subject,
+            'hometext'      => $hometext,
+            'bodytext'      => $bodytext,
+            'topic'         => $topic,
+            'notes'         => $notes,
+            'ihome'         => $ihome,
+            'time'          => 'now()',
+            'date_finval'   => $date_finval,
+            'auto_epur'     => $epur,
+            'archive'       => 0,
+        ));
     } else {
-        sql_query("UPDATE " . $NPDS_Prefix . "stories SET catid='$catid', title='$subject', hometext='$hometext', bodytext='$bodytext', topic='$topic', notes='$notes', ihome='$ihome', date_finval='$date_finval', auto_epur='$epur' WHERE sid='$sid'");
+        DB::table('stories')->where('sid', $sid)->update(array(
+            'catid'         => $catid,
+            'title'         => $subject,
+            'hometext'      => $hometext,
+            'bodytext'      => $bodytext,
+            'topic'         => $topic,
+            'notes'         => $notes,
+            'ihome'         => $ihome,
+            'date_finval'   => $date_finval,
+            'auto_epur'     => $epur,
+        ));
     }
 
     if ($Csid) {
-        sql_query("UPDATE " . $NPDS_Prefix . "stories SET hometext='<i class=\"fa fa-thumb-tack fa-2x me-2 text-muted\"></i> $hometext' WHERE sid='$sid'");
+        DB::table('stories')->where('sid', $sid)->update(array(
+            'hometext'       => '<i class=\"fa fa-thumb-tack fa-2x me-2 text-muted\"></i>'. $hometext,
+        ));
+
         list($Lsid) = sql_fetch_row(sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories ORDER BY sid DESC"));
 
         = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $Lsid++;
-        sql_query("UPDATE " . $NPDS_Prefix . "stories SET sid='$Lsid' WHERE sid='$sid'");
+        DB::table('stories')->where('sid', $sid)->update(array(
+            'sid'       => $Lsid,
+        ));
 
         // commentaires
         if (file_exists("modules/comments/config/article.conf.php")) {
             include("modules/comments/config/article.conf.php");
 
-            sql_query("UPDATE " . $NPDS_Prefix . "posts SET topic_id='$Lsid' WHERE forum_id='$forum' AND topic_id='$topic'");
+            DB::table('posts')->where('forum_id', $forum)->where('topic_id', $topic)->update(array(
+                'topic_id'       => $Lsid,
+            ));
         }
 
         $sid = $Lsid;
