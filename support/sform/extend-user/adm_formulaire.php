@@ -18,9 +18,9 @@ declare(strict_types=1);
 use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 use npds\system\support\facades\Sform;
 
-global $NPDS_Prefix;
 // quand un form est utilisé plusieurs fois dans des context différents add/mod/new les variables ne sont pas toujours defini ce qui entraine des notices php dans les if ...solution peu élégante mais efficace
 if (!isset($chng_uname)) $chng_uname = '';
 if (!isset($chng_name)) $chng_name = '';
@@ -64,69 +64,113 @@ Sform::add_extender('add_email', '', '<span class="help-block text-end" id="coun
 Sform::add_field('add_femail', adm_translate("Adresse E-mail masquée"), $chng_femail, 'email', false, 60, '', '');
 Sform::add_extender('add_femail', '', '<span class="help-block"><span class="float-end" id="countcar_add_femail"></span></span>');
 
-if ($op == 'ModifyUser')
+if ($op == 'ModifyUser') {
     Sform::add_checkbox('raz_avatar', adm_translate("Revenir aux avatars standards"), 1, false, false);
+}
 
-$r = sql_query("SELECT access_id, access_title FROM " . $NPDS_Prefix . "access");
-if ($mX = sql_fetch_assoc($r)) {
-    do {
+$access = DB::table('access')->select('access_id', 'access_title')->first();
+
+if ($access) {
+    foreach ($access as $mx) {
         $tmp_tempo[$mX['access_id']]['en'] = $mX['access_title'];
-        if ($mX['access_id'] == $chng_level)
+
+        if ($mX['access_id'] == $chng_level) {
             $tmp_tempo[$mX['access_id']]['selected'] = true;
-        else
+        } else {
             $tmp_tempo[$mX['access_id']]['selected'] = false;
-    } while ($mX = sql_fetch_assoc($r));
+        }
+    }
 }
 Sform::add_select('add_level', adm_translate("Niveau de l'Utilisateur"), $tmp_tempo, false, '', false);
 
 // ---- Rôles
 unset($tmp_tempo);
-$r = sql_query("SELECT rank1, rank2, rank3, rank4, rank5 FROM " . $NPDS_Prefix . "config");
-list($rank1, $rank2, $rank3, $rank4, $rank5) = sql_fetch_row($r);
+
+$config = DB::table('')->select('rank1', 'rank2', 'rank3', 'rank4', 'rank5')->first();
 
 $tmp_tempo[0]['en'] = '-> ' . adm_translate("Supprimer") . '/' . adm_translate("Choisir un rôle") . ' <-';
-if (($chng_rank == '') or ($chng_rank == '0')) $tmp_tempo[0]['selected'] = true;
-else $tmp_tempo[0]['selected'] = false;
-$tmp_tempo[1]['en'] = language::aff_langue($rank1);
-if ($chng_rank == 1) $tmp_tempo[1]['selected'] = true;
-else $tmp_tempo[1]['selected'] = false;
-$tmp_tempo[2]['en'] = language::aff_langue($rank2);
-if ($chng_rank == 2) $tmp_tempo[2]['selected'] = true;
-else $tmp_tempo[2]['selected'] = false;
-$tmp_tempo[3]['en'] = language::aff_langue($rank3);
-if ($chng_rank == 3) $tmp_tempo[3]['selected'] = true;
-else $tmp_tempo[3]['selected'] = false;
-$tmp_tempo[4]['en'] = language::aff_langue($rank4);
-if ($chng_rank == 4) $tmp_tempo[4]['selected'] = true;
-else $tmp_tempo[4]['selected'] = false;
-$tmp_tempo[5]['en'] = language::aff_langue($rank5);
-if ($chng_rank == 5) $tmp_tempo[5]['selected'] = true;
-else $tmp_tempo[5]['selected'] = false;
+
+if (($chng_rank == '') or ($chng_rank == '0')) {
+    $tmp_tempo[0]['selected'] = true;
+} else {
+    $tmp_tempo[0]['selected'] = false;
+}
+
+$tmp_tempo[1]['en'] = language::aff_langue($config['rank1']);
+if ($chng_rank == 1) {
+    $tmp_tempo[1]['selected'] = true;
+} else {
+    $tmp_tempo[1]['selected'] = false;
+}
+
+$tmp_tempo[2]['en'] = language::aff_langue($config['rank2']);
+if ($chng_rank == 2) {
+    $tmp_tempo[2]['selected'] = true;
+} else {
+    $tmp_tempo[2]['selected'] = false;
+}
+
+$tmp_tempo[3]['en'] = language::aff_langue($config['rank3']);
+if ($chng_rank == 3) {
+    $tmp_tempo[3]['selected'] = true;
+} else {
+    $tmp_tempo[3]['selected'] = false;
+}
+
+$tmp_tempo[4]['en'] = language::aff_langue($config['rank4']);
+if ($chng_rank == 4) {
+    $tmp_tempo[4]['selected'] = true;
+} else {
+    $tmp_tempo[4]['selected'] = false;
+}
+
+$tmp_tempo[5]['en'] = language::aff_langue($config['rank5']);
+if ($chng_rank == 5) {
+    $tmp_tempo[5]['selected'] = true;
+} else {
+    $tmp_tempo[5]['selected'] = false;
+}
+
 Sform::add_select('chng_rank', adm_translate("Rôle de l'Utilisateur"), $tmp_tempo, false, '', false);
 
 // ---- Groupes
 $les_groupes = explode(',', $groupe);
 $mX = groupe::liste_group();
 $nbg = 0;
+
 foreach ($mX as $groupe_id => $groupe_name) {
-    //   while (list($groupe_id, $groupe_name)=each($mX)) {
     $tmp_groupe[$groupe_id]['en'] = $groupe_name;
     $selectionne = 0;
+    
     if ($les_groupes) {
         foreach ($les_groupes as $groupevalue) {
-            if (($groupe_id == $groupevalue) and ($groupe_id != 0)) $selectionne = 1;
+            if (($groupe_id == $groupevalue) and ($groupe_id != 0)) {
+                $selectionne = 1;
+            }
         }
     }
-    if ($selectionne == 1) $tmp_groupe[$groupe_id]['selected'] = true;
+
+    if ($selectionne == 1) {
+        $tmp_groupe[$groupe_id]['selected'] = true;
+    }
+
     $nbg++;
 }
-if ($nbg > 7) $nbg = 7;
+
+if ($nbg > 7) {
+    $nbg = 7;
+}
+
 Sform::add_select('add_group', adm_translate("Groupe"), $tmp_groupe, false, $nbg, true);
 // ---- Groupes
 
-if ($open_user) $checked = true;
-else $checked = false;
+if ($open_user) { 
+    $checked = true;
+} else {
+    $checked = false;
+}
 Sform::add_checkbox('add_open_user', adm_translate("Autoriser la connexion"), 1, false, $checked);
+
 if ($mns) {
     $checked = true;
 } else {
@@ -135,24 +179,37 @@ if ($mns) {
 Sform::add_checkbox('add_mns', adm_translate("Activer son MiniSite"), 1, false, $checked);
 
 // LNL
-if ($user_lnl) $checked = true;
-else $checked = false;
+if ($user_lnl) {
+    $checked = true;
+} else {
+    $checked = false;
+}
 Sform::add_checkbox('user_lnl', translate("S'inscrire à la liste de diffusion du site"), 1, false, $checked);
 // LNL
 
-if ($chng_user_viewemail) $checked = true;
-else $checked = false;
+if ($chng_user_viewemail) {
+    $checked = true;
+} else {
+    $checked = false;
+}
 Sform::add_checkbox('add_user_viewemail', adm_translate("Autoriser les autres utilisateurs à voir son adresse E-mail"), 1, false, $checked);
 
 Sform::add_field('add_url', 'URL', $chng_url, 'url', false, 100, '', '');
 Sform::add_extender('add_url', '', '<span class="help-block text-end" id="countcar_add_url"></span>');
 
 // ---- SUBSCRIBE and INVISIBLE
-if ($chng_send_email == 1) $checked = true;
-else $checked = false;
+if ($chng_send_email == 1) {
+    $checked = true;
+}else {
+    $checked = false;
+}
 Sform::add_checkbox('add_send_email', adm_translate("M'envoyer un Mel lorsque qu'un Msg Int. arrive"), 1, false, $checked);
-if ($chng_is_visible == 1) $checked = false;
-else $checked = true;
+
+if ($chng_is_visible == 1) {
+    $checked = false;
+} else {
+    $checked = true;
+}
 Sform::add_checkbox('add_is_visible', adm_translate("Membre invisible"), 1, false, $checked);
 // ---- SUBSCRIBE and INVISIBLE
 
@@ -165,8 +222,11 @@ Sform::add_extender('add_user_occ', '', '<span class="help-block text-end" id="c
 Sform::add_field('add_user_intrest', adm_translate("Centres d'intérêt"), $chng_user_intrest, 'text', false, 150, '', '');
 Sform::add_extender('add_user_intrest', '', '<span class="help-block text-end" id="countcar_add_user_intrest"></span>');
 
-if ($attach == 1) $checked = true;
-else $checked = false;
+if ($attach == 1){ 
+    $checked = true;
+} else {
+    $checked = false;
+}
 Sform::add_checkbox('attach', adm_translate("Afficher signature"), 1, false, $checked);
 Sform::add_field('add_user_sig', adm_translate("Signature"), $chng_user_sig, 'textarea', false, 255, 7, '', '');
 Sform::add_extender('add_user_sig', '', '<span class="help-block text-end" id="countcar_add_user_sig"></span>');
@@ -175,8 +235,11 @@ Sform::add_field('add_bio', adm_translate("Informations supplémentaires"), $chn
 Sform::add_extender('add_bio', '', '<span class="help-block text-end" id="countcar_add_bio" ></span>');
 
 $requi = '';
-if ($op == "ModifyUser") $requi = false;
-else $requi = true;
+if ($op == "ModifyUser") { 
+    $requi = false;
+} else {
+    $requi = true;
+}
 Sform::add_field('add_pass', adm_translate("Mot de Passe"), '', 'password', $requi, '40', '', '');
 Sform::add_extra('<div class="mb-3 row"><div class="col-sm-8 ms-sm-auto" ><div class="progress" style="height: 0.2rem;"><div id="passwordMeter_cont" class="progress-bar bg-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div></div></div></div>');
 Sform::add_extender('add_pass', '', '<span class="help-block text-end" id="countcar_add_pass"></span>');
@@ -185,24 +248,30 @@ if ($op == "ModifyUser") {
     Sform::add_field('add_pass2', adm_translate("Entrez à nouveau le Mot de Passe") . '&nbsp;<span class="small">' . adm_translate("(seulement pour modifications)") . '</span>', '', 'password', false, 40, '', '');
     Sform::add_extender('add_pass2', '', '<span class="help-block text-end" id="countcar_add_pass2"></span>');
 }
+
 // --- EXTENDER
-if (file_exists("modules/sform/extend-user/extender/formulaire.php"))
+if (file_exists("modules/sform/extend-user/extender/formulaire.php")) {
     include("modules/sform/extend-user/extender/formulaire.php");
+}
 // --- EXTENDER
 
 // ----------------------------------------------------------------
 // CES CHAMPS sont indispensables --- Don't remove these fields
 // Champ Hidden
-if ($op == 'displayUsers')
+if ($op == 'displayUsers') {
     Sform::add_field('op', '', 'addUser', 'hidden', false);
+}
+
 if ($op == "ModifyUser") {
     Sform::add_field('op', '', 'updateUser', 'hidden', false);
     Sform::add_field("chng_uid", '', $chng_uid, 'hidden', false);
 }
-if ($chng_avatar != '')
+
+if ($chng_avatar != '') {
     Sform::add_field('add_avatar', '', $chng_avatar, 'hidden', false);
-else
+} else {
     Sform::add_field('add_avatar', '', 'blank.gif', 'hidden', false);
+}
 
 include('modules/geoloc/config/geoloc.conf');
 
@@ -232,8 +301,10 @@ Sform::add_extra('
             });
         //]]>
         </script>');
+
 $arg1 = '
         var formulid = ["Register"];';
+
 $fv_parametres = '
             T1: {
                 excluded: false,
@@ -251,7 +322,8 @@ $fv_parametres = '
                 },
                 }
             },';
-if ($op == "ModifyUser")
+
+if ($op == "ModifyUser") {
     $fv_parametres .= '
             add_pass2: {
                 validators: {
@@ -262,6 +334,8 @@ if ($op == "ModifyUser")
                 }
                 }
             },';
+}
+
 $fv_parametres .= '
         ' . $ch_lat . ': {
             validators: {
@@ -298,11 +372,14 @@ $fv_parametres .= '
             }
         },
             !###!';
-if ($op == "ModifyUser")
+
+if ($op == "ModifyUser") {
     $fv_parametres .= '
             Register.querySelector(\'[name="add_pass"]\').addEventListener("input", function() {
                 fvitem.revalidateField("add_pass2");
             });';
+}
+
 $fv_parametres .= '
             flatpickr("#T1", {
                 altInput: true,
@@ -313,5 +390,5 @@ $fv_parametres .= '
                 "locale": "' . language::language_iso(1, '', '') . '",
             });
             ';
+
 Sform::add_extra(css::adminfoot('fv', $fv_parametres, $arg1, '1'));
-// ----------------------------------------------------------------

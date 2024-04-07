@@ -34,6 +34,7 @@ use npds\system\support\editeur;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) { 
@@ -124,7 +125,7 @@ function makePass()
     $syllables = 'Er@1,In@2,Ti#a3,D#un4,F_e5,P_re6,V!et7,J!o8,Ne%s9,A%l0,L*en1,So*n2,Ch$a3,I$r4,L^er5,Bo^6,Ok@7,!Tio8,N@ar9,0Sim,1P$le,2B*la,3Te!n,4T~oe,5Ch~o,6Co,7Lat,8Spe,9Ak,0Er,1Po,2Co,3Lor,4Pen,5Cil!,6Li!,7Ght,8_Wh,9_At,T#he0,#He1,@Ck2,Is@3,M1am@,B2o+,3No@,Fi-4,0Ve!,A9ny#,Wa7y$,P8ol%,Iti^6,Cs~5,Ra*,@Dio,+Sou,-Rce,!Sea,#Rch,$Pa,&Per,^Com,~Bo,*Sp,Eak1*,S2t~,Fi^,R3st&,Gr#,O5up@,!Boy,Ea!,Gle*,4Tr*,+A1il,B0i+,_Bl9e,Br8b_,P7ri#,De6e!,$Ka3y,1En$,2Be-,4Se-';
     $syllable_array = explode(',', $syllables);
     
-    srand( (float) microtime() * 1000000);
+    srand( (int) microtime() * 1000000);
     
     for ($count = 1; $count <= 4; $count++) {
         if (rand() % 10 == 1) {
@@ -939,7 +940,7 @@ function logout()
     global $NPDS_Prefix, $user, $cookie;
 
     if ($cookie[1] != '') {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "session WHERE username='$cookie[1]'");
+        DB::table('session')->where('username', $cookie[1])->delete();
     }
 
     setcookie('user', '', 0);
@@ -1207,7 +1208,7 @@ function login($uname, $pass)
         $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "session WHERE host_addr='$ip' AND guest='1'");
 
         if (sql_num_rows($result) == 1) {
-            sql_query("DELETE FROM " . $NPDS_Prefix . "session WHERE host_addr='$ip' AND guest='1'");
+            DB::table('session')->where('host_addr', $ip)->where('guest', 1)->delete();
         }
 
         Header("Location: index.php");
@@ -1311,7 +1312,7 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
                                 $user_dir = $racine . '/storage/users_private/' . $uname . '/';
 
                                 if (!is_dir($rep . $user_dir)) {
-                                    @umask("0000");
+                                    @umask(0000);
 
                                     if (@mkdir($rep . $user_dir, 0777)) {
                                         $fp = fopen($rep . $user_dir . 'index.html', 'w');
@@ -1815,7 +1816,8 @@ switch ($op) {
     case 'saveuser':
         $past = time() - 300;
         
-        sql_query("DELETE FROM " . $NPDS_Prefix . "session WHERE time < $past");
+        DB::table('session')->where('time', '<', $past)->delete();
+
         $result = sql_query("SELECT time FROM " . $NPDS_Prefix . "session WHERE username='$cookie[1]'");
         
         if (sql_num_rows($result) == 1) {

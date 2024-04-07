@@ -187,9 +187,9 @@ if (isset($user)) {
 
         foreach ($msg_id as $v) {
             if ($type == 'outbox') {
-                $sql = "DELETE FROM " . $NPDS_Prefix . "priv_msgs WHERE msg_id='" . $v . "' AND from_userid='" . $userdata['uid'] . "' AND type_msg='1'";
+                DB::table('priv_msgs')->where('msg_id', $v)->where('from_userid', $userdata['uid'])->where('type_msg', 1)->delete();
             } else {
-                $sql = "DELETE FROM " . $NPDS_Prefix . "priv_msgs WHERE msg_id='" . $v . "' AND to_userid='" . $userdata['uid'] . "'";
+                DB::table('priv_msgs')->where('msg_id', $v)->where('to_userid', $userdata['uid'])->delete();
             }
 
             if (!sql_query($sql)) {
@@ -210,9 +210,9 @@ if (isset($user)) {
     //   settype($delete,'integer');
     if (isset($delete)) {
         if (isset($type) and $type == 'outbox') {
-            $sql = "DELETE FROM " . $NPDS_Prefix . "priv_msgs WHERE msg_id='$msg_id' AND from_userid='" . $userdata['uid'] . "' AND type_msg='1'";
+            DB::table('priv_msgs')->where('msg_id', $msg_id)->where('from_userid', $userdata['uid'])->where('type_msg', 1)->delete();
         } else {
-            $sql = "DELETE FROM " . $NPDS_Prefix . "priv_msgs WHERE msg_id='$msg_id' AND to_userid='" . $userdata['uid'] . "'";
+            DB::table('priv_msgs')->where('msg_id', $msg_id)->where('to_userid', $userdata['uid'])->delete();
         }
 
         if (!sql_query($sql)) {

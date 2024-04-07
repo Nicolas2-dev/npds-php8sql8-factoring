@@ -27,8 +27,6 @@ include('boot/bootstrap.php');
 
 function fab_feed($type, $filename, $timeout)
 {
-    global $backend_image, $backend_title, $backend_width, $backend_height, $backend_language, $storyhome, $gmt;
-
     $rss = new UniversalFeedCreator();
     $rss->useCached($type, $filename, $timeout);
 
@@ -45,12 +43,14 @@ function fab_feed($type, $filename, $timeout)
 
     $image = new FeedImage();
     $image->title = $sitename;
-    $image->url = $backend_image;
+    $image->url = Config::get('npds.backend_image');
     $image->link = $nuke_url;
-    $image->description = $backend_title;
-    $image->width = $backend_width;
-    $image->height = $backend_height;
+    $image->description = Config::get('npds.backend_title');
+    $image->width = Config::get('npds.backend_width');
+    $image->height = Config::get('npds.backend_height');
     $rss->image = $image;
+
+    $storyhome = Config::get('npds.storyhome');
 
     $xtab = news::news_aff('index', "WHERE ihome='0' AND archive='0'", $storyhome, '');
     $story_limit = 0;
@@ -59,11 +59,11 @@ function fab_feed($type, $filename, $timeout)
         list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[$story_limit];
         $story_limit++;
         $item = new FeedItem();
-        $item->title = language::preview_local_langue($backend_language, str_replace('&quot;', '\"', $title));
+        $item->title = language::preview_local_langue(Config::get('backend_language'), str_replace('&quot;', '\"', $title));
         $item->link = $nuke_url . "/article.php?sid=$sid";
-        $item->description = metalang::meta_lang(language::preview_local_langue($backend_language, $hometext));
+        $item->description = metalang::meta_lang(language::preview_local_langue(Config::get('backend_language'), $hometext));
         $item->descriptionHtmlSyndicated = true;
-        $item->date = date::convertdateTOtimestamp($time) + ((int) $gmt * 3600);
+        $item->date = date::convertdateTOtimestamp($time) + ((int) Config::get('npds.gmt') * 3600);
         $item->source = $nuke_url;
         $item->author = $aid;
 

@@ -1,8 +1,36 @@
 <?php
 
+use npds\system\logs\logs;
 use npds\system\news\gzfile;
 use npds\system\news\zipfile;
 
+
+if (! function_exists('Admin_alert'))
+{
+    function Admin_alert($motif)
+    {
+        global $admin;
+
+        setcookie('admin', '', 0);
+        unset($admin);
+
+        logs::Ecr_Log('security', 'auth.inc.php/Admin_alert : ' . $motif, '');
+        
+        if (file_exists("storage/meta/meta.php")) {
+            $Titlesitename = 'NPDS';
+            include("storage/meta/meta.php");
+        }
+
+        echo '
+            </head>
+            <body>
+                <br /><br /><br />
+                <p style="font-size: 24px; font-family: Tahoma, Arial; color: red; text-align:center;"><strong>.: ' . translate("Votre adresse Ip est enregistrée") . ' :.</strong></p>
+            </body>
+        </html>';
+        die();
+    }
+}
 
 if (! function_exists('get_os'))
 {

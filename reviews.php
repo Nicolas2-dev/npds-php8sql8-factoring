@@ -22,6 +22,7 @@ use npds\system\mail\mailler;
 use npds\system\utility\spam;
 use npds\system\security\hack;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -784,12 +785,13 @@ function del_review($id_del)
     settype($id_del, "integer");
 
     if ($admin) {
-        sql_query("DELETE FROM " . $NPDS_Prefix . "reviews WHERE id='$id_del'");
+        DB::table('reviews')->where('id', $id_del)->delete();
 
         // commentaires
         if (file_exists("modules/comments/config/reviews.conf.php")) {
             include("modules/comments/config/reviews.conf.php");
-            sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$id_del'");
+ 
+            DB::table('posts')->where('forum_id', $forum)->where('topic_id', $id_del)->delete();
         }
     }
 

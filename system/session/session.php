@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\session;
 
+use npds\system\support\facades\DB;
+
 class session
 {
 
@@ -36,7 +38,8 @@ class session
         //<== geoloc
         $past = time() - 300;
 
-        sql_query("DELETE FROM " . $NPDS_Prefix . "session WHERE time < '$past'");
+        DB::table('session')->where('time', '<', $past)->delete();
+
         $result = sql_query("SELECT time FROM " . $NPDS_Prefix . "session WHERE username='$username'");
         
         if ($row = sql_fetch_assoc($result)) {

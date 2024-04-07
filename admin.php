@@ -13,10 +13,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\system\date\date;
 use npds\system\assets\css;
 use npds\system\routing\url;
 use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 use npds\system\pagination\paginator;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -179,7 +181,8 @@ function GraphicAdmin(string $hlpfile = null)
 
     if (empty($mess)) {
         //si pas de message on nettoie la base
-        sql_query("DELETE FROM " . $NPDS_Prefix . "fonctions WHERE fnom REGEXP'mes_npds_[[:digit:]]'");
+        DB::table('fonctions')->where('fnom', 'REGEXP', 'mes_npds_[[:digit:]]')->delete();
+
         sql_query("ALTER TABLE " . $NPDS_Prefix . "fonctions AUTO_INCREMENT = (SELECT MAX(fid)+1 FROM " . $NPDS_Prefix . "fonctions)");
     } else {
         $fico = '';
@@ -224,7 +227,7 @@ function GraphicAdmin(string $hlpfile = null)
 
         if (count($f_mes) !== 0) {
             foreach ($f_mes as $v) {
-                sql_query('DELETE from ' . $NPDS_Prefix . 'fonctions where fretour_h="' . $v . '" and fcategorie="9"');
+                DB::table('fonctions')->where('fretour_h', $v)->where('fcategorie', 9)->delete();
             }
         }
     }
@@ -603,13 +606,18 @@ function GraphicAdmin(string $hlpfile = null)
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <p>Vous utilisez NPDS ' . Config::get('versioning.Version_Sub') . ' ' . Config::get('versioning.Version_Num') . '</p>
-                <p>' . adm_translate("Une nouvelle version de NPDS est disponible !") . '</p>
+                <p>Vous utilisez NPDS ' . Config::get('versioning.Version_Sub') . ' ' . Config::get('versioning.Version_Num') . '</p>';
+               
+    if (($versus_info[2] > Config::get('versioning.Version_Num'))) {          
+        $adm_ent .= '<p>' . adm_translate("Une nouvelle version de NPDS est disponible !") . '</p>
                 <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
                 <p class="my-3">
                     <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-bs-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
                     <a class="mx-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.tar.gz" target="_blank" title="" data-bs-toggle="tooltip" data-bs-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.tar.gz</a>
-                </p>
+                </p>';
+    }
+
+    $adm_ent .= '                
                 </div>
                 <div class="modal-footer">
                 </div>
@@ -713,19 +721,23 @@ function adminMain($deja_affiches)
             $result3 = sql_query("SELECT title FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$catid'");
             list($cat_title) = sql_fetch_row($result3);
 
-            if ($radminsuper)
+            if ($radminsuper) {
                 $affiche = true;
-            else {
+            } else {
                 $topicadminX = explode(',', $topicadmin);
                 for ($iX = 0; $iX < count($topicadminX); $iX++) {
-                    if (trim($topicadminX[$iX]) == $aid) $affiche = true;
+                    if (trim($topicadminX[$iX]) == $aid) { 
+                        $affiche = true;
+                    }
                 }
             }
 
             $hometext = strip_tags($hometext, '<br><br />');
             $lg_max = 200;
 
-            if (strlen($hometext) > $lg_max) $hometext = substr($hometext, 0, $lg_max) . ' ...';
+            if (strlen($hometext) > $lg_max) {
+                $hometext = substr($hometext, 0, $lg_max) . ' ...';
+            }
             
             echo '
             <tr>
@@ -734,16 +746,18 @@ function adminMain($deja_affiches)
 
             $title = language::aff_langue($title);
 
-            if ($archive)
+            if ($archive) {
                 echo $title . ' <i>(archive)</i>';
-            else {
+            } else {
                 if ($affiche) {
                     echo '<a data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" href="article.php?sid=' . $sid . '" data-bs-content=\'   <div class="thumbnail"><img class="img-rounded" src="assets/images/topics/' . $topicimage . '" height="80" width="80" alt="topic_logo" /><div class="caption">' . htmlentities($hometext, ENT_QUOTES) . '</div></div>\' title="' . $sid . '" data-bs-html="true">' . ucfirst($title) . '</a>';
-                    if ($ihome == 1)
+                    if ($ihome == 1) {
                         echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip">' . language::aff_langue($cat_title) . '</span> <span class="text-danger">non publié en index</span></small>';
-                    else
-                if ($catid > 0)
-                        echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip"> ' . language::aff_langue($cat_title) . '</span> <span class="text-success"> publié en index</span></small>';
+                    } else {
+                        if ($catid > 0) {
+                            echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip"> ' . language::aff_langue($cat_title) . '</span> <span class="text-success"> publié en index</span></small>';
+                        }
+                    }
                 } else {
                     echo '<i>' . $title . '</i>';
                 }
@@ -757,15 +771,16 @@ function adminMain($deja_affiches)
                 <td>' . $topictext . '<a href="index.php?op=newtopic&amp;topic=' . $topic . '" class="tooltip">' . language::aff_langue($topictext) . '</a>';
             }
 
-            if ($affiche)
+            if ($affiche) {
                 echo '</td>
                 <td>
                 <a href="admin.php?op=EditStory&amp;sid=' . $sid . '" ><i class="fas fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a>
                 <a href="admin.php?op=RemoveStory&amp;sid=' . $sid . '" ><i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></i></a>';
-            
-            else
+           } else {
                 echo '</td>
                 <td>';
+            }
+
             echo '</td>
             </tr>';
             $i++;
@@ -844,7 +859,8 @@ if ($admintest) {
             break;
 
         case 'deleteNotice':
-            sql_query("DELETE FROM " . $NPDS_Prefix . "reviews_add WHERE id='$id'");
+            DB::table('reviews_add')->where('id', $id)->delete();
+
             Header("Location: admin.php?op=$op_back");
             break;
 

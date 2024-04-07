@@ -11,63 +11,47 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-declare(strict_types=1);
 
-use npds\system\logs\logs;
 use npds\system\auth\users;
 use npds\system\config\Config;
-
-function Admin_alert($motif)
-{
-    global $admin;
-
-    setcookie('admin', '', 0);
-    unset($admin);
-
-    logs::Ecr_Log('security', 'auth.inc.php/Admin_alert : ' . $motif, '');
-    
-    if (file_exists("storage/meta/meta.php")) {
-        $Titlesitename = 'NPDS';
-        include("storage/meta/meta.php");
-    }
-
-    echo '
-        </head>
-        <body>
-            <br /><br /><br />
-            <p style="font-size: 24px; font-family: Tahoma, Arial; color: red; text-align:center;"><strong>.: ' . translate("Votre adresse Ip est enregistrée") . ' :.</strong></p>
-        </body>
-    </html>';
-    die();
-}
+use npds\system\support\facades\DB;
 
 if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
     if ($aid != '' and $pwd != '') {
-        $result = sql_query("SELECT pwd, hashkey FROM " . $NPDS_Prefix . "authors WHERE aid='$aid'");
-        
-        if (sql_num_rows($result) == 1) {
-            $setinfo = sql_fetch_assoc($result);
-            $dbpass = $setinfo['pwd'];
-            //$pwd = utf8_decode($pwd);
+
+        $author_setinfo = DB::table('authors')
+                            ->select('pwd', 'hashkey')
+                            ->where('aid', $aid)
+                            ->first();
+
+        if ($author_setinfo) {
+
+            $dbpass = $author_setinfo['pwd'];
             $scryptPass = null;
 
             if (password_verify($pwd, $dbpass) or (strcmp($dbpass, $pwd) == 0)) {
-                if (!$setinfo['hashkey']) {
+                
+                if (!$author_setinfo['hashkey']) {
                     $AlgoCrypt = PASSWORD_BCRYPT;
                     $min_ms = 100;
                     $options = ['cost' => users::getOptimalBcryptCostParameter($pwd, $AlgoCrypt, $min_ms)];
                     $hashpass = password_hash($pwd, $AlgoCrypt, $options);
                     $pwd = crypt($pwd, $hashpass);
                     
-                    sql_query("UPDATE " . $NPDS_Prefix . "authors SET pwd='$pwd', hashkey='1' WHERE aid='$aid'");
-                    $result = sql_query("SELECT pwd, hashkey FROM " . $NPDS_Prefix . "authors WHERE aid = '$aid'");
-                    
-                    if (sql_num_rows($result) == 1) {
-                        $setinfo = sql_fetch_assoc($result);
-                    }
+                    DB::table('authors')->where('aid', $aid)->update(array(
+                        'pwd'       => $pwd,
+                        'hashkey'   => 1,
+                    ));
 
-                    $dbpass = $setinfo['pwd'];
-                    $scryptPass = crypt($dbpass, $hashpass);
+                    $_author_setinfo = DB::table('authors')
+                                            ->select('pwd', 'hashkey')
+                                            ->where('aid', $aid)
+                                            ->first();
+
+                    if ($_author_setinfo) {
+                        $dbpass = $_author_setinfo['pwd'];
+                        $scryptPass = crypt($dbpass, $hashpass);
+                    }
                 }
             }
 
@@ -81,7 +65,7 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
 
             $admin = base64_encode("$aid:" . md5($CryptpPWD));
 
-            $admin_cook_duration = Config::get('npds.admin_cook_duration');
+            $admin_cook_duration = Config::get('app.admin_cook_duration');
 
             if ($admin_cook_duration <= 0) {
                 $admin_cook_duration = 1;
@@ -109,16 +93,18 @@ if (isset($admin) and ($admin != '')) {
         Admin_Alert('Null Aid or Passwd');
     }
 
-    $result = sql_query("SELECT pwd, radminsuper FROM " . $NPDS_Prefix . "authors WHERE aid = '$aid'");
+    $author = DB::table('authors')
+        ->select('pwd', 'radminsuper')
+        ->where('aid', $aid)
+        ->first();
 
-    if (!$result) {
+    if (!$author) {
         Admin_Alert("DB not ready #2 : $aid / $AIpwd");
     } else {
-        list($AIpass, $Xsuper_admintest) = sql_fetch_row($result);
         
-        if (md5($AIpass) == $AIpwd and $AIpass != '') {
+        if (md5($author['pwd']) == $AIpwd and $author['pwd'] != '') {
             $admintest = true;
-            $super_admintest = $Xsuper_admintest;
+            $super_admintest = $author['radminsuper'];
         } else {
             Admin_Alert("Password in Cookies not Good #1 : $aid / $AIpwd");
         }

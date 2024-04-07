@@ -19,6 +19,7 @@ use npds\system\routing\url;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
 use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -49,7 +50,8 @@ function SuserCheck($email)
 
     if (sql_num_rows(sql_query("SELECT email FROM " . $NPDS_Prefix . "lnl_outside_users WHERE email='$email'")) > 0) {
         if (sql_num_rows(sql_query("SELECT email FROM " . $NPDS_Prefix . "lnl_outside_users WHERE email='$email' AND status='NOK'")) > 0) {
-            sql_query("DELETE FROM " . $NPDS_Prefix . "lnl_outside_users WHERE email='$email'");
+
+            DB::table('lnl_outside_users')->where('email', $email)->delete();
         } else {
             $stop = translate("Erreur : adresse Email déjà utilisée");
         }

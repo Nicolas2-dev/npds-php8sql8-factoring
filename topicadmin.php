@@ -19,6 +19,7 @@ use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\utility\spam;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -105,8 +106,8 @@ if ((isset($submit)) and ($mode == 'move')) {
         forum::forumerror('0010');
     }
 
-    $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read where topicid='$topic'";
-    if (!$r = sql_query($sql)) {
+    $r = DB::table('forum_read')->where('topicid', $topic)->delete();
+    if (!$r) {
         forum::forumerror('0001');
     }
 
@@ -186,17 +187,17 @@ if ((isset($submit)) and ($mode == 'move')) {
 
                 break;
             case 'del':
-                $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'";
-                if (!$result = sql_query($sql)) {
+                $r = DB::table('posts')->where('topic_id', $topic)->where('forum_id', $forum)->delete();
+                if (!$r) {
                     forum::forumerror('0009');
                 }
 
-                $sql = "DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'";
-                if (!$result = sql_query($sql)) {
+                $r = DB::table('forumtopics')->where('topic_id', $topic)->delete();
+                if (!$r) {
                     forum::forumerror('0010');
                 }
 
-                $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid='$topic'";
+                $r = DB::table('forum_read')->where('topicid', $topic)->delete();
                 if (!$r = sql_query($sql)) {
                     forum::forumerror('0001');
                 }

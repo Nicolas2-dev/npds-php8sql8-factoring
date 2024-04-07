@@ -18,6 +18,7 @@ use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
@@ -43,13 +44,14 @@ if (!$aid) {
     header("Location: index.php");
 }
 
-sql_query("UPDATE " . $NPDS_Prefix . "stories SET counter=counter+1 WHERE sid='$sid'");
+DB::table('stories')->where('sid', $sid)->update(array(
+    'counter'       => DB::raw('counter+1'),
+));
 
 include("themes/default/header.php");
 
 // Include cache manager
-global $SuperCache;
-if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->genereting_output == -1) or (!$SuperCache)) {
+if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->genereting_output == -1) or (!Config::get('cache.config.SuperCache'))) {
     $title = language::aff_langue(stripslashes($title));
     $hometext = code::aff_code(language::aff_langue(stripslashes($hometext)));
     $bodytext = code::aff_code(language::aff_langue(stripslashes($bodytext)));
@@ -70,18 +72,19 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
     news::getTopics($sid);
 
     if ($catid != 0) {
-        $resultx = sql_query("SELECT title FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$catid'");
-        list($title1) = sql_fetch_row($resultx);
 
-        $title = '<a href="index.php?op=newindex&amp;catid=' . $catid . '"><span>' . language::aff_langue($title1) . '</span></a> : ' . $title;
+        $stories_cat = DB::table('stories_cat')->select('title')->where('catid', $catid)->first();
+
+        $title = '<a href="index.php?op=newindex&amp;catid=' . $catid . '"><span>' . language::aff_langue($stories_cat['title1']) . '</span></a> : ' . $title;
     }
 
     $boxtitle = translate("Liens relatifs");
     $boxstuff = '<ul>';
 
-    $result = sql_query("SELECT name, url FROM " . $NPDS_Prefix . "related WHERE tid='$topic'");
-    while (list($name, $url) = sql_fetch_row($result)) {
-        $boxstuff .= '<li><a href="' . $url . '" target="_blank"><span>' . $name . '</span></a></li>';
+    $related = DB::table('related')->select('name', 'url')->where('tid', $topic)->get();
+    
+    foreach ($related as $val) {
+        $boxstuff .= '<li><a href="' . $val['url'] . '" target="_blank"><span>' . $val['name'] . '</span></a></li>';
     }
 
     $boxstuff .= '

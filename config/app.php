@@ -5,7 +5,7 @@ return array(
 
     // Provisoire le temp de fincr l'organisation des fichiers de configuration
 
-    // Database
+    // Database va disparaitre prochainement !!!!
 
     'database' => array(
         
@@ -22,7 +22,7 @@ return array(
         /**
          * MySQL Password
          */
-        'dbpass' => 'password',
+        'dbpass' => '',
         
         /**
          * MySQL Database Name
@@ -56,6 +56,8 @@ return array(
          * Facades
          */
         'DB' => 'npds\system\support\facades\DB',
+        'Sform' => 'npds\system\support\facades\Sform',
+        'Cache' => 'npds\system\support\facades\Cache',
 
     ),
 );

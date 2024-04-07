@@ -22,6 +22,7 @@ use npds\system\routing\url;
 use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\pixels\image;
+use npds\system\config\Config;
 use npds\system\support\editeur;
 use npds\system\language\language;
 use npds\system\language\metalang;
@@ -40,7 +41,14 @@ include("publication.php");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function puthome($ihome)
+/**
+ * [puthome description]
+ *
+ * @param   int   $ihome  [$ihome description]
+ *
+ * @return  void
+ */
+function puthome(int $ihome): void
 {
     echo '
         <div class="mb-3 row">
@@ -128,11 +136,16 @@ function puthome($ihome)
         </div>';
 }
 
-function SelectCategory($cat)
+/**
+ * [SelectCategory description]
+ *
+ * @param   int   $cat  [$cat description]
+ *
+ * @return  void
+ */
+function SelectCategory(int $cat): void
 {
-    $selcat = sql_query("SELECT catid, title FROM " . $NPDS_Prefix . "stories_cat");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $stories_cat = DB::table('stories_cat')->select('catid', 'title')->get();
 
     echo ' 
         <div class="mb-3 row">
@@ -148,14 +161,14 @@ function SelectCategory($cat)
 
     echo '<option name="catid" value="0" ' . $sel . '>' . adm_translate("Articles") . '</option>';
     
-    while (list($catidX, $title) = sql_fetch_row($selcat)) {
-        if ($catidX == $cat) { 
+    foreach ($stories_cat as $categorie) {
+        if ($categorie['catid'] == $cat) { 
             $sel = 'selected="selected"';
         } else {
             $sel = '';
         }
 
-        echo '<option name="catid" value="' . $catidX . '" ' . $sel . '>' . language::aff_langue($title) . '</option>';
+        echo '<option name="catid" value="' . $categorie['catid'] . '" ' . $sel . '>' . language::aff_langue($categorie['title']) . '</option>';
     }
 
     echo '
@@ -166,7 +179,13 @@ function SelectCategory($cat)
 }
 
 // CATEGORIES
-function AddCategory()
+
+/**
+ * [AddCategory description]
+ *
+ * @return  void
+ */
+function AddCategory(): void
 {
     global $aid;
 
@@ -208,7 +227,14 @@ function AddCategory()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function SaveCategory($title)
+/**
+ * [SaveCategory description]
+ *
+ * @param   string  $title  [$title description]
+ *
+ * @return  void
+ */
+function SaveCategory(string $title): void
 {
     global $aid, $f_meta_nom;
 
@@ -220,11 +246,10 @@ function SaveCategory($title)
     //<== controle droit
 
     $title = preg_replace('#"#', '', $title);
-    $check = sql_num_rows(sql_query("SELECT catid FROM " . $NPDS_Prefix . "stories_cat WHERE title='$title'"));
-    
-    = DB::table('')->select()->where('', )->orderBy('')->get();
 
-    if ($check) {
+    $check = DB::table('stories_cat')->select('catid')->where('title', $title)->first();
+
+    if ($check['catid']) {
         $what1 = '<div class="alert alert-danger lead" role="alert">' . adm_translate("Cette Catégorie existe déjà !") . '<br /><a href="javascript:history.go(-1)" class="btn btn-secondary  mt-2">' . adm_translate("Retour en arrière, pour changer le Nom") . '</a></div>';
     } else {
         $what1 = '<div class="alert alert-success lead" role="alert">' . adm_translate("Nouvelle Catégorie ajoutée") . '</div>';
@@ -247,7 +272,14 @@ function SaveCategory($title)
     css::adminfoot('', '', '', '');
 }
 
-function EditCategory($catid)
+/**
+ * [EditCategory description]
+ *
+ * @param   int   $catid  [$catid description]
+ *
+ * @return  void
+ */
+function EditCategory(int $catid): void
 {
     global $aid;
 
@@ -267,79 +299,83 @@ function EditCategory($catid)
     <hr />
     <h3 class="mb-3">' . adm_translate("Edition des Catégories") . '</h3>';
 
-    $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$catid'");
-    list($title) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     if (!$catid) {
-        $selcat = sql_query("SELECT catid, title FROM " . $NPDS_Prefix . "stories_cat");
+        $selcat = sql_query("SELECT  FROM " . $NPDS_Prefix . "");
         
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $stories_cat = DB::table('stories_cat')->select('catid', 'title')->get();
 
         echo '
-    <form action="admin.php" method="post">
-        <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="catid">' . adm_translate("Sélectionner une Catégorie") . '</label>
-            <div class="col-sm-12">
-                <select class="form-select" id="catid" name="catid">
-                    <option name="catid" value="0">' . adm_translate("Articles") . '</option>';
+        <form action="admin.php" method="post">
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-12" for="catid">' . adm_translate("Sélectionner une Catégorie") . '</label>
+                <div class="col-sm-12">
+                    <select class="form-select" id="catid" name="catid">
+                        <option name="catid" value="0">' . adm_translate("Articles") . '</option>';
         
-        while (list($catid, $title) = sql_fetch_row($selcat)) {
+        foreach ($stories_cat as $categ) {
             echo '
-                <option name="catid" value="' . $catid . '">' . language::aff_langue($title) . '</option>';
+                <option name="catid" value="' . $categ['catid'] . '">' . language::aff_langue($categ['title']) . '</option>';
         }
 
         echo '
-            </select>
+                </select>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <div class="col-sm-12">
-                <input type="hidden" name="op" value="EditCategory" />
-                <input class="btn btn-primary" type="submit" value="' . adm_translate("Editer") . '" />
+            <div class="mb-3 row">
+                <div class="col-sm-12">
+                    <input type="hidden" name="op" value="EditCategory" />
+                    <input class="btn btn-primary" type="submit" value="' . adm_translate("Editer") . '" />
+                </div>
             </div>
-        </div>
-    </form>';
+        </form>';
 
         css::adminfoot('', '', '', '');
     } else {
+
+        $stories_cat = DB::table('stories_cat')->select('title')->where('catid', $catid)->first();
+
         echo '
-    <form id="storieseditcat" action="admin.php" method="post">
-        <div class="mb-3 row">
-        <label class="col-form-label col-sm-12" for="title">' . adm_translate("Nom") . '</label>
-            <div class="col-sm-12">
-                <input class="form-control" type="text" id="title" name="title" maxlength="255" value="' . $title . '" required="required"/>
-                <span class="help-block text-end" id="countcar_title"></span>
+        <form id="storieseditcat" action="admin.php" method="post">
+            <div class="mb-3 row">
+            <label class="col-form-label col-sm-12" for="title">' . adm_translate("Nom") . '</label>
+                <div class="col-sm-12">
+                    <input class="form-control" type="text" id="title" name="title" maxlength="255" value="' . $categorie_cat['title'] . '" required="required"/>
+                    <span class="help-block text-end" id="countcar_title"></span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <div class="col-sm-12">
-                <input type="hidden" name="catid" value="' . $catid . '" />
-                <input type="hidden" name="op" value="SaveEditCategory" />
-                <input class="btn btn-primary" type="submit" value="' . adm_translate("Sauver les modifications") . '" />
+            <div class="mb-3 row">
+                <div class="col-sm-12">
+                    <input type="hidden" name="catid" value="' . $catid . '" />
+                    <input type="hidden" name="op" value="SaveEditCategory" />
+                    <input class="btn btn-primary" type="submit" value="' . adm_translate("Sauver les modifications") . '" />
+                </div>
             </div>
-        </div>
-    </form>';
+        </form>';
 
         $arg1 = '
-    var formulid = ["storieseditcat"];
-    inpandfieldlen("title",255);';
+        var formulid = ["storieseditcat"];
+        inpandfieldlen("title",255);';
 
         css::adminfoot('fv', '', $arg1, '');
     }
 }
 
-function SaveEditCategory($catid, $title)
+/**
+ * [SaveEditCategory description]
+ *
+ * @param   int     $catid  [$catid description]
+ * @param   string  $title  [$title description]
+ *
+ * @return  void
+ */
+function SaveEditCategory(int $catid, string $title): void
 {
     global $aid, $f_meta_nom;
 
     $f_titre = adm_translate("Articles");
     $title = preg_replace('#"#', '', $title);
 
-    $check = sql_num_rows(sql_query("SELECT catid FROM " . $NPDS_Prefix . "stories_cat WHERE title='$title'"));
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $check = DB::table('stories_cat')->select('catid')->where('title', $title)->first();
 
     if ($check) {
         $what1 = '<div class="alert alert-danger lead" role="alert">' . adm_translate("Cette Catégorie existe déjà !") . '<br /><a href="javascript:history.go(-2)" class="btn btn-secondary  mt-2">' . adm_translate("Retour en arrière, pour changer le Nom") . '</a></div>';
@@ -366,7 +402,14 @@ function SaveEditCategory($catid, $title)
     css::adminfoot('', '', '', '');
 }
 
-function DelCategory($cat)
+/**
+ * [DelCategory description]
+ *
+ * @param   int   $cat  [$cat description]
+ *
+ * @return  void
+ */
+function DelCategory(int $cat): void
 {
     global $aid;
 
@@ -382,19 +425,12 @@ function DelCategory($cat)
     GraphicAdmin('');
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$cat'");
-    list($title) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     echo '
     <hr />
     <h3 class="mb-3 text-danger">' . adm_translate("Supprimer une Catégorie") . '</h3>';
 
     if (!$cat) {
-        $selcat = sql_query("SELECT catid, title FROM " . $NPDS_Prefix . "stories_cat");
-        
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $stories_cat = DB::table('stories_cat')->select('catid', 'title')->get();
 
         echo '
     <form action="admin.php" method="post">
@@ -403,8 +439,8 @@ function DelCategory($cat)
             <div class="col-sm-12">
                 <select class="form-select" id="cat" name="cat">';
 
-        while (list($catid, $title) = sql_fetch_row($selcat)) {
-            echo '<option name="cat" value="' . $catid . '">' . language::aff_langue($title) . '</option>';
+        foreach ($stories_cat as $categ) {
+            echo '<option name="cat" value="' . $categ['catid'] . '">' . language::aff_langue($categ['title']) . '</option>';
         }
 
         echo '
@@ -420,10 +456,7 @@ function DelCategory($cat)
     </form>';
 
     } else {
-        $result2 = sql_query("SELECT * FROM " . $NPDS_Prefix . "stories WHERE catid='$cat'");
-        $numrows = sql_num_rows($result2);
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $numrows = DB::table('stories')->select('*')->where('catid', $cat)->count();
 
         if ($numrows == 0) {
             DB::table('stories_cat')->where('catid', $cat)->delete();
@@ -434,9 +467,12 @@ function DelCategory($cat)
             echo '
             <div class="alert alert-success" role="alert">' . adm_translate("Suppression effectuée") . '</div>';
         } else {
+
+            $stories_cat = DB::table('stories_cat')->select('title')->where('catid', $cat)->first();
+        
             echo '
             <div class="alert alert-danger lead" role="alert">
-                <p class="noir"><strong>' . adm_translate("Attention : ") . '</strong> ' . adm_translate("la Catégorie") . ' <strong>' . $title . '</strong> ' . adm_translate("a") . ' <strong>' . $numrows . '</strong> ' . adm_translate("Articles !") . '<br />';
+                <p class="noir"><strong>' . adm_translate("Attention : ") . '</strong> ' . adm_translate("la Catégorie") . ' <strong>' . $stories_cat['title'] . '</strong> ' . adm_translate("a") . ' <strong>' . $numrows . '</strong> ' . adm_translate("Articles !") . '<br />';
             echo adm_translate("Vous pouvez supprimer la Catégorie, les Articles et Commentaires") . ' ';
             echo adm_translate("ou les affecter à une autre Catégorie.") . '<br /></p>
                 <p align="text-center"><strong>' . adm_translate("Que voulez-vous faire ?") . '</strong></p>
@@ -449,16 +485,24 @@ function DelCategory($cat)
     css::adminfoot('', '', '', '');
 }
 
-function YesDelCategory($catid)
+/**
+ * [YesDelCategory description]
+ *
+ * @param   int   $catid  [$catid description]
+ *
+ * @return  void
+ */
+function YesDelCategory(int $catid): void
 {
     DB::table('stories_cat')->where('catid', $catid)->delete();
 
-    $result = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories WHERE catid='$catid'");
+    $stories = DB::table('stories')->select('sid')->where('catid', $catid)->get();
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    while (list($sid) = sql_fetch_row($result)) {
+    foreach ($stories as $storie) {
         DB::table('stories')->where('catid', $catid)->delete();
+
+        // pour article.conf
+        $sid = $storie['sid'];
 
         // commentaires
         if (file_exists("modules/comments/config/article.conf.php")) {
@@ -474,7 +518,15 @@ function YesDelCategory($catid)
     Header("Location: admin.php");
 }
 
-function NoMoveCategory($catid, $newcat)
+/**
+ * [NoMoveCategory description]
+ *
+ * @param   int   $catid   [$catid description]
+ * @param   int   $newcat  [$newcat description]
+ *
+ * @return  void
+ */
+function NoMoveCategory(int $catid, int $newcat): void
 {
     global $f_meta_nom, $f_titre, $aid;
 
@@ -490,54 +542,49 @@ function NoMoveCategory($catid, $newcat)
     GraphicAdmin('');
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$catid'");
-    list($title) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $stories_cat = DB::table('stories_cat')->select('title')->where('catid', $catid)->first();
 
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Affectation d'Articles vers une nouvelle Catégorie") . '</h3>';
 
     if (!$newcat) {
-        echo '<label>' . adm_translate("Tous les Articles dans") . ' <strong>' . language::aff_langue($title) . '</strong> ' . adm_translate("seront affectés à") . '</label>';
+        echo '<label>' . adm_translate("Tous les Articles dans") . ' <strong>' . language::aff_langue($stories_cat['title']) . '</strong> ' . adm_translate("seront affectés à") . '</label>';
         
-        $selcat = sql_query("SELECT catid, title FROM " . $NPDS_Prefix . "stories_cat");
+        $selcat = sql_query("SELECT  FROM " . $NPDS_Prefix . "");
         
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $stories_cat = DB::table('stories_cat')->select('catid', 'title')->get();
 
         echo '
-    <form action="admin.php" method="post">
-        <div class="mb-3 row">
-            <label class="col-form-label visually-hidden" for="newcat">' . adm_translate("Sélectionner la nouvelle Catégorie : ") . '</label>
-            <div class="col-sm-12">
-                <select class="form-select" id="newcat" name="newcat">
-                <option name="newcat" value="0">' . adm_translate("Articles") . '</option>';
+        <form action="admin.php" method="post">
+            <div class="mb-3 row">
+                <label class="col-form-label visually-hidden" for="newcat">' . adm_translate("Sélectionner la nouvelle Catégorie : ") . '</label>
+                <div class="col-sm-12">
+                    <select class="form-select" id="newcat" name="newcat">
+                    <option name="newcat" value="0">' . adm_translate("Articles") . '</option>';
 
-        while (list($newcat, $title) = sql_fetch_row($selcat)) {
-            echo '<option name="newcat" value="' . $newcat . '">' . language::aff_langue($title) . '</option>';
+        foreach ($stories_cat as $cat) {
+            echo '<option name="newcat" value="' . $cat['newcat'] . '">' . language::aff_langue($cat['title']) . '</option>';
         }
 
         echo '
-                </select>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <div class="col-sm-12">
-                <input type="hidden" name="catid" value="' . $catid . '" />
-                <input type="hidden" name="op" value="NoMoveCategory" />
-                <input class="btn btn-primary" type="submit" value="' . adm_translate("Affectation") . '" />
+            <div class="mb-3 row">
+                <div class="col-sm-12">
+                    <input type="hidden" name="catid" value="' . $catid . '" />
+                    <input type="hidden" name="op" value="NoMoveCategory" />
+                    <input class="btn btn-primary" type="submit" value="' . adm_translate("Affectation") . '" />
+                </div>
             </div>
-        </div>
-    </form>';
+        </form>';
 
     } else {
-        $resultm = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories WHERE catid='$catid'");
-        
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $stories = DB::table('stories')->select('sid')->where('catid', $catid)->get();
 
-        while (list($sid) = sql_fetch_row($resultm)) {
-            DB::table('stories')->where('sid', $sid)->update(array(
+        foreach ($stories as $storie) {
+            DB::table('stories')->where('sid', $storie['sid'])->update(array(
                 'catid'       => $newcat,
             ));
         }
@@ -554,39 +601,35 @@ function NoMoveCategory($catid, $newcat)
 }
 
 // NEWS
-function displayStory($qid)
+
+/**
+ * [displayStory description]
+ *
+ * @param   int   $qid  [$qid description]
+ *
+ * @return  void
+ */
+function displayStory(int $qid): void
 {
-    global $tipath, $aid, $radminsuper;
+    global $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Articles");
 
+    $queue = DB::table('queue')->select('qid', 'uid', 'uname', 'subject', 'story', 'bodytext', 'topic', 'date_debval', 'date_finval',' auto_epur')->where('qid', $qid)->get();
 
-    $result = sql_query("SELECT qid, uid, uname, subject, story, bodytext, topic, date_debval,date_finval,auto_epur FROM " . $NPDS_Prefix . "queue WHERE qid='$qid'");
-    list($qid, $uid, $uname, $subject, $story, $bodytext, $topic, $date_debval, $date_finval, $epur) = sql_fetch_row($result);
-    sql_free_result($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    $subject = stripslashes($subject);
-    $story = stripslashes($story);
-    $bodytext = stripslashes($bodytext);
-
-    if ($topic < 1) {
-        $topic = 1;
+    if ($queue['topic'] < 1) {
+        $queue['topic'] = 1;
     }
 
     $affiche = false;
 
-    $result2 = sql_query("SELECT topictext, topicimage, topicadmin FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-    list($topictext, $topicimage, $topicadmin) = sql_fetch_row($result2);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic = DB::table('topics')->select('topictext', 'topicimage', 'topicadmin')->where('topicid', $queue['topic'])->first();
 
     if ($radminsuper) {
         $affiche = true;
     } else {
-        $topicadminX = explode(',', $topicadmin);
+        $topicadminX = explode(',', $topic['topicadmin']);
         for ($i = 0; $i < count($topicadminX); $i++) {
             if (trim($topicadminX[$i]) == $aid) $affiche = true;
         }
@@ -596,7 +639,7 @@ function displayStory($qid)
         header("location: admin.php?op=submissions");
     }
 
-    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topictext) . '</strong></span>';
+    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topic['topictext']) . '</strong></span>';
 
     include("themes/default/header.php");
 
@@ -611,27 +654,28 @@ function displayStory($qid)
         ' . language::aff_localzone_langue("local_user_language") . '
         <div class="card card-body mb-3">';
 
-    if ($topicimage !== '') {
-        if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-            $imgtmp = $tipath . $topicimage;
+    if ($topic['topicimage'] !== '') {
+        if (!$imgtmp = theme::theme_image('topics/' . $topic['topicimage'])) {
+            $imgtmp = config::get('npds.tipath') . $topic['topicimage'];
         }
-
-        $timage = $imgtmp;
 
         if (file_exists($imgtmp)) {
-            $topiclogo = '<img class="img-fluid n-sujetsize" src="' . $timage . '" align="right" alt="" />';
+            $topiclogo = '<img class="img-fluid n-sujetsize" src="' . $imgtmp . '" align="right" alt="" />';
         }
     }
+
+    
+    $subject = stripslashes($queue['subject']);
 
     code_aff('<h4>' . $subject . $topiclogo . '</h4>', '<div class="text-muted">' . metalang::meta_lang($story) . '</div>', metalang::meta_lang($bodytext), "");
 
     echo '
             </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="author">' . userpopover($uname, 40, '') . adm_translate("Utilisateur") . '</label>
+            <label class="col-sm-4 col-form-label" for="author">' . userpopover($queue['uname'], 40, '') . adm_translate("Utilisateur") . '</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="author" name="author" value="' . $uname . '" />
-                <a href="replypmsg.php?send=' . urlencode($uname) . '" target="_blank" title="' . adm_translate("Diffusion d'un Message Interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-lg"></i></a>
+                <input class="form-control" type="text" id="author" name="author" value="' . $queue['uname'] . '" />
+                <a href="replypmsg.php?send=' . urlencode($queue['uname']) . '" target="_blank" title="' . adm_translate("Diffusion d'un Message Interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-lg"></i></a>
             </div>
         </div>
         <div class="mb-3 row">
@@ -645,21 +689,19 @@ function displayStory($qid)
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
-    $toplist = sql_query("SELECT topicid, topictext, topicadmin FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
-    
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     if ($radminsuper) {
         echo '<option value="">' . adm_translate("Tous les Sujets") . '</option>';
     }
 
-    while (list($topicid, $topics, $topicadmin) = sql_fetch_row($toplist)) {
+    $toplis = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
+
+    foreach ($toplist as $list) {
         $affiche = false;
         
         if ($radminsuper) {
             $affiche = true;
         } else {
-            $topicadminX = explode(',', $topicadmin);
+            $topicadminX = explode(',', $list['topicadmin']);
             for ($i = 0; $i < count($topicadminX); $i++) {
                 if (trim($topicadminX[$i]) == $aid) { 
                     $affiche = true;
@@ -672,7 +714,7 @@ function displayStory($qid)
                 $sel = 'selected="selected" ';
             }
 
-            echo '<option ' . $sel . ' value="' . $topicid . '">' . language::aff_langue($topics) . '</option>';
+            echo '<option ' . $sel . ' value="' . $list['topicid'] . '">' . language::aff_langue($list['topics']) . '</option>';
             $sel = '';
         }
     }
@@ -689,6 +731,9 @@ function displayStory($qid)
     settype($ihome, 'integer');
 
     puthome($ihome);
+
+    $story = stripslashes($queue['story']);
+    $bodytext = stripslashes($queue['bodytext']);
 
     echo '
     <div class="mb-3 row">
@@ -720,16 +765,16 @@ function displayStory($qid)
 
     echo editeur::aff_editeur('notes', '');
 
-    $dd_pub = substr($date_debval, 0, 10);
-    $fd_pub = substr($date_finval, 0, 10);
-    $dh_pub = substr($date_debval, 11, 5);
-    $fh_pub = substr($date_finval, 11, 5);
+    $dd_pub = substr($queue['date_debval'], 0, 10);
+    $fd_pub = substr($queue['date_finval'], 0, 10);
+    $dh_pub = substr($queue['date_debval'], 11, 5);
+    $fh_pub = substr($queue['date_finval'], 11, 5);
 
     publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
 
     echo '
-        <input type="hidden" name="qid" value="' . $qid . '" />
-        <input type="hidden" name="uid" value="' . $uid . '" />
+        <input type="hidden" name="qid" value="' . $queue['qid'] . '" />
+        <input type="hidden" name="uid" value="' . $queue['uid'] . '" />
         <div class="mb-3">
             <select class="form-select" name="op">
                 <option value="DeleteStory">' . adm_translate("Effacer l'Article") . '</option>
@@ -746,9 +791,32 @@ function displayStory($qid)
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topic, $notes, $catid, $ihome, $members, $Mmembers, $dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
+/**
+ * [previewStory description]
+ *
+ * @param   int     $qid       [$qid description]
+ * @param   int     $uid       [$uid description]
+ * @param   string  $author    [$author description]
+ * @param   string  $subject   [$subject description]
+ * @param   string  $hometext  [$hometext description]
+ * @param   string  $bodytext  [$bodytext description]
+ * @param   int     $topic     [$topic description]
+ * @param   string  $notes     [$notes description]
+ * @param   int     $catid     [$catid description]
+ * @param   int     $ihome     [$ihome description]
+ * @param   string  $members   [$members description]
+ * @param   int     $Mmembers  [$Mmembers description]
+ * @param   int     $dd_pub    [$dd_pub description]
+ * @param   int     $fd_pub    [$fd_pub description]
+ * @param   int     $dh_pub    [$dh_pub description]
+ * @param   int     $fh_pub    [$fh_pub description]
+ * @param   int     $epur      [$epur description]
+ *
+ * @return  void
+ */
+function previewStory(int $qid, int $uid, string $author, string $subject, string $hometext, string $bodytext, int $topic, string $notes, int $catid, int $ihome, string $members, int $Mmembers, int $dd_pub, int $fd_pub, int $dh_pub, int $fh_pub, int $epur): void
 {
-    global $tipath, $aid, $radminsuper;
+    global $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Articles");
@@ -764,15 +832,12 @@ function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topi
 
     $affiche = false;
 
-    $result2 = sql_query("SELECT topictext, topicimage, topicadmin FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-    list($topictext, $topicimage, $topicadmin) = sql_fetch_row($result2);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic = DB::table('topics')->select('topictext', 'topicimage', 'topicadmin')->where('topicid', $topic)->first();
 
     if ($radminsuper) {
         $affiche = true;
     } else {
-        $topicadminX = explode(',', $topicadmin);
+        $topicadminX = explode(',', $topic['topicadmin']);
         for ($i = 0; $i < count($topicadminX); $i++) {
             if (trim($topicadminX[$i]) == $aid) {
                 $affiche = true;
@@ -784,7 +849,7 @@ function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topi
         header("location: admin.php?op=submissions");
     }
 
-    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topictext) . '</strong></span>';
+    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topic['topictext']) . '</strong></span>';
 
     include("themes/default/header.php");
 
@@ -799,9 +864,9 @@ function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topi
         ' . language::aff_localzone_langue("local_user_language") . '
         <div class="card card-body mb-3">';
 
-    if ($topicimage !== '') {
-        if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-            $imgtmp = $tipath . $topicimage;
+    if ($topic['topicimage'] !== '') {
+        if (!$imgtmp = theme::theme_image('topics/' . $topic['topicimage'])) {
+            $imgtmp = Config::get('npds.tipath') . $topic['topicimage'];
         }
 
         $timage = $imgtmp;
@@ -832,21 +897,19 @@ function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topi
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
-    $toplist = sql_query("SELECT topicid, topictext, topicadmin FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $toplist = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
 
     if ($radminsuper) {
         echo '<option value="">' . adm_translate("Tous les Sujets") . '</option>';
     }
 
-    while (list($topicid, $topics, $topicadmin) = sql_fetch_row($toplist)) {
+    foreach ($toplist as $list) {
         $affiche = false;
 
         if ($radminsuper) {
             $affiche = true;
         } else {
-            $topicadminX = explode(',', $topicadmin);
+            $topicadminX = explode(',', $list['topicadmin']);
             for ($i = 0; $i < count($topicadminX); $i++) {
                 if (trim($topicadminX[$i]) == $aid) { 
                     $affiche = true;
@@ -859,7 +922,7 @@ function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topi
                 $sel = 'selected="selected" ';
             }
 
-            echo '<option ' . $sel . ' value="' . $topicid . '">' . language::aff_langue($topics) . '</option>';
+            echo '<option ' . $sel . ' value="' . $list['topicid'] . '">' . language::aff_langue($list['topics']) . '</option>';
             $sel = '';
         }
     }
@@ -927,9 +990,31 @@ function previewStory($qid, $uid, $author, $subject, $hometext, $bodytext, $topi
     css::adminfoot('', '', '', '');
 }
 
-function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytext, $topic, $notes, $catid, $ihome, $members, $Mmembers, $date_debval, $date_finval, $epur)
+/**
+ * [postStory description]
+ *
+ * @param   string  $type_pub     [$type_pub description]
+ * @param   int     $qid          [$qid description]
+ * @param   int     $uid          [$uid description]
+ * @param   string  $author       [$author description]
+ * @param   string  $subject      [$subject description]
+ * @param   string  $hometext     [$hometext description]
+ * @param   string  $bodytext     [$bodytext description]
+ * @param   int     $topic        [$topic description]
+ * @param   string  $notes        [$notes description]
+ * @param   int     $catid        [$catid description]
+ * @param   int     $ihome        [$ihome description]
+ * @param   string  $members      [$members description]
+ * @param   int     $Mmembers     [$Mmembers description]
+ * @param   int     $date_debval  [$date_debval description]
+ * @param   int     $date_finval  [$date_finval description]
+ * @param   int     $epur         [$epur description]
+ *
+ * @return  void
+ */
+function postStory(string $type_pub, int $qid, int $uid, string $author, string $subject, string $hometext, string $bodytext, int $topic, string $notes, int $catid, int $ihome, string $members, int $Mmembers, int $date_debval, int $date_finval, int $epur): void
 {
-    global $aid, $ultramode;
+    global $aid;
 
     if ($uid == 1) {
         $author = '';
@@ -1010,7 +1095,7 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
 
     if (($uid != 1) and ($uid != '')) {
         DB::table('users')->where('uid', $uid)->update(array(
-            'counter'       => DB::raw(counter+1),
+            'counter'       => DB::raw('counter+1'),
         ));
     }
 
@@ -1018,7 +1103,7 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
         'counter'       => DB::raw('counter+1'),
     ));
 
-    if ($ultramode) {
+    if (Config::get('npds.ultramode')) {
         news::ultramode();
     }
 
@@ -1054,9 +1139,16 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
     url::redirect_url("admin.php?");
 }
 
-function editStory($sid)
+/**
+ * [editStory description]
+ *
+ * @param   int   $sid  [$sid description]
+ *
+ * @return  void
+ */
+function editStory(int $sid): void
 {
-    global $tipath, $aid, $radminsuper, $gmt;
+    global $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
     $f_titre = adm_translate("Editer un Article");
@@ -1069,28 +1161,22 @@ function editStory($sid)
         header("location: admin.php");
     }
 
-    $result = sql_query("SELECT catid, title, hometext, bodytext, topic, notes, ihome, date_finval,auto_epur FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
-    list($catid, $subject, $hometext, $bodytext, $topic, $notes, $ihome, $date_finval, $epur) = sql_fetch_row($result);
+    $storie = DB::table('stories')->select('catid', 'title', 'hometext', 'bodytext', 'topic', 'notes', 'ihome', 'date_finval', 'auto_epur')->where('sid', $sid)->first();
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    $subject = stripslashes($subject);
-    $hometext = stripslashes($hometext);
+    $subject = stripslashes($storie['subject']);
+    $hometext = stripslashes($storie['hometext']);
     $hometext = str_replace('<i class="fa fa-thumb-tack fa-2x me-2 text-muted"></i>', '', $hometext);
-    $bodytext = stripslashes($bodytext);
-    $notes = stripslashes($notes);
+    $bodytext = stripslashes($storie['bodytext']);
+    $notes = stripslashes($storie['notes']);
 
     $affiche = false;
 
-    $result2 = sql_query("SELECT topictext, topicname, topicimage, topicadmin FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-    list($topictext, $topicname, $topicimage, $topicadmin) = sql_fetch_row($result2);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic = DB::table('topics')->select('topictext', 'topicname', 'topicimage', 'topicadmin')->where('topicid', $storie['topic'])->get();
 
     if ($radminsuper) {
         $affiche = true;
     } else {
-        $topicadminX = explode(',', $topicadmin);
+        $topicadminX = explode(',', $topic['topicadmin']);
         for ($i = 0; $i < count($topicadminX); $i++) {
             if (trim($topicadminX[$i]) == $aid) {
                     $affiche = true;
@@ -1102,29 +1188,24 @@ function editStory($sid)
         header("location: admin.php");
     }
 
-    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topicname) . '</strong></span>';
+    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topic['topicname']) . '</strong></span>';
 
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('newarticle'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-    list($topictext, $topicimage) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic = DB::table('topics')->select('topictext', 'topicimage')->where('topicid', $topic)->first();
 
     echo '<hr />' . language::aff_local_langue('', 'local_user_language', '<label class="col-form-label">' . adm_translate("Langue de Prévisualisation") . '</label>');
     
-    if ($topicimage !== '') {
-        if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-            $imgtmp = $tipath . $topicimage;
+    if ($topic['topicimage'] !== '') {
+        if (!$imgtmp = theme::theme_image('topics/' . $topic['topicimage'])) {
+            $imgtmp = Config::get('npds.tipath') . $topic['topicimage'];
         }
 
-        $timage = $imgtmp;
-
         if (file_exists($imgtmp)) {
-            $topiclogo = '<img class="img-fluid " src="' . $timage . '" align="right" alt="" />';
+            $topiclogo = '<img class="img-fluid " src="' . $imgtmp . '" align="right" alt="" />';
         }
     }
 
@@ -1149,21 +1230,19 @@ function editStory($sid)
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
-    $toplist = sql_query("SELECT topicid, topictext, topicadmin FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     if ($radminsuper) {
         echo '<option value="">' . adm_translate("Tous les Sujets") . '</option>';
     }
 
-    while (list($topicid, $topics, $topicadmin) = sql_fetch_row($toplist)) {
+    $toplist = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
+
+    foreach ($toplist as $list) {
         $affiche = false;
 
         if ($radminsuper) {
             $affiche = true;
         } else {
-            $topicadminX = explode(',', $topicadmin);
+            $topicadminX = explode(',', $list['topicadmin']);
             
             for ($i = 0; $i < count($topicadminX); $i++) {
                 if (trim($topicadminX[$i]) == $aid) {
@@ -1173,8 +1252,8 @@ function editStory($sid)
         }
 
         if ($affiche) {
-            $sel = $topicid == $topic ? 'selected="selected"' : '';
-            echo '<option value="' . $topicid . '" ' . $sel . '>' . language::aff_langue($topics) . '</option>';
+            $sel = $list['topicid'] == $list['topic'] ? 'selected="selected"' : '';
+            echo '<option value="' . $topic['topicid'] . '" ' . $sel . '>' . language::aff_langue($topics) . '</option>';
         }
     }
 
@@ -1185,7 +1264,7 @@ function editStory($sid)
 
     SelectCategory($catid);
 
-    puthome($ihome);
+    puthome($storie['ihome']);
 
     echo '
         <div class="mb-3 row">
@@ -1225,7 +1304,7 @@ function editStory($sid)
                 <input class="form-check-input" type="checkbox" id="Cdate" name="Cdate" value="true" />
                 <label class="form-check-label" for="Cdate">' . adm_translate("Oui") . '</label>
                 </div>
-                <span class="small help-block">' . translate(date("l")) . date(" " . translate("dateinternal"), time() + ((int)$gmt * 3600)) . '</span>
+                <span class="small help-block">' . translate(date("l")) . date(" " . translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600)) . '</span>
             </div>
         </div>
         <div class="mb-3 row">
@@ -1238,9 +1317,9 @@ function editStory($sid)
             </div>
         </div>';
 
-    if ($date_finval != '') {
-        $fd_pub = substr($date_finval, 0, 10);
-        $fh_pub = substr($date_finval, 11, 5);
+    if ($storie['date_finval'] != '') {
+        $fd_pub = substr($storie['date_finval'], 0, 10);
+        $fh_pub = substr($storie['date_finval'], 11, 5);
     } else {
         $fd_pub = (date("Y") + 99) . '-01-01';
         $fh_pub = '00:00';
@@ -1287,14 +1366,18 @@ function editStory($sid)
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function deleteStory($qid)
+/**
+ * [deleteStory description]
+ *
+ * @param   int   $qid  [$qid description]
+ *
+ * @return  void
+ */
+function deleteStory(int $qid): void 
 {
-    $res = sql_query("SELECT story, bodytext FROM " . $NPDS_Prefix . "queue WHERE qid='$qid'");
-    list($story, $bodytext) = sql_fetch_row($res);
+    $queue = DB::table('queue')->select('story', 'bodytext')->where('qid', $qid)->first();
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    $artcomplet = $story . $bodytext;
+    $artcomplet = $queue['story'] . $queue['bodytext'];
     $rechcacheimage = '#storage/cache/a[i|c|]\d+_\d+_\d+.[a-z]{3,4}#m';
 
     preg_match_all($rechcacheimage, $artcomplet, $cacheimages);
@@ -1309,30 +1392,32 @@ function deleteStory($qid)
     logs::Ecr_Log("security", "deleteStoryfromQueue($qid) by AID : $aid", "");
 }
 
-function removeStory($sid, $ok = 0)
+/**
+ * [removeStory description]
+ *
+ * @param   int   $sid  [$sid description]
+ * @param   int   $ok   [$ok description]
+ *
+ * @return  void
+ */
+function removeStory(int $sid, int $ok = 0): void
 {
+    global $aid, $radminsuper;  
+
     if (($sid == '') or ($sid == '0')) {
         header("location: admin.php");
     }
 
-    global $ultramode, $aid, $radminsuper;
-
-    $result = sql_query("SELECT topic FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
-    list($topic) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $storie = DB::table('stories')->select('topic')->where('sid', $sid)->first();
 
     $affiche = false;
 
-    $result2 = sql_query("SELECT topicadmin, topicname FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-    list($topicadmin, $topicname) = sql_fetch_row($result2);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic = DB::table('topics')->select('topicadmin', 'topicname')->where('topicid', $storie['topic'])->first();
 
     if ($radminsuper) {
         $affiche = true;
     } else {
-        $topicadminX = explode(',', $topicadmin);
+        $topicadminX = explode(',', $topic['topicadmin']);
         
         for ($i = 0; $i < count($topicadminX); $i++) {
             if (trim($topicadminX[$i]) == $aid) {
@@ -1346,12 +1431,10 @@ function removeStory($sid, $ok = 0)
     }
 
     if ($ok) {
-        $res = sql_query("SELECT hometext, bodytext, notes FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
-        list($hometext, $bodytext, $notes) = sql_fetch_row($res);
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $storie = DB::table('stories')->select('hometext', 'bodytext', 'notes')->where('sid', $sid)->first();
 
-        $artcomplet = $hometext . $bodytext . $notes;
+        $artcomplet = $storie['hometext'] . $storie['bodytext'] . $storie['notes'];
         $rechuploadimage = '#modules/upload/upload/a[i|c|]\d+_\d+_\d+.[a-z]{3,4}#m';
 
         preg_match_all($rechuploadimage, $artcomplet, $uploadimages);
@@ -1372,7 +1455,7 @@ function removeStory($sid, $ok = 0)
         global $aid;
         logs::Ecr_Log('security', "removeStory ($sid, $ok) by AID : $aid", '');
 
-        if ($ultramode) {
+        if (Config::get('npds.ultramode')) {
             news::ultramode();
         }
 
@@ -1390,9 +1473,34 @@ function removeStory($sid, $ok = 0)
     }
 }
 
-function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $catid, $ihome, $members, $Mmembers, $Cdate, $Csid, $date_finval, $epur, $theme, $dd_pub, $fd_pub, $dh_pub, $fh_pub)
+/**
+ * [changeStory description]
+ *
+ * @param   int     $sid          [$sid description]
+ * @param   string  $subject      [$subject description]
+ * @param   string  $hometext     [$hometext description]
+ * @param   string  $bodytext     [$bodytext description]
+ * @param   int     $topic        [$topic description]
+ * @param   string  $notes        [$notes description]
+ * @param   int     $catid        [$catid description]
+ * @param   int     $ihome        [$ihome description]
+ * @param   string  $members      [$members description]
+ * @param   int     $Mmembers     [$Mmembers description]
+ * @param   int     $Cdate        [$Cdate description]
+ * @param   int     $Csid         [$Csid description]
+ * @param   string  $date_finval  [$date_finval description]
+ * @param   int     $epur         [$epur description]
+ * @param   int     $theme        [$theme description]
+ * @param   int     $dd_pub       [$dd_pub description]
+ * @param   int     $fd_pub       [$fd_pub description]
+ * @param   int     $dh_pub       [$dh_pub description]
+ * @param   int     $fh_pub       [$fh_pub description]
+ *
+ * @return  void
+ */
+function changeStory(int $sid, string $subject, string $hometext, string $bodytext, int $topic, string $notes, int $catid, int $ihome, string $members, int $Mmembers, int $Cdate, int $Csid, string $date_finval, int $epur, int $theme, int $dd_pub, int $fd_pub, int $dh_pub, int $fh_pub): void
 {
-    global $aid, $ultramode;
+    global $aid;
 
     $subject = stripslashes(str::FixQuotes(str_replace('"', '&quot;', $subject)));
     $hometext = stripslashes(str::FixQuotes($hometext));
@@ -1440,13 +1548,11 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
             'hometext'       => '<i class=\"fa fa-thumb-tack fa-2x me-2 text-muted\"></i>'. $hometext,
         ));
 
-        list($Lsid) = sql_fetch_row(sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories ORDER BY sid DESC"));
+        $storie = DB::table('stories')->select('sid')->orderBy('sid', 'desc')->first();
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        $Lsid++;
+        $storie['sid']++;
         DB::table('stories')->where('sid', $sid)->update(array(
-            'sid'       => $Lsid,
+            'sid'       => $storie['sid'],
         ));
 
         // commentaires
@@ -1454,17 +1560,17 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
             include("modules/comments/config/article.conf.php");
 
             DB::table('posts')->where('forum_id', $forum)->where('topic_id', $topic)->update(array(
-                'topic_id'       => $Lsid,
+                'topic_id'       => $storie['sid'],
             ));
         }
 
-        $sid = $Lsid;
+        $sid = $storie['sid'];
     }
 
     global $aid;
     logs::Ecr_Log('security', "changeStory($sid, $subject, hometext..., bodytext..., $topic, notes..., $catid, $ihome, $members, $Mmembers, $Cdate, $Csid, $date_finval,$epur,$theme) by AID : $aid", '');
     
-    if ($ultramode) {
+    if (Config::get('npds.ultramode')) {
         news::ultramode();
     }
 
@@ -1491,7 +1597,12 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
     url::redirect_url("admin.php?op=EditStory&sid=$sid");
 }
 
-function adminStory()
+/**
+ * [adminStory description]
+ *
+ * @return  void
+ */
+function adminStory(): void
 {
     global $aid, $radminsuper;
 
@@ -1533,22 +1644,20 @@ function adminStory()
             <div class="col-sm-8">
             <select class="form-select" id="topic" name="topic">';
 
-    $toplist = sql_query("SELECT topicid, topictext, topicadmin FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     //probablement ici aussi mettre les droits pour les gestionnaires de topics ??
     if ($radminsuper) {
         echo '<option value="">' . adm_translate("Sélectionner un Sujet") . '</option>';
     }
 
-    while (list($topicid, $topics, $topicadmin) = sql_fetch_row($toplist)) {
+    $topics = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
+
+    foreach ($topics as $topic) {
         $affiche = false;
         
         if ($radminsuper) {
             $affiche = true;
         } else {
-            $topicadminX = explode(',', $topicadmin);
+            $topicadminX = explode(',', $topic['topicadmin']);
             for ($i = 0; $i < count($topicadminX); $i++) {
                 if (trim($topicadminX[$i]) == $aid) {
                     $affiche = true;
@@ -1557,11 +1666,11 @@ function adminStory()
         }
 
         if ($affiche) {
-            if ($topicid == $topic) {
+            if ($topic['topicid'] == $topic) {
                 $sel = 'selected="selected"';
             }
 
-            echo '<option ' . $sel . ' value="' . $topicid . '">' . language::aff_langue($topics) . '</option>';
+            echo '<option ' . $sel . ' value="' . $topic['topicid'] . '">' . language::aff_langue($topic['topics']) . '</option>';
             $sel = '';
         }
     }
@@ -1635,9 +1744,28 @@ function adminStory()
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihome, $members, $Mmembers, $dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
+/**
+ * [previewAdminStory description]
+ *
+ * @param   string  $subject   [$subject description]
+ * @param   string  $hometext  [$hometext description]
+ * @param   string  $bodytext  [$bodytext description]
+ * @param   int     $topic     [$topic description]
+ * @param   int     $catid     [$catid description]
+ * @param   int     $ihome     [$ihome description]
+ * @param   string  $members   [$members description]
+ * @param   int     $Mmembers  [$Mmembers description]
+ * @param   int     $dd_pub    [$dd_pub description]
+ * @param   int     $fd_pub    [$fd_pub description]
+ * @param   int     $dh_pub    [$dh_pub description]
+ * @param   int     $fh_pub    [$fh_pub description]
+ * @param   int     $epur      [$epur description]
+ *
+ * @return  void
+ */
+function previewAdminStory(string $subject, string $hometext, string $bodytext, int $topic, int $catid, int $ihome, string $members, int $Mmembers, int $dd_pub, int $fd_pub, int $dh_pub, int $fh_pub, int $epur): void
 {
-    global $tipath, $aid, $radminsuper, $topicimage;
+    global $aid, $radminsuper;
 
     $subject = stripslashes(str_replace('"', '&quot;', $subject));
     $hometext = stripslashes(image::dataimagetofileurl($hometext, 'storage/cache/ai'));
@@ -1651,15 +1779,12 @@ function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihom
 
     $affiche = false;
 
-    $result2 = sql_query("SELECT topictext, topicimage, topicadmin FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-    list($topictext, $topicimage, $topicadmin) = sql_fetch_row($result2);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic = DB::table('topics')->select('topictext', 'topicimage', 'topicadmin')->where('topicid', $topic)->first();
 
     if ($radminsuper) {
         $affiche = true;
     } else {
-        $topicadminX = explode(',', $topicadmin);
+        $topicadminX = explode(',', $topic['topicadmin']);
         
         for ($i = 0; $i < count($topicadminX); $i++) {
             if (trim($topicadminX[$i]) == $aid) {
@@ -1679,7 +1804,7 @@ function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihom
     //   admindroits($aid,$f_meta_nom); // à voir l'intégration avec les droits sur les topics ...
     //<== controle droit
 
-    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topictext) . '</strong></span>';
+    $topiclogo = '<span class="badge bg-secondary float-end"><strong>' . language::aff_langue($topic['topictext']) . '</strong></span>';
 
     include("themes/default/header.php");;
 
@@ -1694,9 +1819,9 @@ function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihom
         ' . language::aff_localzone_langue("local_user_language") . '
         <div class="card card-body mb-3">';
 
-    if ($topicimage !== '') {
-        if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
-            $imgtmp = $tipath . $topicimage;
+    if ($topic['topicimage'] !== '') {
+        if (!$imgtmp = theme::theme_image('topics/' . $topic['topicimage'])) {
+            $imgtmp = Config::get('npds.tipath') . $topic['topicimage'];
         }
 
         $timage = $imgtmp;
@@ -1722,21 +1847,19 @@ function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihom
                 <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
-    $toplist = sql_query("SELECT topicid, topictext, topicadmin FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     if ($radminsuper) {
         echo '<option value="">' . adm_translate("Tous les Sujets") . '</option>';
     }
 
-    while (list($topicid, $topics, $topicadmin) = sql_fetch_row($toplist)) {
+    $topics = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
+
+    foreach ($topics as $topic) {
         $affiche = false;
         
         if ($radminsuper) {
             $affiche = true;
         } else {
-            $topicadminX = explode(',', $topicadmin);
+            $topicadminX = explode(',', $topic['topicadmin']);
             
             for ($i = 0; $i < count($topicadminX); $i++) {
                 if (trim($topicadminX[$i]) == $aid) {
@@ -1750,7 +1873,7 @@ function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihom
                 $sel = 'selected="selected"';
             }
 
-            echo '<option ' . $sel . ' value="' . $topicid . '">' . language::aff_langue($topics) . '</option>';
+            echo '<option ' . $sel . ' value="' . $topic['topicid'] . '">' . language::aff_langue($topic['topics']) . '</option>';
             $sel = '';
         }
     }
@@ -1760,7 +1883,7 @@ function previewAdminStory($subject, $hometext, $bodytext, $topic, $catid, $ihom
                 </div>
             </div>';
 
-    $cat = $catid;
+    $cat = $catid; // ?????
     SelectCategory($catid);
 
     if (($members == 1) and ($Mmembers == '')) { 

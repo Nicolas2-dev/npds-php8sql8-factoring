@@ -455,13 +455,13 @@ return array(
     * Activate HTTP referer logs to know who is linking to our site? (1=Yes 0=No)
     *
     */
-    'httpref'  => 0,
+    'httpref'  => 1,
 
     /**
     * Maximum number of HTTP referers to store in the Database (Try to not set this to a high number, 500 ~ 1000 is Ok)
     *
     */
-    'httprefmax'  => 1,
+    'httprefmax'  => 0,
 
 
     ## Miscelaneous Options

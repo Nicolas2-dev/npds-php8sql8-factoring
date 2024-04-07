@@ -23,6 +23,7 @@ use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -144,23 +145,22 @@ if ($submitS) {
         $indice = sql_num_rows(sql_query("SELECT post_id FROM " . $NPDS_Prefix . "posts WHERE post_idH='$post_id'"));
 
         if (!$indice) {
-            $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE post_id='$post_id'";
+            $r DB::table('posts')->where('post_id', $post_id)->delete();
 
-            if (!$r = sql_query($sql)) {
+            if (!$r) {
                 forum::forumerror('0001');
             }
 
             forum::control_efface_post("forum_npds", $post_id, "", "");
 
             if (forum::get_total_posts($forum, $row['topic_id'], "topic", $Mmod) == 0) {
-                $sql = "DELETE FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '" . $row['topic_id'] . "'";
+                $r = DB::table('forumtopics')->where('topic_id', $row['topic_id'])->delete();
 
-                if (!$r = sql_query($sql)) {
+                if (!$r) {
                     forum::forumerror('0001');
                 }
 
-                $sql = "DELETE FROM " . $NPDS_Prefix . "forum_read WHERE topicid = '" . $row['topic_id'] . "'";
-                @sql_query($sql);
+                DB::table('forum_read')->where('topicid', $row['topic_id'])->delete();
 
                 url::redirect_url("viewforum.php?forum=$forum");
                 die();

@@ -16,6 +16,7 @@ use npds\system\config\Config;
 use npds\system\support\stats;
 use npds\system\support\download;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 class boxe
 {
@@ -86,7 +87,8 @@ class boxe
         }
 
         $past = time() - 300;
-        sql_query("DELETE FROM " . $NPDS_Prefix . "session WHERE time < '$past'");
+
+        DB::table('session')->where('time', '<', $past)->delete();
 
         $result = sql_query("SELECT time FROM " . $NPDS_Prefix . "session WHERE username='$username'");
         $ctime = time();

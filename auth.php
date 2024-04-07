@@ -14,34 +14,31 @@
 declare(strict_types=1);
 
 use npds\system\cache\cache;
+use npds\system\support\facades\DB;
 
 if (!function_exists("Mysql_Connexion")) {
     header("location: index.php");
 }
 
-$rowQ1 = cache::Q_Select("SELECT * FROM " . $NPDS_Prefix . "config", 3600);
-if ($rowQ1) {
+if ($rowQ1 = cache::Q_Select3(DB::table('config')->select('*')->get(), 3600, 'tbl_config(*)')) {
     foreach ($rowQ1[0] as $key => $value) {
         $$key = $value;
     }
+
     $upload_table = $NPDS_Prefix . $upload_table;
 }
 
 settype($forum, 'integer');
 
 if ($allow_upload_forum) {
-    $rowQ1 = cache::Q_Select("SELECT attachement FROM " . $NPDS_Prefix . "forums WHERE forum_id='$forum'", 3600);
-    
-    if ($rowQ1) {
+    if ($rowQ1 = cache::Q_Select3(DB::table('forums')->select('attachement')->where('forum_id', $forum)->get(), 3600, 'tbl_forum(attachement)')) {
         foreach ($rowQ1[0] as $value) {
             $allow_upload_forum = $value;
         }
     }
 }
 
-$rowQ1 = cache::Q_Select("SELECT forum_pass FROM " . $NPDS_Prefix . "forums WHERE forum_id='$forum' AND forum_type='1'", 3600);
-
-if ($rowQ1) {
+if ($rowQ1 = cache::Q_Select3(DB::table('forums')->select('forum_pass')->where('forum_id', $forum)->where('forum_type', 1)->get(), 3600, 'tbl_forum(forum_pass)')) {
     if (isset($Forum_Priv[$forum])) {
         $Xpasswd = base64_decode($Forum_Priv[$forum]);
         

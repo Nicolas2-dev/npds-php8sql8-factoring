@@ -422,19 +422,19 @@ function userpopover($who, $dim, $avpop)
             //         '<a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="'.$temp_user['uname'].'" data-bs-content=\'<div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'></i><img data-bs-html="true" class="btn-outline-primary img-thumbnail img-fluid n-ava-'.$dim.' me-2" src="'.$imgtmp.'" alt="'.$temp_user['uname'].'" loading="lazy" /></a>' ;
 
             '
-    <div class="dropdown d-inline-block me-4 dropend">
-        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-            <img class=" btn-outline-primary img-fluid n-ava-' . $dim . ' me-0" src="' . $imgtmp . '" alt="' . $temp_user['uname'] . '" />
-        </a>
-        <ul class="dropdown-menu bg-light">
-            <li><span class="dropdown-item-text text-center py-0 my-0">' . userpopover($who, 64, 1) . '</span></li>
-            <li><h6 class="dropdown-header text-center py-0 my-0">' . $who . '</h6></li>
-            <li><hr class="dropdown-divider"></li>
-            ' . $useroutils . '
-            <li><hr class="dropdown-divider"></li>
-            <li><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div>
-        </ul>
-    </div>';
+            <div class="dropdown d-inline-block me-4 dropend">
+                <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    <img class=" btn-outline-primary img-fluid n-ava-' . $dim . ' me-0" src="' . $imgtmp . '" alt="' . $temp_user['uname'] . '" />
+                </a>
+                <ul class="dropdown-menu bg-light">
+                    <li><span class="dropdown-item-text text-center py-0 my-0">' . userpopover($who, 64, 1) . '</span></li>
+                    <li><h6 class="dropdown-header text-center py-0 my-0">' . $who . '</h6></li>
+                    <li><hr class="dropdown-divider"></li>
+                    ' . $useroutils . '
+                    <li><hr class="dropdown-divider"></li>
+                    <li><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div>
+                </ul>
+            </div>';
 
         return $userpop;
     }

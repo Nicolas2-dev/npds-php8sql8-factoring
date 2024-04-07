@@ -6,6 +6,6 @@ return array(
     * FileManager
     *
     */
-    'manager'  => true,
+    'manager'  => false,
 
 );

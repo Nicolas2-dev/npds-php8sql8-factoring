@@ -20,6 +20,7 @@ use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -200,8 +201,8 @@ function sup_imm($msg_id)
     if (!$cookie) {
         Header("Location: user.php");
     } else {
-        $sql = "DELETE FROM " . $NPDS_Prefix . "priv_msgs WHERE msg_id='$msg_id' AND to_userid='$cookie[0]'";
-        
+        DB::table('priv_msgs')->where('msg_id', $msg_id)->where('to_userid', $cookie[0])->delete();
+
         if (!sql_query($sql)) {
             forum::forumerror('0021');
         }

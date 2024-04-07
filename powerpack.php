@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 use npds\system\cache\cache;
 use npds\system\support\str;
+use npds\system\support\facades\DB;
 use npds\system\messenger\messenger;
 
 
@@ -65,7 +66,7 @@ switch ($op) {
             $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$adminR[0]' LIMIT 1"));
             if ($Q['radminsuper'] == 1) {
                 if ($chatbox_clearDB == 'OK') {
-                    sql_query("DELETE FROM " . $NPDS_Prefix . "chatbox WHERE date <= " . (time() - (60 * 5)) . "");
+                    DB::table('chatbox')->where('date', '<=', (time() - (60 * 5)))->delete();
                 }
             }
         }

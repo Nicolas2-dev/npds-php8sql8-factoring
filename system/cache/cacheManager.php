@@ -474,12 +474,12 @@ class cacheManager
     /**
      * [CachingQuery description]
      *
-     * @param   string  $Xquery     [$Xquery description]
+     * @param   string|array  $Xquery     [$Xquery description]
      * @param   int     $retention  [$retention description]
      *
      * @return  array
      */
-    function CachingQuery(string $Xquery, int $retention): array
+    function CachingQuery(string|array $Xquery, int $retention): array
     {
         global $CACHE_CONFIG;
         
@@ -528,7 +528,7 @@ class cacheManager
     }
 
 
-    function CachingQuery2(array $Xquery, int $retention, $type_req): array
+    function CachingQuery2(array $Xquery, int $retention, string $type_req): array
     {
         global $CACHE_CONFIG;
         
@@ -568,7 +568,6 @@ class cacheManager
             return $Xquery;
         }
     }
-
 
     /**
      * [startCachingObjet description]

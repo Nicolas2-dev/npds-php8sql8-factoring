@@ -14,6 +14,7 @@ use npds\system\mail\mailler;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 
 class forum
 {
@@ -960,19 +961,24 @@ class forum
         include("modules/upload/config/upload.conf.php");
     
         $sql1 = "SELECT att_id, att_name, att_path FROM " . $NPDS_Prefix . "$upload_table WHERE apli='$apli' AND";
-        $sql2 = "DELETE FROM " . $NPDS_Prefix . "$upload_table WHERE apli='$apli' AND";
-    
+        
+        $query_delete = DB::table($upload_table)->where('apli', $apli);
+
         if ($IdForum != '') {
             $sql1 .= " forum_id = '$IdForum'";
-            $sql2 .= " forum_id = '$IdForum'";
+            $query_delete->where('forum_id', $IdForum);
+
         } elseif ($post_id != '') {
             $sql1 .= " post_id = '$post_id'";
-            $sql2 .= " post_id = '$post_id'";
+            $query_delete->where('post_id', $post_id);
+            
         } elseif ($topic_id != '') {
             $sql1 .= " topic_id = '$topic_id'";
-            $sql2 .= " topic_id = '$topic_id'";
+            $query_delete->where('topic_id', $topic_id); 
         }
     
+        $query_delete->delete();
+
         $result = sql_query($sql1);
     
         while (list($att_id, $att_name, $att_path) = sql_fetch_row($result)) {

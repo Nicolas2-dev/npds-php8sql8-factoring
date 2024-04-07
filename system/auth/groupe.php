@@ -516,4 +516,84 @@ class groupe
         </select>');
     }
 
+    /**
+     * [droits description]
+     *
+     * @param   string   $member  [$member description]
+     *
+     * @return  void
+     */
+    public static function droits(string $member): void
+    {
+        echo '
+        <fieldset>
+        <legend>' . adm_translate("Droits") . '</legend>
+        <div class="mb-3">
+            <div class="form-check form-check-inline">';
+    
+        if ($member == -127) { 
+            $checked = ' checked="checked"';
+        } else {
+            $checked = '';
+        }
+    
+        echo '
+                <input class="form-check-input" type="radio" id="adm" name="members" value="-127" ' . $checked . ' />
+                <label class="form-check-label" for="adm">' . adm_translate("Administrateurs") . '</label>
+            </div>
+            <div class="form-check form-check-inline">';
+    
+        if ($member == -1) {
+            $checked = ' checked="checked"';
+        } else {
+            $checked = '';
+        }
+    
+        echo '
+                <input class="form-check-input" type="radio" id="ano" name="members" value="-1" ' . $checked . ' />
+                <label class="form-check-label" for="ano">' . adm_translate("Anonymes") . '</label>
+            </div>';
+        echo '
+            <div class="form-check form-check-inline">';
+        
+        if ($member > 0) {
+            echo '
+                <input class="form-check-input" type="radio" id="mem" name="members" value="1" checked="checked" />
+                <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="tous" name="members" value="0" />
+                <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
+           
+            echo static::groupe($member) . '
+        </div>';
+        } else {
+            if ($member == 0) { 
+                $checked = ' checked="checked"';
+            } else {
+                $checked = '';
+            }
+    
+            echo '
+                <input class="form-check-input" type="radio" id="mem" name="members" value="1" />
+                <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="tous" name="members" value="0"' . $checked . ' />
+                <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
+            
+            echo static::groupe($member) . '
+            </div>
+        </fieldset>';
+        }
+    }
+
 }

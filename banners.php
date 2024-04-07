@@ -22,42 +22,55 @@ use npds\system\support\str;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 include_once('boot/bootstrap.php');
 
-function viewbanner()
+/**
+ * [viewbanner description]
+ *
+ * @return  void
+ */
+function viewbanner(): void
 {
-    global $NPDS_Prefix;
-
     $okprint = false;
     $while_limit = 3;
     $while_cpt = 0;
-    $bresult = sql_query("SELECT id FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9'");
-    $numrows = sql_num_rows($bresult);
+
+    $numrows = DB::table('banner')
+                ->select('id')
+                ->where('userlevel', '!=', 9)
+                ->first();
 
     while ((!$okprint) and ($while_cpt < $while_limit)) {
 
-        // More efficient random stuff, thanks to Cristian Arroyo from http://www.planetalinux.com.ar
         if ($numrows > 0) {
-            mt_srand( (int) microtime() * 1000000); // int non float mt_rans arg 1 = int|null
-            $bannum = mt_rand(0, $numrows);
+            $float = ((float) microtime() * 1000000);
+            mt_srand( (int) $float ); 
+            $bannum = mt_rand(0, $numrows['id']);
         } else {
             break;
         }
 
-        $bresult2 = sql_query("SELECT id, userlevel FROM " . $NPDS_Prefix . "banner WHERE userlevel!='9' LIMIT $bannum,1");
-        list($bid, $userlevel) = sql_fetch_row($bresult2);
+        $banner = DB::table('banner')
+                    ->select('id', 'userlevel')
+                    ->where('userlevel', '!=', 9)
+                    ->limit(1)
+                    ->offset($bannum)
+                    ->get();
 
-        if ($userlevel == 0) {
+        $bid = $banner[0]['id'];
+
+        if ($banner[0]['userlevel'] == 0) {
             $okprint = true;
         } else {
-            if ($userlevel == 1) {
+            if ($banner[0]['userlevel'] == 1) {
                 if (users::secur_static("member")) {
                     $okprint = true;
                 }
             }
 
-            if ($userlevel == 3) {
+            if ($banner[0]['userlevel'] == 3) {
                 if (users::secur_static("admin")) {
                     $okprint = true;
                 }
@@ -69,11 +82,16 @@ function viewbanner()
 
     // Le risque est de sortir sans un BID valide
     if (!isset($bid)) {
-        $rowQ1 = cache::Q_Select("SELECT id FROM " . $NPDS_Prefix . "banner WHERE userlevel='0' LIMIT 0,1", 86400);
-        
+
+        $rowQ1 = cache::Q_Select3(
+            DB::table('banner')->select('id')->where('userlevel', 0)->limit(0)->offset(1)->first(), 
+            86400, 
+            'banner(id)'
+        );
+
         if ($rowQ1) {
-            $myrow = $rowQ1[0]; // erreur à l'install quand on n'a pas de banner dans la base ....
-            $bid = $myrow['id'];
+            // erreur à l'install quand on n'a pas de banner dans la base ....
+            $bid = $rowQ1[0];
             $okprint = true;
         }
     }
@@ -84,51 +102,73 @@ function viewbanner()
         $myhost = getip();
         
         if ($myIP != $myhost) {
-            sql_query("UPDATE " . $NPDS_Prefix . "banner SET impmade=impmade+1 WHERE id='$bid'");
+            DB::table('banner')->where('id', $bid)->update(array(
+                'impmade'       => DB::raw('impmade+1'),
+            ));
         }
 
         if (($numrows > 0) and ($bid)) {
-            $aborrar = sql_query("SELECT cid, imptotal, impmade, clicks, imageurl, clickurl, date FROM " . $NPDS_Prefix . "banner WHERE id='$bid'");
-            list($cid, $imptotal, $impmade, $clicks, $imageurl, $clickurl, $date) = sql_fetch_row($aborrar);
-            
-            if ($imptotal == $impmade) {
-                sql_query("INSERT INTO " . $NPDS_Prefix . "bannerfinish VALUES (NULL, '$cid', '$impmade', '$clicks', '$date', now())");
-                sql_query("DELETE FROM " . $NPDS_Prefix . "banner WHERE id='$bid'");
+
+            $banner = DB::table('banner')
+                        ->select('id', 'imptotal', 'impmade', 'clicks', 'imageurl', 'clickurl', 'date')
+                        ->where('id', $bid)
+                        ->first();
+
+            if ($banner['imptotal'] == $banner['impmade']) {
+                DB::table('bannerfinish')->insert(array(
+                    'cid'           => $banner['cid'],
+                    'impressions'   => $banner['impmade'],
+                    'clicks'        => $banner['clicks'],
+                    'datestart'     => $banner['date'],
+                    'dateend'       => 'now()',
+                ));
+
+                DB::table('banner')->where('id', $bid)->delete();
             }
 
-            if ($imageurl != '') {
-                echo '<a href="banners.php?op=click&amp;bid=' . $bid . '" target="_blank"><img class="img-fluid" src="' . language::aff_langue($imageurl) . '" alt="" /></a>';
+            if ($banner['imageurl'] != '') {
+                echo '<a href="banners.php?op=click&amp;bid=' . $bid . '" target="_blank"><img class="img-fluid" src="' . language::aff_langue($banner['imageurl']) . '" alt="" /></a>';
             } else {
-                if (stristr($clickurl, '.txt')) {
-                    if (file_exists($clickurl)) {
-                        include_once($clickurl);
+                if (stristr($banner['clickurl'], '.txt')) {
+                    if (file_exists($banner['clickurl'])) {
+                        include_once($banner['clickurl']);
                     }
                 } else {
-                    echo $clickurl;
+                    echo $banner['clickurl'];
                 }
             }
         }
     }
 }
 
-function clickbanner($bid)
+/**
+ * [clickbanner description]
+ *
+ * @param   int   $bid  [$bid description]
+ *
+ * @return  void
+ */
+function clickbanner(int $bid): void
 {
-    global $NPDS_Prefix;
+    $banner = DB::table('banner')->select('clickurl')->where('id', $bid)->first();
 
-    $bresult = sql_query("SELECT clickurl FROM " . $NPDS_Prefix . "banner WHERE id='$bid'");
-    list($clickurl) = sql_fetch_row($bresult);
-    
-    sql_query("UPDATE " . $NPDS_Prefix . "banner SET clicks=clicks+1 WHERE id='$bid'");
-    sql_free_result($bresult);
-    
-    if ($clickurl == '') {
-        $clickurl = Config::get('npds.nuke_url');
+    DB::table('banner')->where('id', $bid)->update(array(
+        'clicks'       => DB::raw('clicks+1'),
+    ));
+
+    if ($banner['clickurl'] == '') {
+        $banner['clickurl'] = Config::get('npds.nuke_url');
     }
 
-    Header("Location: " . language::aff_langue($clickurl));
+    Header("Location: " . language::aff_langue($banner['clickurl']));
 }
 
-function clientlogin()
+/**
+ * [clientlogin description]
+ *
+ * @return  void
+ */
+function clientlogin(): void 
 {
     header_page();
     
@@ -138,11 +178,11 @@ function clientlogin()
             <form id="loginbanner" action="banners.php" method="post">
                 <fieldset>
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="text" id="login" name="login" maxlength="10" required="required" />
+                    <input class="form-control" type="text" id="login" name="login" maxlength="25" required="required" />
                     <label for="login">' . translate("Identifiant ") . '</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input class="form-control" type="password" id="pass" name="pass" maxlength="10" required="required" />
+                    <input class="form-control" type="password" id="pass" name="pass" maxlength="25" required="required" />
                     <label for="pass">' . translate("Mot de passe") . '</label>
                     <span class="help-block">' . translate("Merci de saisir vos informations") . '</span>
                 </div>
@@ -153,16 +193,19 @@ function clientlogin()
             </form>
         </div>';
     
-    $arg1 = '
-        var formulid=["loginbanner"];
-        ';
+    $arg1 = 'var formulid=["loginbanner"];';
 
     css::adminfoot('fv', '', $arg1, 'no');
 
     footer_page();
 }
 
-function IncorrectLogin()
+/**
+ * [IncorrectLogin description]
+ *
+ * @return  void
+ */
+function IncorrectLogin(): void
 {
     header_page();
 
@@ -171,7 +214,12 @@ function IncorrectLogin()
     footer_page();
 }
 
-function header_page()
+/**
+ * [header_page description]
+ *
+ * @return  void
+ */
+function header_page(): void 
 {
     include_once("modules/upload/config/upload.conf.php");
     include("storage/meta/meta.php");
@@ -216,7 +264,12 @@ function header_page()
         <p align="center">';
 }
 
-function footer_page()
+/**
+ * [footer_page description]
+ *
+ * @return  void
+ */
+function footer_page(): void 
 {
     include('themes/default/view/include/footer_after.inc');
 
@@ -226,21 +279,29 @@ function footer_page()
     </html>';
 }
 
-function bannerstats($login, $pass)
+/**
+ * [bannerstats description]
+ *
+ * @param   string  $login  [$login description]
+ * @param   string  $pass   [$pass description]
+ *
+ * @return  void
+ */
+function bannerstats(string $login, string $pass): void
 {
-    global $NPDS_Prefix;
-
-    $result = sql_query("SELECT cid, name, passwd FROM " . $NPDS_Prefix . "bannerclient WHERE login='$login'");
-    list($cid, $name, $passwd) = sql_fetch_row($result);
+    $bannerclient = DB::table('bannerclient')
+                        ->select('id', 'name', 'passwd')
+                        ->where('login', $login)
+                        ->first();
 
     if ($login == '' and $pass == '' or $pass == '') {
         IncorrectLogin();
     } else {
-        if ($pass == $passwd) {
+        if ($pass == $bannerclient['passwd']) {
             header_page();
 
             echo '
-            <h3>' . translate("Bannières actives pour") . ' ' . $name . '</h3>
+            <h3>' . translate("Bannières actives pour") . ' ' . $bannerclient['name'] . '</h3>
             <table data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-show-columns="true" data-icons="icons" data-icons-prefix="fa">
                 <thead>
                 <tr>
@@ -255,22 +316,26 @@ function bannerstats($login, $pass)
                 </thead>
                 <tbody>';
 
-            $result = sql_query("SELECT id, imptotal, impmade, clicks, date FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
-            
-            while (list($bid, $imptotal, $impmade, $clicks, $date) = sql_fetch_row($result)) {
+            $banners = DB::table('banner')
+                        ->select('id', 'imptotal', 'impmade', 'clicks', 'date')
+                        ->where('cid', $bannerclient['id'])
+                        ->get();
 
-                $percent = $impmade == 0 ? '0' : substr(100 * $clicks / $impmade, 0, 5);
-                $left = $imptotal == 0 ? translate("Illimité") : $imptotal - $impmade;
+            foreach ($banners as $banner) {
+                $float = (100 * $banner['clicks'] / $banner['impmade']);
+
+                $percent = $banner['impmade'] == 0 ? '0' : substr( (string) $float, 0, 5);
+                $left = $banner['imptotal'] == 0 ? translate("Illimité") : $banner['imptotal'] - $banner['impmade'];
                 
                 echo '
                 <tr>
-                    <td>' . $bid . '</td>
-                    <td>' . $impmade . '</td>
-                    <td>' . $imptotal . '</td>
+                    <td>' . $banner['id'] . '</td>
+                    <td>' . $banner['impmade'] . '</td>
+                    <td>' . $banner['imptotal'] . '</td>
                     <td>' . $left . '</td>
-                    <td>' . $clicks . '</td>
+                    <td>' . $banner['clicks'] . '</td>
                     <td>' . $percent . '%</td>
-                    <td><a href="banners.php?op=EmailStats&amp;login=' . $login . '&amp;cid=' . $cid . '&amp;bid=' . $bid . '" ><i class="far fa-envelope fa-lg me-2 tooltipbyclass" data-bs-placement="top" title="E-mail Stats"></i></a></td>
+                    <td><a href="banners.php?op=EmailStats&amp;login=' . $login . '&amp;cid=' . $bannerclient['id'] . '&amp;bid=' . $banner['id'] . '" ><i class="far fa-envelope fa-lg me-2 tooltipbyclass" data-bs-placement="top" title="E-mail Stats"></i></a></td>
                 </tr>';
             }
 
@@ -281,34 +346,36 @@ function bannerstats($login, $pass)
                 <a href="' . Config::get('npds.nuke_url') . '" target="_blank">' . Config::get('npds.sitename') . '</a>
             </div>';
 
-            $result = sql_query("SELECT id, imageurl, clickurl FROM " . $NPDS_Prefix . "banner WHERE cid='$cid'");
+            $banners= DB::table('banner')
+                        ->select('id', 'imageurl', 'clickurl')
+                        ->where('cid', $bannerclient['id'])
+                        ->get();
 
-            while (list($bid, $imageurl, $clickurl) = sql_fetch_row($result)) {
-                //$numrows = sql_num_rows($result); // ??????
-                
+            foreach ($banners as $banner) {
+
                 echo '<div class="card card-body mb-3">';
 
-                if ($imageurl != '') {
-                    echo '<p><img src="' . language::aff_langue($imageurl) . '" class="img-fluid" />'; // pourquoi aff_langue ??
+                if ($banner['imageurl'] != '') {
+                    echo '<p><img src="' . language::aff_langue($banner['imageurl']) . '" class="img-fluid" />'; // pourquoi aff_langue ??
                 } else {
                     echo '<p>';
-                    echo $clickurl;
+                    echo $banner['clickurl'];
                 }
 
-                echo '<h4 class="mb-2">Banner ID : ' . $bid . '</h4>';
+                echo '<h4 class="mb-2">Banner ID : ' . $banner['id'] . '</h4>';
 
-                if ($imageurl != '') {
-                    echo '<p>' . translate("Cette bannière est affichée sur l'url") . ' : <a href="' . language::aff_langue($clickurl) . '" target="_Blank" >[ URL ]</a></p>';
+                if ($banner['imageurl'] != '') {
+                    echo '<p>' . translate("Cette bannière est affichée sur l'url") . ' : <a href="' . language::aff_langue($banner['clickurl']) . '" target="_Blank" >[ URL ]</a></p>';
                 }
 
                 echo '<form action="banners.php" method="get">';
                 
-                if ($imageurl != '') {
+                if ($banner['imageurl'] != '') {
                     echo '
                     <div class="mb-3 row">
                         <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
                         <div class="col-sm-12">
-                            <input class="form-control" type="text" name="url" maxlength="200" value="' . $clickurl . '" />
+                            <input class="form-control" type="text" name="url" maxlength="200" value="' . $banner['clickurl'] . '" />
                         </div>
                     </div>';
                 } else {
@@ -316,16 +383,16 @@ function bannerstats($login, $pass)
                     <div class="mb-3 row">
                         <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
                         <div class="col-sm-12">
-                            <input class="form-control" type="text" name="url" maxlength="200" value="' . htmlentities($clickurl, ENT_QUOTES, 'utf-8') . '" />
+                            <input class="form-control" type="text" name="url" maxlength="200" value="' . htmlentities($banner['clickurl'], ENT_QUOTES, 'utf-8') . '" />
                         </div>
                     </div>';
                 }
 
                 echo '
                 <input type="hidden" name="login" value="' . $login . '" />
-                <input type="hidden" name="bid" value="' . $bid . '" />
+                <input type="hidden" name="bid" value="' . $banner['id'] . '" />
                 <input type="hidden" name="pass" value="' . $pass . '" />
-                <input type="hidden" name="cid" value="' . $cid . '" />
+                <input type="hidden" name="cid" value="' . $bannerclient['id'] . '" />
                 <input class="btn btn-primary" type="submit" name="op" value="' . translate("Changer") . '" />
                 </form>
                 </p>
@@ -335,7 +402,7 @@ function bannerstats($login, $pass)
             // Finnished Banners
             echo "<br />";
             echo '
-            <h3>' . translate("Bannières terminées pour") . ' ' . $name . '</h3>
+            <h3>' . translate("Bannières terminées pour") . ' ' . $bannerclient['name'] . '</h3>
             <table data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-show-columns="true" data-icons="icons" data-icons-prefix="fa">
                 <thead>
                 <tr>
@@ -349,18 +416,23 @@ function bannerstats($login, $pass)
                 </thead>
                 <tbody>';
 
-            $result = sql_query("SELECT id, impressions, clicks, datestart, dateend FROM " . $NPDS_Prefix . "bannerfinish WHERE cid='$cid'");
-            
-            while (list($bid, $impressions, $clicks, $datestart, $dateend) = sql_fetch_row($result)) {
-                $percent = substr(100 * $clicks / $impressions, 0, 5);
+            $bannerfinish = DB::table('bannerfinish')
+                                ->select('id', 'impressions', 'clicks', 'datestart', 'dateend')
+                                ->where('cid', $bannerclient['id'])
+                                ->get();
+
+            foreach ($bannerfinish as $finish) {  
+                $float = (100 * $finish['clicks'] / $finish['impressions']);
+                $percent = substr((string) $float, 0, 5);
+                
                 echo '
                 <tr>
-                    <td>' . $bid . '</td>
-                    <td>' . str::wrh($impressions) . '</td>
-                    <td>' . $clicks . '</td>
+                    <td>' . $finish['id'] . '</td>
+                    <td>' . str::wrh($finish['impressions']) . '</td>
+                    <td>' . $finish['clicks'] . '</td>
                     <td>' . $percent . ' %</td>
-                    <td><small>' . $datestart . '</small></td>
-                    <td><small>' . $dateend . '</small></td>
+                    <td><small>' . $finish['datestart'] . '</small></td>
+                    <td><small>' . $finish['dateend'] . '</small></td>
                 </tr>';
             }
 
@@ -371,60 +443,79 @@ function bannerstats($login, $pass)
             css::adminfoot('fv', '', '', 'no');
 
             footer_page();
-        } else
+        } else {
             IncorrectLogin();
+        }
     }
 }
 
-function EmailStats($login, $cid, $bid)
+/**
+ * [EmailStats description]
+ *
+ * @param   string  $login  [$login description]
+ * @param   int     $cid    [$cid description]
+ * @param   int     $bid    [$bid description]
+ *
+ * @return  void
+ */
+function EmailStats(string $login, int $cid, int $bid): void
 {
-    global $NPDS_Prefix;
+    $bannerclient = DB::table('bannerclient')
+                        ->select('login')
+                        ->where('id', $cid)
+                        ->first();
 
-    $result = sql_query("SELECT login FROM " . $NPDS_Prefix . "bannerclient WHERE cid='$cid'");
-    list($loginBD) = sql_fetch_row($result);
+    if ($login == $bannerclient['login']) {
 
-    if ($login == $loginBD) {
-        $result2 = sql_query("SELECT name, email FROM " . $NPDS_Prefix . "bannerclient WHERE cid='$cid'");
-        list($name, $email) = sql_fetch_row($result2);
-        
-        if ($email == '') {
+        $bannerclient = DB::table('bannerclient')
+                            ->select('name', 'email')
+                            ->where('id', $cid)
+                            ->first();
+
+        if ($bannerclient['email'] == '') {
             header_page();
 
             echo "<p align=\"center\"><br />" . translate("Les statistiques pour la bannières ID") . " : $bid " . translate("ne peuvent pas être envoyées.") . "<br /><br />
-                " . translate("Email non rempli pour : ") . " $name<br /><br /><a href=\"javascript:history.go(-1)\" >" . translate("Retour en arrière") . "</a></p>";
+                " . translate("Email non rempli pour : ") . $bannerclient['name'] ."<br /><br /><a href=\"javascript:history.go(-1)\" >" . translate("Retour en arrière") . "</a></p>";
             
             footer_page();
         } else {
-            $result = sql_query("SELECT id, imptotal, impmade, clicks, imageurl, clickurl, date FROM " . $NPDS_Prefix . "banner WHERE id='$bid' AND cid='$cid'");
-            list($bid, $imptotal, $impmade, $clicks, $imageurl, $clickurl, $date) = sql_fetch_row($result);
+
+            $banner  = DB::table('banner')
+                ->select('id', 'imptotal', 'impmade', 'clicks', 'imageurl', 'clickurl', 'date')
+                ->where('id', $bid)
+                ->where('cid', $cid)
+                ->first();
+
+            $float = (100 * $banner['clicks'] / $banner['impmade']);
+
+            $percent = $banner['impmade'] == 0 ? '0' : substr( (string) $float , 0, 5);
             
-            $percent = $impmade == 0 ? '0' : substr(100 * $clicks / $impmade, 0, 5);
-            
-            if ($imptotal == 0) {
+            if ($banner['imptotal'] == 0) {
                 $left = translate("Illimité");
-                $imptotal = translate("Illimité");
+                $banner['imptotal'] = translate("Illimité");
             } else {
-                $left = $imptotal - $impmade;
+                $left = $banner['imptotal'] - $banner['impmade'];
             }
 
             $fecha = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
             
             $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . Config::get('npds.sitename');
             
-            $message  = "Client : $name\n" . translate("Bannière") . " ID : $bid\n" . translate("Bannière") . " Image : $imageurl\n" . translate("Bannière") . " URL : $clickurl\n\n";
-            $message .= "Impressions " . translate("Réservées") . " : $imptotal\nImpressions " . translate("Réalisées") . " : $impmade\nImpressions " . translate("Restantes") . " : $left\nClicks " . translate("Reçus") . " : $clicks\nClicks " . translate("Pourcentage") . " : $percent%\n\n";
+            $message  = "Client : ". $bannerclient['name'] ."\n" . translate("Bannière") . " ID : ". $banner['id'] ."\n" . translate("Bannière") . " Image : ". $banner['imageurl'] ."\n" . translate("Bannière") . " URL : ". $banner['clickurl'] ."\n\n";
+            $message .= "Impressions " . translate("Réservées") . " : ". $banner['imptotal'] ."\nImpressions " . translate("Réalisées") . " : " .$banner['impmade'] ."\nImpressions " . translate("Restantes") . " : $left\nClicks " . translate("Reçus") . " : ". $banner['clicks'] ."\nClicks " . translate("Pourcentage") . " : $percent%\n\n";
             $message .= translate("Rapport généré le") . ' : ' . "$fecha\n\n";
             $message .= Config::get('signature.message');
 
-            mailler::send_email($email, $subject, $message, '', true, 'html', '');
+            mailler::send_email($bannerclient['email'], $subject, $message, '', true, 'html', '');
 
             header_page();
             echo '
             <div class="card bg-light">
                 <div class="card-body"
                 <p>' . $fecha . '</p>
-                <p>' . translate("Les statistiques pour la bannières ID") . ' : ' . $bid . ' ' . translate("ont été envoyées.") . '</p>
-                <p>' . $email . ' : Client : ' . $name . '</p>
+                <p>' . translate("Les statistiques pour la bannières ID") . ' : ' . $banner['id'] . ' ' . translate("ont été envoyées.") . '</p>
+                <p>' . $bannerclient['email'] . ' : Client : ' . $bannerclient['name'] . '</p>
                 <p><a href="javascript:history.go(-1)" class="btn btn-primary">' . translate("Retour en arrière") . '</a></p>
                 </div>
             </div>';
@@ -437,24 +528,52 @@ function EmailStats($login, $cid, $bid)
     footer_page();
 }
 
-function change_banner_url_by_client($login, $pass, $cid, $bid, $url)
+/**
+ * [change_banner_url_by_client description]
+ *
+ * @param   string  $login  [$login description]
+ * @param   string  $pass   [$pass description]
+ * @param   int     $cid    [$cid description]
+ * @param   int     $bid    [$bid description]
+ * @param   string  $url    [$url description]
+ *
+ * @return  void
+ */
+function change_banner_url_by_client(string $login, string $pass, int $cid, int $bid, string $url): void
 {
-    global $NPDS_Prefix;
-
     header_page();
 
-    $result = sql_query("SELECT passwd FROM " . $NPDS_Prefix . "bannerclient WHERE cid='$cid'");
-    list($passwd) = sql_fetch_row($result);
+    $bannerclient = DB::table('bannerclient')
+                        ->select('passwd')
+                        ->where('cid', $cid)
+                        ->first();
 
-    if (!empty($pass) and $pass == $passwd) {
-        sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE id='$bid'");
-        sql_query("UPDATE " . $NPDS_Prefix . "banner SET clickurl='$url' WHERE id='$bid'");
-        
+    if (!empty($pass) and $pass == $bannerclient['passwd']) {
+        DB::table('banner')->where('id', $bid)->update(array(
+            'clickurl'       => $url,
+        ));
+
+        DB::table('banner')->where('clickurl', $url)->update(array(
+            'id'       => $bid,
+        ));
+
         echo '
-            <div class="alert alert-success">' . translate("Vous avez changé l'url de la bannière") . '<br /><a href="javascript:history.go(-1)" class="alert-link">' . translate("Retour en arrière") . '</a></div>';
+            <div class="alert alert-success">
+                ' . translate("Vous avez changé l'url de la bannière") . '
+                <br />
+                <a href="javascript:history.go(-1)" class="alert-link">
+                    ' . translate("Retour en arrière") . '
+                </a>
+            </div>';
     } else
         echo '
-            <div class="alert alert-danger">' . translate("Identifiant incorrect !") . '<br />' . translate("Merci de") . ' <a href="banners.php?op=login" class="alert-link">' . translate("vous reconnecter.") . '</a></div>';
+            <div class="alert alert-danger">
+                ' . translate("Identifiant incorrect !") . '
+                <br />' . translate("Merci de") . ' 
+                <a href="banners.php?op=login" class="alert-link">
+                    ' . translate("vous reconnecter.") . '
+                </a>
+            </div>';
     
     footer_page();
 }

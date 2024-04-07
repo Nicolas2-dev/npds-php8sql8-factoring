@@ -17,6 +17,7 @@ declare(strict_types=1);
 use npds\system\routing\url;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 
 
 if (!function_exists("Mysql_Connexion")) { 
@@ -50,7 +51,8 @@ if ($op != "maj_subscribe") {
     if ($subscribe) {
         if ($user) {
 
-            $result = sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$cookie[0]' AND topicid!=NULL");
+            DB::table('subscribe')->where('uid', $cookie[0])->where('topicid', '!=', 'NULL')->delete();
+
             $selection = sql_query("SELECT topicid FROM " . $NPDS_Prefix . "topics ORDER BY topicid");
 
             while (list($topicid) = sql_fetch_row($selection)) {

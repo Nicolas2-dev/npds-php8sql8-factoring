@@ -33,68 +33,6 @@ admindroits($aid, $f_meta_nom);
 //<== controle droit
 
 /**
- * [droits description]
- *
- * @param   int              [ description]
- * @param   string  $member  [$member description]
- *
- * @return  void
- */
-function droits(int|string $member): void
-{
-    echo '
-    <div class="mb-3">
-        <div class="form-check form-check-inline">';
-    $checked = ($member == -127) ? ' checked="checked"' : '';
-    echo '
-            <input type="radio" id="adm" name="privs" class="form-check-input" value="-127" ' . $checked . ' />
-            <label class="form-check-label" for="adm">' . adm_translate("Administrateurs") . '</label>
-        </div>
-        <div class="form-check form-check-inline">';
-    $checked = ($member == -1) ? ' checked="checked"' : '';
-    echo '
-            <input type="radio" id="ano" name="privs" class="form-check-input" value="-1" ' . $checked . ' />
-            <label class="form-check-label" for="ano">' . adm_translate("Anonymes") . '</label>
-        </div>';
-    echo '
-        <div class="form-check form-check-inline">';
-    if ($member > 0) {
-        echo '
-            <input type="radio" id="mem" name="privs" value="1" class="form-check-input" checked="checked" />
-            <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" id="tous" name="privs" class="form-check-input" value="0" />
-            <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label class="col-form-label col-sm-12" for="mpri">' . adm_translate("Groupes") . '</label>
-        <div class="col-sm-12">';
-        echo groupe::groupe($member) . '
-        </div>
-    </div>';
-    } else {
-        $checked = ($member == 0) ? ' checked="checked"' : '';
-        echo '
-            <input type="radio" id="mem" name="privs" class="form-check-input" value="1" />
-            <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" id="tous" name="privs" class="form-check-input" value="0"' . $checked . ' />
-            <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label class="col-form-label col-sm-12" for="mpri">' . adm_translate("Groupes") . '</label>
-        <div class="col-sm-12">';
-        echo groupe::groupe($member) . '
-        </div>
-    </div>';
-    }
-}
-
-/**
  * [DownloadAdmin description]
  *
  * @return  void
@@ -327,7 +265,7 @@ function DownloadAdmin(): void
         <fieldset>
             <legend>' . adm_translate("Droits") . '</legend>';
 
-    droits('0');
+    groupe::droits('0');
 
     echo '
         </fieldset>
@@ -451,7 +389,7 @@ function DownloadEdit(int $did): void
         <fieldset>
             <legend>' . adm_translate("Droits") . '</legend>';
 
-    droits($download['perms']);
+    groupe::droits($download['perms']);
 
     echo '
         </fieldset>

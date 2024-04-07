@@ -36,19 +36,9 @@ if (!$user) {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
     
-    $Default_Theme = Config::get('npds.Default_Theme');
+    $theme = theme::getTheme();
 
-    if ($userdata[9] != '') {
-        if (!$file = @opendir("themes/$userdata[9]")) {
-            $tmp_theme = $Default_Theme;
-        } else {
-            $tmp_theme = $userdata[9];
-        }
-    } else {
-        $tmp_theme = $Default_Theme;
-    }
-
-    include("themes/$tmp_theme/theme.php");
+    include("themes/$theme/theme.php");
 
     $Titlesitename = translate("Carnet d'adresses");
 
@@ -56,9 +46,8 @@ if (!$user) {
 
     echo '<link id="bsth" rel="stylesheet" href="themes/_skins/default/bootstrap.min.css" />';
 
-    $language = Config::get('npds.language');
-
-    echo css::import_css($tmp_theme, $language, "", "", "");
+    // language pas bon
+    echo css::import_css($theme, Config::get('npds.language'), "", "", "");
 
     include("assets/formhelp.java.php");
 

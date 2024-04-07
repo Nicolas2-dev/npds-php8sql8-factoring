@@ -269,8 +269,9 @@ class news
                         $notes = stripslashes(str::FixQuotes($notes));
                         
                         sql_query("INSERT INTO " . $NPDS_Prefix . "stories VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '0', '0', '$topic', '$author', '$notes', '$ihome', '0', '$date_finval', '$epur')");
-                        sql_query("DELETE FROM " . $NPDS_Prefix . "autonews WHERE anid='$anid'");
                         
+                        DB::table('autonews')->where('anid', $anid)->delete();
+
                         global $subscribe;
                         if ($subscribe) {
                             subscribe::subscribe_mail('topic', $topic, '', $subject, '');
@@ -299,11 +300,11 @@ class news
                 if (($date[4] < $hour) and ($date[5] >= $min) or ($date[4] <= $hour) and ($date[5] <= $min)) {
                     
                     if ($epur == 1) {
-                        sql_query("DELETE FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
-                        
+                        DB::table('stories')->where('sid', $sid)->delete();
+
                         if (file_exists("modules/comments/config/article.conf.php")) {
                             include("modules/comments/config/article.conf.php");
-                            sql_query("DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$topic'");
+                            DB::table('posts')->where('forum_id', $forum)->where('topic_id', $topic)->delete();
                         }
 
                         logs::Ecr_Log('security', "removeStory ($sid, epur) by automated epur : system", '');

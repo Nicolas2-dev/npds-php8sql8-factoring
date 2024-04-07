@@ -21,6 +21,7 @@ namespace npds\system\sform;
 
 use npds\system\utility\spam;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 
 class form_handler
@@ -1445,11 +1446,8 @@ class form_handler
     /**************************************************************************************/
     function sform_delete_mysql()
     {
-        global $NPDS_Prefix;
-
-        $sql = "DELETE FROM " . $NPDS_Prefix . "sform WHERE id_form='" . $this->form_title . "' AND id_key='" . $this->form_key . "' AND key_value='" . $this->form_key_value . "'";
-        
-        if (!$result = sql_query($sql)) {
+        $result = DB::table('sform')->where('id_form', $this->form_title)->where('id_key', $this->form_key)->where('key_value', $this->form_key_value)->delete();
+        if (!$result) {
             return ("Error Sform : Delete DB");
         }
     }

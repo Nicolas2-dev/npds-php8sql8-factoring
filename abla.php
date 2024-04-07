@@ -17,8 +17,8 @@ use npds\system\assets\css;
 use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\support\str;
-use npds\system\config\Config;
 use npds\system\support\stats;
+use npds\system\support\facades\DB;
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) {
     include("admin/die.php");
@@ -37,7 +37,6 @@ $f_titre = translate("Tableau de bord");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-
 global $admin;
 if ($admin) {
     include("themes/default/header.php");
@@ -46,14 +45,6 @@ if ($admin) {
     adminhead($f_meta_nom, $f_titre);
 
     list($membres, $totala, $totalb, $totalc, $totald, $totalz) = stats::req_stat();
-
-    //LNL Email in outside table
-    $result = sql_query("SELECT email FROM " . $NPDS_Prefix . "lnl_outside_users");
-    if ($result) {
-        $totalnl = sql_num_rows($result);
-    } else {
-        $totalnl = "0";
-    }
 
     include("storage/logs/abla.log");
 
@@ -162,6 +153,13 @@ if ($admin) {
         echo '<span>';
     }
 
+    //LNL Email in outside table
+    if ($count = DB::table('lnl_outside_users')->select('email')->count()) {
+        $totalnl = $count;
+    } else {
+        $totalnl = 0;
+    }
+
     echo str::wrh($totalb - $xtotalb) . '</span>)</td>
             </tr>
             <tr>
@@ -202,13 +200,13 @@ if ($admin) {
         </thead>
         <tbody>';
 
-    $num_dow = 0;
-    $result = sql_query("SELECT dcounter, dfilename FROM " . $NPDS_Prefix . "downloads");
-
     settype($xdownload, 'array');
 
-    while (list($dcounter, $dfilename) = sql_fetch_row($result)) {
-        $num_dow++;
+    $downloads = DB::table('downloads')->select('dcounter', 'dfilename')->get();
+
+    $num_dow = 0;    
+    foreach ($downloads as $download) {  
+
         echo '
             <tr>
                 <td><span class="text-danger">';
@@ -217,18 +215,20 @@ if ($admin) {
             echo $xdownload[$num_dow][1];
         }
 
-        echo '</span> -/- ' . $dfilename . '</td>
+        echo '</span> -/- ' . $download['dfilename'] . '</td>
                 <td><span class="text-danger">';
 
         if (array_key_exists($num_dow, $xdownload)) {
             echo $xdownload[$num_dow][2];
         }
 
-        echo '</span> -/- ' . $dcounter . '</td>
+        echo '</span> -/- ' . $download['dcounter'] . '</td>
             </tr>';
 
-        $xfile .= "\$xdownload[$num_dow][1] = \"$dfilename\";\n";
-        $xfile .= "\$xdownload[$num_dow][2] = \"$dcounter\";\n";
+        $xfile .= "\$xdownload[$num_dow][1] = \"". $download['dfilename'] ."\";\n";
+        $xfile .= "\$xdownload[$num_dow][2] = \"". $download['dcounter'] ."\";\n";
+
+        $num_dow++;         
     }
 
     echo '
@@ -245,38 +245,46 @@ if ($admin) {
             </tr>
         </thead>';
 
-    $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "catagories ORDER BY cat_id");
-    $num_for = 0;
+    $catagories = DB::table('catagories')->select('cat_id', 'cat_title')->orderBy('cat_id')->get();
 
-    while (list($cat_id, $cat_title) = sql_fetch_row($result)) {
-        $sub_sql = "SELECT f.*, u.uname FROM " . $NPDS_Prefix . "forums f, " . $NPDS_Prefix . "users u WHERE f.cat_id = '$cat_id' AND f.forum_moderator = u.uid ORDER BY forum_index,forum_id";
-        
-        if (!$sub_result = sql_query($sub_sql)) {
+    $num_for = 0;
+    foreach ($catagories as $categ) {    
+
+        $forums = DB::table('forums')
+            ->select('forums.forum_id', 'forums.forum_name', 'forums.forum_desc', 'forums.forum_access', 'forums.forum_moderator', 'forums.cat_id', 'forums.forum_type', 'forums.forum_pass', 'forums.arbre', 'forums.attachement', 'forums.forum_index', 'users.uname')
+            ->join('users', 'forums.forum_moderator', "=", 'users.uid')
+            ->where('forums.cat_id', '=', $categ['cat_id'])
+            ->orderBy('forums.forum_index, forums.forum_id')
+            ->get();
+
+        if (!$forums) {
             forum::forumerror('0022');
         }
 
-        if ($myrow = sql_fetch_assoc($sub_result)) {
+        if ($forums) {
             echo '
             <tbody>
                 <tr>
-                <td class="table-active" colspan="4">' . stripslashes($cat_title) . '</td>
+                <td class="table-active" colspan="4">' . stripslashes($categ['cat_title']) . '</td>
                 </tr>';
             
-            do {
+            foreach ($forums as $forum) {
                 $num_for++;
-                $last_post = forum::get_last_post($myrow['forum_id'], 'forum', 'infos', true);
+                $last_post = forum::get_last_post($forum['forum_id'], 'forum', 'infos', true);
                 
-                echo '
-                <tr>';
+                echo '<tr>';
 
-                $total_topics = forum::get_total_topics($myrow['forum_id']);
-                $name = stripslashes($myrow['forum_name']);
+                $total_topics = forum::get_total_topics($forum['forum_id']);
+                $name = stripslashes($forum['forum_name']);
                 $xfile .= "\$xforum[$num_for][1] = \"$name\";\n";
                 $xfile .= "\$xforum[$num_for][2] = $total_topics;\n";
-                $desc = stripslashes($myrow['forum_desc']);
+                $desc = stripslashes($forum['forum_desc']);
 
-                echo '
-                <td><a tabindex="0" role="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="' . $desc . '"><i class="far fa-lg fa-file-alt me-2"></i></a><a href="viewforum.php?forum=' . $myrow['forum_id'] . '" ><span class="text-danger">';
+                echo '<td>
+                    <a tabindex="0" role="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="' . $desc . '">
+                        <i class="far fa-lg fa-file-alt me-2"></i>
+                    </a>
+                    <a href="viewforum.php?forum=' . $forum['forum_id'] . '" ><span class="text-danger">';
                 
                 if (array_key_exists($num_for, $xforum)) {
                     echo $xforum[$num_for][1];
@@ -291,11 +299,10 @@ if ($admin) {
 
                 echo '</span> -/- ' . $total_topics . '</td>';
 
-                $total_posts = forum::get_total_posts($myrow['forum_id'], "", "forum", false);
+                $total_posts = forum::get_total_posts($forum['forum_id'], "", "forum", false);
                 $xfile .= "\$xforum[$num_for][3] = $total_posts;\n";
 
-                echo '
-                <td class="text-center"><span class="text-danger">';
+                echo '<td class="text-center"><span class="text-danger">';
 
                 if (array_key_exists($num_for, $xforum)) {
                     echo $xforum[$num_for][3];
@@ -303,7 +310,7 @@ if ($admin) {
 
                 echo '</span> -/- ' . $total_posts . '</td>
                 <td class="text-end small">' . $last_post . '</td>';
-            } while ($myrow = sql_fetch_assoc($sub_result));
+            }
         }
     }
 

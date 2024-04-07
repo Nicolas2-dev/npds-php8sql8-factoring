@@ -33,7 +33,12 @@ $f_titre = adm_translate("Gestion des sujets");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function topicsmanager()
+/**
+ * [topicsmanager description]
+ *
+ * @return  void
+ */
+function topicsmanager(): void 
 {
     global $f_meta_nom, $f_titre, $nook;
 
@@ -48,30 +53,30 @@ function topicsmanager()
 
     if ($result > 0) {
         echo '
-    <hr />
-    <h3 class="my-3">' . adm_translate("Sujets actifs") . '<span class="badge bg-secondary float-end">' . sql_num_rows($result) . '</span></h3>';
+        <hr />
+        <h3 class="my-3">' . adm_translate("Sujets actifs") . '<span class="badge bg-secondary float-end">' . sql_num_rows($result) . '</span></h3>';
         
-        while (list($topicid, $topicname, $topicimage, $topictext) = sql_fetch_row($result)) {
+        foreach($result as $topic) {
             echo '
-    <div class="card card-body mb-2" id="top_' . $topicid . '">
-        <div class=" topi">
-            <div class="">';
+            <div class="card card-body mb-2" id="top_' . $topic['topicid'] . '">
+                <div class=" topi">
+                    <div class="">';
 
-            if (($topicimage) or ($topicimage != '')) {
-                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . $topicimage . '" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topicname . '" /></a>';
+            if (($topic['topicimage']) or ($topic['topicimage'] != '')) {
+                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topic['topicid'] . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . $topicimage . '" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topic['topicname'] . '" /></a>';
             } else {
-                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . 'topics.png" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topicname . '" /></a>';
+                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topic['topicid'] . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . 'topics.png" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topic['topicname'] . '" /></a>';
             }
 
             echo '
-            </div>
-            <div class="">
-                <h4 class="my-3"><a href="admin.php?op=topicedit&amp;topicid=' . $topicid . '" ><i class="fa fa-edit me-1 align-middle"></i>' . language::aff_langue($topicname) . '</a></h4>
-                <p>' . language::aff_langue($topictext) . '</p>
-                <div id="shortcut-tools_' . $topicid . '" class="n-shortcut-tools" style="display:none;"><a class="text-danger btn" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=0" ><i class="fas fa-trash fa-2x"></i></a></div>
-            </div>
-        </div>
-    </div>';
+                    </div>
+                    <div class="">
+                        <h4 class="my-3"><a href="admin.php?op=topicedit&amp;topicid=' . $topic['topicid'] . '" ><i class="fa fa-edit me-1 align-middle"></i>' . language::aff_langue($topic['topicname']) . '</a></h4>
+                        <p>' . language::aff_langue($topic['topictext']) . '</p>
+                        <div id="shortcut-tools_' . $topic['topicid'] . '" class="n-shortcut-tools" style="display:none;"><a class="text-danger btn" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=0" ><i class="fas fa-trash fa-2x"></i></a></div>
+                    </div>
+                </div>
+            </div>';
         }
     }
 
@@ -89,7 +94,7 @@ function topicsmanager()
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="topicname">' . adm_translate("Intitulé") . '</label>
             <div class="col-sm-8">
-                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="' . $topicname . '" placeholder="' . adm_translate("cesiteestgénial") . '" required="required" />
+                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="' . $topic['topicname'] . '" placeholder="' . adm_translate("cesiteestgénial") . '" required="required" />
                 <span class="help-block">' . adm_translate("(un simple nom sans espaces)") . ' - ' . adm_translate("max caractères") . ' : <span id="countcar_topicname"></span></span>
             </div>
         </div>
@@ -103,7 +108,7 @@ function topicsmanager()
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="topicimage">' . adm_translate("Image") . '</label>
             <div class="col-sm-8">
-                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topicimage . '" placeholder="genial.png" />
+                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topic['topicimage'] . '" placeholder="genial.png" />
                 <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . Config::get('npds.tipath') . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
             </div>
         </div>
@@ -179,25 +184,28 @@ function topicsmanager()
                 message: "' . adm_translate("Doit être un nom de fichier valide avec une de ces extensions : jpg, jpeg, png, gif.") . '"
             }
         }
-    },
-    ';
+    },';
 
     $arg1 = '
     var formulid = ["topicmake"];
     inpandfieldlen("topicname",20);
     inpandfieldlen("topictext",250);
     inpandfieldlen("topicimage",20);
-    inpandfieldlen("topicadmin",255);
-    ';
+    inpandfieldlen("topicadmin",255);';
 
     echo js::auto_complete_multi('admin', 'aid', 'authors', 'topicadmin', '');
-
-    sql_free_result($result);
 
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function topicedit($topicid)
+/**
+ * [topicedit description]
+ *
+ * @param   int   $topicid  [$topicid description]
+ *
+ * @return  void
+ */
+function topicedit(int $topicid): void 
 {
     global $f_meta_nom, $f_titre;
 
@@ -206,18 +214,15 @@ function topicedit($topicid)
     GraphicAdmin(manuel('topics'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT topicid, topicname, topicimage, topictext, topicadmin FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
-    list($topicid, $topicname, $topicimage, $topictext, $topicadmin) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic  = DB::table('topics')->select('topicid', 'topicname', 'topicimage', 'topictext', 'topicadmin')->where('topicid', $topicid)->first();
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Editer le Sujet :") . ' <span class="text-muted">' . language::aff_langue($topicname) . '</span></h3>';
+    <h3 class="mb-3">' . adm_translate("Editer le Sujet :") . ' <span class="text-muted">' . language::aff_langue($topic['topicname']) . '</span></h3>';
 
-    if ($topicimage != '') {
+    if ($topic['topicimage'] != '') {
         echo '
-    <div class="card card-body my-4 py-3"><img class="img-fluid mx-auto d-block" src="' . Config::get('npds.tipath') . $topicimage . '" alt="image-sujet" /></div>';
+    <div class="card card-body my-4 py-3"><img class="img-fluid mx-auto d-block" src="' . Config::get('npds.tipath') . $topic['topicimage'] . '" alt="image-sujet" /></div>';
     }
 
     echo '
@@ -226,21 +231,21 @@ function topicedit($topicid)
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="topicname">' . adm_translate("Intitulé") . '</label>
                 <div class="col-sm-8">
-                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="' . $topicname . '" placeholder="' . adm_translate("cesiteestgénial") . '" required="required" />
+                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="' . $topic['topicname'] . '" placeholder="' . adm_translate("cesiteestgénial") . '" required="required" />
                 <span class="help-block">' . adm_translate("(un simple nom sans espaces)") . ' - ' . adm_translate("max caractères") . ' : <span id="countcar_topicname"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="topictext">' . adm_translate("Texte") . '</label>
                 <div class="col-sm-8">
-                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="' . adm_translate("ce site est génial") . '" required="required">' . $topictext . '</textarea>
+                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="' . adm_translate("ce site est génial") . '" required="required">' . $topic['topictext'] . '</textarea>
                 <span class="help-block">' . adm_translate("(description ou nom complet du sujet)") . ' - ' . adm_translate("max caractères") . ' : <span id="countcar_topictext"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="topicimage">' . adm_translate("Image") . '</label>
                 <div class="col-sm-8">
-                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topicimage . '" placeholder="genial.png" />
+                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topic['topicimage'] . '" placeholder="genial.png" />
                 <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . Config::get('npds.tipath') . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
                 </div>
             </div>
@@ -249,7 +254,7 @@ function topicedit($topicid)
                 <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-user-cog fa-lg"></i></span>
-                    <input class="form-control" type="text" id="topicadmin" name="topicadmin" maxlength="255" value="' . $topicadmin . '" />
+                    <input class="form-control" type="text" id="topicadmin" name="topicadmin" maxlength="255" value="' . $topic['topicadmin'] . '" />
                 </div>
                 </div>
             </div>
@@ -273,7 +278,7 @@ function topicedit($topicid)
         </div>
         </fieldset>
         <div class="mb-3 row">
-            <input type="hidden" name="topicid" value="' . $topicid . '" />
+            <input type="hidden" name="'.$topic['topicid'].'" value="' . $topic['topicid'] . '" />
             <input type="hidden" name="op" value="topicchange" />
             <div class="col-sm-8 ms-sm-auto">
                 <button class="btn btn-primary" type="submit">' . adm_translate("Sauver les modifications") . '</button>
@@ -283,7 +288,7 @@ function topicedit($topicid)
     </form>';
     /*
     <form id="fad_deltop" action="admin.php" method="post">
-        <input type="hidden" name="topicid" value="'.$topicid.'" />
+        <input type="hidden" name="topic['topicid']" value="'.$topic['topicid'].'" />
         <input type="hidden" name="op" value="topicdelete" />
     </form>
     <button class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;&nbsp;'.adm_translate("Effacer le Sujet !").'</button>
@@ -291,11 +296,9 @@ function topicedit($topicid)
 
     echo '
         <hr />
-        <h3 class="my-2">' . adm_translate("Gérer les Liens Relatifs : ") . ' <span class="text-muted">' . language::aff_langue($topicname) . '</span></h3>';
+        <h3 class="my-2">' . adm_translate("Gérer les Liens Relatifs : ") . ' <span class="text-muted">' . language::aff_langue($topic['topicname']) . '</span></h3>';
 
-    $res = sql_query("SELECT rid, name, url FROM " . $NPDS_Prefix . "related WHERE tid='$topicid'");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $r_related = DB::table('related')->select('rid', 'name', 'url')->where('tid', $topic['topicid'])->first();
 
     echo '
     <table id="tad_linkrel" data-toggle="table" data-striped="true" data-icons="icons" data-icons-prefix="fa">
@@ -307,14 +310,15 @@ function topicedit($topicid)
         <tbody>';
 
     while (list($rid, $name, $url) = sql_fetch_row($res)) {
+    foreach ($r_relatad as $related)
         echo '
                 <tr>
-                    <td>' . $name . '</td>
-                    <td><a href="' . $url . '" target="_blank">' . $url . '</a></td>
+                    <td>' . $related['name'] . '</td>
+                    <td><a href="' . $related['url'] . '" target="_blank">' . $related['url'] . '</a></td>
                     <td>
-                    <a href="admin.php?op=relatededit&amp;tid=' . $topicid . '&amp;rid=' . $rid . '" ><i class="fas fa-edit fa-lg" data-bs-toggle="tooltip" title="' . adm_translate("Editer") . '"></i></a>&nbsp;
-                    <a href="' . $url . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>&nbsp;
-                    <a href="admin.php?op=relateddelete&amp;tid=' . $topicid . '&amp;rid=' . $rid . '" ><i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="' . adm_translate("Effacer") . '"></i></a>
+                    <a href="admin.php?op=relatededit&amp;tid=' . $topic['topicid'] . '&amp;rid=' . $related['rid'] . '" ><i class="fas fa-edit fa-lg" data-bs-toggle="tooltip" title="' . adm_translate("Editer") . '"></i></a>&nbsp;
+                    <a href="' . $related['url'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>&nbsp;
+                    <a href="admin.php?op=relateddelete&amp;tid=' . $topic['topicid'] . '&amp;rid=' . $related['rid'] . '" ><i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="' . adm_translate("Effacer") . '"></i></a>
                     </td>
                 </tr>';
     }
@@ -374,7 +378,15 @@ function topicedit($topicid)
     css::adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function relatededit($tid, $rid)
+/**
+ * [relatededit description]
+ *
+ * @param   int   $tid  [$tid description]
+ * @param   int   $rid  [$rid description]
+ *
+ * @return  void
+ */
+function relatededit(int $tid, int $rid): void 
 {
     global $f_meta_nom, $f_titre;
 
@@ -383,25 +395,19 @@ function relatededit($tid, $rid)
     GraphicAdmin(manuel('topics'));
     adminhead($f_meta_nom, $f_titre);
 
-    $result = sql_query("SELECT name, url FROM " . $NPDS_Prefix . "related WHERE rid='$rid'");
-    list($name, $url) = sql_fetch_row($result);
+    $related = DB::table('related')->select('name', 'url')->where('rid', $rid)->first();
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    $result2 = sql_query("SELECT topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$tid'");
-    list($topictext, $topicimage) = sql_fetch_row($result2);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $topic = DB::table('topics')->select('topictext', 'topicimage')->where('topicid', $tid)->first();
 
     echo '
     <hr />
-    <h3>' . adm_translate("Sujet : ") . ' ' . $topictext . '</h3>
+    <h3>' . adm_translate("Sujet : ") . ' ' . $topic['topictext'] . '</h3>
     <h4>' . adm_translate("Editer les Liens Relatifs") . '</h4>';
 
-    if ($topicimage != "") {  
+    if ($topic['topicimage'] != "") {  
         echo '
     <div class="thumbnail">
-        <img class="img-fluid " src="' . Config::get('npds.tipath') . $topicimage . '" alt="' . $topictext . '" />
+        <img class="img-fluid " src="' . Config::get('npds.tipath') . $topic['topicimage'] . '" alt="' . $topic['topictext'] . '" />
     </div>';
     }
 
@@ -411,7 +417,7 @@ function relatededit($tid, $rid)
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4" for="name">' . adm_translate("Nom du site") . '</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" name="name" id="name" value="' . $name . '" maxlength="30" required="required" />
+                <input type="text" class="form-control" name="name" id="name" value="' . $related['name'] . '" maxlength="30" required="required" />
                 <span class="help-block text-end"><span id="countcar_name"></span></span>
             </div>
         </div>
@@ -420,9 +426,9 @@ function relatededit($tid, $rid)
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-text">
-                        <a href="' . $url . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>
+                        <a href="' . $related['url'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>
                     </span>
-                    <input type="url" class="form-control" name="url" id="url" value="' . $url . '" maxlength="320" />
+                    <input type="url" class="form-control" name="url" id="url" value="' . $related['url'] . '" maxlength="320" />
                 </div>
                 <span class="help-block text-end"><span id="countcar_url"></span></span>
                 </div>
@@ -440,13 +446,22 @@ function relatededit($tid, $rid)
     $arg1 = '
         var formulid = ["editrelatedlink"];
         inpandfieldlen("name",30);
-        inpandfieldlen("url",320);
-    ';
+        inpandfieldlen("url",320);';
 
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function relatedsave($tid, $rid, $name, $url)
+/**
+ * [relatedsave description]
+ *
+ * @param   int     $tid   [$tid description]
+ * @param   int     $rid   [$rid description]
+ * @param   string  $name  [$name description]
+ * @param   string  $url   [$url description]
+ *
+ * @return  void
+ */
+function relatedsave(int $tid, int $rid, string $name, string $url): void
 {
     DB::table('related')->where('rid', $rid)->update(array(
         'name'      => $name,
@@ -456,28 +471,44 @@ function relatedsave($tid, $rid, $name, $url)
     Header("Location: admin.php?op=topicedit&topicid=$tid");
 }
 
-function relateddelete($tid, $rid)
+/**
+ * [relateddelete description]
+ *
+ * @param   int   $tid  [$tid description]
+ * @param   int   $rid  [$rid description]
+ *
+ * @return  void
+ */
+function relateddelete(int $tid, int $rid): void 
 {
     DB::table('related')->where('rid', $rid)->delete();
 
     Header("Location: admin.php?op=topicedit&topicid=$tid");
 }
 
-function topicmake($topicname, $topicimage, $topictext, $topicadmin)
+/**
+ * [topicmake description]
+ *
+ * @param   string  $topicname   [$topicname description]
+ * @param   string  $topicimage  [$topicimage description]
+ * @param   string  $topictext   [$topictext description]
+ * @param   string  $topicadmin  [$topicadmin description]
+ *
+ * @return  void
+ */
+function topicmake(string $topicname, string $topicimage, string $topictext, string $topicadmin): void
 {
-    $topicname = stripslashes(FixQuotes($topicname));
+    $topicname = stripslashes(str::FixQuotes($topicname));
 
-    $istopicname = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "topics WHERE topicname='$topicname'"));
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $istopicname = DB::table('topics')->select('*')->where('topicname', $topicname)->first();
 
     if ($istopicname !== 0) {
         Header("Location: admin.php?op=topicsmanager&nook=nook#addtopic");
         die();
     }
 
-    $topicimage = stripslashes(FixQuotes($topicimage));
-    $topictext = stripslashes(FixQuotes($topictext));
+    $topicimage = stripslashes(str::FixQuotes($topicimage));
+    $topictext = stripslashes(str::FixQuotes($topictext));
 
     DB::table('topics')->insert(array(
         'topicname'         => $topicname,
@@ -496,9 +527,7 @@ function topicmake($topicname, $topicimage, $topictext, $topicadmin)
     for ($i = 0; $i < count($topicadminX); $i++) {
         trim($topicadminX[$i]);
 
-        $nres = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "droits WHERE d_aut_aid='$topicadminX[$i]' and d_droits=11112"));
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $nres = DB::table('droits')->select('*')->where('d_aut_aid', $topicadminX[$i])->where('d_droits', 11112)->get();
 
         if ($nres == 0) {
             DB::table('droits')->insert(array(
@@ -513,20 +542,31 @@ function topicmake($topicname, $topicimage, $topictext, $topicadmin)
     Header("Location: admin.php?op=topicsmanager#addtopic");
 }
 
-function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin, $name, $url)
+/**
+ * [topicchange description]
+ *
+ * @param   int     $topicid     [$topicid description]
+ * @param   string  $topicname   [$topicname description]
+ * @param   string  $topicimage  [$topicimage description]
+ * @param   string  $topictext   [$topictext description]
+ * @param   string  $topicadmin  [$topicadmin description]
+ * @param   string  $name        [$name description]
+ * @param   string  $url         [$url description]
+ *
+ * @return  void
+ */
+function topicchange(int $topicid, string $topicname, string $topicimage, string $topictext, string $topicadmin, string $name, string $url): void
 {
     $topicadminX = explode(',', $topicadmin);
     array_pop($topicadminX);
 
-    $res = sql_query("SELECT * FROM " . $NPDS_Prefix . "droits WHERE d_droits=11112 AND d_fon_fid=2");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $res = DB::table('droits')->select('*')->where('d_droits', 11112)->where('d_fon_fid', 2)->get();
 
     $d = array();
     $topad = array();
 
-    while ($d = sql_fetch_row($res)) {
-        $topad[] = $d[0];
+    foreach ($res as $d) {
+        $topad[] = $d['d_aut_aid'];
     }
 
     foreach ($topicadminX as $value) {
@@ -542,19 +582,14 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
     foreach ($topad as $value) { //pour chaque droit adminsujet on regarde le nom de l'adminsujet
         if (!in_array($value, $topicadminX)) { //si le nom de l'adminsujet n'est pas dans les nouveaux adminsujet
             //on cherche si il administre un autre sujet
-            $resu =  mysqli_get_client_info() <= '8.0' 
-                ? sql_query("SELECT * FROM " . $NPDS_Prefix . "topics WHERE topicadmin REGEXP '[[:<:]]" . $value . "[[:>:]]'") 
+            // $resu =  mysqli_get_client_info() <= '8.0' 
+            //     ? DB::table('topics')->select('*')->where('topicadmin', 'REGEXP', '[[:<:]]" . $value . "[[:>:]]')->first()
 
-                = DB::table('')->select()->where('', )->orderBy('')->get();
+            //     : DB::table('topics')->select('*')->where('topicadmin', 'REGEXP', '\\b" . $value . "\\b')->first();
 
-                : sql_query("SELECT * FROM " . $NPDS_Prefix . "topics WHERE topicadmin REGEXP '\\b" . $value . "\\b'");
-
-                = DB::table('')->select()->where('', )->orderBy('')->get();
+            $resu = DB::table('topics')->select('*')->where('topicadmin', 'REGEXP', '\\b" . $value . "\\b')->first();
             
-            $nbrow = sql_num_rows($resu);
-            list($tid) = sql_fetch_row($resu);
-            
-            if (($nbrow == 1) and ($topicid == $tid)) {
+            if (($resu == 1) and ($topicid == $resu['tid'])) {
                 DB::table('droits')->where('d_aut_aid', $value)->where('d_droits', 11112)->wxhere('d_fon_fid', 2)->delete();
             }
         }
@@ -568,9 +603,9 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
 
     DB::table('topics')->where('topicid', $topicid)->update(array(
         'topicname'       => $topicname,
-        'topicimage'       => $topicimage,
+        'topicimage'      => $topicimage,
         'topictext'       => $topictext,
-        'topicadmin'       => $topicadmin,
+        'topicadmin'      => $topicadmin,
     ));
 
     global $aid;
@@ -587,15 +622,21 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
     Header("Location: admin.php?op=topicedit&topicid=$topicid");
 }
 
-function topicdelete($topicid, $ok = 0)
+/**
+ * [topicdelete description]
+ *
+ * @param   int   $topicid  [$topicid description]
+ * @param   int   $ok       [$ok description]
+ *
+ * @return  void
+ */
+function topicdelete(int $topicid, int $ok = 0): void
 {
     if ($ok == 1) {
         global $aid;
 
-        $result = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories WHERE topic='$topicid'");
-        list($sid) = sql_fetch_row($result);
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        // pourquoi  cette requete not used res'[sid']
+        //$res = DB::table('stories')->select('sid')->where('topic', $topicid)->first();
 
         DB::table('stories')->where('topic', $topicid)->delete();
 
@@ -620,34 +661,30 @@ function topicdelete($topicid, $ok = 0)
 
         Header("Location: admin.php?op=topicsmanager");
     } else {
-        global $topicimage, $f_meta_nom, $f_titre;
+        global $f_meta_nom, $f_titre;
 
         include("themes/default/header.php");
 
         GraphicAdmin(manuel('topics'));
         adminhead($f_meta_nom, $f_titre);
 
-        $result2 = sql_query("SELECT topicimage, topicname, topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid'");
-        list($topicimage, $topicname, $topictext) = sql_fetch_row($result2);
+        $topic = DB::table('topics')->select('topicimage', 'topicname', 'topictext')->where('topicid', $topicid)->first();
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        echo '
-    <h3 class=""><span class="text-danger">' . adm_translate("Effacer le Sujet") . ' : </span>' . language::aff_langue($topicname) . '</h3>';
+        echo '<h3 class=""><span class="text-danger">' . adm_translate("Effacer le Sujet") . ' : </span>' . language::aff_langue($topicname) . '</h3>';
         echo '<div class="alert alert-danger lead" role="alert">';
 
-        if ($topicimage != "") {
+        if ($topic['topicimage'] != "") {
             echo '
-    <div class="thumbnail">
-        <img class="img-fluid" src="' . Config::get('npds.tipath') . $topicimage . '" alt="logo-topic" />
-    </div>';
+            <div class="thumbnail">
+                <img class="img-fluid" src="' . Config::get('npds.tipath') . $topic['topicimage'] . '" alt="logo-topic" />
+            </div>';
         }
 
         echo '
-        <p>' . adm_translate("Etes-vous sûr de vouloir effacer ce sujet ?") . ' : ' . $topicname . '</p>
-        <p>' . adm_translate("Ceci effacera tous ses articles et ses commentaires !") . '</p>
-        <p><a class="btn btn-danger" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=1">' . adm_translate("Oui") . '</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">' . adm_translate("Non") . '</a></p>
-    </div>';
+            <p>' . adm_translate("Etes-vous sûr de vouloir effacer ce sujet ?") . ' : ' . $topic['topicname'] . '</p>
+            <p>' . adm_translate("Ceci effacera tous ses articles et ses commentaires !") . '</p>
+            <p><a class="btn btn-danger" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=1">' . adm_translate("Oui") . '</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">' . adm_translate("Non") . '</a></p>
+        </div>';
 
         css::adminfoot('', '', '', '');
     }

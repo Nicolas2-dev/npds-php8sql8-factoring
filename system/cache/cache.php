@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace npds\system\cache;
 
-use npds\system\cache\cacheManager;
+use npds\system\config\Config;
 use npds\system\cache\SuperCacheEmpty;
+use npds\system\cache\CacheManager;
 
 
 class cache
@@ -18,12 +19,10 @@ class cache
      */
     public static function SC_infos(): string
     {
-        global $SuperCache;
-
         $infos = '';
-        if ($SuperCache) {
+        if (Config::get('cache.config.SuperCache')) {
 
-            $npds_sc = cacheManager::setInstance()::getNpdsSc();
+            $npds_sc = CacheManager::setInstance()::getNpdsSc();
             
             if ($npds_sc) {
                 $infos = '<span class="small">' . translate(".:Page >> Super-Cache:.") . '</span>';
@@ -42,9 +41,9 @@ class cache
      */
     public static function cacheManagerStart(): SuperCacheEmpty|cacheManager
     {
-        global $SuperCache, $cache_obj;
+        global $cache_obj;
 
-        if ($SuperCache) {
+        if (Config::get('cache.config.SuperCache')) {
             $cache_obj = new cacheManager();
             $cache_obj->startCachingPage();
         } else {
@@ -61,16 +60,16 @@ class cache
      */
     public static function cacheManagerStart2(): bool
     {
-        global $SuperCache, $cache_obj;
+        global $cache_obj;
 
-        if ($SuperCache) {
+        if (Config::get('cache.config.SuperCache')) {
             $cache_obj = new cacheManager();
             $cache_obj->startCachingPage();
         } else {
             $cache_obj = new SuperCacheEmpty();
         }
 
-        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!Config::get('cache.config.SuperCache'))) {
             return true;
         } else {
             return false;
@@ -84,9 +83,9 @@ class cache
      */
     public static function cacheManagerEnd(): void
     {
-        global $SuperCache, $cache_obj;
+        global $cache_obj;
         
-        if ($SuperCache) {
+        if (Config::get('cache.config.SuperCache')) {
             $cache_obj = cacheManager::getInstance();
 
             $cache_obj->endCachingPage();
@@ -102,9 +101,9 @@ class cache
      */
     public static function cacheManagerStartBlock(string $cache_clef): bool
     {
-        global $SuperCache, $CACHE_TIMINGS;
+        global $CACHE_TIMINGS;
 
-        if ($SuperCache) {
+        if (Config::get('cache.config.SuperCache')) {
             $CACHE_TIMINGS[$cache_clef] = 600;
 
             $cache_obj = new cacheManager();
@@ -113,7 +112,7 @@ class cache
             $cache_obj = new SuperCacheEmpty();
         }
 
-        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!Config::get('cache.config.SuperCache'))) {
             return true;
         } else {
             return false;
@@ -129,9 +128,7 @@ class cache
      */
     public static function cacheManagerEndBlock(string $cache_clef): void
     {
-        global $SuperCache;
-        
-        if ($SuperCache) {
+        if (Config::get('cache.config.SuperCache')) {
             $cache_obj = cacheManager::getInstance();
 
             $cache_obj->endCachingBlock($cache_clef);
@@ -148,9 +145,9 @@ class cache
      */
     public static function Q_Select(string $Xquery, int $retention = 3600): array
     {
-        global $SuperCache, $cache_obj;
+        global $cache_obj;
         
-        if (($SuperCache) and ($cache_obj)) {
+        if ((Config::get('cache.config.SuperCache')) and ($cache_obj)) {
             $row = $cache_obj->CachingQuery($Xquery, $retention);
            
             return $row;
@@ -166,11 +163,32 @@ class cache
         }
     }
 
+
+    public static function Q_Select3(array $Xquery, int $retention = 3600, string $type_req): array
+    {
+        global $cache_obj;
+        
+        if ((Config::get('cache.config.SuperCache')) and ($cache_obj)) {
+            $row = $cache_obj->CachingQuery2($Xquery, $retention, $type_req);
+           
+            return $row;
+        } else {
+            $tab_tmp = array();
+            
+            foreach ($Xquery as $row) {
+                $tab_tmp[] = $row;
+            }
+            
+            return $tab_tmp;
+        }
+    }
+
+
     public static function Q_Select2(string|array $Xquery, int $retention = 3600, string $type_req): string|array
     {
-        global $SuperCache, $cache_obj;
+        global $cache_obj;
 
-        if ($SuperCache) {
+        if (Config::get('cache.config.SuperCache')) {
             $row = $cache_obj->CachingQuery2($Xquery, $retention, $type_req);
             
             //var_dump($row);

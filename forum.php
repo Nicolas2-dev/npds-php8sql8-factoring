@@ -18,6 +18,7 @@ declare(strict_types=1);
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -37,7 +38,8 @@ if ($op == "maj_subscribe") {
     if ($user) {
         settype($cookie[0], "integer");
 
-        $result = sql_query("DELETE FROM " . $NPDS_Prefix . "subscribe WHERE uid='$cookie[0]' AND forumid!='NULL'");
+        DB::table('subscribe')->where('uid', $cookie[0])->where('forumid', '!', 'NULL')->delete();
+
         $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums ORDER BY forum_index,forum_id");
 
         while (list($forumid) = sql_fetch_row($result)) {
