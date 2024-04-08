@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace npds\system\cache;
 
 use npds\system\config\Config;
-use npds\system\cache\CacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\Cache as SuperCache;
 
 
 class cache
@@ -23,8 +23,8 @@ class cache
         $infos = '';
         if (Config::get('cache.config.SuperCache')) {
 
-            $npds_sc = CacheManager::setInstance()::getNpdsSc();
-            
+            $npds_sc = SuperCache::getInstance()::getNpdsSc();
+
             if ($npds_sc) {
                 $infos = '<span class="small">' . translate(".:Page >> Super-Cache:.") . '</span>';
             } else {
@@ -38,14 +38,12 @@ class cache
     /**
      * [cacheManagerStart description]
      *
-     * @return  SuperCacheEmpty|cacheManager
+     * @return  SuperCacheEmpty|SuperCache
      */
-    public static function cacheManagerStart(): SuperCacheEmpty|cacheManager
+    public static function cacheManagerStart(): SuperCacheEmpty|SuperCache
     {
-        global $cache_obj;
-
         if (Config::get('cache.config.SuperCache')) {
-            $cache_obj = new cacheManager();
+            $cache_obj = SuperCache::getInstance();
             $cache_obj->startCachingPage();
         } else {
             $cache_obj = new SuperCacheEmpty();
@@ -61,10 +59,8 @@ class cache
      */
     public static function cacheManagerStart2(): bool
     {
-        global $cache_obj;
-
         if (Config::get('cache.config.SuperCache')) {
-            $cache_obj = new cacheManager();
+            $cache_obj = SuperCache::getInstance();
             $cache_obj->startCachingPage();
         } else {
             $cache_obj = new SuperCacheEmpty();
@@ -84,10 +80,8 @@ class cache
      */
     public static function cacheManagerEnd(): void
     {
-        global $cache_obj;
-        
         if (Config::get('cache.config.SuperCache')) {
-            $cache_obj = cacheManager::getInstance();
+            $cache_obj = SuperCache::getInstance();
 
             $cache_obj->endCachingPage();
         }
@@ -102,12 +96,9 @@ class cache
      */
     public static function cacheManagerStartBlock(string $cache_clef): bool
     {
-        global $CACHE_TIMINGS;
-
         if (Config::get('cache.config.SuperCache')) {
-            $CACHE_TIMINGS[$cache_clef] = 600;
-
-            $cache_obj = new cacheManager();
+            $cache_obj = SuperCache::getInstance();
+            $cache_obj->setTimingBlock($cache_clef, 600);
             $cache_obj->startCachingBlock($cache_clef);            
         } else {
             $cache_obj = new SuperCacheEmpty();
@@ -130,7 +121,7 @@ class cache
     public static function cacheManagerEndBlock(string $cache_clef): void
     {
         if (Config::get('cache.config.SuperCache')) {
-            $cache_obj = cacheManager::getInstance();
+            $cache_obj = SuperCache::getInstance();
 
             $cache_obj->endCachingBlock($cache_clef);
         }
@@ -146,8 +137,8 @@ class cache
      */
     public static function Q_Select(string $Xquery, int $retention = 3600): array
     {
-        global $cache_obj;
-        
+        $cache_obj = SuperCache::getInstance();
+
         if ((Config::get('cache.config.SuperCache')) and ($cache_obj)) {
             $row = $cache_obj->CachingQuery($Xquery, $retention);
            
@@ -167,7 +158,7 @@ class cache
 
     public static function Q_Select3(string|array|DB $Xquery, int $retention = 3600, string $type_req): array
     {
-        global $cache_obj;
+        $cache_obj = SuperCache::getInstance();
         
         if ((Config::get('cache.config.SuperCache')) and ($cache_obj)) {
             $row = $cache_obj->CachingQuery2($Xquery, $retention, $type_req);
@@ -184,21 +175,6 @@ class cache
         }
     }
 
-
-    public static function Q_Select2(string|array $Xquery, int $retention = 3600, string $type_req): string|array
-    {
-        global $cache_obj;
-
-        if (Config::get('cache.config.SuperCache')) {
-            $row = $cache_obj->CachingQuery2($Xquery, $retention, $type_req);
-            
-            //var_dump($row);
-            return $row;
-        } else {
-            return $Xquery;
-        }
-    }
-
     /**
      * [PG_clean description]
      *
@@ -208,17 +184,17 @@ class cache
      */
     public static function PG_clean(string $request): void
     {
-        global $CACHE_CONFIG;
-        
+        $config = SuperCache::getConfig();
+
         $page = md5($request);
-        $dh = opendir($CACHE_CONFIG['data_dir']);
+        $dh = opendir($config['data_dir']);
         
         while (false !== ($filename = readdir($dh))) {
             if ($filename === '.' or $filename === '..' or (strpos($filename, $page) === FALSE)) {
                 continue;
             }
 
-            unlink($CACHE_CONFIG['data_dir'] . $filename);
+            unlink($config['data_dir'] . $filename);
         }
         closedir($dh);
     }
@@ -230,21 +206,21 @@ class cache
      */
     public static function Q_Clean(): void
     {
-        global $CACHE_CONFIG;
+        $config = SuperCache::getConfig();
         
-        $dh = opendir($CACHE_CONFIG['data_dir'] . "sql");
+        $dh = opendir($config['data_dir'] . "sql");
         while (false !== ($filename = readdir($dh))) {
             if ($filename === '.' or $filename === '..') {
                 continue;
             }
             
-            if (is_file($CACHE_CONFIG['data_dir'] . "sql/" . $filename)) {
-                unlink($CACHE_CONFIG['data_dir'] . "sql/" . $filename);
+            if (is_file($config['data_dir'] . "sql/" . $filename)) {
+                unlink($config['data_dir'] . "sql/" . $filename);
             }
         }
         closedir($dh);
 
-        $fp = fopen($CACHE_CONFIG['data_dir'] . "sql/.htaccess", 'w');
+        $fp = fopen($config['data_dir'] . "sql/.htaccess", 'w');
         @fputs($fp, "Deny from All");
         fclose($fp);
     }
@@ -256,18 +232,17 @@ class cache
      */
     public static function SC_clean(): void
     {
-        global $CACHE_CONFIG;
+        $config = SuperCache::getConfig();
         
-        $dh = opendir($CACHE_CONFIG['data_dir']);
+        $dh = opendir($config['data_dir']);
         
         while (false !== ($filename = readdir($dh))) {
-            //if ($filename === '.' or $filename === '..' or $filename === 'ultramode.txt' or $filename === 'net2zone.txt' or $filename === 'sql' or $filename === 'index.html') {
             if ($filename === '.' or $filename === '..' or $filename === 'sql' or $filename === 'index.html') {
                 continue;
             }
             
-            if (is_file($CACHE_CONFIG['data_dir'] . $filename)) {
-                unlink($CACHE_CONFIG['data_dir'] . $filename);
+            if (is_file($config['data_dir'] . $filename)) {
+                unlink($config['data_dir'] . $filename);
             }
         }
         closedir($dh);

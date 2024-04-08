@@ -136,7 +136,7 @@ class news
             $Xstorynum = $storynum * $coef;
             
             //$result = cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
-            $result = cache::Q_select2(DB::table('stories')
+            $result = cache::Q_select3(DB::table('stories')
                 ->where('ihome', '!=', 1)
                 ->where('archive', 0)
                 ->limit($Xstorynum)
@@ -267,7 +267,7 @@ class news
 
         if ($type_req == 'old_news') {
             //      $Xstorynum=$oldnum*$coef;
-            $result = cache::Q_select("SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories $sel ORDER BY time DESC LIMIT $storynum", 3600);
+            $result = cache::Q_select3($sel, 3600, $type_req);
             $Znum = $oldnum;
         }
 

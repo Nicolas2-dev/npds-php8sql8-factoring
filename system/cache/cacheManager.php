@@ -29,6 +29,35 @@ class cacheManager
 {
 
     /**
+     * 
+     *
+     * @var [type]
+     */
+    protected array $config = array();
+
+    /**
+     * 
+     *
+     * @var [type]
+     */
+    protected array $timings = array();
+
+    /**
+     * 
+     *
+     * @var [type]
+     */
+    protected array $blocks = array();
+
+    /**
+     * 
+     *
+     * @var [type]
+     */
+    protected array $Objets = array();
+
+
+    /**
      * [$request_uri description]
      *
      * @var [type]
@@ -82,13 +111,13 @@ class cacheManager
      * [__construct description]
      *
      */
-    public function __construct()
+    public function __construct($config, $timings)
     {
-        global $CACHE_CONFIG;
-
-        static::$instance = $this;
-
         $this->genereting_output = 0;
+
+        $this->config = $config;
+
+        $this->timings = $timings;
 
         if (!empty($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
             $this->request_uri = $_SERVER['REQUEST_URI'];
@@ -113,12 +142,12 @@ class cacheManager
         if (file_exists("storage/storage/cache/site_load.log")) {
             $site_load = file("storage/storage/cache/site_load.log");
             
-            if ($site_load[0] >= $CACHE_CONFIG['clean_limit']) {
+            if ($site_load[0] >= $this->config['clean_limit']) {
                 $this->site_overload = true;
             }
         }
 
-        if (($CACHE_CONFIG['run_cleanup'] == 1) and (!$this->site_overload)) {
+        if (($this->config['run_cleanup'] == 1) and (!$this->site_overload)) {
             $this->cacheCleanup();
         }
     }
@@ -128,10 +157,10 @@ class cacheManager
      *
      * @return cacheManager
      */
-    public static function setInstance(): cacheManager
+    public static function setInstance($config, $timings): cacheManager
     {
         if (static::$instance === null) {
-            static::$instance = new self();
+            static::$instance = new self($config, $timings);
         }
 
         return static::$instance;
@@ -158,16 +187,24 @@ class cacheManager
     }
 
     /**
+     * [getNpdsSc description]
+     *
+     * @return  bool
+     */
+    public function getConfig(): array
+    {
+        return static::$config;
+    }
+
+    /**
      * [startCachingPage description]
      *
      * @return  void
      */
     function startCachingPage(): void
     {
-        global $CACHE_TIMINGS, $CACHE_CONFIG, $CACHE_QUERYS;
-
-        if ($CACHE_TIMINGS[$this->php_self] > 0 and ($this->query_string == '' or preg_match("#" . $CACHE_QUERYS[$this->php_self] . "#", $this->query_string))) {
-            $cached_page = $this->checkCache($this->request_uri, $CACHE_TIMINGS[$this->php_self]);
+        if ($this->timings[$this->php_self]['timing'] > 0 and ($this->query_string == '' or preg_match("#" . $this->timings[$this->php_self]['query'] . "#", $this->query_string))) {
+            $cached_page = $this->checkCache($this->request_uri, $this->timings[$this->php_self]['timing']);
             
             if ($cached_page != '') {
                 echo $cached_page;
@@ -176,7 +213,7 @@ class cacheManager
 
                 $this->logVisit($this->request_uri, 'HIT');
                 
-                if ($CACHE_CONFIG['exit'] == 1) {
+                if ($this->config['exit'] == 1) {
                     exit;
                 }
             } else {
@@ -218,9 +255,9 @@ class cacheManager
      */
     function checkCache(string $request, int $refresh): string
     {
-        global $CACHE_CONFIG, $user;
+        global $user;
 
-        if (!$CACHE_CONFIG['non_differentiate']) {
+        if (!$this->config['non_differentiate']) {
             if (isset($user) and $user != '') {
                 $cookie = explode(':', base64_decode($user));
                 $cookie = $cookie[1];
@@ -234,7 +271,7 @@ class cacheManager
             $cookie = '';
         }
 
-        $filename = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('npds.language');
+        $filename = $this->config['data_dir'] . $cookie . md5($request) . '.' . Config::get('npds.language');
         
         // Overload
         if ($this->site_overload) {
@@ -268,9 +305,9 @@ class cacheManager
      */
     function insertIntoCache(string $content, string $request): void
     {
-        global $CACHE_CONFIG, $user;
+        global $user;
 
-        if (!$CACHE_CONFIG['non_differentiate']) {
+        if (!$this->config['non_differentiate']) {
             if (isset($user) and $user != '') {
                 $cookie = explode(":", base64_decode($user));
                 $cookie = $cookie[1];
@@ -291,7 +328,7 @@ class cacheManager
             $affich = true;
         }
 
-        $nombre = $CACHE_CONFIG['data_dir'] . $cookie . md5($request) . '.' . Config::get('npds.language');
+        $nombre = $this->config['data_dir'] . $cookie . md5($request) . '.' . Config::get('npds.language');
 
         if ($fp = fopen($nombre, 'w')) {
             flock($fp, LOCK_EX);
@@ -317,13 +354,11 @@ class cacheManager
      */
     function logVisit(string|array $request, string $type): void
     {
-        global $CACHE_CONFIG;
-
-        if (!$CACHE_CONFIG['save_stats']) {
+        if (!$this->config['save_stats']) {
             return;
         }
 
-        $logfile = $CACHE_CONFIG['data_dir'] . 'stats.log';
+        $logfile = $this->config['data_dir'] . 'stats.log';
         $fp = fopen($logfile, 'a');
         flock($fp, LOCK_EX);
         fseek($fp, filesize($logfile));
@@ -341,13 +376,11 @@ class cacheManager
     function cacheCleanup(): void
     {
         // Cette fonction n'est plus adaptée au nombre de fichiers manipulé par SuperCache
-        global $CACHE_CONFIG;
-
         srand( (int) microtime() * 1000000);
         $num = rand(1, 100);
 
-        if ($num <= $CACHE_CONFIG['cleanup_freq']) {
-            $dh = opendir($CACHE_CONFIG['data_dir']);
+        if ($num <= $this->config['cleanup_freq']) {
+            $dh = opendir($this->config['data_dir']);
             $clean = false;
             
             // Clean SC directory
@@ -357,29 +390,29 @@ class cacheManager
                     continue;
                 }
 
-                if (filemtime($CACHE_CONFIG['data_dir'] . $filename) < time() - $CACHE_CONFIG['max_age']) {
-                    @unlink($CACHE_CONFIG['data_dir'] . $filename);
+                if (filemtime($this->config['data_dir'] . $filename) < time() - $this->config['max_age']) {
+                    @unlink($this->config['data_dir'] . $filename);
                     $clean = true;
                 }
             }
             closedir($dh);
 
             // Clean SC/SQL directory
-            $dh = opendir($CACHE_CONFIG['data_dir'] . "sql/");
+            $dh = opendir($this->config['data_dir'] . "sql/");
             $objet .= "+SQL";
             while (false !== ($filename = readdir($dh))) {
                 if ($filename === '.' or $filename === '..') {
                     continue;
                 }
 
-                if (filemtime($CACHE_CONFIG['data_dir'] . "sql/" . $filename) < time() - $CACHE_CONFIG['max_age']) {
-                    @unlink($CACHE_CONFIG['data_dir'] . "sql/" . $filename);
+                if (filemtime($this->config['data_dir'] . "sql/" . $filename) < time() - $this->config['max_age']) {
+                    @unlink($this->config['data_dir'] . "sql/" . $filename);
                     $clean = true;
                 }
             }
             closedir($dh);
 
-            $fp = fopen($CACHE_CONFIG['data_dir'] . "sql/.htaccess", 'w');
+            $fp = fopen($this->config['data_dir'] . "sql/.htaccess", 'w');
             @fputs($fp, "Deny from All");
             fclose($fp);
 
@@ -396,13 +429,13 @@ class cacheManager
      */
     function UsercacheCleanup(): void
     {
-        global $CACHE_CONFIG, $user;
+        global $user;
 
         if (isset($user)) {
             $cookie = explode(":", base64_decode($user));
         }
 
-        $dh = opendir($CACHE_CONFIG['data_dir']);
+        $dh = opendir($this->config['data_dir']);
         while (false !== ($filename = readdir($dh))) {
             if ($filename === '.' or $filename === '..') {
                 continue;
@@ -414,7 +447,7 @@ class cacheManager
                 $filename_final = explode(".", $filename);
                 
                 if (strlen(substr($filename_final[0], strlen($cookie[1]))) == 32) {
-                    unlink($CACHE_CONFIG['data_dir'] . $filename);
+                    unlink($this->config['data_dir'] . $filename);
                 }
             }
         }
@@ -430,10 +463,8 @@ class cacheManager
      */
     function startCachingBlock(string $Xblock): void
     {
-        global $CACHE_TIMINGS, $CACHE_CONFIG;
-
-        if ($CACHE_TIMINGS[$Xblock] > 0) {
-            $cached_page = $this->checkCache($Xblock, (int) $CACHE_TIMINGS[$Xblock]);
+        if ($this->blocks[$Xblock]['timing'] > 0) {
+            $cached_page = $this->checkCache($Xblock, (int) $this->blocks[$Xblock]['key']);
             
             if ($cached_page != '') {
                 echo $cached_page;
@@ -441,7 +472,7 @@ class cacheManager
                 
                 static::$npds_sc = true;
 
-                if ($CACHE_CONFIG['exit'] == 1) {
+                if ($this->config['exit'] == 1) {
                     exit;
                 }
             } else {
@@ -472,6 +503,19 @@ class cacheManager
     }
 
     /**
+     * 
+     *
+     * @param   [type]  $cache_clef  [$cache_clef description]
+     * @param   [type]  $cache       [$cache description]
+     *
+     * @return  [type]
+     */
+    public function setTimingBlock($cache_clef, $cache) {
+        $this->blocks[$cache_clef]['key'] = $cache_clef;
+        $this->blocks[$cache_clef]['timing'] = $cache;
+    }
+
+    /**
      * [CachingQuery description]
      *
      * @param   string|array  $Xquery     [$Xquery description]
@@ -481,9 +525,7 @@ class cacheManager
      */
     function CachingQuery(string|array $Xquery, int $retention): array
     {
-        global $CACHE_CONFIG;
-        
-        $filename = $CACHE_CONFIG['data_dir'] . "sql/" . md5($Xquery);
+        $filename = $this->config['data_dir'] . "sql/" . md5($Xquery);
 
         if (file_exists($filename)) {
             if (filemtime($filename) > time() - $retention) {
@@ -527,12 +569,9 @@ class cacheManager
         }
     }
 
-
     function CachingQuery2(array $Xquery, int $retention, string $type_req): array
-    {
-        global $CACHE_CONFIG;
-        
-        $filename = $CACHE_CONFIG['data_dir'] . "sql/" . md5($type_req);
+    {   
+        $filename = $this->config['data_dir'] . "sql/" . md5($type_req);
 
         if (file_exists($filename)) {
             if (filemtime($filename) > time() - $retention) {
@@ -578,15 +617,13 @@ class cacheManager
      */
     function startCachingObjet(string $Xobjet): string|array 
     {
-        global $CACHE_TIMINGS, $CACHE_CONFIG;
-
-        if ($CACHE_TIMINGS[$Xobjet] > 0) {
-            $cached_page = $this->checkCache($Xobjet, $CACHE_TIMINGS[$Xobjet]);
+        if ($this->Objets[$Xobjet]['timing'] > 0) {
+            $cached_page = $this->checkCache($Xobjet, $this->Objets[$Xobjet]['key']);
             
             if ($cached_page != '') {
                 $this->logVisit($Xobjet, 'HIT');
                 
-                if ($CACHE_CONFIG['exit'] == 1) {
+                if ($this->config['exit'] == 1) {
                     exit;
                 }
 
@@ -603,6 +640,19 @@ class cacheManager
 
             return "";
         }
+    }
+
+    /**
+     * 
+     *
+     * @param   [type]  $cache_clef  [$cache_clef description]
+     * @param   [type]  $cache       [$cache description]
+     *
+     * @return  [type]
+     */
+    public function setTimingObjet($cache_clef, $cache) {
+        $this->Objets[$cache_clef]['key'] = $cache_clef;
+        $this->Objets[$cache_clef]['timing'] = $cache;
     }
 
     /**

@@ -729,7 +729,7 @@ if ($forum_access != 9) {
 // }
 
 // if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
-if (cache::cacheManagerStartBlock("forum-jump-to")) {    
+//if (cache::cacheManagerStartBlock("forum-jump-to")) {    
     echo '
     <form action="viewforum.php" method="post">
     <div class="mb-3 row">
@@ -763,11 +763,11 @@ if (cache::cacheManagerStartBlock("forum-jump-to")) {
     </div>
     </form>
     <a name="botofpage"></a>';
-}
+// }
 
-// if ($SuperCache)
-//     $cache_obj->endCachingBlock($cache_clef);
-cache::cacheManagerEndBlock("forum-jump-to");
+// // if ($SuperCache)
+// //     $cache_obj->endCachingBlock($cache_clef);
+// cache::cacheManagerEndBlock("forum-jump-to");
 
 
 if ((($Mmod) and ($forum_access != 9)) or ($adminforum == 1)) {

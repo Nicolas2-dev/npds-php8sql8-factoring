@@ -11,6 +11,7 @@ use npds\system\language\language;
 use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\Cache as SuperCache;
 
 class block
 {
@@ -111,7 +112,7 @@ class block
      */
     public static function fab_block(string $title, string $member, string $content, int $Xcache): void
     {
-        global $CACHE_TIMINGS;
+        //global $CACHE_TIMINGS;
         
         // Multi-Langue
         $title = language::aff_langue($title);
@@ -149,8 +150,8 @@ class block
         
         if ((Config::get('cache.config.SuperCache')) and ($Xcache != 0)) {
             $cache_clef = md5($content);
-            $CACHE_TIMINGS[$cache_clef] = $Xcache;
-            $cache_obj = new cacheManager();
+            $cache_obj = SuperCache::getInstance();
+            $cache_obj->setTimingBlock($cache_clef, $Xcache);
             $cache_obj->startCachingBlock($cache_clef);
         } else {
             $cache_obj = new SuperCacheEmpty();

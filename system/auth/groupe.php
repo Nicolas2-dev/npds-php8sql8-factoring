@@ -33,8 +33,8 @@ class groupe
             $userdata = explode(':', base64_decode($xuser));
 
             $user_temp = cache::Q_select3(DB::table('users_status')->select('groupe')->where('uid', $userdata[0])->get(), 3600, 'users_status(ui)');
-            $groupe = $user_temp[0];
-            $tab_groupe = explode(',', $groupe['groupe']);
+
+            $tab_groupe = explode(',', $user_temp[0]['groupe']);
         } else {
             $tab_groupe = '';
         }
@@ -49,7 +49,7 @@ class groupe
      */
     public static function liste_group(): array
     {  
-        $groupes = DB::table('')->select('groupe_id', 'groupe_name')->orderBy('groupe_id', 'asc')->get();
+        $groupes = DB::table('groupes')->select('groupe_id', 'groupe_name')->orderBy('groupe_id', 'asc')->get();
         
         $tmp_groupe[0] = '-> ' . adm_translate("Supprimer") . '/' . adm_translate("Choisir un groupe") . ' <-';
         

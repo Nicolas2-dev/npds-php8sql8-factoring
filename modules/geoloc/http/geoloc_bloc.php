@@ -75,7 +75,7 @@ switch ($cartyp_b) {
         $source_fond = 'new ol.source.OSM()';
 }
 $content .= '
-    <div class="mb-2" id="map_bloc_ol" tabindex="200" style=" min-height:' . $h_b . 'px;" lang="' . language_iso(1, 0, 0) . '"></div>';
+    <div class="mb-2" id="map_bloc_ol" tabindex="200" style=" min-height:' . $h_b . 'px;" lang="' . language::language_iso(1, 0, 0) . '"></div>';
 if (!defined('OL')) {
     define('OL', 'ol');
     $content .= '<script type="text/javascript" src="' . $nuke_url . '/assets/shared/ol/ol.js"></script>';

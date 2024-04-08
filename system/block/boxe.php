@@ -14,6 +14,7 @@ use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\support\stats;
+use npds\system\utility\crypt;
 use npds\system\support\download;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
@@ -198,9 +199,10 @@ class boxe
         if ($admin) {
             $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$aid' LIMIT 1"));
 
-            $R = $Q['radminsuper'] == 1 ?
-                sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f WHERE f.finterface =1 AND f.fetat != '0' ORDER BY f.fcategorie") :
-                sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f LEFT JOIN " . $NPDS_Prefix . "droits d ON f.fdroits1 = d.d_fon_fid LEFT JOIN " . $NPDS_Prefix . "authors a ON d.d_aut_aid =a.aid WHERE f.finterface =1 AND fetat!=0 AND d.d_aut_aid='$aid' AND d.d_droits REGEXP'^1' ORDER BY f.fcategorie");
+            $R = (($Q['radminsuper'] == 1) 
+                ? sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f WHERE f.finterface =1 AND f.fetat != '0' ORDER BY f.fcategorie") 
+                : sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f LEFT JOIN " . $NPDS_Prefix . "droits d ON f.fdroits1 = d.d_fon_fid LEFT JOIN " . $NPDS_Prefix . "authors a ON d.d_aut_aid =a.aid WHERE f.finterface =1 AND fetat!=0 AND d.d_aut_aid='$aid' AND d.d_droits REGEXP'^1' ORDER BY f.fcategorie")
+            );
 
             while ($SAQ = sql_fetch_assoc($R)) {
                 $arraylecture = explode('|', $SAQ['fdroits1_descr']);
@@ -362,18 +364,19 @@ class boxe
      */
     public static function mainblock(): void
     {
-        global $NPDS_Prefix;
-
-        $result = sql_query("SELECT title, content FROM " . $NPDS_Prefix . "block WHERE id=1");
-        list($title, $content) = sql_fetch_row($result);
+        $block = DB::table('block')->select('title', 'content')->where('id', 1)->first();
 
         global $block_title;
-        if ($title == '') {
-            $title = $block_title;
+        if ($block['title'] == '') {
+            $block['title'] = $block_title;
         }
 
         //must work from php 4 to 7 !..?..
-        themesidebox(language::aff_langue($title), language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', [str::class, 'changetoamp'], $content)));
+        themesidebox(
+            language::aff_langue($block['title']), 
+            language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', 
+            [str::class, 'changetoamp'], $block['content']))
+        );
     }
 
     /**
@@ -384,22 +387,26 @@ class boxe
      */
     public static function ephemblock(): void
     {
-        global $NPDS_Prefix;
-
         $cnt = 0;
         $eday = date("d", time() + ((int) Config::get('npds.gmt') * 3600));
         $emonth = date("m", time() + ((int) Config::get('npds.gmt') * 3600));
 
-        $result = sql_query("SELECT yid, content FROM " . $NPDS_Prefix . "ephem WHERE did='$eday' AND mid='$emonth' ORDER BY yid ASC");
+        $result = DB::table('ephem')
+                    ->select('yid', 'content')
+                    ->where('did', $eday)
+                    ->where('mid', $emonth)
+                    ->orderBy('yid', 'asc')
+                    ->get();
+        
         $boxstuff = '<div>' . translate("En ce jour...") . '</div>';
 
-        while (list($yid, $content) = sql_fetch_row($result)) {
+        foreach ($result as $ephem) {
             if ($cnt == 1) {
                 $boxstuff .= "\n<br />\n";
             }
 
-            $boxstuff .= "<b>$yid</b>\n<br />\n";
-            $boxstuff .= language::aff_langue($content);
+            $boxstuff .= "<b>". $ephem['yid'] ."</b>\n<br />\n";
+            $boxstuff .= language::aff_langue($ephem['content']);
             $cnt = 1;
         }
 
@@ -425,23 +432,23 @@ class boxe
 
         if (!$user) {
             $boxstuff = '
-       <form action="user.php" method="post">
-          <div class="mb-3">
-             <label for="uname">' . translate("Identifiant") . '</label>
-             <input class="form-control" type="text" name="uname" maxlength="25" />
-          </div>
-          <div class="mb-3">
-             <label for="pass">' . translate("Mot de passe") . '</label>
-             <input class="form-control" type="password" name="pass" maxlength="20" />
-          </div>
-          <div class="mb-3">
-             <input type="hidden" name="op" value="login" />
-             <button class="btn btn-primary" type="submit">' . translate("Valider") . '</button>
-          </div>
-          <div class="help-block">
-          ' . translate("Vous n'avez pas encore de compte personnel ? Vous devriez") . ' <a href="user.php">' . translate("en créer un") . '</a>. ' . translate("Une fois enregistré") . ' ' . translate("vous aurez certains avantages, comme pouvoir modifier l'aspect du site,") . ' ' . translate("ou poster des commentaires signés...") . '
-          </div>
-       </form>';
+            <form action="user.php" method="post">
+                <div class="mb-3">
+                    <label for="uname">' . translate("Identifiant") . '</label>
+                    <input class="form-control" type="text" name="uname" maxlength="25" />
+                </div>
+                <div class="mb-3">
+                    <label for="pass">' . translate("Mot de passe") . '</label>
+                    <input class="form-control" type="password" name="pass" maxlength="20" />
+                </div>
+                <div class="mb-3">
+                    <input type="hidden" name="op" value="login" />
+                    <button class="btn btn-primary" type="submit">' . translate("Valider") . '</button>
+                </div>
+                <div class="help-block">
+                ' . translate("Vous n'avez pas encore de compte personnel ? Vous devriez") . ' <a href="user.php">' . translate("en créer un") . '</a>. ' . translate("Une fois enregistré") . ' ' . translate("vous aurez certains avantages, comme pouvoir modifier l'aspect du site,") . ' ' . translate("ou poster des commentaires signés...") . '
+                </div>
+            </form>';
 
             global $block_title;
             $title = $block_title == '' ? translate("Se connecter") : $block_title;
@@ -458,16 +465,25 @@ class boxe
      */
     public static function userblock(): void
     {
-        global $NPDS_Prefix, $user, $cookie;
+        global $user, $cookie;
 
         if (($user) and ($cookie[8])) {
-            $getblock = cache::Q_select("SELECT ublock FROM " . $NPDS_Prefix . "users WHERE uid='$cookie[0]'", 86400);
-            $ublock = $getblock[0];
+
+            $getblock = cache::Q_select3(
+                DB::table('users')
+                ->select('ublock')
+                ->where('uid', $cookie[0])
+                ->get(), 
+                86400, 
+                crypt::encrypt('user(ublock)')
+            );
+
+            $ublock = $getblock[0]['ublock'];
 
             global $block_title;
             $title = $block_title == '' ? translate("Menu de") . ' ' . $cookie[1] : $block_title;
 
-            themesidebox($title, $ublock['ublock']);
+            themesidebox($title, $ublock);
         }
     }
 
@@ -482,6 +498,7 @@ class boxe
         global $block_title;
 
         $title = $block_title == '' ? translate("Les plus téléchargés") : $block_title;
+
         $boxstuff = '<ul>';
         $boxstuff .= download::topdownload_data('short', 'dcounter');
         $boxstuff .= '</ul>';
@@ -528,49 +545,77 @@ class boxe
      */
     public static function oldNews(string $storynum, ?string $typ_aff = ''): void
     {
-        global $locale, $categories, $cat, $user, $cookie;
+        global $categories, $cat, $user, $cookie;
 
         $boxstuff = '<ul class="list-group">';
+
         $storynum = isset($cookie[3]) ? $cookie[3] : Config::get('npds.storyhome');
 
+        $query = DB::table('stories')->select('sid', 'catid', 'ihome', 'time');
+
         if (($categories == 1) and ($cat != '')) {
-            $sel = $user ? "WHERE catid='$cat'" : "WHERE catid='$cat' AND ihome=0";
+            if ($user) {
+                $query->where('catid', $cat);
+            } else {
+                $query->where('catid', $cat)->where('ihome', 0);
+            }
+            
         } else {
-            $sel = $user ? '' : "WHERE ihome=0";
+            if ($user) {
+                $query->where('ihome', 0);
+            } 
         }
 
-        $sel =  "WHERE ihome=0"; // en dur pour test
-        $vari = 0;
-        $xtab = news::news_aff('old_news', $sel, $storynum, Config::get('npds.oldnum'));
+        //$sel =  "WHERE ihome=0"; // en dur pour test
+        
+        $query_res = $query->orderBy('time', 'desc')->limit($storynum)->get();
+
+        $xtab = news::news_aff2('old_news', $query_res, $storynum, Config::get('npds.oldnum'));
+        
+        $vari = 0;        
         $story_limit = 0;
         $time2 = 0;
         $a = 0;
+
+        $locale = Config::get('npds.locale');
 
         while (($story_limit < Config::get('npds.oldnum')) and ($story_limit < sizeof($xtab))) {
             list($sid, $title, $time, $comments, $counter) = $xtab[$story_limit];
             $story_limit++;
 
-            // a revoir entre locale user et local site
-            $locale = language::getLocale();
             $datetime2 = ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring2"), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
 
             if (Config::get('npds.language') != 'chinese') {
                 $datetime2 = ucfirst($datetime2);
             }
 
-            $comments = $typ_aff == 'lecture' ?
-                '<span class="badge rounded-pill bg-secondary ms-1" title="' . translate("Lu") . '" data-bs-toggle="tooltip">' . $counter . '</span>' : '';
+            $comments = (($typ_aff == 'lecture') 
+                ? '<span class="badge rounded-pill bg-secondary ms-1" title="' . translate("Lu") . '" data-bs-toggle="tooltip">' . $counter . '</span>' 
+                : ''
+            );
 
             if ($time2 == $datetime2) {
-                $boxstuff .= '
-          <li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center"><a class="n-ellipses" href="article.php?sid=' . $sid . '">' . language::aff_langue($title) . '</a>' . $comments . '</li>';
+                $boxstuff .= '<li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center">
+                    <a class="n-ellipses" href="article.php?sid=' . $sid . '">
+                        ' . language::aff_langue($title) . '
+                    </a>' . $comments . '</li>';
             } else {
                 if ($a == 0) {
-                    $boxstuff .= '<li class="list-group-item fs-6">' . $datetime2 . '</li><li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center"><a href="article.php?sid=' . $sid . '">' . language::aff_langue($title) . '</a>' . $comments . '</li>';
+                    $boxstuff .= '<li class="list-group-item fs-6">' . $datetime2 . '</li>
+                    <li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center">
+                        <a href="article.php?sid=' . $sid . '">
+                            ' . language::aff_langue($title) . '
+                        </a>' . $comments . '
+                    </li>';
                     $time2 = $datetime2;
                     $a = 1;
                 } else {
-                    $boxstuff .= '<li class="list-group-item fs-6">' . $datetime2 . '</li><li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center"><a href="article.php?sid=' . $sid . '">' . language::aff_langue($title) . '</a>' . $comments . '</li>';
+                    $boxstuff .= '<li class="list-group-item fs-6">' . $datetime2 . '</li>
+                    <li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center">
+                        <a href="article.php?sid=' . $sid . '">
+                            ' . language::aff_langue($title) . '
+                        </a>' . $comments . '
+                    </li>';
                     $time2 = $datetime2;
                 }
             }
@@ -578,9 +623,15 @@ class boxe
             $vari++;
 
             if ($vari == Config::get('npds.oldnum')) {
+
                 $storynum = isset($cookie[3]) ? $cookie[3] : Config::get('npds.storyhome');
                 $min = Config::get('npds.oldnum') + $storynum;
-                $boxstuff .= "<li class=\"text-center mt-3\" ><a href=\"search.php?min=$min&amp;type=stories&amp;category=$cat\"><strong>" . translate("Articles plus anciens") . "</strong></a></li>\n";
+                
+                $boxstuff .= "<li class=\"text-center mt-3\" >
+                    <a href=\"search.php?min=$min&amp;type=stories&amp;category=$cat\">
+                        <strong>" . translate("Articles plus anciens") . "</strong>
+                    </a>
+                </li>\n";
             }
         }
 
@@ -647,27 +698,44 @@ class boxe
      */
     public static function category(): void
     {
-        global $NPDS_Prefix, $cat;
+        global $cat;
 
-        $result = sql_query("SELECT catid, title FROM " . $NPDS_Prefix . "stories_cat ORDER BY title");
-        $numrows = sql_num_rows($result);
+        $result = DB::table('stories_cat')
+                    ->select('catid', 'title')
+                    ->orderBy('title')
+                    ->get();
+
+        $numrows = count($result);
 
         if ($numrows == 0) {
             return;
         } else {
             $boxstuff = '<ul>';
 
-            while (list($catid, $title) = sql_fetch_row($result)) {
-                $result2 = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories WHERE catid='$catid' LIMIT 0,1");
-                $numrows = sql_num_rows($result2);
+            foreach ($result as $storie) {
+                $numrows = DB::table('stories')
+                                ->select('sid')
+                                ->where('catid', $storie['catid'])
+                                ->limit(1)
+                                ->offset(0)
+                                ->count();
 
                 if ($numrows > 0) {
-                    $res = sql_query("SELECT time FROM " . $NPDS_Prefix . "stories WHERE catid='$catid' ORDER BY sid DESC LIMIT 0,1");
-                    list($time) = sql_fetch_row($res);
+                    $res = DB::table('stories')
+                            ->select('time')
+                            ->where('catid', $storie['catid'])
+                            ->orderBy('sid', 'desc')
+                            ->limit(1)
+                            ->offset(0)
+                            ->first();
 
-                    $boxstuff .= (($cat == $catid)
-                        ? '<li><strong>' . language::aff_langue($title) . '</strong></li>'
-                        : '<li class="list-group-item list-group-item-action hyphenate"><a href="index.php?op=newcategory&amp;catid=' . $catid . '" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernière contribution") . ' <br />' . date::formatTimestamp($time) . ' ">' . language::aff_langue($title) . '</a></li>'
+                    $boxstuff .= (($cat == $storie['catid'])
+                        ? '<li><strong>' . language::aff_langue($storie['title']) . '</strong></li>'
+                        : '<li class="list-group-item list-group-item-action hyphenate">
+                                <a href="index.php?op=newcategory&amp;catid=' . $storie['catid'] . '" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernière contribution") . ' <br />' . date::formatTimestamp($res['time']) . ' ">
+                                    ' . language::aff_langue($storie['title']) . '
+                                </a>
+                            </li>'
                     );
                 }
             }
@@ -692,33 +760,37 @@ class boxe
      *
      * @return  string          [return description]
      */
-    public static function headlines(string $hid = '', string|bool $block = true): string|bool
+    public static function headlines(?string $hid = '', string|bool $block = true)
     {
-        global $NPDS_Prefix;
-
         if (file_exists("config/proxy.php")) {
             include("config/proxy.php");
         }
 
         if ($hid == '') {
-            $result = sql_query("SELECT sitename, url, headlinesurl, hid FROM " . $NPDS_Prefix . "headlines WHERE status=1");
+            $result = DB::table('headlines')
+                ->select('sitename', 'url', 'headlinesurl', 'hid')
+                ->where('status', 1)
+                ->get();
         } else {
-            $result = sql_query("SELECT sitename, url, headlinesurl, hid FROM " . $NPDS_Prefix . "headlines WHERE hid='$hid' AND status=1");
+            $result = DB::table('headlines')
+                ->select('sitename', 'url', 'headlinesurl', 'hid')
+                ->where('hid', $hid)
+                ->where('status', 1)
+                ->get();
         }
 
-        while (list($sitename, $url, $headlinesurl, $hid) = sql_fetch_row($result)) {
-            $boxtitle = $sitename;
+        foreach ($result as $headlines) { 
+            $boxtitle = $headlines['sitename'];
 
-            $cache_file = 'storage/cache/' . preg_replace('[^a-z0-9]', '', strtolower($sitename)) . '_' . $hid . '.cache';
+            $cache_file = 'storage/cache/' . preg_replace('[^a-z0-9]', '', strtolower($headlines['sitename'])) . '_' . $headlines['hid'] . '.cache';
             $cache_time = 1200; //3600 origine
 
-            //$items = 0; // ?????
             $max_items = 6;
             $rss_timeout = 15;
             $rss_font = '<span class="small">';
 
             if ((!(file_exists($cache_file))) or (filemtime($cache_file) < (time() - $cache_time)) or (!(filesize($cache_file)))) {
-                $rss = parse_url($url);
+                $rss = parse_url($headlines['url']);
 
                 if (Config::get('npds.rss_host_verif') == true) {
                     $verif = fsockopen($rss['host'], 80, $errno, $errstr, $rss_timeout);
@@ -732,11 +804,10 @@ class boxe
                 }
 
                 if (!$verif) {
-                    // a revoir ???? pas clair !!!!
                     $cache_file_sec = $cache_file . ".security";
 
                     if (file_exists($cache_file)) {
-                        $ibid = rename($cache_file, $cache_file_sec);
+                        rename($cache_file, $cache_file_sec);
                     }
 
                     themesidebox($boxtitle, "Security Error");
@@ -750,10 +821,7 @@ class boxe
 
                     if ($fpwrite) {
                         fputs($fpwrite, "<ul>\n");
-                        $flux = simplexml_load_file($headlinesurl, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-                        //$namespaces = $flux->getNamespaces(true); // get namespaces ?????
-                        //$ic = ''; // ?????
+                        $flux = simplexml_load_file($headlines['headlinesurl'], 'SimpleXMLElement', LIBXML_NOCDATA);
 
                         //ATOM//
                         if ($flux->entry) {
@@ -828,16 +896,15 @@ class boxe
                     }
                 }
             }
-
-            // a revoir ??? pas clair !!!! 
+ 
             if (file_exists($cache_file)) {
                 ob_start();
-                $ibid = readfile($cache_file); // ??????
-                $boxstuff = $rss_font . ob_get_contents() . '</span>';
+                    readfile($cache_file);
+                    $boxstuff = $rss_font . ob_get_contents() . '</span>';
                 ob_end_clean();
             }
 
-            $boxstuff .= '<div class="text-end"><a href="' . $url . '" target="_blank">' . translate("Lire la suite...") . '</a></div>';
+            $boxstuff .= '<div class="text-end"><a href="' . $headlines['url'] . '" target="_blank">' . translate("Lire la suite...") . '</a></div>';
 
             if ($block) {
                 themesidebox($boxtitle, $boxstuff);
@@ -857,27 +924,36 @@ class boxe
      */
     public static function bloc_rubrique(): void
     {
-        global $NPDS_Prefix;
-
-        $result = sql_query("SELECT rubid, rubname, ordre FROM " . $NPDS_Prefix . "rubriques WHERE enligne='1' AND rubname<>'divers' ORDER BY ordre");
         $boxstuff = '<ul>';
 
-        while (list($rubid, $rubname) = sql_fetch_row($result)) {
-            $title = language::aff_langue($rubname);
-            $result2 = sql_query("SELECT secid, secname, userlevel, ordre FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
+        $result = DB::table('rubriques')
+                    ->select('rubid', 'rubname', 'ordre')
+                    ->where('enligne', 1)
+                    ->where('rubname', '<>', 'divers')
+                    ->orderBy('ordre')
+                    ->get();
+
+        foreach ($result as $rubriques) { 
+            $title = language::aff_langue($rubriques['rubname']);
+
+            $result2 = DB::table('sections')
+                    ->select('secid', 'secname', 'userlevel', 'ordre')
+                    ->where('rubid', $rubriques['rubid'])
+                    ->orderBy('ordre')
+                    ->get();
 
             $boxstuff .= '<li><strong>' . $title . '</strong></li>';
 
-            //$ibid++;//??? only for notice ???
-            while (list($secid, $secname, $userlevel) = sql_fetch_row($result2)) {
+            foreach ($result2 as $section) {
 
-                $query3 = "SELECT artid FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid'";
-                $result3 = sql_query($query3);
-                $nb_article = sql_num_rows($result3);
+                $nb_article = DB::table('seccont')
+                                    ->select('artid')
+                                    ->where('secid', $section['secid'])
+                                    ->count();
 
                 if ($nb_article > 0) {
                     $boxstuff .= '<ul>';
-                    $tmp_auto = explode(',', $userlevel);
+                    $tmp_auto = explode(',', $section['userlevel']);
 
                     foreach ($tmp_auto as $userlevel) {
                         $okprintLV1 = users::autorisation($userlevel);
@@ -887,8 +963,8 @@ class boxe
                     }
 
                     if ($okprintLV1) {
-                        $sec = language::aff_langue($secname);
-                        $boxstuff .= '<li><a href="sections.php?op=listarticles&amp;secid=' . $secid . '">' . $sec . '</a></li>';
+                        $sec = language::aff_langue($section['secname']);
+                        $boxstuff .= '<li><a href="sections.php?op=listarticles&amp;secid=' . $section['secid'] . '">' . $sec . '</a></li>';
                     }
 
                     $boxstuff .= '</ul>';
@@ -917,10 +993,12 @@ class boxe
      */
     public static function bloc_espace_groupe(string $gr, string $i_gr): void
     {
-        global $NPDS_Prefix, $block_title;
+        global $block_title;
 
         if ($block_title == '') {
-            $rsql = sql_fetch_assoc(sql_query("SELECT groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$gr'"));
+            
+            $rsql = DB::table('groupes')->select('groupe_name')->where('groupe_id', $gr)->first();
+            
             $title = $rsql['groupe_name'];
         } else {
             $title = $block_title;
@@ -1035,7 +1113,7 @@ class boxe
      */
     public static function pollMain(int $pollID, string|int $pollClose): void
     {
-        global $NPDS_Prefix, $boxTitle, $boxContent;
+        global $boxTitle, $boxContent;
 
         if (!isset($pollID)) {
             $pollID = 1;
@@ -1050,14 +1128,22 @@ class boxe
         <input type="hidden" name="pollID" value="' . $pollID . '" />
         <input type="hidden" name="forwarder" value="' . $url . '" />';
 
-        $result = sql_query("SELECT pollTitle, voters FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$pollID'");
-        list($pollTitle, $voters) = sql_fetch_row($result);
+        $poll_desc = DB::table('poll_desc')
+                        ->select('pollTitle', 'voters')
+                        ->where('pollID', $pollID)
+                        ->first();
 
         global $block_title;
         $boxTitle = $block_title == '' ? translate("Sondage") :  $block_title;
 
-        $boxContent .= '<legend>' . language::aff_langue($pollTitle) . '</legend>';
-        $result = sql_query("SELECT pollID, optionText, optionCount, voteID FROM " . $NPDS_Prefix . "poll_data WHERE (pollID='$pollID' AND optionText<>'') ORDER BY voteID");
+        $boxContent .= '<legend>' . language::aff_langue($poll_desc['pollTitle']) . '</legend>';
+
+        $result = DB::table('poll_data')
+                ->select('pollID', 'optionText', 'optionCount', 'voteID')
+                ->where('pollID', $pollID)
+                ->where('optionText', '<>', '')
+                ->orderBy('voteID')
+                ->get();
 
         $sum = 0;
         $j = 0;
@@ -1065,21 +1151,21 @@ class boxe
         if (!$pollClose) {
             $boxContent .= '<div class="mb-3">';
 
-            while ($object = sql_fetch_assoc($result)) {
+            foreach ($result as $poll_data) {
                 $boxContent .= '
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" id="voteID' . $j . '" name="voteID" value="' . $object['voteID'] . '" />
-                    <label class="form-check-label d-block" for="voteID' . $j . '" >' . language::aff_langue($object['optionText']) . '</label>
+                    <input class="form-check-input" type="radio" id="voteID' . $j . '" name="voteID" value="' . $poll_data['voteID'] . '" />
+                    <label class="form-check-label d-block" for="voteID' . $j . '" >' . language::aff_langue($poll_data['optionText']) . '</label>
                 </div>';
-                $sum = $sum + $object['optionCount'];
+                $sum = $sum + $poll_data['optionCount'];
                 $j++;
             }
 
             $boxContent .= '</div>';
         } else {
-            while ($object = sql_fetch_assoc($result)) {
-                $boxContent .= '&nbsp;' . language::aff_langue($object['optionText']) . '<br />';
-                $sum = $sum + $object['optionCount'];
+            foreach ($result as $poll_data) {
+                $boxContent .= '&nbsp;' . language::aff_langue($poll_data['optionText']) . '<br />';
+                $sum = $sum + $poll_data['optionCount'];
             }
         }
 
@@ -1101,7 +1187,12 @@ class boxe
                 include("modules/comments/config/pollBoth.conf.php");
             }
 
-            list($numcom) = sql_fetch_row(sql_query("SELECT COUNT(*) FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$pollID' AND post_aff='1'"));
+            $numcom = DB::table('posts')
+                        ->select('*')
+                        ->where('forum_id', $forum)
+                        ->where('topic_id', $pollID)
+                        ->where('post_aff', 1)
+                        ->count();
 
             $boxContent .= '<li class="list-group-item">' . translate("Commentaire(s) : ") . ' <span class="badge rounded-pill bg-secondary float-end">' . $numcom . '</span></li>';
         }

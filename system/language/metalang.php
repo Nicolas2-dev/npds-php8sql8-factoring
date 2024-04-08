@@ -12,6 +12,7 @@ use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 use npds\system\language\metafunction;
+use npds\system\support\facades\Cache as SuperCache;
 
 class metalang
 {
@@ -132,13 +133,14 @@ class metalang
      */
     public static function charg_metalang(): array
     {
-        global $CACHE_TIMINGS, $REQUEST_URI;
+        global $REQUEST_URI;
 
         if (Config::get('cache.SuperCache')) {
             $racine = parse_url(basename($REQUEST_URI));
             $cache_clef = "[metalang]==>" . $racine['path'] . ".common";
-            $CACHE_TIMINGS[$cache_clef] = 86400;
-            $cache_obj = new cacheManager();
+
+            $cache_obj = SuperCache::getInstance();
+            $cache_obj->setTimingObjet($cache_clef, 86400);
             $glossaire = $cache_obj->startCachingObjet($cache_clef);
         } else {
             $cache_obj = new SuperCacheEmpty();

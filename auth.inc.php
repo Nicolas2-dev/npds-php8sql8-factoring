@@ -65,7 +65,7 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
 
             $admin = base64_encode("$aid:" . md5($CryptpPWD));
 
-            $admin_cook_duration = Config::get('app.admin_cook_duration');
+            $admin_cook_duration = Config::get('npds.admin_cook_duration');
 
             if ($admin_cook_duration <= 0) {
                 $admin_cook_duration = 1;
@@ -93,23 +93,24 @@ if (isset($admin) and ($admin != '')) {
         Admin_Alert('Null Aid or Passwd');
     }
 
-    $author = DB::table('authors')
+    $res_author = DB::table('authors')
         ->select('pwd', 'radminsuper')
         ->where('aid', $aid)
         ->first();
 
-    if (!$author) {
+    if (!$res_author) {
         Admin_Alert("DB not ready #2 : $aid / $AIpwd");
     } else {
         
-        if (md5($author['pwd']) == $AIpwd and $author['pwd'] != '') {
+        if (md5($res_author['pwd']) == $AIpwd and $res_author['pwd'] != '') {
             $admintest = true;
-            $super_admintest = $author['radminsuper'];
+            $super_admintest = $res_author['radminsuper'];
         } else {
             Admin_Alert("Password in Cookies not Good #1 : $aid / $AIpwd");
         }
     }
     
+    //unset($res_author);
     unset($AIpass);
     unset($AIpwd);
     unset($Xadmin);

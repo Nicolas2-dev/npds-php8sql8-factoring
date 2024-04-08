@@ -15,18 +15,20 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
-use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\Cache as SuperCache;
+
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if ($SuperCache) {
-    $cache_obj = new cacheManager();
+if (Config::get('cache.SuperCache')) {
+    $cache_obj = SuperCache::getInstance();
 } else {
     $cache_obj = new SuperCacheEmpty();
 }
@@ -55,11 +57,11 @@ if ($op == "maj_subscribe") {
 include("themes/default/header.php");
 
 // -- SuperCache
-if (($SuperCache) and (!$user)) {
+if ((Config::get('cache.SuperCache')) and (!$user)) {
     $cache_obj->startCachingPage();
 }
 
-if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache) or ($user)) {
+if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!Config::get('cache.SuperCache')) or ($user)) {
     $inclusion = false;
 
     settype($catid, 'integer');
@@ -92,7 +94,7 @@ if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1
 }
 
 // -- SuperCache
-if (($SuperCache) and (!$user)) {
+if ((Config::get('cache.SuperCache')) and (!$user)) {
     $cache_obj->endCachingPage();
 }
 

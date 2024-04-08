@@ -566,7 +566,9 @@ class Builder
         if (isset($this->offset)) {
             $query .= ' OFFSET ' .$this->offset;
         }
+
 //vd($query);
+
         return $query;
     }
 

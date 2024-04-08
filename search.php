@@ -19,8 +19,9 @@ use npds\system\news\news;
 use npds\system\cache\cache;
 use npds\system\security\hack;
 use npds\system\language\language;
-use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
+
+use npds\system\support\facades\Cache as SuperCache;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
@@ -146,12 +147,12 @@ echo '
 settype($author, 'string');
 
 $sel = '';
-while (list($authors) = sql_fetch_row($thing)) {
-    if ($authors == $author) {
+while (list($authors_aid) = sql_fetch_row($thing)) {
+    if ($authors_aid == $author) {
         $sel = 'selected="selected" ';
     }
 
-    echo '<option ' . $sel . ' value="' . $authors . '">' . $authors . '</option>';
+    echo '<option ' . $sel . ' value="' . $authors_aid . '">' . $authors_aid . '</option>';
     $sel = '';
 }
 
@@ -260,7 +261,9 @@ if ($type == "stories" or $type == "archive" or !$type) {
     if ($member != '') {
         $q .= "AND s.informant='$member' ";
     } else {
-        if ($author != '') $q .= "AND s.aid='$author' ";
+        if ($author != '') {
+            $q .= "AND s.aid=' $author' ";
+        }
     }
 
     if ($topic != '') {
@@ -277,8 +280,8 @@ if ($type == "stories" or $type == "archive" or !$type) {
 
     if ($SuperCache) {
         $cache_clef = "[objet]==> $q";
-        $CACHE_TIMINGS[$cache_clef] = 3600;
-        $cache_obj = new cacheManager();
+        $cache_obj = SuperCache::getInstance();
+        $cache_obj->setTimingObjet($cache_clef, 3600);
         $tab_sid = $cache_obj->startCachingObjet($cache_clef);
 
         if ($tab_sid != '') {

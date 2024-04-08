@@ -243,6 +243,9 @@ switch ($op) {
         break;
 
     case 'deletelblock':
+
+        settype($id, 'int');
+        
         deletelblock($id);
         break;
 

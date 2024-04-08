@@ -59,8 +59,11 @@ function makerblock(string $title, string $content, int $members, string $Mmembe
         $Rindex = 0;
     }
 
-    $title = stripslashes(str::FixQuotes($title));
-    $content = stripslashes(str::FixQuotes($content));
+    // $title = stripslashes(str::FixQuotes($title));
+    // $content = stripslashes(str::FixQuotes($content));
+
+    $title = stripslashes($title);
+    $content = stripslashes($content);
 
     if ($SHTML != 'ON') {
         $content = strip_tags(str_replace('<br />', "\n", $content));
@@ -93,13 +96,13 @@ function makerblock(string $title, string $content, int $members, string $Mmembe
  * @param   string  $Mmember  [$Mmember description]
  * @param   int     $Rindex   [$Rindex description]
  * @param   int     $Scache   [$Scache description]
- * @param   int     $Sactif   [$Sactif description]
+ * @param   string  $Sactif   [$Sactif description]
  * @param   string  $BRaide   [$BRaide description]
  * @param   int     $css      [$css description]
  *
  * @return  void
  */
-function changerblock(int $id, string $title, string $content, int $members, string $Mmember, int $Rindex, int $Scache, int $Sactif, string $BRaide, int $css): void
+function changerblock(int $id, string $title, string $content, int $members, string $Mmember, int $Rindex, int $Scache, string $Sactif, string $BRaide, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
@@ -112,7 +115,8 @@ function changerblock(int $id, string $title, string $content, int $members, str
         $Rindex = 0;
     }
 
-    $title = stripslashes(str::FixQuotes($title));
+    //$title = stripslashes(str::FixQuotes($title));
+    $title = stripslashes($title);
 
     if ($Sactif == 'ON') { 
         $Sactif = 1;
@@ -120,7 +124,8 @@ function changerblock(int $id, string $title, string $content, int $members, str
         $Sactif = 0;
     }
 
-    $content = stripslashes(str::FixQuotes($content));
+    //$content = stripslashes(str::FixQuotes($content));
+    $content = stripslashes($content);
     
     DB::table('rblocks')->where('id', $id)->update(array(
         'title'       => $title,
@@ -149,13 +154,13 @@ function changerblock(int $id, string $title, string $content, int $members, str
  * @param   string  $Mmember  [$Mmember description]
  * @param   int     $Rindex   [$Rindex description]
  * @param   int     $Scache   [$Scache description]
- * @param   int     $Sactif   [$Sactif description]
+ * @param   string  $Sactif   [$Sactif description]
  * @param   string  $BRaide   [$BRaide description]
  * @param   int     $css      [$css description]
  *
  * @return  void
  */
-function changegaucherblock(int $id, string $title, string $content, int $members, string $Mmember, int $Rindex, int $Scache, int $Sactif, string $BRaide, int $css): void
+function changegaucherblock(int $id, string $title, string $content, int $members, string $Mmember, int $Rindex, int $Scache, string $Sactif, string $BRaide, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
@@ -168,7 +173,8 @@ function changegaucherblock(int $id, string $title, string $content, int $member
         $Rindex = 0;
     }
 
-    $title = stripslashes(str::FixQuotes($title));
+    //$title = stripslashes(str::FixQuotes($title));
+    $title = stripslashes($title);
 
     if ($Sactif == 'ON') { 
         $Sactif = 1;
@@ -176,9 +182,10 @@ function changegaucherblock(int $id, string $title, string $content, int $member
         $Sactif = 0;
     }
 
-    $content = stripslashes(str::FixQuotes($content));
+    //$content = stripslashes(str::FixQuotes($content));
+    $content = stripslashes($content);
 
-    DB::table('')->insert(array(
+    DB::table('lblocks')->insert(array(
         'title'         => $title,
         'content'       => $content,
         'member'        => $members,
@@ -222,18 +229,56 @@ $Mmember = isset($Mmember) ? $Mmember : '';
 
 switch ($op) {
     case 'makerblock':
+
+        settype($title, 'string');
+        settype($content, 'string');
+        settype($members, 'int');
+        settype($Mmember, 'string');
+        settype($index, 'int');
+        settype($Scache, 'int');
+        settype($Baide, 'string');
+        settype($SHTML, 'int');
+        settype($css, 'int');
+
         makerblock($title, $xtext, $members, $Mmember, $index, $Scache, $Baide, $SHTML, $css);
         break;
 
     case 'deleterblock':
+
+        settype($id, 'int');
+
         deleterblock($id);
         break;
 
     case 'changerblock':
+
+        settype($id, 'int');
+        settype($title, 'string');
+        settype($content, 'string');
+        settype($members, 'int');
+        settype($Mmember, 'string');
+        settype($Rindex, 'int');
+        settype($Scache, 'int');
+        settype($Sactif, 'string');
+        settype($BRaide, 'string');
+        settype($css, 'int');
+
         changerblock($id, $title, $content, $members, $Mmember, $Rindex, $Scache, $Sactif, $BRaide, $css);
         break;
 
     case 'gaucherblock':
+
+        settype($id, 'int');
+        settype($title, 'string');
+        settype($content, 'string');
+        settype($members, 'int');
+        settype($Mmember, 'string');
+        settype($Rindex, 'int');
+        settype($Scache, 'int');
+        settype($Sactif, 'string');
+        settype($BRaide, 'string');
+        settype($css, 'int');
+
         changegaucherblock($id, $title, $content, $members, $Mmember, $Rindex, $Scache, $Sactif, $BRaide, $css);
         break;
 }

@@ -21,8 +21,6 @@ foreach (glob('config/*.php') as $path) {
     $key = lcfirst(pathinfo($path, PATHINFO_FILENAME));
 
     if (($key[0] !== '_') and (!strstr($key, '.'))
-    and (!strstr($key, 'cache.config'))
-    and (!strstr($key, 'cache.timings'))
     and (!strstr($key, 'config'))
     and (!strstr($key, 'pages'))
     and (!strstr($key, 'sample.proxy'))
@@ -122,10 +120,6 @@ AliasLoader::initialize();
 // initialisation de la database 
 $db = Manager::getInstance();
 $db->connection()->setFetchMode(PDO::FETCH_ASSOC);
-
-// include des fichier pour le cache !!!! A revoir ces fichiers !!!!
-include_once('config/cache.config.php');
-include_once('config/cache.timings.php');
 
 // Multi-language
 if (file_exists('storage/language/langcode.php')) {

@@ -206,7 +206,7 @@ if (! function_exists('headlines'))
      *
      * @return  [type]          [return description]
      */
-    function headlines($hid, $block)
+    function headlines(string $hid = '', string|bool $block = true)
     {
         return boxe::headlines($hid, $block);
     }
