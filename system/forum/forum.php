@@ -19,8 +19,26 @@ use npds\system\support\facades\DB;
 class forum
 {
 
-    #autodoc RecentForumPosts($title, $maxforums, $maxtopics, $dposter, $topicmaxchars,$hr,$decoration) : Bloc Forums <br />=> syntaxe :<br />function#RecentForumPosts<br />params#titre, nb_max_forum (O=tous), nb_max_topic, affiche_l'emetteur(true / false), topic_nb_max_char, affiche_HR(true / false),
-    public static function RecentForumPosts($title, $maxforums, $maxtopics, $displayposter = false, $topicmaxchars = 15, $hr = false, $decoration = '')
+    /**
+     * Bloc Forums
+     *
+     * syntaxe : function#RecentForumPosts
+     * nb_max_forum (O=tous) nb_max_topic, affiche_l'emetteur(true / false), topic_nb_max_char, affiche_HR(true / false)
+     * 
+     * @param   string  $title          [$title description]
+     * @param   string  $maxforums      [$maxforums description]
+     * @param   string  $maxtopics      [$maxtopics description]
+     * @param   bool    $displayposter  [$displayposter description]
+     * @param   false                   [ description]
+     * @param   string                  [ description]
+     * @param   int     $topicmaxchars  [$topicmaxchars description]
+     * @param   bool    $hr             [$hr description]
+     * @param   false                   [ description]
+     * @param   string  $decoration     [$decoration description]
+     *
+     * @return  void
+     */
+    public static function RecentForumPosts(string $title, string $maxforums, string $maxtopics, bool $displayposter = false, string|int $topicmaxchars = 15, bool $hr = false, string $decoration = ''): void
     {
         $boxstuff = static::RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
 
@@ -33,7 +51,23 @@ class forum
         themesidebox($title, $boxstuff);
     }
 
-    public static function RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration)
+    /**
+     * [RecentForumPosts_fab description]
+     *
+     * @param   string  $title          [$title description]
+     * @param   string                  [ description]
+     * @param   int     $maxforums      [$maxforums description]
+     * @param   string                  [ description]
+     * @param   int     $maxtopics      [$maxtopics description]
+     * @param   bool    $displayposter  [$displayposter description]
+     * @param   string                  [ description]
+     * @param   int     $topicmaxchars  [$topicmaxchars description]
+     * @param   bool    $hr             [$hr description]
+     * @param   string  $decoration     [$decoration description]
+     *
+     * @return  string                  [return description]
+     */
+    public static function RecentForumPosts_fab(string $title, string|int $maxforums, string|int $maxtopics, bool $displayposter, string|int $topicmaxchars, bool $hr, string $decoration): string
     {
         global $user, $NPDS_Prefix;
 
@@ -140,7 +174,14 @@ class forum
         return $boxstuff;
     }
 
-    public static function get_total_topics($forum_id)
+    /**
+     * 
+     *
+     * @param   int    $forum_id  [$forum_id description]
+     *
+     * @return  array
+     */
+    public static function get_total_topics(int $forum_id): array
     {
         global $NPDS_Prefix;
     
@@ -159,8 +200,17 @@ class forum
         return $myrow['total'];
     }
     
-    #autodoc get_contributeurs($fid, $tid) : Retourne une chaine des id des contributeurs du sujet
-    public static function get_contributeurs($fid, $tid)
+    /**
+     * Retourne une chaine des id des contributeurs du sujet
+     *
+     * @param   string        [ description]
+     * @param   int     $fid  [$fid description]
+     * @param   string        [ description]
+     * @param   int     $tid  [$tid description]
+     *
+     * @return  string
+     */
+    public static function get_contributeurs(string|int $fid, string|int $tid): string 
     {
         global $NPDS_Prefix;
     
@@ -176,7 +226,20 @@ class forum
         return chop($posterids);
     }
     
-    public static function get_total_posts($fid, $tid, $type, $Mmod)
+    /**
+     * 
+     *
+     * @param   string         [ description]
+     * @param   int     $fid   [$fid description]
+     * @param   string         [ description]
+     * @param   int     $tid   [$tid description]
+     * @param   string         [ description]
+     * @param   int     $type  [$type description]
+     * @param   bool    $Mmod  [$Mmod description]
+     *
+     * @return  mixed
+     */
+    public static function get_total_posts(string|int $fid, string|int $tid, string|int $type, bool $Mmod): mixed
     {
         global $NPDS_Prefix;
     
@@ -208,7 +271,19 @@ class forum
         return $myrow['total'];
     }
     
-    public static function get_last_post($id, $type, $cmd, $Mmod)
+    /**
+     * 
+     *
+     * @param   string         [ description]
+     * @param   int     $id    [$id description]
+     * @param   string         [ description]
+     * @param   int     $type  [$type description]
+     * @param   string  $cmd   [$cmd description]
+     * @param   bool    $Mmod  [$Mmod description]
+     *
+     * @return  string
+     */
+    public static function get_last_post(string|int $id, string|int $type, string $cmd, bool $Mmod): string 
     {
         global $NPDS_Prefix;
     
@@ -244,7 +319,14 @@ class forum
         return $val;
     }
     
-    public static function get_moderator($user_id)
+    /**
+     * 
+     *
+     * @param   string  $user_id  [$user_id description]
+     *
+     * @return  string
+     */
+    public static function get_moderator(string $user_id): string 
     {
         global $NPDS_Prefix;
     
@@ -265,7 +347,18 @@ class forum
         return chop($modslist);
     }
 
-    public static function user_is_moderator($uidX, $passwordX, $forum_accessX)
+    /**
+     * 
+     *
+     * @param   string                  [ description]
+     * @param   int     $uidX           [$uidX description]
+     * @param   string  $passwordX      [$passwordX description]
+     * @param   string                  [ description]
+     * @param   int     $forum_accessX  [$forum_accessX description]
+     *
+     * @return  string
+     */
+    public static function user_is_moderator(string|int $uidX, string $passwordX, string|int $forum_accessX): string|bool
     {
         global $NPDS_Prefix;
     
@@ -284,7 +377,14 @@ class forum
         }
     }
     
-    public static function get_userdata_from_id($userid)
+    /**
+     * 
+     *
+     * @param   string  $userid  [$userid description]
+     *
+     * @return  array
+     */
+    public static function get_userdata_from_id(string $userid): array
     {
         global $NPDS_Prefix;
     
@@ -304,7 +404,14 @@ class forum
         return $myrow;
     }
     
-    public static function get_userdata_extend_from_id($userid)
+    /**
+     * 
+     *
+     * @param   string  $userid  [$userid description]
+     *
+     * @return  array
+     */
+    public static function get_userdata_extend_from_id(string $userid): array 
     {
         global $NPDS_Prefix;
     
@@ -326,7 +433,14 @@ class forum
         return $myrow;
     }
     
-    public static function get_userdata($username)
+    /**
+     * 
+     *
+     * @param   string  $username  [$username description]
+     *
+     * @return  array
+     */
+    public static function get_userdata(string $username): array
     {
         global $NPDS_Prefix;
     
@@ -343,7 +457,17 @@ class forum
         return $myrow;
     }
     
-    public static function does_exists($id, $type)
+    /**
+     * 
+     *
+     * @param   string         [ description]
+     * @param   int     $id    [$id description]
+     * @param   string         [ description]
+     * @param   int     $type  [$type description]
+     *
+     * @return  int
+     */
+    public static function does_exists(string|int $id, string|int $type): int
     {
         global $NPDS_Prefix;
     
@@ -368,7 +492,15 @@ class forum
         return 1;
     }
     
-    public static function is_locked($topic)
+    /**
+     * 
+     *
+     * @param   string          [ description]
+     * @param   int     $topic  [$topic description]
+     *
+     * @return  bool
+     */
+    public static function is_locked(string|int $topic): bool
     {
         global $NPDS_Prefix;
     
@@ -389,9 +521,15 @@ class forum
         }
     }
     
-    public static function smilie($message)
+    /**
+     * 
+     *
+     * @param   string  $message  [$message description]
+     *
+     * @return  string
+     */
+    public static function smilie(string $message): string
     {
-        // Tranforme un :-) en IMG
         $theme = theme::getTheme();
     
         if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
@@ -431,9 +569,15 @@ class forum
         return $message;
     }
     
-    public static function smile($message)
+    /**
+     * 
+     *
+     * @param   string  $message  [$message description]
+     *
+     * @return  string
+     */
+    public static function smile(string $message): string 
     {
-        // Tranforme une IMG en :-)
         $theme = theme::getTheme();
     
         if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
@@ -466,9 +610,15 @@ class forum
     
         return $message;
     }
-    
-    #autodoc aff_video_yt($ibid) : analyse et génère un tag à la volée pour les video youtube,vimeo, dailymotion $ibid - JPB 01-2011/18
-    public static function aff_video_yt($ibid)
+     
+    /**
+     * analyse et génère un tag à la volée pour les video youtube,vimeo, dailymotion $ibid - JPB 01-2011/18
+     *
+     * @param   string  $ibid  [$ibid description]
+     *
+     * @return  string         [return description]
+     */
+    public static function aff_video_yt(string $ibid): string 
     {
         $videoprovider = array('yt', 'vm', 'dm');
     
@@ -541,15 +691,18 @@ class forum
         return ($ibid);
     }
     
-    // ne fonctionne pas dans tous les contextes car on a pas la variable du theme !?
-    public static function putitems_more()
-    {
-        global $tmp_theme;
 
+    /**
+     * ne fonctionne pas dans tous les contextes car on a pas la variable du theme !?
+     *
+     * @return  void    [return description]
+     */
+    public static function putitems_more(): void
+    {
         $theme = theme::getTheme();
 
         if (stristr($_SERVER['PHP_SELF'], "more_emoticon.php")) {
-            $theme = $tmp_theme;
+            $theme = $theme;
         }
     
         echo '<p align="center">' . translate("Cliquez pour insérer des émoticons dans votre message") . '</p>';
@@ -583,8 +736,14 @@ class forum
         }
     }
     
-    #autodoc putitems($targetarea) : appel un popover pour la saisie des emoji (Unicode v13) dans un textarea défini par $targetarea
-    public static function putitems($targetarea)
+    /**
+     * appel un popover pour la saisie des emoji (Unicode v13) dans un textarea défini par $targetarea
+     *
+     * @param   string  $targetarea  [$targetarea description]
+     *
+     * @return  void
+     */
+    public static function putitems(string $targetarea): void
     {
         echo '
         <div title="' . translate("Cliquez pour insérer des emoji dans votre message") . '" data-bs-toggle="tooltip">
@@ -606,7 +765,12 @@ class forum
         </script>';
     }
     
-    public static function HTML_Add()
+    /**
+     * 
+     *
+     * @return  string  [return description]
+     */
+    public static function HTML_Add(): string
     {
         $affich = '
                         <div class="mt-2">
@@ -657,7 +821,14 @@ class forum
         return $affich;
     }
     
-    public static function emotion_add($image_subject)
+    /**
+     * 
+     *
+     * @param   [type]  $image_subject  [$image_subject description]
+     *
+     * @return  string
+     */
+    public static function emotion_add($image_subject): string 
     {
         $theme = theme::getTheme();
     
@@ -707,7 +878,14 @@ class forum
         return $temp;
     }
     
-    public static function make_clickable($text)
+    /**
+     * 
+     *
+     * @param   string  $text  [$text description]
+     *
+     * @return  string
+     */
+    public static function make_clickable(string $text): string 
     {
         $ret = '';
         $ret = preg_replace('#(^|\s)(http|https|ftp|sftp)(://)([^\s]*)#i', ' <a href="$2$3$4" target="_blank">$2$3$4</a>', $text);
@@ -716,7 +894,14 @@ class forum
         return $ret;
     }
     
-    public static function undo_htmlspecialchars($input)
+    /**
+     * 
+     *
+     * @param   string  $input  [$input description]
+     *
+     * @return  string
+     */
+    public static function undo_htmlspecialchars(string $input): string 
     {
         $input = preg_replace("/&gt;/i", ">", $input);
         $input = preg_replace("/&lt;/i", "<", $input);
@@ -726,7 +911,12 @@ class forum
         return $input;
     }
     
-    public static function searchblock()
+    /**
+     * 
+     *
+     * @return  string
+     */
+    public static function searchblock(): string
     {
         $ibid = '
                 <form class="row" id="searchblock" action="searchbb.php" method="post" name="forum_search">
@@ -743,7 +933,16 @@ class forum
         return $ibid;
     }
     
-    public static function member_qualif($poster, $posts, $rank)
+    /**
+     * 
+     *
+     * @param   string  $poster  [$poster description]
+     * @param   string  $posts   [$posts description]
+     * @param   string  $rank    [$rank description]
+     *
+     * @return  string
+     */
+    public static function member_qualif(string $poster, string $posts, string $rank): string
     {
         $tmp = '';
     
@@ -799,7 +998,14 @@ class forum
         return $tmp;
     }
     
-    public static function forumerror($e_code)
+    /**
+     * 
+     *
+     * @param   string  $e_code  [$e_code description]
+     *
+     * @return
+     */
+    public static function forumerror(string $e_code): mixed
     {
         global $header;
 
@@ -954,7 +1160,17 @@ class forum
         die('');
     }
     
-    public static function control_efface_post($apli, $post_id, $topic_id, $IdForum)
+    /**
+     * 
+     *
+     * @param   string          $apli      [$apli description]
+     * @param   int             $post_id   [$post_id description]
+     * @param   string|int      $topic_id  [$topic_id description]
+     * @param   string|int      $IdForum   [$IdForum description]
+     *
+     * @return  void
+     */
+    public static function control_efface_post(string $apli, int $post_id, string|int $topic_id, string|int $IdForum): void
     {
         global $upload_table, $NPDS_Prefix;
     
@@ -989,7 +1205,12 @@ class forum
         @sql_query($sql2);
     }
     
-    public static function autorize()
+    /**
+     * 
+     *
+     * @return  bool
+     */
+    public static function autorize(): bool
     {
         global $IdPost, $IdTopic, $IdForum, $user, $NPDS_Prefix;
     
@@ -1025,7 +1246,18 @@ class forum
         return $Mmod;
     }
     
-    public static function anti_flood($modoX, $paramAFX, $poster_ipX, $userdataX, $gmtX)
+    /**
+     * 
+     *
+     * @param   string  $modoX       [$modoX description]
+     * @param   string  $paramAFX    [$paramAFX description]
+     * @param   string  $poster_ipX  [$poster_ipX description]
+     * @param   array   $userdataX   [$userdataX description]
+     * @param   int     $gmtX        [$gmtX description]
+     *
+     * @return  void
+     */
+    public static function anti_flood(string $modoX, string $paramAFX, string $poster_ipX, array $userdataX, int $gmtX): void
     {
         // anti_flood : nb de post dans les 90 puis 30 dernières minutes / les modérateurs echappent à cette règle
         // security.log est utilisée pour enregistrer les tentatives
@@ -1060,7 +1292,14 @@ class forum
         }
     }
     
-    public static function forum($rowQ1)
+    /**
+     * 
+     *
+     * @param   array   $rowQ1  [$rowQ1 description]
+     *
+     * @return  string
+     */
+    public static function forum(array $rowQ1): string 
     {
         global $user, $admin, $adminforum, $NPDS_Prefix;
     
@@ -1311,8 +1550,14 @@ class forum
         return $ibid;
     }
     
-    // fonction appelée par le meta-mot forum_subfolder()
-    public static function sub_forum_folder($forum)
+    /**
+     * fonction appelée par le meta-mot forum_subfolder()
+     *
+     * @param   string    $forum  [$forum description]
+     *
+     * @return  string
+     */
+    public static function sub_forum_folder(string $forum): string 
     {
         global $user, $NPDS_Prefix;
     

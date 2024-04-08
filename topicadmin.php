@@ -33,7 +33,7 @@ if ($SuperCache) {
 }
 
 include('auth.php');
-global $NPDS_Prefix, $adminforum;
+global $NPDS_Prefix, $adminforum, $admin;
 
 //==> droits des admin sur les forums (superadmin et admin avec droit gestion forum)
 $adminforum = false;

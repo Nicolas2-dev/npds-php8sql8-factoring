@@ -30,7 +30,7 @@ if (!function_exists("Mysql_Connexion"))  {
 
 function FriendSend($sid, $archive)
 {
-    global $NPDS_Prefix;
+    global $NPDS_Prefix, $user, $cookie;
 
     settype($sid, "integer");
     settype($archive, "integer");
@@ -52,10 +52,7 @@ function FriendSend($sid, $archive)
     <form id="friendsendstory" action="friend.php" method="post">
         <input type="hidden" name="sid" value="' . $sid . '" />';
 
-    global $user;
     if ($user) {
-        global $cookie;
-
         $result = sql_query("SELECT name, email FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
         list($yn, $ye) = sql_fetch_row($result);
     } else {
@@ -105,7 +102,7 @@ function FriendSend($sid, $archive)
 
 function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question, $asb_reponse)
 {
-    global $user;
+    global $user, $NPDS_Prefix;
 
     if (!$user) {
         //anti_spambot
@@ -116,8 +113,6 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
             die();
         }
     }
-
-    global $NPDS_Prefix;
 
     settype($sid, 'integer');
     settype($archive, 'integer');
@@ -184,6 +179,7 @@ function StorySent($title, $fname)
 function RecommendSite()
 {
     global $user;
+
     if ($user) {
         global $cookie, $NPDS_Prefix;
 

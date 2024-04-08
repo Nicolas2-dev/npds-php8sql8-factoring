@@ -56,7 +56,7 @@ function geninfo($did, $out_template)
     }
 
     if ($okfile) {
-        $title = $dfilename; // ??? not used
+        //$title = $dfilename; // ??? not used
         
         if ($out_template == 1) {
             include('themes/default/header.php');

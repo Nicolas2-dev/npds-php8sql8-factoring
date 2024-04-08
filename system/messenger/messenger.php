@@ -13,31 +13,48 @@ use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\support\online;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 class messenger
 {
 
-    #autodoc Form_instant_message($to_userid) : Ouvre la page d'envoi d'un MI (Message Interne)
-    public static function Form_instant_message($to_userid)
+    /**
+     * Ouvre la page d'envoi d'un MI (Message Interne)
+     *
+     * @param   string  $to_userid  [$to_userid description]
+     *
+     * @return  void
+     */
+    public static function Form_instant_message(string $to_userid): void
     {
         include("themes/default/header.php");
         static::write_short_private_message(hack::removeHack($to_userid));
         include("themes/default/footer.php");;
     }
 
-    #autodoc writeDB_private_message($to_userid,$image,$subject,$from_userid,$message, $copie) : Insère un MI dans la base et le cas échéant envoi un mail
-    public static function writeDB_private_message($to_userid, $image, $subject, $from_userid, $message, $copie)
+    /**
+     * Insère un MI dans la base et le cas échéant envoi un mail
+     *
+     * @param   string  $to_userid    [$to_userid description]
+     * @param   string  $image        [$image description]
+     * @param   string  $subject      [$subject description]
+     * @param   string  $from_userid  [$from_userid description]
+     * @param   string  $message      [$message description]
+     * @param   string  $copie        [$copie description]
+     *
+     * @return  void
+     */
+    public static function writeDB_private_message(string $to_userid, string $image, string $subject, string $from_userid, string $message, string $copie): void
     {
-        global $NPDS_Prefix;
-
-        $res = sql_query("SELECT uid, user_langue FROM " . $NPDS_Prefix . "users WHERE uname='$to_userid'");
-        list($to_useridx, $user_languex) = sql_fetch_row($res);
+        $user = DB::table('users')
+                    ->select('uid', 'user_langue')
+                    ->where('uname', $to_userid)
+                    ->first();
 
         if ($to_useridx == '') {
             forum::forumerror('0016');
         } else {
-            global $gmt;
-            $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
+            $time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
 
             include_once("language/multilangue.php");
 
@@ -45,38 +62,56 @@ class messenger
             $message = str_replace("\n", "<br />", $message);
             $message = addslashes(hack::removeHack($message));
 
-            $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
-            $sql .= "VALUES ('$image', '$subject', '$from_userid', '$to_useridx', '$time', '$message')";
+            $r = DB::table('priv_msgs')->insert(array(
+                'msg_image'      => $image,
+                'subject'        => $subject,
+                'from_userid'    => $from_userid,
+                'to_userid'      => $user['to_useridx'],
+                'msg_time'       => $time,
+                'msg_text'       => $message,
+            ));
 
-            if (!$result = sql_query($sql)) {
+            if (!$r) {
                 forum::forumerror('0020');
             }
 
             if ($copie) {
-                $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text, type_msg, read_msg) ";
-                $sql .= "VALUES ('$image', '$subject', '$from_userid', '$to_useridx', '$time', '$message', '1', '1')";
-                
-                if (!$result = sql_query($sql)) {
+                $r = DB::table('priv_msgs')->insert(array(
+                    'msg_image'      => $image,
+                    'subject'        => $subject,
+                    'from_userid'    => $from_userid,
+                    'to_userid'      => $user['to_useridx'],
+                    'msg_time'       => $time,
+                    'msg_text'       => $message,
+                    'type_msg'       => 1,
+                    'read_msg'       => 1,
+                ));
+
+                if (!$r) {
                     forum::forumerror('0020');
                 }
             }
 
-            global $subscribe; 
-
             $nuke_url = Config::get('npds.nuke_url');
             
-            if ($subscribe) {
-                $sujet = html_entity_decode(translate_ml($user_languex, "Notification message privé."), ENT_COMPAT | ENT_HTML401, 'utf-8') . '[' . $from_userid . '] / ' . Config::get('npds.sitename');
-                $message = $time . '<br />' . translate_ml($user_languex, "Bonjour") . '<br />' . translate_ml($user_languex, "Vous avez un nouveau message.") . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . $nuke_url . '/viewpmsg.php">' . translate_ml($user_languex, "Cliquez ici pour lire votre nouveau message.") . '</a><br />';
+            if (Config::get('npds.subscribe')) {
+                $sujet = html_entity_decode(translate_ml($user['user_langue'], "Notification message privé."), ENT_COMPAT | ENT_HTML401, 'utf-8') . '[' . $from_userid . '] / ' . Config::get('npds.sitename');
+                $message = $time . '<br />' . translate_ml($user['user_langue'], "Bonjour") . '<br />' . translate_ml($user['user_langue'], "Vous avez un nouveau message.") . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . $nuke_url . '/viewpmsg.php">' . translate_ml($user['user_langue'], "Cliquez ici pour lire votre nouveau message.") . '</a><br />';
                 $message .= Config::get('signature.message');
                 
-                mailler::copy_to_email($to_useridx, $sujet, stripslashes($message));
+                mailler::copy_to_email($user['to_useridx'], $sujet, stripslashes($message));
             }
         }
     }
 
-    #autodoc write_short_private_message($to_userid) : Formulaire d'écriture d'un MI
-    public static function write_short_private_message($to_userid)
+    /**
+     * Formulaire d'écriture d'un MI
+     *
+     * @param   string  $to_userid  [$to_userid description]
+     *
+     * @return  void
+     */
+    public static function write_short_private_message(string $to_userid): void
     {
         echo '
         <h2>' . translate("Message à un membre") . '</h2>
@@ -113,11 +148,15 @@ class messenger
         </form>';
     }
 
-    #autodoc <span class="text-success">BLOCS NPDS</span>:
-    #autodoc instant_members_message() : Bloc MI (Message Interne) <br />=> syntaxe : function#instant_members_message
-    public static function instant_members_message()
+    /**
+     * Bloc MI (Message Interne)
+     * syntaxe : function#instant_members_message
+     *
+     * @return  void
+     */
+    public static function instant_members_message(): void
     {
-        global $user, $admin, $NPDS_Prefix;
+        global $user, $admin, $cookie;
 
         settype($boxstuff, 'string');
 
@@ -131,10 +170,8 @@ class messenger
         }
 
         if ($user) {
-            global $cookie;
 
-            $boxstuff = '
-            <ul class="">';
+            $boxstuff = '<ul class="">';
 
             $ibid = online::online_members();
 
@@ -148,38 +185,35 @@ class messenger
                     $timex = '<i class="fa fa-plug faa-flash animated text-primary" title="' . $ibid[$i]['username'] . ' ' . translate("est connecté") . '" data-bs-toggle="tooltip" data-bs-placement="right" ></i>&nbsp;';
                 }
 
-                global $member_invisible;
-                if ($member_invisible) {
-                    if ($admin) {
-                        $and = '';
-                    } else {
-                        if ($ibid[$i]['username'] == $cookie[1]) {
-                            $and = '';
-                        } else {
-                            $and = "AND is_visible=1";}
+                $query = DB::table('users')->select('uid');
+
+                if (!Config::get('npds.member_invisible')) {
+                    if (!$admin) {
+                        if (!$ibid[$i]['username'] == $cookie[1]) {
+                            $query->where('is_visible', 1);
+                        }
                     }
-                } else {
-                    $and = '';
                 }
 
-                $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='" . $ibid[$i]['username'] . "' $and");
-                list($userid) = sql_fetch_row($result);
+                $userid = $query->where('uname', $ibid[$i]['username'])->first();
 
                 if ($userid) {
-                    $rowQ1 = cache::Q_Select("SELECT rang FROM " . $NPDS_Prefix . "users_status WHERE uid='$userid'", 3600);
-                    $myrow = $rowQ1[0];
-                    $rank = $myrow['rang'];
+
+                    $rowQ1 = cache::Q_Select3(DB::table('users_status')->select('rang')->where('uid', $userid['uid'])->get(), 3600, 'users_status(rang)');
+
+                    $rank = $rowQ1[0]['rang'];
                     $tmpR = '';
 
                     if ($rank) {
                         if ($rank1 == '') {
-                            if ($rowQ2 = cache::Q_Select("SELECT rank1, rank2, rank3, rank4, rank5 FROM " . $NPDS_Prefix . "config", 86400)) {
-                                $myrow = $rowQ2[0];
-                                $rank1 = $myrow['rank1'];
-                                $rank2 = $myrow['rank2'];
-                                $rank3 = $myrow['rank3'];
-                                $rank4 = $myrow['rank4'];
-                                $rank5 = $myrow['rank5'];
+
+                            if ($myrow = cache::Q_Select3(DB::table('config')->select('rank1', 'rank2', 'rank3', 'rank4', 'rank5')->get(), 86400, 'config(rank)')) {
+                                
+                                $rank1 = $myrow[0]['rank1'];
+                                $rank2 = $myrow[0]['rank2'];
+                                $rank3 = $myrow[0]['rank3'];
+                                $rank4 = $myrow[0]['rank4'];
+                                $rank5 = $myrow[0]['rank5'];
                             }
                         }
 
@@ -195,8 +229,8 @@ class messenger
                         $tmpR = '&nbsp;';
                     }
 
-                    $new_messages = sql_num_rows(sql_query("SELECT msg_id FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '$userid' AND read_msg='0' AND type_msg='0'"));
-                    
+                    $new_messages = DB::table('priv_msgs')->select('msg_id')->where('to_userid', $userid['uid'])->where('read_msg', 0)->where('type_msg', 0)->count();
+
                     if ($new_messages > 0) {
                         $PopUp = java::JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
                         $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
@@ -213,8 +247,9 @@ class messenger
                             $icon .= '</a>';
                         }
                     } else {
-                        $messages = sql_num_rows(sql_query("SELECT msg_id FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '$userid' AND type_msg='0' AND dossier='...'"));
-                        
+                        $messages = DB::table('priv_msgs')->select('msg_id')->where('to_userid', $userid['uid'])->where('type_msg', 0)->where('dossier', '...')->count();
+
+
                         if ($messages > 0) {
                             $PopUp = java::JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
                             $PopUp = '<a href="javascript:void(0);" onclick="window.open(' . $PopUp . ');">';
@@ -239,9 +274,8 @@ class messenger
                         $M = $N;
                     }
 
-                    $boxstuff .= '
-                <li class="">' . $timex . '&nbsp;<a href="powerpack.php?op=instant_message&amp;to_userid=' . $N . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip" >' . $M . '</a><span class="float-end">' . $icon . '</span></li>';
-                } //suppression temporaire ... rank  '.$tmpR.'
+                    $boxstuff .= '<li class="">' . $timex . '&nbsp;<a href="powerpack.php?op=instant_message&amp;to_userid=' . $N . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip" >' . $M . '</a><span class="float-end">' . $icon . '</span></li>';
+                } 
             }
 
             $boxstuff .= '

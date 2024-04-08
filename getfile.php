@@ -16,6 +16,7 @@ declare(strict_types=1);
 use npds\system\assets\css;
 use npds\system\config\Config;
 use npds\system\utility\crypt;
+use npds\system\support\facades\DB;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -105,10 +106,12 @@ switch ($apli) {
 
                 if (file_exists($fic)) {
                     if ($apli == 'forum_npds') {
+                        
                         include('auth.php');
 
-                        $sql = "UPDATE $upload_table SET compteur = compteur+1 WHERE att_id = '$att_id'";
-                        sql_query($sql);
+                        DB::table($upload_table)->where('att_id', $att_id)->update(array(
+                            'compteur'       => DB::raw('compteur+1'),
+                        ));
                     }
 
                     // Output file to the browser

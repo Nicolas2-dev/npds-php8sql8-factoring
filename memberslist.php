@@ -56,7 +56,7 @@ if (isset($gr_from_ws) and ($gr_from_ws != 0)) {
 
 function alpha()
 {
-    global $sortby, $list, $gr_from_ws, $uid_from_ws;
+    global $sortby, $list, $gr_from_ws;
 
     $alphabet = array(translate("Tous"), 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', translate("Autres"));
     $num = count($alphabet) - 1;
@@ -203,6 +203,7 @@ function avatar($user_avatar)
 }
 
 include("themes/default/header.php");
+
 $pagesize = Config::get('npds.show_user');
 
 if (!isset($letter) or ($letter == '')) {

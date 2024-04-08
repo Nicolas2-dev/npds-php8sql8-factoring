@@ -163,7 +163,7 @@ function write_review()
 
 function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, $url_title, $hits, ?int $id)
 {
-    global $admin, $short_review;
+    global $admin;
 
     $title = stripslashes(strip_tags($title));
     $text = stripslashes(hack::removeHack(str::conv2br($text)));
@@ -780,7 +780,7 @@ function mod_review($id)
 
 function del_review($id_del)
 {
-    global $admin, $NPDS_Prefix;
+    global $admin;
 
     settype($id_del, "integer");
 

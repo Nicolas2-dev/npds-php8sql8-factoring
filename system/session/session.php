@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\session;
 
+use npds\system\config\Config;
 use npds\system\support\facades\DB;
 
 class session
@@ -16,7 +17,7 @@ class session
      */
     public static function session_manage(): void
     {
-        global $NPDS_Prefix, $cookie, $REQUEST_URI;
+        global $cookie, $REQUEST_URI;
 
         $ip = getip();
 
@@ -40,19 +41,37 @@ class session
 
         DB::table('session')->where('time', '<', $past)->delete();
 
-        $result = sql_query("SELECT time FROM " . $NPDS_Prefix . "session WHERE username='$username'");
-        
-        if ($row = sql_fetch_assoc($result)) {
-            if ($row['time'] < (time() - 30)) {
-                sql_query("UPDATE " . $NPDS_Prefix . "session SET username='$username', time='" . time() . "', host_addr='$ip', guest='$guest', uri='$REQUEST_URI', agent='" . getenv("HTTP_USER_AGENT") . "' WHERE username='$username'");
-                
+        $session = DB::table('session')
+                        ->select('time')
+                        ->where('username', $username)
+                        ->first();
+
+        if ($session) {
+            if ($session['time'] < (time() - 30)) {
+                DB::table('session')->where('username', $username)->update(array(
+                        'username'      => $username,
+                        'time'          => time(),
+                        'host_addr'     => $ip,
+                        'guest'         => $guest,
+                        'uri'           => $REQUEST_URI,
+                        'agent'         => getenv("HTTP_USER_AGENT"),
+                ));
+
                 if ($guest == 0) {
-                    global $gmt;
-                    sql_query("UPDATE " . $NPDS_Prefix . "users SET user_lastvisit='" . (time() + (int) $gmt * 3600) . "' WHERE uname='$username'");
+                    DB::table('users')->where('uname', $username)->update(array(
+                        'user_lastvisit'    => (time() + (int) Config::get('npds.gmt') * 3600),
+                    ));
                 }
             }
         } else {
-            sql_query("INSERT INTO " . $NPDS_Prefix . "session (username, time, host_addr, guest, uri, agent) VALUES ('$username', '" . time() . "', '$ip', '$guest', '$REQUEST_URI', '" . getenv("HTTP_USER_AGENT") . "')");
+            DB::table('session')->insert(array(
+                'username'      => $username,
+                'time'          => time(),
+                'host_addr'     => $ip,
+                'guest'         => $guest,
+                'uri'           => $REQUEST_URI,
+                'agent'         => getenv("HTTP_USER_AGENT"),
+            ));
         }
     }
 }

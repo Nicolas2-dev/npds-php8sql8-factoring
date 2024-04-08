@@ -26,6 +26,7 @@ class Builder
      * The query constraints.
      */
     protected $columns;
+    protected $goupeby;   
 
     protected $distinct = false;
 
@@ -491,6 +492,20 @@ class Builder
     }
 
     /**
+     * 
+     *
+     * @param   [type]  $column  [$column description]
+     *
+     * @return  [type]
+     */
+    function groupeBy($column) {
+        $this->goupeby = $column;
+
+        return $this;
+    }
+
+
+    /**
      * Compute the SQL and parameters for constraints.
      *
      * @return string
@@ -534,6 +549,11 @@ class Builder
             $sql[] = $this->wrap($order['column']) .' ' .$order['direction'];
         }
 
+        // Groupe BY
+        if (! empty($this->goupeby)) {
+            $query .= ' GROUP BY ' . $this->goupeby;
+        }
+
         if (! empty($sql)) {
             $query .= ' ORDER BY ' .implode(', ', $sql);
         }
@@ -546,7 +566,7 @@ class Builder
         if (isset($this->offset)) {
             $query .= ' OFFSET ' .$this->offset;
         }
-
+//vd($query);
         return $query;
     }
 

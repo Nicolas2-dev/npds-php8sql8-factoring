@@ -100,7 +100,7 @@ function sitemaprub($prio)
         // Rubriques
         $tmp .= "<url>\n";
         $tmp .= "<loc>$nuke_url/sections.php?op=viewarticle&amp;artid=$artid</loc>\n";
-        $tmp .= "<lastmod>" . date("Y-m-d", $timestamp) . "</lastmod>\n";
+        $tmp .= "<lastmod>" . date("Y-m-d", (int) $timestamp) . "</lastmod>\n";
         $tmp .= "<changefreq>weekly</changefreq>\n";
         $tmp .= "<priority>$prio</priority>\n";
         $tmp .= "</url>\n\n";

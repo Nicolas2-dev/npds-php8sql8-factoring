@@ -6,6 +6,7 @@ namespace npds\system\auth;
 
 use npds\system\auth\groupe;
 use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 class users
 {
@@ -37,19 +38,20 @@ class users
      */
     public static function getusrinfo(string $user): array
     {
-        global $NPDS_Prefix;
-        
         $cookie = explode(':', base64_decode($user));
-        $result = sql_query("SELECT pass FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
-        list($pass) = sql_fetch_row($result);
         
+        $user = DB::table('users')->select('pass')->where('uname', $cookie[1])->first();
+
         $userinfo = '';
         
-        if (($cookie[2] == md5($pass)) and ($pass != '')) {
-            $result = sql_query("SELECT uid, name, uname, email, femail, url, user_avatar, user_occ, user_from, user_intrest, user_sig, user_viewemail, user_theme, pass, storynum, umode, uorder, thold, noscore, bio, ublockon, ublock, theme, commentmax, user_journal, send_email, is_visible, mns, user_lnl FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
+        if (($cookie[2] == md5($user['pass'])) and ($user['pass'] != '')) {
             
-            if (sql_num_rows($result) == 1) {
-                $userinfo = sql_fetch_assoc($result);
+            $result = DB::table('users')
+                ->select('uid', 'name', 'uname', 'email', 'femail', 'url', 'user_avatar', 'user_occ', 'user_from', 'user_intrest', 'user_sig', 'user_viewemail', 'user_theme', 'pass', 'storynum', 'umode', 'uorder', 'thold', 'noscore', 'bio', 'ublockon', 'ublock', 'theme', 'commentmax', 'user_journal', 'send_email', 'is_visible', 'mns', 'user_lnl')
+                ->where('uname', $cookie[1])->first();
+
+            if ($result) {
+                $userinfo = $result;
             } else {
                 echo '<strong>' . translate("Un problème est survenu") . '.</strong>';
             }
@@ -66,14 +68,15 @@ class users
      */
     public static function AutoReg(): bool
     {
-        global $NPDS_Prefix, $user;
+        global $user;
 
         if (!Config::get('npds.AutoRegUser')) {
             if (isset($user)) {
                 $cookie = explode(':', base64_decode($user));
-                list($test) = sql_fetch_row(sql_query("SELECT open FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'"));
                 
-                if (!$test) {
+                $test = DB::table('users_status')->select('open')->where('uid', $cookie[0])->first();
+
+                if (!$test['uid']) {
                     setcookie('user', '', 0);
                     return false;
                 } else {
@@ -243,6 +246,5 @@ class users
         </ul>
         <div class="mt-3"></div>';
     }
-
 
 }

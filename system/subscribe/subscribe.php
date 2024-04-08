@@ -6,6 +6,7 @@ namespace npds\system\subscribe;
 
 use npds\system\mail\mailler;
 use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 class subscribe
 {
@@ -14,51 +15,75 @@ class subscribe
     /**
      * Assure l'envoi d'un mail pour un abonnement
      *
-     * @param   string  $Xtype    [$Xtype description]
-     * @param   int     $Xtopic   [$Xtopic description]
-     * @param   int|string     $Xforum   [$Xforum description]
-     * @param   string  $Xresume  [$Xresume description]
-     * @param   string  $Xsauf    [$Xsauf description]
+     * @param   string  $Xtype         [$Xtype description]
+     * @param   int|string  $Xtopic    [$Xtopic description]
+     * @param   int|string   $Xforum   [$Xforum description]
+     * @param   string  $Xresume       [$Xresume description]
+     * @param   string  $Xsauf         [$Xsauf description]
      *
      * @return  void
      */
-    public static function subscribe_mail(string $Xtype, int $Xtopic, int|string $Xforum, string $Xresume, string $Xsauf): void
+    public static function subscribe_mail(string $Xtype, int|string $Xtopic, int|string $Xforum, string $Xresume, string $Xsauf): void
     {
         // $Xtype : topic, forum ... / $Xtopic clause WHERE / $Xforum id of forum / $Xresume Text passed / $Xsauf not this userid
-        global $NPDS_Prefix;
 
         $nuke_url = Config::get('npds.nuke_url');
 
         if ($Xtype == 'topic') {
-            $result = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$Xtopic'");
-            list($abo) = sql_fetch_row($result);
-            
-            $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "subscribe WHERE topicid='$Xtopic'");
+            $result  = DB::table('topics')
+                        ->select('topictext')
+                        ->where('topicid', $Xtopic)
+                        ->first();
+
+            $abo = $result['topictext'];
+
+            $result = DB::table('subscribe')
+                        ->select('uid')
+                        ->where('topicid', $Xtopic)
+                        ->get();
         }
 
         if ($Xtype == 'forum') {
-            $result = sql_query("SELECT forum_name, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id='$Xforum'");
-            list($abo, $arbre) = sql_fetch_row($result);
-            
+            $result = DB::table('forums')
+                        ->select('forum_name', 'arbre')
+                        ->where('forum_id', $Xforum)
+                        ->first();
+
+            $abo = $result['forum_name']; 
+            $arbre = $result['arbre'];
+
             if ($arbre) {
                 $hrefX = 'viewtopicH.php';
             } else {
                 $hrefX = 'viewtopic.php';
             }
+
+            $resultZ = DB::table('forumtopics')
+                        ->select('topic_title')
+                        ->where('topic_id', $Xtopic)
+                        ->first();
             
-            $resultZ = sql_query("SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$Xtopic'");
-            list($title_topic) = sql_fetch_row($resultZ);
-            
-            $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "subscribe WHERE forumid='$Xforum'");
+            $title_topic = $resultZ['topic_title'];
+
+            $result = DB::table('subscribe')
+                        ->select('uid')
+                        ->where('forumid', $Xforum)
+                        ->get();
         }
 
-        include_once("library/language/multi-langue.php");
+        include_once("language/multilangue.php");
 
-        while (list($uid) = sql_fetch_row($result)) {
-            if ($uid != $Xsauf) {
-                $resultX = sql_query("SELECT email, user_langue FROM " . $NPDS_Prefix . "users WHERE uid='$uid'");
-                list($email, $user_langue) = sql_fetch_row($resultX);
-                
+        foreach($result as $res) {  
+            
+        if ($res['uid'] != $Xsauf) {
+                $resultX = DB::table('users')
+                                ->select('email', 'user_langue')
+                                ->where('uid', $res['uid'])
+                                ->first();
+
+                $email = $resultX['email'];
+                $user_langue = $resultX['user_langue'];
+
                 if ($Xtype == 'topic') {
                     $entete = translate_ml($user_langue, "Vous recevez ce Mail car vous vous êtes abonné à : ") . translate_ml($user_langue, "Sujet") . " => " . strip_tags($abo) . "\n\n";
                     $resume = translate_ml($user_langue, "Le titre de la dernière publication est") . " => $Xresume\n\n";
@@ -99,17 +124,32 @@ class subscribe
      */
     public static function subscribe_query(string $Xuser, string $Xtype, int $Xclef): bool
     {
-        global $NPDS_Prefix;
-
         if ($Xtype == 'topic') {
-            $result = sql_query("SELECT topicid FROM " . $NPDS_Prefix . "subscribe WHERE uid='$Xuser' AND topicid='$Xclef'");
+            $result = DB::table('subscribe')
+                            ->select('topicid')
+                            ->where('uid', $Xuser)
+                            ->where('topicid', $Xclef)
+                            ->first();
+            if ($result) {
+                $Xtemp = $result['topicid'];
+            } else {
+                $Xtemp = '';
+            }
         }
 
         if ($Xtype == 'forum') {
-            $result = sql_query("SELECT forumid FROM " . $NPDS_Prefix . "subscribe WHERE uid='$Xuser' AND forumid='$Xclef'");
-        }
+            $result = DB::table('subscribe')
+                            ->select('forumid')
+                            ->where('uid', $Xuser)
+                            ->where('forumid', $Xclef)
+                            ->first();
 
-        list($Xtemp) = sql_fetch_row($result);
+            if ($result) {
+                $Xtemp = $result['forumid'];
+            } else {
+                $Xtemp = '';
+            }
+        }
 
         if ($Xtemp != '') {
             return true;

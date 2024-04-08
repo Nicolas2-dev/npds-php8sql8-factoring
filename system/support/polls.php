@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\support;
 
 use npds\system\block\boxe;
+use npds\system\support\facades\DB;
 
 class polls
 {
@@ -18,16 +19,15 @@ class polls
      */
     public static function pollSecur(string|int $pollID): array
     {
-        global $NPDS_Prefix, $user;
+        global $user;
 
         $pollClose = '';
-        $result = sql_query("SELECT pollType FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$pollID'");
+        $result = DB::table('poll_data')->select('pollType')->where('pollID', $pollID)->first();
 
-        if (sql_num_rows($result)) {
-            list($pollType) = sql_fetch_row($result);
+        if ($result) {
             
-            $pollClose = (($pollType / 128) >= 1 ? 1 : 0);
-            $pollType = $pollType % 128;
+            $pollClose = (($result['pollType'] / 128) >= 1 ? 1 : 0);
+            $pollType = $result['pollType'] % 128;
             
             if (($pollType == 1) and !isset($user)) {
                 $pollClose = 99;
@@ -49,8 +49,6 @@ class polls
      */
     public static function PollNewest(?int $id = null): void
     {
-        global $NPDS_Prefix;
-
         // snipe : multi-poll evolution
         if ($id != 0) {
             
@@ -60,10 +58,9 @@ class polls
                 boxe::pollMain($ibid, $pollClose);
             }
 
-        } elseif ($result = sql_query("SELECT pollID FROM " . $NPDS_Prefix . "poll_data ORDER BY pollID DESC LIMIT 1")) {
-            list($pollID) = sql_fetch_row($result);
+        } elseif ($result = DB::table('poll_data')->select('pollID')->orderBy('pollID', 'asc')->limit(1)->first()) {
             
-            list($ibid, $pollClose) = static::pollSecur($pollID);
+            list($ibid, $pollClose) = static::pollSecur($result['pollID']);
             
             if ($ibid) {
                 boxe::pollMain($ibid, $pollClose);

@@ -15,6 +15,7 @@ use npds\system\config\Config;
 use npds\system\utility\crypt;
 use npds\system\support\online;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 class groupe
 {
@@ -28,11 +29,10 @@ class groupe
      */
     public static function valid_group(string $xuser): array
     {
-        global $NPDS_Prefix;
-
         if ($xuser) {
             $userdata = explode(':', base64_decode($xuser));
-            $user_temp = cache::Q_select("SELECT groupe FROM " . $NPDS_Prefix . "users_status WHERE uid='$userdata[0]'", 3600);
+
+            $user_temp = cache::Q_select3(DB::table('users_status')->select('groupe')->where('uid', $userdata[0])->get(), 3600, 'users_status(ui)');
             $groupe = $user_temp[0];
             $tab_groupe = explode(',', $groupe['groupe']);
         } else {
@@ -48,16 +48,14 @@ class groupe
      * @return  array
      */
     public static function liste_group(): array
-    {
-        global $NPDS_Prefix;
-
-        $r = sql_query("SELECT groupe_id, groupe_name FROM " . $NPDS_Prefix . "groupes ORDER BY groupe_id ASC");
+    {  
+        $groupes = DB::table('')->select('groupe_id', 'groupe_name')->orderBy('groupe_id', 'asc')->get();
+        
         $tmp_groupe[0] = '-> ' . adm_translate("Supprimer") . '/' . adm_translate("Choisir un groupe") . ' <-';
         
-        while ($mX = sql_fetch_assoc($r)) {
-            $tmp_groupe[$mX['groupe_id']] = language::aff_langue($mX['groupe_name']);
+        foreach ($groupes as $groupe) {
+            $tmp_groupe[$groupe['groupe_id']] = language::aff_langue($groupe['groupe_name']);
         }
-        sql_free_result($r);
 
         return $tmp_groupe;
     }
@@ -119,10 +117,6 @@ class groupe
      */
     public static function fab_espace_groupe(string $gr, string $t_gr, string $i_gr): string
     {
-        global $NPDS_Prefix;
-        
-        $rsql = sql_fetch_assoc(sql_query("SELECT groupe_id, groupe_name, groupe_description, groupe_forum, groupe_mns, groupe_chat, groupe_blocnote, groupe_pad FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$gr'"));
-
         $content = '
         <script type="text/javascript">
         //<![CDATA[
@@ -141,23 +135,27 @@ class groupe
         $content .= '
         <div id="bloc_ws_' . $gr . '" class="">' . "\n";
         
-        if ($t_gr == 1)
+        $rsql = DB::table('groupes')
+                ->select('groupe_id', 'groupe_name', 'groupe_description', 'groupe_forum', 'groupe_mns', 'groupe_chat', 'groupe_blocnote', 'groupe_pad')
+                ->where('groupe_id', $gr)
+                ->first();
+
+        if ($t_gr == 1) {
             $content .= '<span style="font-size: 120%; font-weight:bolder;">' . language::aff_langue($rsql['groupe_name']) . '</span>' . "\n";
+        }
 
         $content .= '<p>' . language::aff_langue($rsql['groupe_description']) . '</p>' . "\n";
         
-        if (file_exists('storage/users_private/groupe/' . $gr . '/groupe.png') and ($i_gr == 1))
+        if (file_exists('storage/users_private/groupe/' . $gr . '/groupe.png') and ($i_gr == 1)){
             $content .= '<img src="storage/users_private/groupe/' . $gr . '/groupe.png" class="img-fluid mx-auto d-block rounded" alt="' . translate("Groupe") . '" loading="lazy" />';
+        }
         
         //=> liste des membres
         $li_mb = '';
         $li_ic = '';
 
-        $result = mysqli_get_client_info() <= '8.0' ?
-            sql_query("SELECT uid, groupe FROM " . $NPDS_Prefix . "users_status WHERE groupe REGEXP '[[:<:]]" . $gr . "[[:>:]]' ORDER BY uid ASC") :
-            sql_query("SELECT uid, groupe FROM " . $NPDS_Prefix . "users_status WHERE `groupe` REGEXP \"\\\\b$gr\\\\b\" ORDER BY uid ASC;");
-        
-        $nb_mb = sql_num_rows($result);
+        $result = DB::table('users_status')->select('uid', 'groupe')->where('groupe', 'REGEXP', $gr)->orderBy('uid', 'asc')->get();
+        $nb_mb = count($result);
 
         $count = 0;
 
@@ -168,8 +166,11 @@ class groupe
 
         $li_mb .= '
               <ul id="lst_mb_ws_' . $gr . '" class="list-group ul_bloc_ws collapse">';
-        
-        while (list($uid, $groupe) = sql_fetch_row($result)) {
+
+        foreach ($result as $groupe) {
+
+            $uid = $groupe['uid'];
+
             $socialnetworks = array();
             $posterdata_extend = array();
             $res_id = array();
@@ -198,8 +199,11 @@ class groupe
                             if (false !== $k) {
                                 $my_rs .= '<a class="me-2" href="';
 
-                                if ($v1[2] == 'skype') $my_rs .= $v1[1] . $y1[1] . '?chat';
-                                else $my_rs .= $v1[1] . $y1[1];
+                                if ($v1[2] == 'skype') {
+                                    $my_rs .= $v1[1] . $y1[1] . '?chat';
+                                } else {
+                                    $my_rs .= $v1[1] . $y1[1];
+                                }
 
                                 $my_rs .= '" target="_blank"><i class="fab fa-' . $v1[2] . ' fa-lg fa-fw mb-2"></i></a> ';
                                 break;
@@ -207,46 +211,57 @@ class groupe
                         }
                     }
                     $my_rsos[] = $my_rs;
-                } else $my_rsos[] = '';
+                } else {
+                    $my_rsos[] = '';
+                }
             }
 
-            list($uname, $user_avatar, $mns, $url, $femail) = sql_fetch_row(sql_query("SELECT uname, user_avatar, mns, url, femail FROM " . $NPDS_Prefix . "users WHERE uid='$uid'"));
+            $user = DB::table('users')
+                    ->select('uname', 'user_avatar', 'mns', 'url', 'femail')
+                    ->where('uid', $uid)->first();
 
             include('modules/geoloc/config/geoloc.conf');
 
             settype($ch_lat, 'string');
             $useroutils = '';
             
-            if ($uid != 1 and $uid != '')
-                $useroutils .= '<a class="list-group-item text-primary" href="user.php?op=userinfo&amp;uname=' . $uname . '" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Profil") . '</span></a>';
-            
-            if ($uid != 1)
-                $useroutils .= '<a class="list-group-item text-primary" href="powerpack.php?op=instant_message&amp;to_userid=' . $uname . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Message") . '</span></a>';
-            
-            if ($femail != '')
-                $useroutils .= '<a class="list-group-item text-primary" href="mailto:' . spam::anti_spam($femail, 1) . '" target="_blank" title="' . translate("Email") . '" data-bs-toggle="tooltip"><i class="fas fa-at fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Email") . '</span></a>';
-            
-            if ($url != '')
-                $useroutils .= '<a class="list-group-item text-primary" href="' . $url . '" target="_blank" title="' . translate("Visiter ce site web") . '" data-bs-toggle="tooltip"><i class="fas fa-2x fa-external-link-alt align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visiter ce site web") . '</span></a>';
-            
-            if ($mns)
-                $useroutils .= '<a class="list-group-item text-primary" href="minisite.php?op=' . $uname . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visitez le minisite") . '</span></a>';
-            
-            if (!Config::get('npds.short_user'))
-                if ($posterdata_extend[$ch_lat] != '')
-                    $useroutils .= '<a class="list-group-item text-primary" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u' . $uid . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Localisation") . '</span></a>';
+            if ($uid != 1 and $uid != '') {
+                $useroutils .= '<a class="list-group-item text-primary" href="user.php?op=userinfo&amp;uname=' . $user['uname'] . '" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Profil") . '</span></a>';
+            }
 
-            $conn = '<i class="fa fa-plug text-muted" title="' . $uname . ' ' . translate("n'est pas connecté") . '" data-bs-toggle="tooltip" ></i>';
+            if ($uid != 1) {
+                $useroutils .= '<a class="list-group-item text-primary" href="powerpack.php?op=instant_message&amp;to_userid=' . $user['uname'] . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Message") . '</span></a>';
+            }
+
+            if ($user['femail'] != '') {
+                $useroutils .= '<a class="list-group-item text-primary" href="mailto:' . spam::anti_spam($user['femail'], 1) . '" target="_blank" title="' . translate("Email") . '" data-bs-toggle="tooltip"><i class="fas fa-at fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Email") . '</span></a>';
+            }
+
+            if ($user['url'] != '') {
+                $useroutils .= '<a class="list-group-item text-primary" href="' . $user['url'] . '" target="_blank" title="' . translate("Visiter ce site web") . '" data-bs-toggle="tooltip"><i class="fas fa-2x fa-external-link-alt align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visiter ce site web") . '</span></a>';
+            }
+
+            if ($user['mns']) {
+                $useroutils .= '<a class="list-group-item text-primary" href="minisite.php?op=' . $user['uname'] . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visitez le minisite") . '</span></a>';
+            }
+
+            if (!Config::get('npds.short_user')) {
+                if ($posterdata_extend[$ch_lat] != '') {
+                    $useroutils .= '<a class="list-group-item text-primary" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u' . $uid . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Localisation") . '</span></a>';
+                }
+            }
+
+            $conn = '<i class="fa fa-plug text-muted" title="' . $user['uname'] . ' ' . translate("n'est pas connecté") . '" data-bs-toggle="tooltip" ></i>';
             
-            if (!$user_avatar)
+            if (!$user['user_avatar']) {
                 $imgtmp = "assets/images/forum/avatar/blank.gif";
-            else if (stristr($user_avatar, "users_private"))
-                $imgtmp = $user_avatar;
-            else {
-                if ($ibid = theme::theme_image("forum/avatar/$user_avatar")) {
+            } else if (stristr($user['user_avatar'], "users_private")) {
+                $imgtmp = $user['user_avatar'];
+            } else {
+                if ($ibid = theme::theme_image("forum/avatar/". $user['user_avatar'])) {
                     $imgtmp = $ibid;
                 } else {
-                    $imgtmp = "assets/images/forum/avatar/$user_avatar";
+                    $imgtmp = "assets/images/forum/avatar/". $user['user_avatar'];
                 }
 
                 if (!file_exists($imgtmp)) {
@@ -256,32 +271,34 @@ class groupe
 
             $timex = false;
             for ($i = 1; $i <= $tab[0]; $i++) {
-                if ($tab[$i]['username'] == $uname)
+                if ($tab[$i]['username'] == $user['uname']) {
                     $timex = time() - $tab[$i]['time'];
+                }
             }
             
             if (($timex !== false) and ($timex < 60)) {
-                $conn = '<i class="fa fa-plug faa-flash animated text-primary" title="' . $uname . ' ' . translate("est connecté") . '" data-bs-toggle="tooltip" ></i>';
+                $conn = '<i class="fa fa-plug faa-flash animated text-primary" title="' . $user['uname'] . ' ' . translate("est connecté") . '" data-bs-toggle="tooltip" ></i>';
             }
             
             $li_ic .= '<img class="n-smil" src="' . $imgtmp . '" alt="avatar" loading="lazy" />';
             $li_mb .= '
                  <li class="list-group-item list-group-item-action d-flex flex-row p-2">
-                    <div id="li_mb_' . $uname . '_' . $gr . '" class="n-ellipses">
-                       ' . $conn . '<a class="ms-2" tabindex="0" data-bs-title="' . $uname . '" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-content=\'<div class="list-group mb-3">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">';
+                    <div id="li_mb_' . $user['uname'] . '_' . $gr . '" class="n-ellipses">
+                       ' . $conn . '<a class="ms-2" tabindex="0" data-bs-title="' . $user['uname'] . '" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-content=\'<div class="list-group mb-3">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">';
             
             if (!Config::get('npds.short_user')) {
                 $li_mb .= $my_rsos[$count];
             }
             
             $li_mb .= '</div>\'>
-           <img class=" btn-outline-primary img-thumbnail img-fluid n-ava-small " src="' . $imgtmp . '" alt="avatar" title="' . $uname . '" loading="lazy" /></a>
-           <span class="ms-2">' . $uname . '</span>
+           <img class=" btn-outline-primary img-thumbnail img-fluid n-ava-small " src="' . $imgtmp . '" alt="avatar" title="' . $user['uname'] . '" loading="lazy" /></a>
+           <span class="ms-2">' . $user['uname'] . '</span>
      
                     </div>
                  </li>';
             $count++;
         }
+
         $li_mb .= '
               <li style="clear:left;line-height:6px; background:none;">&nbsp;</li>
               <li class="list-group-item" style="clear:left;line-height:24px;padding:6px; margin-top:0px;">' . $li_ic . '</li>
@@ -296,17 +313,20 @@ class groupe
         $nb_for_gr = '';
         
         if ($rsql['groupe_forum'] == 1) {
-            $res_forum = sql_query("SELECT forum_id, forum_name FROM " . $NPDS_Prefix . "forums WHERE forum_pass REGEXP '$gr'");
-            $nb_foru = sql_num_rows($res_forum);
-            
+            $res_forum = DB::table('forums')
+                            ->select('forum_id', 'forum_name')
+                            ->where('forum_pass', 'REGEXP', $gr)
+                            ->get();
+
+            $nb_foru = count($res_forum);
+
             if ($nb_foru >= 1) {
                 $lst_for_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_for_gr_' . $gr . '" class="text-primary" id="show_lst_for_' . $gr . '" title="' . translate("Déplier la liste") . '" ><i id="i_lst_for_gr_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a>';
                 $lst_for .= '<ul id="lst_for_gr_' . $gr . '" class="list-group ul_bloc_ws collapse" style ="list-style-type:none;">';
                 $nb_for_gr = '  <span class="badge bg-secondary float-end">' . $nb_foru . '</span>';
                 
-                while (list($id_fo, $fo_name) = sql_fetch_row($res_forum)) {
-                    $lst_for .= '
-                 <li class="list-group-item list-group-item-action"><a href="viewforum.php?forum=' . $id_fo . '">' . $fo_name . '</a></li>';
+                foreach ($res_forum as $forum) {   
+                    $lst_for .= '<li class="list-group-item list-group-item-action"><a href="viewforum.php?forum=' . $forum['forum_id'] . '">' . $forum['forum_name'] . '</a></li>';
                 }
 
                 $lst_for .= '</ul>';
@@ -323,25 +343,30 @@ class groupe
             settype($lst_doc_tog, 'string');
             
             include("modules/wspad/config/config.php");
-            
-            $docs_gr = sql_query("SELECT page, editedby, modtime, ranq FROM " . $NPDS_Prefix . "wspad WHERE (ws_id) IN (SELECT MAX(ws_id) FROM " . $NPDS_Prefix . "wspad WHERE member='$gr' GROUP BY page) ORDER BY page ASC");
-            $nb_doc = sql_num_rows($docs_gr);
-            
+
+            $wspad = DB::table('wspad')
+                ->select('page', 'editedby', 'modtime', 'ranq')
+                ->where('member', $gr)
+                ->groupeBy('page')
+                ->orderBy('page', 'asc')
+                ->get();
+
+            $nb_doc = count($wspad);
+
             if ($nb_doc >= 1) {
                 $lst_doc_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_doc_gr_' . $gr . '" class="text-primary" id="show_lst_doc_' . $gr . '" title="' . translate("Déplier la liste") . '"><i id="i_lst_doc_gr_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a>';
-                $lst_doc .= '
-              <ul id="lst_doc_gr_' . $gr . '" class="list-group ul_bloc_ws mt-3 collapse">';
+                $lst_doc .= '<ul id="lst_doc_gr_' . $gr . '" class="list-group ul_bloc_ws mt-3 collapse">';
                 $nb_doc_gr = '  <span class="badge bg-secondary float-end">' . $nb_doc . '</span>';
                 
-                while (list($p, $e, $m, $r) = sql_fetch_row($docs_gr)) {
-                    $surlignage = $couleur[str::hexfromchr($e)];
-                    $lst_doc .= '
-                 <li class="list-group-item list-group-item-action px-1 py-3" style="line-height:14px;"><div id="last_editor_' . $p . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernier éditeur") . ' : ' . $e . ' ' . date(translate("dateinternal"), $m) . '" style="float:left; width:1rem; height:1rem; background-color:' . $surlignage . '"></div><i class="fa fa-edit text-muted mx-1" data-bs-toggle="tooltip" title="' . translate("Document co-rédigé") . '." ></i><a href="modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page=' . $p . '&amp;member=' . $gr . '&amp;ranq=' . $r . '">' . $p . '</a></li>';
+                foreach($wspad as $pad) {
+                    $surlignage = $couleur[str::hexfromchr($pad['e'])];
+                    $lst_doc .= '<li class="list-group-item list-group-item-action px-1 py-3" style="line-height:14px;"><div id="last_editor_' . $pad['p'] . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernier éditeur") . ' : ' . $pad['e'] . ' ' . date(translate("dateinternal"), $pad['m']) . '" style="float:left; width:1rem; height:1rem; background-color:' . $surlignage . '"></div><i class="fa fa-edit text-muted mx-1" data-bs-toggle="tooltip" title="' . translate("Document co-rédigé") . '." ></i><a href="modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page=' . $pad['p'] . '&amp;member=' . $gr . '&amp;ranq=' . $pad['r'] . '">' . $pad['p'] . '</a></li>';
                 }
 
                 $lst_doc .= '
               </ul>';
             }
+
             $content .= '
            <hr /><div class="">' . $lst_doc_tog . '<i class="fa fa-edit fa-2x text-muted ms-3 align-middle" title="' . translate("Co-rédaction") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<a class="text-uppercase" href="modules.php?ModPath=wspad&ModStart=wspad&member=' . $gr . '" >' . translate("Co-rédaction") . '</a>' . $nb_doc_gr . $lst_doc . '</div>' . "\n";
         }
@@ -368,29 +393,35 @@ class groupe
         $content .= '<div class="px-1 card card-body d-flex flex-row mt-3 flex-wrap text-center">';
         
         //=> Filemanager
-        if (file_exists('modules/f-manager/config/groupe_' . $gr . '.conf.php'))
+        if (file_exists('modules/f-manager/config/groupe_' . $gr . '.conf.php')) {
             $content .= '<a class="mx-2" href="modules.php?ModPath=f-manager&amp;ModStart=f-manager&amp;FmaRep=groupe_' . $gr . '" title="' . translate("Gestionnaire fichiers") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-folder fa-2x"></i></a>' . "\n";
-        
+        }
+
         //=> Minisite
-        if ($rsql['groupe_mns'] == 1)
+        if ($rsql['groupe_mns'] == 1) {
             $content .= '<a class="mx-2" href="minisite.php?op=groupe/' . $gr . '" target="_blank" title= "' . translate("MiniSite") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-desktop fa-2x"></i></a>';
-        
+        }
+
         //=> Chat
         settype($chat_img, 'string');
         
         if ($rsql['groupe_chat'] == 1) {
             $PopUp = java::JavaPopUp("chat.php?id=$gr&amp;auto=" . crypt::encrypt(serialize($gr)), "chat" . $gr, 380, 480);
             
-            if (array_key_exists('chat_info_' . $gr, $_COOKIE))
-                if ($_COOKIE['chat_info_' . $gr]) $chat_img = 'faa-pulse animated faa-slow';
+            if (array_key_exists('chat_info_' . $gr, $_COOKIE)) {
+                if ($_COOKIE['chat_info_' . $gr]) {
+                    $chat_img = 'faa-pulse animated faa-slow';
+                }
+            }
             
             $content .= '<a class="mx-2" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . translate("Ouvrir un salon de chat pour le groupe.") . '" data-bs-toggle="tooltip" data-bs-placement="right" ><i class="fa fa-comments fa-2x ' . $chat_img . '"></i></a>';
         }
         //=> admin
 
-        if (users::autorisation(-127))
+        if (users::autorisation(-127)) {
             $content .= '<a class="mx-2" href="admin.php?op=groupes" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" class="fa fa-cogs fa-2x"></i></a>';
-        
+        }
+
         $content .= '</div>
         </div>';
         
@@ -407,32 +438,40 @@ class groupe
      */
     public static function fab_groupes_bloc(string $user, string $im): string
     {
-        global $NPDS_Prefix;
-
         $lstgr = array();
         $userdata = explode(':', base64_decode( (string) $user));
-        $result = sql_query("SELECT DISTINCT `groupe` FROM " . $NPDS_Prefix . "`users_status` WHERE `groupe` > 1;");
-        
-        while (list($groupe) = sql_fetch_row($result)) {
-            $pos = strpos($groupe, ',');
+
+        $result = DB::table('users_status')
+                    ->distinct()
+                    ->select('groupe')
+                    ->where('groupe', '>', 1)
+                    ->get();
+
+        foreach ($result as $groupe) {
+
+            $pos = strpos($groupe['groupe'], ',');
             
-            if ($pos === false)
-                $lstgr[] = $groupe;
-            else {
-                $arg = explode(',', $groupe);
+            if ($pos === false) {
+                $lstgr[] = $groupe['groupe'];
+            } else {
+                $arg = explode(',', $groupe['groupe']);
                 foreach ($arg as $v) {
-                    if (!in_array($v, $lstgr, true))
+                    if (!in_array($v, $lstgr, true)) {
                         $lstgr[] = $v;
+                    }
                 }
             }
         }
 
         $ids_gr = join("','", $lstgr);
-        sql_free_result($result);
         
-        $result = sql_query("SELECT groupe_id, groupe_name, groupe_description FROM `" . $NPDS_Prefix . "groupes` WHERE groupe_id IN ('$ids_gr')");
-        $nb_groupes = sql_num_rows($result);
-        
+        $result = DB::table('groupes')
+                        ->select('groupe_id', 'groupe_name', 'groupe_description')
+                        ->where('groupe_id', 'in', $ids_gr)
+                        ->get();
+
+        $nb_groupes = count($result);
+
         $content = '
            <div id="bloc_groupes" class="">
               <ul id="lst_groupes" class="list-group list-group-flush mb-3">
@@ -445,29 +484,30 @@ class groupe
                     <span class="badge bg-primary rounded-pill">' . $nb_groupes . '</span>
                  </li>';
         
-        while (list($groupe_id, $groupe_name, $groupe_description) = sql_fetch_row($result)) {
+        foreach ($result as $groupe) {   
             $content .= '
-                 <li class="list-group-item px-0">' . $groupe_name . '<div class="small">' . $groupe_description . '</div>';
-            $content .= $im == 1 ? '<div class="text-center my-2"><img class="img-fluid" src="storage/users_private/groupe/' . $groupe_id . '/groupe.png" loading="lazy"></div>' : '';
+                 <li class="list-group-item px-0">' . $groupe['groupe_name'] . '<div class="small">' . $groupe['groupe_description'] . '</div>';
+            $content .= $im == 1 ? '<div class="text-center my-2"><img class="img-fluid" src="storage/users_private/groupe/' . $groupe['groupe_id'] . '/groupe.png" loading="lazy"></div>' : '';
             
-            if (!file_exists('storage/users_private/groupe/ask4group_' . $userdata[0] . '_' . $groupe_id . '_.txt') and !users::autorisation($groupe_id))
-                if (!users::autorisation(-1))
-                    $content .= '<div class="text-end small"><a href="user.php?op=askforgroupe&amp;askedgroup=' . $groupe_id . '" title="' . translate('Envoi une demande aux administrateurs pour rejoindre ce groupe. Un message privé vous informera du résultat de votre demande.') . '" data-bs-toggle="tooltip">' . translate('Rejoindre ce groupe') . '</a></div>';
-            
+            if (!file_exists('storage/users_private/groupe/ask4group_' . $userdata[0] . '_' . $groupe['groupe_id'] . '_.txt') and !users::autorisation($groupe['groupe_id'])) {
+                if (!users::autorisation(-1)) {
+                    $content .= '<div class="text-end small"><a href="user.php?op=askforgroupe&amp;askedgroup=' . $groupe['groupe_id'] . '" title="' . translate('Envoi une demande aux administrateurs pour rejoindre ce groupe. Un message privé vous informera du résultat de votre demande.') . '" data-bs-toggle="tooltip">' . translate('Rejoindre ce groupe') . '</a></div>';
+                }
+            }
+
             $content .= '</li>';
         }
 
         $content .= '
               </ul>';
         
-        if (users::autorisation(-127))
+        if (users::autorisation(-127)) {
             $content .= '
               <div class="text-end"><a class="mx-2" href="admin.php?op=groupes" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" data-bs-placement="left" class="fa fa-cogs fa-lg"></i></a></div>';
-        
+        }
+
         $content .= '
            </div>';
-
-        sql_free_result($result);
 
         return $content;
     }

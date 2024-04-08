@@ -8,6 +8,7 @@ use npds\system\auth\users;
 use npds\system\support\str;
 use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 class download
 {
@@ -22,32 +23,34 @@ class download
      */
     public static function topdownload_data(string $form, string $ordre): string
     {
-        global $NPDS_Prefix;
-
         if (!Config::get('npds.theme.long_chain')) {
             Config::set('npds.theme.long_chain', 13);
         }
-
-        //settype($top, 'integer');
-
-        $result = sql_query("SELECT did, dcounter, dfilename, dcategory, ddate, perms FROM " . $NPDS_Prefix . "downloads ORDER BY $ordre DESC LIMIT 0, " .Config::get('npds.top'));
+ 
+        $result = DB::table('downloads')
+                    ->select('did', 'dcounter', 'dfilename', 'dcategory', 'ddate', 'perms')
+                    ->orderBy($ordre, 'desc')
+                    ->limit(Config::get('npds.top'))
+                    ->offset(0)
+                    ->get();
+        
         $lugar = 1;
         $ibid = '';
 
-        while (list($did, $dcounter, $dfilename, $dcategory, $ddate, $dperm) = sql_fetch_row($result)) {
-            if ($dcounter > 0) {
-                $okfile = users::autorisation($dperm);
+        foreach ($result as $download) {    
+            if ($download['dcounter'] > 0) {
+                $okfile = users::autorisation($download['perms']);
                 
                 if ($ordre == 'dcounter') {
-                    $dd = str::wrh($dcounter);
+                    $dd = str::wrh($download['dcounter']);
                 }
                 
                 if ($ordre == 'ddate') {
                     $dd = translate("dateinternal");
 
-                    $day = substr($ddate, 8, 2);
-                    $month = substr($ddate, 5, 2);
-                    $year = substr($ddate, 0, 4);
+                    $day = substr($download['ddate'], 8, 2);
+                    $month = substr($download['ddate'], 5, 2);
+                    $year = substr($download['ddate'], 0, 4);
 
                     $dd = str_replace('d', $day, $dd);
                     $dd = str_replace('m', $month, $dd);
@@ -55,19 +58,29 @@ class download
                     $dd = str_replace("H:i", "", $dd);
                 }
 
-                $ori_dfilename = $dfilename;
+                $ori_dfilename = $download['dfilename'];
                 
-                if (strlen($dfilename) > Config::get('npds.theme.long_chain')) {
-                    $dfilename = (substr($dfilename, 0, Config::get('npds.theme.long_chain'))) . " ...";
+                if (strlen($download['dfilename']) > Config::get('npds.theme.long_chain')) {
+                    $dfilename = (substr($download['dfilename'], 0, Config::get('npds.theme.long_chain'))) . " ...";
                 }
 
                 if ($form == 'short') {
                     if ($okfile) {
-                        $ibid .= '<li class="list-group-item list-group-item-action d-flex justify-content-start p-2 flex-wrap">' . $lugar . ' <a class="ms-2" href="download.php?op=geninfo&amp;did=' . $did . '&amp;out_template=1" title="' . $ori_dfilename . ' ' . $dd . '" >' . $dfilename . '</a><span class="badge bg-secondary ms-auto align-self-center">' . $dd . '</span></li>';
+                        $ibid .= '<li class="list-group-item list-group-item-action d-flex justify-content-start p-2 flex-wrap">' . $lugar . ' 
+                            <a class="ms-2" href="download.php?op=geninfo&amp;did=' . $download['did'] . '&amp;out_template=1" title="' . $ori_dfilename . ' ' . $dd . '" >
+                                ' . $download['dfilename'] . '
+                            </a>
+                            <span class="badge bg-secondary ms-auto align-self-center">' . $dd . '</span>
+                        </li>';
                     }
                 } else {
                     if ($okfile) {
-                        $ibid .= '<li class="ms-4 my-1"><a href="download.php?op=mydown&amp;did=' . $did . '" >' . $dfilename . '</a> (' . translate("Catégorie") . ' : ' . language::aff_langue(stripslashes($dcategory)) . ')&nbsp;<span class="badge bg-secondary float-end align-self-center">' . str::wrh($dcounter) . '</span></li>';
+                        $ibid .= '<li class="ms-4 my-1">
+                            <a href="download.php?op=mydown&amp;did=' . $download['did'] . '" >
+                                ' . $download['dfilename'] . '
+                            </a> (' . translate("Catégorie") . ' : ' . language::aff_langue(stripslashes($download['dcategory'])) . ')&nbsp;
+                            <span class="badge bg-secondary float-end align-self-center">' . str::wrh($download['dcounter']) . '</span>
+                        </li>';
                     }
                 }
 
@@ -76,8 +89,6 @@ class download
                 }
             }
         }
-
-        sql_free_result($result);
 
         return $ibid;
     }

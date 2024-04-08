@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\support;
 
 use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 class counter
 {
@@ -31,52 +32,70 @@ class counter
             and (!stristr($user_agent, "IPHONE")) 
             and (!stristr($user_agent, "IPOD")) 
             and (!stristr($user_agent, "IPAD")) 
-            and (!stristr($user_agent, "ANDROID"))) 
+            and (!stristr($user_agent, "ANDROID"))) {
                 $browser = "Netscape";
-            elseif (stristr($user_agent, "MSIE")) 
+            } elseif (stristr($user_agent, "MSIE")) {
                 $browser = "MSIE";
-            elseif (stristr($user_agent, "Trident")) 
+            } elseif (stristr($user_agent, "Trident")) {
                 $browser = "MSIE";
-            elseif (stristr($user_agent, "Lynx")) 
+            } elseif (stristr($user_agent, "Lynx")) {
                 $browser = "Lynx";
-            elseif (stristr($user_agent, "Opera")) 
+            } elseif (stristr($user_agent, "Opera")) {
                 $browser = "Opera";
-            elseif (stristr($user_agent, "WebTV")) 
+            } elseif (stristr($user_agent, "WebTV")) {
                 $browser = "WebTV";
-            elseif (stristr($user_agent, "Konqueror")) 
+            } elseif (stristr($user_agent, "Konqueror")) {
                 $browser = "Konqueror";
-            elseif (stristr($user_agent, "Chrome")) 
+            } elseif (stristr($user_agent, "Chrome")) {
                 $browser = "Chrome";
-            elseif (stristr($user_agent, "Safari")) 
+            } elseif (stristr($user_agent, "Safari")) {
                 $browser = "Safari";
-            elseif (preg_match('#([bB]ot|[sS]pider|[yY]ahoo)#', $user_agent)) 
+            } elseif (preg_match('#([bB]ot|[sS]pider|[yY]ahoo)#', $user_agent)) {
                 $browser = "Bot";
-            else 
+            } else {
                 $browser = "Other";
+            }
 
-            if (stristr($user_agent, "Win")) 
+            if (stristr($user_agent, "Win")) {
                 $os = "Windows";
-            elseif ((stristr($user_agent, "Mac")) 
-            || (stristr($user_agent, "PPC"))) 
+            } elseif ((stristr($user_agent, "Mac")) || (stristr($user_agent, "PPC"))) {
                 $os = "Mac";
-            elseif (stristr($user_agent, "Linux")) 
+            } elseif (stristr($user_agent, "Linux")) {
                 $os = "Linux";
-            elseif (stristr($user_agent, "FreeBSD")) 
+            } elseif (stristr($user_agent, "FreeBSD")) {
                 $os = "FreeBSD";
-            elseif (stristr($user_agent, "SunOS")) 
+            } elseif (stristr($user_agent, "SunOS")) {
                 $os = "SunOS";
-            elseif (stristr($user_agent, "IRIX")) 
+            } elseif (stristr($user_agent, "IRIX")) {
                 $os = "IRIX";
-            elseif (stristr($user_agent, "BeOS")) 
+            } elseif (stristr($user_agent, "BeOS")) {
                 $os = "BeOS";
-            elseif (stristr($user_agent, "OS/2")) 
+            } elseif (stristr($user_agent, "OS/2")) {
                 $os = "OS/2";
-            elseif (stristr($user_agent, "AIX")) 
+            } elseif (stristr($user_agent, "AIX")) {
                 $os = "AIX";
-            else 
+            } else {
                 $os = "Other";
+            }
+            // sql_query("UPDATE " . $NPDS_Prefix . "counter 
+            // SET count=count+1 
+            // WHERE (type='total' AND var='hits') 
+            // OR (var='$browser' AND type='browser') 
+            // OR (var='$os' AND type='os')");
+            
+            /// BUG !!!! conpte double sur count+1
+            $data = array(
+                'count' => DB::raw('count+1')
+            );
 
-            sql_query("UPDATE " . $NPDS_Prefix . "counter SET count=count+1 WHERE (type='total' AND var='hits') OR (var='$browser' AND type='browser') OR (var='$os' AND type='os')");
+            DB::table('counter')
+            		->where('type', 'total')
+                    ->where('var', 'hits')
+                    //->orWhere('type', '=', 'browser')
+                    ->orWhere('var', '=', $browser)
+                    //->orWhere('type', '=', 'os')                    
+                    ->orWhere('var', '=', $os)
+                    ->update($data);
         }
     }
 }

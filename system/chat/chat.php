@@ -12,32 +12,43 @@ use npds\system\support\str;
 use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\utility\crypt;
+use npds\system\support\facades\DB;
 
 class chat
 {
 
-    #autodoc if_chat() : Retourne le nombre de connecté au Chat
-    public static function if_chat($pour)
+    /**
+     * Retourne le nombre de connecté au Chat
+     *
+     * @param   string  $pour  [$pour description]
+     *
+     * @return  string
+     */
+    public static function if_chat(string $pour): string 
     {
-        global $NPDS_Prefix;
-
         $auto = block::autorisation_block("params#" . $pour);
         $dimauto = count( (array) $auto);
         $numofchatters = 0;
 
         if ($dimauto <= 1) {
-            $result = sql_query("SELECT DISTINCT ip FROM " . $NPDS_Prefix . "chatbox WHERE id='" . $auto[0] . "' AND date >= " . (time() - (60 * 3)) . "");
-            $numofchatters = sql_num_rows($result);
+            $numofchatters = DB::table('chatbox')->distinct()->select('ip')->where('id', $auto[0])->where('date', '>=', (time() - (60 * 3)))->count();
         }
 
         return $numofchatters;
     }
 
-    #autodoc insertChat($username, $message, $dbname, $id) : Insère un record dans la table Chat / on utilise id pour filtrer les messages - id = l'id du groupe
-    public static function insertChat($username, $message, $dbname, $id)
+    /**
+     * Insère un record dans la table Chat / on utilise id pour filtrer les messages - id = l'id du groupe
+     *
+     * @param   string  $username  [$username description]
+     * @param   string  $message   [$message description]
+     * @param   int     $dbname    [$dbname description]
+     * @param   int     $id        [$id description]
+     *
+     * @return  void
+     */
+    public static function insertChat(string $username, string $message, int $dbname, int $id) : void
     {
-        global $NPDS_Prefix;
-
         if ($message != '') {
             $username = hack::removeHack(stripslashes(str::FixQuotes(strip_tags(trim($username)))));
             $message =  hack::removeHack(stripslashes(str::FixQuotes(strip_tags(trim($message)))));
@@ -47,14 +58,31 @@ class chat
             settype($id, 'integer');
             settype($dbname, 'integer');
 
-            $result = sql_query("INSERT INTO " . $NPDS_Prefix . "chatbox VALUES ('" . $username . "', '" . $ip . "', '" . $message . "', '" . time() . "', '$id', " . $dbname . ")");
+            DB::table('chatbox')->insert(array(
+                'username'  => $username,
+                'ip'        => $ip,
+                'message'   => $message,
+                'date'      => time(),
+                'ip'        => $id,
+                'dbname'    => $dbname,
+            ));
         }
     }
 
-    #autodoc makeChatBox($pour) : Bloc ChatBox <br />=> syntaxe : function#makeChatBox <br />params#chat_membres <br /> le parametre doit être en accord avec l'autorisation donc (chat_membres, chat_tous, chat_admin, chat_anonyme)
-    public static function makeChatBox($pour)
+    /**
+     * Bloc ChatBox
+     * syntaxe : function#makeChatBox
+     * params#chat_membres
+     * 
+     * le parametre doit être en accord avec l'autorisation donc (chat_membres, chat_tous, chat_admin, chat_anonyme)
+     *
+     * @param   string  $pour  [$pour description]
+     *
+     * @return  void
+     */
+    public static function makeChatBox(string $pour): void
     {
-        global $user, $admin, $NPDS_Prefix;
+        global $user, $admin;
 
         $auto = (array) block::autorisation_block('params#' . $pour);
         $dimauto = count($auto);
@@ -67,31 +95,36 @@ class chat
         $une_ligne = false;
 
         if ($dimauto <= 1) {
-            $counter = sql_num_rows(sql_query("SELECT message FROM " . $NPDS_Prefix . "chatbox WHERE id='" . $auto[0] . "'")) - 6;
-            
+            $counter = DB::table('chatbox')->select('message')->where('id', $auto[0])->get();
+
             if ($counter < 0) {
                 $counter = 0;
             }
 
-            $result = sql_query("SELECT username, message, dbname FROM " . $NPDS_Prefix . "chatbox WHERE id='" . $auto[0] . "' ORDER BY date ASC LIMIT $counter,6");
-            
+            $result = DB::table('chatbox')
+                        ->select('username', 'message', 'dbname')
+                        ->where('id', $auto[0])
+                        ->orderBy('date', 'asc')
+                        ->limit(6)
+                        ->offset($counter)
+                        ->get();
+
             if ($result) {
-                while (list($username, $message, $dbname) = sql_fetch_row($result)) {
-                    
-                    if (isset($username)) {
-                        if ($dbname == 1) {
+                foreach($result as $chatbox) {  
+                    if (isset($chatbox['username'])) {
+                        if ($chatbox['dbname'] == 1) {
                             $thing .= ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) ?
-                                '<span class="">' . substr($username, 0, 8) . '.</span>' :
-                                "<a href=\"user.php?op=userinfo&amp;uname=$username\">" . substr($username, 0, 8) . ".</a>";
+                                '<span class="">' . substr($chatbox['username'], 0, 8) . '.</span>' :
+                                "<a href=\"user.php?op=userinfo&amp;uname=" . $chatbox['username'] ."\">" . substr($chatbox['username'], 0, 8) . ".</a>";
                         } else {
-                            $thing .= '<span class="">' . substr($username, 0, 8) . '.</span>';
+                            $thing .= '<span class="">' . substr($chatbox['username'], 0, 8) . '.</span>';
                         }
                     }
 
                     $une_ligne = true;
-                    $thing .= (strlen($message) > Config::get('npds.theme.long_chain'))  ?
-                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($message, 0, Config::get('npds.theme.long_chain')))) . " </span><br />\n" :
-                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes($message)) . " </span><br />\n";
+                    $thing .= (strlen($chatbox['message']) > Config::get('npds.theme.long_chain'))  ?
+                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($chatbox['message'], 0, Config::get('npds.theme.long_chain')))) . " </span><br />\n" :
+                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes($chatbox['message'])) . " </span><br />\n";
                 }
             }
 
@@ -101,8 +134,12 @@ class chat
                 $thing .= '<hr />';
             }
 
-            $result = sql_query("SELECT DISTINCT ip FROM " . $NPDS_Prefix . "chatbox WHERE id='" . $auto[0] . "' AND date >= " . (time() - (60 * 2)) . "");
-            $numofchatters = sql_num_rows($result);
+            $numofchatters = DB::table('chatbox')
+                                ->distinct()
+                                ->select('ip')
+                                ->where('id', $auto[0])
+                                ->where('date', '>=', (time() - (60 * 2)))
+                                ->count();
 
             $thing .= $numofchatters > 0 ?
                 '<div class="d-flex"><a id="' . $pour . '_encours" class="fs-4" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . translate("Cliquez ici pour entrer") . ' ' . $pour . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-comments fa-2x nav-link faa-pulse animated faa-slow"></i></a><span class="badge rounded-pill bg-primary ms-auto align-self-center" title="' . translate("personne connectée.") . '" data-bs-toggle="tooltip">' . $numofchatters . '</span></div>' :
@@ -113,17 +150,16 @@ class chat
                 $thing .= '<ul>';
                 
                 foreach ($auto as $autovalue) {
-                    $result = cache::Q_select("SELECT groupe_id, groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$autovalue'", 3600);
-                    $autovalueX = $result[0];
 
-                    $PopUp = java::JavaPopUp("chat.php?id=" . $autovalueX['groupe_id'] . "&auto=" . crypt::encrypt(serialize($autovalueX['groupe_id'])), "chat" . $autovalueX['groupe_id'], 380, 480);
-                    $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">" . $autovalueX['groupe_name'] . "</a>";
+                    $autovalueX = cache::Q_select3(DB::table('groupes')->select('groupe_id', 'groupe_name')->where('groupe_id', $autovalue)->get(), 3600, 'groupe(groupr_id)');
 
-                    $result = sql_query("SELECT DISTINCT ip FROM " . $NPDS_Prefix . "chatbox WHERE id='" . $autovalueX['groupe_id'] . "' AND date >= " . (time() - (60 * 3)) . "");
-                    $numofchatters = sql_num_rows($result);
+                    $PopUp = java::JavaPopUp("chat.php?id=" . $autovalueX[0]['groupe_id'] . "&auto=" . crypt::encrypt(serialize($autovalueX[0]['groupe_id'])), "chat" . $autovalueX[0]['groupe_id'], 380, 480);
+                    $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">" . $autovalueX[0]['groupe_name'] . "</a>";
                     
+                    $numofchatters = DB::table('chatbox')->distinct()->select('ip')->where('id', $autovalueX[0]['groupe_id'])->where('date', '>=', (time() - (60 * 3)))->count();
+
                     if ($numofchatters) {
-                        $thing .= '&nbsp;(<span class="text-danger"><b>' . sql_num_rows($result) . '</b></span>)';
+                        $thing .= '&nbsp;(<span class="text-danger"><b>' . $numofchatters . '</b></span>)';
                     }
 
                     echo '</li>';
@@ -138,8 +174,6 @@ class chat
         }
 
         themesidebox($block_title, $thing);
-
-        sql_free_result($result);
     }
 
 }

@@ -3,6 +3,25 @@
 use npds\system\logs\logs;
 use npds\system\news\gzfile;
 use npds\system\news\zipfile;
+use npds\system\config\Config;
+
+
+if (! function_exists('siteUrl'))
+{
+    /**
+     * 
+     *
+     * @param   string  $url  [$url description]
+     *
+     * @return  string
+     */
+    function siteUrl(string $url): string
+    {
+        $url = ltrim($url, '/');
+
+        return Config::get('npds.nuke_url') .'/'. $url;
+    }
+}
 
 
 if (! function_exists('Admin_alert'))

@@ -55,6 +55,8 @@ if (!isset($query)) {
 
 include("themes/default/header.php");
 
+$topic = (isset($topic) ? $topic : '');
+
 if ($topic > 0) {
     $result = sql_query("SELECT topicimage, topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
     list($topicimage, $topictext) = sql_fetch_row($result);

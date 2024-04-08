@@ -134,15 +134,14 @@ class news
         
         if ($type_req == 'index') {
             $Xstorynum = $storynum * $coef;
-        //    $result = cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
-           $result = cache::Q_select2(DB::table('stories')
+            
+            //$result = cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
+            $result = cache::Q_select2(DB::table('stories')
                 ->where('ihome', '!=', 1)
                 ->where('archive', 0)
                 ->limit($Xstorynum)
                 ->orderBy('sid', 'desc')
                 ->get(array('sid', 'catid', 'ihome')), 3600, $type_req);
-
-    //var_dump($result);
            
             $Znum = $storynum;
         }
@@ -160,7 +159,7 @@ class news
         }
 
         if ($type_req == 'libre') {
-            $Xstorynum = $oldnum * $coef; //need for what ?
+            $Xstorynum = (int) $oldnum * $coef; //need for what ?
             $result = cache::Q_select("SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories $sel", 3600);
             $Znum = $oldnum;
         }
@@ -226,6 +225,131 @@ class news
 
         return $tab;
     }
+
+
+    /**
+     * Une des fonctions fondamentales de NPDS
+     * assure la gestion de la selection des News en fonctions des critères de publication
+     *
+     * @param   string  $type_req  [$type_req description]
+     * @param   string  $sel       [$sel description]
+     * @param   string             [ description]
+     * @param   int     $storynum  [$storynum description]
+     * @param   string             [ description]
+     * @param   int     $oldnum    [$oldnum description]
+     *
+     * @return  array
+     */
+    public static function news_aff2(string $type_req, string|array|DB $sel, string|int $storynum, string|int $oldnum): array
+    { // pas stabilisé ...!
+        global $NPDS_Prefix;
+        
+        // Astuce pour afficher le nb de News correct même si certaines News ne sont pas visibles (membres, groupe de membres)
+        // En fait on * le Nb de News par le Nb de groupes
+        // $row_Q2 = cache::Q_select("SELECT COUNT(groupe_id) AS total FROM " . $NPDS_Prefix . "groupes", 86400);
+        // $NumG = $row_Q2[0];
+
+        // if ($NumG['total'] < 2) {
+        //     $coef = 2;
+        // } else {
+        //     $coef = $NumG['total'];
+        // }
+
+        settype($storynum, "integer");
+        
+        if ($type_req == 'index') {
+            //$Xstorynum = $storynum * $coef;
+
+            $result = cache::Q_select3($sel, 3600, $type_req);
+           
+            $Znum = $storynum;
+        }
+
+        if ($type_req == 'old_news') {
+            //      $Xstorynum=$oldnum*$coef;
+            $result = cache::Q_select("SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories $sel ORDER BY time DESC LIMIT $storynum", 3600);
+            $Znum = $oldnum;
+        }
+
+        if (($type_req == 'big_story') or ($type_req == 'big_topic')) {
+            //      $Xstorynum=$oldnum*$coef;
+            $result = cache::Q_select("SELECT sid, catid, ihome, counter FROM " . $NPDS_Prefix . "stories $sel ORDER BY counter DESC LIMIT $storynum", 0);
+            $Znum = $oldnum;
+        }
+
+        if ($type_req == 'libre') {
+            //$Xstorynum = $oldnum * $coef; //need for what ?
+
+            $result = cache::Q_select3($sel, 3600, $type_req);
+
+            $Znum = $oldnum;
+        }
+
+        if ($type_req == 'archive') {
+            //$Xstorynum = $oldnum * $coef; //need for what ?
+            
+            $result = cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel", 3600);
+            $Znum = $oldnum;
+        }
+
+        $ibid = 0;
+        settype($tab, 'array');
+
+        foreach ($result as $myrow) {
+
+            $s_sid = $myrow['sid'];
+            $catid = $myrow['catid'];
+            $ihome = $myrow['ihome'];
+           
+            if (array_key_exists('time', $myrow)){
+                $time = $myrow['time'];}
+
+            if ($ibid == $Znum) {
+                break;
+            }
+
+            if ($type_req == "libre") {
+                $catid = 0;
+            }
+
+            if ($type_req == "archive") {
+                $ihome = 0;
+            }
+            
+            if (static::ctrl_aff($ihome, $catid)) {
+                if (($type_req == "index") or ($type_req == "libre")) {
+                    $result2 = sql_query("SELECT sid, catid, aid, title, time, hometext, bodytext, comments, counter, topic, informant, notes FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='0'");
+                }
+                
+                if ($type_req == "archive") {
+                    $result2 = sql_query("SELECT sid, catid, aid, title, time, hometext, bodytext, comments, counter, topic, informant, notes FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='1'");
+                }
+                
+                if ($type_req == "old_news") {
+                    $result2 = sql_query("SELECT sid, title, time, comments, counter FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='0'");
+                }
+                
+                if (($type_req == "big_story") or ($type_req == "big_topic")) {
+                    $result2 = sql_query("SELECT sid, title FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='0'");
+                }
+
+                $tab[$ibid] = sql_fetch_row($result2);
+                
+                if (is_array($tab[$ibid])) {
+                    $ibid++;
+                }
+                
+                sql_free_result($result2);
+            }
+        }
+
+        //@sql_free_result($result);
+
+        return $tab;
+    }
+
+
+
 
     /**
      * [automatednews description]

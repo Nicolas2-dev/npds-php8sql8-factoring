@@ -1027,13 +1027,13 @@ class boxe
     /**
      * Construit le bloc sondage
      *
-     * @param   string  $pollID     [$pollID description]
+     * @param   int  $pollID     [$pollID description]
      * @param   string              [ description]
      * @param   int     $pollClose  [$pollClose description]
      *
      * @return  void
      */
-    public static function pollMain(string $pollID, string|int $pollClose): void
+    public static function pollMain(int $pollID, string|int $pollClose): void
     {
         global $NPDS_Prefix, $boxTitle, $boxContent;
 

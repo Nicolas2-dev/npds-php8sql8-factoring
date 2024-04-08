@@ -6,8 +6,10 @@ namespace npds\system\block;
 
 use npds\system\auth\users;
 use npds\system\auth\groupe;
+use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 
 class block
@@ -103,13 +105,13 @@ class block
      * @param   string  $title    [$title description]
      * @param   string  $member   [$member description]
      * @param   string  $content  [$content description]
-     * @param   string  $Xcache   [$Xcache description]
+     * @param   int     $Xcache   [$Xcache description]
      *
      * @return  void
      */
-    public static function fab_block(string $title, string $member, string $content, string $Xcache): void
+    public static function fab_block(string $title, string $member, string $content, int $Xcache): void
     {
-        global $SuperCache, $CACHE_TIMINGS;
+        global $CACHE_TIMINGS;
         
         // Multi-Langue
         $title = language::aff_langue($title);
@@ -145,7 +147,7 @@ class block
 
         $content = (string) language::aff_langue($content);
         
-        if (($SuperCache) and ($Xcache != 0)) {
+        if ((Config::get('cache.config.SuperCache')) and ($Xcache != 0)) {
             $cache_clef = md5($content);
             $CACHE_TIMINGS[$cache_clef] = $Xcache;
             $cache_obj = new cacheManager();
@@ -154,7 +156,7 @@ class block
             $cache_obj = new SuperCacheEmpty();
         }
 
-        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache) or ($Xcache == 0)) {
+        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!Config::get('cache.config.SuperCache')) or ($Xcache == 0)) {
             global $user, $admin;
             // For including CLASS AND URI in Block
             global $B_class_title, $B_class_content;
@@ -308,7 +310,7 @@ class block
                 }
             }
 
-            if (($SuperCache) and ($Xcache != 0)) {
+            if ((Config::get('cache.config.SuperCache')) and ($Xcache != 0)) {
                 $cache_obj->endCachingBlock($cache_clef);
             }
         }
@@ -368,36 +370,36 @@ class block
      */
     public static function Pre_fab_block(string $Xid, string $Xblock, string $moreclass): void
     {
-        global $NPDS_Prefix, $htvar; // modif Jireck
+        global $htvar; // modif Jireck
 
         if ($Xid) {
-            $result = $Xblock == 'RB' 
-                ? sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "rblocks WHERE id='$Xid'") 
-                : sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "lblocks WHERE id='$Xid'");
+            $result = (($Xblock == 'RB') 
+                ? DB::table('rblocks')->select('title', 'content', 'member', 'cache', 'actif', 'id', 'css')->where('id', $Xid)->get()
+                : DB::table('lblocks')->select('title', 'content', 'member', 'cache', 'actif', 'id', 'css')->where('id', $Xid)->get()
+            );
         } else {
-            $result = $Xblock == 'RB' 
-                ? sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "rblocks ORDER BY Rindex ASC") 
-                : sql_query("SELECT title, content, member, cache, actif, id, css FROM " . $NPDS_Prefix . "lblocks ORDER BY Lindex ASC");
+            $result = (($Xblock == 'RB') 
+                ? DB::table('rblocks')->select('title', 'content', 'member', 'cache', 'actif', 'id', 'css')->orderBy('Rindex', 'asc')->get()
+                : DB::table('lblocks')->select('title', 'content', 'member', 'cache', 'actif', 'id', 'css')->orderBy('Lindex', 'asc')->get()
+            );
         }
 
         global $bloc_side;
 
         $bloc_side = $Xblock == 'RB' ? 'RIGHT' : 'LEFT';
 
-        while (list($title, $content, $member, $cache, $actif, $id, $css) = sql_fetch_row($result)) {
-            if (($actif) or ($Xid)) {
-                if ($css == 1) {
-                    $htvar = '<div class="' . $moreclass . '" id="' . $Xblock . '_' . $id . '">'; // modif Jireck
+        foreach ($result as $block) {
+            if (($block['actif']) or ($Xid)) {
+                if ($block['css'] == 1) {
+                    $htvar = '<div class="' . $moreclass . '" id="' . $Xblock . '_' . $block['id'] . '">'; // modif Jireck
                 } else {
                     $htvar = '<div class="' . $moreclass . ' ' . strtolower($bloc_side) . 'bloc">'; // modif Jireck
                 }
 
-                static::fab_block($title, $member, $content, $cache);
+                static::fab_block($block['title'], $block['member'], $block['content'], $block['cache']);
                 // echo "</div>"; // modif Jireck
             }
         }
-
-        sql_free_result($result);
     }
  
     /**
@@ -410,21 +412,17 @@ class block
      */
     public static function niv_block(string $Xcontent): string 
     {
-        global $NPDS_Prefix;
+        $result = DB::table('rblocks')->select('member', 'actif')->where('content', 'REGEXP', $Xcontent)->first();
 
-        $result = sql_query("SELECT member, actif FROM " . $NPDS_Prefix . "rblocks WHERE content REGEXP '$Xcontent'");
-        if (sql_num_rows($result)) {
-            list($member, $actif) = sql_fetch_row($result);
-            return ($member . ',' . $actif);
+        if ($result) {
+            return ($result['member'] . ',' . $result['actif']);
         }
 
-        $result = sql_query("SELECT member, actif FROM " . $NPDS_Prefix . "lblocks WHERE content REGEXP '$Xcontent'");
-        if (sql_num_rows($result)) {
-            list($member, $actif) = sql_fetch_row($result);
-            return ($member . ',' . $actif);
+        $result = DB::table('lblocks')->select('member', 'actif')->where('content', 'REGEXP', $Xcontent)->first();
+        
+        if ($result) {
+            return ($result['member'] . ',' . $result['actif']);
         }
-
-        sql_free_result($result);
     }
  
     /**

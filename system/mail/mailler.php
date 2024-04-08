@@ -10,6 +10,7 @@ use npds\system\utility\spam;
 use PHPMailer\PHPMailer\SMTP;
 use npds\system\config\Config;
 use PHPMailer\PHPMailer\PHPMailer;
+use npds\system\support\facades\DB;
 use PHPMailer\PHPMailer\Exception as MaillerExecption;
 
 class mailler
@@ -175,13 +176,10 @@ class mailler
      */
     public static function copy_to_email(int $to_userid, string $sujet, string $message): void
     {
-        global $NPDS_Prefix;
-        
-        $result = sql_query("SELECT email,send_email FROM " . $NPDS_Prefix . "users WHERE uid='$to_userid'");
-        list($mail, $avertir_mail) = sql_fetch_row($result);
-        
-        if (($mail) and ($avertir_mail == 1)) {
-            static::send_email($mail, $sujet, $message, '', true, 'html', '');
+        $user = DB::table('users')->select('email', 'send_email')->where('uid', $to_userid)->first();
+
+        if (($user['mail']) and ($user['send_mail'] == 1)) {
+            static::send_email($user['mail'], $sujet, $message, '', true, 'html', '');
         }
     }
  
@@ -242,13 +240,24 @@ class mailler
      */
     public static function Mess_Check_Mail_Sub(string $username, string $class): string
     {
-        global $NPDS_Prefix, $user;
+        global $user;
         
         if ($username) {
             $userdata = explode(':', base64_decode($user));
-            $total_messages = sql_num_rows(sql_query("SELECT msg_id FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '$userdata[0]' AND type_msg='0'"));
-            $new_messages = sql_num_rows(sql_query("SELECT msg_id FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '$userdata[0]' AND read_msg='0' AND type_msg='0'"));
+
+            $total_messages = DB::table('priv_msgs')
+                                ->select('msg_id')
+                                ->where('to_userid', $userdata[0])
+                                ->where('type_msg', 0)
+                                ->count();
             
+            $new_messages = DB::table('priv_msgs')
+                                ->select('msg_id')
+                                ->where('to_userid', $userdata[0])
+                                ->where('read_msg', 0)
+                                ->where('type_msg', 0)
+                                ->count();
+
             if ($total_messages > 0) {
                 if ($new_messages > 0) {
                     $Xcheck_Nmail = $new_messages;

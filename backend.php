@@ -15,11 +15,13 @@ declare(strict_types=1);
 
 use npds\system\date\date;
 use npds\system\news\news;
+use npds\system\cache\cache;
 use npds\system\config\Config;
 use npds\system\feed\FeedItem;
 use npds\system\feed\FeedImage;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 use npds\system\feed\UniversalFeedCreator;
 
 include('boot/bootstrap.php');
@@ -52,7 +54,17 @@ function fab_feed($type, $filename, $timeout)
 
     $storyhome = Config::get('npds.storyhome');
 
-    $xtab = news::news_aff('index', "WHERE ihome='0' AND archive='0'", $storyhome, '');
+    $xtab = news::news_aff2('index',
+        DB::table('stories')
+            ->select('sid', 'catid', 'ihome')
+            ->where('ihome', 0)
+            ->where('archive', 0)
+            ->limit($storyhome)
+            ->orderBy('sid', 'desc')
+            ->get(), 
+        $storyhome, 
+        '');
+
     $story_limit = 0;
     
     while (($story_limit < $storyhome) and ($story_limit < sizeof($xtab))) {

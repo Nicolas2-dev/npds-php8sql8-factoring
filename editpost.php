@@ -145,7 +145,7 @@ if ($submitS) {
         $indice = sql_num_rows(sql_query("SELECT post_id FROM " . $NPDS_Prefix . "posts WHERE post_idH='$post_id'"));
 
         if (!$indice) {
-            $r DB::table('posts')->where('post_id', $post_id)->delete();
+            $r = DB::table('posts')->where('post_id', $post_id)->delete();
 
             if (!$r) {
                 forum::forumerror('0001');

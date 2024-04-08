@@ -6,8 +6,10 @@ namespace npds\system\language;
 
 use npds\system\theme\theme;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 use npds\system\language\metafunction;
 
@@ -130,9 +132,9 @@ class metalang
      */
     public static function charg_metalang(): array
     {
-        global $SuperCache, $CACHE_TIMINGS, $REQUEST_URI, $NPDS_Prefix;
+        global $CACHE_TIMINGS, $REQUEST_URI;
 
-        if ($SuperCache) {
+        if (Config::get('cache.SuperCache')) {
             $racine = parse_url(basename($REQUEST_URI));
             $cache_clef = "[metalang]==>" . $racine['path'] . ".common";
             $CACHE_TIMINGS[$cache_clef] = 86400;
@@ -142,34 +144,40 @@ class metalang
             $cache_obj = new SuperCacheEmpty();
         }
 
-        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+        if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!Config::get('cache.SuperCache'))) {
 
             settype($glossaire, 'array');
 
-            $result = sql_query("SELECT def, content, type_meta, type_uri, uri FROM " . $NPDS_Prefix . "metalang WHERE type_meta='mot' OR type_meta='meta' OR type_meta='smil'");
+            $result = DB::table('metalang')
+                        ->select('def', 'content', 'type_meta', 'type_uri', 'uri')
+                        ->where('type_meta', 'mot')
+                        ->orWhere('type_meta', 'meta')
+                        ->orWhere('type_meta', 'smil')
+                        ->get();          
+ 
+            foreach  ($result as $meta) {
             
-            while (list($def, $content, $type_meta, $type_uri, $uri) = sql_fetch_row($result)) {
                 // la syntaxe est presque la même que pour les blocs (on n'utilise que la racine de l'URI)
                 // si type_uri="-" / uri site les URIs où les meta-mot NE seront PAS actifs (tous sauf ...)
                 // si type_uri="+" / uri site les URI où les meta-mot seront actifs (seulement ...)
                 // Le séparateur entre les URI est l'ESPACE
                 // => Exemples : index.php user.php forum.php static.php
 
-                if ($uri != '') {
-                    $match = static::match_uri($racine['path'], $uri);
+                if ($meta['uri'] != '') {
+                    $match = static::match_uri($racine['path'], $meta['uri']);
                     
-                    if (($match and $type_uri == "+") or (!$match and $type_uri == "-")) {
-                        $glossaire[$def]['content'] = $content;
-                        $glossaire[$def]['type'] = $type_meta;
+                    if (($match and $meta['type_uri'] == "+") or (!$match and $meta['type_uri'] == "-")) {
+                        $glossaire[$meta['def']]['content'] = $meta['content'];
+                        $glossaire[$meta['def']]['type'] = $meta['type_meta'];
                     }
                 } else {
-                    $glossaire[$def]['content'] = $content;
-                    $glossaire[$def]['type'] = $type_meta;
+                    $glossaire[$meta['def']]['content'] = $meta['content'];
+                    $glossaire[$meta['def']]['type'] = $meta['type_meta'];
                 }
             }
         }
 
-        if ($SuperCache) {
+        if (Config::get('cache.SuperCache')) {
             $cache_obj->endCachingObjet($cache_clef, $glossaire);
         }
 

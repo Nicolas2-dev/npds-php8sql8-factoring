@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\cookie;
 
 use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 class cookie
 {
@@ -18,8 +19,6 @@ class cookie
      */    
     public static function cookiedecode(string $user): array|bool
     {
-        global $NPDS_Prefix;
-
         $stop = false;
 
         if (array_key_exists("user", $_GET)) {
@@ -40,14 +39,20 @@ class cookie
             settype($cookie[0], "integer");
             
             if (trim($cookie[1]) != '') {
-                $result = sql_query("SELECT pass, user_langue FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
-                
-                if (sql_num_rows($result) == 1) {
-                    list($pass, $user_langue) = sql_fetch_row($result);
-                    
-                    if (($cookie[2] == md5($pass)) and ($pass != '')) {
-                        if (Config::get('npds.language') != $user_langue) {
-                            sql_query("UPDATE " . $NPDS_Prefix . "users SET user_langue='". Config::get('npds.language') ."' WHERE uname='$cookie[1]'");
+
+                $users = DB::table('users')
+                        ->select('pass', 'user_langue')
+                        ->where('uname', $cookie[1])
+                        ->first();
+
+                if ($users) {
+
+                    if (($cookie[2] == md5($users['pass'])) and ($users['pass'] != '')) {
+                        
+                        if (Config::get('npds.language') != $users['user_langue']) {
+                            DB::table('users')->where('uname', $cookie[1])->update(array(
+                                'user_langue'       => Config::get('npds.language'),
+                            ));
                         }
 
                         return $cookie;

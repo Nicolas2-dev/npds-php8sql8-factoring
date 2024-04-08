@@ -661,7 +661,7 @@ if ($forum_access != 9) {
     }
 
     if ((($Mmod) or ($original_poster == $userdata[0])) and (!$lock_state)) {
-        $sec_clef = md5($forum . $topic . md5(Config::get('npds.NPDS_Key')));
+        $sec_clef = md5($forum . $topic . md5(Config::get('app.NPDS_Key')));
         echo '<p><a href="viewforum.php?forum=' . $forum . '&amp;topic_id=' . $topic . '&amp;topic_title=' . rawurlencode($topic_subject) . '&amp;op=solved&amp;sec_clef=' . $sec_clef . '"><i class="fa fa-lock fa-2x align-middle me-1"></i>' . translate("Résolu") . '</a></p>';
         
         unset($sec_clef);

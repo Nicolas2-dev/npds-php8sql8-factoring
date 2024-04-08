@@ -1350,10 +1350,12 @@ class form_handler
     // If the first char of $mess_ok is : ! => the button is hidden
     function sform_browse_mysql($pas, $mess_passwd, $mess_ok, $presentation = '')
     {
-        global $NPDS_Prefix;
+        $result = DB::table('sform')->select('key_value', 'passwd')
+                ->where('id_form', $this->form_title)
+                ->where('id_key', $this->form_key)
+                ->orderBy('key_value',  'asc')
+                ->get();
 
-        $result = sql_query("SELECT key_value, passwd FROM " . $NPDS_Prefix . "sform WHERE id_form='" . $this->form_title . "' AND id_key='" . $this->form_key . "' ORDER BY key_value ASC");
-        
         echo "<form action=\"" . $this->url . "\" method=\"post\" name=\"browse\" enctype=\"multipart/form-data\">";
         echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" class=\"ligna\"><tr><td>";
         echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" class=\"lignb\">";
@@ -1366,23 +1368,23 @@ class form_handler
         }
 
         $ibid = 0;
-        while (list($key_value, $passwd) = sql_fetch_row($result)) {
+        foreach ($result as $res) { 
             if ($ibid == 0) {
                 echo "<tr class=\"ligna\">";
             }
 
             $ibid++;
 
-            if ($passwd != "") {
-                $red = "<span class=\"text-danger\">$key_value (v)</span>";
+            if ($res['passwd'] != "") {
+                $red = "<span class=\"text-danger\">" . $res['key_value'] ."(v)</span>";
             } else {
-                $red = "$key_value";
+                $red = $res['key_value'];
             }
 
             if ($presentation == "liste") {
-                echo "<td><a href=\"" . $this->url . "&amp;" . $this->submit_value . "=$mess_ok&amp;browse_key=" . urlencode($key_value) . "\" class=\"noir\">$key_value</a></td>";
+                echo "<td><a href=\"" . $this->url . "&amp;" . $this->submit_value . "=$mess_ok&amp;browse_key=" . urlencode($res['key_value']) . "\" class=\"noir\">". $res['key_value'] ."</a></td>";
             } else {
-                echo "<td><input type=\"radio\" name=\"browse_key\" value=\"" . urlencode($key_value) . "\"> $red</td>";
+                echo "<td><input type=\"radio\" name=\"browse_key\" value=\"" . urlencode($res['key_value']) . "\"> $red</td>";
             }
 
             if ($ibid >= $pas) {
@@ -1407,13 +1409,18 @@ class form_handler
     /**************************************************************************************/
     function sform_read_mysql($clef)
     {
-        global $NPDS_Prefix;
-
         if ($clef != '') {
             $clef = urldecode($clef);
-            $result = sql_query("SELECT content FROM " . $NPDS_Prefix . "sform WHERE id_form='" . $this->form_title . "' AND id_key='" . $this->form_key . "' AND key_value='" . addslashes($clef) . "' AND passwd='" . $this->form_password_access . "' ORDER BY key_value ASC");
-            $tmp = sql_fetch_assoc($result);
             
+            $tmp = DB::table('sform')
+                ->select('content')
+                ->where('id_form', $this->form_title)
+                ->where('id_key', $this->form_key)
+                ->where('key_value', addslashes($clef))
+                ->where('passwd', $this->form_password_access)
+                ->orderBy('key_value', 'asc')
+                ->get();
+
             if ($tmp) {
                 $ibid = explode("\n", $tmp['content']);
                 
@@ -1432,12 +1439,16 @@ class form_handler
     /**************************************************************************************/
     function sform_insert_mysql($response)
     {
-        global $NPDS_Prefix;
-
         $content = $this->write_sform_data($response);
-        $sql = "INSERT INTO " . $NPDS_Prefix . "sform (id_form, id_key, key_value, passwd, content) ";
-        $sql .= "VALUES ('" . $this->form_title . "', '" . $this->form_key . "', '" . $this->form_key_value . "', '" . $this->form_password_access . "', '$content')";
         
+        DB::table('sform')->insert(array(
+            'id_form'       => $this->form_title,
+            'id_key'        => $this->form_key,
+            'key_value'     => $this->form_key_value,
+            'passwd'        => $this->form_password_access,
+            'content'       => $content,
+        ));
+
         if (!$result = sql_query($sql)) {
             return ("Error Sform : Insert DB");
         }
@@ -1455,11 +1466,17 @@ class form_handler
     /**************************************************************************************/
     function sform_modify_mysql($response)
     {
-        global $NPDS_Prefix;
-
         $content = $this->write_sform_data($response);
-        $sql = "UPDATE " . $NPDS_Prefix . "sform SET passwd='" . $this->form_password_access . "', content='$content' WHERE (id_form='" . $this->form_title . "' AND id_key='" . $this->form_key . "' AND key_value='" . $this->form_key_value . "')";
-        
+
+        DB::table('sform')
+            ->where('id_form', $this->form_title)
+            ->where('id_key', $this->form_key)
+            ->where('key_value', $this->form_key_value)
+            ->update(array(
+                'passwd'        => $this->form_password_access,
+                'content'       => $content,
+        ));
+
         if (!$result = sql_query($sql)) {
             return ("Error Sform : Update DB");
         }
@@ -1468,12 +1485,17 @@ class form_handler
     /**************************************************************************************/
     function sform_read_mysql_XML($clef)
     {
-        global $NPDS_Prefix;
-
         if ($clef != "") {
             $clef = urldecode($clef);
-            $result = sql_query("SELECT content FROM " . $NPDS_Prefix . "sform WHERE id_form='" . $this->form_title . "' AND id_key='" . $this->form_key . "' AND key_value='$clef' AND passwd='" . $this->form_password_access . "' ORDER BY key_value ASC");
-            $tmp = sql_fetch_assoc($result);
+
+            $tmp = DB::table('sform')
+                ->select('content')
+                ->where('id_form', $this->form_title)
+                ->where('id_key', $this->form_key)
+                ->where('key_value', $clef)
+                ->where('passwd', $this->form_password_access)
+                ->orderBy('key_value', 'asc')
+                ->first();
 
             $analyseur_xml = xml_parser_create();
 

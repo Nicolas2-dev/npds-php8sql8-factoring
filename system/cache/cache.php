@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace npds\system\cache;
 
 use npds\system\config\Config;
-use npds\system\cache\SuperCacheEmpty;
 use npds\system\cache\CacheManager;
+use npds\system\support\facades\DB;
+use npds\system\cache\SuperCacheEmpty;
 
 
 class cache
@@ -164,7 +165,7 @@ class cache
     }
 
 
-    public static function Q_Select3(array $Xquery, int $retention = 3600, string $type_req): array
+    public static function Q_Select3(string|array|DB $Xquery, int $retention = 3600, string $type_req): array
     {
         global $cache_obj;
         

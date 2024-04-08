@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 use npds\system\assets\css;
+use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\utility\crypt;
 

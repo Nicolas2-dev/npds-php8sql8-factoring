@@ -196,14 +196,17 @@ function show_imm($op)
 
 function sup_imm($msg_id)
 {
-    global $cookie, $NPDS_Prefix;
+    global $cookie;
 
     if (!$cookie) {
         Header("Location: user.php");
     } else {
-        DB::table('priv_msgs')->where('msg_id', $msg_id)->where('to_userid', $cookie[0])->delete();
+        $r = DB::table('priv_msgs')
+                ->where('msg_id', $msg_id)
+                ->where('to_userid', $cookie[0])
+                ->delete();
 
-        if (!sql_query($sql)) {
+        if (!$r) {
             forum::forumerror('0021');
         }
     }
