@@ -94,17 +94,31 @@ class boxe
         $result = sql_query("SELECT time FROM " . $NPDS_Prefix . "session WHERE username='$username'");
         $ctime = time();
 
+       // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if ($row = sql_fetch_row($result)) {
             sql_query("UPDATE " . $NPDS_Prefix . "session SET username='$username', time='$ctime', host_addr='$ip', guest='$guest' WHERE username='$username'");
+
+            // DB::table('')->where('', )->update(array(
+            //     ''       => ,
+            // ));
         } else {
             sql_query("INSERT INTO " . $NPDS_Prefix . "session (username, time, host_addr, guest) VALUES ('$username', '$ctime', '$ip', '$guest')");
+
+
+           // = DB::table('')->select()->where('', )->orderBy('')->get();
         }
 
         $result = sql_query("SELECT username FROM " . $NPDS_Prefix . "session WHERE guest=1");
         $guest_online_num = sql_num_rows($result);
 
+        //= DB::table('')->select()->where('', )->orderBy('')->get();
+
+
         $result = sql_query("SELECT username FROM " . $NPDS_Prefix . "session WHERE guest=0");
         $member_online_num = sql_num_rows($result);
+
+       // = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $who_online_num = $guest_online_num + $member_online_num;
         $who_online = '<p class="text-center">' . translate("Il y a actuellement") . ' <span class="badge bg-secondary">' . $guest_online_num . '</span> ' . translate("visiteur(s) et") . ' <span class="badge bg-secondary">' . $member_online_num . ' </span> ' . translate("membre(s) en ligne.") . '<br />';
@@ -112,8 +126,13 @@ class boxe
 
         if ($user) {
             $content .= '<br />' . translate("Vous êtes connecté en tant que") . ' <strong>' . $username . '</strong>.<br />';
+            
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+            
             $result = cache::Q_select("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$username'", 86400);
             $uid = $result[0];
+
+           // = DB::table('')->select()->where('', )->orderBy('')->get();
 
             $result2 = sql_query("SELECT to_userid FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $uid['uid'] . "' AND type_msg='0'");
             $numrow = sql_num_rows($result2);
@@ -197,11 +216,20 @@ class boxe
         $bloc_foncts_A = '';
 
         if ($admin) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$aid' LIMIT 1"));
 
             $R = (($Q['radminsuper'] == 1) 
                 ? sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f WHERE f.finterface =1 AND f.fetat != '0' ORDER BY f.fcategorie") 
+
+               // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 : sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f LEFT JOIN " . $NPDS_Prefix . "droits d ON f.fdroits1 = d.d_fon_fid LEFT JOIN " . $NPDS_Prefix . "authors a ON d.d_aut_aid =a.aid WHERE f.finterface =1 AND fetat!=0 AND d.d_aut_aid='$aid' AND d.d_droits REGEXP'^1' ORDER BY f.fcategorie")
+            
+               // = DB::table('')->select()->where('', )->orderBy('')->get();
+            
             );
 
             while ($SAQ = sql_fetch_assoc($R)) {
@@ -256,6 +284,9 @@ class boxe
             $result = sql_query("SELECT title, content FROM " . $NPDS_Prefix . "block WHERE id=2");
             list($title, $content) = sql_fetch_row($result);
 
+          //  = DB::table('')->select()->where('', )->orderBy('')->get();
+
+
             global $block_title;
             $title = $title == '' ? $block_title : language::aff_langue($title);
             $content = language::aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#', [str::class, 'changetoampadm'], $content));
@@ -270,8 +301,18 @@ class boxe
             $versus_info = explode('|', $messages_npds[0]);
             if ($versus_info[1] == Config::get('versioning.Version_Sub') and $versus_info[2] == Config::get('versioning.Version_Num')) {
                 sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . Config::get('versioning.Version_Sub') . " " . Config::get('versioning.Version_Num') . "', furlscript='' WHERE fid='36'");
+           
+                // DB::table('')->where('', )->update(array(
+                //     ''       => ,
+                // ));
+           
             } else {
                 sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
+            
+                // DB::table('')->where('', )->update(array(
+                //     ''       => ,
+                // ));
+            
             }
 
             $content .= '
@@ -567,10 +608,13 @@ class boxe
         }
 
         //$sel =  "WHERE ihome=0"; // en dur pour test
-        
-        $query_res = $query->orderBy('time', 'desc')->limit($storynum)->get();
 
-        $xtab = news::news_aff2('old_news', $query_res, $storynum, Config::get('npds.oldnum'));
+        $xtab = news::news_aff2('old_news', 
+            $query->orderBy('time', 'desc')
+                    ->limit($storynum)
+                    ->get(), 
+            $storynum, 
+            Config::get('npds.oldnum'));
         
         $vari = 0;        
         $story_limit = 0;
@@ -580,8 +624,12 @@ class boxe
         $locale = Config::get('npds.locale');
 
         while (($story_limit < Config::get('npds.oldnum')) and ($story_limit < sizeof($xtab))) {
-            list($sid, $title, $time, $comments, $counter) = $xtab[$story_limit];
-            $story_limit++;
+            
+            $sid        = $xtab[$story_limit]['sid']; 
+            $title      = $xtab[$story_limit]['title']; 
+            $time       = $xtab[$story_limit]['time']; 
+            $comments   = $xtab[$story_limit]['comments']; 
+            $counter    = $xtab[$story_limit]['counter'];
 
             $datetime2 = ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring2"), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
 
@@ -633,6 +681,8 @@ class boxe
                     </a>
                 </li>\n";
             }
+
+            $story_limit++;
         }
 
         $boxstuff .= '</ul>';
@@ -655,6 +705,8 @@ class boxe
      */
     public static function bigstory(): void
     {
+        global $cookie;
+
         $content = '';
         $today = getdate();
         $day = $today['mday'];
@@ -671,10 +723,27 @@ class boxe
 
         $year = $today['year'];
         $tdate = "$year-$month-$day";
-        $xtab = news::news_aff("big_story", "WHERE (time LIKE '%$tdate%')", 1, 1);
+
+        if (isset($cookie[3])) {
+            $storynum = $cookie[3];
+        } else {
+            $storynum = Config::get('npds.storyhome');
+        }
+
+        $xtab = news::news_aff2("big_story", 
+            DB::table('stories')
+                ->select('sid', 'catid', 'ihome', 'counter')
+                ->where('time', 'LIKE', '%'.$tdate.'%')
+                ->orderBy('counter', 'desc')
+                ->limit($storynum)
+                ->get(),
+            1,
+            1
+        );
 
         if (sizeof($xtab)) {
-            list($fsid, $ftitle) = $xtab[0];
+            $fsid   = $xtab[0]['sid']; 
+            $ftitle = $xtab[0]['title'];
         } else {
             $fsid = '';
             $ftitle = '';

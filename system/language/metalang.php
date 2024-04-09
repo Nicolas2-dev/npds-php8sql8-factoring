@@ -8,7 +8,6 @@ use npds\system\theme\theme;
 use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\security\hack;
-use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 use npds\system\language\metafunction;

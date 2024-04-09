@@ -1,16 +1,18 @@
 <?php
 declare(strict_types=1);
 
+use npds\system\auth\users;
+use npds\system\support\str;
+use npds\system\auth\authors;
+use npds\system\utility\spam;
 use npds\system\config\Config;
 use npds\system\cookie\cookie;
 use npds\system\app\AliasLoader;
 use npds\system\session\session;
 use npds\system\database\Manager;
+use npds\system\security\protect;
 use npds\system\language\language;
 use npds\system\language\metalang;
-use npds\system\support\str;
-use npds\system\utility\spam;
-use npds\system\security\protect;
 use npds\system\exception\ExceptionHandler;
 
 // Load autolad
@@ -69,11 +71,7 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     }
 
     // extract cookie user
-    if (isset($user)) {
-        $ibid = explode(':', base64_decode($user));
-        array_walk($ibid, [protect::class, 'url']);
-        $user = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
-    }
+    $user = users::extractUser();
 
     // extract cookie user_language
     if (isset($user_language)) {
@@ -83,6 +81,8 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     }
 
     // extract cookie admin
+    $admin = authors::extractAdmin();
+
     if (isset($admin)) {
         $ibid = explode(':', base64_decode($admin));
         array_walk($ibid, [protect::class, 'url']);
@@ -118,8 +118,7 @@ ExceptionHandler::initialize(true);
 AliasLoader::initialize();
 
 // initialisation de la database 
-$db = Manager::getInstance();
-$db->connection()->setFetchMode(PDO::FETCH_ASSOC);
+with(Manager::getInstance())->connection()->setFetchMode(PDO::FETCH_ASSOC);
 
 // Multi-language
 if (file_exists('storage/language/langcode.php')) {
@@ -174,10 +173,7 @@ $NPDS_Prefix = '';
 // controle de la connection admin 
 require_once("auth.inc.php");
 
-// extract les donnée du cookie user ! va disparaitre prochainement !!!!
-if (isset($user)) {
-    $cookie = cookie::cookiedecode($user);
-}
+$cookie = users::cookieUser();
 
 // inbitilisation de la session
 session::session_manage();
@@ -188,6 +184,7 @@ $tab_langue = language::make_tab_langue();
 // gestion metalang a revoir !!!!
 global $meta_glossaire;
 $meta_glossaire = metalang::charg_metalang();
+
 
 // initilisation du time zone A revoir avec la estion des dates a finaliser !!!!
 if (function_exists("date_default_timezone_set")) {

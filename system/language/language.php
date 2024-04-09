@@ -263,15 +263,13 @@ class language
      * $s (séparateur - | _) , 
      * $c=> 0 ou 1 (requis)
      *
-     * @param   string      [ description]
-     * @param   int     $l  [$l description]
-     * @param   string  $s  [$s description]
-     * @param   string      [ description]
-     * @param   int     $c  [$c description]
+     * @param   string|int  $l  [$l description]
+     * @param   string|int  $s  [$s description]
+     * @param   string|int  $c  [$c description]
      *
      * @return  string
      */
-    public static function language_iso(string|int $l, string $s, string|int $c): string
+    public static function language_iso(string|int $l, string|int $s, string|int $c): string
     {
         global $user_language;
 

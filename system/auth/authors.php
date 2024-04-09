@@ -4,11 +4,57 @@ declare(strict_types=1);
 
 namespace npds\system\auth;
 
+use npds\system\cookie\cookie;
+use npds\system\security\protect;
 use npds\system\support\facades\DB;
 
 class authors
 {
  
+    /**
+     * 
+     *
+     * @return  string
+     */
+    public static function extractAdmin(): string 
+    {
+        $admin = cookie::extratCookie('admin');
+
+        if (isset($admin)) {
+            $ibid = explode(':', base64_decode($admin));
+            array_walk($ibid, [protect::class, 'url']);
+            $admin = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($admin))));
+        }
+
+        return $admin;
+    }
+
+    /**
+     * 
+     *
+     * @return  string
+     */
+    public static function getAdmin(): string
+    {
+        return static::extractAdmin();
+    }
+
+    /**
+     * 
+     *
+     * @return  array
+     */
+    public static function cookieAdmin():array|bool
+    {
+        $user = static::extractAdmin();
+
+        if (isset($user)) {
+            return cookie::cookiedecode($user);
+        }
+
+        return false;
+    }
+
     /**
      * Phpnuke compatibility functions
      *

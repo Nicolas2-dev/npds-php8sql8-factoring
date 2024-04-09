@@ -37,6 +37,8 @@ function PrintPage($oper, $DB, $nl, $sid)
 
     $aff = true;
     if ($oper == 'news') {
+
+        //"SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories
         $xtab = news::news_aff('libre', "WHERE sid='$sid'", 1, 1);
         list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[0];
         
@@ -49,6 +51,8 @@ function PrintPage($oper, $DB, $nl, $sid)
     }
 
     if ($oper == 'archive') {
+
+        //"SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel"
         $xtab = news::news_aff('archive', "WHERE sid='$sid'", 1, 1);
         list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[0];
         

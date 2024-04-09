@@ -6,10 +6,56 @@ namespace npds\system\auth;
 
 use npds\system\auth\groupe;
 use npds\system\config\Config;
+use npds\system\cookie\cookie;
+use npds\system\security\protect;
 use npds\system\support\facades\DB;
 
 class users
 {
+
+    /**
+     * 
+     *
+     * @return  string
+     */
+    public static function extractUser(): string  
+    {
+        $user = cookie::extratCookie('user');
+
+        if (isset($user)) {
+            $ibid = explode(':', base64_decode($user));
+            array_walk($ibid, [protect::class, 'url']);
+            $user = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
+        }
+
+        return $user;
+    }
+
+    /**
+     * 
+     *
+     * @return  string
+     */
+    public static function getUser(): string
+    {
+        return static::extractUser();
+    }
+
+    /**
+     * 
+     *
+     * @return  array
+     */
+    public static function cookieUser():array|bool
+    {
+        $user = static::extractUser();
+
+        if (isset($user)) {
+            return cookie::cookiedecode($user);
+        }
+
+        return false;
+    }
 
     /**
      * Phpnuke compatibility functions

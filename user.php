@@ -789,6 +789,8 @@ function userinfo($uname)
         </div>
         <h4 class="my-3">' . translate("Les derniers articles de") . ' ' . $uname . '.</h4>
         <div id="last_article_by" class="card card-body mb-3">';
+
+    //"SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories
     $xtab = news::news_aff("libre", "WHERE informant='$uname' ORDER BY sid DESC LIMIT 10", '', 10);
 
     $story_limit = 0;
@@ -1483,7 +1485,7 @@ function savehome($uid, $uname, $theme, $storynum, $ublockon, $ublock)
 
     if (($check == $uname) and ($uid == $vuid)) {
         $ublockon = $ublockon ? 1 : 0;
-        $ublock = hack::removeHack(FixQuotes($ublock));
+        $ublock = hack::removeHack(str::FixQuotes($ublock));
 
         sql_query("UPDATE " . $NPDS_Prefix . "users SET storynum='$storynum', ublockon='$ublockon', ublock='$ublock' WHERE uid='$uid'");
 

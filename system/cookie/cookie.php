@@ -11,6 +11,22 @@ class cookie
 {
 
     /**
+     * 
+     *
+     * @param   string  $name  [$name description]
+     *
+     * @return  string
+     */
+    public static function extratCookie(string $name): string
+    {
+        if (!empty($_COOKIE)) {
+            extract($_COOKIE, EXTR_OVERWRITE);
+        }
+
+        return $$name;
+    }
+
+    /**
      * Décode le cookie membre et vérifie certaines choses (password)
      *
      * @param   string  $user  [$user description]

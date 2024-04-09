@@ -111,8 +111,8 @@ class block
      * @return  void
      */
     public static function fab_block(string $title, string $member, string $content, int $Xcache): void
-    {
-        //global $CACHE_TIMINGS;
+    { 
+        global $user, $admin, $B_class_title, $B_class_content, $REQUEST_URI;
         
         // Multi-Langue
         $title = language::aff_langue($title);
@@ -158,9 +158,8 @@ class block
         }
 
         if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!Config::get('cache.config.SuperCache')) or ($Xcache == 0)) {
-            global $user, $admin;
+            
             // For including CLASS AND URI in Block
-            global $B_class_title, $B_class_content;
             $B_class_title = '';
             $B_class_content = '';
             $R_uri = '';
@@ -189,8 +188,7 @@ class block
 
             // For BLOC URIs
             if ($R_uri) {
-                global $REQUEST_URI;
-
+          
                 $page_ref = basename($REQUEST_URI);
                 $tab_uri = explode(" ", $R_uri);
                 $R_content = false;

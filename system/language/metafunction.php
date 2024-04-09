@@ -390,7 +390,7 @@ class metafunction
             crypt::encrypt('stories(title)')
         );
     
-        return "<a href=\"". siteUrl('article.php?sid='.$arg)."\">" . $rowQ[0]['title'] . "</a>";
+        return "<a href=\"". site_url('article.php?sid='.$arg)."\">" . $rowQ[0]['title'] . "</a>";
     }
     
     /**

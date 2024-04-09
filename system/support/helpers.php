@@ -6,7 +6,7 @@ use npds\system\news\zipfile;
 use npds\system\config\Config;
 
 
-if (! function_exists('siteUrl'))
+if (! function_exists('site_url'))
 {
     /**
      * 
@@ -15,7 +15,7 @@ if (! function_exists('siteUrl'))
      *
      * @return  string
      */
-    function siteUrl(string $url): string
+    function site_url(string $url): string
     {
         $url = ltrim($url, '/');
 
@@ -324,5 +324,22 @@ if (! function_exists('array_set'))
         $array[$key] = $value;
 
         return $array;
+    }
+}
+
+/**
+ * 
+ */
+if (! function_exists('with'))
+{
+    /**
+     * Return the given object. Useful for chaining.
+     *
+     * @param  mixed  $object
+     * @return mixed
+     */
+    function with($object)
+    {
+        return $object;
     }
 }
