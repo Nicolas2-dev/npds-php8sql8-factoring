@@ -30,11 +30,11 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if ($SuperCache) {
-    $cache_obj = new cacheManager();
-} else {
-    $cache_obj = new SuperCacheEmpty();
-}
+// if ($SuperCache) {
+//     $cache_obj = new cacheManager();
+// } else {
+//     $cache_obj = new SuperCacheEmpty();
+// }
 
 include('auth.php');
 
@@ -504,13 +504,13 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         <i class="fa fa-lock fa-lg text-danger"></i> = ' . translate("Ce sujet est verrouillé : il ne peut accueillir aucune nouvelle contribution.") . '<br />
     </blockquote>';
 
-    if ($SuperCache) {
-        $cache_clef = "forum-jump-to";
-        $CACHE_TIMINGS[$cache_clef] = 3600;
-        $cache_obj->startCachingBlock($cache_clef);
-    }
+    // if ($SuperCache) {
+    //     $cache_clef = "forum-jump-to";
+    //     $CACHE_TIMINGS[$cache_clef] = 3600;
+    //     $cache_obj->startCachingBlock($cache_clef);
+    // }
 
-    if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+    // if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
 
         echo '
         <form class="my-3" action="viewforum.php" method="post">
@@ -547,11 +547,11 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
             </div>
         </form>';
         include("themes/default/footer.php");
-    }
+    //}
     
-    if ($SuperCache) {
-        $cache_obj->endCachingBlock($cache_clef);
-    }
+    // if ($SuperCache) {
+    //     $cache_obj->endCachingBlock($cache_clef);
+    // }
 } else {
     header("location: forum.php");
 }

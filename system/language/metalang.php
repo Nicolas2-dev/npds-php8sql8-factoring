@@ -116,7 +116,7 @@ class metalang
         $tab_uri = explode(' ', $R_uri);
         
         foreach ($tab_uri as $RR_uri) {
-            //   while (list(,$RR_uri)=each($tab_uri)) {
+        // while (list(,$RR_uri)=each($tab_uri)) {
             if ($racine == $RR_uri) {
                 return true;
             }
@@ -149,14 +149,13 @@ class metalang
 
             settype($glossaire, 'array');
 
-            $result = DB::table('metalang')
+            foreach  (DB::table('metalang')
                         ->select('def', 'content', 'type_meta', 'type_uri', 'uri')
                         ->where('type_meta', 'mot')
                         ->orWhere('type_meta', 'meta')
                         ->orWhere('type_meta', 'smil')
-                        ->get();          
- 
-            foreach  ($result as $meta) {
+                        ->get() as $meta) 
+            {
             
                 // la syntaxe est presque la même que pour les blocs (on n'utilise que la racine de l'URI)
                 // si type_uri="-" / uri site les URIs où les meta-mot NE seront PAS actifs (tous sauf ...)

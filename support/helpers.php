@@ -443,17 +443,19 @@ if (! function_exists('RecentForumPosts'))
     /**
      * [RecentForumPosts description]
      *
-     * @param   [type] $title          [$title description]
-     * @param   [type] $maxforums      [$maxforums description]
-     * @param   [type] $maxtopics      [$maxtopics description]
-     * @param   [type] $displayposter  [$displayposter description]
-     * @param   false  $topicmaxchars  [$topicmaxchars description]
-     * @param   [type] $hr             [$hr description]
-     * @param   false  $decoration     [$decoration description]
+     * @param   string  $title          [$title description]
+     * @param   int     $maxforums      [$maxforums description]
+     * @param   int     $maxtopics      [$maxtopics description]
+     * @param   bool    $displayposter  [$displayposter description]
+     * @param   false                   [ description]
+     * @param   int     $topicmaxchars  [$topicmaxchars description]
+     * @param   bool    $hr             [$hr description]
+     * @param   false                   [ description]
+     * @param   string  $decoration     [$decoration description]
      *
-     * @return  [type]                 [return description]
+     * @return  [type]                  [return description]
      */
-    function RecentForumPosts($title, $maxforums, $maxtopics, $displayposter = false, $topicmaxchars = 15, $hr = false, $decoration = '') {
+    function RecentForumPosts(string $title, int $maxforums, int $maxtopics, bool $displayposter = false, int $topicmaxchars = 15, bool $hr = false, string $decoration = '') {
         return forum::RecentForumPosts($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
     }
 }
@@ -463,17 +465,17 @@ if (! function_exists('RecentForumPosts_fab'))
     /**
      * [RecentForumPosts_fab description]
      *
-     * @param   [type]  $title          [$title description]
-     * @param   [type]  $maxforums      [$maxforums description]
-     * @param   [type]  $maxtopics      [$maxtopics description]
-     * @param   [type]  $displayposter  [$displayposter description]
-     * @param   [type]  $topicmaxchars  [$topicmaxchars description]
-     * @param   [type]  $hr             [$hr description]
-     * @param   [type]  $decoration     [$decoration description]
+     * @param   string  $title          [$title description]
+     * @param   int     $maxforums      [$maxforums description]
+     * @param   int     $maxtopics      [$maxtopics description]
+     * @param   bool    $displayposter  [$displayposter description]
+     * @param   int     $topicmaxchars  [$topicmaxchars description]
+     * @param   bool    $hr             [$hr description]
+     * @param   string  $decoration     [$decoration description]
      *
      * @return  [type]                  [return description]
      */
-    function RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration) {
+    function RecentForumPosts_fab(string $title, int $maxforums, int $maxtopics, bool $displayposter,int $topicmaxchars, bool $hr, string $decoration) {
         return forum::RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
     }
 }

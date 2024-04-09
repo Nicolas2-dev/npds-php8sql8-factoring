@@ -57,7 +57,24 @@ class block
 
                 // En fonction du nombre de params de la fonction : limite actuelle : 8
                 if (function_exists($contentII)) {
+                    
+                    // provisoire le tmp de finaliser le typage correcte de tout les block
+                    if ($contentII === 'RecentForumPosts') {
+                        $prm_type = array();
+                        foreach ($prm as $_prm) {
+                            if (is_numeric($_prm)) {
+                                $prm_type[] = (int) $_prm;
+                            } elseif (is_bool($_prm)) {
+                                $prm_type[] = (bool) $_prm;
+                            } elseif (is_string($_prm)) {
+                                $prm_type[] = (string) $_prm;
+                            }
+                        }
+                        $prm = $prm_type;
+                    }
+
                     switch (count($prm)) {
+                        
                         case 1:
                             $contentII($prm[0]);
                             break;

@@ -1,17 +1,19 @@
 <?php
 
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace npds\system\forum;
 
 use npds\system\date\date;
 use npds\system\logs\logs;
+use npds\system\auth\users;
 use npds\system\auth\groupe;
 use npds\system\cache\cache;
 use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
+use npds\system\utility\crypt;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\support\facades\DB;
@@ -24,21 +26,20 @@ class forum
      *
      * syntaxe : function#RecentForumPosts
      * nb_max_forum (O=tous) nb_max_topic, affiche_l'emetteur(true / false), topic_nb_max_char, affiche_HR(true / false)
-     * 
+     *
      * @param   string  $title          [$title description]
-     * @param   string  $maxforums      [$maxforums description]
-     * @param   string  $maxtopics      [$maxtopics description]
+     * @param   int     $maxforums      [$maxforums description]
+     * @param   int     $maxtopics      [$maxtopics description]
      * @param   bool    $displayposter  [$displayposter description]
      * @param   false                   [ description]
-     * @param   string                  [ description]
      * @param   int     $topicmaxchars  [$topicmaxchars description]
      * @param   bool    $hr             [$hr description]
      * @param   false                   [ description]
      * @param   string  $decoration     [$decoration description]
      *
-     * @return  void
+     * @return  void                    [return description]
      */
-    public static function RecentForumPosts(string $title, string $maxforums, string $maxtopics, bool $displayposter = false, string|int $topicmaxchars = 15, bool $hr = false, string $decoration = ''): void
+    public static function RecentForumPosts(string $title, int $maxforums, int $maxtopics, bool $displayposter = false, int $topicmaxchars = 15, bool $hr = false, string $decoration = ''): void
     {
         $boxstuff = static::RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
 
@@ -52,41 +53,39 @@ class forum
     }
 
     /**
-     * [RecentForumPosts_fab description]
-     *
-     * @param   string  $title          [$title description]
-     * @param   string                  [ description]
-     * @param   int     $maxforums      [$maxforums description]
-     * @param   string                  [ description]
-     * @param   int     $maxtopics      [$maxtopics description]
-     * @param   bool    $displayposter  [$displayposter description]
-     * @param   string                  [ description]
-     * @param   int     $topicmaxchars  [$topicmaxchars description]
-     * @param   bool    $hr             [$hr description]
-     * @param   string  $decoration     [$decoration description]
-     *
-     * @return  string                  [return description]
-     */
-    public static function RecentForumPosts_fab(string $title, string|int $maxforums, string|int $maxtopics, bool $displayposter, string|int $topicmaxchars, bool $hr, string $decoration): string
+      * 
+      *
+      * @param   string  $title          [$title description]
+      * @param   int     $maxforums      [$maxforums description]
+      * @param   int     $maxtopics      [$maxtopics description]
+      * @param   bool    $displayposter  [$displayposter description]
+      * @param   int     $topicmaxchars  [$topicmaxchars description]
+      * @param   bool    $hr             [$hr description]
+      * @param   string  $decoration     [$decoration description]
+      *
+      * @return  string                  [return description]
+      */
+    public static function RecentForumPosts_fab(string $title, int $maxforums, int $maxtopics, bool $displayposter, int $topicmaxchars, bool $hr, string $decoration): string
     {
-        global $user, $NPDS_Prefix;
+        global $NPDS_Prefix;
 
-        $topics = 0;
+//vd($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
 
-        settype($maxforums, "integer");
-        settype($maxtopics, "integer");
+        $query = DB::table('forums')->select('*');
 
-        $lim = $maxforums == 0 ? '' : " LIMIT $maxforums";
+        $user = users::getUser();
 
-        $query = $user 
-            ? "SELECT * FROM " . $NPDS_Prefix . "forums ORDER BY cat_id,forum_index,forum_id" . $lim
+        if(!$user) {
+            $query->where('forum_type', '!=', 9)
+                  ->where('forum_type', '!=', 7)
+                  ->where('forum_type', '!=', 5);
+        }
 
-            //= DB::table('')->select()->where('', )->orderBy('')->get();
-            : "SELECT * FROM " . $NPDS_Prefix . "forums WHERE forum_type!='9' AND forum_type!='7' AND forum_type!='5' ORDER BY cat_id,forum_index,forum_id" . $lim;
-        
-            //= DB::table('')->select()->where('', )->orderBy('')->get();
+        if($maxforums > 0) {
+            $query->limit($maxforums);
+        }
 
-        $result = sql_query($query);
+        $result = $query->orderBy('cat_id, forum_index, forum_id')->get();
 
         if (!$result) {
             exit();
@@ -94,88 +93,117 @@ class forum
 
         $boxstuff = '<ul>';
 
-        while ($row = sql_fetch_row($result)) {
-            if (($row[6] == "5") or ($row[6] == "7")) {
+        foreach($result as $row) {
+
+            if (($row['forum_type'] == "5") or ($row['forum_type'] == "7")) {
                 $ok_affich = false;
                 $tab_groupe = groupe::valid_group($user);
-                $ok_affich = groupe::groupe_forum($row[7], $tab_groupe);
+                $ok_affich = groupe::groupe_forum($row['forum_pass'], $tab_groupe);
             } else {
                 $ok_affich = true;
             }
 
             if ($ok_affich) {
-                $forumid = $row[0];
-                $forumname = $row[1];
-                $forum_desc = $row[2];
+                $forumid    = $row['forum_id'];
+                $forumname  = $row['forum_name'];
+                $forum_desc = $row['forum_desc'];
 
                 if ($hr) {
                     $boxstuff .= '<li><hr /></li>';
                 }
 
                 if (Config::get('npds.parse') == 0) {
-                    $forumname = str::FixQuotes($forumname);
+                    $forumname  = str::FixQuotes($forumname);
                     $forum_desc = str::FixQuotes($forum_desc);
                 } else {
-                    $forumname = stripslashes($forumname);
+                    $forumname  = stripslashes($forumname);
                     $forum_desc = stripslashes($forum_desc);
                 }
 
-                $res = sql_query("SELECT * FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id = '$forumid' ORDER BY topic_time DESC");
-                $ibidx = sql_num_rows($res);
+                $res = DB::table('forumtopics')
+                        ->select('*')
+                        ->where('forum_id', $forumid)
+                        ->orderBy('topic_time', 'desc')
+                        ->get();
 
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-                $boxstuff .= '
-                <li class="list-unstyled border-0 p-2 mt-1"><h6><a href="viewforum.php?forum=' . $forumid . '" title="' . strip_tags($forum_desc) . '" data-bs-toggle="tooltip">' . $forumname . '</a><span class="float-end badge bg-secondary" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">' . $ibidx . '</span></h6></li>';
+                $boxstuff .= '<li class="list-unstyled border-0 p-2 mt-1">
+                    <h6>
+                        <a href="'. site_url('viewforum.php?forum=' . $forumid) . '" title="' . strip_tags($forum_desc) . '" data-bs-toggle="tooltip">
+                            ' . $forumname . '
+                        </a>
+                        <span class="float-end badge bg-secondary" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">
+                            ' . count($res) . '
+                        </span>
+                    </h6>
+                </li>';
 
                 $topics = 0;
-                while (($topics < $maxtopics) && ($topicrow = sql_fetch_row($res))) {
-                    $topicid = $topicrow[0];
-                    $tt = $topictitle = $topicrow[1];
-                    $date = $topicrow[3];
-                    $replies = 0;
 
-                    $postquery = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "posts WHERE topic_id = '$topicid'";
+//vd($topics,  $maxtopics);
 
-                    //= DB::table('')->select()->where('', )->orderBy('')->get();
+                //while (($topics < $maxtopics) && ($topicrow = sql_fetch_row($res))) {
+                
 
-                    if ($pres = sql_query($postquery)) {
-                        if ($myrow = sql_fetch_assoc($pres)) {
-                            $replies = $myrow['total'];
-                        }
-                    }
+                foreach ($res as $topicrow) {
+                    
+                    if ($topics < $maxtopics) {                
+                        
+                        $topicid = $topicrow['topic_id'];
+                        $tt      = $topictitle = $topicrow['topic_title'];
+                        // $date    = $topicrow['topic_time']; // not used !!!
+                        $replies = 0;
 
-                    if (strlen($topictitle) > $topicmaxchars) {
-                        $topictitle = substr($topictitle, 0, $topicmaxchars);
-                        $topictitle .= '..';
-                    }
-
-                    if ($displayposter) {
-                        $posterid = $topicrow[2];
-                        $RowQ1 = cache::Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid = '$posterid'", 3600);
-                        $myrow = $RowQ1[0];
+                        $postquery = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "posts WHERE topic_id = '$topicid'";
 
                         //= DB::table('')->select()->where('', )->orderBy('')->get();
 
-                        $postername = $myrow['uname'];
-                    }
+                        if ($pres = sql_query($postquery)) {
+                            if ($myrow = sql_fetch_assoc($pres)) {
+                                $replies = $myrow['total'];
+                            }
+                        }
 
-                    if (Config::get('npds.parse') == 0) {
-                        $tt =  strip_tags(FixQuotes($tt));
-                        $topictitle = FixQuotes($topictitle);
-                    } else {
-                        $tt =  strip_tags(stripslashes($tt));
-                        $topictitle = stripslashes($topictitle);
-                    }
+                        if (strlen($topictitle) > $topicmaxchars) {
+                            $topictitle = substr($topictitle, 0, $topicmaxchars);
+                            $topictitle .= '..';
+                        }
 
-                    $boxstuff .= '<li class="list-group-item p-1 border-right-0 border-left-0 list-group-item-action"><div class="n-ellipses"><span class="badge bg-secondary mx-2" title="' . translate("Réponses") . '" data-bs-toggle="tooltip" data-bs-placement="top">' . $replies . '</span><a href="viewtopic.php?topic=' . $topicid . '&amp;forum=' . $forumid . '" >' . $topictitle . '</a></div>';
-                    
-                    if ($displayposter) {
-                        $boxstuff .= $decoration . '<span class="ms-1">' . $postername . '</span>';
-                    }
+                        if ($displayposter) {
+                            $posterid = $topicrow[2];
+                            $RowQ1 = cache::Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid = '$posterid'", 3600);
+                            $myrow = $RowQ1[0];
 
-                    $boxstuff .= '</li>';
-                    $topics++;
+                            //= DB::table('')->select()->where('', )->orderBy('')->get();
+
+                            $postername = $myrow['uname'];
+                        }
+
+                        if (Config::get('npds.parse') == 0) {
+                            $tt =  strip_tags(str::FixQuotes($tt));
+                            $topictitle = str::FixQuotes($topictitle);
+                        } else {
+                            $tt =  strip_tags(stripslashes($tt));
+                            $topictitle = stripslashes($topictitle);
+                        }
+
+                        $boxstuff .= '<li class="list-group-item p-1 border-right-0 border-left-0 list-group-item-action">
+                            <div class="n-ellipses">
+                                <span class="badge bg-secondary mx-2" title="' . translate("Réponses") . '" data-bs-toggle="tooltip" data-bs-placement="top">
+                                    ' . $replies . '
+                                </span>
+                                <a href="'. site_url('viewtopic.php?topic=' . $topicid . '&amp;forum=' . $forumid) . '" >
+                                    ' . $topictitle . '
+                                </a>
+                            </div>';
+                        
+                        if ($displayposter) {
+                            $boxstuff .= $decoration . '<span class="ms-1">' . $postername . '</span>';
+                        }
+
+                        $boxstuff .= '</li>';
+
+                        $topics++;
+                    }
                 }
             }
         }
@@ -1360,16 +1388,19 @@ class forum
     /**
      * 
      *
-     * @param   array   $rowQ1  [$rowQ1 description]
+     * @param   array   $forum_categorie  [$rowQ1 description]
      *
      * @return  string
      */
-    public static function forum(array $rowQ1): string 
+    public static function forum(array $forum_categorie): string 
     {
         global $user, $admin, $adminforum, $NPDS_Prefix;
     
-        //==> droits des admin sur les forums (superadmin et admin avec droit gestion forum)
+//vd($forum_categorie);
+
+        // droits des admin sur les forums (superadmin et admin avec droit gestion forum)
         $adminforum = false;
+
         if ($admin) {
             $adminX = base64_decode($admin);
             $adminR = explode(':', $adminX);
@@ -1381,7 +1412,14 @@ class forum
             if ($Q['radminsuper'] == 1) {
                 $adminforum = 1;
             } else {
-                $R = sql_query("SELECT fnom, fid, radminsuper FROM " . $NPDS_Prefix . "authors a LEFT JOIN " . $NPDS_Prefix . "droits d ON a.aid = d.d_aut_aid LEFT JOIN " . $NPDS_Prefix . "fonctions f ON d.d_fon_fid = f.fid WHERE a.aid='$adminR[0]' AND f.fid BETWEEN 13 AND 15");
+                $R = sql_query("SELECT fnom, fid, radminsuper 
+                FROM " . $NPDS_Prefix . "authors a 
+                LEFT JOIN " . $NPDS_Prefix . "droits d 
+                ON a.aid = d.d_aut_aid 
+                LEFT JOIN " . $NPDS_Prefix . "fonctions f 
+                ON d.d_fon_fid = f.fid 
+                WHERE a.aid='$adminR[0]' 
+                AND f.fid BETWEEN 13 AND 15");
                 
                 //= DB::table('')->select()->where('', )->orderBy('')->get();
 
@@ -1390,7 +1428,7 @@ class forum
                 }
             }
         }
-        //<== droits des admin sur les forums (superadmin et admin avec droit gestion forum)
+        // droits des admin sur les forums (superadmin et admin avec droit gestion forum)
     
         if ($user) {
             $userX = base64_decode($user);
@@ -1411,53 +1449,62 @@ class forum
         }
     
         // preparation de la gestion des folders
-        $result = sql_query("SELECT forum_id, COUNT(topic_id) AS total FROM " . $NPDS_Prefix . "forumtopics GROUP BY (forum_id)");
-
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-        while (list($forumid, $total) = sql_fetch_row($result)) {
-            $tab_folder[$forumid][0] = $total; // Topic
+        foreach (DB::table('forumtopics')
+            ->select('forum_id', DB::raw('COUNT(topic_id) AS total'))
+            ->groupeBy('forum_id')
+            ->get() as $forumtopic) 
+        {
+            $tab_folder[$forumtopic['forum_id']][0] = $forumtopic['total']; // Topic
         }
     
-        $result = sql_query("SELECT forum_id, COUNT(DISTINCT topicid) AS total FROM " . $NPDS_Prefix . "forum_read WHERE uid='$userR[0]' AND topicid>'0' AND status!='0' GROUP BY (forum_id)");
-        
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-        
-        while (list($forumid, $total) = sql_fetch_row($result)) {
-            $tab_folder[$forumid][1] = $total; // Folder
+        foreach (DB::table('forum_read')
+            ->select('forum_id', DB::raw('COUNT(DISTINCT topicid) AS total'))
+            ->where('uid', $userR[0])
+            ->where('topicid', '>', 0)
+            ->where('status', '!=', 0)
+            ->groupeBy('forum_id')
+            ->get() as $forum_read) 
+        { 
+            $tab_folder[$forum_read['forum_id']][1] = $forum_read['total']; // Folder
         }
-    
+
         // préparation de la gestion des abonnements
-        $result = sql_query("SELECT forumid FROM " . $NPDS_Prefix . "subscribe WHERE uid='$userR[0]'");
-        
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-        
-        while (list($forumid) = sql_fetch_row($result)) {
-            $tab_subscribe[$forumid] = true;
+        foreach (DB::table('subscribe')
+                ->select('forumid')
+                ->where('uid', $userR[0])
+                ->get() as $subscribe) 
+        {
+            $tab_subscribe[$subscribe['forum_id']] = true;
         }
     
         // preparation du compteur total_post
-        $rowQ0 = cache::Q_Select("SELECT forum_id, COUNT(post_aff) AS total FROM " . $NPDS_Prefix . "posts GROUP BY forum_id", 600);
-        
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-        
-        foreach ($rowQ0 as $row0) {
-            $tab_total_post[$row0['forum_id']] = $row0['total'];
+        foreach (cache::Q_Select3(
+            DB::table('posts')
+                ->select('forum_id', DB::raw('COUNT(post_aff) AS total'))
+                ->groupeBy('forum_id')
+                ->get(), 600, crypt::encrypt('COUNT(post_aff)')
+        )  as  $posts) {
+            $tab_total_post[$posts['forum_id']] = $posts['total'];
         }
     
         $ibid = '';
     
-        if ($rowQ1) {
-            foreach ($rowQ1 as $row) {
+        if ($forum_categorie) {
+            foreach ($forum_categorie as $row) {
                 $title_aff = true;
-                
-                $rowQ2 = cache::Q_Select("SELECT * FROM " . $NPDS_Prefix . "forums WHERE cat_id = '" . $row['cat_id'] . "' AND SUBSTRING(forum_name,1,3)!='<!>' ORDER BY forum_index,forum_id", 21600);
-               
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
 
-                if ($rowQ2) {
-                    foreach ($rowQ2 as $myrow) {
-                        
+                $forums_list = cache::Q_Select3(
+                    DB::table('forums')
+                        ->select('*')
+                        ->where('cat_id', $row['cat_id'])
+                        ->where(DB::raw('SUBSTRING(forum_name, 1, 3)'), '!=', '<!>', 'AND')
+                        ->groupeBy('forum_index, forum_id')
+                        ->get(), 600, crypt::encrypt('SUBSTRING(forum_name, 1, 3)')
+                );
+
+                if ($forums_list) {
+                    foreach ($forums_list as $myrow) {
+
                         // Gestion des Forums Cachés aux non-membres
                         if (($myrow['forum_type'] != "9") or ($userR)) {
                             
@@ -1469,7 +1516,8 @@ class forum
                                     $ok_affich = true; // to see when admin mais pas assez precis
                                 }
                             } else {
-                                $ok_affich = true; }
+                                $ok_affich = true; 
+                            }
                             
                             if ($ok_affich) {
                                 if ($title_aff) {
@@ -1479,12 +1527,12 @@ class forum
 
                                     if ((file_exists("themes/$theme/view/forum-cat" . $row['cat_id'] . ".html")) or (file_exists("themes/default/view/forum-cat" . $row['cat_id'] . ".html"))) {
                                         $ibid .= '
-                                <div class=" mt-3" id="catfo_' . $row['cat_id'] . '" >
-                                    <a class="list-group-item list-group-item-action active" href="forum.php?catid=' . $row['cat_id'] . '"><h5>' . $title . '</h5></a>';
+                                        <div class=" mt-3" id="catfo_' . $row['cat_id'] . '" >
+                                            <a class="list-group-item list-group-item-action active" href="forum.php?catid=' . $row['cat_id'] . '"><h5>' . $title . '</h5></a>';
                                     } else {
                                         $ibid .= '
-                                <div class=" mt-3" id="catfo_' . $row['cat_id'] . '">
-                                    <div class="list-group-item list-group-item-action active"><h5>' . $title . '</h5></div>';
+                                        <div class=" mt-3" id="catfo_' . $row['cat_id'] . '">
+                                            <div class="list-group-item list-group-item-action active"><h5>' . $title . '</h5></div>';
                                     }
     
                                     $title_aff = false;
@@ -1500,31 +1548,42 @@ class forum
                                 }
                                 
                                 $last_post = static::get_last_post($myrow['forum_id'], "forum", "infos", $Mmod);
+                            
                                 $ibid .= '
                                     <p class="mb-0 list-group-item list-group-item-action flex-column align-items-start">
                                         <span class="d-flex w-100 mt-1">';
     
-                                if (($tab_folder[$myrow['forum_id']][0] - $tab_folder[$myrow['forum_id']][1]) > 0) {
-                                    $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="' . translate("Les nouvelles contributions depuis votre dernière visite.") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                // bizare ce bug ! $tab_folder[$myrow['forum_id']][0] $tab_folder[$myrow['forum_id']][1] si forum sans posts
+                                if (array_key_exists($myrow['forum_id'], $tab_folder)) {
+                                    if (($tab_folder[$myrow['forum_id']][0] - $tab_folder[$myrow['forum_id']][1]) > 0) {
+                                        $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="' . translate("Les nouvelles contributions depuis votre dernière visite.") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                    } else {
+                                        $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="' . translate("Aucune nouvelle contribution depuis votre dernière visite.") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                    }
                                 } else {
                                     $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="' . translate("Aucune nouvelle contribution depuis votre dernière visite.") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                 }
-    
+
                                 $name = stripslashes($myrow['forum_name']);
                                 $redirect = false;
     
                                 if (strstr(strtoupper($name), "<a HREF")) {
                                     $redirect = true;
                                 } else {
-                                    $ibid .= '
-                                        <a href="viewforum.php?forum=' . $myrow['forum_id'] . '" >' . $name . '</a>';
+                                    $ibid .= '<a href="viewforum.php?forum=' . $myrow['forum_id'] . '" >' . $name . '</a>';
                                 }
     
                                 if (!$redirect) {
                                     $ibid .= '
                                         <span class="ms-auto"> 
-                                            <span class="badge bg-secondary ms-1" title="' . translate("Contributions") . '" data-bs-toggle="tooltip">' . $tab_total_post[$myrow['forum_id']] . '</span>
-                                            <span class="badge bg-secondary ms-1" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">' . $tab_folder[$myrow['forum_id']][0] . '</span>
+                                            <span class="badge bg-secondary ms-1" title="' . translate("Contributions") . '" data-bs-toggle="tooltip">' . $tab_total_post[$myrow['forum_id']] . '</span>';
+                                    
+                                    // bizare ce bug ! $tab_folder[$myrow['forum_id']][0] si forum sans posts
+                                    if (array_key_exists($myrow['forum_id'], $tab_folder)) {
+                                        $ibid .= '<span class="badge bg-secondary ms-1" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">' . $tab_folder[$myrow['forum_id']][0] . '</span>';
+                                    }
+
+                                    $ibid .= ' 
                                         </span>
                                     </span>';
                                 }
@@ -1584,21 +1643,20 @@ class forum
                                         if (!$redirect) {
                                             if (mailler::isbadmailuser($userR[0]) === false) { //proto
                                                 $ibid .= '
-                                <span class="d-flex w-100 mt-1" >
-                                <span class="form-check">';
+                                                <span class="d-flex w-100 mt-1" >
+                                                    <span class="form-check">';
     
-                                                if (!isset($tab_subscribe[$myrow['forum_id']])) { // ajout isset bug $tab_subscribe non definie
-                                                    $ibid .= '
-                                    <input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" checked="checked" />';
+                                            // ajout isset bug $tab_subscribe non definie    
+                                            if (!isset($tab_subscribe[$myrow['forum_id']])) { 
+                                                    $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" checked="checked" />';
                                                 } else {
-                                                    $ibid .= '
-                                    <input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" />';
+                                                    $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" />';
                                                 }
     
-                                                $ibid .= '
-                                    <label class="form-check-label" for="subforumid' . $myrow['forum_id'] . '" title="' . translate("Cochez et cliquez sur le bouton OK pour recevoir un Email lors d'une nouvelle soumission dans ce forum.") . '" data-bs-toggle="tooltip" data-bs-placement="right">&nbsp;&nbsp;</label>
-                                    </span>
-                                </span>';
+                                                $ibid .= '<label class="form-check-label" for="subforumid' . $myrow['forum_id'] . '" title="' . translate("Cochez et cliquez sur le bouton OK pour recevoir un Email lors d'une nouvelle soumission dans ce forum.") . '" data-bs-toggle="tooltip" data-bs-placement="right">&nbsp;&nbsp;</label>
+                                                    </span>
+                                                </span>';
+
                                             }
                                         }
                                     }
@@ -1621,7 +1679,8 @@ class forum
         }
     
         if ((Config::get('npds.subscribe')) and ($user) and ($ok_affich)) {
-            if (mailler::isbadmailuser($userR[0]) === false) { //proto
+            //proto
+            if (mailler::isbadmailuser($userR[0]) === false) {
                 $ibid .= '
             <div class="form-check mt-1">
                 <input class="form-check-input" type="checkbox" id="ckball_f" />

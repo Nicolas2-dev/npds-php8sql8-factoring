@@ -193,7 +193,7 @@ class cacheManager
      */
     public function getConfig(): array
     {
-        return static::$config;
+        return $this->config;
     }
 
     /**

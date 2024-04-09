@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\theme;
 
+use npds\system\auth\users;
 use npds\system\config\Config;
 use npds\system\language\metalang;
 
@@ -13,16 +14,37 @@ class theme
     /**
      *  Retourne le chemin complet si l'image est trouvée dans le répertoire image du thème sinon false
      *
-     * @param   string  $theme_img  [$theme_img description]
+     * @param   string  $theme_img    [$theme_img description]
      *
-     * @return  string|bool
+     * @return  string                [return description]
      */
     public static function theme_image(string $theme_img): string|bool
     {
         $theme = static::getTheme();
         
-        if (@file_exists("themes/$theme/assets/images/$theme_img")) {
-            return ("themes/$theme/assets/images/$theme_img");
+        if (@file_exists('themes/'. $theme .'/assets/images/'. $theme_img)) {
+            return 'themes/'. $theme .'/assets/images/'. $theme_img;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     *  Retourne le chemin complet si l'image est trouvée dans le répertoire image du thème sinon false
+     *
+     * @param   string  $theme_img    [$theme_img description]
+     * @param   string  $defautl_img  [$defautl_img description]
+     *
+     * @return  string                [return description]
+     */
+    public static function theme_image_row(string $theme_img, string $defautl_img): string|bool
+    {
+        $theme = static::getTheme();
+        
+        if (@file_exists('themes/'. $theme .'/assets/images/'. $theme_img)) {
+            return ('themes/'. $theme .'/assets/images/'. $theme_img);
+        } elseif (@file_exists($defautl_img)) {
+            return $defautl_img;  
         } else {
             return false;
         }
@@ -35,13 +57,13 @@ class theme
      */
     public static function getSkin(): string 
     {
-        global $user;
+        $user = users::getUser();
 
-        if (isset($user) and $user != '') {
-            global $cookie;
-            
-            if ($cookie[9] != '') {
-                $ibix = explode('+', urldecode($cookie[9]));
+        if (isset($user) and $user != '') {  
+            $cookie = users::cookieUser(9);
+
+            if ($cookie != '') {
+                $ibix = explode('+', urldecode($cookie));
                 if (array_key_exists(1, $ibix)) {
                     $skin = $ibix[1];
                 } else {
@@ -64,13 +86,13 @@ class theme
      */
     public static function getTheme(): string
     {
-        global $user;
+        $user = users::getUser();
 
         if (isset($user) and $user != '') {
-            global $cookie;
+            $cookie = users::cookieUser(9);
 
-            if ($cookie[9] != '') {
-                $ibix = explode('+', urldecode($cookie[9]));
+            if ($cookie != '') {
+                $ibix = explode('+', urldecode($cookie));
                 
                 if (array_key_exists(0, $ibix)) {
                     $theme = $ibix[0];
@@ -136,7 +158,7 @@ class theme
      */
     public static function themepreview(string $title, string $hometext, string $bodytext = '', string $notes = ''): void
     {
-        echo "$title<br />" . metalang::meta_lang($hometext) . "<br />" . metalang::meta_lang($bodytext) . "<br />" . metalang::meta_lang($notes);
+        echo $title .'<br />'. metalang::meta_lang($hometext) .'<br />'. metalang::meta_lang($bodytext) .'<br />'. metalang::meta_lang($notes);
     }
     
 }

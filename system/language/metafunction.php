@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\language;
 
 use npds\system\news\news;
+use npds\system\auth\users;
 use npds\system\block\boxe;
 use npds\system\auth\groupe;
 use npds\system\block\block;
@@ -12,15 +13,16 @@ use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\theme\theme;
+use npds\system\auth\authors;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
 use npds\system\config\Config;
 use npds\system\support\edito;
+use npds\system\utility\crypt;
 use npds\system\support\online;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\support\facades\DB;
-use npds\system\utility\crypt;
 
 class metafunction
 {
@@ -154,30 +156,33 @@ class metafunction
      */
     public function MM_date(): string 
     {
-        $locale = language::getLocale();
-    
-        return ucfirst(htmlentities(\PHP81_BC\strftime(translate("daydate"), time(), $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
+        return ucfirst(
+            htmlentities(\PHP81_BC\strftime(translate("daydate"), 
+            time(), config::get('npds.locale')), 
+            ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 
+            'utf-8')
+        );
     }
     
     /**
      * 
      *
-     * @return  string
+     * @return  string|bool
      */
-    public function MM_banner(): string 
+    public function MM_banner(): string|bool 
     {
         global $hlpfile;
     
         if ((Config::get('npds.banners')) and (!$hlpfile)) {
             ob_start();
                 include("banners.php");
-                $MT_banner = ob_get_contents();
+                $banner = ob_get_contents();
             ob_end_clean();
+
+            return $banner;
         } else {
-            $MT_banner = "";
+            return false;
         }
-    
-        return $MT_banner;
     }
     
     /**
@@ -187,26 +192,26 @@ class metafunction
      */
     public function MM_search_topics(): string 
     {
-        $MT_search_topics = "<form action=\"search.php\" method=\"post\"><label class=\"col-form-label\">" . translate("Sujets") . " </label>";
-        $MT_search_topics .= "<select class=\"form-select\" name=\"topic\"onChange='submit()'>";
-        $MT_search_topics .= "<option value=\"\">" . translate("Tous les sujets") . "</option>\n";
-    
-        $rowQ = cache::Q_select3(
+        foreach (cache::Q_select3(
             DB::table('topics')
                 ->select('topicid', 'topictext')
                 ->orderBy('topictext')
                 ->get(), 
             86400, 
             crypt::encrypt('topics(topiccid)')
-        );
-        
-        foreach ($rowQ as $myrow) {
-            $MT_search_topics .= "<option value=\"" . $myrow['topicid'] . "\">" . language::aff_langue($myrow['topictext']) . "</option>\n";
+        ) as $res_topic) 
+        {   
+            $options_topics = '';
+            $options_topics .= '<option value="' . $res_topic['topicid'] . '">' . language::aff_langue($res_topic['topictext']) . '</option>';
         }
     
-        $MT_search_topics .= "</select></form>";
-    
-        return $MT_search_topics;
+        return '<form action="'. site_url('search.php') .'" method="post">
+                <label class="col-form-label">' . translate("Sujets") . ' </label>
+                <select class="form-select" name="topic"onChange="submit()">
+                    <option value="">' . translate("Tous les sujets") . '</option>
+                        '. $options_topics .'
+                    </select>
+                </form>';
     }
     
     /**
@@ -216,8 +221,8 @@ class metafunction
      */
     public function MM_search(): string
     {
-        return "<form action=\"search.php\" method=\"post\"><label>" . translate("Recherche") . "</label>
-        <input class=\"form-control\" type=\"text\" name=\"query\" size=\"10\"></form>";
+        return '<form action="'. site_url('search.php') .'" method="post"><label>' . translate("Recherche") . '</label>
+        <input class="form-control" type="text" name="query" size="10"></form>';
     }
     
     /**
@@ -227,11 +232,7 @@ class metafunction
      */
     public function MM_member(): string 
     {
-        global $cookie;
-    
-        $username = $cookie[1];
-    
-        if ($username == "") {
+        if (!$username = users::cookieUser(1)) {
             $username = Config::get('npds.anonymous');
         }
     
@@ -274,13 +275,11 @@ class metafunction
      */
     public function MM_membre_nom(): string 
     {
-        global $cookie;
-    
         if (isset($cookie[1])) {
             $rowQ = cache::Q_select3(
                 DB::table('users')
                     ->select('name')
-                    ->where('uname', metalang::arg_filter($cookie[1]))
+                    ->where('uname', metalang::arg_filter(users::cookieUser(1)))
                     ->get(), 
                 3600, 
                 crypt::encrypt('users(name)')
@@ -289,7 +288,7 @@ class metafunction
             return $rowQ[0]['name'];
         }
     }
-    
+
     /**
      * 
      *
@@ -297,9 +296,7 @@ class metafunction
      */
     public function MM_membre_pseudo(): string
     {
-        global $cookie;
-    
-        return $cookie[1];
+        return users::cookieUser(1);
     }
     
     /**
@@ -390,7 +387,7 @@ class metafunction
             crypt::encrypt('stories(title)')
         );
     
-        return "<a href=\"". site_url('article.php?sid='.$arg)."\">" . $rowQ[0]['title'] . "</a>";
+        return '<a href="'. site_url('article.php?sid='.$arg).'">' . $rowQ[0]['title'] . '</a>';
     }
     
     /**
@@ -479,15 +476,19 @@ class metafunction
      */
     public function MM_list_mns(): string 
     {
-        $users = DB::table('users')
+        $MT_mns = '<ul class="list-group list-group-flush">';
+       
+        foreach (DB::table('users')
                     ->select('uname')
                     ->where('mns', 1)
-                    ->get();
-
-        $MT_mns = "<ul class=\"list-group list-group-flush\">";
-       
-        foreach ($users as $user) {
-            $MT_mns .= "<li class=\"list-group-item\"><a href=\"minisite.php?op=". $user['uname'] ."\" target=\"_blank\">". $user['uname'] ."</a></li>";
+                    ->get()
+             as $user) 
+        {
+            $MT_mns .= '<li class="list-group-item">
+                <a href="'. site_url('minisite.php?op='. $user['uname']) .'" target="_blank">
+                    '. $user['uname'] .'
+                </a>
+            </li>';
         }
     
         $MT_mns .= "</ul>";
@@ -537,7 +538,7 @@ class metafunction
      */
     public function MM_groupe_text(string $arg): string 
     {
-        global $user;
+        $user   = users::getUser();
     
         $affich = false;
         $remp = "";
@@ -568,7 +569,7 @@ class metafunction
      */
     public function MM_no_groupe_text(string $arg): string 
     {
-        global $user;
+        $user   = users::getUser();
     
         $affich = true;
         $remp = "";
@@ -611,7 +612,7 @@ class metafunction
      */
     public function MM_note_admin(): string 
     {
-        global $admin;
+        $admin   = authors::getAdmin();
     
         if (!$admin) {
             return "!delete!";
@@ -662,16 +663,14 @@ class metafunction
      */
     public function MM_forum_all(): string 
     {
-        $rowQ1 = cache::Q_Select3(
+        return @forum::forum(cache::Q_Select3(
             DB::table('catagories')
                 ->select('*')
                 ->orderBy('cat_id')
                 ->get(), 
             3600, 
             crypt::encrypt('categories(*)')
-        );
-    
-        return @forum::forum($rowQ1);
+        ));
     }
     
     /**
@@ -697,13 +696,11 @@ class metafunction
             $countwhere++;
         }
 
-        $rowQ1 = cache::Q_Select3(
+        return @forum::forum(cache::Q_Select3(
             $query->get(), 
             3600, 
             crypt::encrypt('categories_where_or(*)')
-        );
-    
-        return @forum::forum($rowQ1);
+        ));
     }
     
     /**
@@ -713,7 +710,7 @@ class metafunction
      */
     public function MM_forum_message(): string 
     {
-        global $user;
+        $user   = users::getUser();
     
         $ibid = "";
     
@@ -745,22 +742,10 @@ class metafunction
      */
     public function MM_forum_icones(): string 
     {
-        if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
-            $imgtmpR = $ibid;
-        } else {
-            $imgtmpR = "images/forum/icons/red_folder.gif";
-        }
-    
-        if ($ibid = theme::theme_image("forum/icons/folder.gif")) {
-            $imgtmp = $ibid;
-        } else {
-            $imgtmp = "images/forum/icons/folder.gif";
-        }
-    
-        $ibid = "<img src=\"$imgtmpR\" border=\"\" alt=\"\" /> = " . translate("Les nouvelles contributions depuis votre dernière visite.") . "<br />";
-        $ibid .= "<img src=\"$imgtmp\" border=\"\" alt=\"\" /> = " . translate("Aucune nouvelle contribution depuis votre dernière visite.");
-        
-        return $ibid;
+        return '<img src="'. theme::theme_image_row('forum/icons/red_folder.gif', 'assets/images/forum/icons/red_folder.gif') .'" border="" alt="" /> = ' . translate("Les nouvelles contributions depuis votre dernière visite.") . '
+                <br />
+                <img src="'. theme::theme_image_row('forum/icons/folder.gif', 'assets/images/forum/icons/folder.gif') .'" border="" alt="" /> = ' . translate("Aucune nouvelle contribution depuis votre dernière visite.");
+
     }
     
     /**
@@ -770,7 +755,7 @@ class metafunction
      */
     public function MM_forum_subscribeON(): string 
     {
-        global $user;
+        $user   = users::getUser();
     
         $ibid = "";
         
@@ -779,8 +764,8 @@ class metafunction
             $userR = explode(':', $userX);
             
             if (mailler::isbadmailuser($userR[0]) === false) {
-                $ibid = "<form action=\"forum.php\" method=\"post\">
-                <input type=\"hidden\" name=\"op\" value=\"maj_subscribe\" />";
+                $ibid = '<form action="'. site_url('forum.php') .'" method="post">
+                <input type="hidden" name="op" value="maj_subscribe" />';
             }
         }
     
@@ -794,7 +779,7 @@ class metafunction
      */
     public function MM_forum_bouton_subscribe(): string 
     {
-        global $user;
+        $user   = users::getUser();
     
         if ((Config::get('npds.subscribe')) and ($user)) {
             $userX = base64_decode($user);
@@ -815,7 +800,7 @@ class metafunction
      */
     public function MM_forum_subscribeOFF(): string 
     {
-        global $user;
+        $user   = users::getUser();
     
         $ibid = "";
     
@@ -840,9 +825,7 @@ class metafunction
      */
     public function MM_forum_subfolder(string $arg): string 
     {
-        $forum = metalang::arg_filter($arg);
-
-        return forum::sub_forum_folder($forum);
+        return forum::sub_forum_folder(metalang::arg_filter($arg));
     }
     
     /**
@@ -892,11 +875,10 @@ class metafunction
      */
     public function MM_login(): string 
     {
-        global $user;
-    
+
         $boxstuff = '
         <div class="card card-body m-3">
-           <h5><a href="user.php?op=only_newuser" role="button" title="' . translate("Nouveau membre") . '"><i class="fa fa-user-plus"></i>&nbsp;' . translate("Nouveau membre") . '</a></h5>
+           <h5><a href="'. site_url('user.php?op=only_newuser') .'" role="button" title="' . translate("Nouveau membre") . '"><i class="fa fa-user-plus"></i>&nbsp;' . translate("Nouveau membre") . '</a></h5>
         </div>
         <div class="card card-body m-3">
            <h5 class="mb-3"><i class="fas fa-sign-in-alt fa-lg"></i>&nbsp;' . translate("Connexion") . '</h5>
@@ -912,7 +894,7 @@ class metafunction
                    <div class="mb-0 form-floating">
                       <input type="password" class="form-control" name="pass" id="inputPassuser_b" placeholder="' . translate("Mot de passe") . '" required="required" />
                       <label for="inputPassuser_b">' . translate("Mot de passe") . '</label>
-                      <span class="help-block small"><a href="user.php?op=forgetpassword" role="button" title="' . translate("Vous avez perdu votre mot de passe ?") . '">' . translate("Vous avez perdu votre mot de passe ?") . '</a></span>
+                      <span class="help-block small"><a href="'. site_url('user.php?op=forgetpassword') .'" role="button" title="' . translate("Vous avez perdu votre mot de passe ?") . '">' . translate("Vous avez perdu votre mot de passe ?") . '</a></span>
                     </div>
                  </div>
               </div>
@@ -925,8 +907,10 @@ class metafunction
            </form>
         </div>';
     
+        $user   = users::getUser();
+
         if (isset($user)) {
-            $boxstuff = '<h5><a class="text-danger" href="user.php?op=logout"><i class="fas fa-sign-out-alt fa-lg align-middle text-danger me-2"></i>' . translate("Déconnexion") . '</a></h5>';
+            $boxstuff = '<h5><a class="text-danger" href="'. site_url('user.php?op=logout') .'"><i class="fas fa-sign-out-alt fa-lg align-middle text-danger me-2"></i>' . translate("Déconnexion") . '</a></h5>';
         }
     
         return $boxstuff;
@@ -939,12 +923,10 @@ class metafunction
      */
     public function MM_administration(): string 
     {
-        global $admin;
-    
-        if ($admin) {
-            return "<a href=\"admin.php\">" . translate("Outils administrateur") . "</a>";
+        if (authors::getAdmin()) {
+            return '<a href="'. site_url('admin.php').'">' . translate("Outils administrateur") . '</a>';
         } else {
-            return "";
+            return '';
         }
     }
     
@@ -967,9 +949,9 @@ class metafunction
         );
         
         if ($rowQ1[0]['url'] != '') {
-            $auteur = "<a href=\"" . $rowQ1[0]['url'] . "\">$arg</a>";
+            $auteur = '<a href="' . $rowQ1[0]['url'] . '">'. $arg .'</a>';
         } elseif ($rowQ1[0]['email'] != '') {
-            $auteur = "<a href=\"mailto:" . $rowQ1[0]['email'] . "\">$arg</a>";
+            $auteur = '<a href="mailto:' . $rowQ1[0]['email'] . '">'. $arg .'</a>';
         } else {
             $auteur = $arg;
         }
@@ -1012,7 +994,7 @@ class metafunction
         }
     
         if ($imgnum != -1) {
-            $Xcontent = "<img src=\"" . $tab_img[$imgnum] . "\" border=\"0\" alt=\"" . $tab_img[$imgnum] . "\" title=\"" . $tab_img[$imgnum] . "\" />";
+            $Xcontent = '<img src="'. $tab_img[$imgnum] .'" border="0" alt="'. $tab_img[$imgnum] .'" title="'. $tab_img[$imgnum] .'" />';
         }
     
         return $Xcontent;
@@ -1057,10 +1039,18 @@ class metafunction
 
         $story_limit = 0;
         while (($story_limit < $arg) and ($story_limit < sizeof($xtab))) {
-            list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter) = $xtab[$story_limit];
             
+            $sid        = $xtab[$story_limit]['sid'];
+            $title      = $xtab[$story_limit]['title']; 
+            $counter    = $xtab[$story_limit]['counter'];
+
             if ($counter > 0) {
-                $content .= '<li class="ms-4 my-1"><a href="article.php?sid=' . $sid . '" >' . language::aff_langue($title) . '</a>&nbsp;<span class="badge bg-secondary float-end">' . str::wrh($counter) . ' ' . translate("Fois") . '</span></li>';
+                $content .= '<li class="ms-4 my-1">
+                    <a href="'. site_url('article.php?sid=' . $sid) .'" >
+                        '. language::aff_langue($title) .'
+                    </a>
+                    &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($counter) .' '. translate("Fois") .'</span>
+                </li>';
             }
 
             $story_limit++;
@@ -1118,14 +1108,22 @@ class metafunction
         );
 
         $story_limit = 0;
-        
         while (($story_limit < $arg) and ($story_limit < sizeof($xtab))) {
-            list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments) = $xtab[$story_limit];
-            $story_limit++;
             
+            $sid        = $xtab[$story_limit]['sid'];
+            $title      = $xtab[$story_limit]['title'];
+            $comments   = $xtab[$story_limit]['comments'];
+
             if ($comments > 0) {
-                $content .= '<li class="ms-4 my-1"><a href="article.php?sid=' . $sid . '" >' . language::aff_langue($title) . '</a>&nbsp;<span class="badge bg-secondary float-end">' . str::wrh($comments) . '</span></li>';
+                $content .= '<li class="ms-4 my-1">
+                    <a href="'. site_url('article.php?sid='. $sid) .'" >
+                        '. language::aff_langue($title) .'
+                    </a>
+                    &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($comments) .'</span>
+                </li>';
             }
+
+            $story_limit++;
         }
     
         return $content;
@@ -1142,20 +1140,19 @@ class metafunction
     {
         $content = '';
 
-        $result = DB::table('stories_cat')
+        foreach (DB::table('stories_cat')
                     ->select('catid', 'title', 'counter')
                     ->orderBy('counter', 'asc')
                     ->limit(metalang::arg_filter($arg))
                     ->offset(0)
-                    ->get();
-        
-        foreach ($result as $storie) {
+                    ->get() as $storie) 
+        {
             if ($storie['counter'] > 0) {
                 $content .= '<li class="ms-4 my-1">
-                    <a href="index.php?op=newindex&amp;catid=' . $storie['catid'] . '" >
-                        ' . language::aff_langue($storie['title']) . '
+                    <a href="'. site_url('index.php?op=newindex&amp;catid='. $storie['catid']) .'" >
+                        '. language::aff_langue($storie['title']) .'
                     </a>
-                    &nbsp;<span class="badge bg-secondary float-end">' . str::wrh($storie['counter']) . '</span>
+                    &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($storie['counter']) .'</span>
                 </li>';
             }
         }
@@ -1174,19 +1171,18 @@ class metafunction
     {
         $content = '';
 
-        $result = DB::table('seccont')
+        foreach (DB::table('seccont')
                     ->select('artid', 'title', 'counter')
                     ->orderBy('counter', 'desc')
                     ->limit(metalang::arg_filter($arg))
                     ->offset(0)
-                    ->get();
-        
-        foreach ($result as $seccont) {
+                    ->get()  as $seccont) 
+        {
             $content .= '<li class="ms-4 my-1">
-                <a href="sections.php?op=viewarticle&amp;artid=' . $seccont['artid'] . '" >
-                    ' . language::aff_langue($seccont['title']) . '
+                <a href="'. site_url('sections.php?op=viewarticle&amp;artid='. $seccont['artid']) .'" >
+                    '. language::aff_langue($seccont['title']) .'
                 </a>
-                &nbsp;<span class="badge bg-secondary float-end">' . str::wrh($seccont['counter']) . ' ' . translate("Fois") . '</span></li>';
+                &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($seccont['counter']) .' '. translate("Fois") .'</span></li>';
         }
 
         return $content;
@@ -1203,20 +1199,19 @@ class metafunction
     {
         $content = '';
 
-        $result = DB::table('reviews')
+        foreach (DB::table('reviews')
                     ->select('id', 'title', 'hits')
                     ->orderBy('hits', 'desc')
                     ->limit(metalang::arg_filter($arg))
                     ->offset(0)
-                    ->get();
-
-        foreach ($result as $review) {
+                    ->get()as $review) 
+        {
             if ($review['hits'] > 0) {
                 $content .= '<li class="ms-4 my-1">
-                    <a href="reviews.php?op=showcontent&amp;id=' . $review['id'] . '" >
-                        ' . $review['title'] . '
+                    <a href="'. site_url('reviews.php?op=showcontent&amp;id=' . $review['id']) .'" >
+                        '. $review['title'] .'
                     </a>
-                    &nbsp;<span class="badge bg-secondary float-end">' . str::wrh($review['hits']) . ' ' . translate("Fois") . '</span></li>';
+                    &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($review['hits']) .' '. translate("Fois") .'</span></li>';
             }
         }
 
@@ -1234,20 +1229,19 @@ class metafunction
     {
         $content = '';
 
-        $result = DB::table('authors')
+        foreach (DB::table('authors')
                     ->select('aid', 'counter')
                     ->orderBy('counter', 'desc')
                     ->limit(metalang::arg_filter($arg))
                     ->offset(0)
-                    ->get();
-
-        foreach ($result as $author) {
+                    ->get() as $author)
+        {
             if ($author['counter'] > 0) {
                 $content .= '<li class="ms-4 my-1">
-                    <a href="search.php?query=&amp;author=' . $author['aid'] . '" >
-                        ' . $author['aid'] . '
+                    <a href="'. site_url('search.php?query=&amp;author='. $author['aid']) .'" >
+                        '. $author['aid'] .'
                     </a>
-                    &nbsp;<span class="badge bg-secondary float-end">' . str::wrh($author['counter']) . '</span></li>';
+                    &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($author['counter']) .'</span></li>';
             }
         }
     
@@ -1265,21 +1259,19 @@ class metafunction
     {
         $content = '';
 
-        $result = DB::table('poll_desc')
+        foreach (DB::table('poll_desc')
                 ->select('pollID', 'pollTitle', 'voters')
                 ->orderBy('voters', 'desc')
                 ->limit(metalang::arg_filter($arg))
                 ->offset(0)
-                ->get();
-
-        foreach ($result as $poll) {
-            
+                ->get() as $poll) 
+        {
             if ($poll['voters'] > 0) {
                 $content .= '<li class="ms-4 my-1">
-                    <a href="pollBooth.php?op=results&amp;pollID=' . $poll['pollID'] . '" >
-                        ' . language::aff_langue($poll['pollTitle']) . '
+                    <a href="'. site_url('pollBooth.php?op=results&amp;pollID='. $poll['pollID']) .'" >
+                        '. language::aff_langue($poll['pollTitle']) .'
                     </a>
-                    &nbsp;<span class="badge bg-secondary float-end">' . str::wrh($poll['voters']) . '</span></li>';
+                    &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($poll['voters']) .'</span></li>';
             }
         }
     
@@ -1297,21 +1289,19 @@ class metafunction
     {
         $content = '';
 
-        $result = DB::table('users')
+        foreach (DB::table('users')
                     ->select('uname', 'counter')
                     ->orderBy('counter', 'desc')
                     ->limit(metalang::arg_filter($arg))
                     ->offset(0)
-                    ->get();
-        
-        foreach ($result as $user) {
-            
+                    ->get() as $user) 
+        {
             if ($user['counter'] > 0) {
                 $content .= '<li class="ms-4 my-1">
-                    <a href="user.php?op=userinfo&amp;uname=' . $user['uname'] . '" >
-                        ' . $user['uname'] . '
+                    <a href="'. site_url('user.php?op=userinfo&amp;uname='. $user['uname']) .'" >
+                        '. $user['uname'] .'
                     </a>
-                    &nbsp;<span class="badge bg-secondary float-end">' . str::wrh($user['counter']) . '</span></li>';
+                    &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($user['counter']) .'</span></li>';
             }
         }
     
@@ -1328,13 +1318,11 @@ class metafunction
         $aff = '';
         $aff = '<div class="">';
     
-        $result = DB::table('topics')
+        foreach (DB::table('topics')
                     ->select('topicid', 'topicname', 'topicimage', 'topictext')
                     ->orderBy('topicname')
-                    ->get();
-        
-        foreach ($result as $topic) {
-            
+                    ->get() as $topic) 
+        {
             $total_news = DB::table('stories')
                             ->select(DB::raw('COUNT(*) AS total'))
                             ->where('topic', $topic['topicid'])
@@ -1345,20 +1333,20 @@ class metafunction
                   <div class="card my-2">';
             
             if ((($topic['topicimage']) or ($topic['topicimage'] != '')) and (file_exists(Config::get('npds.tipath') . $topic['topicimage']))) {
-                $aff .= '<img class="mt-3 ms-3 n-sujetsize" src="' . Config::get('npds.tipath') . $topic['topicimage'] . '" alt="topic_icon" />';
+                $aff .= '<img class="mt-3 ms-3 n-sujetsize" src="'. Config::get('npds.tipath') . $topic['topicimage'] .'" alt="topic_icon" />';
             }
     
             $aff .= '<div class="card-body">';
             
             if ($total_news['total'] != '0') {
-                $aff .= '<a href="index.php?op=newtopic&amp;topic=' . $topic['topicid'] . '"><h4 class="card-title">' . language::aff_langue($topic['topicname']) . '</h4></a>';
+                $aff .= '<a href="'. site_url('index.php?op=newtopic&amp;topic=' . $topic['topicid']) .'"><h4 class="card-title">'. language::aff_langue($topic['topicname']) .'</h4></a>';
             } else {
-                $aff .= '<h4 class="card-title">' . language::aff_langue($topic['topicname']) . '</h4>';
+                $aff .= '<h4 class="card-title">'. language::aff_langue($topic['topicname']) .'</h4>';
             }
     
-            $aff .= '<p class="card-text">' . language::aff_langue($topic['topictext']) . '</p>
+            $aff .= '<p class="card-text">'. language::aff_langue($topic['topictext']) .'</p>
                         <p class="card-text text-end">
-                            <span class="small">' . translate("Nb. d'articles") . '</span> <span class="badge bg-secondary">' . $total_news['total'] . '</span>
+                            <span class="small">' . translate("Nb. d'articles") . '</span> <span class="badge bg-secondary">'. $total_news['total'] .'</span>
                         </p>
                      </div>
                   </div>
@@ -1377,11 +1365,12 @@ class metafunction
      */
     public function MM_topic_subscribeOFF(): string 
     {
-        $aff = '<div class="mb-3 row"><input type="hidden" name="op" value="maj_subscribe" />';
-        $aff .= '<button class="btn btn-primary ms-3" type="submit" name="ok">' . translate("Valider") . '</button>';
-        $aff .= '</div></fieldset></form>';
-    
-        return $aff;
+        return '<div class="mb-3 row">
+                    <input type="hidden" name="op" value="maj_subscribe" />
+                    <button class="btn btn-primary ms-3" type="submit" name="ok">' . translate("Valider") . '</button>
+                </div>
+            </fieldset>
+            </form>';
     }
     
     /**
@@ -1391,11 +1380,9 @@ class metafunction
      */
     public function MM_topic_subscribeON(): mixed
     {
-        global $user, $cookie;
-        
-        if (Config::get('npds.subscribe') and $user) {
-            if (mailler::isbadmailuser($cookie[0]) === false) {
-                return ('<form action="topics.php" method="post"><fieldset>');
+        if (Config::get('npds.subscribe') and users::getUser()) {
+            if (mailler::isbadmailuser(users::cookieUser(0)) === false) {
+                return '<form action="'. site_url('topics.php') .'" method="post"><fieldset>';
             }
         }
     }
@@ -1409,26 +1396,23 @@ class metafunction
      */
     public function MM_topic_subscribe(string $arg): string 
     {
-        global $user, $cookie;
-    
         $segment = metalang::arg_filter($arg);
         $aff = '';
         
         if (Config::get('npds.subscribe')) {
-            if ($user) {
+            if (users::getUser()) {
                 $aff = '
                   <div class="mb-3 row">';
                 
-                $result = DB::table('topics')
+                foreach (DB::table('topics')
                             ->select('topicid', 'topictext', 'topicname')
                             ->orderBy('topicname')
-                            ->get();
-
-                foreach ($result as $topic) {
+                            ->get() as $topic) 
+                {
 
                     $resultX = DB::table('subscribe')
                             ->select('topicid')
-                            ->where('uid', $cookie[0])
+                            ->where('uid', users::cookieUser(0))
                             ->where('topicid', $topic['topicid'])
                             ->get();
 
@@ -1439,10 +1423,10 @@ class metafunction
                     }
     
                     $aff .= '
-                        <div class="' . $segment . '">
+                        <div class="'. $segment .'">
                            <div class="form-check">
-                              <input type="checkbox" class="form-check-input" name="Subtopicid[' . $topic['topicid'] . ']" id="subtopicid' . $topic['topicid'] . '" ' . $checked . ' />
-                              <label class="form-check-label" for="subtopicid' . $topic['topicid'] . '">' . language::aff_langue($topic['topicname']) . '</label>
+                              <input type="checkbox" class="form-check-input" name="Subtopicid['. $topic['topicid'] .']" id="subtopicid'. $topic['topicid'] .'" '. $checked .' />
+                              <label class="form-check-label" for="subtopicid'. $topic['topicid'] .'">'. language::aff_langue($topic['topicname']) .'</label>
                            </div>
                         </div>';
                 }
@@ -1521,8 +1505,6 @@ class metafunction
      */
     public function MM_forumP(): string 
     {
-        global $cookie, $user;
-    
         /*Sujet chaud*/
         $hot_threshold = 10;
     
@@ -1531,27 +1513,24 @@ class metafunction
     
         $MM_forumP = '<table cellspacing="3" cellpadding="3" width="top" border="0">'
             . '<tr align="center" class="ligna">'
-            . '<th width="5%">' . language::aff_langue('[french]Etat[/french][english]State[/english]') . '</th>'
-            . '<th width="20%">' . language::aff_langue('[french]Forum[/french][english]Forum[/english]') . '</th>'
-            . '<th width="30%">' . language::aff_langue('[french]Sujet[/french][english]Topic[/english]') . '</th>'
-            . '<th width="5%">' . language::aff_langue('[french]RÃ©ponse[/french][english]Replie[/english]') . '</th>'
-            . '<th width="20%">' . language::aff_langue('[french]Dernier Auteur[/french][english]Last author[/english]') . '</th>'
-            . '<th width="20%">' . language::aff_langue('[french]Date[/french][english]Date[/english]') . '</th>'
+            . '<th width="5%">'. language::aff_langue('[french]Etat[/french][english]State[/english]') .'</th>'
+            . '<th width="20%">'. language::aff_langue('[french]Forum[/french][english]Forum[/english]') .'</th>'
+            . '<th width="30%">'. language::aff_langue('[french]Sujet[/french][english]Topic[/english]') .'</th>'
+            . '<th width="5%">'. language::aff_langue('[french]RÃ©ponse[/french][english]Replie[/english]') .'</th>'
+            . '<th width="20%">'. language::aff_langue('[french]Dernier Auteur[/french][english]Last author[/english]') .'</th>'
+            . '<th width="20%">'. language::aff_langue('[french]Date[/french][english]Date[/english]') .'</th>'
             . '</tr>';
     
         /*Requete liste dernier post*/
-
-        $result = DB::table('posts')
+        foreach (DB::table('posts')
                     ->select(DB::raw('MAX(post_id)'))
                     ->where('forum_id', '>', 0)
                     ->groupey('topic_id')
                     ->orderBy(DB::raw('MAX(post_id)'), 'desc')
                     ->limit($maxcount)
                     ->offset(0)
-                    ->get();
-
-        foreach ($result as $post) {
-    
+                    ->get() as $post) 
+        {
             /*Requete detail dernier post*/
             $res = DB::table('posts')
                         ->select('posts.topic_id', 'posts.forum_id', 'posts.poster_id', 'posts.post_time', 'forumtopics.topic_title', 'forums.forum_name', 'forums.forum_type', 'forums.forum_pass', 'users.uname', 'forumtopics.topic_status')
@@ -1563,12 +1542,11 @@ class metafunction
                         ->first();
 
             if (($res['forum_type'] == "5") or ($res['forum_type'] == "7")) {
-    
                 $ok_affich = false;
-                $tab_groupe = groupe::valid_group($user);
+
+                $tab_groupe = groupe::valid_group(users::getUser());
                 $ok_affich = groupe::groupe_forum($res['forum_pass'], $tab_groupe);
             } else {
-    
                 $ok_affich = true;
             }
     
@@ -1581,73 +1559,59 @@ class metafunction
                             ->where('topic_id', $res['topic_id'])
                             ->count();
 
-
                 $replys = ($TableRep - 1);
 
                 /*Gestion lu / non lu*/
                 $sqlR = DB::table('forum_read')
                             ->select('rid')
                             ->where('topicid', $res['topic_id'])
-                            ->where('uid', $cookie[0])
+                            ->where('uid', users::cookieUser(0))
                             ->where('status', '!=', 0)
                             ->get();
-
-                if ($ibid = theme::theme_image("forum/icons/hot_red_folder.gif")) {
-                    $imgtmpHR = $ibid;
-                } else {
-                    $imgtmpHR = "images/forum/icons/hot_red_folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/hot_folder.gif")) {
-                    $imgtmpH = $ibid;
-                } else {
-                    $imgtmpH = "images/forum/icons/hot_folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
-                    $imgtmpR = $ibid;
-                } else {
-                    $imgtmpR = "images/forum/icons/red_folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/folder.gif")) {
-                    $imgtmpF = $ibid;
-                } else {
-                    $imgtmpF = "images/forum/icons/folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/lock.gif")) {
-                    $imgtmpL = $ibid;
-                } else {
-                    $imgtmpL = "images/forum/icons/lock.gif";
-                }
     
                 if ($replys >= $hot_threshold) {
-    
                     if ($sqlR == 0) {
-                        $image = $imgtmpHR;
+                        $image = theme::theme_image_row('forum/icons/hot_red_folder.gif', 'assets/images/forum/icons/hot_red_folder.gif');
                     } else {
-                        $image = $imgtmpH;}
+                        $image = theme::theme_image_row('forum/icons/hot_folder.gif', 'assets/images/forum/icons/hot_folder.gif');
+                    }
                 } else {
-    
                     if ($sqlR == 0) {
-                        $image = $imgtmpR;
+                        $image = theme::theme_image_row('forum/icons/red_folder.gif', 'assets/images/forum/icons/red_folder.gif');
                     } else {
-                        $image = $imgtmpF;}
+                        $image = theme::theme_image_row('forum/icons/folder.gif', 'assets/images/forum/icons/folder.gif');}
                 }       
 
                 if ($res['topic_status'] != 0) {
-                    $image = $imgtmpL;
+                    $image = theme::theme_image_row('forum/icons/lock.gif', 'assets/images/forum/icons/lock.gif');
                 }
 
-                $MM_forumP .= '<tr class="lignb">'
-                    . '<td align="center"><img src="' . $image . '"></td>'
-                    . '<td><a href="viewforum.php?forum=' . $res['forum_id'] . '">' . $res['forum_name'] . '</a></td>'
-                    . '<td><a href="viewtopic.php?topic=' . $res['topic_id'] . '&forum=' . $res['forum_id'] . '">' . $res['topic_title'] . '</a></td>'
-                    . '<td align="center">' . $replys . '</td>'
-                    . '<td><a href="user.php?op=userinfo&uname=' . $res['uname'] . '">' . $res['uname'] . '</a></td>'
-                    . '<td align="center">' . $res['post_time'] . '</td>'
-                    . '</tr>';
+                $MM_forumP .= '<tr class="lignb">
+                    <td align="center">
+                        <img src="'. $image .'">
+                    </td>
+                    <td>
+                        <a href="'. site_url('viewforum.php?forum='. $res['forum_id']) .'">
+                            '. $res['forum_name'] .'
+                        </a>
+                    </td>
+                    <td>
+                        <a href="'. site_url('viewtopic.php?topic='. $res['topic_id'] .'&forum='. $res['forum_id']) .'">
+                            '. $res['topic_title'] .'
+                        </a>
+                    </td>
+                    <td align="center">
+                        '. $replys . '
+                    </td>
+                    <td>
+                        <a href="'. site_url('user.php?op=userinfo&uname='. $res['uname']) .'">
+                            '. $res['uname'] .'
+                        </a>
+                    </td>
+                    <td align="center">
+                        '. $res['post_time'] .'
+                    </td>
+                    </tr>';
             }
         }
     
@@ -1663,8 +1627,6 @@ class metafunction
      */
     public function MM_forumL(): string 
     {
-        global $cookie, $user;
-    
         /*Sujet chaud*/
         $hot_threshold = 10;
     
@@ -1680,18 +1642,15 @@ class metafunction
             . '</tr>';
     
         /*Requete liste dernier post*/
-
-        $result = DB::table('posts')
+        foreach (DB::table('posts')
                     ->select(DB::raw('MAX(post_id)'))
                     ->where('forum_id', '>', 0)
                     ->groupey('topic_id')
                     ->orderBy(DB::raw('MAX(post_id)', 'desc'))
                     ->limit($maxcount)
                     ->offset(0)
-                    ->get();
-        
-        foreach ($result as $post) {
-    
+                    ->get() as $post) 
+        {
             /*Requete detail dernier post*/
             $res = DB::table('posts')
                 ->select('posts.topic_id', 'posts.forum_id', 'posts.poster_id', 'forumtopics.topic_title', 'forums.forum_name', 'forums.forum_type', 'forums.forum_pass', 'forumtopics.topic_status' )
@@ -1702,19 +1661,17 @@ class metafunction
                 ->get();
 
             if (($res['forum_type'] == "5") or ($res['forum_type'] == "7")) {
-    
                 $ok_affich = false;
-                $tab_groupe = groupe::valid_group($user);
+
+                $tab_groupe = groupe::valid_group(users::getUser());
                 $ok_affich = groupe::groupe_forum($res['forum_pass'], $tab_groupe);
             } else {
-    
                 $ok_affich = true;
             }
     
             if ($ok_affich) {
     
                 /*Nbre de postes par sujet*/
-                
                 $TableRep = DB::table('posts')
                                 ->select('*')
                                 ->where('forum_id', '>', 0)
@@ -1727,65 +1684,46 @@ class metafunction
                 $sqlR = DB::table('forum_read')
                             ->select('rid')
                             ->where('topicid', $res['topic_id'])
-                            ->where('uid', $cookie[0])
+                            ->where('uid', users::cookieUser(0))
                             ->where('status', '!=',  0)
                             ->count();
 
-                if ($ibid = theme::theme_image("forum/icons/hot_red_folder.gif")) {
-                    $imgtmpHR = $ibid;
-                } else {
-                    $imgtmpHR = "images/forum/icons/hot_red_folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/hot_folder.gif")) {
-                    $imgtmpH = $ibid;
-                } else {
-                    $imgtmpH = "images/forum/icons/hot_folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
-                    $imgtmpR = $ibid;
-                } else {
-                    $imgtmpR = "images/forum/icons/red_folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/folder.gif")) {
-                    $imgtmpF = $ibid;
-                } else {
-                    $imgtmpF = "images/forum/icons/folder.gif";
-                }
-    
-                if ($ibid = theme::theme_image("forum/icons/lock.gif")) {
-                    $imgtmpL = $ibid;
-                } else {
-                    $imgtmpL = "images/forum/icons/lock.gif";
-                }
-    
                 if ($replys >= $hot_threshold) {
-    
                     if ($sqlR == 0) {
-                        $image = $imgtmpHR;
+                        $image = theme::theme_image_row('forum/icons/hot_red_folder.gif', 'images/forum/icons/hot_red_folder.gif');
                     } else {
-                        $image = $imgtmpH;}
+                        $image = theme::theme_image_row('forum/icons/hot_folder.gif', 'images/forum/icons/hot_folder.gif');
+                    }
                 } else {
-    
                     if ($sqlR == 0) {
-                        $image = $imgtmpR;
+                        $image = theme::theme_image_row('forum/icons/red_folder.gif', 'images/forum/icons/red_folder.gif');
                     } else {
-                        $image = $imgtmpF;
+                        $image = theme::theme_image_row('forum/icons/folder.gif', 'images/forum/icons/folder.gif');
                     }
                 }        
 
                 if ($res['topic_status'] != 0) {
-                    $image = $imgtmpL;
+                    $image = theme::theme_image_row('forum/icons/lock.gif', 'images/forum/icons/lock.gif');
                 }
     
-                $MM_forumL .= '<tr class="lignb">'
-                    . '<td align="center"><img src="' . $image . '"></td>'
-                    . '<td><a href="viewforum.php?forum=' . $res['forum_id'] . '">' . $res['forum_name'] . '</a></td>'
-                    . '<td><a href="viewtopic.php?topic=' . $res['topic_id'] . '&forum=' . $res['forum_id'] . '">' . $res['topic_title'] . '</a></td>'
-                    . '<td align="center">' . $replys . '</td>'
-                    . '</tr>';
+                $MM_forumL .= '<tr class="lignb">
+                    <td align="center">
+                        <img src="'. $image .'">
+                    </td>
+                    <td>
+                        <a href="'. site_url('viewforum.php?forum='. $res['forum_id']) .'">
+                        '. $res['forum_name'] .'
+                        </a>
+                        </td>
+                    <td>
+                        <a href="'. site_url('viewtopic.php?topic='. $res['topic_id'] .'&forum='. $res['forum_id']) .'">
+                        '. $res['topic_title'] .'
+                        </a>
+                        </td>
+                    <td align="center">
+                        '. $replys .'
+                    </td>
+                    </tr>';
             }
         }
     
@@ -1849,12 +1787,10 @@ class metafunction
      */
     public function MM_noforbadmail():string 
     {
-        global $user, $cookie;
-    
         $remp = '';
     
-        if (Config::get('npds.subscribe') and $user) {
-            if (mailler::isbadmailuser($cookie[0]) === true)
+        if (Config::get('npds.subscribe') and users::getUser()) {
+            if (mailler::isbadmailuser(users::cookieUser(0)) === true)
                 $remp = '!delete!';
         }
     

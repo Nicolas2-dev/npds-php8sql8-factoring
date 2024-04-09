@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 use npds\system\auth\users;
 use npds\system\support\str;
+use npds\system\theme\theme;
 use npds\system\auth\authors;
+use npds\system\http\Request;
 use npds\system\utility\spam;
 use npds\system\config\Config;
 use npds\system\cookie\cookie;
@@ -13,6 +15,7 @@ use npds\system\database\Manager;
 use npds\system\security\protect;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\language\metafunction;
 use npds\system\exception\ExceptionHandler;
 
 // Load autolad
@@ -184,7 +187,6 @@ $tab_langue = language::make_tab_langue();
 // gestion metalang a revoir !!!!
 global $meta_glossaire;
 $meta_glossaire = metalang::charg_metalang();
-
 
 // initilisation du time zone A revoir avec la estion des dates a finaliser !!!!
 if (function_exists("date_default_timezone_set")) {
