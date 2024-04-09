@@ -46,10 +46,10 @@ class authors
      */
     public static function cookieAdmin():array|bool
     {
-        $user = static::extractAdmin();
+        $admin = static::extractAdmin();
 
-        if (isset($user)) {
-            return cookie::cookiedecode($user);
+        if (isset($admin)) {
+            return cookie::cookiedecode($admin);
         }
 
         return false;
