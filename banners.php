@@ -127,7 +127,7 @@ function viewbanner(): void
             }
 
             if ($banner['imageurl'] != '') {
-                echo '<a href="banners.php?op=click&amp;bid=' . $bid . '" target="_blank"><img class="img-fluid" src="' . language::aff_langue($banner['imageurl']) . '" alt="" /></a>';
+                echo '<a href="' . site_url('banners.php?op=click&amp;bid=' . $bid) .'" target="_blank"><img class="img-fluid" src="' . language::aff_langue($banner['imageurl']) . '" alt="" /></a>';
             } else {
                 if (stristr($banner['clickurl'], '.txt')) {
                     if (file_exists($banner['clickurl'])) {
@@ -175,7 +175,7 @@ function clientlogin(): void
     echo '
         <div class="card card-body mb-3">
             <h3 class="mb-4"><i class="fas fa-sign-in-alt fa-lg me-3 align-middle"></i>' . translate("Connexion") . '</h3>
-            <form id="loginbanner" action="banners.php" method="post">
+            <form id="loginbanner" action="' . site_url('banners.php') .'" method="post">
                 <fieldset>
                 <div class="form-floating mb-3">
                     <input class="form-control" type="text" id="login" name="login" maxlength="25" required="required" />
@@ -256,7 +256,7 @@ function header_page(): void
         <div class="container-fluid">
         <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-primary">
             <div class="container-fluid">
-            <a class="navbar-brand" href="index.php"><i class="fa fa-home fa-lg me-2"></i></a>
+            <a class="navbar-brand" href="' . site_url('index.php') .'"><i class="fa fa-home fa-lg me-2"></i></a>
             <span class="navbar-text">' . translate("Bannières - Publicité") . '</span>
             </div>
         </nav>
@@ -335,7 +335,7 @@ function bannerstats(string $login, string $pass): void
                     <td>' . $left . '</td>
                     <td>' . $banner['clicks'] . '</td>
                     <td>' . $percent . '%</td>
-                    <td><a href="banners.php?op=EmailStats&amp;login=' . $login . '&amp;cid=' . $bannerclient['id'] . '&amp;bid=' . $banner['id'] . '" ><i class="far fa-envelope fa-lg me-2 tooltipbyclass" data-bs-placement="top" title="E-mail Stats"></i></a></td>
+                    <td><a href="' . site_url('banners.php?op=EmailStats&amp;login=' . $login . '&amp;cid=' . $bannerclient['id'] . '&amp;bid=' . $banner['id']) .'" ><i class="far fa-envelope fa-lg me-2 tooltipbyclass" data-bs-placement="top" title="E-mail Stats"></i></a></td>
                 </tr>';
             }
 
@@ -368,7 +368,7 @@ function bannerstats(string $login, string $pass): void
                     echo '<p>' . translate("Cette bannière est affichée sur l'url") . ' : <a href="' . language::aff_langue($banner['clickurl']) . '" target="_Blank" >[ URL ]</a></p>';
                 }
 
-                echo '<form action="banners.php" method="get">';
+                echo '<form action="' . site_url('banners.php') .'" method="get">';
                 
                 if ($banner['imageurl'] != '') {
                     echo '
@@ -522,7 +522,7 @@ function EmailStats(string $login, int $cid, int $bid): void
         }
     } else {
         header_page();
-        echo "<p align=\"center\"><br />" . translate("Identifiant incorrect !") . "<br /><br />" . translate("Merci de") . " <a href=\"banners.php?op=login\" class=\"noir\">" . translate("vous reconnecter.") . "</a></p>";
+        echo "<p align=\"center\"><br />" . translate("Identifiant incorrect !") . "<br /><br />" . translate("Merci de") . " <a href=\"" . site_url('banners.php?op=login') ."\" class=\"noir\">" . translate("vous reconnecter.") . "</a></p>";
     }
 
     footer_page();
@@ -570,7 +570,7 @@ function change_banner_url_by_client(string $login, string $pass, int $cid, int 
             <div class="alert alert-danger">
                 ' . translate("Identifiant incorrect !") . '
                 <br />' . translate("Merci de") . ' 
-                <a href="banners.php?op=login" class="alert-link">
+                <a href="' . site_url('banners.php?op=login') .'" class="alert-link">
                     ' . translate("vous reconnecter.") . '
                 </a>
             </div>';

@@ -58,7 +58,7 @@ $informant  = $xtab[0]['informant'];
 $notes      = $xtab[0]['notes'];
 
 if (!$aid) {
-    header("Location: index.php");
+    header('Location: ' . site_url('index.php'));
 }
 
 DB::table('stories')->where('sid', $sid)->update(array(

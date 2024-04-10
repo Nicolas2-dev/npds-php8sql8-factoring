@@ -58,8 +58,8 @@ function links(): void
     echo '
     <hr />
     <h3>'. adm_translate("Liens")  .' <span class="">'. $numrows  .'</span></h3>';
-    echo '[ <a href="admin.php?op=LinksListBrokenLinks">'. adm_translate("Soumission de Liens brisés")  .' ('. $totalbrokenlinks  .')</a> -
-    <a href="admin.php?op=LinksListModRequests">'. adm_translate("Proposition de modifications de Liens")  .' ('. $totalmodrequests  .')</a> ]';
+    echo '[ <a href="' . site_url('admin.php?op=LinksListBrokenLinks') .'">'. adm_translate("Soumission de Liens brisés")  .' ('. $totalbrokenlinks  .')</a> -
+    <a href="' . site_url('admin.php?op=LinksListModRequests') .'">'. adm_translate("Proposition de modifications de Liens")  .' ('. $totalmodrequests  .')</a> ]';
 
     $links_newlink = DB::table('links_newlink')
                 ->select('lid', 'cid', 'sid', 'title', 'url', 'description', 'name', 'email', 'submitter')
@@ -76,7 +76,7 @@ function links(): void
         echo '
         <hr />
         <h3>'. adm_translate("Liens en attente de validation")  .'</h3>
-        <form action="admin.php" method="post" name="'. $adminform  .'" id="linksattente">';
+        <form action="' . site_url('admin.php') .'" method="post" name="'. $adminform  .'" id="linksattente">';
         echo
         adm_translate("Lien N° : ")  .'<b>'. $links_newlink['lid']  .'</b> - '. adm_translate("Auteur")  .' : '. $links_newlink['submitter']  .' <br /><br />
         <div class="mb-3 row">
@@ -161,7 +161,7 @@ function links(): void
                     <input type="hidden" name="submitter" value="'. $links_newlink['submitter']  .'">
                     <input type="hidden" name="op" value="LinksAddLink">
                     <input class="btn btn-primary" type="submit" value="'. adm_translate("Ajouter")  .'" />&nbsp;
-                    <a class="btn btn-danger" href="admin.php?op=LinksDelNew&amp;lid='. $links_newlink['lid']  .'" >'. adm_translate("Effacer")  .'</a>
+                    <a class="btn btn-danger" href="' . site_url('admin.php?op=LinksDelNew&amp;lid='. $links_newlink['lid']) .'" >'. adm_translate("Effacer")  .'</a>
                 </div>
             </div>
         </form>
@@ -189,9 +189,9 @@ function links(): void
         <h3>'. adm_translate("Ajouter un lien")  .'</h3>';
 
         if ($adminform == '') {
-            echo '<form method="post" action="admin.php" id="addlink" name="adminForm">';
+            echo '<form method="post" action="' . site_url('admin.php') .'" id="addlink" name="adminForm">';
         } else {
-            echo '<form method="post" action="admin.php" id="addlink">';
+            echo '<form method="post" action="' . site_url('admin.php') .'" id="addlink">';
         }
 
         echo '
@@ -278,7 +278,7 @@ function links(): void
     echo '
     <div class="card card-body mb-3">
         <h3>'. adm_translate("Ajouter une catégorie")  .'</h3>
-        <form action="admin.php" method="post" id="linksaddcat">
+        <form action="' . site_url('admin.php') .'" method="post" id="linksaddcat">
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4 " for="cattitle" >'. adm_translate("Nom")  .'</label>
                 <div class="col-sm-8">
@@ -310,7 +310,7 @@ function links(): void
         echo '
         <div class="card card-body mb-3">
             <h3 class="mb-3">'. adm_translate("Ajouter une Sous-catégorie")  .'</h3>
-            <form method="post" action="admin.php" id="linksaddsubcat">
+            <form method="post" action="' . site_url('admin.php') .'" id="linksaddsubcat">
                 <div class="mb-3 row">
                     <label class="col-form-label col-sm-4" for="subcattitle">'. adm_translate("Nom")  .'</label>
                     <div class="col-sm-8">
@@ -356,7 +356,7 @@ function links(): void
         echo '
         <div class="card card-body">
             <h3 class="mb-3">'. adm_translate("Modifier la Catégorie")  .'</h3>
-            <form method="post" action="admin.php">
+            <form method="post" action="' . site_url('admin.php') .'">
                 <div class="mb-3 row">
                     <label class="col-form-label col-sm-4" for="cat">'. adm_translate("Catégorie")  .'</label>
                     <div class="col-sm-8">
@@ -439,8 +439,8 @@ function links(): void
                 <td>'. $link['title']  .'</td>
                 <td><a href="'. $link['url']  .'" target="_blank">'. $link['url']  .'</a></td>
                 <td>
-                <a href="admin.php?op=LinksModLink&amp;lid='. $link['lid']  .'" ><i class="fas fa-edit fa-lg"></i></a>
-                <a href="admin.php?op=LinksDelLink&amp;lid='. $link['lid']  .'" class="text-danger"><i class="fas fa-trash fa-lg ms-3"></i></a>
+                <a href="' . site_url('admin.php?op=LinksModLink&amp;lid='. $link['lid']) .'" ><i class="fas fa-edit fa-lg"></i></a>
+                <a href="' . site_url('admin.php?op=LinksDelLink&amp;lid='. $link['lid']) .'" class="text-danger"><i class="fas fa-trash fa-lg ms-3"></i></a>
                 </td>
             </tr>';
     }
@@ -457,11 +457,11 @@ function links(): void
         <li class="page-item disabled"><a class="page-link" href="#">'. $count_links  .'</a></li>';
 
     if ($deja_affiches >= Config::get('link.rupture')) {
-        echo '<li class="page-item"><a class="page-link" href="admin.php?op=suite_links&amp;deja_affiches=-'. $deja_affiches_moin  .'" >'. adm_translate("Précédent")  .'</a></li>';
+        echo '<li class="page-item"><a class="page-link" href="' . site_url('admin.php?op=suite_links&amp;deja_affiches=-'. $deja_affiches_moin) .'" >'. adm_translate("Précédent")  .'</a></li>';
     }
 
     if ($deja_affiches_plus < $count_links) {
-        echo '<li class="page-item"><a class="page-link" href="admin.php?op=suite_links&amp;deja_affiches='. $deja_affiches_plus  .'" >'. adm_translate("Suivant")  .'</a></li>';
+        echo '<li class="page-item"><a class="page-link" href="' . site_url('admin.php?op=suite_links&amp;deja_affiches='. $deja_affiches_plus) .'" >'. adm_translate("Suivant")  .'</a></li>';
     }
 
     echo '</ul>';
@@ -504,7 +504,7 @@ function LinksModLink(int $lid): void
     $description = stripslashes($link['description']);
 
     echo '
-    <form action="admin.php" method="post" name="adminForm" id="linksmodlink">
+    <form action="' . site_url('admin.php') .'" method="post" name="adminForm" id="linksmodlink">
         <div class="mb-3 row">
             <label class="col-form-label col-sm-4 " for="title">'. adm_translate("Titre de la page")  .'</label>
             <div class="col-sm-8">
@@ -588,7 +588,7 @@ function LinksModLink(int $lid): void
             <div class="col-sm-8 ms-sm-auto">
                 <input type="hidden" name="op" value="LinksModLinkS" />
                 <button type="submit" class="btn btn-primary" ><i class="fa fa-check fa-lg"></i>&nbsp;'. adm_translate("Modifier")  .' </button>
-                <a href="admin.php?op=LinksDelLink&amp;lid='. $lid  .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
+                <a href="' . site_url('admin.php?op=LinksDelLink&amp;lid='. $lid) .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
             </div>
         </div>
     </form>';
@@ -599,7 +599,7 @@ function LinksModLink(int $lid): void
     if (empty($links_editorials)) {
         echo '
         <h3 class="mb-3">'. adm_translate("Ajouter un Editorial")  .'</h3>
-        <form action="admin.php" method="post" id="linksaddeditorial">
+        <form action="' . site_url('admin.php') .'" method="post" id="linksaddeditorial">
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4 " for="editorialtitle">'. adm_translate("Titre")  .'</label>
                 <div class="col-sm-8">
@@ -628,7 +628,7 @@ function LinksModLink(int $lid): void
             $editorialtext = stripslashes($editorials['editorialtext']);
 
             echo '<h3 class="mb-3">'. adm_translate("Modifier l'Editorial")  .'</h3> - '. adm_translate("Auteur")  .' : '. $editorials['adminid']  .' : '. date::formatTimeStamp($editorials['editorialtimestamp']);
-            echo '<form action="admin.php" method="post" id="linksediteditorial">
+            echo '<form action="' . site_url('admin.php') .'" method="post" id="linksediteditorial">
                 <div class="mb-3 row">
                     <label class="col-form-label col-sm-4 " for="editorialtitle">'. adm_translate("Titre")  .'</label>
                     <div class="col-sm-8">
@@ -647,7 +647,7 @@ function LinksModLink(int $lid): void
                         <input type="hidden" name="linkid" value="'. $lid  .'" />
                         <input type="hidden" name="op" value="LinksModEditorial" />
                         <button class="btn btn-primary" type="submit"><i class="fa fa-check fa-lg"></i>&nbsp;'. adm_translate("Modifier")  .'</button>
-                        <a href="admin.php?op=LinksDelEditorial&amp;linkid='. $lid  .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
+                        <a href="' . site_url('admin.php?op=LinksDelEditorial&amp;linkid='. $lid) .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
                         </div>
                 </div>
             </form>';
@@ -700,7 +700,7 @@ function LinksListBrokenLinks(): void
     $totalbrokenlinks = DB::table('links_modrequest')->select('lid', 'modifysubmitter')->where('brokenlink', 1)->orderBy('requestid')->get();
 
     if ($totalbrokenlinks == 0) {
-        header("location: admin.php?op=links");
+        header('location: ' . site_url('admin.php?op=links'));
     }
 
     include("themes/default/header.php");
@@ -766,8 +766,8 @@ function LinksListBrokenLinks(): void
 
             echo '
                 </td>
-                <td><a href="admin.php?op=LinksIgnoreBrokenLinks&amp;lid='. $brokenlinks['lid']  .'" ><i class="fas fa-trash fa-lg" title="'. adm_translate("Ignorer (Efface toutes les demandes pour un Lien donné)")  .'" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></td>
-                <td><a href=admin.php?op=LinksDelBrokenLinks&amp;lid='. $brokenlinks['lid']  .'" ><i class="fas fa-trash text-danger fa-lg" title="'. adm_translate("Effacer (Efface les Liens cassés et les avis pour un Lien donné)")  .'" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></td>
+                <td><a href="' . site_url('admin.php?op=LinksIgnoreBrokenLinks&amp;lid='. $brokenlinks['lid']) .'" ><i class="fas fa-trash fa-lg" title="'. adm_translate("Ignorer (Efface toutes les demandes pour un Lien donné)")  .'" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></td>
+                <td><a href=' . site_url('admin.php?op=LinksDelBrokenLinks&amp;lid='. $brokenlinks['lid']) .'" ><i class="fas fa-trash text-danger fa-lg" title="'. adm_translate("Effacer (Efface les Liens cassés et les avis pour un Lien donné)")  .'" data-bs-toggle="tooltip" data-bs-placement="left"></i></a></td>
             </tr>';
         }
     }
@@ -794,7 +794,7 @@ function LinksDelBrokenLinks(int $lid): void
     global $aid;
     logs::Ecr_Log('security', "DeleteBrokensLinks($lid) by AID : $aid", '');
 
-    Header("Location: admin.php?op=LinksListBrokenLinks");
+    Header('Location: ' . site_url('admin.php?op=LinksListBrokenLinks'));
 }
 
 /**
@@ -808,7 +808,7 @@ function LinksIgnoreBrokenLinks(int $lid): void
 {
     DB::table('links_modrequest')->where('lid', $lid)->where('brokenlink', 1)->delete();
 
-    Header("Location: admin.php?op=LinksListBrokenLinks");
+    Header('Location: ' . site_url('admin.php?op=LinksListBrokenLinks');
 }
 
 /**
@@ -825,7 +825,7 @@ function LinksListModRequests(): void
                             ->get();
 
     if ($links_modrequest == 0) {
-        header("location: admin.php?op=links");
+        header('location: ' . site_url('admin.php?op=links'));
     }
 
     include("themes/default/header.php");
@@ -958,8 +958,8 @@ function LinksListModRequests(): void
 
         echo '
             <div class="mb-3">
-                <a href="admin.php?op=LinksChangeModRequests&amp;requestid='. $modrequest['requestid']  .'" class="btn btn-primary btn-sm">'. adm_translate("Accepter")  .'</a>
-                <a href="admin.php?op=LinksChangeIgnoreRequests&amp;requestid='. $modrequest['requestid']  .'" class="btn btn-secondary btn-sm">'. adm_translate("Ignorer")  .'</a>
+                <a href="' . site_url('admin.php?op=LinksChangeModRequests&amp;requestid='. $modrequest['requestid']) .'" class="btn btn-primary btn-sm">'. adm_translate("Accepter")  .'</a>
+                <a href="' . site_url('admin.php?op=LinksChangeIgnoreRequests&amp;requestid='. $modrequest['requestid']) .'" class="btn btn-secondary btn-sm">'. adm_translate("Ignorer")  .'</a>
             </div>
         </div>';
     }
@@ -994,7 +994,7 @@ function LinksChangeModRequests(int $Xrequestid): void
     global $aid;
     logs::Ecr_Log('security', "UpdateModRequestLinks($Xrequestid) by AID : $aid", '');
 
-    Header("Location: admin.php?op=LinksListModRequests");
+    Header('Location: ' . site_url('admin.php?op=LinksListModRequests');
 }
 
 /**
@@ -1008,7 +1008,7 @@ function LinksChangeIgnoreRequests(int $requestid): void
 {
     DB::table('links_modrequest')->where('requestid', $requestid)->delete();
 
-    Header("Location: admin.php?op=LinksListModRequests");
+    Header('Location: ' . site_url('admin.php?op=LinksListModRequests'));
 }
 
 /**
@@ -1047,7 +1047,7 @@ function LinksModLinkS(int $lid, string $title, string $url, string $xtext, stri
     global $aid;
     logs::Ecr_Log('security', "UpdateLinks($lid, $title) by AID : $aid", '');
 
-    Header("Location: admin.php?op=links");
+    Header('Location: ' . site_url('admin.php?op=links'));
 }
 
 /**
@@ -1064,7 +1064,7 @@ function LinksDelLink(int $lid): void
     global $aid;
     logs::Ecr_Log('security', "DeleteLinks($lid) by AID : $aid", '');
 
-    Header("Location: admin.php?op=links");
+    Header('Location: ' . site_url('admin.php?op=links'));
 }
 
 /**
@@ -1099,7 +1099,7 @@ function LinksModCat(string $cat): void
         $cdescription = stripslashes($categorie['cdescription']);
         
         echo '
-        <form action="admin.php" method="get" id="linksmodcat">
+        <form action="' . site_url('admin.php') .'" method="get" id="linksmodcat">
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4 " for="title">'. adm_translate("Nom")  .'</label>
                 <div class="col-sm-8">
@@ -1119,7 +1119,7 @@ function LinksModCat(string $cat): void
                     <input type="hidden" name="cid" value="'. $cat[0]  .'">
                     <input type="hidden" name="op" value="LinksModCatS">
                     <button class="btn btn-primary" type="submit"><i class="fa fa-check fa-lg"></i>&nbsp;'. adm_translate("Modifier")  .'</button>
-                    <a href="admin.php?op=LinksDelCat&amp;sub=0&amp;cid='. $cat[0]  .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
+                    <a href="' . site_url('admin.php?op=LinksDelCat&amp;sub=0&amp;cid='. $cat[0]) .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
                 </div>
             </div>
         </form>';
@@ -1132,7 +1132,7 @@ function LinksModCat(string $cat): void
         <hr />
         <h3>'. adm_translate("Modifier la Catégorie")  .' </h3>
         <p class="lead">'. adm_translate("Nom de la Catégorie : ") . language::aff_langue($categories['ctitle'])  .'</p>
-        <form action="admin.php" method="get" id="linksmodcat">
+        <form action="' . site_url('admin.php') .'" method="get" id="linksmodcat">
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4 " for="title">'. adm_translate("Nom de la Sous-catégorie")  .'</label>
                 <div class="col-sm-8">
@@ -1147,7 +1147,7 @@ function LinksModCat(string $cat): void
                     <input type="hidden" name="sid" value="'. $cat[1]  .'">
                     <input type="hidden" name="op" value="LinksModCatS">
                     <button class="btn btn-primary" type="submit"><i class="fa fa-check fa-lg"></i>&nbsp;'. adm_translate("Modifier")  .'</button>
-                    <a href="admin.php?op=LinksDelCat&amp;sub=1&amp;cid='. $cat[0]  .'&amp;sid='. $cat[1]  .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
+                    <a href="' . site_url('admin.php?op=LinksDelCat&amp;sub=1&amp;cid='. $cat[0]  .'&amp;sid='. $cat[1]) .'" class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;'. adm_translate("Effacer")  .'</a>
                 </div>
             </div>
         </form>';
@@ -1190,7 +1190,7 @@ function LinksModCatS(int $cid, int $sid, int $sub, string $title, string $cdesc
         logs::Ecr_Log('security', "UpdateSubCatLinks($cid, $title) by AID : $aid", '');
     }
 
-    Header("Location: admin.php?op=links");
+    Header('Location: ' . site_url('admin.php?op=links'));
 }
 
 /**
@@ -1221,10 +1221,10 @@ function LinksDelCat(int $cid, int $sid, int $sub, int $ok = 0): void
             logs::Ecr_Log('security', "DeleteCatLinks($cid) by AID : $aid", '');
         }
 
-        Header("Location: admin.php?op=links");
+        Header('Location: ' . site_url('admin.php?op=links'));
     } else {
         message_error('<div class="alert alert-danger">'. adm_translate("ATTENTION : Etes-vous sûr de vouloir effacer cette Catégorie et tous ses Liens ?")  .'</div><br />
-        <a class="btn btn-danger me-2" href="admin.php?op=LinksDelCat&amp;cid='. $cid  .'&amp;sid='. $sid  .'&amp;sub='. $sub  .'&amp;ok=1" >'. adm_translate("Oui")  .'</a>');
+        <a class="btn btn-danger me-2" href="' . site_url('admin.php?op=LinksDelCat&amp;cid='. $cid  .'&amp;sid='. $sid  .'&amp;sub='. $sub  .'&amp;ok=1') .'" >'. adm_translate("Oui")  .'</a>');
     }
 }
 
@@ -1242,7 +1242,7 @@ function LinksDelNew(int $lid): void
     global $aid;
     logs::Ecr_Log('security', "DeleteNewLinks($lid) by AID : $aid", '');
 
-    Header("Location: admin.php?op=links");
+    Header('Location: ' . site_url('admin.php?op=links'));
 }
 
 /**
@@ -1268,7 +1268,7 @@ function LinksAddCat(string $title, string $cdescription): void
         global $aid;
         logs::Ecr_Log('security', "AddCatLinks($title) by AID : $aid", '');
 
-        Header("Location: admin.php?op=links");
+        Header('Location: ' . site_url('admin.php?op=links'));
     }
 }
 
@@ -1295,7 +1295,7 @@ function LinksAddSubCat(int $cid, string $title): void
         global $aid;
         logs::Ecr_Log('security', "AddSubCatLinks($title) by AID : $aid", '');
 
-        Header("Location: admin.php?op=links");
+        Header('Location: ' . site_url('admin.php?op=links'));
     }
 }
 
@@ -1382,7 +1382,7 @@ function message_error(string $ibid): void
 
     echo '<hr />';
     echo $ibid;
-    echo '<a href="admin.php?op=links" class="btn btn-secondary">'. adm_translate("Retour en arrière")  .'</a>';
+    echo '<a href="' . site_url('admin.php?op=links') .'" class="btn btn-secondary">'. adm_translate("Retour en arrière")  .'</a>';
 
     css::adminfoot('', '', '', '');
 }
@@ -1451,7 +1451,7 @@ function LinksAddLink(int $new, int $lid, string $title, string $url, string $ca
                 $nuke_url = Config::get('npds.nuke_url');
                 
                 $subject = html_entity_decode(adm_translate("Votre Lien"), ENT_COMPAT | ENT_HTML401, 'utf-8') ." : ". Config::get('npds.sitename');
-                $message = adm_translate("Bonjour") ." $name :\n\n". adm_translate("Nous avons approuvé votre contribution à notre moteur de recherche.") ."\n\n". adm_translate("Titre de la page") ." : $title\n". adm_translate("URL de la Page : ") ."<a href=\"$url\">$url</a>\n". adm_translate("Description : ") ."$xtext\n". adm_translate("Vous pouvez utiliser notre moteur de recherche sur : ") ." <a href=\"$nuke_url/modules.php?ModPath=links&ModStart=links\">$nuke_url/modules.php?ModPath=links&ModStart=links</a>\n\n". adm_translate("Merci pour votre Contribution !") ."\n";
+                $message = adm_translate("Bonjour") ." $name :\n\n". adm_translate("Nous avons approuvé votre contribution à notre moteur de recherche.") ."\n\n". adm_translate("Titre de la page") ." : $title\n". adm_translate("URL de la Page : ") ."<a href=\"$url\">$url</a>\n". adm_translate("Description : ") ."$xtext\n". adm_translate("Vous pouvez utiliser notre moteur de recherche sur : ") ." <a href=\"" . site_url('modules.php?ModPath=links&ModStart=links') ."/\">" . site_url('modules.php?ModPath=links&ModStart=links') ."</a>\n\n". adm_translate("Merci pour votre Contribution !") ."\n";
                 $message .= Config::get('signature.message');
                 
                 mailler::send_email($email, $subject, $message, '', false, 'html', '');

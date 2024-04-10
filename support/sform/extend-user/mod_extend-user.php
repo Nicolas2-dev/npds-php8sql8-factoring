@@ -20,7 +20,7 @@ Sform::add_form_title('Register');
 Sform::add_form_id('register');
 Sform::add_form_method("post");
 Sform::add_form_check('false');
-Sform::add_url('user.php');
+Sform::add_url(site_url('user.php'));
 
 include("support/sform/extend-user/mod_formulaire.php");
 

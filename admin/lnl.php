@@ -42,8 +42,8 @@ admindroits($aid, $f_meta_nom);
  */
 function error_handler(string $ibid): void
 {
-    echo "<p align=\"center\"><span class=\"rouge\">". adm_translate("Merci d'entrer l'information en fonction des spécifications") ."<br /><br />";
-    echo "$ibid</span><br /><a href=\"index.php\" class=\"noir\">". adm_translate("Retour en arrière") ."</a></p>";
+    echo '<p align="center"><span class="rouge">'. adm_translate("Merci d'entrer l'information en fonction des spécifications") .'<br /><br />';
+    echo $ibid .'</span><br /><a href="' . site_url('index.php') .'" class="noir">'. adm_translate("Retour en arrière") .'</a></p>';
 }
 
 /**
@@ -101,10 +101,10 @@ function ShowHeader(): void
                     <code>'. $head_foot['html'] .'</code>
                 </td>
                 <td>
-                    <a href="admin.php?op=lnl_Shw_Header&amp;Headerid='. $head_foot['ref'] .'" >
+                    <a href="' . site_url('admin.php?op=lnl_Shw_Header&amp;Headerid='. $head_foot['ref']) .'" >
                         <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
-                    <a href="admin.php?op=lnl_Sup_Header&amp;Headerid='. $head_foot['ref'] .'" class="text-danger">
+                    <a href="' . site_url('admin.php?op=lnl_Sup_Header&amp;Headerid='. $head_foot['ref']) .'" class="text-danger">
                         <i class="fas fa-trash fa-lg" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                 </td>
@@ -157,7 +157,7 @@ function Detail_Header_Footer(string $ibid, string $type): void
 
     echo '
     <hr />
-    <form action="admin.php" method="post" name="adminForm">
+    <form action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <div class="mb-3 row">
             <label class="col-form-label col-sm-12" for="xtext">'. adm_translate("Texte") .'</label>
             <div class="col-sm-12">
@@ -182,7 +182,7 @@ function Detail_Header_Footer(string $ibid, string $type): void
         <div class="mb-3 row">
             <div class="col-sm-12">
                 <button class="btn btn-primary me-1" type="submit">'. adm_translate("Valider") .'</button>
-                <a class="btn btn-secondary" href="admin.php?op=lnl" >'. adm_translate("Retour en arrière") .'</a>
+                <a class="btn btn-secondary" href="' . site_url('admin.php?op=lnl') .'" >'. adm_translate("Retour en arrière") .'</a>
             </div>
         </div>
     </form>';
@@ -244,10 +244,10 @@ function ShowBody(): void
                 <code>'. $body['html'] .'</code>
             </td>
             <td>
-                <a href="admin.php?op=lnl_Shw_Body&amp;Bodyid='. $body['ref'] .'">
+                <a href="' . site_url('admin.php?op=lnl_Shw_Body&amp;Bodyid='. $body['ref']) .'">
                     <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                 </a>
-                <a href="admin.php?op=lnl_Sup_Body&amp;Bodyid='. $body['ref'] .'" class="text-danger">
+                <a href="' . site_url('admin.php?op=lnl_Sup_Body&amp;Bodyid='. $body['ref']) .'" class="text-danger">
                     <i class="fas fa-trash fa-lg" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                 </a>
             </td>
@@ -290,7 +290,7 @@ function Detail_Body(string $ibid): void
     }
 
     echo '
-    <form action="admin.php" method="post" name="adminForm">
+    <form action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <div class="mb-3 row">
             <label class="col-form-label col-sm-12" for="xtext">'. adm_translate("Corps de message") .'</label>
             <div class="col-sm-12">
@@ -335,7 +335,7 @@ function Add_Body(): void
     echo '
     <hr />
     <h3 class="mb-2">'. adm_translate("Corps de message") .'</h3>
-    <form id="lnlbody" action="admin.php" method="post" name="adminForm">
+    <form id="lnlbody" action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <fieldset>
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="html">'. adm_translate("Format de données") .'</label>
@@ -359,7 +359,7 @@ function Add_Body(): void
             <div class="mb-3 row">
                 <input type="hidden" name="op" value="lnl_Add_Body_Submit" />
                 <button class="btn btn-primary col-sm-12 col-md-6" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. adm_translate("Ajouter") .' '. adm_translate("corps de message") .'</button>
-                <a href="admin.php?op=lnl" class="btn btn-secondary col-sm-12 col-md-6">'. adm_translate("Retour en arrière") .'</a>
+                <a href="' . site_url('admin.php?op=lnl') .'" class="btn btn-secondary col-sm-12 col-md-6">'. adm_translate("Retour en arrière") .'</a>
             </div>
         </fieldset>
     </form>';
@@ -449,10 +449,10 @@ function ShowFooter(): void
                 <td>
                     <code>'. $head_foot['html'] .'</code></td>
                 <td>
-                    <a href="admin.php?op=lnl_Shw_Footer&amp;Footerid='. $head_foot['ref'] .'" >
+                    <a href="' . site_url('admin.php?op=lnl_Shw_Footer&amp;Footerid='. $head_foot['ref']) .'" >
                         <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
-                    <a href="admin.php?op=lnl_Sup_Footer&amp;Footerid='. $head_foot['ref'] .'" class="text-danger">
+                    <a href="' . site_url('admin.php?op=lnl_Sup_Footer&amp;Footerid='. $head_foot['ref']) .'" class="text-danger">
                         <i class="fas fa-trash fa-lg" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                 </td>
@@ -491,7 +491,7 @@ function Add_Header_Footer(string $ibid): void
     echo '
         <hr />
         <h3 class="mb-2">'. ucfirst(adm_translate("$ti")) .'</h3>
-        <form id="lnlheadfooter" action="admin.php" method="post" name="adminForm">
+        <form id="lnlheadfooter" action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <fieldset>
             <div class="mb-3">
                 <label class="col-form-label" for="html">'. adm_translate("Format de données") .'</label>
@@ -585,30 +585,30 @@ function main(): void
     <h3 class="mb-2">'. adm_translate("Petite Lettre D'information") .'</h3>
     <ul class="nav flex-md-row flex-column">
         <li class="nav-item">
-            <a class="nav-link active" href="admin.php?op=lnl_List">'. adm_translate("Liste des LNL envoyées") .'</a>
+            <a class="nav-link active" href="' . site_url('admin.php?op=lnl_List') .'">'. adm_translate("Liste des LNL envoyées") .'</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="admin.php?op=lnl_User_List">'. adm_translate("Afficher la liste des prospects") .'</a>
+            <a class="nav-link active" href="' . site_url('admin.php?op=lnl_User_List') .'">'. adm_translate("Afficher la liste des prospects") .'</a>
         </li>
     </ul>
-    <h4 class="my-3"><a href="admin.php?op=lnl_Add_Header" ><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Message d'entête") .'</h4>';
+    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Header') .'" ><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Message d'entête") .'</h4>';
     
     ShowHeader();
 
     echo '
-    <h4 class="my-3"><a href="admin.php?op=lnl_Add_Body" ><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Corps de message") .'</h4>';
+    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Body') .'" ><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Corps de message") .'</h4>';
     
     ShowBody();
 
     echo '
-    <h4 class="my-3"><a href="admin.php?op=lnl_Add_Footer"><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Message de pied de page") .'</h4>';
+    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Footer') .'"><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Message de pied de page") .'</h4>';
     
     ShowFooter();
 
     echo '
     <hr />
     <h4>'. adm_translate("Assembler une lettre et la tester") .'</h4>
-    <form id="ltesto" action="admin.php" method="post">
+    <form id="ltesto" action="' . site_url('admin.php') .'" method="post">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
@@ -636,7 +636,7 @@ function main(): void
     </form>
     <hr />
     <h4>'. adm_translate("Envoyer La Lettre") .'</h4>
-    <form id="lsendo" action="admin.php" method="post">
+    <form id="lsendo" action="' . site_url('admin.php') .'" method="post">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
@@ -736,7 +736,7 @@ function Del_Question(string $retour, string $param): void
     echo '
     <hr />
     <div class="alert alert-danger">'. adm_translate("Etes-vous sûr de vouloir effacer cet Article ?") .'</div>
-    <a href="admin.php?op='. $retour .'&amp;'. $param .'" class="btn btn-danger btn-sm">'. adm_translate("Oui") .'</a>
+    <a href="' . site_url('admin.php?op='. $retour .'&amp;'. $param) .'" class="btn btn-danger btn-sm">'. adm_translate("Oui") .'</a>
     <a href="javascript:history.go(-1)" class="btn btn-secondary btn-sm">'. adm_translate("Non") .'</a>';
 
     css::adminfoot('', '', '', '');
@@ -957,7 +957,7 @@ function lnl_user_list(): void
         }
 
         echo '<td>
-                <a href="admin.php?op=lnl_Sup_User&amp;lnl_user_email='. $outside_users['email'] .'" class="text-danger">
+                <a href="' . site_url('admin.php?op=lnl_Sup_User&amp;lnl_user_email='. $outside_users['email']) .'" class="text-danger">
                     <i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="'. adm_translate("Effacer") .'"></i>
                 </a>
             </td>
@@ -988,19 +988,19 @@ switch ($op) {
     case "Sup_HeaderOK":
         DB::table('lnl_head_foot')->where('ref', $Headerid)->delete();
 
-        header("location: admin.php?op=lnl");
+        header('location: ' . site_url('admin.php?op=lnl'));
         break;
 
     case "Sup_BodyOK":
         DB::table('lnl_body')->where('ref', $Bodyid)->delete();
 
-        header("location: admin.php?op=lnl");
+        header('location: ' . site_url('admin.php?op=lnl'));
         break;
 
     case "Sup_FooterOK":
         DB::table('lnl_head_foot')->where('ref', $Footerid)->delete();
 
-        header("location: admin.php?op=lnl");
+        header('location: ' . site_url('admin.php?op=lnl'));
         break;
 
     case "Shw_Header":
@@ -1021,7 +1021,7 @@ switch ($op) {
 
     case "Add_Header_Submit":
         Add_Header_Footer_Submit("HED", $xtext, $html);
-        header("location: admin.php?op=lnl");
+        header('location: ' . site_url('admin.php?op=lnl'));
         break;
 
     case "Add_Header_Mod":
@@ -1029,7 +1029,7 @@ switch ($op) {
             'text'  => $xtext,
         ));
 
-        header("location: admin.php?op=lnl_Shw_Header&Headerid=$ref");
+        header('location: ' . site_url('admin.php?op=lnl_Shw_Header&Headerid='. $ref));
         break;
 
     case "Add_Body":
@@ -1046,7 +1046,7 @@ switch ($op) {
             'text'  => $xtext,
         ));
 
-        header("location: admin.php?op=lnl_Shw_Body&Bodyid=$ref");
+        header('location: ' . site_url('admin.php?op=lnl_Shw_Body&Bodyid='. $ref));
         break;
 
     case "Add_Footer":
@@ -1055,7 +1055,7 @@ switch ($op) {
 
     case "Add_Footer_Submit":
         Add_Header_Footer_Submit("FOT", $xtext, $html);
-        header("location: admin.php?op=lnl");
+        header('location: ' . site_url('admin.php?op=lnl'));
         break;
 
     case "Add_Footer_Mod":
@@ -1063,7 +1063,7 @@ switch ($op) {
             'text'  => $xtext,
         ));
 
-        header("location: admin.php?op=lnl_Shw_Footer&Footerid=$ref");
+        header('location: ' . site_url('admin.php?op=lnl_Shw_Footer&Footerid='. $ref));
         break;
 
     case "Test":
@@ -1081,7 +1081,7 @@ switch ($op) {
     case "Sup_User":
         DB::table('lnl_outside_users')->where('email', $lnl_user_email)->delete();
 
-        header("location: admin.php?op=lnl_User_List");
+        header('location: ' . site_url('admin.php?op=lnl_User_List'));
         break;
 
     case "Send":
@@ -1149,10 +1149,10 @@ switch ($op) {
                             
                             if ($Xmime == "html-nobr") {
                                 $Xmessage = $message ."<br /><br /><hr noshade>";
-                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") ." : <a href=\"". $nuke_url ."/lnl.php?op=unsubscribe&email=". $outside_users['email'] ."\">". adm_translate("Modifier") ."</a>";
+                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") ." : <a href=\"". site_url('lnl.php?op=unsubscribe&email='. $outside_users['email']) ."\">". adm_translate("Modifier") ."</a>";
                             } else {
                                 $Xmessage = $message ."\n\n------------------------------------------------------------------\n";
-                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") ." : ". $nuke_url ."/lnl.php?op=unsubscribe&email=". $outside_users['email'] ."";
+                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") ." : ".  site_url('lnl.php?op=unsubscribe&email='. $outside_users['email']) ."";
                             }
 
                             mailler::send_email($$outside_users['email'], $subject, metalang::meta_lang($Xmessage), "", true, $Xmime, '');
@@ -1276,7 +1276,7 @@ switch ($op) {
                     ));
                 }
 
-                header("location: admin.php?op=lnl");
+                header('location: ' . site_url('admin.php?op=lnl'));
                 break;
             } else {
                 if ($OXtype == "All") {
@@ -1305,7 +1305,7 @@ switch ($op) {
         echo "<script type=\"text/javascript\">
                 //<![CDATA[
                 function redirect() {
-                    window.location=\"admin.php?op=lnl_Send&debut=". $deb ."&OXtype=$OXtype&Xtype=$Xtype&Xgroupe=$Xgroupe&Xheader=". $Xheader ."&Xbody=". $Xbody ."&Xfooter=". $Xfooter ."&number_send=". $number_send ."&Xsubject=". $Xsubject ."\";
+                    window.location=\"" . site_url('admin.php?op=lnl_Send&debut='. $deb .'&OXtype='. $OXtype .'&Xtype='. $Xtype .'&Xgroupe='. $Xgroupe .'&Xheader='. $Xheader .'&Xbody='. $Xbody .'&Xfooter='. $Xfooter .'&number_send='. $number_send .'&Xsubject='. $Xsubject) ."\";
                 }
                 setTimeout(\"redirect()\",10000);
                 //]]>

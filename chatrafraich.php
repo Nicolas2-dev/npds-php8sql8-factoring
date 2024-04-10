@@ -64,7 +64,7 @@ if ($chatbox) {
             if ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) {
                 $thing .= "<div class='chatnom'>".$username."</div>";
             } else {
-                $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', userpopover($username, 36, 1)) . "</div> <a href='user.php?op=userinfo&amp;uname=$username' target='_blank'>$username</a></div>";
+                $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', userpopover($username, 36, 1)) . "</div> <a href='". site_url('user.php?op=userinfo&amp;uname='. $username) ."' target='_blank'>$username</a></div>";
             }
         } else {
             $thing .= "<div class='chatnom'>".$username."</div>";
@@ -134,7 +134,7 @@ echo "</head>\n<body id='chat'>
     }
 
     function rafraichir() {
-        self.location='chatrafraich.php?repere=".$repere."&aff_entetes=0&connectes=".$numofchatters."&id=".$id."&auto=".$auto."'
+        self.location='" . site_url('chatrafraich.php?repere='. $repere .'&aff_entetes=0&connectes='. $numofchatters .'&id='. $id .'&auto='. $auto) ."'
     }
 
     function sur_chargement() {

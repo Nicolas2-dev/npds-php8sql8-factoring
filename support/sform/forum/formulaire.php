@@ -70,7 +70,7 @@ $tmp = array(
     "n9" => array('en' => "-: NPDS RÉvolution 16.1 ", 'selected' => false),
     "n10" => array('en' => "-: NPDS RÉvolution 16.2 ", 'selected' => false),
 );
-Sform::add_select('t4', 'Version NPDS (<a href="stats.php">voir statistiques du site</a>)', $tmp, false, 4, true);
+Sform::add_select('t4', 'Version NPDS (<a href="' . site_url('stats.php') .'">voir statistiques du site</a>)', $tmp, false, 4, true);
 
 // Champ Combo : hauteur = 6 / Pas d'option par défaut / titre "Type de problème"
 $tmp = array(

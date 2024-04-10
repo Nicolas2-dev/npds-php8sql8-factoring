@@ -32,7 +32,7 @@ function L_encrypt($txt)
 global $user;
 
 if (!$user) {
-    Header("Location: user.php");
+    Header('Location: ' . site_url('user.php'));
 } else {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);

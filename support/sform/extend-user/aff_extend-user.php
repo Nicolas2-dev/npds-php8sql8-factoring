@@ -20,7 +20,7 @@ use npds\system\support\facades\Sform;
 Sform::add_form_title('Register');
 Sform::add_form_method('post');
 Sform::add_form_check('false');
-Sform::add_url('user.php');
+Sform::add_url(site_url('user.php'));
 
 include($sform_path . 'support/sform/extend-user/aff_formulaire.php');
 

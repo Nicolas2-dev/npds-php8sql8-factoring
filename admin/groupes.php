@@ -67,7 +67,7 @@ function group_liste(string $al): void
         if ($tab_groupe) {
             foreach ($tab_groupe as $groupevalue) {
                 if ($groupevalue != '') {
-                    $tab_groupeII[$groupevalue] .= $status['uid'] . ' ';
+                    $tab_groupeII[$groupevalue] .= $status['uid']  .' ';
                     $tab_groupeIII[$groupevalue] = $groupevalue;
                 }
             }
@@ -80,12 +80,12 @@ function group_liste(string $al): void
     if ($al) {
         if (preg_match('#^mod#', $al)) {
             $al = explode('_', $al);
-            $mes = adm_translate("Vous ne pouvez pas exclure") . ' ' . $al[1] . ' ' . adm_translate("car il est modérateur unique de forum. Oter ses droits de modération puis retirer le du groupe.");
+            $mes = adm_translate("Vous ne pouvez pas exclure")  .' '. $al[1]  .' '. adm_translate("car il est modérateur unique de forum. Oter ses droits de modération puis retirer le du groupe.");
         }
     }
 
     if ($al) {
-        echo 'bootbox.alert("' . $mes . '")';
+        echo 'bootbox.alert("'. $mes  .'")';
     }
 
     echo '
@@ -95,7 +95,7 @@ function group_liste(string $al): void
     function choisir_mod_forum(gp,gn,ar_user,ar_uid) {
         var user_json = ar_user.split(",");
         var uid_json = ar_uid.split(",");
-        var choix_mod = prompt("' . html_entity_decode(adm_translate("Choisir un modérateur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : \n"+user_json);
+        var choix_mod = prompt("'. html_entity_decode(adm_translate("Choisir un modérateur"), ENT_COMPAT | ENT_HTML401, 'utf-8')  .' : \n"+user_json);
         if (choix_mod) {
             for (i=0; i<user_json.length; i++) {
                 if (user_json[i] == choix_mod) {var ind_uid=i;}
@@ -105,9 +105,9 @@ function group_liste(string $al): void
                 xhr_object = new XMLHttpRequest();
             else if(window.ActiveXObject) // IE
                 xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-            xhr_object.open("GET", "admin.php?op=forum_groupe_create&groupe_id="+gp+"&groupe_name="+gn+"&moder="+uid_json[ind_uid], false);
+            xhr_object.open("GET", "' . site_url('admin.php?op=forum_groupe_create&groupe_id=') .'"+gp+"&groupe_name="+gn+"&moder="+uid_json[ind_uid], false);
             xhr_object.send(null);
-            document.location.href="admin.php?op=groupes";
+            document.location.href="' . site_url('admin.php?op=groupes') .'";
         }
     } 
     //<== choix moderateur
@@ -119,8 +119,8 @@ function group_liste(string $al): void
             xhr_object = new XMLHttpRequest();
         else if(window.ActiveXObject) // IE
             xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-        if (confirm("' . adm_translate("Vous allez exclure TOUS les membres du groupe") . ' "+grp+" !")) {
-            xhr_object.open("GET", location.href="admin.php?op=retiredugroupe_all&groupe_id="+grp+"&tab_groupe="+ugp, false);
+        if (confirm("'. adm_translate("Vous allez exclure TOUS les membres du groupe")  .' "+grp+" !")) {
+            xhr_object.open("GET", location.href="' . site_url('admin.php?op=retiredugroupe_all&groupe_id=') .'"+grp+"&tab_groupe="+ugp, false);
         }
     }
     //<== confirmation suppression tous les membres du groupe (done in xhr)
@@ -132,8 +132,8 @@ function group_liste(string $al): void
             xhr_object = new XMLHttpRequest();
         else if(window.ActiveXObject) // IE
             xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-        if (confirm("' . adm_translate("Vous allez supprimer le groupe") . ' "+gr)) {
-            xhr_object.open("GET", location.href="admin.php?op=groupe_maj&groupe_id="+gr+"&sub_op=' . adm_translate("Supprimer") . '", false);
+        if (confirm("'. adm_translate("Vous allez supprimer le groupe")  .' "+gr)) {
+            xhr_object.open("GET", location.href="' . site_url('admin.php?op=groupe_maj&groupe_id=') .'"+gr+"&sub_op='. adm_translate("Supprimer")  .'", false);
         }
     }
     //<== confirmation suppression groupe (done in xhr)
@@ -142,12 +142,12 @@ function group_liste(string $al): void
 
     echo '
     <hr />
-    <form action="admin.php" method="post" name="nouveaugroupe">
+    <form action="' . site_url('admin.php') .'" method="post" name="nouveaugroupe">
         <input type="hidden" name="op" value="groupe_add" />
-        <a href="#" onclick="document.forms[\'nouveaugroupe\'].submit()" title="' . adm_translate("Ajouter un groupe") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-users fa-2x"></i><i class="fa fa-plus fa-lg me-1"></i></a> 
+        <a href="#" onclick="document.forms[\'nouveaugroupe\'].submit()" title="'. adm_translate("Ajouter un groupe")  .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-users fa-2x"></i><i class="fa fa-plus fa-lg me-1"></i></a> 
     </form>
     <hr />
-    <h3 class="my-3"><a class="tog small" id="hide_lst_gr" title="' . adm_translate("Replier la liste") . '" ><i id="i_lst_gr" class="fa fa-caret-up fa-lg text-primary" ></i></a>&nbsp;' . adm_translate("Liste des groupes") . '</h3>
+    <h3 class="my-3"><a class="tog small" id="hide_lst_gr" title="'. adm_translate("Replier la liste")  .'" ><i id="i_lst_gr" class="fa fa-caret-up fa-lg text-primary" ></i></a>&nbsp;'. adm_translate("Liste des groupes")  .'</h3>
     <div id="lst_gr" class="row">
         <div id="gr_dat" class="p-3">';
 
@@ -164,13 +164,13 @@ function group_liste(string $al): void
                         ->first();
 
             echo '
-            <div id="bloc_gr_' . $gp . '" class="row border rounded ms-1 p-2 px-0 mb-2 w-100">
+            <div id="bloc_gr_'. $gp  .'" class="row border rounded ms-1 p-2 px-0 mb-2 w-100">
                 <div class="col-lg-4 ">
-                <span>' . $gp . '</span>
-                <i class="fa fa-users fa-2x text-muted"></i><h4 class="my-2">' . language::aff_langue($result['groupe_name']) . '</h4><p>' . language::aff_langue($result['groupe_description']);
+                <span>'. $gp  .'</span>
+                <i class="fa fa-users fa-2x text-muted"></i><h4 class="my-2">'. language::aff_langue($result['groupe_name'])  .'</h4><p>'. language::aff_langue($result['groupe_description']);
             
-            if (file_exists('storage/users_private/groupe/' . $gp . '/groupe.png')) {
-                echo '<img class="d-block my-2" src="storage/users_private/groupe/' . $gp . '/groupe.png" width="80" height="80" alt="logo_groupe" />';
+            if (file_exists('storage/users_private/groupe/'. $gp  .'/groupe.png')) {
+                echo '<img class="d-block my-2" src="storage/users_private/groupe/'. $gp  .'/groupe.png" width="80" height="80" alt="logo_groupe" />';
             }
             
             echo '
@@ -181,14 +181,14 @@ function group_liste(string $al): void
             $nb_mb = (count($tab_groupe)) - 1;
 
             echo '
-                <a class="tog" id="show_lst_mb_' . $gp . '" title="' . adm_translate("Déplier la liste") . '"><i id="i_lst_mb_gr_' . $gp . '" class="fa fa-caret-down fa-lg text-primary" ></i></a>&nbsp;&nbsp;
-                <i class="fa fa-user fa-2x text-muted"></i> <span class=" align-top badge bg-secondary">&nbsp;' . $nb_mb . '</span>&nbsp;&nbsp;';
+                <a class="tog" id="show_lst_mb_'. $gp  .'" title="'. adm_translate("Déplier la liste")  .'"><i id="i_lst_mb_gr_'. $gp  .'" class="fa fa-caret-down fa-lg text-primary" ></i></a>&nbsp;&nbsp;
+                <i class="fa fa-user fa-2x text-muted"></i> <span class=" align-top badge bg-secondary">&nbsp;'. $nb_mb  .'</span>&nbsp;&nbsp;';
             
             $lst_uid_json = '';
             //$lst_uidna_json = ''; // ??? not used
 
             //==> liste membres du groupe
-            echo '<ul id="lst_mb_gr_' . $gp . '" style ="display:none; padding-left:0px; -webkit-padding-start: 0px;">';
+            echo '<ul id="lst_mb_gr_'. $gp  .'" style ="display:none; padding-left:0px; -webkit-padding-start: 0px;">';
             
             foreach ($tab_groupe as $bidon => $uidX) {
                 if ($uidX) {
@@ -198,9 +198,9 @@ function group_liste(string $al): void
                         ->where('uid', $uidX)
                         ->first();
 
-                    $lst_user_json .= $user['uname'] . ',';
-                    $lst_uid_json .= $uidX . ',';
-                    $lst_gr_json .= '\'mbgr_' . $gp . '\': { gp: \'' . $gp . '\'},';
+                    $lst_user_json .= $user['uname']  .',';
+                    $lst_uid_json .= $uidX  .',';
+                    $lst_gr_json .= '\'mbgr_'. $gp  .'\': { gp: \''. $gp  .'\'},';
                     
                     if (!$user['user_avatar']) {
                         $imgtmp = "assets/images/forum/avatar/blank.gif";
@@ -219,22 +219,22 @@ function group_liste(string $al): void
                     }
 
                     echo '
-                <li id="' . $user['uname'] . $uidX . '_' . $gp . '" style="list-style-type:none;">
+                <li id="'. $user['uname'] . $uidX  .'_'. $gp  .'" style="list-style-type:none;">
                     <div style="float:left;">
-                        <a class="adm_tooltip"><em style="width:90px;"><img src="' . $imgtmp . '"  height="80" width="80" alt="avatar"/></em>- </a>
+                        <a class="adm_tooltip"><em style="width:90px;"><img src="'. $imgtmp  .'"  height="80" width="80" alt="avatar"/></em>- </a>
                     </div>
                     <div class="text-truncate" style="min-width:110px; width:110px; float:left;">
-                        ' . $user['uname'] . '
+                        '. $user['uname']  .'
                     </div>
                     <div>
-                        <a href="admin.php?chng_uid=' . $uidX . '&amp;op=modifyUser" title="' . adm_translate("Editer les informations concernant") . ' ' . $user['uname'] . '" data-bs-toggle="tooltip"><i class="fa fa-edit fa-lg fa-fw me-1"></i></a>
-                        <a href="admin.php?op=retiredugroupe&amp;uid=' . $uidX . '&amp;uname=' . $user['uname'] . '&amp;groupe_id=' . $gp . '" title="' . adm_translate("Exclure") . ' ' . $user['uname'] . ' ' . adm_translate("du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"><i class="fa fa-user-times fa-lg fa-fw text-danger me-1"></i></a>
-                        <a href="" data-bs-toggle="collapse" data-bs-target="#moderation_' . $uidX . '_' . $gp . '" ><i class="fa fa-balance-scale fa-lg fa-fw" title="' . adm_translate("Modérateur") . '" data-bs-toggle="tooltip"></i></a>
-                        <div id="moderation_' . $uidX . '_' . $gp . '" class="collapse">';
+                        <a href="' . site_url('admin.php?chng_uid='. $uidX  .'&amp;op=modifyUser') .'" title="'. adm_translate("Editer les informations concernant")  .' '. $user['uname']  .'" data-bs-toggle="tooltip"><i class="fa fa-edit fa-lg fa-fw me-1"></i></a>
+                        <a href="' . site_url('admin.php?op=retiredugroupe&amp;uid='. $uidX  .'&amp;uname='. $user['uname']  .'&amp;groupe_id='. $gp) .'" title="'. adm_translate("Exclure")  .' '. $user['uname']  .' '. adm_translate("du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"><i class="fa fa-user-times fa-lg fa-fw text-danger me-1"></i></a>
+                        <a href="" data-bs-toggle="collapse" data-bs-target="#moderation_'. $uidX  .'_'. $gp  .'" ><i class="fa fa-balance-scale fa-lg fa-fw" title="'. adm_translate("Modérateur")  .'" data-bs-toggle="tooltip"></i></a>
+                        <div id="moderation_'. $uidX  .'_'. $gp  .'" class="collapse">';
                     
                     //=>traitement moderateur
                     if ($result['groupe_forum'] == 1) {
-                        $pat = '#\b' . $uidX . '\b#';
+                        $pat = '#\b'. $uidX  .'\b#';
                         
                         $forums = DB::table('forums')->select('forum_id', 'forum_name', 'forum_moderator')->where('forum_pass', $gp)->get();
 
@@ -248,15 +248,15 @@ function group_liste(string $al): void
                                 $new_moder = implode(',', $tmp_moder);
                                 
                                 echo count($tmp_moder) != 0 ?
-                                    '<a href="admin.php?op=moderateur_update&amp;forum_id=' . $row[0] . '&amp;forum_moderator=' . $new_moder . '" title="' . adm_translate("Oter") . ' ' . $user['uname'] . ' ' . adm_translate("des modérateurs du forum") . ' ' . $row[0] . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-balance-scale fa-lg fa-fw text-danger me-1"></i></a>' :
-                                    '<i class="fa fa-balance-scale fa-lg fa-fw me-1" title="' . adm_translate("Ce modérateur") . " (" . $user['uname'] . ") " . adm_translate("n'est pas modifiable tant qu'un autre n'est pas nommé pour ce forum") . ' ' . $row[0] . '" data-bs-toggle="tooltip" data-bs-placement="right" ></i>';
+                                    '<a href="' . site_url('admin.php?op=moderateur_update&amp;forum_id='. $row[0]  .'&amp;forum_moderator='. $new_moder) .'" title="'. adm_translate("Oter")  .' '. $user['uname']  .' '. adm_translate("des modérateurs du forum")  .' '. $row[0]  .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-balance-scale fa-lg fa-fw text-danger me-1"></i></a>' :
+                                    '<i class="fa fa-balance-scale fa-lg fa-fw me-1" title="'. adm_translate("Ce modérateur") . " (" . $user['uname'] . ") " . adm_translate("n'est pas modifiable tant qu'un autre n'est pas nommé pour ce forum")  .' '. $row[0]  .'" data-bs-toggle="tooltip" data-bs-placement="right" ></i>';
                             } else {
                                 $tmp_moder[] = $uidX;
                                 asort($tmp_moder);
 
                                 $new_moder = implode(',', $tmp_moder);
 
-                                echo '<a href="admin.php?op=moderateur_update&amp;forum_id=' . $row[0] . '&amp;forum_moderator=' . $new_moder . '" title="' . adm_translate("Nommer") . ' ' . $user['uname'] . ' ' . adm_translate("comme modérateur du forum") . ' ' . $row[1] . ' (' . $row[0] . ')" data-bs-toggle="tooltip" data-bs-placement="right" ><i class="fa fa-balance-scale fa-lg fa-fw me-1"></i></a>';
+                                echo '<a href="' . site_url('admin.php?op=moderateur_update&amp;forum_id='. $row[0]  .'&amp;forum_moderator='. $new_moder) .'" title="'. adm_translate("Nommer")  .' '. $user['uname']  .' '. adm_translate("comme modérateur du forum")  .' '. $row[1]  .' ('. $row[0]  .')" data-bs-toggle="tooltip" data-bs-placement="right" ><i class="fa fa-balance-scale fa-lg fa-fw me-1"></i></a>';
                             }
                         }
                     }
@@ -278,41 +278,47 @@ function group_liste(string $al): void
             echo '
             <script type="text/javascript">
                 //<![CDATA[
-                tog(\'lst_mb_gr_' . $gp . '\',\'show_lst_mb_' . $gp . '\',\'hide_lst_mb_' . $gp . '\');
+                tog(\'lst_mb_gr_'. $gp  .'\',\'show_lst_mb_'. $gp  .'\',\'hide_lst_mb_'. $gp  .'\');
                 //]]>
             </script>
-            <i class="fa fa-user-times fa-lg text-danger" title="' . adm_translate('Exclure TOUS les membres du groupe') . ' ' . $gp . '" data-bs-toggle="tooltip" data-bs-placement="right" onclick="delete_AllMembersGroup(\'' . $gp . '\',\'' . $lst_uid_json . '\');"></i>';
+            <i class="fa fa-user-times fa-lg text-danger" title="'. adm_translate('Exclure TOUS les membres du groupe')  .' '. $gp  .'" data-bs-toggle="tooltip" data-bs-placement="right" onclick="delete_AllMembersGroup(\''. $gp  .'\',\''. $lst_uid_json  .'\');"></i>';
             //<== liste membres du groupe
 
             //==> menu groupe
             echo '
             </div>
             <div class="col-lg-3 list-group-item px-0 mt-2 mt-md-0">
-                <a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=groupe_edit&amp;groupe_id=' . $gp . '" title="' . adm_translate("Editer groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fas fa-pencil-alt fa-lg"></i></a><a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="javascript:void(0);" onclick="bootbox.alert(\'' . adm_translate("Avant de supprimer le groupe") . ' ' . $gp . ' ' . adm_translate("vous devez supprimer TOUS ses membres !") . '\');" title="' . adm_translate("Supprimer groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fas fa-trash fa-lg fa-fw"></i></a><a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=membre_add&amp;groupe_id=' . $gp . '" title="' . adm_translate("Ajouter un ou des membres au groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fa fa-user-plus fa-lg fa-fw"></i></a><a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=bloc_groupe_create&amp;groupe_id=' . $gp . '" title="' . adm_translate("Créer le bloc WS") . ' (' . $gp . ')" data-bs-toggle="tooltip"  ><i class="fa fa-clone fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
+                <a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=groupe_edit&amp;groupe_id='. $gp) .'" title="'. adm_translate("Editer groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  >
+                    <i class="fas fa-pencil-alt fa-lg"></i>
+                </a>
+                <a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="javascript:void(0);" onclick="bootbox.alert(\''. adm_translate("Avant de supprimer le groupe")  .' '. $gp  .' '. adm_translate("vous devez supprimer TOUS ses membres !")  .'\');" title="'. adm_translate("Supprimer groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  >
+                    <i class="fas fa-trash fa-lg fa-fw"></i></a><a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=membre_add&amp;groupe_id='. $gp) .'" title="'. adm_translate("Ajouter un ou des membres au groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  >
+                    <i class="fa fa-user-plus fa-lg fa-fw"></i></a><a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=bloc_groupe_create&amp;groupe_id='. $gp) .'" title="'. adm_translate("Créer le bloc WS")  .' ('. $gp  .')" data-bs-toggle="tooltip"  ><i class="fa fa-clone fa-lg fa-fw"></i><i class="fa fa-plus"></i>
+                </a>';
             
             echo $result['groupe_pad'] == 1 
-                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=pad_remove&amp;groupe_id=' . $gp . '" title="' . adm_translate("Désactiver PAD du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fa fa-edit fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
-                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=pad_create&amp;groupe_id=' . $gp . '" title="' . adm_translate("Activer PAD du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fa fa-edit fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
+                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=pad_remove&amp;groupe_id='. $gp) .'" title="'. adm_translate("Désactiver PAD du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="fa fa-edit fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
+                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=pad_create&amp;groupe_id='. $gp) .'" title="'. adm_translate("Activer PAD du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="fa fa-edit fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
             
             echo $result['groupe_blocnote'] == 1 
-                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=note_remove&amp;groupe_id=' . $gp . '" title="' . adm_translate("Désactiver bloc-note du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="far fa-sticky-note fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
-                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=note_create&amp;groupe_id=' . $gp . '" title="' . adm_translate("Activer bloc-note du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="far fa-sticky-note fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
+                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=note_remove&amp;groupe_id='. $gp) .'" title="'. adm_translate("Désactiver bloc-note du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="far fa-sticky-note fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
+                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=note_create&amp;groupe_id='. $gp) .'" title="'. adm_translate("Activer bloc-note du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="far fa-sticky-note fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
             
-            echo file_exists('modules/f-manager/config/groupe_' . $gp . '.conf.php') 
-                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=workspace_archive&amp;groupe_id=' . $gp . '" title="' . adm_translate("Désactiver gestionnaire de fichiers du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="far fa-folder fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
-                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=workspace_create&amp;groupe_id=' . $gp . '" title="' . adm_translate("Activer gestionnaire de fichiers du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="far fa-folder fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
+            echo file_exists('modules/f-manager/config/groupe_'. $gp  .'.conf.php') 
+                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=workspace_archive&amp;groupe_id='. $gp) .'" title="'. adm_translate("Désactiver gestionnaire de fichiers du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="far fa-folder fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
+                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=workspace_create&amp;groupe_id='. $gp) .'" title="'. adm_translate("Activer gestionnaire de fichiers du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="far fa-folder fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
             
             echo $result['groupe_forum'] == 1 
-                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=forum_groupe_delete&amp;groupe_id=' . $gp . '" title="' . adm_translate("Supprimer forum du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fa fa-list-alt fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
-                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="javascript:void(0);" onclick="javascript:choisir_mod_forum(\'' . $gp . '\',\'' . $result['groupe_name'] . '\',\'' . $lst_user_json . '\',\'' . $lst_uid_json . '\');" title="' . adm_translate("Créer forum du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fa fa-list-alt fa-lg fa-fw"></i> <i class="fa fa-plus"></i></a>';
+                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=forum_groupe_delete&amp;groupe_id='. $gp  .'') .'" title="'. adm_translate("Supprimer forum du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="fa fa-list-alt fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
+                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="javascript:void(0);" onclick="javascript:choisir_mod_forum(\''. $gp  .'\',\''. $result['groupe_name']  .'\',\''. $lst_user_json  .'\',\''. $lst_uid_json  .'\');" title="'. adm_translate("Créer forum du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="fa fa-list-alt fa-lg fa-fw"></i> <i class="fa fa-plus"></i></a>';
             
             echo $result['groupe_mns'] == 1 
-                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=groupe_mns_delete&amp;groupe_id=' . $gp . '" title="' . adm_translate("Supprimer MiniSite du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fa fa-desktop fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
-                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=groupe_mns_create&amp;groupe_id=' . $gp . '" title="' . adm_translate("Créer MiniSite du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fa fa-desktop fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
+                ? '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=groupe_mns_delete&amp;groupe_id='. $gp) .'" title="'. adm_translate("Supprimer MiniSite du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="fa fa-desktop fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>' 
+                : '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=groupe_mns_create&amp;groupe_id='. $gp) .'" title="'. adm_translate("Créer MiniSite du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="fa fa-desktop fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>';
             
             echo $result['groupe_chat'] == 0 
-                ? '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=groupe_chat_create&amp;groupe_id=' . $gp . '" title="' . adm_translate("Activer chat du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="far fa-comments fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>' 
-                : '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=groupe_chat_delete&amp;groupe_id=' . $gp . '" title="' . adm_translate("Désactiver chat du groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="far fa-comments fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>';
+                ? '<a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=groupe_chat_create&amp;groupe_id='. $gp) .'" title="'. adm_translate("Activer chat du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="far fa-comments fa-lg fa-fw"></i><i class="fa fa-plus"></i></a>' 
+                : '<a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=groupe_chat_delete&amp;groupe_id='. $gp) .'" title="'. adm_translate("Désactiver chat du groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="far fa-comments fa-lg fa-fw"></i><i class="fa fa-minus"></i></a>';
             
             echo '
                 </div>
@@ -339,18 +345,18 @@ function group_liste(string $al): void
         }
 
         if ($gpA) {
-            $lst_gr_json .= '\'mbgr_' . $gp . '\': { gp: \'' . $gp . '\'},';
+            $lst_gr_json .= '\'mbgr_'. $gp  .'\': { gp: \''. $gp  .'\'},';
             
             echo '
             <div class="row border rounded ms-1 p-2 px-0 mb-2 w-100">
-                <div id="bloc_gr_' . $gp . '" class="col-lg-5">
-                <span class="text-danger">' . $gp . '</span>
+                <div id="bloc_gr_'. $gp  .'" class="col-lg-5">
+                <span class="text-danger">'. $gp  .'</span>
                 <i class="fa fa-users fa-2x text-muted"></i>
-                <h4 class="my-2 text-muted">' . language::aff_langue($groupe['groupe_name']) . '</h4>
-                <p class="text-muted">' . language::aff_langue($groupe['groupe_description']);
+                <h4 class="my-2 text-muted">'. language::aff_langue($groupe['groupe_name'])  .'</h4>
+                <p class="text-muted">'. language::aff_langue($groupe['groupe_description']);
 
-            if (file_exists('storage/users_private/groupe/' . $gp . '/groupe.png')) {
-                echo '<img class="d-block my-2" src="storage/users_private/groupe/' . $gp . '/groupe.png" width="80" height="80" />';
+            if (file_exists('storage/users_private/groupe/'. $gp  .'/groupe.png')) {
+                echo '<img class="d-block my-2" src="storage/users_private/groupe/'. $gp  .'/groupe.png" width="80" height="80" />';
             }
             
             echo '
@@ -360,7 +366,7 @@ function group_liste(string $al): void
                 <i class="fa fa-user-o fa-2x text-muted"></i><span class="align-top badge bg-secondary ms-1">0</span>
                 </div>
                 <div class="col-lg-3 list-group-item px-0 mt-2">
-                <a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=groupe_edit&amp;groupe_id=' . $gp . '" title="' . adm_translate("Editer groupe") . ' ' . $gp . '" data-bs-toggle="tooltip"  ><i class="fas fa-pencil-alt fa-lg"></i></a><a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="#" onclick="confirm_deleteGroup(\'' . $gp . '\');" title="' . adm_translate("Supprimer groupe") . ' ' . $gp . '" data-bs-toggle="tooltip" ><i class="fas fa-trash fa-lg"></i></a><a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="admin.php?op=membre_add&amp;groupe_id=' . $gp . '" title="' . adm_translate("Ajouter un ou des membres au groupe") . ' ' . $gp . '" data-bs-toggle="tooltip" ><i class="fa fa-user-plus fa-lg"></i></a>
+                <a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=groupe_edit&amp;groupe_id='. $gp) .'" title="'. adm_translate("Editer groupe")  .' '. $gp  .'" data-bs-toggle="tooltip"  ><i class="fas fa-pencil-alt fa-lg"></i></a><a class="btn btn-outline-danger btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="#" onclick="confirm_deleteGroup(\''. $gp  .'\');" title="'. adm_translate("Supprimer groupe")  .' '. $gp  .'" data-bs-toggle="tooltip" ><i class="fas fa-trash fa-lg"></i></a><a class="btn btn-outline-secondary btn-sm col-lg-6 col-md-1 col-sm-2 col-3 mb-1 border-0" href="' . site_url('admin.php?op=membre_add&amp;groupe_id='. $gp) .'" title="'. adm_translate("Ajouter un ou des membres au groupe")  .' '. $gp  .'" data-bs-toggle="tooltip" ><i class="fa fa-user-plus fa-lg"></i></a>
                 </div>
             </div>';
         }
@@ -395,19 +401,19 @@ function membre_add(int $gp): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Ajouter des membres") . ' / ' . adm_translate("Groupe") . ' : ' . $gp . '</h3>
-    <form id="groupesaddmb" class="admform" action="admin.php" method="post">
+    <h3>'. adm_translate("Ajouter des membres")  .' / '. adm_translate("Groupe")  .' : '. $gp  .'</h3>
+    <form id="groupesaddmb" class="admform" action="' . site_url('admin.php') .'" method="post">
         <fieldset>
             <legend><i class="fa fa-users fa-2x text-muted"></i></legend>
             <div class="mb-3">
-                <label class="col-form-label" for="luname">' . adm_translate("Liste des membres") . '</label>
+                <label class="col-form-label" for="luname">'. adm_translate("Liste des membres")  .'</label>
                 <input type="text" class="form-control" id="luname" name="luname" maxlength="255" value="" required="required" />
                 <span class="help-block text-end"><span id="countcar_luname"></span></span>
             </div>
             <input type="hidden" name="op" value="membre_add_finish" />
-            <input type="hidden" name="groupe_id" value="' . $gp . '" />
+            <input type="hidden" name="groupe_id" value="'. $gp  .'" />
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" name="sub_op" value="' . adm_translate("Sauver les modifications") . '" />
+                <input class="btn btn-primary" type="submit" name="sub_op" value="'. adm_translate("Sauver les modifications")  .'" />
             </div>
         </fieldset>
     </form>';
@@ -417,8 +423,8 @@ function membre_add(int $gp): void
     inpandfieldlen("luname",255);';
 
     // echo (mysqli_get_client_info() <= '8.0') 
-    //     ? js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '[[:<:]]' . $gp . '[[:>:]]')->get()) 
-    //     : js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '\\b' . $gp . '\\b\'')->get());
+    //     ? js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '[[:<:]]'. $gp  .'[[:>:]]')->get()) 
+    //     : js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '\\b'. $gp  .'\\b\'')->get());
     
     js::auto_complete_multi_query('membre', 'uname', 'luname', 
         DB::table('users')
@@ -452,8 +458,8 @@ function membre_add_finish(int $groupe_id, string $luname): void
     $list_membres = explode(',', $luname);
     $nbremembres = count($list_membres);
 
-    $subject = adm_translate('Nouvelles du groupe') . ' ' . $gn;
-    $message = adm_translate('Vous faites désormais partie des membres du groupe') . ' : ' . $gn . ' [' . $groupe_id . '].';
+    $subject = adm_translate('Nouvelles du groupe')  .' '. $gn;
+    $message = adm_translate('Vous faites désormais partie des membres du groupe')  .' : '. $gn  .' ['. $groupe_id  .'].';
 
     $copie = '';
     $from_userid = 1;
@@ -481,7 +487,7 @@ function membre_add_finish(int $groupe_id, string $luname): void
 
             if (!$groupeexistedeja) {
                 if ($ibid2['groupe']) {
-                    $groupesmodif = $ibid2['groupe'] . ',' . $groupe_id;
+                    $groupesmodif = $ibid2['groupe']  .','. $groupe_id;
                 } else {
                     $groupesmodif = $groupe_id;
                 }
@@ -498,7 +504,7 @@ function membre_add_finish(int $groupe_id, string $luname): void
     global $aid;
     logs::Ecr_Log('security', "AddMemberToGroup($groupe_id, $luname) by AID : $aid", '');
 
-    Header("Location: admin.php?op=groupes");
+    Header('Location: ' . site_url('admin.php?op=groupes'));
 }
 
 /**
@@ -516,7 +522,7 @@ function retiredugroupe(int $groupe_id, int $uid, string $uname): void
 
     $gn = DB::table('groupes')->select('groupe_name')->where('groupe_id', $groupe_id)->first();
 
-    $pat = '#^\b' . $uid . '\b$#';
+    $pat = '#^\b'. $uid  .'\b$#';
     $mes_sys = '';
     $q = '';
     $ok = 0;
@@ -526,14 +532,14 @@ function retiredugroupe(int $groupe_id, int $uid, string $uname): void
     foreach($res as $row) {
         
         if (preg_match($pat, $row['forum_moderator'])) {
-            $mes_sys = 'mod_' . $uname;
-            $q = '&al=' . $mes_sys;
+            $mes_sys = 'mod_'. $uname;
+            $q = '&al='. $mes_sys;
             $ok = 1;
         }
     }
 
     if ($ok == 0) {
-        $pat = '#\b' . $uid . '\b#';
+        $pat = '#\b'. $uid  .'\b#';
 
         $res = DB::table('forums')->select('forum_id', 'forum_moderator')->where('forum_pass', $groupe_id)->where('cat_id', -1)->get();
 
@@ -545,8 +551,8 @@ function retiredugroupe(int $groupe_id, int $uid, string $uname): void
             ));
         }
 
-        $subject = adm_translate('Nouvelles du groupe') . ' ' . $gn;
-        $message = adm_translate('Vous ne faites plus partie des membres du groupe') . ' : ' . $gn . ' [' . $groupe_id . '].';
+        $subject = adm_translate('Nouvelles du groupe')  .' '. $gn;
+        $message = adm_translate('Vous ne faites plus partie des membres du groupe')  .' : '. $gn  .' ['. $groupe_id  .'].';
 
         $copie = '';
         $from_userid = 1;
@@ -562,7 +568,7 @@ function retiredugroupe(int $groupe_id, int $uid, string $uname): void
         for ($i = 0; $i < $nbregroupes; $i++) {
             if ($lesgroupes[$i] != $groupe_id) {
                 if ($groupesmodif == '') $groupesmodif .= $lesgroupes[$i];
-                else $groupesmodif .= ',' . $lesgroupes[$i];
+                else $groupesmodif .= ','. $lesgroupes[$i];
             }
         }
 
@@ -576,7 +582,7 @@ function retiredugroupe(int $groupe_id, int $uid, string $uname): void
         logs::Ecr_Log('security', "DeleteMemberToGroup($groupe_id, $uname) by AID : $aid", '');
     }
 
-    Header("Location: admin.php?op=groupes" . $q);
+    Header('Location: ' . site_url('admin.php?op=groupes'. $q));
 }
 
 /**
@@ -603,7 +609,7 @@ function retiredugroupe_all(int $groupe_id, string $tab_groupe): void
             for ($i = 0; $i < $nbregroupes; $i++) {
                 if ($lesgroupes[$i] != $groupe_id) {
                     if ($groupesmodif == '') $groupesmodif .= $lesgroupes[$i];
-                    else $groupesmodif .= ',' . $lesgroupes[$i];
+                    else $groupesmodif .= ','. $lesgroupes[$i];
                 }
             }
 
@@ -616,7 +622,7 @@ function retiredugroupe_all(int $groupe_id, string $tab_groupe): void
         }
     }
 
-    Header("Location: admin.php?op=groupes");
+    Header('Location: ' . site_url('admin.php?op=groupes'));
 }
 
 // GROUPES
@@ -642,20 +648,20 @@ function groupe_edit(string $groupe_id): void
     if ($groupe_id != 'groupe_add') {
         echo '
         <hr />
-        <h3>' . adm_translate("Modifier le groupe") . ' : ' . $groupe_id . '</h3>';
+        <h3>'. adm_translate("Modifier le groupe")  .' : '. $groupe_id  .'</h3>';
     } else {
         echo '
         <hr />
-        <h3>' . adm_translate("Créer un groupe.") . '</h3>';
+        <h3>'. adm_translate("Créer un groupe.")  .'</h3>';
     }  
 
     echo '
-    <form class="admform" id="groupesaddmod" action="admin.php" method="post">
+    <form class="admform" id="groupesaddmod" action="' . site_url('admin.php') .'" method="post">
         <fieldset>
-            <legend><i class="fas fa-users fa-2x text-muted"></i></legend>' . "\n";
+            <legend><i class="fas fa-users fa-2x text-muted"></i></legend>'. "\n";
 
     if ($groupe_id != 'groupe_add') {
-        echo '<input type="hidden" name="groupe_id" value="' . $groupe_id . '" />';
+        echo '<input type="hidden" name="groupe_id" value="'. $groupe_id  .'" />';
     } else {
         echo '
             <div class="mb-3">
@@ -666,17 +672,17 @@ function groupe_edit(string $groupe_id): void
 
     echo '
             <div class="mb-3">
-                <label class="col-form-label" for="grname">' . adm_translate("Nom") . '</label>
+                <label class="col-form-label" for="grname">'. adm_translate("Nom")  .'</label>
                 <input type="text" class="form-control" id="grname" name="groupe_name" maxlength="1000" value="';
 
     echo isset($result) ? $result['groupe_name'] : '';
 
-    echo '" placeholder="' . adm_translate("Nom du groupe") . '" required="required" />
+    echo '" placeholder="'. adm_translate("Nom du groupe")  .'" required="required" />
                 <span class="help-block text-end"><span id="countcar_grname"></span></span>
             </div>
             <div class="mb-3">
-                <label class="col-form-label" for="grdesc">' . adm_translate("Description") . '</label>
-                <textarea class="form-control" name="groupe_description" id="grdesc" rows="11" placeholder="' . adm_translate("Description du groupe") . '" required="required">';
+                <label class="col-form-label" for="grdesc">'. adm_translate("Description")  .'</label>
+                <textarea class="form-control" name="groupe_description" id="grdesc" rows="11" placeholder="'. adm_translate("Description du groupe")  .'" required="required">';
     
     echo isset($result) ? $result['groupe_description'] : '';
 
@@ -691,7 +697,7 @@ function groupe_edit(string $groupe_id): void
 
     echo '
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" name="sub_op" value="' . adm_translate("Sauver les modifications") . '" />
+                <input class="btn btn-primary" type="submit" name="sub_op" value="'. adm_translate("Sauver les modifications")  .'" />
             </div>
         </fieldset>
     </form>';
@@ -747,7 +753,7 @@ function groupe_maj(string $sub_op): void
         }
     }
 
-    Header("Location: admin.php?op=groupes");
+    Header('Location: ' . site_url('admin.php?op=groupes'));
 }
 
 /**
@@ -787,11 +793,11 @@ function groupe_delete(int $groupe_id): void
 function workspace_create(int $groupe_id): void
 {
     //==>creation fichier conf du groupe
-    @copy('modules/f-manager/config/groupe.conf.php', 'modules/f-manager/config/groupe_' . $groupe_id . '.conf.php');
+    @copy('modules/f-manager/config/groupe.conf.php', 'modules/f-manager/config/groupe_'. $groupe_id  .'.conf.php');
     
-    $file = file('modules/f-manager/config/groupe_' . $groupe_id . '.conf.php');
+    $file = file('modules/f-manager/config/groupe_'. $groupe_id  .'.conf.php');
     $file[29] = "   \$access_fma = \"$groupe_id\";\n";
-    $fic = fopen('modules/f-manager/config/groupe_' . $groupe_id . '.conf.php', "w");
+    $fic = fopen('modules/f-manager/config/groupe_'. $groupe_id  .'.conf.php', "w");
     
     foreach ($file as $n => $ligne) {
         fwrite($fic, $ligne);
@@ -810,13 +816,13 @@ function workspace_create(int $groupe_id): void
         }
     }
 
-    $user_dir = $DOCUMENTROOT . $racine . '/storage/users_private/groupe/' . $groupe_id;
+    $user_dir = $DOCUMENTROOT . $racine  .'/storage/users_private/groupe/'. $groupe_id;
 
     // DOCUMENTS_GROUPE
-    @mkdir('storage/users_private/groupe/' . $groupe_id . '/documents_groupe');
+    @mkdir('storage/users_private/groupe/'. $groupe_id  .'/documents_groupe');
 
-    $repertoire = $user_dir . '/documents_groupe';
-    $directory = $racine . '/modules/groupe/matrice/documents_groupe';
+    $repertoire = $user_dir  .'/documents_groupe';
+    $directory = $racine  .'/modules/groupe/matrice/documents_groupe';
     $handle = opendir($DOCUMENTROOT . $directory);
 
     while (false !== ($file = readdir($handle))) {
@@ -827,7 +833,7 @@ function workspace_create(int $groupe_id): void
 
     foreach ($filelist as $key => $file) {
         if ($file <> '.' and $file <> '..') {
-            @copy($DOCUMENTROOT . $directory . '/' . $file, $repertoire . '/' . $file);
+            @copy($DOCUMENTROOT . $directory  .'/'. $file, $repertoire  .'/'. $file);
         }
     }
 
@@ -835,10 +841,10 @@ function workspace_create(int $groupe_id): void
     unset($filelist);
 
     // IMAGES_GROUPE
-    @mkdir('storage/users_private/groupe/' . $groupe_id . '/images_groupe');
+    @mkdir('storage/users_private/groupe/'. $groupe_id  .'/images_groupe');
 
-    $repertoire = $user_dir . '/images_groupe';
-    $directory = $racine . '/modules/groupe/matrice/images_groupe';
+    $repertoire = $user_dir  .'/images_groupe';
+    $directory = $racine  .'/modules/groupe/matrice/images_groupe';
     $handle = opendir($DOCUMENTROOT . $directory);
 
     while (false !== ($file = readdir($handle))) {
@@ -848,13 +854,13 @@ function workspace_create(int $groupe_id): void
     asort($filelist);
     foreach ($filelist as $key => $file) {
         if ($file <> '.' and $file <> '..') {
-            @copy($DOCUMENTROOT . $directory . '/' . $file, $repertoire . '/' . $file);
+            @copy($DOCUMENTROOT . $directory  .'/'. $file, $repertoire  .'/'. $file);
         }
     }
     closedir($handle);
     unset($filelist);
 
-    @unlink('storage/users_private/groupe/' . $groupe_id . '/delete');
+    @unlink('storage/users_private/groupe/'. $groupe_id  .'/delete');
 
     global $aid;
     logs::Ecr_Log('security', "CreateWS($groupe_id) by AID : $aid", '');
@@ -952,11 +958,11 @@ function note_remove(int $groupe_id): void
 function workspace_archive(int $groupe_id): void
 {
     //=> archivage espace groupe
-    $fp = fopen('storage/users_private/groupe/' . $groupe_id . '/delete', 'w');
+    $fp = fopen('storage/users_private/groupe/'. $groupe_id  .'/delete', 'w');
     fclose($fp);
 
     //suppression fichier conf
-    @unlink('modules/f-manager/config/groupe_' . $groupe_id . '.conf.php');
+    @unlink('modules/f-manager/config/groupe_'. $groupe_id  .'.conf.php');
 
     global $aid;
     logs::Ecr_Log('security', "ArchiveWS($groupe_id) by AID : $aid", '');
@@ -1079,22 +1085,22 @@ function groupe_mns_create(int $groupe_id): void
         }
     }
 
-    $user_dir = $DOCUMENTROOT . $racine . '/storage/users_private/groupe/' . $groupe_id;
-    $repertoire = $user_dir . '/mns';
+    $user_dir = $DOCUMENTROOT . $racine  .'/storage/users_private/groupe/'. $groupe_id;
+    $repertoire = $user_dir  .'/mns';
 
     if (!is_dir($user_dir)) {
         @umask(0000);
         
         if (@mkdir($user_dir, 0777)) {
-            $fp = fopen($user_dir . '/index.html', 'w');
+            $fp = fopen($user_dir  .'/index.html', 'w');
             fclose($fp);
             @umask(0000);
             
             if (@mkdir($repertoire, 0777)) {
-                $fp = fopen($repertoire . '/index.html', 'w');
+                $fp = fopen($repertoire  .'/index.html', 'w');
                 fclose($fp);
 
-                $fp = fopen($repertoire . '/.htaccess', 'w');
+                $fp = fopen($repertoire  .'/.htaccess', 'w');
                 @fputs($fp, 'Deny from All');
                 fclose($fp);
             }
@@ -1102,17 +1108,17 @@ function groupe_mns_create(int $groupe_id): void
     } else {
         @umask(0000);
         if (@mkdir($repertoire, 0777)) {
-            $fp = fopen($repertoire . '/index.html', 'w');
+            $fp = fopen($repertoire  .'/index.html', 'w');
             fclose($fp);
 
-            $fp = fopen($repertoire . '/.htaccess', 'w');
+            $fp = fopen($repertoire  .'/.htaccess', 'w');
             @fputs($fp, 'Deny from All');
             fclose($fp);
         }
     }
 
     // copie de la matrice par défaut
-    $directory = $racine . '/modules/groupe/matrice/mns_groupe';
+    $directory = $racine  .'/modules/groupe/matrice/mns_groupe';
     $handle = opendir($DOCUMENTROOT . $directory);
 
     while (false !== ($file = readdir($handle))) {
@@ -1123,7 +1129,7 @@ function groupe_mns_create(int $groupe_id): void
     
     foreach ($filelist as $key => $file) {
         if ($file <> '.' and $file <> '..') {
-            @copy($DOCUMENTROOT . $directory . '/' . $file, $repertoire . '/' . $file);
+            @copy($DOCUMENTROOT . $directory  .'/'. $file, $repertoire  .'/'. $file);
         }
     }
 
@@ -1158,20 +1164,20 @@ function groupe_mns_delete(int $groupe_id): void
         }
     }
 
-    $user_dir = $DOCUMENTROOT . $racine . '/storage/users_private/groupe/' . $groupe_id;
+    $user_dir = $DOCUMENTROOT . $racine  .'/storage/users_private/groupe/'. $groupe_id;
 
     // Supprimer son ministe s'il existe
-    if (is_dir($user_dir . '/mns')) {
-        $dir = opendir($user_dir . '/mns');
+    if (is_dir($user_dir  .'/mns')) {
+        $dir = opendir($user_dir  .'/mns');
         
         while (false !== ($nom = readdir($dir))) {
             if ($nom != '.' && $nom != '..' && $nom != '') {
-                @unlink($user_dir . '/mns/' . $nom);
+                @unlink($user_dir  .'/mns/'. $nom);
             }
         }
 
         closedir($dir);
-        @rmdir($user_dir . '/mns');
+        @rmdir($user_dir  .'/mns');
     }
 
     DB::table('groupes')->where('groupe_id', $groupe_id)->update(array(
@@ -1277,13 +1283,13 @@ function groupe_member_ask(): void
         $groupe = DB::table('groupes')->select('groupe_name')->where('groupe_id', $groupe_asked)->first();
         $gn = $groupe['groupe_name'];
 
-        $subject = adm_translate('Nouvelles du groupe') . ' ' . $gn;
+        $subject = adm_translate('Nouvelles du groupe')  .' '. $gn;
         $image = '18.png';
 
         if ($sub_op == adm_translate("Oui")) {
-            $message = '✅ ' . adm_translate('Demande acceptée.') . ' ' . adm_translate('Vous faites désormais partie des membres du groupe') . ' : ' . $gn . ' [' . $groupe_asked . '].';
+            $message = '✅ '. adm_translate('Demande acceptée.')  .' '. adm_translate('Vous faites désormais partie des membres du groupe')  .' : '. $gn  .' ['. $groupe_asked  .'].';
             
-            unlink($directory . '/ask4group_' . $user_asked . '_' . $groupe_asked . '_.txt');
+            unlink($directory  .'/ask4group_'. $user_asked  .'_'. $groupe_asked  .'_.txt');
             
             $ibid2 = DB::table('users_status')->select('groupe')->where('uid', $user_asked)->first();
 
@@ -1299,7 +1305,7 @@ function groupe_member_ask(): void
             }
 
             if (!$groupeexistedeja) {
-                $groupesmodif = $ibid2['groupe'] ? $ibid2['groupe'] . ',' . $groupe_asked : $groupe_asked;
+                $groupesmodif = $ibid2['groupe'] ? $ibid2['groupe']  .','. $groupe_asked : $groupe_asked;
                 
                 DB::table('users_status')->where('uid', $user_asked)->update(array(
                     'groupe'    => $groupesmodif,
@@ -1311,15 +1317,15 @@ function groupe_member_ask(): void
             global $aid;
             logs::Ecr_Log('security', "AddMemberToGroup($groupe_asked, $uname) by AID : $aid", '');
 
-            Header("Location: admin.php?op=groupes");
+            Header('Location: ' . site_url('admin.php?op=groupes'));
         }
         if ($sub_op == adm_translate("Non")) {
-            $message = '🚫 ' . adm_translate('Demande refusée pour votre participation au groupe') . ' : ' . $gn . ' [' . $groupe_asked . '].';
-            unlink($directory . '/ask4group_' . $user_asked . '_' . $groupe_asked . '_.txt');
+            $message = '🚫 '. adm_translate('Demande refusée pour votre participation au groupe')  .' : '. $gn  .' ['. $groupe_asked  .'].';
+            unlink($directory  .'/ask4group_'. $user_asked  .'_'. $groupe_asked  .'_.txt');
 
             messenger::writeDB_private_message($uname, $image, $subject, 1, $message, '');
 
-            Header("Location: admin.php?op=groupes");
+            Header('Location: ' . site_url('admin.php?op=groupes'));
         }
     }
 
@@ -1341,16 +1347,16 @@ function groupe_member_ask(): void
             $gn = $r['groupe_name'];
 
             echo '
-            <form id="acceptmember_' . $us_gr[1] . '_' . $us_gr[2] . '" class="admform" action="admin.php" method="post">
+            <form id="acceptmember_'. $us_gr[1]  .'_'. $us_gr[2]  .'" class="admform" action="' . site_url('admin.php') .'" method="post">
                 <div id="" class="">
-                ' . adm_translate("Accepter") . ' ' . $myrow['uname'] . ' ' . adm_translate("dans le groupe") . ' ' . $us_gr[2] . ' : ' . $gn . ' ?
+                '. adm_translate("Accepter")  .' '. $myrow['uname']  .' '. adm_translate("dans le groupe")  .' '. $us_gr[2]  .' : '. $gn  .' ?
                 </div>
                 <input type="hidden" name="op" value="groupe_member_ask" />
-                <input type="hidden" name="user_asked" value="' . $us_gr[1] . '" />
-                <input type="hidden" name="groupe_asked" value="' . $us_gr[2] . '" />
+                <input type="hidden" name="user_asked" value="'. $us_gr[1]  .'" />
+                <input type="hidden" name="groupe_asked" value="'. $us_gr[2]  .'" />
                 <div class="mb-3">
-                    <input class="btn btn-primary btn-sm" type="submit" name="sub_op" value="' . adm_translate("Oui") . '" />
-                    <input class="btn btn-primary btn-sm" type="submit" name="sub_op" value="' . adm_translate("Non") . '" />
+                    <input class="btn btn-primary btn-sm" type="submit" name="sub_op" value="'. adm_translate("Oui")  .'" />
+                    <input class="btn btn-primary btn-sm" type="submit" name="sub_op" value="'. adm_translate("Non")  .'" />
                 </div>
             </form>';
             $j++;
@@ -1377,32 +1383,32 @@ switch ($op) {
 
     case 'pad_create':
         pad_create($groupe_id);
-        Header("Location: admin.php?op=groupes");
+        Header('Location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'pad_remove':
         pad_remove($groupe_id);
-        Header("Location: admin.php?op=groupes");
+        Header('Location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'note_create':
         note_create($groupe_id);
-        Header("Location: admin.php?op=groupes");
+        Header('Location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'note_remove':
         note_remove($groupe_id);
-        Header("Location: admin.php?op=groupes");
+        Header('Location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'workspace_create':
         workspace_create($groupe_id);
-        Header("Location: admin.php?op=groupes");
+        Header('Location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'workspace_archive':
         workspace_archive($groupe_id);
-        Header("Location: admin.php?op=groupes");
+        Header('Location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'forum_groupe_create':
@@ -1411,32 +1417,32 @@ switch ($op) {
 
     case 'moderateur_update':
         moderateur_update($forum_id, $forum_moderator);
-        Header('location: admin.php?op=groupes');
+        Header('location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'forum_groupe_delete':
         forum_groupe_delete($groupe_id);
-        Header('location: admin.php?op=groupes');
+        Header('location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'groupe_mns_create':
         groupe_mns_create($groupe_id);
-        Header('location: admin.php?op=groupes');
+        Header('location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'groupe_mns_delete':
         groupe_mns_delete($groupe_id);
-        Header('location: admin.php?op=groupes');
+        Header('location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'groupe_chat_create':
         groupe_chat_create($groupe_id);
-        Header('location: admin.php?op=groupes');
+        Header('location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'groupe_chat_delete':
         groupe_chat_delete($groupe_id);
-        Header('location: admin.php?op=groupes');
+        Header('location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'groupe_edit':
@@ -1453,7 +1459,7 @@ switch ($op) {
 
     case 'bloc_groupe_create':
         bloc_groupe_create($groupe_id);
-        Header('location: admin.php?op=groupes');
+        Header('location: ' . site_url('admin.php?op=groupes'));
         break;
 
     case 'groupe_member_ask':
@@ -1490,12 +1496,12 @@ switch ($op) {
 
             ));
 
-            @mkdir('storage/users_private/groupe/' . $groupe_id);
-            $fp = fopen('storage/users_private/groupe/' . $groupe_id . '/index.html', 'w');
+            @mkdir('storage/users_private/groupe/'. $groupe_id);
+            $fp = fopen('storage/users_private/groupe/'. $groupe_id  .'/index.html', 'w');
             fclose($fp);
 
-            @copy('modules/groupe/assets/images/groupe.png', 'storage/users_private/groupe/' . $groupe_id . '/groupe.png');
-            @unlink('storage/users_private/groupe/' . $groupe_id . '/delete');
+            @copy('modules/groupe/assets/images/groupe.png', 'storage/users_private/groupe/'. $groupe_id  .'/groupe.png');
+            @unlink('storage/users_private/groupe/'. $groupe_id  .'/delete');
 
             global $aid;
             logs::Ecr_Log('security', "CreateGroupe($groupe_id, $groupe_name) by AID : $aid", '');

@@ -17,7 +17,7 @@ use npds\system\cache\cache;
 use npds\system\support\facades\DB;
 
 if (!function_exists("Mysql_Connexion")) {
-    header("location: index.php");
+    header('location: ' . site_url('index.php'));
 }
 
 if ($rowQ1 = cache::Q_Select3(DB::table('config')->select('*')->get(), 3600, 'tbl_config(*)')) {

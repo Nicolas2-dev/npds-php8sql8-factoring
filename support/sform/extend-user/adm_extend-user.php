@@ -19,7 +19,7 @@ Sform::add_form_title('Register');
 Sform::add_form_id('Register');
 Sform::add_form_method('post');
 Sform::add_form_check('false');
-Sform::add_url('admin.php');
+Sform::add_url(site_url('admin.php'));
 
 include('support/sform/extend-user/adm_formulaire.php');
 

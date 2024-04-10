@@ -284,7 +284,7 @@ if ($admin) {
                     <a tabindex="0" role="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="' . $desc . '">
                         <i class="far fa-lg fa-file-alt me-2"></i>
                     </a>
-                    <a href="viewforum.php?forum=' . $forum['forum_id'] . '" ><span class="text-danger">';
+                    <a href="' . site_url('viewforum.php?forum=' . $forum['forum_id']) .'" ><span class="text-danger">';
                 
                 if (array_key_exists($num_for, $xforum)) {
                     echo $xforum[$num_for][1];

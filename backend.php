@@ -41,7 +41,7 @@ function fab_feed($type, $filename, $timeout)
     $rss->descriptionHtmlSyndicated = true;
 
     $rss->link = $nuke_url;
-    $rss->syndicationURL = $nuke_url . "/backend.php?op=" . $type;
+    $rss->syndicationURL = site_url('backend.php?op=' . $type);
 
     $image = new FeedImage();
     $image->title = $sitename;
@@ -72,7 +72,7 @@ function fab_feed($type, $filename, $timeout)
         $story_limit++;
         $item = new FeedItem();
         $item->title = language::preview_local_langue(Config::get('backend_language'), str_replace('&quot;', '\"', $title));
-        $item->link = $nuke_url . "/article.php?sid=$sid";
+        $item->link = site_url('article.php?sid='. $sid);
         $item->description = metalang::meta_lang(language::preview_local_langue(Config::get('backend_language'), $hometext));
         $item->descriptionHtmlSyndicated = true;
         $item->date = date::convertdateTOtimestamp($time) + ((int) Config::get('npds.gmt') * 3600);

@@ -62,7 +62,7 @@ echo '</head>
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="assets/shared/font-awesome/css/all.min.css">
-        <form name="coolsus" action="chatinput.php" method="post">
+        <form name="coolsus" action="' . site_url('chatinput.php') .'" method="post">
         <input type="hidden" name="op" value="set" />
         <input type="hidden" name="id" value="' . $id . '" />
         <input type="hidden" name="auto" value="' . $auto . '" />

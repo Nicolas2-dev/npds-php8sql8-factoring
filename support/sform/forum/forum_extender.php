@@ -22,7 +22,7 @@ Sform::add_form_method("post");
 Sform::add_form_check("false");
 Sform::add_mess(" * d&eacute;signe un champ obligatoire ");
 Sform::add_submit_value("submitS");
-Sform::add_url("newtopic.php");
+Sform::add_url(site_url('newtopic.php'));
 
 include("support/sform/forum/$formulaire");
 
