@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace npds\system\messenger;
 
+use npds\system\auth\users;
 use npds\system\assets\java;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
+use npds\system\auth\authors;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
 use npds\system\security\hack;
@@ -51,7 +53,7 @@ class messenger
                     ->where('uname', $to_userid)
                     ->first();
 
-        if ($to_useridx == '') {
+        if ($to_userid == '') {
             forum::forumerror('0016');
         } else {
             $time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
@@ -156,7 +158,7 @@ class messenger
      */
     public static function instant_members_message(): void
     {
-        global $user, $admin, $cookie;
+        //global $user, $admin, $cookie;
 
         settype($boxstuff, 'string');
 
@@ -169,6 +171,8 @@ class messenger
             $block_title = translate("M2M bloc");
         }
 
+        $user = users::getUser();
+        
         if ($user) {
 
             $boxstuff = '<ul class="">';
@@ -188,8 +192,11 @@ class messenger
                 $query = DB::table('users')->select('uid');
 
                 if (!Config::get('npds.member_invisible')) {
+                    
+                    $admin = authors::getAdmin();
+                
                     if (!$admin) {
-                        if (!$ibid[$i]['username'] == $cookie[1]) {
+                        if (!$ibid[$i]['username'] == users::cookieUser(1)) {
                             $query->where('is_visible', 1);
                         }
                     }
@@ -235,7 +242,7 @@ class messenger
                         $PopUp = java::JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
                         $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
                         
-                        if ($ibid[$i]['username'] == $cookie[1]) {
+                        if ($ibid[$i]['username'] == users::cookieUser(1)) {
                             $icon = $PopUp;
                         } else {
                             $icon = "";
@@ -243,7 +250,7 @@ class messenger
 
                         $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="' . translate("Nouveau") . '<span class=\'rounded-pill bg-danger ms-2\'>' . $new_messages . '</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
                         
-                        if ($ibid[$i]['username'] == $cookie[1]) {
+                        if ($ibid[$i]['username'] == users::cookieUser(1)) {
                             $icon .= '</a>';
                         }
                     } else {
@@ -254,7 +261,7 @@ class messenger
                             $PopUp = java::JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
                             $PopUp = '<a href="javascript:void(0);" onclick="window.open(' . $PopUp . ');">';
                             
-                            if ($ibid[$i]['username'] == $cookie[1]) {
+                            if ($ibid[$i]['username'] == users::cookieUser(1)) {
                                 $icon = $PopUp;
                             } else {
                                 $icon = '';
@@ -283,6 +290,8 @@ class messenger
 
             themesidebox($block_title, $boxstuff);
         } else {
+            $admin = authors::getAdmin();
+            
             if ($admin) {
                 $ibid = online::online_members();
 

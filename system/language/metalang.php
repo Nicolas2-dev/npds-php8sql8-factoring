@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\language;
 
 use npds\system\theme\theme;
+use npds\system\auth\authors;
 use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\security\hack;
@@ -211,7 +212,7 @@ class metalang
      */
     public static function meta_lang(string $Xcontent): string
     {
-        global $meta_glossaire, $admin, $NPDS_debug, $NPDS_debug_str, $NPDS_debug_cycle;
+        global $meta_glossaire, $NPDS_debug, $NPDS_debug_str, $NPDS_debug_cycle;
 
         // Reduction
         $Xcontent = str_replace("<!--meta", "", $Xcontent);
@@ -415,6 +416,8 @@ class metalang
 
                     $tab[$Rword . $car_fin] = $Cword . $car_fin;
                 }
+
+                $admin = authors::getAdmin();
 
                 if ($NPDS_debug and $admin) {
                     $NPDS_debug_str .= "=> $word<br />";

@@ -275,11 +275,13 @@ class metafunction
      */
     public function MM_membre_nom(): string 
     {
-        if (isset($cookie[1])) {
+        $cookie = users::cookieUser(1);
+
+        if (isset($cookie)) {
             $rowQ = cache::Q_select3(
                 DB::table('users')
                     ->select('name')
-                    ->where('uname', metalang::arg_filter(users::cookieUser(1)))
+                    ->where('uname', metalang::arg_filter($cookie))
                     ->get(), 
                 3600, 
                 crypt::encrypt('users(name)')
@@ -538,7 +540,7 @@ class metafunction
      */
     public function MM_groupe_text(string $arg): string 
     {
-        $user   = users::getUser();
+        $user = users::getUser();
     
         $affich = false;
         $remp = "";
@@ -569,7 +571,7 @@ class metafunction
      */
     public function MM_no_groupe_text(string $arg): string 
     {
-        $user   = users::getUser();
+        $user = users::getUser();
     
         $affich = true;
         $remp = "";
@@ -612,7 +614,7 @@ class metafunction
      */
     public function MM_note_admin(): string 
     {
-        $admin   = authors::getAdmin();
+        $admin = authors::getAdmin();
     
         if (!$admin) {
             return "!delete!";
@@ -710,7 +712,7 @@ class metafunction
      */
     public function MM_forum_message(): string 
     {
-        $user   = users::getUser();
+        $user = users::getUser();
     
         $ibid = "";
     
@@ -755,15 +757,10 @@ class metafunction
      */
     public function MM_forum_subscribeON(): string 
     {
-        $user   = users::getUser();
-    
         $ibid = "";
         
-        if ((Config::get('npds.subscribe')) and ($user)) {
-            $userX = base64_decode($user);
-            $userR = explode(':', $userX);
-            
-            if (mailler::isbadmailuser($userR[0]) === false) {
+        if ((Config::get('npds.subscribe')) and (users::getUser())) {
+            if (mailler::isbadmailuser(users::cookieUser(0)) === false) {
                 $ibid = '<form action="'. site_url('forum.php') .'" method="post">
                 <input type="hidden" name="op" value="maj_subscribe" />';
             }
@@ -779,13 +776,9 @@ class metafunction
      */
     public function MM_forum_bouton_subscribe(): string 
     {
-        $user   = users::getUser();
-    
-        if ((Config::get('npds.subscribe')) and ($user)) {
-            $userX = base64_decode($user);
-            $userR = explode(':', $userX);
+        if ((Config::get('npds.subscribe')) and (users::getUser())) {
             
-            if (mailler::isbadmailuser($userR[0]) === false) {
+            if (mailler::isbadmailuser(users::cookieUser(0)) === false) {
                 return '<input class="btn btn-secondary" type="submit" name="Xsub" value="' . translate("OK") . '" />';
             }
         } else {
@@ -800,15 +793,10 @@ class metafunction
      */
     public function MM_forum_subscribeOFF(): string 
     {
-        $user   = users::getUser();
-    
         $ibid = "";
     
-        if ((Config::get('npds.subscribe')) and ($user)) {
-            $userX = base64_decode($user);
-            $userR = explode(':', $userX);
-            
-            if (mailler::isbadmailuser($userR[0]) === false) {
+        if ((Config::get('npds.subscribe')) and (users::getUser())) {   
+            if (mailler::isbadmailuser(users::cookieUser(0)) === false) {
                 $ibid = "</form>";
             }
         }

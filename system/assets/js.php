@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace npds\system\assets;
 
 use npds\system\cache\cache;
+use npds\system\utility\crypt;
+use npds\system\support\facades\DB;
 
 class js
 {
@@ -25,18 +27,16 @@ class js
      */
     public static function auto_complete(string $nom_array_js, string $nom_champ, string $nom_tabl, string $id_inpu, int $temps_cache): string 
     {
-        global $NPDS_Prefix;
-
         $list_json = '';
         $list_json .= 'var ' . $nom_array_js . ' = [';
-        $res = cache::Q_select("SELECT " . $nom_champ . " FROM " . $NPDS_Prefix . $nom_tabl, $temps_cache);
-        
-        foreach ($res as $ar_data) {
-            foreach ($ar_data as $val_champ) {
+
+        foreach (cache::Q_select3(DB::table($nom_tabl)->select($nom_champ)->get(), $temps_cache, crypt::encrypt('auto_complete')) as $ar_data) 
+        {
+            foreach ($ar_data as $champ) {
                 if ($id_inpu == '') {
-                    $list_json .= '"' . base64_encode($val_champ) . '",';
+                    $list_json .= '"' . base64_encode($champ[$nom_champ]) . '",';
                 } else {
-                    $list_json .= '"' . $val_champ . '",';
+                    $list_json .= '"' . $champ[$nom_champ] . '",';
                 }
             }
         }
@@ -81,14 +81,12 @@ class js
      */
     public static function auto_complete_multi(string $nom_array_js, string $nom_champ, string $nom_tabl, string $id_inpu, string $req): string
     {
-        global $NPDS_Prefix;
-
         $list_json = '';
         $list_json .= $nom_array_js . ' = [';
-        $res = sql_query("SELECT " . $nom_champ . " FROM " . $NPDS_Prefix . $nom_tabl . " " . $req);
 
-        while (list($nom_champ) = sql_fetch_row($res)) {
-            $list_json .= '\'' . $nom_champ . '\',';
+        foreach (DB::table($nom_tabl)->select($nom_champ)->get() as $champ) 
+        {
+            $list_json .= '\'' . $champ[$nom_champ] . '\',';
         }
 
         $list_json = rtrim($list_json, ',');
@@ -164,16 +162,16 @@ class js
         $scri_js .= '
         <script type="text/javascript">
         //<![CDATA[
-        var ' . $nom_array_js . ';
+        var '. $nom_array_js .';
         $(function() {
-        ' . $list_json . '
+        '. $list_json .'
         function split( val ) {
         return val.split( /,\s*/ );
         }
         function extractLast( term ) {
         return split( term ).pop();
         }
-        $( "#' . $id_inpu . '" )
+        $( "#'. $id_inpu .'" )
         // dont navigate away from the field on tab when selecting an item
         .bind( "keydown", function( event ) {
             if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -185,7 +183,7 @@ class js
             minLength: 0,
             source: function( request, response ) {
             response( $.ui.autocomplete.filter(
-                ' . $nom_array_js . ', extractLast( request.term ) ) );
+                '. $nom_array_js .', extractLast( request.term ) ) );
             },
             focus: function() {
             return false;
@@ -201,7 +199,7 @@ class js
         });
         });
         //]]>
-        </script>' . "\n";
+        </script>'. "\n";
 
         return $scri_js;
     }

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace npds\system\support;
 
+use npds\system\auth\users;
+use npds\system\config\Config;
+use npds\system\support\facades\DB;
+
 class online
 {
 
@@ -26,14 +30,12 @@ class online
      */
     public static function Who_Online_Sub(): array
     {
-        global $user, $cookie;
-
         list($member_online_num, $guest_online_num) = static::site_load();
 
         $content1 = "$guest_online_num " . translate("visiteur(s) et") . " $member_online_num " . translate("membre(s) en ligne.");
         
-        if ($user) {
-            $content2 = translate("Vous êtes connecté en tant que") . " <b>" . $cookie[1] . "</b>";
+        if (users::getUser()) {
+            $content2 = translate("Vous êtes connecté en tant que") . " <b>" . users::cookieUser(1) . "</b>";
         } else {
             $content2 = translate("Devenez membre privilégié en cliquant") . " <a href=\"user.php?op=only_newuser\">" . translate("ici") . "</a>";
         }
@@ -50,14 +52,16 @@ class online
      */
     public static function Site_Load(): array
     {
-        global $NPDS_Prefix, $SuperCache, $who_online_num;
+        global $who_online_num;
 
         $guest_online_num = 0;
         $member_online_num = 0;
 
-        $result = sql_query("SELECT COUNT(username) AS TheCount, guest FROM " . $NPDS_Prefix . "session GROUP BY guest");
-        
-        while ($TheResult = sql_fetch_assoc($result)) {
+        foreach (DB::table('session')
+            ->select(DB::raw('COUNT(username) AS TheCount, guest'))
+            ->groupeBy('guest')
+            ->get() as $TheResult) 
+        {
             if ($TheResult['guest'] == 0) {
                 $member_online_num = $TheResult['TheCount'];
             } else {
@@ -67,7 +71,7 @@ class online
 
         $who_online_num = $guest_online_num + $member_online_num;
         
-        if ($SuperCache) {
+        if (Config::get('cache.SuperCache')) {
             $file = fopen("storage/cache/site_load.log", "w");
             fwrite($file, (string) $who_online_num);
             fclose($file);
@@ -85,17 +89,20 @@ class online
      */
     public static function online_members(): array
     {
-        global $NPDS_Prefix;
+        $result = DB::table('session')
+                ->select('username', 'guest', 'time')
+                ->where('guest', 0)
+                ->orderBy('username', 'asc')
+                ->get();
 
-        $result = sql_query("SELECT username, guest, time FROM " . $NPDS_Prefix . "session WHERE guest='0' ORDER BY username ASC");
         $i = 0;
-        $members_online[$i] = sql_num_rows($result);
+        $members_online[$i] = count($result);
 
-        while ($session = sql_fetch_assoc($result)) {
+        foreach ($result as $session) {
             if (isset($session['guest']) and $session['guest'] == 0) {
                 $i++;
                 $members_online[$i]['username'] = $session['username'];
-                $members_online[$i]['time'] = $session['time'];
+                $members_online[$i]['time']     = $session['time'];     
             }
         }
 

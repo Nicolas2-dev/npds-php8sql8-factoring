@@ -150,13 +150,13 @@ class css
             echo '
     <script type="text/javascript" src="assets/js/es6-shim.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/FormValidation.full.min.js"></script>
-    <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/' . language::language_iso(1, "_", 1) . '.min.js"></script>
+    <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/'. language::language_iso(1, "_", 1) .'.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
     <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/L10n.min.js"></script>
     <script type="text/javascript" src="assets/js/checkfieldinp.js"></script>
     <script type="text/javascript">
     //<![CDATA[
-    ' . $arg1 . '
+    '. $arg1 .'
     var diff;
     document.addEventListener("DOMContentLoaded", function(e) {
        // validateur pour mots de passe
@@ -174,40 +174,40 @@ class css
                 if (value === value.toLowerCase()) {
                    return {
                       valid: false,
-                      message: "' . translate("Le mot de passe doit contenir au moins un caractère en majuscule.") . '",
+                      message: "'. translate("Le mot de passe doit contenir au moins un caractère en majuscule.") .'",
                       meta:{score: score-1},
                     };
                 }
                 if (value === value.toUpperCase()) {
                    return {
                       valid: false,
-                      message: "' . translate("Le mot de passe doit contenir au moins un caractère en minuscule.") . '",
+                      message: "'. translate("Le mot de passe doit contenir au moins un caractère en minuscule.") .'",
                       meta:{score: score-2},
                    };
                 }
                 if (value.search(/[0-9]/) < 0) {
                    return {
                       valid: false,
-                      message: "' . translate("Le mot de passe doit contenir au moins un chiffre.") . '",
+                      message: "'. translate("Le mot de passe doit contenir au moins un chiffre.") .'",
                       meta:{score: score-3},
                    };
                 }
                 if (value.search(/[@\+\-!#$%&^~*_]/) < 0) {
                    return {
                       valid: false,
-                      message: "' . translate("Le mot de passe doit contenir au moins un caractère non alphanumérique.") . '",
+                      message: "'. translate("Le mot de passe doit contenir au moins un caractère non alphanumérique.") .'",
                       meta:{score: score-4},
                    };
                 }
                 if (value.length < 8) {
                    return {
                       valid: false,
-                      message: "' . translate("Le mot de passe doit contenir") . ' ' . Config::get('npds.minpass') . ' ' . translate("caractères au minimum") . '",
+                      message: "'. translate("Le mot de passe doit contenir") .' '. Config::get('npds.minpass') .' '. translate("caractères au minimum") .'",
                       meta:{score: score-5},
                    };
                 }
  
-                score += ((value.length >= ' . Config::get('npds.minpass') . ') ? 1 : -1);
+                score += ((value.length >= '. Config::get('npds.minpass') .') ? 1 : -1);
                 if (/[A-Z]/.test(value)) score += 1;
                 if (/[a-z]/.test(value)) score += 1; 
                 if (/[0-9]/.test(value)) score += 1;
@@ -223,13 +223,12 @@ class css
        formulid.forEach(function(item, index, array) {
           const fvitem = FormValidation.formValidation(
              document.getElementById(item),{
-                locale: "' . language::language_iso(1, "_", 1) . '",
-                localization: FormValidation.locales.' . language::language_iso(1, "_", 1) . ',
+                locale: "'. language::language_iso(1, "_", 1) .'",
+                localization: FormValidation.locales.'. language::language_iso(1, "_", 1) .',
                 fields: {';
             
             if ($fv_parametres != '') {
-                echo '
-             ' . $fv_parametres[0];
+                echo $fv_parametres[0];
             }
             
             echo '
@@ -281,7 +280,7 @@ class css
             if ($fv_parametres != '')
                 if (array_key_exists(1, $fv_parametres)) {
                     echo '
-                ' . $fv_parametres[1];
+                '. $fv_parametres[1];
             }
             
             echo '

@@ -6,6 +6,7 @@ namespace npds\system\block;
 
 use npds\system\auth\users;
 use npds\system\auth\groupe;
+use npds\system\auth\authors;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\cache\cacheManager;
@@ -129,7 +130,7 @@ class block
      */
     public static function fab_block(string $title, string $member, string $content, int $Xcache): void
     { 
-        global $user, $admin, $B_class_title, $B_class_content, $REQUEST_URI;
+        global $B_class_title, $B_class_content, $REQUEST_URI;
         
         // Multi-Langue
         $title = language::aff_langue($title);
@@ -278,6 +279,9 @@ class block
                     $content = $Xcontent;
                 }
             }
+
+            $user = users::getUser();
+            $admin = authors::getAdmin();
 
             if (!empty($content)) {
                 if (($member == 1) and (isset($user))) {

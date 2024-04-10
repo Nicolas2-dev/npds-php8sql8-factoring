@@ -11,9 +11,9 @@ use npds\system\auth\groupe;
 use npds\system\cache\cache;
 use npds\system\support\str;
 use npds\system\theme\theme;
+use npds\system\auth\authors;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
-use npds\system\cookie\cookie;
 use npds\system\utility\crypt;
 use npds\system\language\language;
 use npds\system\language\metalang;
@@ -123,15 +123,15 @@ class forum
 
                 $boxstuff .= '<li class="list-unstyled border-0 p-2 mt-1">
                     <h6>
-                        <a href="'. site_url('viewforum.php?forum=' . $forumid) . '" title="' . strip_tags($forum_desc) . '" data-bs-toggle="tooltip">
-                            ' . $forumname . '
+                        <a href="'. site_url('viewforum.php?forum='. $forumid) .'" title="'. strip_tags($forum_desc) .'" data-bs-toggle="tooltip">
+                            '. $forumname .'
                         </a>
-                        <span class="float-end badge bg-secondary" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">
-                            ' . count($res_forumtopics) . '
+                        <span class="float-end badge bg-secondary" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">
+                            '. count($res_forumtopics) .'
                         </span>
                     </h6>
                 </li>';
-
+                
                 $topics = 0;
                 foreach ($res_forumtopics as $topicrow) {
                     if ($topics < $maxtopics) {                
@@ -173,16 +173,16 @@ class forum
 
                         $boxstuff .= '<li class="list-group-item p-1 border-right-0 border-left-0 list-group-item-action">
                             <div class="n-ellipses">
-                                <span class="badge bg-secondary mx-2" title="' . translate("Réponses") . '" data-bs-toggle="tooltip" data-bs-placement="top">
-                                    ' . $replies . '
+                                <span class="badge bg-secondary mx-2" title="'. translate("Réponses") .'" data-bs-toggle="tooltip" data-bs-placement="top">
+                                    '. $replies .'
                                 </span>
-                                <a href="'. site_url('viewtopic.php?topic=' . $topicrow['topic_id'] . '&amp;forum=' . $forumid) . '" >
-                                    ' . $topictitle . '
+                                <a href="'. site_url('viewtopic.php?topic='. $topicrow['topic_id'] .'&amp;forum='. $forumid) .'" >
+                                    '. $topictitle .'
                                 </a>
                             </div>';
                         
                         if ($displayposter) {
-                            $boxstuff .= $decoration . '<span class="ms-1">' . $postername . '</span>';
+                            $boxstuff .= $decoration .'<span class="ms-1">'. $postername .'</span>';
                         }
 
                         $boxstuff .= '</li>';
@@ -342,7 +342,7 @@ class forum
 
                 $val = date::convertdate($myrow['topic_time']);
                 // $rowQ1[0]['uname']
-                $val .= $rowQ1 ? ' ' . userpopover($rowQ1[0][0], 40, 2) : '';
+                $val .= $rowQ1 ? ' '. userpopover($rowQ1[0][0], 40, 2) : '';
             }
         }
     
@@ -516,7 +516,6 @@ class forum
                             ->select('forum_id')
                             ->where('forum_id', $id)
                             ->first();
-
                 break;
     
             case 'topic':
@@ -524,7 +523,6 @@ class forum
                             ->select('topic_id')
                             ->where('topic_id', $id)
                             ->first();
-
                 break;
         }
     
@@ -572,7 +570,7 @@ class forum
     {
         $theme = theme::getTheme();
     
-        if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
+        if (theme::theme_image("forum/smilies/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/";
         } else {
             $imgtmp = "assets/images/forum/smilies/";
@@ -585,14 +583,14 @@ class forum
                 $suffix = strtoLower(substr(strrchr($tab_smilies[1], '.'), 1));
     
                 if (($suffix == "gif") or ($suffix == "png")) {
-                    $message = str_replace($tab_smilies[0], "<img class='n-smil' src='" . $imgtmp . $tab_smilies[1] . "' loading='lazy' />", $message);
+                    $message = str_replace($tab_smilies[0], "<img class='n-smil' src='". $imgtmp . $tab_smilies[1] ."' loading='lazy' />", $message);
                 } else {
                     $message = str_replace($tab_smilies[0], $tab_smilies[1], $message);
                 }
             }
         }
     
-        if ($ibid = theme::theme_image("forum/smilies/more/smilies.php")) {
+        if (theme::theme_image("forum/smilies/more/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/more/";
         } else {
             $imgtmp = "assets/images/forum/smilies/more/";
@@ -602,7 +600,7 @@ class forum
             include($imgtmp . "smilies.php");
             
             foreach ($smilies as $tab_smilies) {
-                $message = str_replace($tab_smilies[0], "<img class='n-smil' src='" . $imgtmp . $tab_smilies[1] . "' loading='lazy' />", $message);
+                $message = str_replace($tab_smilies[0], "<img class='n-smil' src='". $imgtmp . $tab_smilies[1] ."' loading='lazy' />", $message);
             }
         }
     
@@ -620,7 +618,7 @@ class forum
     {
         $theme = theme::getTheme();
     
-        if ($ibid = theme::theme_image("forum/smilies/smilies.php")) {
+        if (theme::theme_image("forum/smilies/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/";
         } else {
             $imgtmp = "assets/images/forum/smilies/";
@@ -630,11 +628,11 @@ class forum
             include($imgtmp . "smilies.php");
             
             foreach ($smilies as $tab_smilies) {
-                $message = str_replace("<img class='n-smil' src='" . $imgtmp . $tab_smilies[1] . "' loading='lazy' />", $tab_smilies[0], $message);
+                $message = str_replace("<img class='n-smil' src='". $imgtmp . $tab_smilies[1] ."' loading='lazy' />", $tab_smilies[0], $message);
             }
         }
     
-        if ($ibid = theme::theme_image("forum/smilies/more/smilies.php")) {
+        if (theme::theme_image("forum/smilies/more/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/more/";
         } else {
             $imgtmp = "assets/images/forum/smilies/more/";
@@ -644,7 +642,7 @@ class forum
             include($imgtmp . "smilies.php");
             
             foreach ($smilies as $tab_smilies) {
-                $message = str_replace("<img class='n-smil' src='" . $imgtmp . $tab_smilies[1] . "' loading='lazy' />", $tab_smilies[0],  $message);
+                $message = str_replace("<img class='n-smil' src='". $imgtmp . $tab_smilies[1] ."' loading='lazy' />", $tab_smilies[0],  $message);
             }
         }
     
@@ -728,7 +726,7 @@ class forum
             }
         }
     
-        return ($ibid);
+        return $ibid;
     }
     
 
@@ -747,7 +745,7 @@ class forum
     
         echo '<p align="center">' . translate("Cliquez pour insérer des émoticons dans votre message") . '</p>';
     
-        if ($ibid = theme::theme_image("forum/smilies/more/smilies.php")) {
+        if (theme::theme_image("forum/smilies/more/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/more/";
         } else {
             $imgtmp = "assets/images/forum/smilies/more/";
@@ -762,13 +760,13 @@ class forum
             foreach ($smilies as $tab_smilies) {
                 if ($tab_smilies[3]) {
                     echo '
-                <span class ="d-inline-block m-2"><a href="#" onclick="javascript: DoAdd(\'true\',\'message\',\' ' . $tab_smilies[0] . '\');"><img src="' . $imgtmp . $tab_smilies[1] . '" width="32" height="32" alt="' . $tab_smilies[2];
+                <span class ="d-inline-block m-2"><a href="#" onclick="javascript: DoAdd(\'true\',\'message\',\' '. $tab_smilies[0] .'\');"><img src="'. $imgtmp . $tab_smilies[1] .'" width="32" height="32" alt="'. $tab_smilies[2];
                     
                     if ($tab_smilies[2]) {
                         echo ' => ';
                     }
     
-                    echo $tab_smilies[0] . '" loading="lazy" /></a></span>';
+                    echo $tab_smilies[0] .'" loading="lazy" /></a></span>';
                 }
             }
             echo '
@@ -786,8 +784,8 @@ class forum
     public static function putitems(string $targetarea): void
     {
         echo '
-        <div title="' . translate("Cliquez pour insérer des emoji dans votre message") . '" data-bs-toggle="tooltip">
-            <button class="btn btn-link ps-0" type="button" id="button-textOne" data-bs-toggle="emojiPopper" data-bs-target="#' . $targetarea . '">
+        <div title="'. translate("Cliquez pour insérer des emoji dans votre message") .'" data-bs-toggle="tooltip">
+            <button class="btn btn-link ps-0" type="button" id="button-textOne" data-bs-toggle="emojiPopper" data-bs-target="#'. $targetarea .'">
                 <i class="far fa-smile fa-lg" aria-hidden="true"></i>
             </button>
         </div>
@@ -814,17 +812,17 @@ class forum
     {
         $affich = '
                         <div class="mt-2">
-                            <a href="javascript: addText(\'&lt;b&gt;\',\'&lt;/b&gt;\');" title="' . translate("Gras") . '" data-bs-toggle="tooltip" ><i class="fa fa-bold fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;i&gt;\',\'&lt;/i&gt;\');" title="' . translate("Italique") . '" data-bs-toggle="tooltip" ><i class="fa fa-italic fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;u&gt;\',\'&lt;/u&gt;\');" title="' . translate("Souligné") . '" data-bs-toggle="tooltip" ><i class="fa fa-underline fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;b&gt;\',\'&lt;/b&gt;\');" title="'. translate("Gras") .'" data-bs-toggle="tooltip" ><i class="fa fa-bold fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;i&gt;\',\'&lt;/i&gt;\');" title="'. translate("Italique") .'" data-bs-toggle="tooltip" ><i class="fa fa-italic fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;u&gt;\',\'&lt;/u&gt;\');" title="'. translate("Souligné") .'" data-bs-toggle="tooltip" ><i class="fa fa-underline fa-lg me-2 mb-3"></i></a>
                             <a href="javascript: addText(\'&lt;span style=\\\'text-decoration:line-through;\\\'&gt;\',\'&lt;/span&gt;\');" title="" data-bs-toggle="tooltip" ><i class="fa fa-strikethrough fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p class=\\\'text-start\\\'&gt;\',\'&lt;/p&gt;\');" title="' . translate("Texte aligné à gauche") . '" data-bs-toggle="tooltip" ><i class="fa fa-align-left fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p class=\\\'text-center\\\'&gt;\',\'&lt;/p&gt;\');" title="' . translate("Texte centré") . '" data-bs-toggle="tooltip" ><i class="fa fa-align-center fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p class=\\\'text-end\\\'&gt;\',\'&lt;/p&gt;\');" title="' . translate("Texte aligné à droite") . '" data-bs-toggle="tooltip" ><i class="fa fa-align-right fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p align=\\\'justify\\\'&gt;\',\'&lt;/p&gt;\');" title="' . translate("Texte justifié") . '" data-bs-toggle="tooltip" ><i class="fa fa-align-justify fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;ul&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ul&gt;\');" title="' . translate("Liste non ordonnnée") . '" data-bs-toggle="tooltip" ><i class="fa fa-list-ul fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;ol&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ol&gt;\');" title="' . translate("Liste ordonnnée") . '" data-bs-toggle="tooltip" ><i class="fa fa-list-ol fa-lg me-2 mb-3"></i></a>
-                            <div class="dropdown d-inline me-2 mb-3" title="' . translate("Lien web") . '" data-bs-toggle="tooltip" data-bs-placement="left">
+                            <a href="javascript: addText(\'&lt;p class=\\\'text-start\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte aligné à gauche") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-left fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;p class=\\\'text-center\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte centré") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-center fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;p class=\\\'text-end\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte aligné à droite") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-right fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;p align=\\\'justify\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte justifié") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-justify fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;ul&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ul&gt;\');" title="'. translate("Liste non ordonnnée") .'" data-bs-toggle="tooltip" ><i class="fa fa-list-ul fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;ol&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ol&gt;\');" title="'. translate("Liste ordonnnée") .'" data-bs-toggle="tooltip" ><i class="fa fa-list-ol fa-lg me-2 mb-3"></i></a>
+                            <div class="dropdown d-inline me-2 mb-3" title="'. translate("Lien web") .'" data-bs-toggle="tooltip" data-bs-placement="left">
                                 <a class=" dropdown-toggle" href="#" role="button" id="protocoletype" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-link fa-lg"></i></a>
                                 <div class="dropdown-menu" aria-labelledby="protocoletype">
                                 <a class="dropdown-item" href="javascript: addText(\' http://\',\'\');">http</a>
@@ -834,7 +832,7 @@ class forum
                                 </div>
                             </div>
                             <a href="javascript: addText(\'&lt;table class=\\\'table table-bordered table-striped table-sm\\\'&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;\',\'\'); " title="' . translate("Tableau") . '" data-bs-toggle="tooltip"><i class="fa fa-table fa-lg me-2 mb-3"></i></a>
-                            <div class="dropdown d-inline me-2 mb-3" title="' . translate("Code") . '" data-bs-toggle="tooltip" data-bs-placement="left">
+                            <div class="dropdown d-inline me-2 mb-3" title="'. translate("Code") .'" data-bs-toggle="tooltip" data-bs-placement="left">
                                 <a class=" dropdown-toggle" href="#" role="button" id="codeclasslanguage" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-code fa-lg"></i></a>
                                 <div class="dropdown-menu" aria-labelledby="codeclasslanguage">
                                 <h6 class="dropdown-header">Languages</h6>
@@ -846,10 +844,10 @@ class forum
                                 <a class="dropdown-item" href="javascript: addText(\'&lt;pre&gt;[code sql]\',\'[/code]&lt;/pre&gt;\');">SQL</a>
                                 </div>
                             </div>
-                            <div class="dropdown d-inline me-2 mb-3" title="' . translate("Vidéos") . '" data-bs-toggle="tooltip" data-bs-placement="left">
+                            <div class="dropdown d-inline me-2 mb-3" title="'. translate("Vidéos") .'" data-bs-toggle="tooltip" data-bs-placement="left">
                                 <a class=" dropdown-toggle" href="#" role="button" id="typevideo" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-film fa-lg"></i></a>
                                 <div class="dropdown-menu" aria-labelledby="typevideo">
-                                <p class="dropdown-header">' . translate("Coller l'ID de votre vidéo entre les deux balises") . ' : <br />[video_yt]xxxx[/video_yt]<br />[video_vm]xxxx[/video_vm]<br />[video_dm]xxxx[/video_dm]</p>
+                                <p class="dropdown-header">'. translate("Coller l'ID de votre vidéo entre les deux balises") .' : <br />[video_yt]xxxx[/video_yt]<br />[video_vm]xxxx[/video_vm]<br />[video_dm]xxxx[/video_dm]</p>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="javascript: addText(\'[video_yt]\',\'[/video_yt]\');"><i class="fab fa-youtube fa-lg fa-fw me-1"></i>Youtube</a>
                                 <a class="dropdown-item" href="javascript: addText(\'[video_vm]\',\'[/video_vm]\');"><i class="fab fa-vimeo fa-lg fa-fw me-1"></i>Vimeo</a>
@@ -872,7 +870,7 @@ class forum
     {
         $theme = theme::getTheme();
     
-        if ($ibid = theme::theme_image('forum/subject/index.html')) {
+        if (theme::theme_image('forum/subject/index.html')) {
             $imgtmp = "themes/$theme/images/forum/subject";
         } else {
             $imgtmp = 'assets/images/forum/subject';
@@ -899,18 +897,18 @@ class forum
             if ($image_subject != '') {
                 if ($file == $image_subject) {
                     $temp .= '
-                    <input type="radio" value="' . $file . '" id="image_subject' . $j . '" name="image_subject" class="form-check-input" checked="checked" />';
+                    <input type="radio" value="'. $file .'" id="image_subject'. $j .'" name="image_subject" class="form-check-input" checked="checked" />';
                 } else {
                     $temp .= '
-                    <input type="radio" value="' . $file . '" id="image_subject' . $j . '" name="image_subject" class="form-check-input" />';
+                    <input type="radio" value="'. $file .'" id="image_subject'. $j .'" name="image_subject" class="form-check-input" />';
                 }
             } else {
                 $temp .= '
-                    <input type="radio" value="' . $file . '" id="image_subject' . $j . '" name="image_subject" class="form-check-input" checked="checked" />';
+                    <input type="radio" value="'. $file . '" id="image_subject'. $j .'" name="image_subject" class="form-check-input" checked="checked" />';
                 $image_subject = 'no image';
             }
     
-            $temp .= '<label class="form-check-label" for="image_subject' . $j . '" ><img class="n-smil d-block" src="' . $imgtmp . '/' . $file . '" alt="" loading="lazy" /></label>
+            $temp .= '<label class="form-check-label" for="image_subject'. $j .'" ><img class="n-smil d-block" src="'. $imgtmp .'/'. $file .'" alt="" loading="lazy" /></label>
                 </div>';
             $j++;
         }
@@ -964,8 +962,8 @@ class forum
                     <input type="hidden" name="sortby" value="0" />
                     <div class="col">
                     <div class="form-floating">
-                        <input type="text" class="form-control" name="term" id="term" placeholder="' . translate('Recherche') . '" required="required" />
-                        <label for="term"><i class="fa fa-search fa-lg me-2"></i>' . translate('Recherche') . '</label>
+                        <input type="text" class="form-control" name="term" id="term" placeholder="'. translate('Recherche') .'" required="required" />
+                        <label for="term"><i class="fa fa-search fa-lg me-2"></i>'. translate('Recherche') .'</label>
                     </div>
                     </div>
                 </form>';
@@ -992,7 +990,7 @@ class forum
             $imgtmpP = 'assets/images/forum/rank/post.gif';
         }
     
-        $tmp = '<img class="n-smil" src="' . $imgtmpP . '" alt="" loading="lazy" />' . $posts . '&nbsp;';
+        $tmp = '<img class="n-smil" src="'. $imgtmpP .'" alt="" loading="lazy" />'. $posts .'&nbsp;';
     
         if ($poster != Config::get('npds.anonymous')) {
             $nux = 0;
@@ -1031,7 +1029,7 @@ class forum
                 $rank = 'rank' . $rank;
     
                 global $$rank;
-                $tmp .= '<div class="my-2"><img class="n-smil" src="' . $imgtmpA . '" alt="logo rôle" loading="lazy" />&nbsp;' . language::aff_langue($$rank) . '</div>';
+                $tmp .= '<div class="my-2"><img class="n-smil" src="'. $imgtmpA .'" alt="logo rôle" loading="lazy" />&nbsp;'. language::aff_langue($$rank) .'</div>';
             }
         }
     
@@ -1047,7 +1045,6 @@ class forum
      */
     public static function forumerror(string $e_code): mixed
     {
-        global $header;
 
         if ($e_code == "0001") {
             $error_msg = translate("Pas de connexion à la base forums.");
@@ -1166,7 +1163,7 @@ class forum
         }
     
         if ($e_code == "0031") {
-            return (0);
+            return 0;
         }
     
         if ($e_code == "0035") {
@@ -1185,15 +1182,17 @@ class forum
             $error_msg = translate("Vous ne pouvez répondre à ce message.");
         }
     
+        $header = Config::get('npds.theme.header');
+
         if (!isset($header)){
             include("themes/default/header.php");
         }
     
         echo '
-        <div class="alert alert-danger"><strong>' . Config::get('npds.sitename') . '<br />' . translate("Erreur du forum") . '</strong><br />';
-        echo translate("Code d'erreur :") . ' ' . $e_code . '<br /><br />';
-        echo $error_msg . '<br /><br />';
-        echo '<a href="javascript:history.go(-1)" class="btn btn-secondary">' . translate("Retour en arrière") . '</a><br /></div>';
+        <div class="alert alert-danger"><strong>'. Config::get('npds.sitename') .'<br />'. translate("Erreur du forum") .'</strong><br />';
+        echo translate("Code d'erreur :") .' '. $e_code .'<br /><br />';
+        echo $error_msg .'<br /><br />';
+        echo '<a href="javascript:history.go(-1)" class="btn btn-secondary">'. translate("Retour en arrière") .'</a><br /></div>';
     
         include("themes/default/footer.php");
     
@@ -1254,19 +1253,28 @@ class forum
      */
     public static function autorize(): bool
     {
-        global $IdPost, $IdTopic, $IdForum, $user, $NPDS_Prefix;
+        global $IdPost, $IdTopic, $IdForum;
     
-        list($poster_id) = sql_fetch_row(sql_query("SELECT poster_id FROM " . $NPDS_Prefix . "posts WHERE post_id='$IdPost' AND topic_id='$IdTopic'"));
-    
+        $poster_id = DB::table('posts')
+                        ->select('poster_id')
+                        ->where('post_id', $IdPost)
+                        ->where('topic_id', $IdTopic)
+                        ->first();
+
         $Mmod = false;
     
         if ($poster_id) {
-            $myrow = sql_fetch_assoc(sql_query("SELECT forum_moderator FROM " . $NPDS_Prefix . "forums WHERE (forum_id='$IdForum')"));
-            
+            $myrow = DB::table('forums')
+                        ->select('forum_moderator')
+                        ->where('forum_id', $IdForum)
+                        ->first();
+
             if ($myrow) {
                 $moderator = static::get_moderator($myrow['forum_moderator']);
                 $moderator = explode(' ', $moderator);
                 
+                $user = users::getUser();
+
                 if (isset($user)) {
                     $userX = base64_decode($user);
                     $userdata = explode(":", $userX);
@@ -1303,36 +1311,31 @@ class forum
     {
         // anti_flood : nb de post dans les 90 puis 30 dernières minutes / les modérateurs echappent à cette règle
         // security.log est utilisée pour enregistrer les tentatives
-        global $NPDS_Prefix;
-    
         $compte = !array_key_exists('uname', $userdataX) ? Config::get('npds.anonymous') : $userdataX['uname'];
     
         if ((!$modoX) and ($paramAFX > 0)) {
-            $sql = "SELECT COUNT(poster_ip) AS total FROM " . $NPDS_Prefix . "posts WHERE post_time>'";
+            $query = DB::table('posts')->select(DB::raw('COUNT(poster_ip) AS total'));
+
+            if ($userdataX['uid'] != 1) {
+                $query->where('poster_ip', $poster_ipX)->orWhere('poster_id', '=', $userdataX['uid']);
+            } else {
+                $query->where('poster_ip', $poster_ipX);
+            }
             
-            //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-            $sql2 = $userdataX['uid'] != 1 ?
-                "' AND (poster_ip='$poster_ipX' OR poster_id='" . $userdataX['uid'] . "')" :
-                "' AND poster_ip='$poster_ipX'";
-            
-
-            //= DB::table('')->select()->where('', )->orderBy('')->get();
-
             $timebase = date("Y-m-d H:i", time() + ($gmtX * 3600) - 5400);
 
-            list($time90) = sql_fetch_row(sql_query($sql . $timebase . $sql2));
-    
-            if ($time90 > ($paramAFX * 2)) {
+            $time90 = $query->where('post_time', '>', $timebase)->first();
+
+            if ($time90['total'] > ($paramAFX * 2)) {
                 logs::Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
                 
                 static::forumerror(translate("Vous n'êtes pas autorisé à participer à ce forum"));
             } else {
                 $timebase = date("Y-m-d H:i", time() + ($gmtX * 3600) - 1800);
                 
-                list($time30) = sql_fetch_row(sql_query($sql . $timebase . $sql2));
-                
-                if ($time30 > $paramAFX) {
+                $time30 = $query->where('post_time', '>', $timebase)->first();
+
+                if ($time30['total'] > $paramAFX) {
                     logs::Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
                     
                     static::forumerror(translate("Vous n'êtes pas autorisé à participer à ce forum"));
@@ -1350,42 +1353,43 @@ class forum
      */
     public static function forum(array $forum_categorie): string 
     {
-        global $user, $admin, $adminforum, $NPDS_Prefix;
+        global $adminforum;
     
-//vd($forum_categorie);
-
         // droits des admin sur les forums (superadmin et admin avec droit gestion forum)
         $adminforum = false;
+
+        $admin = authors::getAdmin();
 
         if ($admin) {
             $adminX = base64_decode($admin);
             $adminR = explode(':', $adminX);
     
-            $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$adminR[0]' LIMIT 1"));
-            
-            //= DB::table('')->select()->where('', )->orderBy('')->get();
+            $Q = DB::table('authors')
+                    ->select('*')
+                    ->where('aid', $adminR[0])
+                    ->limit(1)
+                    ->first();
 
             if ($Q['radminsuper'] == 1) {
                 $adminforum = 1;
-            } else {
-                $R = sql_query("SELECT fnom, fid, radminsuper 
-                FROM " . $NPDS_Prefix . "authors a 
-                LEFT JOIN " . $NPDS_Prefix . "droits d 
-                ON a.aid = d.d_aut_aid 
-                LEFT JOIN " . $NPDS_Prefix . "fonctions f 
-                ON d.d_fon_fid = f.fid 
-                WHERE a.aid='$adminR[0]' 
-                AND f.fid BETWEEN 13 AND 15");
-                
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
+            } else {   
+                $R = DB::table('authors')
+                    ->select('fonctions.fnom', 'fonctions.fid', 'authors.aid', 'authors.radminsuper')
+                    ->leftJoin('droits', 'authors.aid', '=', 'droits.d_aut_aid')
+                    ->leftJoin('fonctions', 'droits.d_fon_fid', '=', 'fonctions.fid')
+                    ->where('authors.aid', '=', $adminR[0])
+                    ->where('fonctions.fid', 'BETWEEN', DB::raw('13 AND 15'))
+                    ->get();
 
-                if (sql_num_rows($R) >= 1) {
+                if ($R >= 1) {
                     $adminforum = 1;
                 }
             }
         }
         // droits des admin sur les forums (superadmin et admin avec droit gestion forum)
     
+        $user = users::getUser();
+
         if ($user) {
             $userX = base64_decode($user);
             $userR = explode(':', $userX);
@@ -1484,14 +1488,14 @@ class forum
 
                                     $theme = theme::getTheme();
 
-                                    if ((file_exists("themes/$theme/view/forum-cat" . $row['cat_id'] . ".html")) or (file_exists("themes/default/view/forum-cat" . $row['cat_id'] . ".html"))) {
+                                    if ((file_exists("themes/$theme/view/forum-cat". $row['cat_id'] .".html")) or (file_exists("themes/default/view/forum-cat". $row['cat_id'] .".html"))) {
                                         $ibid .= '
-                                        <div class=" mt-3" id="catfo_' . $row['cat_id'] . '" >
-                                            <a class="list-group-item list-group-item-action active" href="forum.php?catid=' . $row['cat_id'] . '"><h5>' . $title . '</h5></a>';
+                                        <div class=" mt-3" id="catfo_'. $row['cat_id'] .'" >
+                                            <a class="list-group-item list-group-item-action active" href="forum.php?catid='. $row['cat_id'] .'"><h5>'. $title .'</h5></a>';
                                     } else {
                                         $ibid .= '
-                                        <div class=" mt-3" id="catfo_' . $row['cat_id'] . '">
-                                            <div class="list-group-item list-group-item-action active"><h5>' . $title . '</h5></div>';
+                                        <div class=" mt-3" id="catfo_'. $row['cat_id'] .'">
+                                            <div class="list-group-item list-group-item-action active"><h5>'. $title .'</h5></div>';
                                     }
     
                                     $title_aff = false;
@@ -1515,12 +1519,12 @@ class forum
                                 // bizare ce bug ! $tab_folder[$myrow['forum_id']][0] $tab_folder[$myrow['forum_id']][1] si forum sans posts
                                 if (array_key_exists($myrow['forum_id'], $tab_folder)) {
                                     if (($tab_folder[$myrow['forum_id']][0] - $tab_folder[$myrow['forum_id']][1]) > 0) {
-                                        $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="' . translate("Les nouvelles contributions depuis votre dernière visite.") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                        $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Les nouvelles contributions depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                     } else {
-                                        $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="' . translate("Aucune nouvelle contribution depuis votre dernière visite.") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                        $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Aucune nouvelle contribution depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                     }
                                 } else {
-                                    $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="' . translate("Aucune nouvelle contribution depuis votre dernière visite.") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                    $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Aucune nouvelle contribution depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                 }
 
                                 $name = stripslashes($myrow['forum_name']);
@@ -1529,17 +1533,17 @@ class forum
                                 if (strstr(strtoupper($name), "<a HREF")) {
                                     $redirect = true;
                                 } else {
-                                    $ibid .= '<a href="viewforum.php?forum=' . $myrow['forum_id'] . '" >' . $name . '</a>';
+                                    $ibid .= '<a href="'. site_url('viewforum.php?forum=' . $myrow['forum_id']) . '" >' . $name . '</a>';
                                 }
     
                                 if (!$redirect) {
                                     $ibid .= '
                                         <span class="ms-auto"> 
-                                            <span class="badge bg-secondary ms-1" title="' . translate("Contributions") . '" data-bs-toggle="tooltip">' . $tab_total_post[$myrow['forum_id']] . '</span>';
+                                            <span class="badge bg-secondary ms-1" title="'. translate("Contributions") .'" data-bs-toggle="tooltip">'. $tab_total_post[$myrow['forum_id']] .'</span>';
                                     
                                     // bizare ce bug ! $tab_folder[$myrow['forum_id']][0] si forum sans posts
                                     if (array_key_exists($myrow['forum_id'], $tab_folder)) {
-                                        $ibid .= '<span class="badge bg-secondary ms-1" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">' . $tab_folder[$myrow['forum_id']][0] . '</span>';
+                                        $ibid .= '<span class="badge bg-secondary ms-1" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">'. $tab_folder[$myrow['forum_id']][0] .'</span>';
                                     }
 
                                     $ibid .= ' 
@@ -1550,7 +1554,7 @@ class forum
                                 $desc = stripslashes(metalang::meta_lang($myrow['forum_desc']));
     
                                 if ($desc != '') {
-                                    $ibid .= '<span class="d-flex w-100 mt-1">' . $desc . '</span>';
+                                    $ibid .= '<span class="d-flex w-100 mt-1">'. $desc .'</span>';
                                 }
     
                                 if (!$redirect) {
@@ -1565,7 +1569,7 @@ class forum
                                     }
     
                                     if ($myrow['forum_type'] == "5") {
-                                        $ibid .= "PHP Script + " . translate("Groupe");
+                                        $ibid .= "PHP Script + ". translate("Groupe");
                                     }
     
                                     if ($myrow['forum_type'] == "6") {
@@ -1592,7 +1596,7 @@ class forum
                                     }
     
                                     if ($myrow['forum_access'] == "9") {
-                                        $ibid .= '<span class="text-danger mx-2"><i class="fa fa-lock me-2"></i>' . translate("Fermé") . '</span>';
+                                        $ibid .= '<span class="text-danger mx-2"><i class="fa fa-lock me-2"></i>'. translate("Fermé") .'</span>';
                                     }
     
                                     $ibid .= ' ] </span>';
@@ -1608,12 +1612,12 @@ class forum
     
                                                 // ajout isset bug $tab_subscribe non definie    
                                                 if (!isset($tab_subscribe[$myrow['forum_id']])) { 
-                                                    $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" checked="checked" />';
+                                                    $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid'. $myrow['forum_id'] .'" name="Subforumid['. $myrow['forum_id'] .']" checked="checked" />';
                                                 } else {
-                                                    $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" />';
+                                                    $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid'. $myrow['forum_id'] .'" name="Subforumid['. $myrow['forum_id'] .']" />';
                                                 }
     
-                                                $ibid .= '<label class="form-check-label" for="subforumid' . $myrow['forum_id'] . '" title="' . translate("Cochez et cliquez sur le bouton OK pour recevoir un Email lors d'une nouvelle soumission dans ce forum.") . '" data-bs-toggle="tooltip" data-bs-placement="right">&nbsp;&nbsp;</label>
+                                                $ibid .= '<label class="form-check-label" for="subforumid'. $myrow['forum_id'] .'" title="'. translate("Cochez et cliquez sur le bouton OK pour recevoir un Email lors d'une nouvelle soumission dans ce forum.") . '" data-bs-toggle="tooltip" data-bs-placement="right">&nbsp;&nbsp;</label>
                                                     </span>
                                                 </span>';
 
@@ -1621,7 +1625,7 @@ class forum
                                         }
                                     }
     
-                                    $ibid .= '<span class="d-flex w-100 justify-content-end"><span class="small">' . translate("Dernière contribution") . ' : ' . $last_post . '</span></span>';
+                                    $ibid .= '<span class="d-flex w-100 justify-content-end"><span class="small">'. translate("Dernière contribution") .' : '. $last_post .'</span></span>';
                                 } else {
                                     $ibid .= '';
                                 }
@@ -1644,7 +1648,7 @@ class forum
                 $ibid .= '
                 <div class="form-check mt-1">
                     <input class="form-check-input" type="checkbox" id="ckball_f" />
-                    <label class="form-check-label text-muted" for="ckball_f" id="ckb_status_f">Tout cocher</label>
+                    <label class="form-check-label text-muted" for="ckball_f" id="ckb_status_f">'. translate("Tout cocher") .'</label>
                 </div>';
             }
         }
@@ -1661,24 +1665,27 @@ class forum
      */
     public static function sub_forum_folder(string $forum): string 
     {
-        global $user, $NPDS_Prefix;
+        $user = users::getUser();
     
         if ($user) {
             $userX = base64_decode($user);
             $userR = explode(':', $userX);
         }
     
-        $result = sql_query("SELECT COUNT(topic_id) AS total FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum'");
-        list($totalT) = sql_fetch_row($result);
+        $totalT = DB::table('forumtopics')
+                    ->select(DB::raw('COUNT(topic_id) AS total'))
+                    ->where('forum_id', $forum)
+                    ->first();
     
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-        $result = sql_query("SELECT COUNT(DISTINCT topicid) AS total FROM " . $NPDS_Prefix . "forum_read WHERE uid='$userR[0]' AND topicid>'0' AND status!='0' AND forum_id='$forum'");
-        list($totalF) = sql_fetch_row($result);
+        $totalF = DB::table('forum_read')
+                    ->select(DB::raw('COUNT(DISTINCT topicid) AS total'))
+                    ->where('uid', $userR[0])
+                    ->where('topicid', '>', 0)
+                    ->where('status', '!=', 0)
+                    ->where('forum_id', $forum)
+                    ->first();
     
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-    
-        if (($totalT - $totalF) > 0) {
+        if (($totalT['total'] - $totalF['total']) > 0) {
             $ibid = '<img src="'. theme::theme_image_row('forum/icons/red_sub_folder.gif', 'assets/images/forum/icons/red_sub_folder.gif') .'" alt="" loading="lazy" />';
         } else {
             $ibid = '<img src="'. theme::theme_image_row('forum/icons/sub_folder.gif', 'assets/images/forum/icons/sub_folder.gif') .'" alt="" loading="lazy" />';

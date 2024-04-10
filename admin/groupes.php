@@ -416,10 +416,17 @@ function membre_add(int $gp): void
     var formulid = ["groupesaddmb"];
     inpandfieldlen("luname",255);';
 
-    echo (mysqli_get_client_info() <= '8.0') 
-        ? js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '[[:<:]]' . $gp . '[[:>:]]')->get()) 
-        : js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '\\b' . $gp . '\\b\'')->get());
+    // echo (mysqli_get_client_info() <= '8.0') 
+    //     ? js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '[[:<:]]' . $gp . '[[:>:]]')->get()) 
+    //     : js::auto_complete_multi_query('membre', 'uname', 'luname', DB::table('users')->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')->where('users.uid', '<>', 1)->where('groupe', 'NOT REGEXP', '\\b' . $gp . '\\b\'')->get());
     
+    js::auto_complete_multi_query('membre', 'uname', 'luname', 
+        DB::table('users')
+            ->join('users_status', 'users.uid', '=', 'users_status.uid', 'inner')
+            ->where('users.uid', '<>', 1)
+            ->where('groupe', 'NOT REGEXP', $gp )
+            ->get());
+
     css::adminfoot('fv', '', $arg1, '');
 }
 

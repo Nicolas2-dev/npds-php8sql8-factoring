@@ -17,6 +17,7 @@
 /* dev team : Philippe Revilliod (Phr), A.NICOL                         */
 /************************************************************************/
 
+use npds\system\auth\authors;
 use npds\system\config\Config;
 use npds\system\language\language;
 
@@ -210,7 +211,7 @@ $content .= '
     </script>';
 
 $content .= '<div class="mt-1"><a href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=geoloc"><i class="fa fa-globe fa-lg me-1"></i>[fr]Carte[/fr][en]Map[/en][zh]&#x5730;&#x56FE;[/zh][es]Mapa[/es][de]Karte[/de]</a>';
-if ($admin)
+if (authors::getAdmin())
     $content .= '<div class="text-end"><a class="tooltipbyclass" href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=geoloc&amp;ModStart=admin/geoloc_set" title="[fr]Administration[/fr][en]Administration[/en][zh]&#34892;&#25919;[/zh][es]Administraci&oacute;n[/es][de]Verwaltung[/de]" data-bs-placement="left"><i class="fa fa-cogs fa-lg ms-1"></i></a></div>';
 $content .= '</div>';
 $content = language::aff_langue($content);

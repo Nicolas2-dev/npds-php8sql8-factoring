@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\support;
 
+use npds\system\auth\users;
 use npds\system\block\boxe;
 use npds\system\support\facades\DB;
 
@@ -19,8 +20,6 @@ class polls
      */
     public static function pollSecur(string|int $pollID): array
     {
-        global $user;
-
         $pollClose = '';
         $result = DB::table('poll_data')->select('pollType')->where('pollID', $pollID)->first();
 
@@ -28,6 +27,8 @@ class polls
             
             $pollClose = (($result['pollType'] / 128) >= 1 ? 1 : 0);
             $pollType = $result['pollType'] % 128;
+            
+            $user = users::getUser();
             
             if (($pollType == 1) and !isset($user)) {
                 $pollClose = 99;

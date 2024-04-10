@@ -1340,7 +1340,7 @@ class form_handler
         echo $this->print_form_hidden();
 
         echo '<input class="btn btn-secondary" type="submit" name="sformret" value="Retour" />
-    </form>';
+        </form>';
 
         include("themes/default/footer.php");
     }
@@ -1431,25 +1431,24 @@ class form_handler
                 }
 
                 return true;
-            } else
+            } else {
                 return false;
+            }
         }
     }
 
     /**************************************************************************************/
     function sform_insert_mysql($response)
     {
-        $content = $this->write_sform_data($response);
-        
-        DB::table('sform')->insert(array(
+        $r = DB::table('sform')->insert(array(
             'id_form'       => $this->form_title,
             'id_key'        => $this->form_key,
             'key_value'     => $this->form_key_value,
             'passwd'        => $this->form_password_access,
-            'content'       => $content,
+            'content'       => $this->write_sform_data($response),
         ));
 
-        if (!$result = sql_query($sql)) {
+        if (!$r) {
             return ("Error Sform : Insert DB");
         }
     }
@@ -1466,18 +1465,16 @@ class form_handler
     /**************************************************************************************/
     function sform_modify_mysql($response)
     {
-        $content = $this->write_sform_data($response);
-
-        DB::table('sform')
+        $r = DB::table('sform')
             ->where('id_form', $this->form_title)
             ->where('id_key', $this->form_key)
             ->where('key_value', $this->form_key_value)
             ->update(array(
                 'passwd'        => $this->form_password_access,
-                'content'       => $content,
+                'content'       => $this->write_sform_data($response),
         ));
 
-        if (!$result = sql_query($sql)) {
+        if (!$r) {
             return ("Error Sform : Update DB");
         }
     }

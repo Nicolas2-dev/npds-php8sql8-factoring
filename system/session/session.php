@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\session;
 
+use npds\system\auth\users;
 use npds\system\config\Config;
 use npds\system\support\facades\DB;
 
@@ -17,11 +18,13 @@ class session
      */
     public static function session_manage(): void
     {
-        global $cookie, $REQUEST_URI;
+        global $REQUEST_URI;
 
         $ip = getip();
 
-        $username = isset($cookie[1]) ? $cookie[1] : $ip; // pas bon ...
+        $cookie = users::cookieUser(1);
+
+        $username = isset($cookie) ? $cookie : $ip; // pas bon ...
 
         if ($username == $ip) {
             $guest = 1;

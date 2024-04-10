@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace npds\system\chat;
 
+use npds\system\auth\users;
 use npds\system\assets\java;
 use npds\system\block\block;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\support\str;
+use npds\system\auth\authors;
 use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\utility\crypt;
@@ -82,8 +84,6 @@ class chat
      */
     public static function makeChatBox(string $pour): void
     {
-        global $user, $admin;
-
         $auto = (array) block::autorisation_block('params#' . $pour);
         $dimauto = count($auto);
 
@@ -113,6 +113,10 @@ class chat
                 foreach($result as $chatbox) {  
                     if (isset($chatbox['username'])) {
                         if ($chatbox['dbname'] == 1) {
+
+                            $user = users::getUser();
+                            $admin = authors::getAdmin();
+
                             $thing .= ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) ?
                                 '<span class="">' . substr($chatbox['username'], 0, 8) . '.</span>' :
                                 "<a href=\"user.php?op=userinfo&amp;uname=" . $chatbox['username'] ."\">" . substr($chatbox['username'], 0, 8) . ".</a>";

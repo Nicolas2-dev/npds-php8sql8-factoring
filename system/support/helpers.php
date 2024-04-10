@@ -2,6 +2,7 @@
 
 use npds\system\logs\logs;
 use npds\system\news\gzfile;
+use npds\system\auth\authors;
 use npds\system\news\zipfile;
 use npds\system\config\Config;
 
@@ -28,7 +29,7 @@ if (! function_exists('Admin_alert'))
 {
     function Admin_alert($motif)
     {
-        global $admin;
+        $admin = authors::getAdmin();
 
         setcookie('admin', '', 0);
         unset($admin);

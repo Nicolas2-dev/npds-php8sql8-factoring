@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\support;
 
 use npds\system\date\date;
+use npds\system\auth\users;
 use npds\system\language\language;
 use npds\system\language\metalang;
 
@@ -18,9 +19,9 @@ class edito
      */
     public static function fab_edito(): array
     {
-        global $cookie;
+        $cookie = users::cookieUser(3);
 
-        if (isset($cookie[3])) {
+        if (isset($cookie)) {
             if (file_exists("storage/static/edito_membres.txt")) {
                 $fp = fopen("storage/static/edito_membres.txt", "r");
                 

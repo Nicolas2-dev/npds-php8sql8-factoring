@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace npds\system\cache;
 
+use npds\system\auth\users;
 use npds\system\config\Config;
 
 
@@ -255,7 +256,7 @@ class cacheManager
      */
     function checkCache(string $request, int $refresh): string
     {
-        global $user;
+        $user = users::getUser();
 
         if (!$this->config['non_differentiate']) {
             if (isset($user) and $user != '') {
@@ -305,7 +306,7 @@ class cacheManager
      */
     function insertIntoCache(string $content, string $request): void
     {
-        global $user;
+        $user = users::getUser();
 
         if (!$this->config['non_differentiate']) {
             if (isset($user) and $user != '') {
@@ -429,7 +430,7 @@ class cacheManager
      */
     function UsercacheCleanup(): void
     {
-        global $user;
+        $user = users::getUser();
 
         if (isset($user)) {
             $cookie = explode(":", base64_decode($user));

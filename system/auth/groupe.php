@@ -226,11 +226,11 @@ class groupe
             $useroutils = '';
             
             if ($uid != 1 and $uid != '') {
-                $useroutils .= '<a class="list-group-item text-primary" href="user.php?op=userinfo&amp;uname=' . $user['uname'] . '" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Profil") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('user.php?op=userinfo&amp;uname='. $user['uname']) .'" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Profil") . '</span></a>';
             }
 
             if ($uid != 1) {
-                $useroutils .= '<a class="list-group-item text-primary" href="powerpack.php?op=instant_message&amp;to_userid=' . $user['uname'] . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Message") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid='. $user['uname']) .'" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Message") . '</span></a>';
             }
 
             if ($user['femail'] != '') {
@@ -242,12 +242,12 @@ class groupe
             }
 
             if ($user['mns']) {
-                $useroutils .= '<a class="list-group-item text-primary" href="minisite.php?op=' . $user['uname'] . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visitez le minisite") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('minisite.php?op='. $user['uname']) .'" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visitez le minisite") . '</span></a>';
             }
 
             if (!Config::get('npds.short_user')) {
                 if ($posterdata_extend[$ch_lat] != '') {
-                    $useroutils .= '<a class="list-group-item text-primary" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u' . $uid . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Localisation") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u'. $uid) .'" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Localisation") . '</span></a>';
                 }
             }
 
@@ -326,7 +326,7 @@ class groupe
                 $nb_for_gr = '  <span class="badge bg-secondary float-end">' . $nb_foru . '</span>';
                 
                 foreach ($res_forum as $forum) {   
-                    $lst_for .= '<li class="list-group-item list-group-item-action"><a href="viewforum.php?forum=' . $forum['forum_id'] . '">' . $forum['forum_name'] . '</a></li>';
+                    $lst_for .= '<li class="list-group-item list-group-item-action"><a href="'. site_url('viewforum.php?forum='. $forum['forum_id']) .'">' . $forum['forum_name'] . '</a></li>';
                 }
 
                 $lst_for .= '</ul>';
@@ -355,12 +355,14 @@ class groupe
 
             if ($nb_doc >= 1) {
                 $lst_doc_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_doc_gr_' . $gr . '" class="text-primary" id="show_lst_doc_' . $gr . '" title="' . translate("Déplier la liste") . '"><i id="i_lst_doc_gr_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a>';
+                
                 $lst_doc .= '<ul id="lst_doc_gr_' . $gr . '" class="list-group ul_bloc_ws mt-3 collapse">';
                 $nb_doc_gr = '  <span class="badge bg-secondary float-end">' . $nb_doc . '</span>';
                 
                 foreach($wspad as $pad) {
                     $surlignage = $couleur[str::hexfromchr($pad['e'])];
-                    $lst_doc .= '<li class="list-group-item list-group-item-action px-1 py-3" style="line-height:14px;"><div id="last_editor_' . $pad['p'] . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernier éditeur") . ' : ' . $pad['e'] . ' ' . date(translate("dateinternal"), $pad['m']) . '" style="float:left; width:1rem; height:1rem; background-color:' . $surlignage . '"></div><i class="fa fa-edit text-muted mx-1" data-bs-toggle="tooltip" title="' . translate("Document co-rédigé") . '." ></i><a href="modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page=' . $pad['p'] . '&amp;member=' . $gr . '&amp;ranq=' . $pad['r'] . '">' . $pad['p'] . '</a></li>';
+                    $lst_doc .= '<li class="list-group-item list-group-item-action px-1 py-3" style="line-height:14px;">
+                    <div id="last_editor_' . $pad['p'] . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernier éditeur") . ' : ' . $pad['e'] . ' ' . date(translate("dateinternal"), $pad['m']) . '" style="float:left; width:1rem; height:1rem; background-color:' . $surlignage . '"></div><i class="fa fa-edit text-muted mx-1" data-bs-toggle="tooltip" title="' . translate("Document co-rédigé") . '." ></i><a href="'. site_url('modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page='. $pad['p'] .'&amp;member='. $gr .'&amp;ranq='. $pad['r']) .'">' . $pad['p'] . '</a></li>';
                 }
 
                 $lst_doc .= '
@@ -368,7 +370,7 @@ class groupe
             }
 
             $content .= '
-           <hr /><div class="">' . $lst_doc_tog . '<i class="fa fa-edit fa-2x text-muted ms-3 align-middle" title="' . translate("Co-rédaction") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<a class="text-uppercase" href="modules.php?ModPath=wspad&ModStart=wspad&member=' . $gr . '" >' . translate("Co-rédaction") . '</a>' . $nb_doc_gr . $lst_doc . '</div>' . "\n";
+           <hr /><div class="">' . $lst_doc_tog . '<i class="fa fa-edit fa-2x text-muted ms-3 align-middle" title="' . translate("Co-rédaction") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<a class="text-uppercase" href="'. site_url('modules.php?ModPath=wspad&ModStart=wspad&member='. $gr) .'" >' . translate("Co-rédaction") . '</a>' . $nb_doc_gr . $lst_doc . '</div>' . "\n";
         }
         //<= wspad
 
@@ -394,19 +396,19 @@ class groupe
         
         //=> Filemanager
         if (file_exists('modules/f-manager/config/groupe_' . $gr . '.conf.php')) {
-            $content .= '<a class="mx-2" href="modules.php?ModPath=f-manager&amp;ModStart=f-manager&amp;FmaRep=groupe_' . $gr . '" title="' . translate("Gestionnaire fichiers") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-folder fa-2x"></i></a>' . "\n";
+            $content .= '<a class="mx-2" href="'. site_url('modules.php?ModPath=f-manager&amp;ModStart=f-manager&amp;FmaRep=groupe_'. $gr .'') .'" title="' . translate("Gestionnaire fichiers") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-folder fa-2x"></i></a>' . "\n";
         }
 
         //=> Minisite
         if ($rsql['groupe_mns'] == 1) {
-            $content .= '<a class="mx-2" href="minisite.php?op=groupe/' . $gr . '" target="_blank" title= "' . translate("MiniSite") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-desktop fa-2x"></i></a>';
+            $content .= '<a class="mx-2" href="'. site_url('minisite.php?op=groupe/'. $gr) .'" target="_blank" title= "' . translate("MiniSite") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-desktop fa-2x"></i></a>';
         }
 
         //=> Chat
         settype($chat_img, 'string');
         
         if ($rsql['groupe_chat'] == 1) {
-            $PopUp = java::JavaPopUp("chat.php?id=$gr&amp;auto=" . crypt::encrypt(serialize($gr)), "chat" . $gr, 380, 480);
+            $PopUp = java::JavaPopUp(site_url('chat.php?id='. $gr .'&amp;auto='. crypt::encrypt(serialize($gr))), "chat" . $gr, 380, 480);
             
             if (array_key_exists('chat_info_' . $gr, $_COOKIE)) {
                 if ($_COOKIE['chat_info_' . $gr]) {
@@ -419,7 +421,7 @@ class groupe
         //=> admin
 
         if (users::autorisation(-127)) {
-            $content .= '<a class="mx-2" href="admin.php?op=groupes" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" class="fa fa-cogs fa-2x"></i></a>';
+            $content .= '<a class="mx-2" href="'. site_url('admin.php?op=groupes') .'" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" class="fa fa-cogs fa-2x"></i></a>';
         }
 
         $content .= '</div>
@@ -491,7 +493,7 @@ class groupe
             
             if (!file_exists('storage/users_private/groupe/ask4group_' . $userdata[0] . '_' . $groupe['groupe_id'] . '_.txt') and !users::autorisation($groupe['groupe_id'])) {
                 if (!users::autorisation(-1)) {
-                    $content .= '<div class="text-end small"><a href="user.php?op=askforgroupe&amp;askedgroup=' . $groupe['groupe_id'] . '" title="' . translate('Envoi une demande aux administrateurs pour rejoindre ce groupe. Un message privé vous informera du résultat de votre demande.') . '" data-bs-toggle="tooltip">' . translate('Rejoindre ce groupe') . '</a></div>';
+                    $content .= '<div class="text-end small"><a href="'. site_url('user.php?op=askforgroupe&amp;askedgroup='. $groupe['groupe_id']) .'" title="' . translate('Envoi une demande aux administrateurs pour rejoindre ce groupe. Un message privé vous informera du résultat de votre demande.') . '" data-bs-toggle="tooltip">' . translate('Rejoindre ce groupe') . '</a></div>';
                 }
             }
 
@@ -503,7 +505,7 @@ class groupe
         
         if (users::autorisation(-127)) {
             $content .= '
-              <div class="text-end"><a class="mx-2" href="admin.php?op=groupes" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" data-bs-placement="left" class="fa fa-cogs fa-lg"></i></a></div>';
+              <div class="text-end"><a class="mx-2" href="'. site_url('admin.php?op=groupes') .'" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" data-bs-placement="left" class="fa fa-cogs fa-lg"></i></a></div>';
         }
 
         $content .= '
@@ -592,25 +594,23 @@ class groupe
         echo '
                 <input class="form-check-input" type="radio" id="ano" name="members" value="-1" ' . $checked . ' />
                 <label class="form-check-label" for="ano">' . adm_translate("Anonymes") . '</label>
-            </div>';
-        echo '
+            </div>
             <div class="form-check form-check-inline">';
         
         if ($member > 0) {
             echo '
-                <input class="form-check-input" type="radio" id="mem" name="members" value="1" checked="checked" />
-                <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+                    <input class="form-check-input" type="radio" id="mem" name="members" value="1" checked="checked" />
+                    <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="tous" name="members" value="0" />
+                    <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
+                </div>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="tous" name="members" value="0" />
-                <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
+            <div class="mb-3">
+                <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
            
-            echo static::groupe($member) . '
-        </div>';
+            echo static::groupe($member) . '</div>';
         } else {
             if ($member == 0) { 
                 $checked = ' checked="checked"';
@@ -619,20 +619,20 @@ class groupe
             }
     
             echo '
-                <input class="form-check-input" type="radio" id="mem" name="members" value="1" />
-                <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+                    <input class="form-check-input" type="radio" id="mem" name="members" value="1" />
+                    <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="tous" name="members" value="0"' . $checked . ' />
+                    <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
+                </div>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="tous" name="members" value="0"' . $checked . ' />
-                <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
-            
-            echo static::groupe($member) . '
-            </div>
-        </fieldset>';
+            <div class="mb-3">
+                <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
+                
+                echo static::groupe($member) . '
+                </div>
+            </fieldset>';
         }
     }
 

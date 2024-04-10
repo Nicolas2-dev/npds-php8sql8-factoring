@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\mail;
 
 use npds\system\logs\logs;
+use npds\system\auth\users;
 use npds\system\theme\theme;
 use npds\system\utility\spam;
 use PHPMailer\PHPMailer\SMTP;
@@ -34,8 +35,6 @@ class mailler
      */
     public static function send_email(string $email, string $subject, string $message, string $from = "", bool $priority = false, string $mime = "text", string $file = null): bool
     {
-        global $NPDS_Key;
-
         $From_email = $from != '' ? $from : Config::get('npds.adminmail');
 
         if (preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $From_email)) {
@@ -44,10 +43,10 @@ class mailler
             
             if ($config['dkim_auto'] == 2) {
                 //Private key filename for this selector 
-                $privatekeyfile = 'storage/mailer/key/' . $NPDS_Key . '_dkim_private.pem';
+                $privatekeyfile = 'storage/mailer/key/' . Config::get('app.NPDS_Key') . '_dkim_private.pem';
                 
                 //Public key filename for this selector 
-                $publickeyfile = 'storage/mailer/key/' . $NPDS_Key . '_dkim_public.pem';
+                $publickeyfile = 'storage/mailer/key/' . Config::get('app.NPDS_Key') . '_dkim_public.pem';
                 
                 if (!file_exists($privatekeyfile)) {
                     //Create a 2048-bit RSA key with an SHA256 digest 
@@ -137,7 +136,7 @@ class mailler
                 if ($config['dkim_auto'] == 2) {
                     $mail->DKIM_domain = str_replace(['http://', 'https://'], ['', ''], Config::get('npds.nuke_url'));
                     $mail->DKIM_private = $privatekeyfile;;
-                    $mail->DKIM_selector = $NPDS_Key;
+                    $mail->DKIM_selector = Config::get('app.NPDS_Key');
                     $mail->DKIM_identity = $mail->From;
                 }
 
@@ -240,9 +239,10 @@ class mailler
      */
     public static function Mess_Check_Mail_Sub(string $username, string $class): string
     {
-        global $user;
-        
         if ($username) {
+
+            $user = users::getUser();
+
             $userdata = explode(':', base64_decode($user));
 
             $total_messages = DB::table('priv_msgs')

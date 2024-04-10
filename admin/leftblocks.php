@@ -40,7 +40,7 @@ admindroits($aid, $f_meta_nom);
  * @param   string  $content  [$content description]
  * @param   int     $members  [$members description]
  * @param   string  $Mmember  [$Mmember description]
- * @param   int     $Lindex   [$Lindex description]
+ * @param   string|int     $Lindex   [$Lindex description]
  * @param   int     $Scache   [$Scache description]
  * @param   string  $BLaide   [$BLaide description]
  * @param   int     $SHTML    [$SHTML description]
@@ -48,7 +48,7 @@ admindroits($aid, $f_meta_nom);
  *
  * @return  void
  */
-function makelblock(string $title, string $content, int $members, string $Mmember, int $Lindex, int $Scache, string $BLaide, int $SHTML, int $css): void
+function makelblock(string $title, string $content, int $members, string $Mmember, string|int $Lindex, int $Scache, string $BLaide, int $SHTML, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
@@ -156,7 +156,7 @@ function changelblock(int $id, string $title, string $content, int $members, str
  * @param   string  $title    [$title description]
  * @param   string  $content  [$content description]
  * @param   int     $members  [$members description]
- * @param   string  $Mmember  [$Mmember description]
+ * @param   int     $Mmember  [$Mmember description]
  * @param   int     $Lindex   [$Lindex description]
  * @param   int     $Scache   [$Scache description]
  * @param   int     $Sactif   [$Sactif description]
@@ -165,7 +165,7 @@ function changelblock(int $id, string $title, string $content, int $members, str
  *
  * @return  void
  */
-function changedroitelblock(int $id, string $title, string $content, int $members, string $Mmember, int $Lindex, int $Scache, int $Sactif, string $BLaide, int $css): void
+function changedroitelblock(int $id, string $title, string $content, int $members, int $Mmember, int $Lindex, int $Scache, int $Sactif, string $BLaide, int $css): void
 {
     if (is_array($Mmember) and ($members == 1)) {
         $members = implode(',', $Mmember);
@@ -239,6 +239,17 @@ $Mmember = isset($Mmember) ? $Mmember : '';
 
 switch ($op) {
     case 'makelblock':
+
+        settype($title, 'string');
+        settype($content, 'string');
+        settype($members, 'int');
+        settype($Mmember, 'string');
+        settype($Lindex, 'int');
+        settype($Scache, 'int');
+        settype($BLaide, 'string');
+        settype($SHTML, 'int');
+        settype($css, 'int');
+
         makelblock($title, $xtext, $members, $Mmember, $index, $Scache, $Baide, $SHTML, $css);
         break;
 

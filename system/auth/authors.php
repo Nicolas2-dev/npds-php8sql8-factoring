@@ -64,7 +64,7 @@ class authors
      */    
     public static function is_admin(string $xadmin): bool
     {
-        global $admin;
+        $admin = static::getAdmin();
         
         if (isset($admin) and ($admin != '')) {
             return true;

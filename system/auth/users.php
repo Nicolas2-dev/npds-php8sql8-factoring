@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace npds\system\auth;
 
 use npds\system\auth\groupe;
-use npds\system\http\Request;
 use npds\system\config\Config;
 use npds\system\cookie\cookie;
 use npds\system\security\protect;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 class users
 {
@@ -45,9 +45,9 @@ class users
     /**
      * 
      *
-     * @return  string|array|bool
+     * @return  string|array|bool|int
      */
-    public static function cookieUser($arg = null): string|array|bool
+    public static function cookieUser($arg = null): string|array|bool|int
     {
         $user = static::extractUser();
 
@@ -265,7 +265,7 @@ class users
      */
     public static function member_menu(string $mns, string $qui): void
     {
-        $op = with(Request::getInstance()->query('op'));
+        $op = Request::query('op');
 
         echo '
         <ul class="nav nav-tabs d-flex flex-wrap"> 

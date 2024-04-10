@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace npds\system\support;
 
+use npds\system\auth\authors;
 use npds\system\config\Config;
 use npds\system\support\facades\DB;
 
@@ -17,9 +18,7 @@ class counter
      */
     public static function counterUpadate(): void
     {
-        global $admin, $NPDS_Prefix;;
-
-        if ((!$admin) or (Config::get('npds.not_admin_count') != 1)) {
+        if ((!authors::getAdmin()) or (Config::get('npds.not_admin_count') != 1)) {
             $user_agent = getenv("HTTP_USER_AGENT");
 
             if ((stristr($user_agent, "Nav")) 

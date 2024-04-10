@@ -39,7 +39,7 @@ class date
      */
     public static function formatTimestamp(string $time): string
     {
-        $locale = language::getLocale();
+        $locale = config::get('npds.locale');
 
         return ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring"), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
     }

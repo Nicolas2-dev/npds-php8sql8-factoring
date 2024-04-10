@@ -142,7 +142,7 @@ function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_k
 }
 
 // -----------------------
-$header = 1;
+Config::Set('npds.theme.header', 1);
 // -----------------------
 
 // include externe file from themes/default/view/include for functions, codes ...
