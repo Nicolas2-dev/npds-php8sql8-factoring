@@ -15,39 +15,41 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\config\Config;
+use npds\system\auth\users;
+use npds\system\cache\cache;
+use npds\system\theme\theme;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\support\facades\DB;
-use npds\system\cache\SuperCacheEmpty;
-use npds\system\support\facades\Cache as SuperCache;
+use npds\system\support\facades\Request;
 
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if (Config::get('cache.SuperCache')) {
-    $cache_obj = SuperCache::getInstance();
-} else {
-    $cache_obj = new SuperCacheEmpty();
-}
+if (Request::query('op') == "maj_subscribe") { 
+    if (users::getUser()) {
 
-settype($op, 'string');
-settype($Subforumid, 'array');
+        DB::table('subscribe')
+            ->where('uid', users::cookieUser(0))
+            ->where('forumid', '!', null)
+            ->delete();
 
-if ($op == "maj_subscribe") {
-    if ($user) {
-        settype($cookie[0], "integer");
+        foreach (DB::table('forums')
+            ->select('forum_id')
+            ->orderBy('forum_index, forum_id')
+            ->get() as $forum) 
+        {    
+            $Subforumid = Request::query('Subforumid');
 
-        DB::table('subscribe')->where('uid', $cookie[0])->where('forumid', '!', 'NULL')->delete();
-
-        $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums ORDER BY forum_index,forum_id");
-
-        while (list($forumid) = sql_fetch_row($result)) {
             if (is_array($Subforumid)) {
-                if (array_key_exists($forumid, $Subforumid)) {
-                    $resultX = sql_query("INSERT INTO " . $NPDS_Prefix . "subscribe (forumid, uid) VALUES ('$forumid','$cookie[0]')");
+                if (array_key_exists($forum['forum_id'], $Subforumid)) {
+                    DB::table('subscribe')->insert(array(
+                        'forumid'   => $forum['forum_id'],
+                        'uid'       => users::cookieUser(0),
+                    ));
+
                 }
             }
         }
@@ -57,16 +59,14 @@ if ($op == "maj_subscribe") {
 include("themes/default/header.php");
 
 // -- SuperCache
-if ((Config::get('cache.SuperCache')) and (!$user)) {
-    $cache_obj->startCachingPage();
-}
-
-if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!Config::get('cache.SuperCache')) or ($user)) {
+    // start Caching page
+if (cache::cacheManagerStart2()) {
     $inclusion = false;
 
-    settype($catid, 'integer');
-
-    if ($catid != '') {
+    $catid = Request::query('$catid');
+    $theme = theme::getTheme();
+    
+    if ($catid) {
         if (file_exists("themes/$theme/view/forum-cat$catid.html")) {
             $inclusion = "themes/$theme/view/forum-cat$catid.html";
         } elseif (file_exists("themes/default/view/forum-cat$catid.html")) {
@@ -93,9 +93,7 @@ if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1
     }
 }
 
-// -- SuperCache
-if ((Config::get('cache.SuperCache')) and (!$user)) {
-    $cache_obj->endCachingPage();
-}
+// end Caching page
+cache::cacheManagerEnd();
 
 include("themes/default/footer.php");

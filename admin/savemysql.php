@@ -265,7 +265,7 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
         }
 
         if (!is_dir($repertoire)) {
-            @umask("0000");
+            @umask(0000);
             @mkdir($repertoire, 0777);
             $fp = fopen($repertoire . "/index.html", 'w');
             fclose($fp);

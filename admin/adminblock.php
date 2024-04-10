@@ -46,24 +46,24 @@ function ablock(): void
 
     echo '
         <hr />
-        <h3 class="mb-3">' . adm_translate("Editer le Bloc Administration") . '</h3>';
+        <h3 class="mb-3">'. adm_translate("Editer le Bloc Administration") .'</h3>';
 
     $block = DB::table('block')->select('title', 'content')->find(2);
 
     if (!empty($block)) {
         echo '
-        <form id="adminblock" action="admin.php" method="post" class="needs-validation">
+        <form id="adminblock" action="'. site_url('admin.php') .'" method="post" class="needs-validation">
             <div class="form-floating mb-3">
-            <textarea class="form-control" type="text" name="title" id="title" maxlength="1000" style="height:70px;">' . $block['title'] . '</textarea>
-            <label for="title">' . adm_translate("Titre") . '</label>
+            <textarea class="form-control" type="text" name="title" id="title" maxlength="1000" style="height:70px;">'. $block['title'] .'</textarea>
+            <label for="title">'. adm_translate("Titre") .'</label>
             <span class="help-block text-end"><span id="countcar_title"></span></span>
             </div>
             <div class="form-floating mb-3">
-            <textarea class="form-control" type="text" rows="25" name="content" id="content" style="height:170px;">' . $block['content'] . '</textarea>
-            <label for="content">' . adm_translate("Contenu") . '</label>
+            <textarea class="form-control" type="text" rows="25" name="content" id="content" style="height:170px;">'. $block['content'] .'</textarea>
+            <label for="content">'. adm_translate("Contenu") .'</label>
             </div>
             <input type="hidden" name="op" value="changeablock" />
-            <button class="btn btn-primary btn-block" type="submit">' . adm_translate("Valider") . '</button>
+            <button class="btn btn-primary btn-block" type="submit">'. adm_translate("Valider") .'</button>
         </form>';
 
         $arg1 = '
@@ -95,7 +95,7 @@ function changeablock(string $title, string $content): void
     global $aid;
     logs::Ecr_Log('security', "ChangeAdminBlock() by AID : $aid", '');
 
-    Header("Location: admin.php?op=adminMain");
+    Header('Location: '. site_url('admin.php?op=adminMain'));
 }
 
 switch ($op) {

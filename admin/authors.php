@@ -53,8 +53,8 @@ function listdroitsmodulo(): array
             $listdroitsmodulo .= '
                 <div class="col-md-4 col-sm-6">
                     <div class="form-check">
-                    <input class="ckbm form-check-input" id="ad_d_m_' . $func['fnom'] . '" type="checkbox" name="ad_d_m_' . $func['fnom'] . '" value="' . $func['fid'] . '" />
-                    <label class="form-check-label" for="ad_d_m_' . $func['fnom'] . '">' . $func['fnom_affich'] . '</label>
+                    <input class="ckbm form-check-input" id="ad_d_m_'. $func['fnom'] .'" type="checkbox" name="ad_d_m_'. $func['fnom'] .'" value="'. $func['fid'] .'" />
+                    <label class="form-check-label" for="ad_d_m_'. $func['fnom'] .'">'. $func['fnom_affich'] .'</label>
                     </div>
                 </div>';
         } else {
@@ -62,8 +62,8 @@ function listdroitsmodulo(): array
                 $listdroits .= '
                 <div class="col-md-4 col-sm-6">
                     <div class="form-check">
-                    <input class="ckbf form-check-input" id="ad_d_' . $func['fid'] . '" type="checkbox" name="ad_d_' . $func['fid'] . '" value="' . $func['fid'] . '" />
-                    <label class="form-check-label" for="ad_d_' . $func['fid'] . '">' . adm_translate($func['fnom_affich']) . '</label>
+                    <input class="ckbf form-check-input" id="ad_d_'. $func['fid'] .'" type="checkbox" name="ad_d_'. $func['fid'] .'" value="'. $func['fid'] .'" />
+                    <label class="form-check-label" for="ad_d_'. $func['fid'] .'">'. adm_translate($func['fnom_affich']) .'</label>
                     </div>
                 </div>';
             }
@@ -102,9 +102,9 @@ function scri_check(): string
             $("#ckball_f").change(function(){
                 check_a_f = $("#ckball_f").is(":checked");
                 if(check_a_f) {
-                    $("#ckb_status_f").text("' . html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') . '");
+                    $("#ckb_status_f").text("'. html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') .'");
                 } else {
-                    $("#ckb_status_f").text("' . adm_translate("Tout cocher") . '");
+                    $("#ckb_status_f").text("'. adm_translate("Tout cocher") .'");
                 }
                 $(".ckbf").prop("checked", $(this).prop("checked"));
             });
@@ -112,9 +112,9 @@ function scri_check(): string
             $("#ckball_m").change(function(){
                 check_a_m = $("#ckball_m").is(":checked");
                 if(check_a_m) {
-                    $("#ckb_status_m").text("' . html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') . '");
+                    $("#ckb_status_m").text("'. html_entity_decode(adm_translate("Tout décocher"), ENT_COMPAT | ENT_HTML401, 'utf-8') .'");
                 } else {
-                    $("#ckb_status_m").text("' . adm_translate("Tout cocher") . '");
+                    $("#ckb_status_m").text("'. adm_translate("Tout cocher") .'");
                 }
                 $(".ckbm").prop("checked", $(this).prop("checked"));
             });
@@ -141,13 +141,13 @@ function displayadmins(): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Les administrateurs") . '</h3>
+    <h3>'. adm_translate("Les administrateurs") .'</h3>
     <table id="tab_adm" data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-show-export="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
-                <th data-sortable="true" data-halign="center">' . adm_translate('Nom') . '</th>
-                <th data-sortable="true" data-halign="center">' . adm_translate('E-mail') . '</th>
-                <th data-halign="center" data-align="right">' . adm_translate('Fonctions') . '</th>
+                <th data-sortable="true" data-halign="center">'. adm_translate('Nom') .'</th>
+                <th data-sortable="true" data-halign="center">'. adm_translate('E-mail') .'</th>
+                <th data-halign="center" data-align="right">'. adm_translate('Fonctions') .'</th>
             </tr>
         </thead>
         <tbody>';
@@ -161,18 +161,18 @@ function displayadmins(): void
         }
         
         echo '
-                <td>' . $author['aid'] . '</td>
-                <td>' . $author['email'] . '</td>
+                <td>'. $author['aid'] .'</td>
+                <td>'. $author['email'] .'</td>
                 <td align="right" nowrap="nowrap">
-                <a href="admin.php?op=modifyadmin&amp;chng_aid=' . $author['aid'] . '" class=""><i class="fa fa-edit fa-lg" title="' . adm_translate("Modifier l'information") . '" data-bs-toggle="tooltip"></i></a>&nbsp;
-                <a href="mailto:' . $author['email'] . '"><i class="fa fa-at fa-lg" title="' . adm_translate("Envoyer un courriel à") . ' ' . $author['aid'] . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+                <a href="'. site_url('admin.php?op=modifyadmin&amp;chng_aid='. $author['aid']) .'" class=""><i class="fa fa-edit fa-lg" title="'. adm_translate("Modifier l'information") .'" data-bs-toggle="tooltip"></i></a>&nbsp;
+                <a href="mailto:'. $author['email'] .'"><i class="fa fa-at fa-lg" title="'. adm_translate("Envoyer un courriel à") .' '. $author['aid'] .'" data-bs-toggle="tooltip"></i></a>&nbsp;';
         
         if ($author['url'] != '') {
-            echo 'a href="' . $author['url'] . '"><i class="fas fa-external-link-alt fa-lg" title="' . adm_translate("Visiter le site web") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+            echo 'a href="'. $author['url'] .'"><i class="fas fa-external-link-alt fa-lg" title="'. adm_translate("Visiter le site web") .'" data-bs-toggle="tooltip"></i></a>&nbsp;';
         }
 
         echo '
-                <a href="admin.php?op=deladmin&amp;del_aid=' . $author['aid'] . '" ><i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer l'Auteur") . '" data-bs-toggle="tooltip" ></i></a>
+                <a href="'. site_url('admin.php?op=deladmin&amp;del_aid='. $author['aid']) .'" ><i class="fas fa-trash fa-lg text-danger" title="'. adm_translate("Effacer l'Auteur") .'" data-bs-toggle="tooltip" ></i></a>
                 </td>
             </tr>';
     }
@@ -183,33 +183,33 @@ function displayadmins(): void
         </tbody>
     </table>
     <hr />
-    <h3>' . adm_translate("Nouvel administrateur") . '</h3>
-    <form id="nou_adm" action="admin.php" method="post">
+    <h3>'. adm_translate("Nouvel administrateur") .'</h3>
+    <form id="nou_adm" action="'. site_url('admin.php') .'" method="post">
         <fieldset>
-            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" /> ' . adm_translate("Informations") . ' </legend>
+            <legend><img src="'. Config::get('npds.adminimg') .'authors.'. Config::get('npds.admf_ext') .'" class="vam" border="0" width="24" height="24" alt="'. adm_translate("Informations") .'" /> '. adm_translate("Informations") .' </legend>
             <div class="form-floating mb-3 mt-3">
-                <input id="add_aid" class="form-control" type="text" name="add_aid" maxlength="30" placeholder="' . adm_translate("Surnom") . '" required="required" />
-                <label for="add_aid">' . adm_translate("Surnom") . ' <span class="text-danger">*</span></label>
+                <input id="add_aid" class="form-control" type="text" name="add_aid" maxlength="30" placeholder="'. adm_translate("Surnom") .'" required="required" />
+                <label for="add_aid">'. adm_translate("Surnom") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_add_aid"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="add_name" class="form-control" type="text" name="add_name" maxlength="50" placeholder="' . adm_translate("Nom") . '" required="required" />
-                <label for="add_name">' . adm_translate("Nom") . ' <span class="text-danger">*</span></label>
+                <input id="add_name" class="form-control" type="text" name="add_name" maxlength="50" placeholder="'. adm_translate("Nom") .'" required="required" />
+                <label for="add_name">'. adm_translate("Nom") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_add_name"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="add_email" class="form-control" type="email" name="add_email" maxlength="254" placeholder="' . adm_translate("E-mail") . '" required="required" />
-                <label for="add_email">' . adm_translate("E-mail") . ' <span class="text-danger">*</span></label>
+                <input id="add_email" class="form-control" type="email" name="add_email" maxlength="254" placeholder="'. adm_translate("E-mail") .'" required="required" />
+                <label for="add_email">'. adm_translate("E-mail") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_add_email"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="add_url" class="form-control" type="url" name="add_url" maxlength="320" placeholder="' . adm_translate("URL") . '" />
-                <label for="add_url">' . adm_translate("URL") . '</label>
+                <input id="add_url" class="form-control" type="url" name="add_url" maxlength="320" placeholder="'. adm_translate("URL") .'" />
+                <label for="add_url">'. adm_translate("URL") .'</label>
                 <span class="help-block text-end"><span id="countcar_add_url"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="add_pwd" class="form-control" type="password" name="add_pwd" maxlength="20" placeholder="' . adm_translate("Mot de Passe") . '" required="required" />
-                <label for="add_pwd">' . adm_translate("Mot de Passe") . ' <span class="text-danger">*</span></label>
+                <input id="add_pwd" class="form-control" type="password" name="add_pwd" maxlength="20" placeholder="'. adm_translate("Mot de Passe") .'" required="required" />
+                <label for="add_pwd">'. adm_translate("Mot de Passe") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end" id="countcar_add_pwd"></span>
                 <div class="progress mt-2" style="height: 0.4rem;">
                 <div id="passwordMeter_cont" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -218,43 +218,43 @@ function displayadmins(): void
             <div class="mb-3">
                 <div class="form-check">
                 <input id="cb_radminsuper" class="form-check-input" type="checkbox" name="add_radminsuper" value="1" />
-                <label class="form-check-label text-danger" for="cb_radminsuper">' . adm_translate("Super administrateur") . '</label>
+                <label class="form-check-label text-danger" for="cb_radminsuper">'. adm_translate("Super administrateur") .'</label>
                 </div>
-                <span class="help-block">' . adm_translate("Si Super administrateur est coché, cet administrateur aura TOUS les droits.") . '</span>
+                <span class="help-block">'. adm_translate("Si Super administrateur est coché, cet administrateur aura TOUS les droits.") .'</span>
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
+            <legend><img src="'. Config::get('npds.adminimg') .'authors.'. Config::get('npds.admf_ext') .'" class="vam" border="0" width="24" height="24" alt="'. adm_translate("Droits") .'" />'. adm_translate("Droits") .' </legend>
             <div id="adm_droi_f" class="container-fluid ">
                 <div class="mb-3">
-                <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">' . adm_translate("Tout cocher") . '</span>
+                <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">'. adm_translate("Tout cocher") .'</span>
                 </div>
                 <div class="row">
-                ' . $listdroits . '
+                '. $listdroits .'
                 </div>
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
+            <legend><img src="'. Config::get('npds.adminimg') .'authors.'. Config::get('npds.admf_ext') .'" class="vam" border="0" width="24" height="24" alt="'. adm_translate("Droits modules") .'" /> '. adm_translate("Droits modules") .' </legend>
             <div id="adm_droi_m" class="container-fluid">
                 <div class="mb-3">
-                <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">' . adm_translate("Tout cocher") . '</span>
+                <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">'. adm_translate("Tout cocher") .'</span>
                 </div>
                 <div class="row">
-                ' . $listdroitsmodulo . '
+                '. $listdroitsmodulo .'
                 </div>
             </div>
-            <button class="btn btn-primary my-3" type="submit"><i class="fa fa-plus-square fa-lg me-2"></i>' . adm_translate("Ajouter un administrateur") . '</button>
+            <button class="btn btn-primary my-3" type="submit"><i class="fa fa-plus-square fa-lg me-2"></i>'. adm_translate("Ajouter un administrateur") .'</button>
             </div>
             <input type="hidden" name="op" value="AddAuthor" />
         </fieldset>
     </form>
-    ' . scri_check();
+    '. scri_check();
 
     $arg1 = '
         var formulid = ["nou_adm"];
-        ' . js::auto_complete('admin', 'aid', 'authors', '', 0) . '
-        ' . js::auto_complete('adminname', 'name', 'authors', '', 0) . '
+        '. js::auto_complete('admin', 'aid', 'authors', '', 0) .'
+        '. js::auto_complete('adminname', 'name', 'authors', '', 0) .'
         inpandfieldlen("add_aid",30);
         inpandfieldlen("add_name",50);
         inpandfieldlen("add_email",254);
@@ -265,7 +265,7 @@ function displayadmins(): void
     add_aid: {
         validators: {
             callback: {
-                message: "' . translate("Ce surnom n\'est pas disponible") . '",
+                message: "'. translate("Ce surnom n\'est pas disponible") .'",
                 callback: function(input) {
                 if($.inArray(btoa(input.value), admin) !== -1)
                     return false;
@@ -278,7 +278,7 @@ function displayadmins(): void
     add_name: {
         validators: {
             callback: {
-                message: "' . translate("Ce nom n\'est pas disponible") . '",
+                message: "'. translate("Ce nom n\'est pas disponible") .'",
                 callback: function(input) {
                 if($.inArray(btoa(input.value), adminname) !== -1)
                     return false;
@@ -315,7 +315,7 @@ function modifyadmin(string $chng_aid): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Actualiser l'administrateur") . ' : <span class="text-muted">' . $chng_aid . '</span></h3>';
+    <h3>'. adm_translate("Actualiser l'administrateur") .' : <span class="text-muted">' . $chng_aid . '</span></h3>';
 
     $author = DB::table('authors')->select('aid', 'name', 'url', 'email', 'pwd', 'radminsuper')->where('aid', $chng_aid)->first();
 
@@ -342,8 +342,8 @@ function modifyadmin(string $chng_aid): void
             $listdroitsmodulo .= '
             <div class="col-md-4 col-sm-6">
                 <div class="form-check">
-                <input class="ckbm form-check-input" id="ad_d_m_' . $func['fnom'] . '" type="checkbox" ' . $chec . ' name="ad_d_m_' . $func['fnom'] . '" value="' . $func['fid'] . '" />
-                <label class="form-check-label" for="ad_d_m_' . $func['fnom'] . '">' . $func['fnom_affich'] . '</label>
+                <input class="ckbm form-check-input" id="ad_d_m_'. $func['fnom'] .'" type="checkbox" '. $chec .' name="ad_d_m_'. $func['fnom'] .'" value="'. $func['fid'] .'" />
+                <label class="form-check-label" for="ad_d_m_'. $func['fnom'] .'">'. $func['fnom_affich'] .'</label>
                 </div>
             </div>';
         } else {
@@ -351,8 +351,8 @@ function modifyadmin(string $chng_aid): void
                 $listdroits .= '
                 <div class="col-md-4 col-sm-6">
                     <div class="form-check">
-                    <input class="ckbf form-check-input" id="ad_d_' . $func['fid'] . '" type="checkbox" ' . $chec . ' name="ad_d_' . $func['fid'] . '" value="' . $func['fid'] . '" />
-                    <label class="form-check-label" for="ad_d_' . $func['fid'] . '">' . adm_translate($func['fnom_affich']) . '</label>
+                    <input class="ckbf form-check-input" id="ad_d_'. $func['fid'] .'" type="checkbox" '. $chec .' name="ad_d_'. $func['fid'] .'" value="'. $func['fid'] .'" />
+                    <label class="form-check-label" for="ad_d_'. $func['fid'] .'">'. adm_translate($func['fnom_affich']) .'</label>
                     </div>
                 </div>';
             }
@@ -361,70 +361,70 @@ function modifyadmin(string $chng_aid): void
 
     //<== construction des check-box des droits
     echo '
-    <form id="mod_adm" class="" action="admin.php" method="post">
+    <form id="mod_adm" class="" action="'. site_url('admin.php') .'" method="post">
         <fieldset>
-            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Informations") . '" title="' . $author['aid'] . '" /> ' . adm_translate("Informations") . '</legend>
+            <legend><img src="'. Config::get('npds.adminimg') .'authors.'. Config::get('npds.admf_ext') .'" class="vam" border="0" width="24" height="24" alt="'. adm_translate("Informations") .'" title="'. $author['aid'] .'" /> '. adm_translate("Informations") .'</legend>
             <div class="form-floating mb-3 mt-3">
-                <input id="chng_name" class="form-control" type="text" name="chng_name" value="' . $author['name'] . '" maxlength="30" placeholder="' . adm_translate("Nom") . '" required="required" />
-                <label for="chng_name">' . adm_translate("Nom") . ' <span class="text-danger">*</span></label>
+                <input id="chng_name" class="form-control" type="text" name="chng_name" value="' . $author['name'] .'" maxlength="30" placeholder="'. adm_translate("Nom") .'" required="required" />
+                <label for="chng_name">'. adm_translate("Nom") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_chng_name"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="chng_email" class="form-control" type="text" name="chng_email" value="' . $author['email'] . '" maxlength="254" placeholder="' . adm_translate("E-mail") . '" required="required" />
-                <label for="chng_email">' . adm_translate("E-mail") . ' <span class="text-danger">*</span></label>
+                <input id="chng_email" class="form-control" type="text" name="chng_email" value="' . $author['email'] .'" maxlength="254" placeholder="'. adm_translate("E-mail") .'" required="required" />
+                <label for="chng_email">'. adm_translate("E-mail") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_chng_email"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="chng_url" class="form-control" type="url" name="chng_url" value="' . $author['url'] . '" maxlength="320" placeholder="' . adm_translate("URL") . '" />
-                <label for="chng_url">' . adm_translate("URL") . '</label>
+                <input id="chng_url" class="form-control" type="url" name="chng_url" value="'. $author['url'] .'" maxlength="320" placeholder="'. adm_translate("URL") .'" />
+                <label for="chng_url">'. adm_translate("URL") .'</label>
                 <span class="help-block text-end"><span id="countcar_chng_url"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <input id="chng_pwd" class="form-control" type="password" name="chng_pwd" maxlength="20" placeholder="' . adm_translate("Mot de Passe") . '" title="' . adm_translate("Entrez votre nouveau Mot de Passe") . '" />
-                <label for="chng_pwd">' . adm_translate("Mot de Passe") . ' <span class="text-danger">*</span></label>
+                <input id="chng_pwd" class="form-control" type="password" name="chng_pwd" maxlength="20" placeholder="'. adm_translate("Mot de Passe") .'" title="'. adm_translate("Entrez votre nouveau Mot de Passe") .'" />
+                <label for="chng_pwd">'. adm_translate("Mot de Passe") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end" id="countcar_chng_pwd"></span>
                 <div class="progress" style="height: 0.4rem;">
                 <div id="passwordMeter_cont" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
             </div>
             <div class="form-floating mb-3">
-                <input id="chng_pwd2" class="form-control" type="password" name="chng_pwd2" maxlength="20" placeholder="' . adm_translate("Mot de Passe") . '" title="' . adm_translate("Entrez votre nouveau Mot de Passe") . '" />
-                <label for="chng_pwd2">' . adm_translate("Mot de Passe") . ' <span class="text-danger">*</span></label>
+                <input id="chng_pwd2" class="form-control" type="password" name="chng_pwd2" maxlength="20" placeholder="'. adm_translate("Mot de Passe") .'" title="'. adm_translate("Entrez votre nouveau Mot de Passe") .'" />
+                <label for="chng_pwd2">'. adm_translate("Mot de Passe") .' <span class="text-danger">*</span></label>
                 <span class="help-block text-end"><span id="countcar_chng_pwd2"></span></span>
             </div>
             <div class="mb-3">
                 <div class="form-check">
-                <input id="cb_radminsuper" class="form-check-input" type="checkbox" name="chng_radminsuper" value="1" ' . $supadm_inp . ' />
-                <label class="form-check-label text-danger" for="cb_radminsuper">' . adm_translate("Super administrateur") . '</label>
+                <input id="cb_radminsuper" class="form-check-input" type="checkbox" name="chng_radminsuper" value="1" '. $supadm_inp .' />
+                <label class="form-check-label text-danger" for="cb_radminsuper">'. adm_translate("Super administrateur") .'</label>
                 </div>
-                <span class="help-block">' . adm_translate("Si Super administrateur est coché, cet administrateur aura TOUS les droits.") . '</span>
+                <span class="help-block">'. adm_translate("Si Super administrateur est coché, cet administrateur aura TOUS les droits.") .'</span>
             </div>
-            <input type="hidden" name="chng_aid" value="' . $author['aid'] . '" />
+            <input type="hidden" name="chng_aid" value="'. $author['aid'] .'" />
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits") . '" /> ' . adm_translate("Droits") . ' </legend>
+            <legend><img src="'. Config::get('npds.adminimg') .'authors.'. Config::get('npds.admf_ext') .'" class="vam" border="0" width="24" height="24" alt="'. adm_translate("Droits") .'" /> '. adm_translate("Droits") .' </legend>
             <div id="adm_droi_f" class="container-fluid ">
                 <div class="mb-3">
-                <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">' . adm_translate("Tout cocher") . '</span>
+                <input type="checkbox" id="ckball_f" />&nbsp;<span class="small text-muted" id="ckb_status_f">'. adm_translate("Tout cocher") .'</span>
                 </div>
                 <div class="row">
-                ' . $listdroits . '
+                '. $listdroits .'
                 </div>
             </div>
         </fieldset>
         <fieldset>
-            <legend><img src="' . Config::get('npds.adminimg') . 'authors.' . Config::get('npds.admf_ext') . '" class="vam" border="0" width="24" height="24" alt="' . adm_translate("Droits modules") . '" /> ' . adm_translate("Droits modules") . ' </legend>
+            <legend><img src="'. Config::get('npds.adminimg') .'authors.'. Config::get('npds.admf_ext') .'" class="vam" border="0" width="24" height="24" alt="'. adm_translate("Droits modules") .'" /> '. adm_translate("Droits modules") .' </legend>
             <div id="adm_droi_m" class="container-fluid ">
                 <div class="mb-3">
-                <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">' . adm_translate("Tout cocher") . '</span>
+                <input type="checkbox" id="ckball_m" />&nbsp;<span class="small text-muted" id="ckb_status_m">'. adm_translate("Tout cocher") .'</span>
                 </div>
                 <div class="row">
-                ' . $listdroitsmodulo . '
+                '. $listdroitsmodulo .'
                 </div>
             </div>
-            <input type="hidden" name="old_pwd" value="' . $author['pwd'] . '" />
+            <input type="hidden" name="old_pwd" value="'. $author['pwd'] .'" />
             <input type="hidden" name="op" value="UpdateAuthor" />
-            <button class="btn btn-primary my-3" type="submit"><i class="fa fa-check fa-lg me-2"></i>' . adm_translate("Actualiser l'administrateur") . '</button>
+            <button class="btn btn-primary my-3" type="submit"><i class="fa fa-check fa-lg me-2"></i>'. adm_translate("Actualiser l'administrateur") .'</button>
         </fieldset>
     </form>';
 
@@ -464,11 +464,11 @@ function modifyadmin(string $chng_aid): void
 /**
  * [deletedroits description]
  *
- * @param   int   $del_dr_aid  [$del_dr_aid description]
+ * @param   string   $del_dr_aid  [$del_dr_aid description]
  *
  * @return  void
  */
-function deletedroits(int $del_dr_aid): void
+function deletedroits(string $del_dr_aid): void
 {
     DB::table('droits')->where('d_aut_aid', $del_dr_aid)->delete();
 }
@@ -511,7 +511,7 @@ function updatedroits(string $chng_aid): void
 function updateadmin(string $chng_aid, string $chng_name, string $chng_email, string $chng_url, int $chng_radminsuper, string $chng_pwd, string $chng_pwd2, string $ad_d_27, string $old_pwd): void
 {
     if (!($chng_aid && $chng_name && $chng_email)) {
-        Header("Location: admin.php?op=mod_authors");
+        Header('Location: '. site_url('admin.php?op=mod_authors'));
     }
 
     if (mailler::checkdnsmail($chng_email) === false) {
@@ -519,7 +519,7 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
         
         GraphicAdmin(manuel('authors'));
         
-        echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") . '<br />');
+        echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") .'<br />');
         
         include("themes/default/footer.php");
         return;
@@ -528,23 +528,23 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
     $author = DB::table('authors')->select('radminsuper')->where('aid', $chng_aid)->first();
 
     if (!$author['radminsuper'] and $chng_radminsuper) {
-        @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
+        @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/". strtolower($chng_aid) .".conf.php");
         
         deletedroits($chng_aid);
     }
 
     if ($author['radminsuper'] and !$chng_radminsuper) {
-        @unlink("modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
+        @unlink("modules/f-manager/config/". strtolower($chng_aid) .".conf.php");
         
         updatedroits($chng_aid);
     }
 
-    if (file_exists("modules/f-managerconfigs/" . strtolower($chng_aid) . ".conf.php") and $ad_d_27 != '27') {
-        @unlink("modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
+    if (file_exists("modules/f-managerconfigs/". strtolower($chng_aid) .".conf.php") and $ad_d_27 != '27') {
+        @unlink("modules/f-manager/config/". strtolower($chng_aid) .".conf.php");
     }
     
-    if (($chng_radminsuper or $ad_d_27 != '') and !file_exists("modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php")) {
-        @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/" . strtolower($chng_aid) . ".conf.php");
+    if (($chng_radminsuper or $ad_d_27 != '') and !file_exists("modules/f-manager/config/". strtolower($chng_aid) .".conf.php")) {
+        @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/". strtolower($chng_aid) .".conf.php");
     }
 
     if ($chng_pwd2 != '') {
@@ -553,7 +553,7 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
             
             GraphicAdmin(manuel('authors'));
             
-            echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") . '<br />');
+            echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") .'<br />');
             
             include("themes/default/footer.php");
             exit;
@@ -636,7 +636,7 @@ function updateadmin(string $chng_aid, string $chng_name, string $chng_email, st
     global $aid;
     logs::Ecr_Log('security', "ModifyAuthor($chng_name) by AID : $aid", '');
 
-    Header("Location: admin.php?op=mod_authors");
+    Header('Location: '. site_url('admin.php?op=mod_authors'));
 }
 
 /**
@@ -650,9 +650,9 @@ function error_handler(string $ibid): void
 {
     echo '
     <div class="alert alert-danger mb-3">
-    ' . adm_translate("Merci d'entrer l'information en fonction des spécifications") . '<br />' . $ibid . '
+        '. adm_translate("Merci d'entrer l'information en fonction des spécifications") .'<br />'. $ibid .'
     </div>
-    <a class="btn btn-outline-secondary" href="admin.php?op=mod_authors" >' . adm_translate("Retour en arrière") . '</a>';
+    <a class="btn btn-outline-secondary" href="'. site_url('admin.php?op=mod_authors') .'" >'. adm_translate("Retour en arrière") .'</a>';
 }
 
 switch ($op) {
@@ -679,7 +679,7 @@ switch ($op) {
 
             GraphicAdmin(manuel('authors'));
 
-            echo error_handler(adm_translate("Vous devez remplir tous les Champs") . '<br />');
+            echo error_handler(adm_translate("Vous devez remplir tous les Champs") .'<br />');
 
             include("themes/default/footer.php");
             return;
@@ -690,7 +690,7 @@ switch ($op) {
 
             GraphicAdmin(manuel('authors'));
 
-            echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") . '<br />');
+            echo error_handler(adm_translate("ERREUR : DNS ou serveur de mail incorrect") .'<br />');
 
             include("themes/default/footer.php");
             return;
@@ -717,13 +717,13 @@ switch ($op) {
 
         // Copie du fichier pour filemanager
         if ($add_radminsuper or isset($ad_d_27)) { // $ad_d_27 pas là ?
-            @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/" . strtolower($add_aid) . ".conf.php");
+            @copy("modules/f-manager/config/modele.admin.conf.php", "modules/f-manager/config/". strtolower($add_aid) .".conf.php");
         }
 
         global $aid;
         logs::Ecr_Log('security', "AddAuthor($add_aid) by AID : $aid", '');
 
-        Header("Location: admin.php?op=mod_authors");
+        Header('Location: '. site_url('admin.php?op=mod_authors'));
         break;
 
     case 'deladmin':
@@ -734,10 +734,12 @@ switch ($op) {
 
         echo '
         <hr />
-        <h3>' . adm_translate("Effacer l'Administrateur") . ' : <span class="text-muted">' . $del_aid . '</span></h3>
+        <h3>'. adm_translate("Effacer l'Administrateur") .' : <span class="text-muted">'. $del_aid .'</span></h3>
         <div class="alert alert-danger">
-        <p><strong>' . adm_translate("Etes-vous sûr de vouloir effacer") . ' ' . $del_aid . ' ? </strong></p>
-        <a href="admin.php?op=deladminconf&amp;del_aid=' . $del_aid . '" class="btn btn-danger btn-sm">' . adm_translate("Oui") . '</a>&nbsp;<a href="admin.php?op=mod_authors" class="btn btn-secondary btn-sm">' . adm_translate("Non") . '</a>
+        <p><strong>'. adm_translate("Etes-vous sûr de vouloir effacer") .' '. $del_aid .' ? </strong></p>
+        <a href="'. site_url('admin.php?op=deladminconf&amp;del_aid='. $del_aid) .'" class="btn btn-danger btn-sm">'. adm_translate("Oui") .'</a>
+        &nbsp;
+        <a href="'. site_url('admin.php?op=mod_authors') .'" class="btn btn-secondary btn-sm">'. adm_translate("Non") .'</a>
         </div>';
 
         css::adminfoot('', '', '', '');
@@ -751,11 +753,11 @@ switch ($op) {
         DB::table('publisujet')->where('aid', $del_aid)->delete();
 
         // Supression du fichier pour filemanager
-        @unlink("modules/f-manager/config/" . strtolower($del_aid) . ".conf.php");
+        @unlink("modules/f-manager/config/". strtolower($del_aid) .".conf.php");
 
         global $aid;
         logs::Ecr_Log('security', "DeleteAuthor($del_aid) by AID : $aid", '');
 
-        Header("Location: admin.php?op=mod_authors");
+        Header('Location: '. site_url('admin.php?op=mod_authors'));
         break;
 }

@@ -31,7 +31,7 @@ if (!users::AutoReg()) {
     unset($user);
 }
 
-if (($member_list == 1) and !isset($user) and !isset($admin)) {
+if ((Config::get('npds.member_list') == 1) and !isset($user) and !isset($admin)) {
     Header("Location: user.php");
 }
 
@@ -293,6 +293,8 @@ if (($letter != translate("Autres")) and ($letter != translate("Tous"))) {
     $where = $ws_req;
 }
 
+$where = "WHERE uid!=1 " . str_replace('WHERE', ' AND', $where);
+
 global $member_invisible;
 if ($member_invisible) {
     if ($admin) {
@@ -303,6 +305,12 @@ if ($member_invisible) {
 } else {
     $and = '';
 }
+
+// if ($and != '') {
+//     $ano = ' WHERE uid!=1 ';
+// } else {
+//     $ano = ' AND uid!=1 ';
+// }
 
 $sort = " ORDER BY $sortby";
 $limit = ' LIMIT ' . $min . ', ' . $max;
@@ -345,13 +353,13 @@ if ($letter != 'front') {
 
         global $user;
         while ($temp_user = sql_fetch_assoc($result)) {
-
+            
             $socialnetworks = array();
             $posterdata_extend = array();
             $res_id = array();
             $my_rs = '';
 
-            if (!$short_user) {
+            if (!Config::get('npds.short_user')) {
                 $posterdata_extend = forum::get_userdata_extend_from_id($temp_user['uid']);
 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');

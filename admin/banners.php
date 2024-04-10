@@ -158,7 +158,9 @@ function BannersAdmin(): void
 
         $client = DB::table('bannerclient')->select('name')->first($banner['cid']);
         
-        $percent = (($banner['impmade'] == 0) ? '0' : substr(100 * $banner['clicks'] / $banner['impmade'], 0, 5));
+        $float = (100 * $banner['clicks'] / $banner['impmade']);
+
+        $percent = (($banner['impmade'] == 0) ? '0' : substr( (string) $float, 0, 5));
         $left = (($banner['imptotal'] == 0) ? adm_translate("Illimité") : $banner['imptotal'] - $banner['impmade']);
         
         echo '
@@ -237,7 +239,8 @@ function BannersAdmin(): void
             $finish['impressions'] = 1;
         }
         
-        $percent = substr(100 * $finish['clicks'] / $finish['impressions'], 0, 5);
+        $float = (100 * $finish['clicks'] / $finish['impressions']);
+        $percent = substr( (string) $float, 0, 5);
         
         echo '
             <tr>
@@ -579,7 +582,8 @@ function BannerDelete(int $bid, int $ok = 0): void
 
         $client = DB::table('bannerclient')->find($banner['cid'], ['name']);
 
-        $percent = substr(100 * $banner['clicks'] / $banner['impmade'], 0, 5);
+        $float = (100 * $banner['clicks'] / $banner['impmade']);
+        $percent = substr( (string) $float, 0, 5);
         $left = (($banner['imptotal'] == 0) ? adm_translate("Illimité") : $banner['imptotal'] - $banner['impmade']);
 
         echo '

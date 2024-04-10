@@ -333,7 +333,7 @@ function copy_sample(string $fileX): void
  */
 function ConfigFiles_create(string $modele): void
 {
-    @umask("0000");
+    @umask(0000);
     if ($modele == "header_before") {
         @copy("themes/default/view/include/sample.header_before.inc", "themes/default/view/include/header_before.inc");
         @chmod("themes/default/view/include/header_before.inc", 0766);

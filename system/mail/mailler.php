@@ -168,13 +168,13 @@ class mailler
     /**
      * Pour copier un subject+message dans un email ($to_userid)
      *
-     * @param   int     $to_userid  [$to_userid description]
+     * @param   string  $to_userid  [$to_userid description]
      * @param   string  $sujet      [$sujet description]
      * @param   string  $message    [$message description]
      *
      * @return  void
      */
-    public static function copy_to_email(int $to_userid, string $sujet, string $message): void
+    public static function copy_to_email(string $to_userid, string $sujet, string $message): void
     {
         $user = DB::table('users')->select('email', 'send_email')->where('uid', $to_userid)->first();
 

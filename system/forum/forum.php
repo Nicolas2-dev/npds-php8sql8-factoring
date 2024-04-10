@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace npds\system\forum;
 
@@ -13,6 +13,7 @@ use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
+use npds\system\cookie\cookie;
 use npds\system\utility\crypt;
 use npds\system\language\language;
 use npds\system\language\metalang;
@@ -67,10 +68,6 @@ class forum
       */
     public static function RecentForumPosts_fab(string $title, int $maxforums, int $maxtopics, bool $displayposter, int $topicmaxchars, bool $hr, string $decoration): string
     {
-        global $NPDS_Prefix;
-
-//vd($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr, $decoration);
-
         $query = DB::table('forums')->select('*');
 
         $user = users::getUser();
@@ -85,9 +82,7 @@ class forum
             $query->limit($maxforums);
         }
 
-        $result = $query->orderBy('cat_id, forum_index, forum_id')->get();
-
-        if (!$result) {
+        if (!$result = $query->orderBy('cat_id, forum_index, forum_id')->get()) {
             exit();
         }
 
@@ -120,7 +115,7 @@ class forum
                     $forum_desc = stripslashes($forum_desc);
                 }
 
-                $res = DB::table('forumtopics')
+                $res_forumtopics = DB::table('forumtopics')
                         ->select('*')
                         ->where('forum_id', $forumid)
                         ->orderBy('topic_time', 'desc')
@@ -132,58 +127,48 @@ class forum
                             ' . $forumname . '
                         </a>
                         <span class="float-end badge bg-secondary" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">
-                            ' . count($res) . '
+                            ' . count($res_forumtopics) . '
                         </span>
                     </h6>
                 </li>';
 
                 $topics = 0;
-
-//vd($topics,  $maxtopics);
-
-                //while (($topics < $maxtopics) && ($topicrow = sql_fetch_row($res))) {
-                
-
-                foreach ($res as $topicrow) {
-                    
+                foreach ($res_forumtopics as $topicrow) {
                     if ($topics < $maxtopics) {                
                         
-                        $topicid = $topicrow['topic_id'];
-                        $tt      = $topictitle = $topicrow['topic_title'];
-                        // $date    = $topicrow['topic_time']; // not used !!!
-                        $replies = 0;
+                        $postquery= DB::table('posts')
+                                        ->select(DB::raw('COUNT(*) AS total'))
+                                        ->where('topic_id', $topicrow['topic_id'])
+                                        ->first();
 
-                        $postquery = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "posts WHERE topic_id = '$topicid'";
-
-                        //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-                        if ($pres = sql_query($postquery)) {
-                            if ($myrow = sql_fetch_assoc($pres)) {
-                                $replies = $myrow['total'];
-                            }
+                        if ($postquery) {
+                            $replies = $postquery['total'];
+                        } else {
+                            $replies = 0;
                         }
 
-                        if (strlen($topictitle) > $topicmaxchars) {
-                            $topictitle = substr($topictitle, 0, $topicmaxchars);
-                            $topictitle .= '..';
+                        if (strlen($topicrow['topic_title']) > $topicmaxchars) {
+                            $topicrow['topic_title'] = substr($topicrow['topic_title'], 0, $topicmaxchars);
+                            $topicrow['topic_title'] .= '..';
                         }
 
                         if ($displayposter) {
-                            $posterid = $topicrow[2];
-                            $RowQ1 = cache::Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid = '$posterid'", 3600);
-                            $myrow = $RowQ1[0];
+                            $posterid = $topicrow['topic_poster'];
 
-                            //= DB::table('')->select()->where('', )->orderBy('')->get();
+                            $RowQ1 = cache::Q_Select(
+                                DB::table('users')
+                                    ->select('uname')
+                                    ->where('uid', $posterid)
+                                    ->get(), 3600
+                                );
 
-                            $postername = $myrow['uname'];
+                            $postername = $RowQ1['uname'];
                         }
 
                         if (Config::get('npds.parse') == 0) {
-                            $tt =  strip_tags(str::FixQuotes($tt));
-                            $topictitle = str::FixQuotes($topictitle);
+                            $topictitle = str::FixQuotes($topicrow['topic_title']);
                         } else {
-                            $tt =  strip_tags(stripslashes($tt));
-                            $topictitle = stripslashes($topictitle);
+                            $topictitle = stripslashes($topicrow['topic_title']);
                         }
 
                         $boxstuff .= '<li class="list-group-item p-1 border-right-0 border-left-0 list-group-item-action">
@@ -191,7 +176,7 @@ class forum
                                 <span class="badge bg-secondary mx-2" title="' . translate("Réponses") . '" data-bs-toggle="tooltip" data-bs-placement="top">
                                     ' . $replies . '
                                 </span>
-                                <a href="'. site_url('viewtopic.php?topic=' . $topicid . '&amp;forum=' . $forumid) . '" >
+                                <a href="'. site_url('viewtopic.php?topic=' . $topicrow['topic_id'] . '&amp;forum=' . $forumid) . '" >
                                     ' . $topictitle . '
                                 </a>
                             </div>';
@@ -222,23 +207,16 @@ class forum
      */
     public static function get_total_topics(int $forum_id): array
     {
-        global $NPDS_Prefix;
-    
-        $sql = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id'";
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $result = DB::table('forumtopics')
+                    ->select(DB::raw('COUNT(*) AS total'))
+                    ->where('forum_id', $forum_id)
+                    ->first();
 
-        if (!$result = sql_query($sql)) {
+        if (!$result) {
             return "ERROR";
         }
     
-        if (!$myrow = sql_fetch_assoc($result)) {
-            return "ERROR";
-        }
-    
-        sql_free_result($result);
-    
-        return $myrow['total'];
+        return $result['total'];
     }
     
     /**
@@ -253,14 +231,15 @@ class forum
      */
     public static function get_contributeurs(string|int $fid, string|int $tid): string 
     {
-        global $NPDS_Prefix;
-    
-        $rowQ1 = cache::Q_Select("SELECT DISTINCT poster_id FROM " . $NPDS_Prefix . "posts WHERE topic_id='$tid' AND forum_id='$fid'", 2);
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-
         $posterids = '';
-        foreach ($rowQ1 as $contribs) {
+        
+        foreach (cache::Q_Select3(DB::table('posts')
+            ->distinct()
+            ->select('poster_id')
+            ->where('topic_id', $tid)
+            ->where('forum_id', $fid)
+            ->get(), 2, crypt::encrypt('post(poster_id)')) as $contribs) 
+        {
             foreach ($contribs as $contrib) {
                 $posterids .= $contrib . ' ';
             }
@@ -280,45 +259,39 @@ class forum
      * @param   int     $type  [$type description]
      * @param   bool    $Mmod  [$Mmod description]
      *
-     * @return  mixed
+     * @return  int
      */
-    public static function get_total_posts(string|int $fid, string|int $tid, string|int $type, bool $Mmod): mixed
+    public static function get_total_posts(string|int $fid, string|int $tid, string|int $type, bool $Mmod): int
     {
-        global $NPDS_Prefix;
-    
-        $post_aff = $Mmod ? '' : " AND post_aff='1'";
-    
         switch ($type) {
             case 'forum':
-                $sql = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "posts WHERE forum_id='$fid'$post_aff";
-
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
+                $query = DB::table('posts')
+                            ->select(DB::raw('COUNT(*) AS total'))
+                            ->where('forum_id', $fid);
                 break;
     
             case 'topic':
-                $sql = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "posts WHERE topic_id='$tid' AND forum_id='$fid' $post_aff";
-                
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
-
+                $query = DB::table('posts')
+                            ->select(DB::raw('COUNT(*) AS total'))
+                            ->where('topic_id', $tid)
+                            ->where('forum_id', $fid);
                 break;
     
             case 'user':
                 static::forumerror('0031');
         }
     
-        if (!$result = sql_query($sql)) {
-            return ("ERROR");
+        if (!$Mmod) {
+            $query->where('post_aff', 1);
         }
-    
-        if (!$myrow = sql_fetch_assoc($result)) {
-            return ("0");
+
+        if (!$result = $query->first()) {
+            return 0;
         }
-    
-        sql_free_result($result);
-    
-        return $myrow['total'];
+
+        return $result['total'];
     }
-    
+
     /**
      * 
      *
@@ -333,51 +306,49 @@ class forum
      */
     public static function get_last_post(string|int $id, string|int $type, string $cmd, bool $Mmod): string 
     {
-        global $NPDS_Prefix;
-    
         // $Mmod ne sert plus - maintenu pour compatibilité
         switch ($type) {
             case 'forum':
-                $sql1 = "SELECT topic_time, current_poster FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id = '$id' ORDER BY topic_time DESC LIMIT 0,1";
-
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-                $sql2 = "SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid=";
-
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
+                $sql1= DB::table('forumtopics')
+                        ->select('topic_time', 'current_poster')
+                        ->where('forum_id', $id)
+                        ->orderBy('topic_time', 'desc')
+                        ->limit(1)
+                        ->offset(0)
+                        ->first();
                 break;
     
             case 'topic':
-                $sql1 = "SELECT topic_time, current_poster FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$id'";
-
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-                $sql2 = "SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid=";
-
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
-
+                $sql1 = DB::table('forumtopics')
+                            ->select('topic_time', 'current_poster')
+                            ->where('topic_id', $id)
+                            ->first();
                 break;
         }
     
-        if (!$result = sql_query($sql1)) {
-            return ("ERROR");
+        if (!$sql1) {
+            return "ERROR";
         }
     
         if ($cmd == 'infos') {
-            if (!$myrow = sql_fetch_row($result)) { 
+            if (!$myrow = $sql1) { 
                 $val = translate("Rien");
             } else {
-                $rowQ1 = cache::Q_Select($sql2 . "'" . $myrow[1] . "'", 3600);
-                $val = date::convertdate($myrow[0]);
-                $val .= $rowQ1 ? ' ' . userpopover($rowQ1[0]['uname'], 40, 2) : '';
+                $rowQ1 = cache::Q_Select3(
+                    DB::table('users')
+                        ->select('uname')
+                        ->where('uid', $myrow['current_poster'])
+                        ->first(), 3600, crypt::encrypt('user(uname_uid)'));
+
+                $val = date::convertdate($myrow['topic_time']);
+                // $rowQ1[0]['uname']
+                $val .= $rowQ1 ? ' ' . userpopover($rowQ1[0][0], 40, 2) : '';
             }
         }
     
-        sql_free_result($result);
-    
         return $val;
     }
-    
+
     /**
      * 
      *
@@ -387,25 +358,35 @@ class forum
      */
     public static function get_moderator(string $user_id): string 
     {
-        global $NPDS_Prefix;
-    
-        $user_id = str_replace(",", "' or uid='", $user_id);
         if ($user_id == 0) {
-            return ("None");
+            return "None";
         }
     
-        $rowQ1 = cache::Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid='$user_id'", 3600);
+        $query = DB::table('users')->select('uname');
 
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $count_id = 0;
+        foreach (explode(',', $user_id) as $user) {
+            if ($count_id == 0) {
+                $query->where('uid', $user);
+            } else {
+                $query->orWhere('uid', $user);
+            }
+            $count_id++;
+        }
+
+        $rowQ1 = cache::Q_Select3(
+            $query->where('uname', '!=' , 'Anonyme')
+                  ->get(), 3600, crypt::encrypt('user(uid_uname)')
+        );
 
         $modslist = '';
-    
+
         foreach ($rowQ1 as $modnames) {
             foreach ($modnames as $modname) {
                 $modslist .= $modname . ' ';
             }
         }
-    
+
         return chop($modslist);
     }
 
@@ -422,21 +403,17 @@ class forum
      */
     public static function user_is_moderator(string|int $uidX, string $passwordX, string|int $forum_accessX): string|bool
     {
-        global $NPDS_Prefix;
-    
-        $result1 = sql_query("SELECT pass FROM " . $NPDS_Prefix . "users WHERE uid = '$uidX'");
-        $userX = sql_fetch_assoc($result1);
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $userX = DB::table('users')
+                    ->select('pass')
+                    ->where('uid', $uidX)
+                    ->first();
 
-        $password = $userX['pass'];
-    
-        $result2 = sql_query("SELECT level FROM " . $NPDS_Prefix . "users_status WHERE uid = '$uidX'");
-        $userX = sql_fetch_assoc($result2);
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $userXX = DB::table('users_status')
+                    ->select('level')
+                    ->where('uid', $uidX)
+                    ->first();
 
-        if ((md5($password) == $passwordX) and ($forum_accessX <= $userX['level']) and ($userX['level'] > 1)) {
+        if ((md5($userX['pass']) == $passwordX) and ($forum_accessX <= $userXX['level']) and ($userXX['level'] > 1)) {
             return $userX['level'];
         } else {
             return false;
@@ -452,26 +429,26 @@ class forum
      */
     public static function get_userdata_from_id(string $userid): array
     {
-        global $NPDS_Prefix;
-    
-        $sql1 = "SELECT * FROM " . $NPDS_Prefix . "users WHERE uid='$userid'";
+        $sql1 = DB::table('users')
+                    ->select('*')
+                    ->where('uid', $userid)
+                    ->first();
 
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $sql2 = DB::table('users_status')
+                    ->select('*')
+                    ->where('uid', $userid)
+                    ->first();
 
-        $sql2 = "SELECT * FROM " . $NPDS_Prefix . "users_status WHERE uid='$userid'";
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-        if (!$result = sql_query($sql1)) {
+        if (!$sql1) {
             static::forumerror('0016');
         }
-    
-        if (!$myrow = sql_fetch_assoc($result)) {
+
+        if (!$sql1) {
             $myrow = array("uid" => 1);
         } else {
-            $myrow = array_merge($myrow, (array)sql_fetch_assoc(sql_query($sql2)));
+            $myrow = array_merge($sql1, (array) $sql2);
         }
-    
+
         return $myrow;
     }
     
@@ -484,29 +461,16 @@ class forum
      */
     public static function get_userdata_extend_from_id(string $userid): array 
     {
-        global $NPDS_Prefix;
-    
-        $sql1 = "SELECT * FROM " . $NPDS_Prefix . "users_extend WHERE uid='$userid'";
+        $sql1 = DB::table('users_extend')
+                    ->select('*')
+                    ->where('uid', $userid)
+                    ->first();
 
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        if (!$sql1) { 
+            forum::forumerror('0016');
+        }
 
-        // $sql2 = "SELECT * FROM ".$NPDS_Prefix."users_status WHERE uid='$userid'";
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-        // if (!$result = sql_query($sql1)) { 
-        //     forumerror('0016');
-        // }
-    
-        // if (!$myrow = sql_fetch_assoc($result)) {
-        //     $myrow = array( "uid" => 1);
-        // } else {
-        //     $myrow=array_merge($myrow,(array)sql_fetch_assoc(sql_query($sql1)));
-        // }
-    
-        $myrow = (array) sql_fetch_assoc(sql_query($sql1));
-    
-        return $myrow;
+        return $sql1;
     }
     
     /**
@@ -518,17 +482,16 @@ class forum
      */
     public static function get_userdata(string $username): array
     {
-        global $NPDS_Prefix;
-    
-        $sql = "SELECT * FROM " . $NPDS_Prefix . "users WHERE uname='$username'";
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $sql = DB::table('users')
+                    ->select('*')
+                    ->where('uname', $username)
+                    ->first();
 
-        if (!$result = sql_query($sql)) {
+        if (!$sql) {
             static::forumerror('0016');
         }
     
-        if (!$myrow = sql_fetch_assoc($result)) {
+        if (!$myrow = $sql) {
             $myrow = array("uid" => 1);
         }
     
@@ -547,29 +510,25 @@ class forum
      */
     public static function does_exists(string|int $id, string|int $type): int
     {
-        global $NPDS_Prefix;
-    
         switch ($type) {
             case 'forum':
-                $sql = "SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$id'";
-
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
+                $sql = DB::table('forums')
+                            ->select('forum_id')
+                            ->where('forum_id', $id)
+                            ->first();
 
                 break;
     
             case 'topic':
-                $sql = "SELECT topic_id FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$id'";
-
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
+                $sql = DB::table('forumtopics')
+                            ->select('topic_id')
+                            ->where('topic_id', $id)
+                            ->first();
 
                 break;
         }
     
-        if (!$result = sql_query($sql)) {
-            return 0;
-        }
-    
-        if (!$myrow = sql_fetch_row($result)) {
+        if (!$sql) {
             return 0;
         }
     
@@ -586,21 +545,16 @@ class forum
      */
     public static function is_locked(string|int $topic): bool
     {
-        global $NPDS_Prefix;
-    
-        $sql = "SELECT topic_status FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
-    
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $sql = DB::table('forumtopics')
+                    ->select('topic_status')
+                    ->where('topic_id', $topic)
+                    ->first();
 
-        if (!$r = sql_query($sql)) {
+        if (!$sql) {
             return false;
         }
     
-        if (!$m = sql_fetch_assoc($r)) {
-            return false;
-        }
-    
-        if (($m['topic_status'] == 1) or ($m['topic_status'] == 2)) {
+        if (($sql['topic_status'] == 1) or ($sql['topic_status'] == 2)) {
             return true;
         } else {
             return false;
@@ -1023,12 +977,12 @@ class forum
      * 
      *
      * @param   string  $poster  [$poster description]
-     * @param   string  $posts   [$posts description]
-     * @param   string  $rank    [$rank description]
+     * @param   int     $posts   [$posts description]
+     * @param   int     $rank    [$rank description]
      *
      * @return  string
      */
-    public static function member_qualif(string $poster, string $posts, string $rank): string
+    public static function member_qualif(string $poster, int $posts, int $rank): string
     {
         $tmp = '';
     
@@ -1250,44 +1204,43 @@ class forum
      * 
      *
      * @param   string          $apli      [$apli description]
-     * @param   int             $post_id   [$post_id description]
+     * @param   string|int      $post_id   [$post_id description]
      * @param   string|int      $topic_id  [$topic_id description]
      * @param   string|int      $IdForum   [$IdForum description]
      *
      * @return  void
      */
-    public static function control_efface_post(string $apli, int $post_id, string|int $topic_id, string|int $IdForum): void
+    public static function control_efface_post(string $apli, string|int $post_id, string|int $topic_id, string|int $IdForum): void
     {
-        global $upload_table, $NPDS_Prefix;
+        global $upload_table;
     
         include("modules/upload/config/upload.conf.php");
     
-        $sql1 = "SELECT att_id, att_name, att_path FROM " . $NPDS_Prefix . "$upload_table WHERE apli='$apli' AND";
-        
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $query = DB::table($upload_table)
+                    ->select('att_id', 'att_name', 'att_path')
+                    ->where('apli', $apli);
 
 
-        $query_delete = DB::table($upload_table)->where('apli', $apli);
+        $query_delete = DB::table($upload_table)
+                            ->where('apli', $apli);
 
         if ($IdForum != '') {
-            $sql1 .= " forum_id = '$IdForum'";
+            $query->where('forum_id', $IdForum);
             $query_delete->where('forum_id', $IdForum);
 
         } elseif ($post_id != '') {
-            $sql1 .= " post_id = '$post_id'";
+            $query->where('post_id', $post_id);
             $query_delete->where('post_id', $post_id);
             
         } elseif ($topic_id != '') {
-            $sql1 .= " topic_id = '$topic_id'";
+            $query->where('topic_id', $topic_id); 
             $query_delete->where('topic_id', $topic_id); 
         }
     
         $query_delete->delete();
 
-        $result = sql_query($sql1);
-    
-        while (list($att_id, $att_name, $att_path) = sql_fetch_row($result)) {
-            $fic = $DOCUMENTROOT . $att_path . $att_id . "." . $apli . "." . $att_name;
+        foreach($query->get() as $apli) {    
+            $fic = $DOCUMENTROOT . $app['att_path'] . $app['att_id'] . "." . $apli . "." . $app['att_name'];
             @unlink($fic);
         }
     
@@ -1357,12 +1310,14 @@ class forum
         if ((!$modoX) and ($paramAFX > 0)) {
             $sql = "SELECT COUNT(poster_ip) AS total FROM " . $NPDS_Prefix . "posts WHERE post_time>'";
             
+            //= DB::table('')->select()->where('', )->orderBy('')->get();
+
             $sql2 = $userdataX['uid'] != 1 ?
                 "' AND (poster_ip='$poster_ipX' OR poster_id='" . $userdataX['uid'] . "')" :
                 "' AND poster_ip='$poster_ipX'";
             
 
-                //= DB::table('')->select()->where('', )->orderBy('')->get();
+            //= DB::table('')->select()->where('', )->orderBy('')->get();
 
             $timebase = date("Y-m-d H:i", time() + ($gmtX * 3600) - 5400);
 
@@ -1374,6 +1329,7 @@ class forum
                 static::forumerror(translate("Vous n'êtes pas autorisé à participer à ce forum"));
             } else {
                 $timebase = date("Y-m-d H:i", time() + ($gmtX * 3600) - 1800);
+                
                 list($time30) = sql_fetch_row(sql_query($sql . $timebase . $sql2));
                 
                 if ($time30 > $paramAFX) {
@@ -1436,17 +1392,19 @@ class forum
             $tab_groupe = groupe::valid_group($user);
         }
     
-        if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
-            $imgtmpR = $ibid;
-        } else {
-            $imgtmpR = "assets/images/forum/icons/red_folder.gif";
-        }
+        // not used !!!!
+        // if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
+        //     $imgtmpR = $ibid;
+        // } else {
+        //     $imgtmpR = "assets/images/forum/icons/red_folder.gif";
+        // }
     
-        if ($ibid = theme::theme_image("forum/icons/folder.gif")) {
-            $imgtmp = $ibid;
-        } else {
-            $imgtmp = "assets/images/forum/icons/folder.gif";
-        }
+        // not used !!!!
+        // if ($ibid = theme::theme_image("forum/icons/folder.gif")) {
+        //     $imgtmp = $ibid;
+        // } else {
+        //     $imgtmp = "assets/images/forum/icons/folder.gif";
+        // }
     
         // preparation de la gestion des folders
         foreach (DB::table('forumtopics')
@@ -1513,7 +1471,8 @@ class forum
                                 $ok_affich = groupe::groupe_forum($myrow['forum_pass'], $tab_groupe);
                                 
                                 if ((isset($admin)) and ($adminforum == 1)) {
-                                    $ok_affich = true; // to see when admin mais pas assez precis
+                                    // à voir quand admin mais pas assez précis !!!!
+                                    $ok_affich = true;
                                 }
                             } else {
                                 $ok_affich = true; 
@@ -1641,13 +1600,14 @@ class forum
                                     // Subscribe
                                     if ((Config::get('npds.subscribe')) and ($user)) {
                                         if (!$redirect) {
-                                            if (mailler::isbadmailuser($userR[0]) === false) { //proto
+                                            //proto
+                                            if (mailler::isbadmailuser($userR[0]) === false) { 
                                                 $ibid .= '
                                                 <span class="d-flex w-100 mt-1" >
                                                     <span class="form-check">';
     
-                                            // ajout isset bug $tab_subscribe non definie    
-                                            if (!isset($tab_subscribe[$myrow['forum_id']])) { 
+                                                // ajout isset bug $tab_subscribe non definie    
+                                                if (!isset($tab_subscribe[$myrow['forum_id']])) { 
                                                     $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" checked="checked" />';
                                                 } else {
                                                     $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid' . $myrow['forum_id'] . '" name="Subforumid[' . $myrow['forum_id'] . ']" />';
@@ -1682,10 +1642,10 @@ class forum
             //proto
             if (mailler::isbadmailuser($userR[0]) === false) {
                 $ibid .= '
-            <div class="form-check mt-1">
-                <input class="form-check-input" type="checkbox" id="ckball_f" />
-                <label class="form-check-label text-muted" for="ckball_f" id="ckb_status_f">Tout cocher</label>
-            </div>';
+                <div class="form-check mt-1">
+                    <input class="form-check-input" type="checkbox" id="ckball_f" />
+                    <label class="form-check-label text-muted" for="ckball_f" id="ckb_status_f">Tout cocher</label>
+                </div>';
             }
         }
     
@@ -1717,23 +1677,11 @@ class forum
         list($totalF) = sql_fetch_row($result);
     
         //= DB::table('')->select()->where('', )->orderBy('')->get();
-
-        if ($ibid = theme::theme_image("forum/icons/red_sub_folder.gif")) {
-            $imgtmpR = $ibid;
-        } else {
-            $imgtmpR = "assets/images/forum/icons/red_sub_folder.gif";
-        }
-    
-        if ($ibid = theme::theme_image("forum/icons/sub_folder.gif")) {
-            $imgtmp = $ibid;
-        } else {
-            $imgtmp = "assets/images/forum/icons/sub_folder.gif";
-        }
     
         if (($totalT - $totalF) > 0) {
-            $ibid = '<img src="' . $imgtmpR . '" alt="" loading="lazy" />';
+            $ibid = '<img src="'. theme::theme_image_row('forum/icons/red_sub_folder.gif', 'assets/images/forum/icons/red_sub_folder.gif') .'" alt="" loading="lazy" />';
         } else {
-            $ibid = '<img src="' . $imgtmp . '" alt="" loading="lazy" />';
+            $ibid = '<img src="'. theme::theme_image_row('forum/icons/sub_folder.gif', 'assets/images/forum/icons/sub_folder.gif') .'" alt="" loading="lazy" />';
         }
     
         return $ibid;

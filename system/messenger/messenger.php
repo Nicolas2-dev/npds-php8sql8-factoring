@@ -38,13 +38,13 @@ class messenger
      * @param   string  $to_userid    [$to_userid description]
      * @param   string  $image        [$image description]
      * @param   string  $subject      [$subject description]
-     * @param   string  $from_userid  [$from_userid description]
+     * @param   int     $from_userid  [$from_userid description]
      * @param   string  $message      [$message description]
      * @param   string  $copie        [$copie description]
      *
      * @return  void
      */
-    public static function writeDB_private_message(string $to_userid, string $image, string $subject, string $from_userid, string $message, string $copie): void
+    public static function writeDB_private_message(string $to_userid, string $image, string $subject, int $from_userid, string $message, string $copie): void
     {
         $user = DB::table('users')
                     ->select('uid', 'user_langue')

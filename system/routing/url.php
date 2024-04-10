@@ -18,7 +18,7 @@ class url
     {
         echo "<script type=\"text/javascript\">\n";
         echo "//<![CDATA[\n";
-        echo "document.location.href='" . $urlx . "';\n";
+        echo "document.location.href='". site_url($urlx) ."';\n";
         echo "//]]>\n";
         echo "</script>";
     }

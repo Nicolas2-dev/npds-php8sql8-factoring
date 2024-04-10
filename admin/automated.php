@@ -20,6 +20,7 @@ use npds\system\assets\css;
 use npds\system\auth\groupe;
 use npds\system\support\str;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\support\editeur;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
@@ -135,7 +136,7 @@ function SelectCategory(int $cat): void
 
     foreach ($storie_categorie as $categorie) {
 
-        echo '<option name="catid" value="' . $categorie['catid'] . '" ' . ((($categorie['catid'] == $cat) ? 'selected' : '') . '>' . language::aff_langue($categorie['title']) . '</option>';
+        echo '<option name="catid" value="' . $categorie['catid'] . '" ' . (($categorie['catid'] == $cat) ? 'selected' : '') . '>' . language::aff_langue($categorie['title']) . '</option>';
     }
 
     echo '

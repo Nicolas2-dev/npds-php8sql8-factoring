@@ -1076,12 +1076,12 @@ function groupe_mns_create(int $groupe_id): void
     $repertoire = $user_dir . '/mns';
 
     if (!is_dir($user_dir)) {
-        @umask("0000");
+        @umask(0000);
         
         if (@mkdir($user_dir, 0777)) {
             $fp = fopen($user_dir . '/index.html', 'w');
             fclose($fp);
-            @umask("0000");
+            @umask(0000);
             
             if (@mkdir($repertoire, 0777)) {
                 $fp = fopen($repertoire . '/index.html', 'w');
@@ -1093,7 +1093,7 @@ function groupe_mns_create(int $groupe_id): void
             }
         }
     } else {
-        @umask("0000");
+        @umask(0000);
         if (@mkdir($repertoire, 0777)) {
             $fp = fopen($repertoire . '/index.html', 'w');
             fclose($fp);
