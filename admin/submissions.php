@@ -51,19 +51,19 @@ function submissions(): void
     if ($queues == 0) {
         echo '
     <hr />
-    <h3>' . adm_translate("Pas de nouveaux Articles postés") . '</h3>';
+    <h3>'. adm_translate("Pas de nouveaux Articles postés") .'</h3>';
     } else {
         echo '
     <hr />
-    <h3>' . adm_translate("Nouveaux Articles postés") . '<span class="badge bg-danger float-end">' . sql_num_rows($result) . '</span></h3>
+    <h3>'. adm_translate("Nouveaux Articles postés") .'<span class="badge bg-danger float-end">'. sql_num_rows($result) .'</span></h3>
     <table id="tad_subm" data-toggle="table" data-striped="true" data-show-toggle="true" data-search="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
                 <th data-halign="center"><i class="fa fa-user fa-lg"></i></th>
-                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">' . adm_translate("Sujet") . '</th>
-                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">' . adm_translate("Titre") . '</th>
-                <th data-halign="center" data-align="right">' . adm_translate("Date") . '</th>
-                <th class="n-t-col-xs-2" data-halign="center" data-align="center">' . adm_translate("Fonctions") . '</th>
+                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">'. adm_translate("Sujet") .'</th>
+                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">'. adm_translate("Titre") .'</th>
+                <th data-halign="center" data-align="right">'. adm_translate("Date") .'</th>
+                <th class="n-t-col-xs-2" data-halign="center" data-align="center">'. adm_translate("Fonctions") .'</th>
             </tr>
         </thead>
         <tbody>';
@@ -91,7 +91,7 @@ function submissions(): void
 
             echo '
             <tr>
-                <td>' . userpopover($queue['uname'], '40', 2) . ' ' . $queue['uname'] . '</td>
+                <td>'. userpopover($queue['uname'], '40', 2) .' '. $queue['uname'] .'</td>
                 <td>';
 
             if ($queue['subject'] == '') {
@@ -101,19 +101,26 @@ function submissions(): void
             $subject = language::aff_langue($queue['subject']);
 
             if ($affiche) {
-                echo '<img class=" " src="assets/images/topics/' . $topics['topicimage'] . '" height="30" width="30" alt="avatar" />&nbsp;<a href="admin.php?op=topicedit&amp;topicid=' . $queue['topic'] . '" class="adm_tooltip">' . language::aff_langue($topics['topictext']) . '</a></td>
-                <td align="left"><a href="admin.php?op=DisplayStory&amp;qid=' . $queue['qid'] . '">' . ucfirst($subject) . '</a></td>';
+                echo '<img class=" " src="assets/images/topics/'. $topics['topicimage'] .'" height="30" width="30" alt="avatar" />&nbsp;
+                <a href="'. site_url('admin.php?op=topicedit&amp;topicid='. $queue['topic']) .'" class="adm_tooltip">'. language::aff_langue($topics['topictext']) .'</a></td>
+                <td align="left"><a href="'. site_url('admin.php?op=DisplayStory&amp;qid='. $queue['qid']) .'">'. ucfirst($subject) .'</a></td>';
             } else {
-                echo language::aff_langue($topics['topictext']) . '</td>
-                <td><i>' . ucfirst($subject) . '</i></td>';
+                echo language::aff_langue($topics['topictext']) .'</td>
+                <td><i>'. ucfirst($subject) .'</i></td>';
             }
 
             echo '
-                <td class="small">' . date::formatTimestamp($queue['timestamp']) . '</td>';
+                <td class="small">'. date::formatTimestamp($queue['timestamp']) .'</td>';
 
             if ($affiche) {
                 echo '
-                <td><a class="" href="admin.php?op=DisplayStory&amp;qid=' . $queue['qid'] . '"><i class="fa fa-edit fa-lg" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" ></i></a><a class="text-danger" href="admin.php?op=DeleteStory&amp;qid=' . $queue['qid'] . '"><i class="fas fa-trash fa-lg ms-3" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" ></i></a></td>
+                <td><a class="" href="'. site_url('admin.php?op=DisplayStory&amp;qid='. $queue['qid']) .'">
+                        <i class="fa fa-edit fa-lg" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" ></i>
+                    </a>
+                    <a class="text-danger" href="'. site_url('admin.php?op=DeleteStory&amp;qid='. $queue['qid']) .'">
+                        <i class="fas fa-trash fa-lg ms-3" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" ></i>
+                    </a>
+                </td>
             </tr>';
             } else {
                 echo '
@@ -125,7 +132,7 @@ function submissions(): void
         }
 
         if ($dummy < 1) {
-            echo '<h3>' . adm_translate("Pas de nouveaux Articles postés") . '</h3>';
+            echo '<h3>'. adm_translate("Pas de nouveaux Articles postés") .'</h3>';
         } else {
             echo '
             </tbody>

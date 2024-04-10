@@ -49,34 +49,34 @@ function displayUsers(): void
 
     echo '
     <hr />
-        <h3>' . adm_translate("Extraire l'annuaire") . '</h3>
-        <form method="post" class="form-inline" action="admin.php">
+        <h3>'. adm_translate("Extraire l'annuaire") .'</h3>
+        <form method="post" class="form-inline" action="'. site_url('admin.php') .'">
                 <div class="mb-3">
-                    <label class="me-2 mt-sm-3" for="op">' . adm_translate("Format de fichier") . '</label>
+                    <label class="me-2 mt-sm-3" for="op">'. adm_translate("Format de fichier") .'</label>
                     <select class="form-select me-2 mt-sm-3" name="op">
-                        <option value="extractUserCSV">' . adm_translate("Au format CSV") . '</option>
+                        <option value="extractUserCSV">'. adm_translate("Au format CSV") .'</option>
                     </select>
                 </div>
-                <button class="btn btn-primary ms-2 mt-3" type="submit">' . adm_translate("Ok") . ' </button>
+                <button class="btn btn-primary ms-2 mt-3" type="submit">'. adm_translate("Ok") .' </button>
         </form>
         <hr />
-        <h3>' . adm_translate("Rechercher utilisateur") . '</h3>
-        <form method="post" class="form-inline" action="admin.php">
-        <label class="me-2 mt-sm-1" for="chng_uid">' . adm_translate("Identifiant Utilisateur") . '</label>
+        <h3>'. adm_translate("Rechercher utilisateur") .'</h3>
+        <form method="post" class="form-inline" action="'. site_url('admin.php') .'">
+        <label class="me-2 mt-sm-1" for="chng_uid">'. adm_translate("Identifiant Utilisateur") .'</label>
         <input class="form-control me-2 mt-sm-3 mb-2" type="text" id="chng_uid" name="chng_uid" size="20" maxlength="10" />
         <select class="form-select me-2 mt-sm-3 mb-2" name="op">
-            <option value="modifyUser">' . adm_translate("Modifier un utilisateur") . '</option>
-            <option value="unsubUser">' . adm_translate("Désabonner un utilisateur") . '</option>
-            <option value="delUser">' . adm_translate("Supprimer un utilisateur") . '</option>
+            <option value="modifyUser">'. adm_translate("Modifier un utilisateur") .'</option>
+            <option value="unsubUser">'. adm_translate("Désabonner un utilisateur") .'</option>
+            <option value="delUser">'. adm_translate("Supprimer un utilisateur") .'</option>
         </select>
-        <button class="btn btn-primary ms-sm-2 mt-sm-3 mb-2" type="submit" >' . adm_translate("Ok") . ' </button>
+        <button class="btn btn-primary ms-sm-2 mt-sm-3 mb-2" type="submit" >'. adm_translate("Ok") .' </button>
         </form>';
 
     $chng_is_visible = 1;
 
     echo '
         <hr />
-        <h3>' . adm_translate("Créer utilisateur") . '</h3>';
+        <h3>'. adm_translate("Créer utilisateur") .'</h3>';
 
     $op = 'displayUsers';
 
@@ -85,9 +85,9 @@ function displayUsers(): void
     echo js::auto_complete('membre', 'uname', 'users', 'chng_uid', 86400);
 
     echo '<hr />
-        <h3 class="mb-3">' . adm_translate("Fonctions") . '</h3>
-        <a href="admin.php?op=checkdnsmail_users">' . adm_translate("Contrôler les serveurs de mail de tous les utilisateurs") . '</a><br />
-        <a href="admin.php?op=checkdnsmail_users&amp;page=0&amp;end=1">' . adm_translate("Serveurs de mail incorrects") . '</a><br />';
+        <h3 class="mb-3">'. adm_translate("Fonctions") .'</h3>
+        <a href="'. site_url('admin.php?op=checkdnsmail_users') .'">'. adm_translate("Contrôler les serveurs de mail de tous les utilisateurs") .'</a><br />
+        <a href="'. site_url('admin.php?op=checkdnsmail_users&amp;page=0&amp;end=1') .'">'. adm_translate("Serveurs de mail incorrects") .'</a><br />';
 
     css::adminfoot('', '', '', '');
 }
@@ -117,7 +117,7 @@ function extractUserCSV(): void
             $val = str_replace("\r\n", "\n", (string) $val);
 
             if (preg_match("#[$deliminator\"\n\r]#", $val)) {
-                $val = '"' . str_replace('"', '""', $val) . '"';
+                $val = '"'. str_replace('"', '""', $val) .'"';
             }
 
             $line .= $val . $deliminator;
@@ -132,7 +132,7 @@ function extractUserCSV(): void
                     $val2 = str_replace("\r\n", "\n", $val2);
 
                     if (preg_match("#[$deliminator\"\n\r]#", (string) $val2)) {
-                        $val2 = '"' . str_replace('"', '""', $val2) . '"';
+                        $val2 = '"'. str_replace('"', '""', $val2) .'"';
                     }
 
                     $line .= $val2 . $deliminator;
@@ -197,7 +197,7 @@ function modifyUser(string|int $chng_user): void
 
         echo '
         <hr />
-        <h3>' . adm_translate("Modifier un utilisateur") . ' : ' . $chng_uname . ' / ' . $result['uid'] . '</h3>';
+        <h3>'. adm_translate("Modifier un utilisateur") .' : '. $chng_uname .' / '. $result['uid'] .'</h3>';
 
         // ppour sform
         $op = 'ModifyUser';
@@ -249,8 +249,8 @@ function modifyUser(string|int $chng_user): void
 function error_handler($ibid): void
 {
     echo '
-    <div class="alert alert-danger" align="center">' . adm_translate("Merci d'entrer l'information en fonction des spécifications") . '<br />
-    <strong>' . $ibid . '</strong><br /><a class="btn btn-secondary" href="admin.php?op=mod_users" >' . adm_translate("Retour en arrière") . '</a>
+    <div class="alert alert-danger" align="center">'. adm_translate("Merci d'entrer l'information en fonction des spécifications") .'<br />
+    <strong>'. $ibid .'</strong><br /><a class="btn btn-secondary" href="'. site_url('admin.php?op=mod_users') .'" >'. adm_translate("Retour en arrière") .'</a>
     </div>';
 }
 
@@ -280,15 +280,15 @@ function Minisites(int $chng_mns, string $chng_uname): void
             @umask(0000);
             
             if (@mkdir($user_dir, 0777)) {
-                $fp = fopen($user_dir . '/index.html', 'w');
+                $fp = fopen($user_dir .'/index.html', 'w');
                 fclose($fp);
                 @umask(0000);
                 
                 if (@mkdir($repertoire, 0777)) {
-                    $fp = fopen($repertoire . '/index.html', 'w');
+                    $fp = fopen($repertoire .'/index.html', 'w');
                     fclose($fp);
 
-                    $fp = fopen($repertoire . '/.htaccess', 'w');
+                    $fp = fopen($repertoire .'/.htaccess', 'w');
                     @fputs($fp, 'Deny from All');
                     fclose($fp);
                 }
@@ -296,17 +296,17 @@ function Minisites(int $chng_mns, string $chng_uname): void
         } else {
             @umask(0000);
             if (@mkdir($repertoire, 0777)) {
-                $fp = fopen($repertoire . '/index.html', 'w');
+                $fp = fopen($repertoire .'/index.html', 'w');
                 fclose($fp);
 
-                $fp = fopen($repertoire . '/.htaccess', 'w');
+                $fp = fopen($repertoire .'/.htaccess', 'w');
                 @fputs($fp, "Deny from All");
                 fclose($fp);
             }
         }
 
         // copie de la matrice par défaut
-        $directory = $racine . '/modules/blog/matrice';
+        $directory = $racine .'/modules/blog/matrice';
         $handle = opendir($DOCUMENTROOT . $directory);
         
         while (false !== ($file = readdir($handle))) {
@@ -317,7 +317,7 @@ function Minisites(int $chng_mns, string $chng_uname): void
 
         foreach ($filelist as $key => $file) {
             if ($file <> '.' and $file <> '..') {
-                @copy($DOCUMENTROOT . $directory . '/' . $file, $repertoire . '/' . $file);
+                @copy($DOCUMENTROOT . $directory .'/'. $file, $repertoire .'/'. $file);
             }
         }
 
@@ -388,7 +388,7 @@ mixed $C7, mixed $C8, mixed $M1, mixed $M2, mixed $T1, mixed $T2, mixed $B1, int
         GraphicAdmin(manuel('users'));
         adminhead($f_meta_nom, $f_titre);
         
-        echo error_handler(adm_translate("ERREUR : cet identifiant est déjà utilisé") . '<br />');
+        echo error_handler(adm_translate("ERREUR : cet identifiant est déjà utilisé") .'<br />');
         
         css::adminfoot('', '', '', '');
         return;
@@ -405,7 +405,7 @@ mixed $C7, mixed $C8, mixed $M1, mixed $M2, mixed $T1, mixed $T2, mixed $B1, int
             GraphicAdmin(manuel('users'));
             adminhead($f_meta_nom, $f_titre);
             
-            echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") . '<br />');
+            echo error_handler(adm_translate("Désolé, les nouveaux Mots de Passe ne correspondent pas. Cliquez sur retour et recommencez") .'<br />');
             
             css::adminfoot('', '', '', '');
             return;
@@ -422,7 +422,7 @@ mixed $C7, mixed $C8, mixed $M1, mixed $M2, mixed $T1, mixed $T2, mixed $B1, int
         GraphicAdmin(manuel('users'));
         adminhead($f_meta_nom, $f_titre);
         
-        echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") . '<br />');
+        echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") .'<br />');
         
         css::adminfoot('', '', '', '');
         
@@ -568,7 +568,7 @@ mixed $C7, mixed $C8, mixed $M1, mixed $M2, mixed $T1, mixed $T2, mixed $B1, int
 
     fclose($handle);
 
-    $re = '/#' . $chng_uid . '\|(\d+)/m';
+    $re = '/#'. $chng_uid .'\|(\d+)/m';
     $maj = preg_replace($re, '', $contents);
 
     $file = fopen("storage/users_private/usersbadmail.txt", 'w');
@@ -579,10 +579,10 @@ mixed $C7, mixed $C8, mixed $M1, mixed $M2, mixed $T1, mixed $T2, mixed $B1, int
     logs::Ecr_Log('security', "UpdateUser($chng_uid, $chng_uname) by AID : $aid", '');
 
     global $referer;
-    if ($referer != "memberslist.php")  {
-        Header("Location: admin.php?op=mod_users");
+    if ($referer != site_url('memberslist.php'))  {
+        Header('Location: '. site_url('admin.php?op=mod_users'));
     } else {
-        Header("Location: memberslist.php");
+        Header('Location: '. site_url('memberslist.php'));
     }
 }
 
@@ -608,15 +608,15 @@ function nonallowedUsers(): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Utilisateur(s) en attente de validation") . '<span class="badge bg-secondary float-end">' . count($users) . '</span></h3>
+    <h3>'. adm_translate("Utilisateur(s) en attente de validation") .'<span class="badge bg-secondary float-end">'. count($users) .'</span></h3>
     <table class="table table-no-bordered table-sm " data-toggle="table" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa" data-show-columns="true">
         <thead>
             <tr>
                 <th data-halign="center" data-align="center" class="n-t-col-xs-1" ><i class="fa fa-user-o fa-lg me-1 align-middle"></i>ID</th>
-                <th data-halign="center" data-sortable="true">' . adm_translate("Identifiant") . '</th>
-                <th data-halign="center" data-align="left" data-sortable="true">' . adm_translate("Name") . '</th>
-                <th data-halign="center" data-align="right">' . adm_translate("Date") . '</th>
-                <th data-halign="center" data-align="center" class="n-t-col-xs-2" >' . adm_translate("Fonctions") . '</th>
+                <th data-halign="center" data-sortable="true">'. adm_translate("Identifiant") .'</th>
+                <th data-halign="center" data-align="left" data-sortable="true">'. adm_translate("Name") .'</th>
+                <th data-halign="center" data-align="right">'. adm_translate("Date") .'</th>
+                <th data-halign="center" data-align="center" class="n-t-col-xs-2" >'. adm_translate("Fonctions") .'</th>
             </tr>
         </thead>
         <tbody>';
@@ -624,12 +624,12 @@ function nonallowedUsers(): void
     foreach($users as $user) {  
         echo '
             <tr class="table-danger">
-                <td>' . $user['uid'] . '</td>
-                <td>' . $user['uname'] . '</td>
-                <td>' . $user['name'] . '</td>
-                <td>' . date('d/m/Y @ h:m', (int) $user['user_regdate']) . '</td>
+                <td>'. $user['uid'] .'</td>
+                <td>'. $user['uname'] .'</td>
+                <td>'. $user['name'] .'</td>
+                <td>'. date('d/m/Y @ h:m', (int) $user['user_regdate']) .'</td>
                 <td>
-                <a class="me-3" href="admin.php?chng_uid=' . $user['uid'] . '&amp;op=modifyUser#add_open_user" ><i class="fa fa-edit fa-lg" title="' . translate("Edit") . '" data-bs-toggle="tooltip"></i></a>
+                <a class="me-3" href="'. site_url('admin.php?chng_uid='. $user['uid'] .'&amp;op=modifyUser#add_open_user') .'"><i class="fa fa-edit fa-lg" title="'. translate("Edit") .'" data-bs-toggle="tooltip"></i></a>
                 </td>
             </tr>';
     }
@@ -684,7 +684,7 @@ function checkdnsmailusers(): void
 
     $subject = adm_translate("Votre adresse Email est incorrecte.");
     $time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
-    $message = adm_translate("Votre adresse Email est incorrecte.") . ' (' . adm_translate("DNS ou serveur de mail incorrect") . ').<br />' . adm_translate("Tous vos abonnements vers cette adresse Email ont été suspendus.") . '<br /><a href="user.php?op=edituser">' . adm_translate("Merci de fournir une nouvelle adresse Email valide.") . ' <i class="fa fa-user fa-2x align-middle fa-fw"></i></a><br />' . adm_translate("Sans réponse de votre part sous 60 jours vous ne pourrez plus vous connecter en tant que membre sur ce site.") . ' ' . adm_translate("Puis votre compte pourra être supprimé.") . '<br /><br />' . adm_translate("Contacter l'administration du site.") . '<a href="mailto:' . Config::get('npds.adminmail') . '" target="_blank"><i class="fa fa-at fa-2x align-middle fa-fw"></i>';
+    $message = adm_translate("Votre adresse Email est incorrecte.") .' ('. adm_translate("DNS ou serveur de mail incorrect") .').<br />'. adm_translate("Tous vos abonnements vers cette adresse Email ont été suspendus.") .'<br /><a href="'. site_url('user.php?op=edituser') .'">'. adm_translate("Merci de fournir une nouvelle adresse Email valide.") .' <i class="fa fa-user fa-2x align-middle fa-fw"></i></a><br />'. adm_translate("Sans réponse de votre part sous 60 jours vous ne pourrez plus vous connecter en tant que membre sur ce site.") .' '. adm_translate("Puis votre compte pourra être supprimé.") .'<br /><br />'. adm_translate("Contacter l'administration du site.") .'<a href="mailto:'. Config::get('npds.adminmail') .'" target="_blank"><i class="fa fa-at fa-2x align-middle fa-fw"></i>';
     
     $output = '';
     $contents = '';
@@ -708,7 +708,7 @@ function checkdnsmailusers(): void
         $email  = $user['email'];
 
         if (mailler::checkdnsmail($email) === true and mailler::isbadmailuser($uid) === true) {
-            $re = '/#' . $uid . '\|(\d+)/m';
+            $re = '/#'. $uid .'\|(\d+)/m';
             $maj = preg_replace($re, '', $contents);
 
             $file = fopen("storage/users_private/usersbadmail.txt", 'w');
@@ -718,7 +718,7 @@ function checkdnsmailusers(): void
 
         if (mailler::checkdnsmail($email) === false) {
             if (mailler::isbadmailuser($uid) === false) {
-                $arrayusers[] = '#' . $uid . '|' . time();
+                $arrayusers[] = '#'. $uid .'|'. time();
 
                 //suspension des souscriptions
                 DB::table('subscribe')->where('uid', $uid)->delete();
@@ -747,7 +747,7 @@ function checkdnsmailusers(): void
             }
 
             if (mailler::isbadmailuser($uid) === true) {
-                $re = '/#' . $uid . '\|(\d+)/m';
+                $re = '/#'. $uid .'\|(\d+)/m';
                 preg_match($re, $contents, $res);
 
                 $datenvoi = date('d/m/Y', (int) $res[1]);
@@ -755,13 +755,13 @@ function checkdnsmailusers(): void
             }
 
             $wrongdnsmail++;
-            $output .= '<li>' . adm_translate("DNS ou serveur de mail incorrect") . ' : 
-                <a class="alert-link" href="admin.php?chng_uid=' . $uid . '&amp;op=modifyUser">
-                    ' . $uname . '
+            $output .= '<li>'. adm_translate("DNS ou serveur de mail incorrect") .' : 
+                <a class="alert-link" href="'. site_url('admin.php?chng_uid='. $uid .'&amp;op=modifyUser') .'">
+                    '. $uname .'
                 </a>
                 <span class="float-end"><i class="far fa-envelope me-1 align-middle"></i>
-                    <small>' . $datenvoi . '</small>
-                    <i class="fa fa-ban mx-1 align-middle"></i><small>' . $datelimit . '</small>
+                    <small>'. $datenvoi .'</small>
+                    <i class="fa fa-ban mx-1 align-middle"></i><small>'. $datelimit .'</small>
                 </span>
             </li>';
         }
@@ -775,7 +775,7 @@ function checkdnsmailusers(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Contrôle des serveurs de mails") . '</h3>
+    <h3 class="mb-3">'. adm_translate("Contrôle des serveurs de mails") .'</h3>
     <div class="alert alert-success lead">';
 
     if ($end != 1) {
@@ -792,28 +792,28 @@ function checkdnsmailusers(): void
         }
 
         echo '
-        <div>' . adm_translate("Serveurs de mails contrôlés") . '<span class="badge bg-success float-end">' . ($page * $pagesize) . '</span><br /></div>
-        <a class="btn btn-success btn-sm mt-2" href="admin.php?op=checkdnsmail_users&amp;page=' . $next_page . '&amp;end=' . $end . '">Continuer</a>
+        <div>'. adm_translate("Serveurs de mails contrôlés") .'<span class="badge bg-success float-end">'. ($page * $pagesize) .'</span><br /></div>
+        <a class="btn btn-success btn-sm mt-2" href="'. site_url('admin.php?op=checkdnsmail_users&amp;page='. $next_page .'&amp;end='. $end) .'">Continuer</a>
         <hr />
-        <div class="text-end"><input id="controlauto" ' . $ck . ' type="checkbox" /></div>
+        <div class="text-end"><input id="controlauto" '. $ck .' type="checkbox" /></div>
         <script type="text/javascript">
         //<![CDATA[
             $(function () {
                 check = $("#controlauto").is(":checked");
                 if(check)
-                setTimeout(function(){ document.location.href="admin.php?op=checkdnsmail_users&page=' . $next_page . '&end=' . $end . '&autocont=1"; }, 3000);
+                setTimeout(function(){ document.location.href="'. site_url('admin.php?op=checkdnsmail_users&page='. $next_page .'&end='. $end .'&autocont=1') .'"; }, 3000);
             });
             $("#controlauto").on("click", function(){
                 check = $("#controlauto").is(":checked");
                 if(check)
-                setTimeout(function(){ document.location.href="admin.php?op=checkdnsmail_users&page=' . $next_page . '&end=' . $end . '&autocont=1"; }, 3000);
+                setTimeout(function(){ document.location.href="'. site_url('admin.php?op=checkdnsmail_users&page='. $next_page .'&end='. $end .'&autocont=1') .'"; }, 3000);
                 else
-                setTimeout(function(){ document.location.href="admin.php?op=checkdnsmail_users&page=' . $next_page . '&end=' . $end . '&autocont=0"; }, 3000);
+                setTimeout(function(){ document.location.href="'. site_url('admin.php?op=checkdnsmail_users&page='. $next_page .'&end='. $end .'&autocont=0') .'"; }, 3000);
             });
         //]]>
         </script>';
     } else {
-        echo adm_translate("Serveurs de mails contrôlés") . '<span class="badge bg-success float-end">' . $total . '</span>';
+        echo adm_translate("Serveurs de mails contrôlés") .'<span class="badge bg-success float-end">'. $total .'</span>';
     }
     
     echo
@@ -823,11 +823,11 @@ function checkdnsmailusers(): void
         if ($wrongdnsmail > 0) {
             echo '
         <div class="alert alert-danger">
-            <p class="lead">' . adm_translate("DNS ou serveur de mail incorrect") . '<span class="badge bg-danger float-end">' . $wrongdnsmail . '</span></p>
+            <p class="lead">'. adm_translate("DNS ou serveur de mail incorrect") .'<span class="badge bg-danger float-end">'. $wrongdnsmail .'</span></p>
             <hr />
-            ' . adm_translate("Toutes les souscriptions de ces utilisateurs ont été suspendues.") . '<br />
-            ' . adm_translate("Un message privé leur a été envoyé sans réponse à ce message sous 60 jours ces utilisateurs ne pourront plus se connecter au site.") . '<br /><br />
-            <ul>' . $output . '</ul>
+            '. adm_translate("Toutes les souscriptions de ces utilisateurs ont été suspendues.") .'<br />
+            '. adm_translate("Un message privé leur a été envoyé sans réponse à ce message sous 60 jours ces utilisateurs ne pourront plus se connecter au site.") .'<br /><br />
+            <ul>'. $output .'</ul>
         </div>';
         } else {
             echo '<div class="alert alert-success">OK</div>';
@@ -854,19 +854,19 @@ function checkdnsmailusers(): void
 
         echo '
     <div class="alert alert-danger">
-        <div class="lead">' . adm_translate("DNS ou serveur de mail incorrect") . ' <span class="badge bg-danger float-end">' . $nbu . '</span></div>';
+        <div class="lead">'. adm_translate("DNS ou serveur de mail incorrect") .' <span class="badge bg-danger float-end">'. $nbu .'</span></div>';
         
         if ($nbu > 0) {
             echo '
-            <hr />' . adm_translate("Toutes les souscriptions de ces utilisateurs ont été suspendues.") . '<br />
-        ' . adm_translate("Un message privé leur a été envoyé sans réponse à ce message sous 60 jours ces utilisateurs ne pourront plus se connecter au site.") . '<br /><br />
+            <hr />'. adm_translate("Toutes les souscriptions de ces utilisateurs ont été suspendues.") .'<br />
+        '. adm_translate("Un message privé leur a été envoyé sans réponse à ce message sous 60 jours ces utilisateurs ne pourront plus se connecter au site.") .'<br /><br />
         <ul>';
 
             for ($row = 0; $row < $nbu; $row++) {
                 $dateenvoi = date('d/m/Y', (int) $t[$row]);
                 $datelimit = date('d/m/Y', $t[$row] + 5184000);
                 echo '
-                <li>' . adm_translate("DNS ou serveur de mail incorrect") . ' <i class="fa fa-user-o me-1 "></i> : <a class="alert-link" href="admin.php?chng_uid=' . $uids[$row] . '&amp;op=modifyUser">' . $unames[$row] . '</a><span class="float-end"><i class="far fa-envelope me-1 align-middle"></i><small>' . $dateenvoi . '</small><i class="fa fa-ban mx-1 align-middle"></i><small>' . $datelimit . '</small></span></li>';
+                <li>'. adm_translate("DNS ou serveur de mail incorrect") .' <i class="fa fa-user-o me-1 "></i> : <a class="alert-link" href="'. site_url('admin.php?chng_uid='. $uids[$row] .'&amp;op=modifyUser') .'">'. $unames[$row] .'</a><span class="float-end"><i class="far fa-envelope me-1 align-middle"></i><small>'. $dateenvoi .'</small><i class="fa fa-ban mx-1 align-middle"></i><small>'. $datelimit .'</small></span></li>';
             }
 
             echo '
@@ -913,16 +913,16 @@ switch ($op) {
         GraphicAdmin(manuel('users'));
 
         echo '
-        <h3 class="text-danger mb-3">' . adm_translate("Supprimer un utilisateur") . '</h3>
-        <div class="alert alert-danger lead">' . adm_translate("Etes-vous sûr de vouloir effacer") . ' ' . adm_translate("Utilisateur") . ' <strong>' . $chng_uid . '</strong> ? <br />
-            <a class="btn btn-danger mt-3" href="admin.php?op=delUserConf&amp;del_uid=' . $chng_uid . '&amp;referer=' . basename($referer) . '">' . adm_translate("Oui") . '</a>';
+        <h3 class="text-danger mb-3">'. adm_translate("Supprimer un utilisateur") .'</h3>
+        <div class="alert alert-danger lead">'. adm_translate("Etes-vous sûr de vouloir effacer") .' '. adm_translate("Utilisateur") .' <strong>'. $chng_uid .'</strong> ? <br />
+            <a class="btn btn-danger mt-3" href="admin.php?op=delUserConf&amp;del_uid='. $chng_uid .'&amp;referer='. basename($referer) .'">'. adm_translate("Oui") .'</a>';
         
-        if (basename($referer) != "memberslist.php") {
+        if (basename($referer) != site_url('memberslist.php')) {
             echo '
-            <a class="btn btn-secondary mt-3" href="admin.php?op=mod_users">' . adm_translate("Non") . '</a>';
+            <a class="btn btn-secondary mt-3" href="'. site_url('admin.php?op=mod_users') .'">'. adm_translate("Non") .'</a>';
         } else {
             echo '
-            <a class="btn btn-secondary mt-3" href="memberslist.php">' . adm_translate("Non") . '</a>';
+            <a class="btn btn-secondary mt-3" href="'. site_url('memberslist.php') .'">'. adm_translate("Non") .'</a>';
         }
 
         echo '
@@ -966,24 +966,24 @@ switch ($op) {
                 }
             }
 
-            $user_dir = $DOCUMENTROOT . $racine . '/storage/users_private/' . $del_uname;
+            $user_dir = $DOCUMENTROOT . $racine .'/storage/users_private/'. $del_uname;
 
             // Supprimer son ministe s'il existe
-            if (is_dir($user_dir . '/mns')) {
-                $dir = opendir($user_dir . '/mns');
+            if (is_dir($user_dir .'/mns')) {
+                $dir = opendir($user_dir .'/mns');
                 
                 while (false !== ($nom = readdir($dir))) {
                     if ($nom != '.' && $nom != '..' && $nom != '') {
-                        @unlink($user_dir . '/mns/' . $nom);
+                        @unlink($user_dir .'/mns/'. $nom);
                     }
                 }
                 closedir($dir);
-                @rmdir($user_dir . '/mns');
+                @rmdir($user_dir .'/mns');
             }
 
             // Mettre un fichier 'delete' dans sa home_directory si elle existe
             if (is_dir($user_dir)) {
-                $fp = fopen($user_dir . '/delete', 'w');
+                $fp = fopen($user_dir .'/delete', 'w');
                 fclose($fp);
             }
 
@@ -993,7 +993,7 @@ switch ($op) {
             ));
 
             // Met à jour les modérateurs des forums
-            $pat = '#\b' . $del_uid . '\b#';
+            $pat = '#\b'. $del_uid .'\b#';
 
             $forums = DB::table('forums')->select('forum_id', 'forum_moderator')->get();
 
@@ -1019,7 +1019,7 @@ switch ($op) {
             }
 
             fclose($handle);
-            $re = '/#' . $del_uid . '\|(\d+)/m';
+            $re = '/#'. $del_uid .'\|(\d+)/m';
             $maj = preg_replace($re, '', $contents);
             $file = fopen("storage/users_private/usersbadmail.txt", 'w');
             fwrite($file, $maj);
@@ -1029,10 +1029,10 @@ switch ($op) {
             logs::Ecr_Log('security', "DeleteUser($del_uid) by AID : $aid", '');
         }
 
-        if ($referer != "memberslist.php") {
-            Header("Location: admin.php?op=mod_users");
+        if ($referer != site_url('memberslist.php')) {
+            Header('Location: '. site_url('admin.php?op=mod_users'));
         } else {
-            Header("Location: memberslist.php");
+            Header('Location: '. site_url('memberslist.php'));
         }
         break;
 
@@ -1051,7 +1051,7 @@ switch ($op) {
             GraphicAdmin(manuel('users'));
             adminhead($f_meta_nom, $f_titre);
 
-            echo error_handler('<i class="fa fa-exclamation me-2"></i>' . adm_translate("ERREUR : cet identifiant est déjà utilisé") . '<br />');
+            echo error_handler('<i class="fa fa-exclamation me-2"></i>'. adm_translate("ERREUR : cet identifiant est déjà utilisé") .'<br />');
             
             css::adminfoot('', '', '', '');
             return;
@@ -1064,7 +1064,7 @@ switch ($op) {
             GraphicAdmin(manuel('users'));
             adminhead($f_meta_nom, $f_titre);
 
-            echo error_handler(adm_translate("Vous devez remplir tous les Champs") . '<br />'); // ce message n'est pas très précis ..
+            echo error_handler(adm_translate("Vous devez remplir tous les Champs") .'<br />'); // ce message n'est pas très précis ..
             
             css::adminfoot('', '', '', '');
             return;
@@ -1078,7 +1078,7 @@ switch ($op) {
             GraphicAdmin(manuel('users'));
             adminhead($f_meta_nom, $f_titre);
             
-            echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") . '<br />');
+            echo error_handler(adm_translate("Erreur : DNS ou serveur de mail incorrect") .'<br />');
             
             css::adminfoot('', '', '', '');
             return;
@@ -1168,7 +1168,7 @@ switch ($op) {
         global $aid;
         logs::Ecr_Log('security', "AddUser($add_name, $add_uname) by AID : $aid", '');
 
-        Header("Location: admin.php?op=mod_users");
+        Header('Location: '. site_url('admin.php?op=mod_users'));
         break;
 
     case 'unsubUser':
@@ -1181,7 +1181,7 @@ switch ($op) {
             logs::Ecr_Log("security", "UnsubUser($chng_uid) by AID : $aid", "");
         }
 
-        Header("Location: admin.php?op=mod_users");
+        Header('Location: '. site_url('admin.php?op=mod_users'));
         break;
 
     case 'nonallowed_users':

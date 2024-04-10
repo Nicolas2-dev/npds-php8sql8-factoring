@@ -24,7 +24,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'OptimySQL';
-$f_titre = adm_translate("Optimisation de la base de données") . ' : ' . Config::get('database.default.database');
+$f_titre = adm_translate("Optimisation de la base de données") .' : '. Config::get('database.default.database');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -87,18 +87,18 @@ if ($tables = DB::select('SHOW TABLE STATUS')) {
         if ($gain == 0) {
             $li_tab_opti .= '
             <tr class="table-success">
-                <td align="right">' . $table['Name'] . '</td>
-                <td align="right">' . $total . ' Ko</td>
-                <td align="center">' . adm_translate("optimisée") . '</td>
+                <td align="right">' . $table['Name'] .'</td>
+                <td align="right">' . $total .' Ko</td>
+                <td align="center">' . adm_translate("optimisée") .'</td>
                 <td align="center"> -- </td>
             </tr>';
         } else {
             $li_tab_opti .= '
             <tr class="table-danger">
-                <td align="right">' . $table['Name'] . '</td>
-                <td align="right">' . $total . ' Ko</td>
-                <td class="text-danger" align="center">' . adm_translate("non optimisée") . '</td>
-                <td align="right">' . $gain . ' Ko</td>
+                <td align="right">' . $table['Name'] .'</td>
+                <td align="right">' . $total .' Ko</td>
+                <td class="text-danger" align="center">' . adm_translate("non optimisée") .'</td>
+                <td align="right">' . $gain .' Ko</td>
             </tr>';
         }
     }
@@ -124,25 +124,25 @@ DB::table('optimy')->where('optid', 1)->update(array(
 // Lecture des gains précédents et addition
 $optimy = DB::table('optimy')->select('optgain', 'optcount')->where('optid', 1)->first();
 
-echo '<hr /><p class="lead">' . adm_translate("Optimisation effectuée") . ' : ' . adm_translate("Gain total réalisé") . ' ' . $total_gain . ' Ko</br>';
+echo '<hr /><p class="lead">' . adm_translate("Optimisation effectuée") .' : ' . adm_translate("Gain total réalisé") .' ' . $total_gain .' Ko</br>';
 echo $last_opti;
 echo '
-    ' . adm_translate("A ce jour, vous avez effectué ") . ' ' . $optimy['optcount'] . ' optimisation(s) ' . adm_translate(" et réalisé un gain global de ") . ' ' . $optimys['optgain'] . ' Ko.</p>
+    ' . adm_translate("A ce jour, vous avez effectué ") .' ' . $optimy['optcount'] .' optimisation(s) ' . adm_translate(" et réalisé un gain global de ") .' ' . $optimys['optgain'] .' Ko.</p>
     <table id="tad_opti" data-toggle="table" data-striped="true" data-show-toggle="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
     <thead>
         <tr>
-            <th data-sortable="true" data-halign="center" data-align="center">' . adm_translate('Table') . '</th>
-            <th data-halign="center" data-align="center">' . adm_translate('Taille actuelle') . '</th>
-            <th data-sortable="true" data-halign="center" data-align="center">' . adm_translate('Etat') . '</th>
-            <th data-halign="center" date-align="center">' . adm_translate('Gain réalisable') . '</th>
+            <th data-sortable="true" data-halign="center" data-align="center">' . adm_translate('Table') .'</th>
+            <th data-halign="center" data-align="center">' . adm_translate('Taille actuelle') .'</th>
+            <th data-sortable="true" data-halign="center" data-align="center">' . adm_translate('Etat') .'</th>
+            <th data-halign="center" date-align="center">' . adm_translate('Gain réalisable') .'</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
             <td></td>
             <td></td>
-            <td>' . adm_translate("Gain total réalisé") . ' : </td>
-            <td>' . $optimy['optgain'] . ' Ko</td>
+            <td>' . adm_translate("Gain total réalisé") .' : </td>
+            <td>' . $optimy['optgain'] .' Ko</td>
         </tr>
     </tfoot>
     <tbody>';

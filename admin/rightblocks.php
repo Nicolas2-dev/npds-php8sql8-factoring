@@ -15,7 +15,6 @@
 declare(strict_types=1);
 
 use npds\system\logs\logs;
-use npds\system\support\str;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
 
@@ -81,9 +80,9 @@ function makerblock(string $title, string $content, int $members, string $Mmembe
     ));
 
     global $aid;
-    logs::Ecr_Log('security', "MakeRightBlock(" . language::aff_langue($title) . ") by AID : $aid", '');
+    logs::Ecr_Log('security', "MakeRightBlock(". language::aff_langue($title) .") by AID : $aid", '');
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 /**
@@ -139,9 +138,9 @@ function changerblock(int $id, string $title, string $content, int $members, str
     ));
 
     global $aid;
-    logs::Ecr_Log('security', "ChangeRightBlock(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
+    logs::Ecr_Log('security', "ChangeRightBlock(". language::aff_langue($title) ." - $id) by AID : $aid", '');
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 /**
@@ -199,9 +198,9 @@ function changegaucherblock(int $id, string $title, string $content, int $member
     DB::table('rblocks')->where('id', $id)->delete();
 
     global $aid;
-    logs::Ecr_Log('security', "MoveRightBlockToLeft(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
+    logs::Ecr_Log('security', "MoveRightBlockToLeft(". language::aff_langue($title) ." - $id) by AID : $aid", '');
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 /**
@@ -218,7 +217,7 @@ function deleterblock(int $id): void
     global $aid;
     logs::Ecr_Log('security', "DeleteRightBlock($id) by AID : $aid", '');
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 settype($css, 'integer');

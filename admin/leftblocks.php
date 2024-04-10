@@ -82,7 +82,7 @@ function makelblock(string $title, string $content, int $members, string $Mmembe
     global $aid;
     logs::Ecr_Log('security', "MakeLeftBlock(" . language::aff_langue($title) . ") by AID : $aid", "");
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 /**
@@ -146,7 +146,7 @@ function changelblock(int $id, string $title, string $content, int $members, str
     global $aid;
     logs::Ecr_Log('security', "ChangeLeftBlock(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 /**
@@ -211,7 +211,7 @@ function changedroitelblock(int $id, string $title, string $content, int $member
     global $aid;
     logs::Ecr_Log('security', "MoveLeftBlockToRight(" . language::aff_langue($title) . " - $id) by AID : $aid", '');
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 /**
@@ -228,7 +228,7 @@ function deletelblock(int $id): void
     global $aid;
     logs::Ecr_Log('security', "DeleteLeftBlock($id) by AID : $aid", '');
 
-    Header("Location: admin.php?op=blocks");
+    Header('Location: '. site_url('admin.php?op=blocks'));
 }
 
 settype($css, 'integer');

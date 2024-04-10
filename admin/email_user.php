@@ -50,39 +50,39 @@ function email_user(): void
 
     echo '
         <hr />
-        <form id="emailuseradm" action="admin.php" method="post" name="AdmMI">
+        <form id="emailuseradm" action="'. site_url('admin.php') .'" method="post" name="AdmMI">
             <fieldset>
-                <legend>' . adm_translate("Message") . '</legend>
+                <legend>'. adm_translate("Message") .'</legend>
                 <input type="hidden" name="op" value="send_email_to_user" />
                 <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="expediteur">' . adm_translate("Expédier en tant") . '</label>
+                <label class="col-form-label col-sm-4" for="expediteur">'. adm_translate("Expédier en tant") .'</label>
                 <div id="expediteur" class="col-sm-8 my-2">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="adm" name="expediteur" value="1" checked="checked" />
-                        <label class="form-check-label" for="adm">' . adm_translate("qu'administrateur") . '</label>
+                        <label class="form-check-label" for="adm">'. adm_translate("qu'administrateur") .'</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="mem" name="expediteur" value="0" />
-                        <label class="form-check-label" for="mem">' . adm_translate("que membre") . '</label>
+                        <label class="form-check-label" for="mem">'. adm_translate("que membre") .'</label>
                     </div>
                 </div>
                 </div>
                 <div id="div_username" class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="username">' . adm_translate("Utilisateur") . '</label>
+                <label class="col-form-label col-sm-4" for="username">'. adm_translate("Utilisateur") .'</label>
                 <div class="col-sm-8">
                     <input  class="form-control" type="text" id="username" name="username" value="" />
                 </div>
                 </div>
                 <div id="div_groupe" class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="groupe">' . adm_translate("Groupe") . '</label>
+                <label class="col-form-label col-sm-4" for="groupe">'. adm_translate("Groupe") .'</label>
                 <div class="col-sm-8">
                     <select id="groupe" class="form-select" name="groupe" >
-                        <option value="0" selected="selected">' . adm_translate("Choisir un groupe");
+                        <option value="0" selected="selected">'. adm_translate("Choisir un groupe");
 
     $groupes = DB::table('groupes')->select('groupe_id', 'groupe_name')->orderBy('groupe_id', 'ASC')->get();
 
     foreach ($groupes as $groupe) {
-        echo '<option value="' . $groupe['groupe_id'] . '">' . $groupe['groupe_id'] . ' - ' . language::aff_langue($groupe['groupe_name']);
+        echo '<option value="'. $groupe['groupe_id'] .'">'. $groupe['groupe_id'] .' - '. language::aff_langue($groupe['groupe_name']);
     }
 
     echo '
@@ -90,7 +90,7 @@ function email_user(): void
                 </div>
                 </div>
                 <div id="div_all" class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="all">' . adm_translate("Envoyer à tous les membres") . '</label>
+                <label class="col-form-label col-sm-4" for="all">'. adm_translate("Envoyer à tous les membres") .'</label>
                 <div class="col-sm-8 ">
                     <div class="form-check my-2">
                         <input class="form-check-input" id="all" type="checkbox" name="all" value="1" />
@@ -99,14 +99,14 @@ function email_user(): void
                 </div>
                 </div>
                 <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="subject">' . adm_translate("Sujet") . '</label>
+                <label class="col-form-label col-sm-4" for="subject">'. adm_translate("Sujet") .'</label>
                 <div class="col-sm-8">
                     <input  class="form-control" type="text" maxlength="100" id="subject" name="subject" required="required" />
                     <span class="help-block text-end"><span id="countcar_subject"></span></span>
                 </div>
                 </div>
                 <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="message">' . adm_translate("Corps de message") . '</label>
+                <label class="col-form-label col-sm-12" for="message">'. adm_translate("Corps de message") .'</label>
                 <div class="col-sm-12">
                     <textarea class="tin form-control" rows="25" id="message" name="message"></textarea>
                 </div>
@@ -117,7 +117,7 @@ function email_user(): void
     echo '
                 <div class="mb-3 row">
                 <div class="col-sm-12">
-                    <button type="submit" class="btn btn-primary">' . adm_translate("Envoyer") . '</button>
+                    <button type="submit" class="btn btn-primary">'. adm_translate("Envoyer") .'</button>
                 </div>
                 </div>
             </fieldset>
@@ -200,7 +200,7 @@ function send_email_to_user(string $username, string $subject, string $message, 
             $users = DB::table('users')->select('uid', 'user_langue')->get();
 
             foreach ($users as $user) {
-                $tab_to_userid[] = $user['uid'] . ':' . $user['user_langue'];
+                $tab_to_userid[] = $user['uid'] .':'. $user['user_langue'];
             }
         } else {
             if ($groupe) {
@@ -218,7 +218,7 @@ function send_email_to_user(string $username, string $subject, string $message, 
                     if ($tab_groupe) {
                         foreach ($tab_groupe as $groupevalue) {
                             if ($groupevalue == $groupe) {
-                                $tab_to_userid[] = $user['uid'] . ':' . $user['user_langue'];
+                                $tab_to_userid[] = $user['uid'] .':'. $user['user_langue'];
                             }
                         }
                     }
@@ -227,13 +227,13 @@ function send_email_to_user(string $username, string $subject, string $message, 
                 $users = DB::table('users')->select('uid', 'user_langue')->where('uname', $username)->first();
 
                 foreach($users as $user) {
-                    $tab_to_userid[] = $user['uid'] . ':' . $user['user_langue'];
+                    $tab_to_userid[] = $user['uid'] .':'. $user['user_langue'];
                 }
             }
         }
 
         if (($subject == '') or ($message == '')) {
-            header("location: admin.php");
+            header('location: '. site_url('admin.php'));
         }
 
         $message = str_replace('\n', '<br />', $message);
@@ -269,7 +269,7 @@ function send_email_to_user(string $username, string $subject, string $message, 
                     $old_message = $message;
                     
                     $sujet = translate_ml($to_tmp[1], 'Vous avez un nouveau message.');
-                    $message = translate_ml($to_tmp[1], 'Bonjour') . ", <br /><br /><a href=\"".Config::get('npds.nuke_url')."/viewpmsg.php\">" . translate_ml($to_tmp[1], "Cliquez ici pour lire votre nouveau message.") . "</a><br /><br />";
+                    $message = translate_ml($to_tmp[1], 'Bonjour') . ", <br /><br /><a href=\"". site_url('viewpmsg.php') ."\">" . translate_ml($to_tmp[1], "Cliquez ici pour lire votre nouveau message.") . "</a><br /><br />";
                     $message .= Config::get('signature.message');
                     
                     mailler::copy_to_email($to_userid, $sujet, $message);
@@ -291,9 +291,9 @@ function send_email_to_user(string $username, string $subject, string $message, 
     echo '<hr />';
     
     if ($pasfin) {
-        echo '<div class="alert alert-success"><strong>"' . stripslashes($subject) . '"</strong> ' . adm_translate("a été envoyée") . '.</div>';
+        echo '<div class="alert alert-success"><strong>"'. stripslashes($subject) .'"</strong> '. adm_translate("a été envoyée") .'.</div>';
     } else {
-        echo '<div class="alert alert-danger"><strong>"' . stripslashes($subject) . '"</strong>' . adm_translate("n'a pas été envoyée") . '.</div>';
+        echo '<div class="alert alert-danger"><strong>"'. stripslashes($subject) .'"</strong>'. adm_translate("n'a pas été envoyée") .'.</div>';
     }
         
     css::adminfoot('', '', '', '');

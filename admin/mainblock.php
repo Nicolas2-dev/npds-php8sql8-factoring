@@ -47,25 +47,25 @@ function mblock():  void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Edition du Bloc Principal") . '</h3>';
+    <h3>'. adm_translate("Edition du Bloc Principal") .'</h3>';
 
     $block = DB::table('block')->select('title', 'content')->find(1);
 
     if (!empty($block)) {
 
         echo '
-        <form id="fad_mblock" action="admin.php" method="post">
+        <form id="fad_mblock" action="'. site_url('admin.php') .'" method="post">
             <div class="form-floating mb-3">
-                <textarea class="form-control" type="text" id="title" name="title" maxlength="1000" placeholder="' . adm_translate("Titre :") . '" style="height:70px;">' . $block['title'] . '</textarea>
-                <label for="title">' . adm_translate("Titre") . '</label>
+                <textarea class="form-control" type="text" id="title" name="title" maxlength="1000" placeholder="'. adm_translate("Titre :") .'" style="height:70px;">'. $block['title'] .'</textarea>
+                <label for="title">'. adm_translate("Titre") .'</label>
                 <span class="help-block text-end"><span id="countcar_title"></span></span>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="content" name="content" style="height:170px;">' . $block['content'] . '</textarea>
-                <label for="content">' . adm_translate("Contenu") . '</label>
+                <textarea class="form-control" id="content" name="content" style="height:170px;">'. $block['content'] .'</textarea>
+                <label for="content">'. adm_translate("Contenu") .'</label>
             </div>
             <input type="hidden" name="op" value="changemblock" />
-            <button class="btn btn-primary btn-block" type="submit">' . adm_translate("Valider") . '</button>
+            <button class="btn btn-primary btn-block" type="submit">'. adm_translate("Valider") .'</button>
         </form>
         <script type="text/javascript">
             //<![CDATA[
@@ -100,7 +100,7 @@ function changemblock(string $title, string $content): void
     global $aid;
     logs::Ecr_Log('security', "ChangeMainBlock(" . language::aff_langue($title) . ") by AID : $aid", '');
 
-    Header("Location: admin.php?op=adminMain");
+    Header('Location: '. site_url('admin.php?op=adminMain'));
 }
 
 switch ($op) {

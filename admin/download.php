@@ -48,7 +48,7 @@ function DownloadAdmin(): void
 
     echo '
     <hr />
-    <h3 class="my-3">' . adm_translate("Catégories") . '</h3>';
+    <h3 class="my-3">'. adm_translate("Catégories") .'</h3>';
 
     $pseudocatid = '';
 
@@ -58,43 +58,43 @@ function DownloadAdmin(): void
 
         echo '
         <h4 class="mb-2">
-            <a class="tog" id="show_cat_' . $pseudocatid . '" title="Déplier la liste">
-                <i id="i_cat_' . $pseudocatid . '" class="fa fa-caret-down fa-lg text-primary"></i>
+            <a class="tog" id="show_cat_'. $pseudocatid .'" title="Déplier la liste">
+                <i id="i_cat_'. $pseudocatid .'" class="fa fa-caret-down fa-lg text-primary"></i>
             </a>
-            ' . language::aff_langue(stripslashes($download['dcategory'])) . '
+            '. language::aff_langue(stripslashes($download['dcategory'])) .'
         </h4>';
         
         echo '
-        <div class="mb-3" id="cat_' . $pseudocatid . '" style="display:none;">
+        <div class="mb-3" id="cat_'. $pseudocatid .'" style="display:none;">
         <table data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-show-columns="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons-prefix="fa" data-icons="icons">
             <thead>
                 <tr>
                     <th data-sortable="true" data-halign="center" data-align="right">
-                        ' . adm_translate("ID") . '
+                        '. adm_translate("ID") .'
                     </th>
                     <th data-sortable="true" data-halign="center" data-align="right">
-                        ' . adm_translate("Compteur") . '
+                        '. adm_translate("Compteur") .'
                     </th>
                     <th data-sortable="true" data-halign="center" data-align="center">
                         Typ.
                     </th>
                     <th data-halign="center" data-align="center">
-                        ' . adm_translate("URL") . '
+                        '. adm_translate("URL") .'
                     </th>
                     <th data-sortable="true" data-halign="center" >
-                        ' . adm_translate("Nom de fichier") . '
+                        '. adm_translate("Nom de fichier") .'
                     </th>
                     <th data-halign="center" data-align="center">
-                        ' . adm_translate("Version") . '
+                        '. adm_translate("Version") .'
                     </th>
                     <th data-halign="center" data-align="right">
-                        ' . adm_translate("Taille de fichier") . '
+                        '. adm_translate("Taille de fichier") .'
                     </th>
                     <th data-halign="center" >
-                        ' . adm_translate("Date") . '
+                        '. adm_translate("Date") .'
                     </th>
                     <th data-halign="center" data-align="center">
-                        ' . adm_translate("Fonctions") . '
+                        '. adm_translate("Fonctions") .'
                     </th>
                 </tr>
             </thead>
@@ -109,36 +109,36 @@ function DownloadAdmin(): void
         foreach ($downloadsX as $download) {
 
             if ($download['perms'] == '0') {
-                $dperm = '<span title="' . adm_translate("Anonymes") . '<br />' . adm_translate("Membres") . '<br />' . adm_translate("Administrateurs") . '" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"><i class="far fa-user fa-lg"></i><i class="fas fa-user fa-lg"></i><i class="fa fa-user-cog fa-lg"></i></span>';
+                $dperm = '<span title="'. adm_translate("Anonymes") .'<br />'. adm_translate("Membres") .'<br />'. adm_translate("Administrateurs") .'" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"><i class="far fa-user fa-lg"></i><i class="fas fa-user fa-lg"></i><i class="fa fa-user-cog fa-lg"></i></span>';
             } else if ($download['perms'] == '1') { 
-                $dperm = '<span title="' . adm_translate("Membres") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-user fa-lg"></i></span>';
+                $dperm = '<span title="'. adm_translate("Membres") .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-user fa-lg"></i></span>';
             } else if ($download['perms'] == '-127') { 
-                $dperm = '<span title="' . adm_translate("Administrateurs") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-user-cog fa-lg"></i></span>';
+                $dperm = '<span title="'. adm_translate("Administrateurs") .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-user-cog fa-lg"></i></span>';
             } else if ($download['perms'] == '-1') {
-                $dperm = '<span title="' . adm_translate("Anonymes") . '"  data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-user fa-lg"></i></span>';
+                $dperm = '<span title="'. adm_translate("Anonymes") .'"  data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-user fa-lg"></i></span>';
             } else {
-                $dperm = '<span title="' . adm_translate("Groupes") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-users fa-lg"></i></span>';
+                $dperm = '<span title="'. adm_translate("Groupes") .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-users fa-lg"></i></span>';
             }
 
             echo '
                 <tr>
                 <td>
-                    ' . $download['did'] . '
+                    '. $download['did'] .'
                 </td>
                 <td>
-                    ' . $download['dcounter'] . '
+                    '. $download['dcounter'] .'
                 </td>
                 <td>
-                    ' . $dperm . '
+                    '. $dperm .'
                 </td>
                 <td>
-                    <a href="' . $download['durl'] . '" title="' . adm_translate("Téléchargements") . '<br />' . $download['durl'] . '" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"><i class="fa fa-download fa-2x"></i></a>
+                    <a href="'. $download['durl'] .'" title="'. adm_translate("Téléchargements") .'<br />'. $download['durl'] .'" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"><i class="fa fa-download fa-2x"></i></a>
                 </td>
                 <td>
-                    ' . $download['dfilename'] . '
+                    '. $download['dfilename'] .'
                 </td>
                 <td>
-                    <span class="small">' . $download['dver'] . '</span>
+                    <span class="small">'. $download['dver'] .'</span>
                 </td>
                 <td>
                     <span class="small">';
@@ -154,13 +154,13 @@ function DownloadAdmin(): void
             echo '</span>
                     </td>
                     <td class="small">
-                        ' . $download['ddate'] . '
+                        '. $download['ddate'] .'
                     </td>
                     <td>
-                        <a href="admin.php?op=DownloadEdit&amp;did=' . $download['did'] . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <a href="'. site_url('admin.php?op=DownloadEdit&amp;did='. $download['did']) .'" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" data-bs-placement="right">
                             <i class="fa fa-edit fa-lg"></i>
                         </a>
-                        <a href="admin.php?op=DownloadDel&amp;did=' . $download['did'] . '&amp;ok=0" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <a href="'. site_url('admin.php?op=DownloadDel&amp;did='. $download['did'] .'&amp;ok=0') .'" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" data-bs-placement="right">
                             <i class="fas fa-trash fa-lg text-danger ms-2"></i>
                         </a>
                     </td>
@@ -174,7 +174,7 @@ function DownloadAdmin(): void
         <script type="text/javascript">
             //<![CDATA[
                 $( document ).ready(function() {
-                    tog("cat_' . $pseudocatid . '","show_cat_' . $pseudocatid . '","hide_cat_' . $pseudocatid . '");
+                    tog("cat_'. $pseudocatid .'","show_cat_'. $pseudocatid .'","hide_cat_'. $pseudocatid .'");
                 })
             //]]>
         </script>';
@@ -184,71 +184,71 @@ function DownloadAdmin(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Ajouter un Téléchargement") . '</h3>
-    <form action="admin.php" method="post" id="downloadadd" name="adminForm">
+    <h3 class="mb-3">'. adm_translate("Ajouter un Téléchargement") .'</h3>
+    <form action="'. site_url('admin.php') .'" method="post" id="downloadadd" name="adminForm">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="durl">' . adm_translate("Télécharger URL") . '</label>
+            <label class="col-form-label col-sm-4" for="durl">'. adm_translate("Télécharger URL") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="durl" name="durl" maxlength="320" required="required" />
-    &nbsp;<a href="javascript:void(0);" onclick="window.open(\'admin.php?op=FileManagerDisplay\', \'wdir\', \'width=650, height=450, menubar=no, location=no, directories=no, status=no, copyhistory=no, toolbar=no, scrollbars=yes, resizable=yes\');">
-    <span class="">[' . adm_translate("Parcourir") . ']</span></a>
+    &nbsp;<a href="javascript:void(0);" onclick="window.open(\''. site_url('admin.php?op=FileManagerDisplay') .'\', \'wdir\', \'width=650, height=450, menubar=no, location=no, directories=no, status=no, copyhistory=no, toolbar=no, scrollbars=yes, resizable=yes\');">
+    <span class="">['. adm_translate("Parcourir") .']</span></a>
                 <span class="help-block text-end" id="countcar_durl"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dcounter">' . adm_translate("Compteur") . '</label>
+            <label class="col-form-label col-sm-4" for="dcounter">'. adm_translate("Compteur") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="number" id="dcounter" name="dcounter" maxlength="30" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dfilename">' . adm_translate("Nom de fichier") . '</label>
+            <label class="col-form-label col-sm-4" for="dfilename">'. adm_translate("Nom de fichier") .'</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="text" id="dfilename" name="dfilename" maxlength="255" required="required" />
                 <span class="help-block text-end" id="countcar_dfilename"></span>
                 </div>
             </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dver">' . adm_translate("Version") . '</label>
+            <label class="col-form-label col-sm-4" for="dver">'. adm_translate("Version") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="dver" id="dver" maxlength="6" />
                 <span class="help-block text-end" id="countcar_dver"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dfilesize">' . adm_translate("Taille de fichier") . ' (bytes)</label>
+            <label class="col-form-label col-sm-4" for="dfilesize">'. adm_translate("Taille de fichier") .' (bytes)</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="dfilesize" name="dfilesize" maxlength="31" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dweb">' . adm_translate("Propriétaire de la page Web") . '</label>
+            <label class="col-form-label col-sm-4" for="dweb">'. adm_translate("Propriétaire de la page Web") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="dweb" name="dweb" maxlength="255" />
                 <span class="help-block text-end" id="countcar_dweb"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="duser">' . adm_translate("Propriétaire") . '</label>
+            <label class="col-form-label col-sm-4" for="duser">'. adm_translate("Propriétaire") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="duser" name="duser" maxlength="30" />
                 <span class="help-block text-end" id="countcar_duser"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dcategory">' . adm_translate("Catégorie") . '</label>
+            <label class="col-form-label col-sm-4" for="dcategory">'. adm_translate("Catégorie") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="dcategory" name="dcategory" maxlength="250" required="required"/>
                 <span class="help-block text-end" id="countcar_dcategory"></span>
                 <select class="form-select" name="sdcategory" onchange="adminForm.dcategory.value=options[selectedIndex].value">
-                <option>' . adm_translate("Catégorie") . '</option>';
+                <option>'. adm_translate("Catégorie") .'</option>';
 
 
     $download_categorie = DB::table('downloads')->select('dcategory')->orderBy('dcategory')->distinct()->get();
 
     foreach ($download_categorie as $categ) {
         $dcategory = stripslashes($categ['dcategory']);
-        echo '<option value="' . $dcategory . '">' . language::aff_langue($dcategory) . '</option>';
+        echo '<option value="'. $dcategory .'">'. language::aff_langue($dcategory) .'</option>';
     }
 
     echo '
@@ -256,14 +256,14 @@ function DownloadAdmin(): void
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="xtext">' . adm_translate("Description") . '</label>
+            <label class="col-form-label col-sm-12" for="xtext">'. adm_translate("Description") .'</label>
             <div class="col-sm-12">
                 <textarea class="tin form-control" id="xtext" name="xtext" rows="20" ></textarea>
             </div>
         </div>
-        ' . editeur::aff_editeur('xtext', '') . '
+        '. editeur::aff_editeur('xtext', '') .'
         <fieldset>
-            <legend>' . adm_translate("Droits") . '</legend>';
+            <legend>'. adm_translate("Droits") .'</legend>';
 
     groupe::droits('0');
 
@@ -272,7 +272,7 @@ function DownloadAdmin(): void
         <input type="hidden" name="op" value="DownloadAdd" />
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <button class="btn btn-primary" type="submit">' . adm_translate("Ajouter") . '</button>
+                <button class="btn btn-primary" type="submit">'. adm_translate("Ajouter") .'</button>
             </div>
         </div>
     </form>';
@@ -312,55 +312,55 @@ function DownloadEdit(int $did): void
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Editer un Téléchargement") . '</h3>
-    <form action="admin.php" method="post" id="downloaded" name="adminForm">
-        <input type="hidden" name="did" value="' . $download['did'] . '" />
-        <input type="hidden" name="dcounter" value="' . $download['dcounter'] . '" />
+    <h3 class="mb-3">'. adm_translate("Editer un Téléchargement") .'</h3>
+    <form action="'. site_url('admin.php') .'" method="post" id="downloaded" name="adminForm">
+        <input type="hidden" name="did" value="'. $download['did'] .'" />
+        <input type="hidden" name="dcounter" value="'. $download['dcounter'] .'" />
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="durl">' . adm_translate("Télécharger URL") . '</label>
+            <label class="col-form-label col-sm-4" for="durl">'. adm_translate("Télécharger URL") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="durl" name="durl" value="' . $download['durl'] . '" maxlength="320" required="required" />
+                <input class="form-control" type="text" id="durl" name="durl" value="'. $download['durl'] .'" maxlength="320" required="required" />
                 <span class="help-block text-end" id="countcar_durl"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dfilename">' . adm_translate("Nom de fichier") . '</label>
+            <label class="col-form-label col-sm-4" for="dfilename">'. adm_translate("Nom de fichier") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="dfilename" name="dfilename" id="dfilename" value="' . $download['dfilename'] . '" maxlength="255" required="required" />
+                <input class="form-control" type="text" id="dfilename" name="dfilename" id="dfilename" value="'. $download['dfilename'] .'" maxlength="255" required="required" />
                 <span class="help-block text-end" id="countcar_dfilename"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dver">' . adm_translate("Version") . '</label>
+            <label class="col-form-label col-sm-4" for="dver">'. adm_translate("Version") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" name="dver" id="dver" value="' . $download['dver'] . '" maxlength="6" />
+                <input class="form-control" type="text" name="dver" id="dver" value="'. $download['dver'] .'" maxlength="6" />
                 <span class="help-block text-end" id="countcar_dver"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dfilesize">' . adm_translate("Taille de fichier") . ' (bytes)</label>
+            <label class="col-form-label col-sm-4" for="dfilesize">'. adm_translate("Taille de fichier") .' (bytes)</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="dfilesize" name="dfilesize" value="' . $download['dfilesize'] . '" maxlength="31" />
+                <input class="form-control" type="text" id="dfilesize" name="dfilesize" value="'. $download['dfilesize'] .'" maxlength="31" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dweb">' . adm_translate("Propriétaire de la page Web") . '</label>
+            <label class="col-form-label col-sm-4" for="dweb">'. adm_translate("Propriétaire de la page Web") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="dweb" name="dweb" value="' . $download['dweb'] . '" maxlength="255" />
+                <input class="form-control" type="text" id="dweb" name="dweb" value="'. $download['dweb'] .'" maxlength="255" />
                 <span class="help-block text-end" id="countcar_dweb"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="duser">' . adm_translate("Propriétaire") . '</label>
+            <label class="col-form-label col-sm-4" for="duser">'. adm_translate("Propriétaire") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="duser" name="duser" value="' . $download['duser'] . '" maxlength="30" />
+                <input class="form-control" type="text" id="duser" name="duser" value="'. $download['duser'] .'" maxlength="30" />
                 <span class="help-block text-end" id="countcar_duser"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="dcategory">' . adm_translate("Catégorie") . '</label>
+            <label class="col-form-label col-sm-4" for="dcategory">'. adm_translate("Catégorie") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="dcategory" name="dcategory" value="' . stripslashes($download['dcategory']) . '" maxlength="250" required="required" />
+                <input class="form-control" type="text" id="dcategory" name="dcategory" value="'. stripslashes($download['dcategory']) .'" maxlength="250" required="required" />
                 <span class="help-block text-end"><span id="countcar_dcategory"></span></span>
                 <select class="form-select" name="sdcategory" onchange="adminForm.dcategory.value=options[selectedIndex].value">';
     
@@ -370,7 +370,7 @@ function DownloadEdit(int $did): void
 
         $sel = (($categ['dcategory'] == $download['dcategory']) ? 'selected' : '');
         $Xdcategory = stripslashes($categ['dcategory']);
-        echo '<option ' . $sel . ' value="' . $Xdcategory . '">' . language::aff_langue($Xdcategory) . '</option>';
+        echo '<option '. $sel .' value="'. $Xdcategory .'">'. language::aff_langue($Xdcategory) .'</option>';
     }
 
     echo '
@@ -378,34 +378,34 @@ function DownloadEdit(int $did): void
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="xtext">' . adm_translate("Description") . '</label>
+            <label class="col-form-label col-sm-12" for="xtext">'. adm_translate("Description") .'</label>
             <div class="col-sm-12">
-                <textarea class="tin form-control" id="xtext" name="xtext" rows="20" >' . stripslashes($download['ddescription']) . '</textarea>
+                <textarea class="tin form-control" id="xtext" name="xtext" rows="20" >'. stripslashes($download['ddescription']) .'</textarea>
             </div>
         </div>
-        ' . editeur::aff_editeur('xtext', '');
+        '. editeur::aff_editeur('xtext', '');
 
     echo '
         <fieldset>
-            <legend>' . adm_translate("Droits") . '</legend>';
+            <legend>'. adm_translate("Droits") .'</legend>';
 
     groupe::droits($download['perms']);
 
     echo '
         </fieldset>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4">' . adm_translate("Changer la date") . '</label>
+            <label class="col-form-label col-sm-4">'. adm_translate("Changer la date") .'</label>
             <div class="col-sm-8">
                 <div class="form-check my-2">
                 <input type="checkbox" id="ddate" name="ddate" class="form-check-input" value="yes" />
-                <label class="form-check-label" for="ddate">' . adm_translate("Oui") . '</label>
+                <label class="form-check-label" for="ddate">'. adm_translate("Oui") .'</label>
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col-sm-12">
                 <input type="hidden" name="op" value="DownloadSave" />
-                <input class="btn btn-primary" type="submit" value="' . adm_translate("Sauver les modifications") . '" />
+                <input class="btn btn-primary" type="submit" value="'. adm_translate("Sauver les modifications") .'" />
             </div>
         </div>
     </form>';
@@ -485,7 +485,7 @@ function DownloadSave(int $did, int $dcounter, string $durl, string $dfilename, 
         ));
     }
 
-    Header("Location: admin.php?op=DownloadAdmin");
+    Header('Location: '. site_url('admin.php?op=DownloadAdmin'));
 }
 
 /**
@@ -534,7 +534,7 @@ function DownloadAdd(int $dcounter, string $durl, string $dfilename, int $dfiles
         ));
     }
     
-    Header("Location: admin.php?op=DownloadAdmin");
+    Header('Location: '. site_url('admin.php?op=DownloadAdmin'));
 }
 
 /**
@@ -552,7 +552,7 @@ function DownloadDel(int $did, int $ok = 0): void
     if ($ok == 1) {
         DB::table('downloads')->where('did', $did)->delete();
 
-        Header("Location: admin.php?op=DownloadAdmin");
+        Header('Location: '. site_url('admin.php?op=DownloadAdmin'));
     } else {
         global $f_titre;
 
@@ -563,14 +563,14 @@ function DownloadDel(int $did, int $ok = 0): void
 
         echo ' 
         <div class="alert alert-danger">
-            <strong>' . adm_translate("ATTENTION : êtes-vous sûr de vouloir supprimer ce fichier téléchargeable ?") . '</strong>
+            <strong>'. adm_translate("ATTENTION : êtes-vous sûr de vouloir supprimer ce fichier téléchargeable ?") .'</strong>
         </div>
-        <a class="btn btn-danger" href="admin.php?op=DownloadDel&amp;did=' . $did . '&amp;ok=1" >
-            ' . adm_translate("Oui") . '
+        <a class="btn btn-danger" href="'. site_url('admin.php?op=DownloadDel&amp;did='. $did .'&amp;ok=1') .'" >
+            '. adm_translate("Oui") .'
         </a>
         &nbsp;
-        <a class="btn btn-secondary" href="admin.php?op=DownloadAdmin" >
-            ' . adm_translate("Non") . '
+        <a class="btn btn-secondary" href="'. site_url('admin.php?op=DownloadAdmin') .'" >
+            '. adm_translate("Non") .'
         </a>';
         
         css::adminfoot('', '', '', '');

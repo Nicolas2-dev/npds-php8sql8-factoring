@@ -75,10 +75,10 @@ function get_table_def(string $table): string
     
     foreach (DB::showFiledsTable($table) as $row) {
 
-        $schema_create .= " " . $row['Field'] . " " . $row['Type'];
+        $schema_create .= " ". $row['Field'] . " ". $row['Type'];
 
         if (isset($row['Default']) && (!empty($row['Default']) || $row['Default'] == "0")) {
-            $schema_create .= " DEFAULT '" . $row['Default'] . "'";
+            $schema_create .= " DEFAULT '". $row['Default'] . "'";
         }
 
         if ($row["Null"] != "YES") {
@@ -86,7 +86,7 @@ function get_table_def(string $table): string
         }
 
         if ($row["Extra"] != "") {
-            $schema_create .= " " . $row['Extra'];
+            $schema_create .= " ". $row['Extra'];
         }
 
         if ($k < ($count_line - 1)) {
@@ -114,17 +114,17 @@ function get_table_def(string $table): string
         $schema_create .= ",$crlf";
 
         if ($x == "PRIMARY") {
-            $schema_create .= " PRIMARY KEY (" . implode(", ", $columns) . ")";
+            $schema_create .= " PRIMARY KEY (". implode(", ", $columns) . ")";
         } elseif (substr($x, 0, 6) == "UNIQUE") {
-            $schema_create .= " UNIQUE " . substr($x, 7) . " (" . implode(", ", $columns) . ")";
+            $schema_create .= " UNIQUE ". substr($x, 7) . " (". implode(", ", $columns) . ")";
         } else {
-            $schema_create .= " KEY $x (" . implode(", ", $columns) . ")";
+            $schema_create .= " KEY $x (". implode(", ", $columns) . ")";
         }
     }
 
     $schema_create .= "$crlf)";
     $schema_create = stripslashes($schema_create);
-    $schema_create .= " ENGINE=MyISAM DEFAULT CHARSET=" . Config::get('database.default.charset') .";";
+    $schema_create .= " ENGINE=MyISAM DEFAULT CHARSET=". Config::get('database.default.charset') .";";
 
     return $schema_create;
 }
@@ -154,7 +154,7 @@ function get_table_content(string $table): string|bool
                 $schema_insert .= " NULL";
             } else {
                 if ($row[$j] != "") {
-                    $schema_insert .= " '" . PrepareString($row[$j]) . "'";
+                    $schema_insert .= " '". PrepareString($row[$j]) . "'";
                 } else {
                     $schema_insert .= " ''";
                 }
@@ -193,19 +193,19 @@ function dbSave(): void
     $date_jour = date(adm_translate("dateforop"));
 
     $date_op = date("mdy");
-    $filename = $dbname . "-" . $date_op;
+    $filename = $dbname . "-". $date_op;
 
     $tables = DB::list_tables();
 
     if ($tables == 0) {
-        echo "&nbsp;" . adm_translate("Aucune table n'a été trouvée") . "\n";
+        echo "&nbsp;". adm_translate("Aucune table n'a été trouvée") . "\n";
     } else {
         $heure_jour = date("H:i");
         
         $data = "# ========================================================$crlf"
             . "# $crlf"
-            . "# " . adm_translate("Sauvegarde de la base de données") . " : " . $dbname . " $crlf"
-            . "# " . adm_translate("Effectuée le") . " " . $date_jour . " : " . $heure_jour . " " . adm_translate("par") . " " . $aid . " $crlf"
+            . "# ". adm_translate("Sauvegarde de la base de données") . " : ". $dbname . " $crlf"
+            . "# ". adm_translate("Effectuée le") . " ". $date_jour . " : ". $heure_jour . " ". adm_translate("par") . " ". $aid . " $crlf"
             . "# $crlf"
             . "# ========================================================$crlf";
 
@@ -214,13 +214,13 @@ function dbSave(): void
             $data .= "$crlf"
                 . "# --------------------------------------------------------$crlf"
                 . "# $crlf"
-                . "# " . adm_translate("Structure de la table") . " '" . $table . "' $crlf"
+                . "# ". adm_translate("Structure de la table") . " '". $table . "' $crlf"
                 . "# $crlf$crlf";
 
             $data .= get_table_def($table)
                 . "$crlf$crlf"
                 . "# $crlf"
-                . "# " . adm_translate("Contenu de la table") . " '" . $table . "' $crlf"
+                . "# ". adm_translate("Contenu de la table") . " '". $table . "' $crlf"
                 . "# $crlf$crlf";
 
             $data .= get_table_content($table)
@@ -253,12 +253,12 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
 
     $date_op = date("ymd");
     
-    $filename = $dbname . "-" . $date_op;
+    $filename = $dbname . "-". $date_op;
 
     $tables = DB::list_tables();
 
     if ($tables == 0) {
-        echo "&nbsp;" . adm_translate("Aucune table n'a été trouvée") . "\n";
+        echo "&nbsp;". adm_translate("Aucune table n'a été trouvée") . "\n";
     } else {
         if ((!isset($repertoire)) or ($repertoire == "")) {
             $repertoire = ".";
@@ -274,8 +274,8 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
         $heure_jour = date("H:i");
         $data0 = "# ========================================================$crlf"
             . "# $crlf"
-            . "# Sauvegarde de la base de données : " . $dbname . " $crlf"
-            . "# Effectuée le " . $date_jour . " : " . $heure_jour . " par " . $aid . " $crlf"
+            . "# Sauvegarde de la base de données : ". $dbname . " $crlf"
+            . "# Effectuée le ". $date_jour . " : ". $heure_jour . " par ". $aid . " $crlf"
             . "# $crlf"
             . "# ========================================================$crlf";
         $data1 = "";
@@ -286,13 +286,13 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
             $data1 .= "$crlf"
                 . "# --------------------------------------------------------$crlf"
                 . "# $crlf"
-                . "# Structure de la table '" . $table . "' $crlf"
+                . "# Structure de la table '". $table . "' $crlf"
                 . "# $crlf$crlf";
 
             $data1 .= get_table_def($table)
                 . "$crlf$crlf"
                 . "# $crlf"
-                . "# Contenu de la table '" . $table . "' $crlf"
+                . "# Contenu de la table '". $table . "' $crlf"
                 . "# $crlf$crlf";
 
             DB::setFetchMode(PDO::FETCH_NUM);
@@ -307,7 +307,7 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
                         $schema_insert .= " NULL";
                     } else {
                         if ($row[$j] != '') {
-                            $schema_insert .= " '" . PrepareString($row[$j]) . "'";
+                            $schema_insert .= " '". PrepareString($row[$j]) . "'";
                         } else {
                             $schema_insert .= " ''";
                         }
@@ -324,7 +324,7 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
 
                 if ($linebyline == 1) {
                     if (strlen($data1) > ($savemysql_size*1024)) {
-                        send_tofile($data0 . $data1, $repertoire, $filename . "-" . sprintf("%03d", $ifile), "sql", $MSos);
+                        send_tofile($data0 . $data1, $repertoire, $filename . "-". sprintf("%03d", $ifile), "sql", $MSos);
                         $data1 = "";
                         $ifile++;
                     }
@@ -336,7 +336,7 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
 
             if ($linebyline == 0) {
                 if (strlen($data1) > ($savemysql_size * 1024)) {
-                    send_tofile($data0 . $data1, $repertoire, $filename . "-" . sprintf("%03d", $ifile), "sql", $MSos);
+                    send_tofile($data0 . $data1, $repertoire, $filename . "-". sprintf("%03d", $ifile), "sql", $MSos);
                     $data1 = "";
                     $ifile++;
                 }
@@ -344,7 +344,7 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
         }
 
         if (strlen($data1) > 0) {
-            send_tofile($data0 . $data1, $repertoire, $filename . "-" . sprintf("%03d", $ifile), "sql", $MSos);
+            send_tofile($data0 . $data1, $repertoire, $filename . "-". sprintf("%03d", $ifile), "sql", $MSos);
             $data1 = "";
             $ifile++;
         }
@@ -371,7 +371,7 @@ switch ($op) {
 
             echo "<script type=\"text/javascript\">
                     //<![CDATA[
-                    alert('" . html_entity_decode(adm_translate("Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs"), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
+                    alert('". html_entity_decode(adm_translate("Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs"), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
                     //]]>
                     </script>";
 
@@ -381,7 +381,7 @@ switch ($op) {
 
             echo "<script type=\"text/javascript\">
                     //<![CDATA[
-                    alert('" . html_entity_decode(adm_translate("Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs"), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
+                    alert('". html_entity_decode(adm_translate("Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs"), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
                     //]]>
                     </script>";
 
@@ -394,6 +394,6 @@ switch ($op) {
         break;
 
     default:
-        header("Location: index.php");
+        header('Location: '. site_url('index.php'));
         break;
 }

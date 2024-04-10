@@ -54,26 +54,27 @@ function topicsmanager(): void
     if ($result > 0) {
         echo '
         <hr />
-        <h3 class="my-3">' . adm_translate("Sujets actifs") . '<span class="badge bg-secondary float-end">' . sql_num_rows($result) . '</span></h3>';
+        <h3 class="my-3">'. adm_translate("Sujets actifs") .'<span class="badge bg-secondary float-end">'. sql_num_rows($result) .'</span></h3>';
         
         foreach($result as $topic) {
             echo '
-            <div class="card card-body mb-2" id="top_' . $topic['topicid'] . '">
+            <div class="card card-body mb-2" id="top_'. $topic['topicid'] .'">
                 <div class=" topi">
                     <div class="">';
 
             if (($topic['topicimage']) or ($topic['topicimage'] != '')) {
-                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topic['topicid'] . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . $topicimage . '" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topic['topicname'] . '" /></a>';
+                echo '<a href="'. site_url('admin.php?op=topicedit&amp;topicid='. $topic['topicid']) .'"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="'. Config::get('npds.tipath') . $topicimage .'" data-bs-toggle="tooltip" title="ID : '. $topicid .'" alt="'. $topic['topicname'] .'" /></a>';
             } else {
-                echo '<a href="admin.php?op=topicedit&amp;topicid=' . $topic['topicid'] . '"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="' . Config::get('npds.tipath') . 'topics.png" data-bs-toggle="tooltip" title="ID : ' . $topicid . '" alt="' . $topic['topicname'] . '" /></a>';
+                echo '<a href="'. site_url('admin.php?op=topicedit&amp;topicid='. $topic['topicid']) .'"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="'. Config::get('npds.tipath') .'topics.png" data-bs-toggle="tooltip" title="ID : '. $topicid .'" alt="'. $topic['topicname'] .'" /></a>';
             }
 
             echo '
                     </div>
                     <div class="">
-                        <h4 class="my-3"><a href="admin.php?op=topicedit&amp;topicid=' . $topic['topicid'] . '" ><i class="fa fa-edit me-1 align-middle"></i>' . language::aff_langue($topic['topicname']) . '</a></h4>
-                        <p>' . language::aff_langue($topic['topictext']) . '</p>
-                        <div id="shortcut-tools_' . $topic['topicid'] . '" class="n-shortcut-tools" style="display:none;"><a class="text-danger btn" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=0" ><i class="fas fa-trash fa-2x"></i></a></div>
+                        <h4 class="my-3"><a href="'. site_url('admin.php?op=topicedit&amp;topicid='. $topic['topicid']) .'" ><i class="fa fa-edit me-1 align-middle"></i>'. language::aff_langue($topic['topicname']) .'</a></h4>
+                        <p>'. language::aff_langue($topic['topictext']) .'</p>
+                        <div id="shortcut-tools_'. $topic['topicid'] .'" class="n-shortcut-tools" style="display:none;">
+                            <a class="text-danger btn" href="'. site_url('admin.php?op=topicdelete&amp;topicid='. $topicid .'&amp;ok=0') .'" ><i class="fas fa-trash fa-2x"></i></a></div>
                     </div>
                 </div>
             </div>';
@@ -89,42 +90,42 @@ function topicsmanager(): void
     }
 
     echo '
-    <h3 class="my-4">' . adm_translate("Ajouter un nouveau Sujet") . '</h3>
-    <form action="admin.php" method="post" id="topicmake">
+    <h3 class="my-4">'. adm_translate("Ajouter un nouveau Sujet") .'</h3>
+    <form action="'. site_url('admin.php') .'" method="post" id="topicmake">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topicname">' . adm_translate("Intitulé") . '</label>
+            <label class="col-form-label col-sm-4" for="topicname">'. adm_translate("Intitulé") .'</label>
             <div class="col-sm-8">
-                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="' . $topic['topicname'] . '" placeholder="' . adm_translate("cesiteestgénial") . '" required="required" />
-                <span class="help-block">' . adm_translate("(un simple nom sans espaces)") . ' - ' . adm_translate("max caractères") . ' : <span id="countcar_topicname"></span></span>
+                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="'. $topic['topicname'] .'" placeholder="'. adm_translate("cesiteestgénial") .'" required="required" />
+                <span class="help-block">'. adm_translate("(un simple nom sans espaces)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topicname"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topictext">' . adm_translate("Texte") . '</label>
+            <label class="col-form-label col-sm-4" for="topictext">'. adm_translate("Texte") .'</label>
             <div class="col-sm-8">
-                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="' . adm_translate("ce site est génial") . '" required="required" >' . $topictext . '</textarea>
-                <span class="help-block">' . adm_translate("(description ou nom complet du sujet)") . ' - ' . adm_translate("max caractères") . ' : <span id="countcar_topictext"></span></span>
+                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="'. adm_translate("ce site est génial") .'" required="required" >'. $topictext .'</textarea>
+                <span class="help-block">'. adm_translate("(description ou nom complet du sujet)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topictext"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topicimage">' . adm_translate("Image") . '</label>
+            <label class="col-form-label col-sm-4" for="topicimage">'. adm_translate("Image") .'</label>
             <div class="col-sm-8">
-                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topic['topicimage'] . '" placeholder="genial.png" />
-                <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . Config::get('npds.tipath') . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
+                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="'. $topic['topicimage'] .'" placeholder="genial.png" />
+                <span class="help-block">'. adm_translate("(nom de l'image + extension)") .' ('. Config::get('npds.tipath') .'). - '. adm_translate("max caractères") .' : <span id="countcar_topicimage"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topicadmin">' . adm_translate("Administrateur(s)") . '</label>
+            <label class="col-form-label col-sm-4" for="topicadmin">'. adm_translate("Administrateur(s)") .'</label>
             <div class="col-sm-8">
                 <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user-cog fa-lg"></i></span>
-                <input class="form-control" type="text" id="topicadmin" name="topicadmin" maxlength="255" value="' . $topicadmin . '" required="required" />
+                <input class="form-control" type="text" id="topicadmin" name="topicadmin" maxlength="255" value="'. $topicadmin .'" required="required" />
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
                 <input type="hidden" name="op" value="topicmake" />
-                <button class="btn btn-primary" type="submit" ><i class="fa fa-plus-square fa-lg me-2"></i>' . adm_translate("Ajouter un Sujet") . '</button>
+                <button class="btn btn-primary" type="submit" ><i class="fa fa-plus-square fa-lg me-2"></i>'. adm_translate("Ajouter un Sujet") .'</button>
             </div>
         </div>
     </form>';
@@ -172,7 +173,7 @@ function topicsmanager(): void
         validators: {
             regexp: {
                 regexp: /^\w+$/i,
-                message: "' . adm_translate("Doit être un mot sans espace.") . '"
+                message: "'. adm_translate("Doit être un mot sans espace.") .'"
             }
         }
     },
@@ -181,7 +182,7 @@ function topicsmanager(): void
         validators: {
             regexp: {
                 regexp: /^[\w]+\\.(jpg|jpeg|png|gif)$/,
-                message: "' . adm_translate("Doit être un nom de fichier valide avec une de ces extensions : jpg, jpeg, png, gif.") . '"
+                message: "'. adm_translate("Doit être un nom de fichier valide avec une de ces extensions : jpg, jpeg, png, gif.") .'"
             }
         }
     },';
@@ -218,76 +219,76 @@ function topicedit(int $topicid): void
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Editer le Sujet :") . ' <span class="text-muted">' . language::aff_langue($topic['topicname']) . '</span></h3>';
+    <h3 class="mb-3">'. adm_translate("Editer le Sujet :") .' <span class="text-muted">'. language::aff_langue($topic['topicname']) .'</span></h3>';
 
     if ($topic['topicimage'] != '') {
         echo '
-    <div class="card card-body my-4 py-3"><img class="img-fluid mx-auto d-block" src="' . Config::get('npds.tipath') . $topic['topicimage'] . '" alt="image-sujet" /></div>';
+    <div class="card card-body my-4 py-3"><img class="img-fluid mx-auto d-block" src="'. Config::get('npds.tipath') . $topic['topicimage'] .'" alt="image-sujet" /></div>';
     }
 
     echo '
-    <form action="admin.php" method="post" id="topicchange">
+    <form action="'. site_url('admin.php') .'" method="post" id="topicchange">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topicname">' . adm_translate("Intitulé") . '</label>
+                <label class="col-form-label col-sm-4" for="topicname">'. adm_translate("Intitulé") .'</label>
                 <div class="col-sm-8">
-                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="' . $topic['topicname'] . '" placeholder="' . adm_translate("cesiteestgénial") . '" required="required" />
-                <span class="help-block">' . adm_translate("(un simple nom sans espaces)") . ' - ' . adm_translate("max caractères") . ' : <span id="countcar_topicname"></span></span>
+                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="'. $topic['topicname'] .'" placeholder="'. adm_translate("cesiteestgénial") .'" required="required" />
+                <span class="help-block">'. adm_translate("(un simple nom sans espaces)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topicname"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topictext">' . adm_translate("Texte") . '</label>
+                <label class="col-form-label col-sm-4" for="topictext">'. adm_translate("Texte") .'</label>
                 <div class="col-sm-8">
-                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="' . adm_translate("ce site est génial") . '" required="required">' . $topic['topictext'] . '</textarea>
-                <span class="help-block">' . adm_translate("(description ou nom complet du sujet)") . ' - ' . adm_translate("max caractères") . ' : <span id="countcar_topictext"></span></span>
+                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="'. adm_translate("ce site est génial") .'" required="required">'. $topic['topictext'] .'</textarea>
+                <span class="help-block">'. adm_translate("(description ou nom complet du sujet)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topictext"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topicimage">' . adm_translate("Image") . '</label>
+                <label class="col-form-label col-sm-4" for="topicimage">'. adm_translate("Image") .'</label>
                 <div class="col-sm-8">
-                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="' . $topic['topicimage'] . '" placeholder="genial.png" />
-                <span class="help-block">' . adm_translate("(nom de l'image + extension)") . ' (' . Config::get('npds.tipath') . '). - ' . adm_translate("max caractères") . ' : <span id="countcar_topicimage"></span></span>
+                <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="'. $topic['topicimage'] .'" placeholder="genial.png" />
+                <span class="help-block">'. adm_translate("(nom de l'image + extension)") .' ('. Config::get('npds.tipath') .'). - '. adm_translate("max caractères") .' : <span id="countcar_topicimage"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topicadmin">' . adm_translate("Administrateur(s) du sujet") . '</label>
+                <label class="col-form-label col-sm-4" for="topicadmin">'. adm_translate("Administrateur(s) du sujet") .'</label>
                 <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-user-cog fa-lg"></i></span>
-                    <input class="form-control" type="text" id="topicadmin" name="topicadmin" maxlength="255" value="' . $topic['topicadmin'] . '" />
+                    <input class="form-control" type="text" id="topicadmin" name="topicadmin" maxlength="255" value="'. $topic['topicadmin'] .'" />
                 </div>
                 </div>
             </div>
         </fieldset>
         <fieldset>
         <hr />
-        <h4 class="my-3">' . adm_translate("Ajouter des Liens relatifs au Sujet") . '</h4>
+        <h4 class="my-3">'. adm_translate("Ajouter des Liens relatifs au Sujet") .'</h4>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="name">' . adm_translate("Nom du site") . '</label>
+            <label class="col-form-label col-sm-4" for="name">'. adm_translate("Nom du site") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="name" id="name" maxlength="30" />
-                <span class="help-block">' . adm_translate("max caractères") . ' : <span id="countcar_name"></span></span>
+                <span class="help-block">'. adm_translate("max caractères") .' : <span id="countcar_name"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="url">' . adm_translate("URL") . '</label>
+            <label class="col-form-label col-sm-4" for="url">'. adm_translate("URL") .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="url" name="url" id="url" maxlength="320" placeholder="http://www.valideurl.org" />
-                <span class="help-block">' . adm_translate("max caractères") . ' : <span id="countcar_url"></span></span>
+                <span class="help-block">'. adm_translate("max caractères") .' : <span id="countcar_url"></span></span>
             </div>
         </div>
         </fieldset>
         <div class="mb-3 row">
-            <input type="hidden" name="'.$topic['topicid'].'" value="' . $topic['topicid'] . '" />
+            <input type="hidden" name="'.$topic['topicid'].'" value="'. $topic['topicid'] .'" />
             <input type="hidden" name="op" value="topicchange" />
             <div class="col-sm-8 ms-sm-auto">
-                <button class="btn btn-primary" type="submit">' . adm_translate("Sauver les modifications") . '</button>
-                <button class="btn btn-secondary" onclick="javascript:document.location.href=\'admin.php?op=topicsmanager\'">' . adm_translate("Retour en arrière") . '</button>
+                <button class="btn btn-primary" type="submit">'. adm_translate("Sauver les modifications") .'</button>
+                <button class="btn btn-secondary" onclick="javascript:document.location.href=\''. site_url('admin.php?op=topicsmanager') .'\'">'. adm_translate("Retour en arrière") .'</button>
             </div>
         </div>
     </form>';
     /*
-    <form id="fad_deltop" action="admin.php" method="post">
+    <form id="fad_deltop" action="'. site_url('admin.php') .'" method="post">
         <input type="hidden" name="topic['topicid']" value="'.$topic['topicid'].'" />
         <input type="hidden" name="op" value="topicdelete" />
     </form>
@@ -296,16 +297,16 @@ function topicedit(int $topicid): void
 
     echo '
         <hr />
-        <h3 class="my-2">' . adm_translate("Gérer les Liens Relatifs : ") . ' <span class="text-muted">' . language::aff_langue($topic['topicname']) . '</span></h3>';
+        <h3 class="my-2">'. adm_translate("Gérer les Liens Relatifs : ") .' <span class="text-muted">'. language::aff_langue($topic['topicname']) .'</span></h3>';
 
     $r_related = DB::table('related')->select('rid', 'name', 'url')->where('tid', $topic['topicid'])->first();
 
     echo '
     <table id="tad_linkrel" data-toggle="table" data-striped="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
-            <th data-sortable="true" data-halign="center">' . adm_translate('Nom') . '</th>
-            <th data-sortable="true" data-halign="center">' . adm_translate('Url') . '</th>
-            <th class="n-t-col-xs-2" data-halign="center" data-align="right">' . adm_translate('Fonctions') . '</th>
+            <th data-sortable="true" data-halign="center">'. adm_translate('Nom') .'</th>
+            <th data-sortable="true" data-halign="center">'. adm_translate('Url') .'</th>
+            <th class="n-t-col-xs-2" data-halign="center" data-align="right">'. adm_translate('Fonctions') .'</th>
         </thead>
         <tbody>';
 
@@ -313,12 +314,12 @@ function topicedit(int $topicid): void
     foreach ($r_relatad as $related)
         echo '
                 <tr>
-                    <td>' . $related['name'] . '</td>
-                    <td><a href="' . $related['url'] . '" target="_blank">' . $related['url'] . '</a></td>
+                    <td>'. $related['name'] .'</td>
+                    <td><a href="'. $related['url'] .'" target="_blank">'. $related['url'] .'</a></td>
                     <td>
-                    <a href="admin.php?op=relatededit&amp;tid=' . $topic['topicid'] . '&amp;rid=' . $related['rid'] . '" ><i class="fas fa-edit fa-lg" data-bs-toggle="tooltip" title="' . adm_translate("Editer") . '"></i></a>&nbsp;
-                    <a href="' . $related['url'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>&nbsp;
-                    <a href="admin.php?op=relateddelete&amp;tid=' . $topic['topicid'] . '&amp;rid=' . $related['rid'] . '" ><i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="' . adm_translate("Effacer") . '"></i></a>
+                    <a href="'. site_url('admin.php?op=relatededit&amp;tid='. $topic['topicid'] .'&amp;rid='. $related['rid']) .'" ><i class="fas fa-edit fa-lg" data-bs-toggle="tooltip" title="'. adm_translate("Editer") .'"></i></a>&nbsp;
+                    <a href="'. $related['url'] .'" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>&nbsp;
+                    <a href="'. site_url('admin.php?op=relateddelete&amp;tid='. $topic['topicid'] .'&amp;rid='. $related['rid']) .'" ><i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="'. adm_translate("Effacer") .'"></i></a>
                     </td>
                 </tr>';
     }
@@ -401,44 +402,44 @@ function relatededit(int $tid, int $rid): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Sujet : ") . ' ' . $topic['topictext'] . '</h3>
-    <h4>' . adm_translate("Editer les Liens Relatifs") . '</h4>';
+    <h3>'. adm_translate("Sujet : ") .' '. $topic['topictext'] .'</h3>
+    <h4>'. adm_translate("Editer les Liens Relatifs") .'</h4>';
 
     if ($topic['topicimage'] != "") {  
         echo '
     <div class="thumbnail">
-        <img class="img-fluid " src="' . Config::get('npds.tipath') . $topic['topicimage'] . '" alt="' . $topic['topictext'] . '" />
+        <img class="img-fluid " src="'. Config::get('npds.tipath') . $topic['topicimage'] .'" alt="'. $topic['topictext'] .'" />
     </div>';
     }
 
     echo '
-    <form class="form-horizontal" action="admin.php" method="post" id="editrelatedlink">
+    <form class="form-horizontal" action="'. site_url('admin.php') .'" method="post" id="editrelatedlink">
         <fieldset>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="name">' . adm_translate("Nom du site") . '</label>
+            <label class="col-form-label col-sm-4" for="name">'. adm_translate("Nom du site") .'</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" name="name" id="name" value="' . $related['name'] . '" maxlength="30" required="required" />
+                <input type="text" class="form-control" name="name" id="name" value="'. $related['name'] .'" maxlength="30" required="required" />
                 <span class="help-block text-end"><span id="countcar_name"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="url">' . adm_translate("URL") . '</label>
+            <label class="col-form-label col-sm-4" for="url">'. adm_translate("URL") .'</label>
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-text">
-                        <a href="' . $related['url'] . '" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>
+                        <a href="'. $related['url'] .'" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>
                     </span>
-                    <input type="url" class="form-control" name="url" id="url" value="' . $related['url'] . '" maxlength="320" />
+                    <input type="url" class="form-control" name="url" id="url" value="'. $related['url'] .'" maxlength="320" />
                 </div>
                 <span class="help-block text-end"><span id="countcar_url"></span></span>
                 </div>
                 <input type="hidden" name="op" value="relatedsave" />
-                <input type="hidden" name="tid" value="' . $tid . '" />
-                <input type="hidden" name="rid" value="' . $rid . '" />
+                <input type="hidden" name="tid" value="'. $tid .'" />
+                <input type="hidden" name="rid" value="'. $rid .'" />
             </fieldset>
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
-                <button class="btn btn-primary col-12" type="submit">' . adm_translate("Sauver les modifications") . '</button>
+                <button class="btn btn-primary col-12" type="submit">'. adm_translate("Sauver les modifications") .'</button>
             </div>
         </div>
     </form>';
@@ -468,7 +469,7 @@ function relatedsave(int $tid, int $rid, string $name, string $url): void
         'url'       => $url,
     ));
 
-    Header("Location: admin.php?op=topicedit&topicid=$tid");
+    Header('Location: '. site_url('admin.php?op=topicedit&topicid='. $tid));
 }
 
 /**
@@ -483,7 +484,7 @@ function relateddelete(int $tid, int $rid): void
 {
     DB::table('related')->where('rid', $rid)->delete();
 
-    Header("Location: admin.php?op=topicedit&topicid=$tid");
+    Header('Location: '. site_url('admin.php?op=topicedit&topicid='. $tid));
 }
 
 /**
@@ -503,7 +504,7 @@ function topicmake(string $topicname, string $topicimage, string $topictext, str
     $istopicname = DB::table('topics')->select('*')->where('topicname', $topicname)->first();
 
     if ($istopicname !== 0) {
-        Header("Location: admin.php?op=topicsmanager&nook=nook#addtopic");
+        Header('Location: '. site_url('admin.php?op=topicsmanager&nook=nook#addtopic'));
         die();
     }
 
@@ -539,7 +540,7 @@ function topicmake(string $topicname, string $topicimage, string $topictext, str
         }
     }
 
-    Header("Location: admin.php?op=topicsmanager#addtopic");
+    Header('Location: '. site_url('admin.php?op=topicsmanager#addtopic'));
 }
 
 /**
@@ -619,7 +620,7 @@ function topicchange(int $topicid, string $topicname, string $topicimage, string
         ));
     }
 
-    Header("Location: admin.php?op=topicedit&topicid=$topicid");
+    Header('Location: '. site_url('admin.php?op=topicedit&topicid='. $topicid));
 }
 
 /**
@@ -659,7 +660,7 @@ function topicdelete(int $topicid, int $ok = 0): void
             logs::Ecr_Log("security", "topicDelete (comments, $topicid) by AID : $aid", "");
         }
 
-        Header("Location: admin.php?op=topicsmanager");
+        Header('Location: '. site_url('admin.php?op=topicsmanager'));
     } else {
         global $f_meta_nom, $f_titre;
 
@@ -670,20 +671,20 @@ function topicdelete(int $topicid, int $ok = 0): void
 
         $topic = DB::table('topics')->select('topicimage', 'topicname', 'topictext')->where('topicid', $topicid)->first();
 
-        echo '<h3 class=""><span class="text-danger">' . adm_translate("Effacer le Sujet") . ' : </span>' . language::aff_langue($topicname) . '</h3>';
+        echo '<h3 class=""><span class="text-danger">'. adm_translate("Effacer le Sujet") .' : </span>'. language::aff_langue($topicname) .'</h3>';
         echo '<div class="alert alert-danger lead" role="alert">';
 
         if ($topic['topicimage'] != "") {
             echo '
             <div class="thumbnail">
-                <img class="img-fluid" src="' . Config::get('npds.tipath') . $topic['topicimage'] . '" alt="logo-topic" />
+                <img class="img-fluid" src="'. Config::get('npds.tipath') . $topic['topicimage'] .'" alt="logo-topic" />
             </div>';
         }
 
         echo '
-            <p>' . adm_translate("Etes-vous sûr de vouloir effacer ce sujet ?") . ' : ' . $topic['topicname'] . '</p>
-            <p>' . adm_translate("Ceci effacera tous ses articles et ses commentaires !") . '</p>
-            <p><a class="btn btn-danger" href="admin.php?op=topicdelete&amp;topicid=' . $topicid . '&amp;ok=1">' . adm_translate("Oui") . '</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">' . adm_translate("Non") . '</a></p>
+            <p>'. adm_translate("Etes-vous sûr de vouloir effacer ce sujet ?") .' : '. $topic['topicname'] .'</p>
+            <p>'. adm_translate("Ceci effacera tous ses articles et ses commentaires !") .'</p>
+            <p><a class="btn btn-danger" href="'. site_url('admin.php?op=topicdelete&amp;topicid='. $topicid .'&amp;ok=1') .'">'. adm_translate("Oui") .'</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">'. adm_translate("Non") .'</a></p>
         </div>';
 
         css::adminfoot('', '', '', '');

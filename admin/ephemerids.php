@@ -46,8 +46,8 @@ function Ephemerids(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">' . adm_translate("Ajouter un éphéméride") . '</h3>
-    <form action="admin.php" method="post">
+    <h3 class="mb-3">'. adm_translate("Ajouter un éphéméride") .'</h3>
+    <form action="'. site_url('admin.php') .'" method="post">
         <div class="row g-3 mb-3">
             <div class="col-sm-4">
                 <div class="form-floating">
@@ -55,13 +55,13 @@ function Ephemerids(): void
 
     $nday = '1';
     while ($nday <= 31) {
-        echo '<option name="did">' . $nday . '</option>';
+        echo '<option name="did">'. $nday .'</option>';
         $nday++;
     }
 
     echo '
                 </select>
-                <label for="did">' . adm_translate("Jour") . '</label>
+                <label for="did">'. adm_translate("Jour") .'</label>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -70,32 +70,32 @@ function Ephemerids(): void
 
     $nmonth = "1";                
     while ($nmonth <= 12) {
-        echo '<option name="mid">' . $nmonth . '</option>';
+        echo '<option name="mid">'. $nmonth .'</option>';
         $nmonth++;
     }
 
     echo '
                 </select>
-                <label for="mid">' . adm_translate("Mois") . '</label>
+                <label for="mid">'. adm_translate("Mois") .'</label>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-floating">
                 <input class="form-control" type="number" id="yid" name="yid" maxlength="4" size="5" />
-                <label for="yid">' . adm_translate("Année") . '</label>
+                <label for="yid">'. adm_translate("Année") .'</label>
                 </div>
             </div>
         </div>
         <div class="form-floating mb-3">
             <textarea name="content" class="form-control" style="height:120px;"></textarea>
-            <label for="content">' . adm_translate("Description de l'éphéméride") . '</label>
+            <label for="content">'. adm_translate("Description de l'éphéméride") .'</label>
         </div>
-        <button class="btn btn-primary" type="submit">' . adm_translate("Envoyer") . '</button>
+        <button class="btn btn-primary" type="submit">'. adm_translate("Envoyer") .'</button>
         <input type="hidden" name="op" value="Ephemeridsadd" />
     </form>
     <hr />
-    <h3 class="mb-3">' . adm_translate("Maintenance des Ephémérides (Editer/Effacer)") . '</h3>
-    <form action="admin.php" method="post">
+    <h3 class="mb-3">'. adm_translate("Maintenance des Ephémérides (Editer/Effacer)") .'</h3>
+    <form action="'. site_url('admin.php') .'" method="post">
         <div class="row g-3">
             <div class="col-4">
                 <div class="form-floating mb-3">
@@ -103,13 +103,13 @@ function Ephemerids(): void
 
     $nday = "1";                
     while ($nday <= 31) {
-        echo '<option name="did">' . $nday . '</option>';
+        echo '<option name="did">'. $nday .'</option>';
         $nday++;
     }
 
     echo '
                 </select>
-                <label for="did">' . adm_translate("Jour") . '</label>
+                <label for="did">'. adm_translate("Jour") .'</label>
                 </div>
             </div>
             <div class="col-4">
@@ -118,18 +118,18 @@ function Ephemerids(): void
 
     $nmonth = "1";
     while ($nmonth <= 12) {
-        echo '<option name="mid">' . $nmonth . '</option>';
+        echo '<option name="mid">'. $nmonth .'</option>';
         $nmonth++;
     }
 
     echo '
                 </select>
-                <label for="mid">' . adm_translate("Mois") . '</label>
+                <label for="mid">'. adm_translate("Mois") .'</label>
                 </div>
             </div>
         </div>
         <input type="hidden" name="op" value="Ephemeridsmaintenance" />
-        <button class="btn btn-primary" type="submit">' . adm_translate("Editer") . '</button>
+        <button class="btn btn-primary" type="submit">'. adm_translate("Editer") .'</button>
     </form>';
 
     css::adminfoot('', '', '', '');
@@ -154,7 +154,7 @@ function Ephemeridsadd(int $did, int $mid, int $yid, string $content): void
         'content '  => stripslashes(str::FixQuotes($content) . ""),
     ));
 
-    Header("Location: admin.php?op=Ephemerids");
+    Header('Location: '. site_url('admin.php?op=Ephemerids'));
 }
 
 /**
@@ -177,7 +177,7 @@ function Ephemeridsmaintenance(int $did, int $mid): void
                     ->get();
 
     if (!$resultX) {
-        header("location: admin.php?op=Ephemerids");
+        header('location: '. site_url('admin.php?op=Ephemerids'));
     }
 
     include("themes/default/header.php");
@@ -187,18 +187,18 @@ function Ephemeridsmaintenance(int $did, int $mid): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Maintenance des Ephémérides") . '</h3>
+    <h3>'. adm_translate("Maintenance des Ephémérides") .'</h3>
     <table data-toggle="table" data-striped="true" data-mobile-responsive="true" data-search="true" data-show-toggle="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
                 <th class="n-t-col-xs-2" data-sortable="true" data-halign="center" data-align="right" >
-                    ' . adm_translate('Année') . '
+                    '. adm_translate('Année') .'
                 </th>
                 <th data-halign="center" >
-                    ' . adm_translate('Description') . '
+                    '. adm_translate('Description') .'
                 </th>
                 <th class="n-t-col-xs-2" data-halign="center" data-align="center" >
-                    ' . adm_translate('Fonctions') . '
+                    '. adm_translate('Fonctions') .'
                 </th>
             </tr>
         </thead>
@@ -208,16 +208,16 @@ function Ephemeridsmaintenance(int $did, int $mid): void
         echo '
             <tr>
                 <td>
-                    ' . $ephem['yid'] . '
+                    '. $ephem['yid'] .'
                 </td>
                 <td>
-                    ' . language::aff_langue($ephem['content']) . '
+                    '. language::aff_langue($ephem['content']) .'
                 </td>
                 <td>
-                    <a href="admin.php?op=Ephemeridsedit&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" >
+                    <a href="'. site_url('admin.php?op=Ephemeridsedit&amp;eid='. $ephem['eid'] .'&amp;did='. $ephem['did'] .'&amp;mid='. $ephem['mid']) .'" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" >
                         <i class="fa fa-edit fa-lg me-2"></i>
                     </a>&nbsp;
-                    <a href="admin.php?op=Ephemeridsdel&amp;eid=' . $ephem['eid'] . '&amp;did=' . $ephem['did'] . '&amp;mid=' . $ephem['mid'] . '" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip">
+                    <a href="'. site_url('admin.php?op=Ephemeridsdel&amp;eid='. $ephem['eid'] .'&amp;did='. $ephem['did'] .'&amp;mid='. $ephem['mid']) .'" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip">
                         <i class="fas fa-trash fa-lg text-danger"></i>
                     </a>
             </tr>';
@@ -243,7 +243,7 @@ function Ephemeridsdel(int $eid, int $did, int $mid): void
 {
     DB::table('ephem')->where('eid', $eid)->delete();
 
-    Header("Location: admin.php?op=Ephemeridsmaintenance&did=$did&mid=$mid");
+    Header('Location: '. site_url('admin.php?op=Ephemeridsmaintenance&did='. $did .'&mid='. $mid));
 }
 
 /**
@@ -268,21 +268,21 @@ function Ephemeridsedit(int $eid, int $did, int $mid): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Editer éphéméride") . '</h3>
-    <form action="admin.php" method="post">
+    <h3>'. adm_translate("Editer éphéméride") .'</h3>
+    <form action="'. site_url('admin.php') .'" method="post">
         <div class="form-floating mb-3">
-            <input class="form-control" type="number" name="yid" value="' . $ephem['yid'] . '" max="2500" />
-            <label for="yid">' . adm_translate("Année") . '</label>
+            <input class="form-control" type="number" name="yid" value="'. $ephem['yid'] .'" max="2500" />
+            <label for="yid">'. adm_translate("Année") .'</label>
         </div>
         <div class="form-floating mb-3">
-            <textarea name="content" id="content" class="form-control" style="height:120px;">' . $ephem['content'] . '</textarea>
-            <label for="content">' . adm_translate("Description de l'éphéméride") . '</label>
+            <textarea name="content" id="content" class="form-control" style="height:120px;">'. $ephem['content'] .'</textarea>
+            <label for="content">'. adm_translate("Description de l'éphéméride") .'</label>
         </div>
-        <input type="hidden" name="did" value="' . $did . '" />
-        <input type="hidden" name="mid" value="' . $mid . '" />
-        <input type="hidden" name="eid" value="' . $eid . '" />
+        <input type="hidden" name="did" value="'. $did .'" />
+        <input type="hidden" name="mid" value="'. $mid .'" />
+        <input type="hidden" name="eid" value="'. $eid .'" />
         <input type="hidden" name="op" value="Ephemeridschange" />
-        <button class="btn btn-primary" type="submit">' . adm_translate("Envoyer") . '</button>
+        <button class="btn btn-primary" type="submit">'. adm_translate("Envoyer") .'</button>
     </form>';
 
     css::adminfoot('', '', '', '');
@@ -306,7 +306,7 @@ function Ephemeridschange(int $eid, int $did, int $mid, int $yid, string $conten
         'content'   => stripslashes(str::FixQuotes($content) . ""),
     ));
 
-    Header("Location: admin.php?op=Ephemeridsmaintenance&did=$did&mid=$mid");
+    Header('Location: '. site_url('admin.php?op=Ephemeridsmaintenance&did='. $did .'&mid='. $mid));
 }
 
 switch ($op) {

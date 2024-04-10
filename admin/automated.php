@@ -51,23 +51,23 @@ $hlpfile = "manuels/$language/automated.html";
 function puthome(int $ihome): void
 {
     echo '<div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="ihome">' . adm_translate("Publier dans la racine ?") . '</label>
+            <label class="col-sm-4 col-form-label" for="ihome">'. adm_translate("Publier dans la racine ?") .'</label>
             <div class="col-sm-8 my-2">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="ihome" name="ihome" value="0" ' . (($ihome == 0) ? 'checked="checked"' : '') . ' />
-                    <label class="form-check-label" for="ihome">' . adm_translate("Oui") . '</label>
+                    <input class="form-check-input" type="radio" id="ihome" name="ihome" value="0" '. (($ihome == 0) ? 'checked="checked"' : '') .' />
+                    <label class="form-check-label" for="ihome">'. adm_translate("Oui") .'</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="ihome1" name="ihome" value="1" ' . (($ihome == 1) ? 'checked="checked"' : '') . ' />
-                    <label class="form-check-label" for="ihome1">' . adm_translate("Non") . '</label>
+                    <input class="form-check-input" type="radio" id="ihome1" name="ihome" value="1" '. (($ihome == 1) ? 'checked="checked"' : '') .' />
+                    <label class="form-check-label" for="ihome1">'. adm_translate("Non") .'</label>
                 </div>
                 <p class="help-block">
-                    ' . adm_translate("Ne s'applique que si la catégorie : 'Articles' n'est pas sélectionnée.") . '
+                    '. adm_translate("Ne s'applique que si la catégorie : 'Articles' n'est pas sélectionnée.") .'
                 </p>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="members">' . adm_translate("Seulement aux membres") . ', ' . adm_translate("Groupe") . '.</label>
+            <label class="col-sm-4 col-form-label" for="members">'. adm_translate("Seulement aux membres") .', '. adm_translate("Groupe") .'.</label>
             <div class="col-sm-8 my-2">
                 <div class="form-check form-check-inline">';
 
@@ -85,12 +85,12 @@ function puthome(int $ihome): void
     }
 
     echo '
-                <input class="form-check-input" type="radio" id="members" name="members" value="1" ' . $sel1 . ' />
-                <label class="form-check-label" for="members">' . adm_translate("Oui") . '</label>
+                <input class="form-check-input" type="radio" id="members" name="members" value="1" '. $sel1 .' />
+                <label class="form-check-label" for="members">'. adm_translate("Oui") .'</label>
                 </div>
                 <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="members1" name="members" value="0" ' . $sel2 . ' />
-                <label class="form-check-label" for="members1">' . adm_translate("Non") . '</label>
+                <input class="form-check-input" type="radio" id="members1" name="members" value="0" '. $sel2 .' />
+                <label class="form-check-label" for="members1">'. adm_translate("Non") .'</label>
                 </div>
             </div>
         </div>';
@@ -104,14 +104,14 @@ function puthome(int $ihome): void
             $groupe_id = '';
         }
 
-        $tmp_groupe .= '<option value="' . $groupe_id . '" ' . (($Mmembers == $groupe_id) ? 'selected="selected"' : '') . '>' . $groupe_name . '</option>';
+        $tmp_groupe .= '<option value="'. $groupe_id .'" '. (($Mmembers == $groupe_id) ? 'selected="selected"' : '') .'>'. $groupe_name .'</option>';
     }
 
     echo '
         <div class="mb-3 row" id="choixgroupe">
-            <label class="col-sm-4 col-form-label" for="Mmembers">' . adm_translate("Groupe") . '</label>
+            <label class="col-sm-4 col-form-label" for="Mmembers">'. adm_translate("Groupe") .'</label>
             <div class="col-sm-8">
-                <select class="form-select" id="Mmembers" name="Mmembers">' . $tmp_groupe . '</select>
+                <select class="form-select" id="Mmembers" name="Mmembers">'. $tmp_groupe .'</select>
             </div>
         </div>';
 }
@@ -127,27 +127,27 @@ function SelectCategory(int $cat): void
 {
     echo ' 
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="catid">' . adm_translate("Catégorie") . '</label>
+            <label class="col-sm-4 col-form-label" for="catid">'. adm_translate("Catégorie") .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="catid" name="catid">
-                    <option name="catid" value="0" ' . (($cat == 0) ? 'selected="selected"' : '') . '>' . adm_translate("Articles") . '</option>';
+                    <option name="catid" value="0" '. (($cat == 0) ? 'selected="selected"' : '') .'>'. adm_translate("Articles") .'</option>';
     
     $storie_categorie = DB::table('stories_cat')->select('catid', 'title')->get();
 
     foreach ($storie_categorie as $categorie) {
 
-        echo '<option name="catid" value="' . $categorie['catid'] . '" ' . (($categorie['catid'] == $cat) ? 'selected' : '') . '>' . language::aff_langue($categorie['title']) . '</option>';
+        echo '<option name="catid" value="'. $categorie['catid'] .'" '. (($categorie['catid'] == $cat) ? 'selected' : '') .'>'. language::aff_langue($categorie['title']) .'</option>';
     }
 
     echo '
                 </select>
                 <p class="help-block text-end">
-                    <a href="admin.php?op=AddCategory" class="btn btn-outline-primary btn-sm" title="' . adm_translate("Ajouter") . '" data-bs-toggle="tooltip" >
+                    <a href="'. site_url('admin.php?op=AddCategory') .'" class="btn btn-outline-primary btn-sm" title="'. adm_translate("Ajouter") .'" data-bs-toggle="tooltip" >
                         <i class="fa fa-plus-square fa-lg"></i>
                     </a>&nbsp;
-                    <a class="btn btn-outline-primary btn-sm" href="admin.php?op=EditCategory" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip" >
+                    <a class="btn btn-outline-primary btn-sm" href="'. site_url('admin.php?op=EditCategory') .'" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" >
                         <i class="fa fa-edit fa-lg"></i>
-                    </a>&nbsp;<a class="btn btn-outline-danger btn-sm" href="admin.php?op=DelCategory" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip">
+                    </a>&nbsp;<a class="btn btn-outline-danger btn-sm" href="'. site_url('admin.php?op=DelCategory') .'" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip">
                         <i class="fas fa-trash fa-lg"></i>
                     </a>
                 </p>
@@ -171,18 +171,18 @@ function autoStory(): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Liste des articles") . '</h3>
+    <h3>'. adm_translate("Liste des articles") .'</h3>
     <table id="tab_adm" data-toggle="table" data-striped="true" data-show-toggle="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
                 <th class="n-t-col-xs-6" data-sortable="true" data-halign="center">
-                    ' . adm_translate('Titre') . '
+                    '. adm_translate('Titre') .'
                 </th>
                 <th class="n-t-col-xs-4 small" data-sortable="true" data-align="center" data-align="right">
-                    ' . adm_translate('Date prévue de publication') . '
+                    '. adm_translate('Date prévue de publication') .'
                 </th>
                 <th class="n-t-col-xs-2" data-align="center">
-                    ' . adm_translate('Fonctions') . '
+                    '. adm_translate('Fonctions') .'
                 </th>
             </tr>
         </thead>
@@ -216,17 +216,17 @@ function autoStory(): void
                 echo '
                 <tr>
                     <td>
-                        <a href="admin.php?op=autoEdit&amp;anid=' . $news['anid'] . '">' . language::aff_langue($news['title']) . '</a>
+                        <a href="'. site_url('admin.php?op=autoEdit&amp;anid=' . $news['anid']) .'">'. language::aff_langue($news['title']) .'</a>
                     </td>
                     <td>
-                        ' . date::formatTimestamp($news['date_debval']) . '
+                        '. date::formatTimestamp($news['date_debval']) .'
                     </td>
                     <td>
-                        <a href="admin.php?op=autoEdit&amp;anid=' . $news['anid'] . '">
-                            <i class="fa fa-edit fa-lg me-2" title="' . adm_translate("Afficher l'article") . '" data-bs-toggle="tooltip"></i>
+                        <a href="'. site_url('admin.php?op=autoEdit&amp;anid=' . $news['anid']) .'">
+                            <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Afficher l'article") .'" data-bs-toggle="tooltip"></i>
                         </a>
-                        <a href="admin.php?op=autoDelete&amp;anid=' . $news['anid'] . '">&nbsp;
-                            <i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer l'Article") . '" data-bs-toggle="tooltip" ></i>
+                        <a href="'. site_url('admin.php?op=autoDelete&amp;anid=' . $news['anid']) .'">&nbsp;
+                            <i class="fas fa-trash fa-lg text-danger" title="'. adm_translate("Effacer l'Article") .'" data-bs-toggle="tooltip" ></i>
                         </a>
                     </td>
                 </tr>';
@@ -234,10 +234,10 @@ function autoStory(): void
                 echo '
                 <tr>
                     <td>
-                        <i>' . language::aff_langue($news['title']) . '</i>
+                        <i>'. language::aff_langue($news['title']) .'</i>
                     </td>
                     <td>
-                        ' . date::formatTimestamp($news['date_debval']) . '
+                        '. date::formatTimestamp($news['date_debval']) .'
                     </td>
                     <td>
                         &nbsp;
@@ -265,7 +265,7 @@ function autoDelete(int $anid): void
 {
     DB::table('autonews')->where('anid', $anid)->delete();
 
-    Header("Location: admin.php?op=autoStory");
+    Header('Location: '. site_url('admin.php?op=autoStory'));
 }
 
 /**
@@ -319,11 +319,11 @@ function autoEdit(int $anid): void
     }
 
     if (!$affiche) {
-        header("location: admin.php?op=autoStory");
+        header('location: '. site_url('admin.php?op=autoStory'));
     }
 
-    $topiclogo = '<span class="badge bg-secondary" title="' . $topics['topictext'] . '" data-bs-toggle="tooltip" data-bs-placement="left">
-        <strong>' . language::aff_langue($topics['topicname']) . '</strong>
+    $topiclogo = '<span class="badge bg-secondary" title="'. $topics['topictext'] .'" data-bs-toggle="tooltip" data-bs-placement="left">
+        <strong>'. language::aff_langue($topics['topicname']) .'</strong>
     </span>';
 
     include("themes/default/header.php");
@@ -333,8 +333,8 @@ function autoEdit(int $anid): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Editer l'Article Automatique") . '</h3>
-    ' . language::aff_local_langue('', 'local_user_language', adm_translate("Langue de Prévisualisation")) . '
+    <h3>'. adm_translate("Editer l'Article Automatique") .'</h3>
+    '. language::aff_local_langue('', 'local_user_language', adm_translate("Langue de Prévisualisation")) .'
     <div class="card card-body mb-3">';
     
     if ($topics['topicimage'] !== '') {
@@ -343,37 +343,37 @@ function autoEdit(int $anid): void
         }
 
         if (file_exists($imgtmp)) {
-            $topiclogo = '<img class="img-fluid " src="' . $imgtmp . '" align="right" alt="topic_logo" loading="lazy" title="' . $topics['topictext'] . '" data-bs-toggle="tooltip" data-bs-placement="left" />';
+            $topiclogo = '<img class="img-fluid " src="'. $imgtmp .'" align="right" alt="topic_logo" loading="lazy" title="'. $topics['topictext'] .'" data-bs-toggle="tooltip" data-bs-placement="left" />';
         }
     }
 
     code_aff('<div class="d-flex">
     <div class="w-100 p-2 ps-0">
-        <h3>' . $autonews['titre'] . '</h3>
+        <h3>'. $autonews['titre'] .'</h3>
     </div>
     <div class="align-self-center p-2 flex-shrink-1 h3">
-        ' . $topiclogo . '
+        '. $topiclogo .'
     </div>
-    </div>', '<div class="text-muted">' . $autonews['hometext'] . '</div>', $autonews['bodytext'], $autonews['notes']);
+    </div>', '<div class="text-muted">'. $autonews['hometext'] .'</div>', $autonews['bodytext'], $autonews['notes']);
 
     echo '<hr />
-    <b>' . adm_translate("Utilisateur") . '</b>' . $autonews['informant'] . '
+    <b>'. adm_translate("Utilisateur") .'</b>'. $autonews['informant'] .'
     <br />
     </div>
-    <form action="admin.php" method="post" name="adminForm" id="autoedit">
+    <form action="'. site_url('admin.php') .'" method="post" name="adminForm" id="autoedit">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="title">' . adm_translate("Titre") . '</label>
+            <label class="col-form-label col-sm-4" for="title">'. adm_translate("Titre") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="title" name="title" size="50" value="' . $autonews['titre'] . '" required="required" />
+                <input class="form-control" type="text" id="title" name="title" size="50" value="'. $autonews['titre'] .'" required="required" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topic">' . adm_translate("Sujet") . '</label>
+            <label class="col-form-label col-sm-4" for="topic">'. adm_translate("Sujet") .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
     if ($radminsuper) {
-        echo '<option value="">' . adm_translate("Tous les Sujets") . '</option>';
+        echo '<option value="">'. adm_translate("Tous les Sujets") .'</option>';
     }
 
     $toplist = DB::table('topics')
@@ -397,7 +397,7 @@ function autoEdit(int $anid): void
         }
 
         if ($affiche) {
-            echo '<option ' . (($list['topicid'] == $autonews['topic']) ? 'selected="selected" ' : '') . ' value="' . $list['topicid'] . '">' . language::aff_langue($list['topics']) . '</option>';
+            echo '<option '. (($list['topicid'] == $autonews['topic']) ? 'selected="selected" ' : '') .' value="'. $list['topicid'] .'">'. language::aff_langue($list['topics']) .'</option>';
         }
     }
 
@@ -412,29 +412,29 @@ function autoEdit(int $anid): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="hometext">' . adm_translate("Texte d'introduction") . '</label>
+            <label class="col-form-label col-sm-12" for="hometext">'. adm_translate("Texte d'introduction") .'</label>
             <div class="col-sm-12">
-                <textarea class="tin form-control" rows="25" id="hometext" name="hometext" >' . $autonews['hometext'] . '</textarea>
+                <textarea class="tin form-control" rows="25" id="hometext" name="hometext" >'. $autonews['hometext'] .'</textarea>
             </div>
         </div>
-        ' . editeur::aff_editeur('hometext', '') . '
+        '. editeur::aff_editeur('hometext', '') . '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="bodytext">' . adm_translate("Texte étendu") . '</label>
+            <label class="col-form-label col-sm-12" for="bodytext">'. adm_translate("Texte étendu") . '</label>
             <div class="col-sm-12">
-                <textarea class="tin form-control" rows="25" id="bodytext" name="bodytext" >' . $autonews['bodytext'] . '</textarea>
+                <textarea class="tin form-control" rows="25" id="bodytext" name="bodytext" >'. $autonews['bodytext'] .'</textarea>
             </div>
         </div>
-        ' . editeur::aff_editeur('bodytext', '');
+        '. editeur::aff_editeur('bodytext', '');
 
     if ($aid != $autonews['informant']) {
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="notes">' . adm_translate("Notes") . '</label>
+            <label class="col-form-label col-sm-12" for="notes">'. adm_translate("Notes") .'</label>
             <div class="col-sm-12">
-                <textarea class="tin form-control" rows="7" id="notes" name="notes">' . $autonews['notes'] . '</textarea>
+                <textarea class="tin form-control" rows="7" id="notes" name="notes">'. $autonews['notes'] .'</textarea>
             </div>
         </div>
-        ' . editeur::aff_editeur('notes', '');
+        '. editeur::aff_editeur('notes', '');
     }
 
     $dd_pub = substr($autonews['date_debval'], 0, 10);
@@ -447,10 +447,10 @@ function autoEdit(int $anid): void
     echo '
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <input type="hidden" name="anid" value="' . $autonews['anid'] . '" />
-                <input type="hidden" name="informant" value="' . $autonews['informant'] . '" />
+                <input type="hidden" name="anid" value="'. $autonews['anid'] .'" />
+                <input type="hidden" name="informant" value="'. $autonews['informant'] .'" />
                 <input type="hidden" name="op" value="autoSaveEdit" />
-                <input class="btn btn-primary" type="submit" value="' . adm_translate("Sauver les modifications") . '" />
+                <input class="btn btn-primary" type="submit" value="'. adm_translate("Sauver les modifications") .'" />
             </div>
         </div>
     </form>';
@@ -532,7 +532,7 @@ function autoSaveEdit(int $anid, string $title, string $hometext, string $bodyte
         news::ultramode();
     }
     
-    Header("Location: admin.php?op=autoEdit&anid=$anid");
+    Header('Location: '. site_url('admin.php?op=autoEdit&anid='. $anid));
 }
 
 switch ($op) {

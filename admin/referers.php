@@ -52,13 +52,13 @@ function hreferer(int $filter): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Qui parle de nous ?") . '</h3>
-    <form action="admin.php" method="post">
+    <h3>'. adm_translate("Qui parle de nous ?") .'</h3>
+    <form action="'. site_url('admin.php') .'" method="post">
         <input type="hidden" name="op" value="hreferer" />
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="filter">' . adm_translate("Filtre") . '</label>
+            <label class="col-form-label col-sm-4" for="filter">'. adm_translate("Filtre") .'</label>
             <div class="col-sm-4">
-                <input type="number" class="form-control" name="filter" min="0" max="99999" value="' . $filter . '" />
+                <input type="number" class="form-control" name="filter" min="0" max="99999" value="'. $filter .'" />
             </div>
             <div class="col-sm-4 xs-hidden"></div>
             <div class="clearfix"></div>
@@ -87,11 +87,11 @@ function hreferer(int $filter): void
             <td>';
 
         if ($referer['TheCount'] == 1) {
-            echo '<a href="' . $referer['url'] . '" target="_blank">';
+            echo '<a href="'. $referer['url'] .'" target="_blank">';
         }
 
         if ($filter != 2048) {
-            echo '<span>' . substr($referer['url'], 0, $filter) . '</span><span class="text-muted">' . substr($referer['url'], $filter) . '</span>';
+            echo '<span>'. substr($referer['url'], 0, $filter) .'</span><span class="text-muted">'. substr($referer['url'], $filter) .'</span>';
         } else {
             echo $referer['url'];
         }
@@ -101,7 +101,7 @@ function hreferer(int $filter): void
         }
 
         echo '</a></td>
-            <td>' . $referer['TheCount'] . '</td>
+            <td>'. $referer['TheCount'] .'</td>
         </tr>';
     }
 
@@ -110,8 +110,8 @@ function hreferer(int $filter): void
     </table>
     <br />
     <ul class="nav nav-pills">
-        <li class="nav-item"><a class="text-danger nav-link" href="admin.php?op=delreferer" >' . adm_translate("Effacer les Référants") . '</a></li>
-        <li class="nav-item"><a class="nav-link" href="admin.php?op=archreferer&amp;filter=' . $filter . '">' . adm_translate("Archiver les Référants") . '</a></li>
+        <li class="nav-item"><a class="text-danger nav-link" href="'. site_url('admin.php?op=delreferer') .'" >'. adm_translate("Effacer les Référants") .'</a></li>
+        <li class="nav-item"><a class="nav-link" href="'. site_url('admin.php?op=archreferer&amp;filter='. $filter .'') .'">'. adm_translate("Archiver les Référants") .'</a></li>
     </ul>';
 
     css::adminfoot('', '', '', '');
@@ -126,7 +126,7 @@ function delreferer(): void
 {
     DB::table('referer')->delete();
 
-    Header("Location: admin.php?op=AdminMain");
+    Header('Location: '. site_url('admin.php?op=AdminMain'));
 }
 
 /**
@@ -151,7 +151,7 @@ function archreferer(int $filter): void
     fwrite($file, $content);
     fclose($file);
 
-    Header("Location: admin.php?op=hreferer&filter=$filter");
+    Header('Location: '. site_url('admin.php?op=hreferer&filter='. $filter));
 }
 
 settype($filter, 'integer');

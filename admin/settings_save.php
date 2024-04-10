@@ -224,7 +224,7 @@ function ConfigSave(int $xparse, string $xsitename, string $xnuke_url, string $x
 
     cache::SC_Clean();
 
-    Header("Location: admin.php?op=AdminMain");
+    Header('Location: '. site_url('admin.php?op=AdminMain'));
 }
 
 

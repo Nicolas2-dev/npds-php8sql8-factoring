@@ -44,7 +44,7 @@ function mod_main(string $title, string $description): void
         'description'   => stripslashes(str::FixQuotes($description)),
     ));
 
-    Header("Location: admin.php?op=reviews");
+    Header('Location: '. site_url('admin.php?op=reviews'));
 }
 
 /**
@@ -65,26 +65,26 @@ function reviews(): void
 
     echo '
     <hr />
-    <h3>' . adm_translate("Configuration de la page") . '</h3>
-    <form id="reviewspagecfg" class="" action="admin.php" method="post">
+    <h3>'. adm_translate("Configuration de la page") .'</h3>
+    <form id="reviewspagecfg" class="" action="'. site_url('admin.php') .'" method="post">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="tit_cri">' . adm_translate("Titre de la Page des Critiques") . '</label>
+                <label class="col-form-label col-sm-12" for="tit_cri">'. adm_translate("Titre de la Page des Critiques") .'</label>
                 <div class="col-sm-12">
-                <input class="form-control" type="text" id="tit_cri" name="title" value="' . $main['title'] . '" maxlength="100" />
+                <input class="form-control" type="text" id="tit_cri" name="title" value="'. $main['title'] .'" maxlength="100" />
                 <span class="help-block text-end" id="countcar_tit_cri"></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="description">' . adm_translate("Description de la Page des Critiques") . '</label>
+                <label class="col-form-label col-sm-12" for="description">'. adm_translate("Description de la Page des Critiques") .'</label>
                 <div class="col-sm-12">
-                <textarea class="form-control" id="description" name="description" rows="10">' . $main['description'] . '</textarea>
+                <textarea class="form-control" id="description" name="description" rows="10">'. $main['description'] .'</textarea>
                 </div>
             </div>
             <div class="mb-3 row">
                 <div class="col-sm-12">
                 <input type="hidden" name="op" value="mod_main" />
-                <button class="btn btn-primary col-12" type="submit"><i class="fa fa-check-square fa-lg"></i>&nbsp;' . adm_translate("Sauver les modifications") . '</button>
+                <button class="btn btn-primary col-12" type="submit"><i class="fa fa-check-square fa-lg"></i>&nbsp;'. adm_translate("Sauver les modifications") .'</button>
                 </div>
             </div>
         </fieldset>
@@ -93,7 +93,7 @@ function reviews(): void
 
     $reviews_add = DB::table('reviews_add')->select('id', 'date', 'title', 'text', 'reviewer', 'email', 'score', 'url', 'url_title')->orderBy('id')->get();
 
-    echo '<h3>' . adm_translate("Critiques en attente de validation") . '<span class="badge bg-danger float-end">' . count($reviews_add) . '</span></h3>';
+    echo '<h3>'. adm_translate("Critiques en attente de validation") .'<span class="badge bg-danger float-end">'. count($reviews_add) .'</span></h3>';
 
     $jsfvc = '';
     $jsfvf = '';
@@ -104,105 +104,105 @@ function reviews(): void
             $text = stripslashes($add['text']);
             
             echo '
-    <h4 class="my-3">' . adm_translate("Ajouter la critique N° : ") . ' ' . $add['id'] . '</h4>
-    <form id="reviewsaddcr' . $add['id'] . '" action="admin.php" method="post">
-    <input type="hidden" name="id" value="' . $add['id'] . '" />
+    <h4 class="my-3">'. adm_translate("Ajouter la critique N° : ") .' '. $add['id'] .'</h4>
+    <form id="reviewsaddcr'. $add['id'] .'" action="'. site_url('admin.php') .'" method="post">
+    <input type="hidden" name="id" value="'. $add['id'] .'" />
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="reviewdate">' . adm_translate("Date") . '</label>
+            <label class="col-form-label col-sm-4" for="reviewdate">'. adm_translate("Date") .'</label>
             <div class="col-sm-8">
                 <div class="input-group">
                 <span class="input-group-text"><i class="far fa-calendar-check fa-lg"></i></span>
-                <input class="form-control reviewdate-js" type="text" id="reviewdate" name="date" value="' . $add['date'] . '" maxlength="10" required="required" />
+                <input class="form-control reviewdate-js" type="text" id="reviewdate" name="date" value="'. $add['date'] .'" maxlength="10" required="required" />
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="title' . $add['id'] . '">' . adm_translate("Nom du produit") . '</label>
+            <label class="col-form-label col-sm-4" for="title'. $add['id'] .'">'. adm_translate("Nom du produit") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="title' . $add['id'] . '" name="title" value="' . $title . '" maxlength="40" required="required" />
-                <span class="help-block text-end" id="countcar_title' . $add['id'] . '"></span>
+                <input class="form-control" type="text" id="title'. $add['id'] .'" name="title" value="'. $title .'" maxlength="40" required="required" />
+                <span class="help-block text-end" id="countcar_title'. $add['id'] .'"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="text' . $add['id'] . '">' . adm_translate("Texte") . '</label>
+            <label class="col-form-label col-sm-4 " for="text'. $add['id'] .'">'. adm_translate("Texte") .'</label>
             <div class="col-sm-8">
-                <textarea class="form-control" id="text' . $add['id'] . ' name="text" rows="6">' . $text . '</textarea>
+                <textarea class="form-control" id="text'. $add['id'] .' name="text" rows="6">'. $text .'</textarea>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="reviewer' . $add['id'] . '">' . adm_translate("Le critique") . '</label>
+            <label class="col-form-label col-sm-4 " for="reviewer'. $add['id'] .'">'. adm_translate("Le critique") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="reviewer' . $add['id'] . '" name="reviewer" value="' . $add['reviewer'] . '" maxlength="20" required="required" />
-                <span class="help-block text-end" id="countcar_reviewer' . $add['id'] . '"></span>
+                <input class="form-control" type="text" id="reviewer'. $add['id'] .'" name="reviewer" value="'. $add['reviewer'] .'" maxlength="20" required="required" />
+                <span class="help-block text-end" id="countcar_reviewer'. $add['id'] .'"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="email' . $add['id'] . '">' . adm_translate("E-mail") . '</label>
+            <label class="col-form-label col-sm-4 " for="email'. $add['id'] .'">'. adm_translate("E-mail") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="email" id="email' . $add['id'] . '" name="email" value="' . $add['email'] . '" maxlength="60" required="required" />
-                <span class="help-block text-end" id="countcar_email' . $add['id'] . '"></span>
+                <input class="form-control" type="email" id="email'. $add['id'] .'" name="email" value="'. $add['email'] .'" maxlength="60" required="required" />
+                <span class="help-block text-end" id="countcar_email'. $add['id'] .'"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="score' . $add['id'] . '">' . adm_translate("Note") . '</label>
+            <label class="col-form-label col-sm-4 " for="score'. $add['id'] .'">'. adm_translate("Note") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="number" id="score' . $add['id'] . '" name="score" value="' . $add['score'] . '"  min="1" max="10" />
+                <input class="form-control" type="number" id="score'. $add['id'] .'" name="score" value="'. $add['score'] .'"  min="1" max="10" />
             </div>
         </div>';
 
             if ($add['url'] != '') {
                 echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="url' . $add['id'] . '">' . adm_translate("Liens relatifs") . '</label>
+            <label class="col-form-label col-sm-4 " for="url'. $add['id'] .'">'. adm_translate("Liens relatifs") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="url" id="url' . $add['id'] . '" name="url" value="' . $add['url'] . '" maxlength="100" />
-                <span class="help-block text-end" id="countcar_url' . $add['id'] . '"></span>
+                <input class="form-control" type="url" id="url'. $add['id'] .'" name="url" value="'. $add['url'] .'" maxlength="100" />
+                <span class="help-block text-end" id="countcar_url'. $add['id'] .'"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4 " for="url_title' . $add['id'] . '">' . adm_translate("Titre du lien") . '</label>
+            <label class="col-form-label col-sm-4 " for="url_title'. $add['id'] .'">'. adm_translate("Titre du lien") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="url_title' . $add['id'] . '" name="url_title" value="' . $add['url_title'] . '" maxlength="50" />
-                <span class="help-block text-end" id="countcar_url_title' . $add['id'] . '"></span>
+                <input class="form-control" type="text" id="url_title'. $add['id'] .'" name="url_title" value="'. $add['url_title'] .'" maxlength="50" />
+                <span class="help-block text-end" id="countcar_url_title'. $add['id'] .'"></span>
             </div>
         </div>';
             }
 
             echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="cover' . $add['id'] . '">' . adm_translate("Image de garde") . '</label>
+            <label class="col-form-label col-sm-4" for="cover'. $add['id'] .'">'. adm_translate("Image de garde") .'</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="cover' . $add['id'] . '" name="cover" maxlength="100" />
-                <span class="help-block">150*150 pixel => images/covers<span class="float-end ms-1" id="countcar_cover' . $add['id'] . '"></span></span>
+                <input class="form-control" type="text" id="cover'. $add['id'] .'" name="cover" maxlength="100" />
+                <span class="help-block">150*150 pixel => images/covers<span class="float-end ms-1" id="countcar_cover'. $add['id'] .'"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
                 <input type="hidden" name="op" value="add_review">
-                <button class="btn btn-primary" type="submit">' . adm_translate("Ajouter") . '</button>
-                <a href="admin.php?op=deleteNotice&amp;id=' . $add['id'] . '&amp;op_back=reviews" class="btn btn-danger" role="button">' . adm_translate("Supprimer") . '</a>
+                <button class="btn btn-primary" type="submit">'. adm_translate("Ajouter") .'</button>
+                <a href="'. site_url('admin.php?op=deleteNotice&amp;id='. $add['id'] .'&amp;op_back=reviews') .'" class="btn btn-danger" role="button">'. adm_translate("Supprimer") .'</a>
             </div>
         </div>
     </form>';
 
-            $jsfvf .= ',"reviewsaddcr' . $add['id'] . '"';
+            $jsfvf .= ',"reviewsaddcr'. $add['id'] .'"';
             $jsfvc .= '
-            inpandfieldlen("title' . $add['id'] . '",40);
-            inpandfieldlen("reviewer' . $add['id'] . '",20);
-            inpandfieldlen("email' . $add['id'] . '",60);
-            inpandfieldlen("url' . $add['id'] . '",100);
-            inpandfieldlen("url_title' . $add['id'] . '",50);
-            inpandfieldlen("cover' . $add['id'] . '",100);';
+            inpandfieldlen("title'. $add['id'] .'",40);
+            inpandfieldlen("reviewer'. $add['id'] .'",20);
+            inpandfieldlen("email'. $add['id'] .'",60);
+            inpandfieldlen("url'. $add['id'] .'",100);
+            inpandfieldlen("url_title'. $add['id'] .'",50);
+            inpandfieldlen("cover'. $add['id'] .'",100);';
         }
 
         $arg1 = '
-            var formulid = ["reviewspagecfg"' . $jsfvf . '];
-            inpandfieldlen("tit_cri",100);' . $jsfvc;
+            var formulid = ["reviewspagecfg"'. $jsfvf .'];
+            inpandfieldlen("tit_cri",100);'. $jsfvc;
 
 
         echo '
     <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
-    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/' . language::language_iso(1, '', '') . '.js"></script>
+    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/'. language::language_iso(1, '', '') .'.js"></script>
     <script type="text/javascript">
     //<![CDATA[
         $(document).ready(function() {
@@ -212,13 +212,13 @@ function reviews(): void
             altInput: true,
             altFormat: "l j F Y",
             dateFormat:"Y-m-d",
-            "locale": "' . language::language_iso(1, '', '') . '",
+            "locale": "'. language::language_iso(1, '', '') .'",
         });
     //]]>
     </script>';
     } else {
         echo '
-        <div class="alert alert-success my-3">' . adm_translate("Aucune critique à ajouter") . '</div>';
+        <div class="alert alert-success my-3">'. adm_translate("Aucune critique à ajouter") .'</div>';
 
         $arg1 = '
         var formulid = ["reviewspagecfg"];
@@ -227,11 +227,11 @@ function reviews(): void
 
     echo '
     <hr />
-    <p><a href="reviews.php?op=write_review" >' . adm_translate("Cliquer ici pour proposer une Critique.") . '</a></p>
+    <p><a href="'. site_url('reviews.php?op=write_review') .'" >'. adm_translate("Cliquer ici pour proposer une Critique.") .'</a></p>
     <hr />
-    <h3 class="my-3">' . adm_translate("Effacer / Modifier une Critique") . '</h3>
+    <h3 class="my-3">'. adm_translate("Effacer / Modifier une Critique") .'</h3>
     <div class="alert alert-success">'
-        . adm_translate("Vous pouvez simplement Effacer / Modifier les Critiques en naviguant sur") . ' <a href="reviews.php" >reviews.php</a> ' . adm_translate("en tant qu'Administrateur.") . '
+        . adm_translate("Vous pouvez simplement Effacer / Modifier les Critiques en naviguant sur") .' <a href="'. site_url('reviews.php') .'" >'. site_url('reviews.php') .'</a> '. adm_translate("en tant qu'Administrateur.") .'
     </div>';
 
     css::adminfoot('fv', '', $arg1, '');
@@ -270,7 +270,7 @@ function add_review(int $id, int $date, string $title, string $text, string $rev
 
     DB::table('reviews_add')->where('id', $id)->delete();
 
-    Header("Location: admin.php?op=reviews");
+    Header('Location: '. site_url('admin.php?op=reviews'));
 }
 
 switch ($op) {
