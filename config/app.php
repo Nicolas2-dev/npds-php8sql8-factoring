@@ -55,9 +55,10 @@ return array(
         /**
          * Facades
          */
-        'DB' => 'npds\system\support\facades\DB',
-        'Sform' => 'npds\system\support\facades\Sform',
-        'Cache' => 'npds\system\support\facades\Cache',
+        'DB'        => 'npds\system\support\facades\DB',
+        'Sform'     => 'npds\system\support\facades\Sform',
+        'Cache'     => 'npds\system\support\facades\Cache',
+        'Request'   => 'npds\system\support\facades\Request',
 
     ),
 );
