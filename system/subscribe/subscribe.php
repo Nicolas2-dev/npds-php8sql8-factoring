@@ -25,10 +25,12 @@ class subscribe
      */
     public static function subscribe_mail(string $Xtype, int|string $Xtopic, int|string $Xforum, string $Xresume, string $Xsauf): void
     {
-        // $Xtype : topic, forum ... / $Xtopic clause WHERE / $Xforum id of forum / $Xresume Text passed / $Xsauf not this userid
-
-        $nuke_url = Config::get('npds.nuke_url');
-
+        // $Xtype : topic, forum ... 
+        // $Xtopic clause WHERE 
+        // $Xforum id of forum 
+        // $Xresume Text passed 
+        // $Xsauf not this userid
+        
         if ($Xtype == 'topic') {
             $result  = DB::table('topics')
                         ->select('topictext')
@@ -87,12 +89,12 @@ class subscribe
                 if ($Xtype == 'topic') {
                     $entete = translate_ml($user_langue, "Vous recevez ce Mail car vous vous êtes abonné à : ") . translate_ml($user_langue, "Sujet") . " => " . strip_tags($abo) . "\n\n";
                     $resume = translate_ml($user_langue, "Le titre de la dernière publication est") . " => $Xresume\n\n";
-                    $url = translate_ml($user_langue, "L'URL pour cet article est : ") . "<a href=\"$nuke_url/search.php?query=&topic=$Xtopic\">$nuke_url/search.php?query=&topic=$Xtopic</a>\n\n";
+                    $url = translate_ml($user_langue, "L'URL pour cet article est : ") . "<a href=\"". site_url('search.php?query=&topic='. $Xtopic) ."\">". site_url('search.php?query=&topic='. $Xtopic) ."</a>\n\n";
                 }
 
                 if ($Xtype == 'forum') {
                     $entete = translate_ml($user_langue, "Vous recevez ce Mail car vous vous êtes abonné à : ") . translate_ml($user_langue, "Forum") . " => " . strip_tags($abo) . "\n\n";
-                    $url = translate_ml($user_langue, "L'URL pour cet article est : ") . "<a href=\"$nuke_url/$hrefX?topic=$Xtopic&forum=$Xforum&start=9999#lastpost\">$nuke_url/$hrefX?topic=$Xtopic&forum=$Xforum&start=9999</a>\n\n";
+                    $url = translate_ml($user_langue, "L'URL pour cet article est : ") . "<a href=\"". site_url($hrefX. '?topic=' .$Xtopic .'&forum='. $Xforum .'&start=9999#lastpost') ."\">". site_url($hrefX. '?topic=' .$Xtopic .'&forum='. $Xforum .'&start=9999#lastpost') ."</a>\n\n";
                     $resume = translate_ml($user_langue, "Le titre de la dernière publication est") . " => ";
                     
                     if ($Xresume != '') {
@@ -102,7 +104,7 @@ class subscribe
                     }
                 }
 
-                $subject = html_entity_decode(translate_ml($user_langue, "Abonnement"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " / " . Config::get('npds.sitename');
+                $subject = html_entity_decode(translate_ml($user_langue, "Abonnement"), ENT_COMPAT | ENT_HTML401, 'utf-8') ." / ". Config::get('npds.sitename');
                 $message = $entete;
                 $message .= $resume;
                 $message .= $url;

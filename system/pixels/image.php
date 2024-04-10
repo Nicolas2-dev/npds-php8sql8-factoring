@@ -45,8 +45,8 @@ class image
                 die('Image non supportée');
             }
 
-            $output_file = $output_path . $j . "_" . $ra . "_" . time() . "." . $ext;
-            $base_64_string = preg_replace($rechdataimage, 'class="img-fluid" src="' . $output_file . '" loading="lazy"', $base_64_string, 1);
+            $output_file = $output_path . $j ."_". $ra ."_". time() .".". $ext;
+            $base_64_string = preg_replace($rechdataimage, 'class="img-fluid" src="'. $output_file .'" loading="lazy"', $base_64_string, 1);
             
             if ($size[0] > $timgw or $size[1] > $timgh) {
                 $timgh = (int) round(($timgw / $size[0]) * $size[1]);

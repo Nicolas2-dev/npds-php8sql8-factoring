@@ -331,11 +331,11 @@ if (Config::get('npds.tiny_mce')) {
             }
         } else {
             Config::set('editeur.tiny_mce_init', false);
-            Config::set('editeur.tiny_mce', false);
+            Config::set('npds.tiny_mce', false);
         }
     } else {
         Config::set('editeur.tiny_mce_init', false);
-        Config::set('editeur.tiny_mce', false);
+        Config::set('npds.tiny_mce', false);
     }
 } else {
     Config::set('editeur.tiny_mce_init', false);

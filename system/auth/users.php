@@ -311,7 +311,7 @@ class users
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item" href="minisite.php?op='. $qui .'" target="_blank">
+                        <a class="dropdown-item" href="'. site_url('minisite.php?op='. $qui) .'" target="_blank">
                             '. translate("MiniSite") .'
                         </a>
                     </li>

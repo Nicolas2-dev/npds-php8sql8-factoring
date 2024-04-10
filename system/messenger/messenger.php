@@ -13,6 +13,7 @@ use npds\system\auth\authors;
 use npds\system\mail\mailler;
 use npds\system\config\Config;
 use npds\system\security\hack;
+use npds\system\utility\crypt;
 use npds\system\support\online;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
@@ -94,11 +95,9 @@ class messenger
                 }
             }
 
-            $nuke_url = Config::get('npds.nuke_url');
-            
             if (Config::get('npds.subscribe')) {
-                $sujet = html_entity_decode(translate_ml($user['user_langue'], "Notification message privé."), ENT_COMPAT | ENT_HTML401, 'utf-8') . '[' . $from_userid . '] / ' . Config::get('npds.sitename');
-                $message = $time . '<br />' . translate_ml($user['user_langue'], "Bonjour") . '<br />' . translate_ml($user['user_langue'], "Vous avez un nouveau message.") . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . $nuke_url . '/viewpmsg.php">' . translate_ml($user['user_langue'], "Cliquez ici pour lire votre nouveau message.") . '</a><br />';
+                $sujet = html_entity_decode(translate_ml($user['user_langue'], "Notification message privé."), ENT_COMPAT | ENT_HTML401, 'utf-8') .'['. $from_userid .'] / '. Config::get('npds.sitename');
+                $message = $time .'<br />'. translate_ml($user['user_langue'], "Bonjour") .'<br />'. translate_ml($user['user_langue'], "Vous avez un nouveau message.") .'<br /><br /><b>'. $subject .'</b><br /><br /><a href="'. site_url('viewpmsg.php') .'/">' . translate_ml($user['user_langue'], "Cliquez ici pour lire votre nouveau message.") .'</a><br />';
                 $message .= Config::get('signature.message');
                 
                 mailler::copy_to_email($user['to_useridx'], $sujet, stripslashes($message));
@@ -116,17 +115,17 @@ class messenger
     public static function write_short_private_message(string $to_userid): void
     {
         echo '
-        <h2>' . translate("Message à un membre") . '</h2>
-        <h3><i class="fa fa-at me-1"></i>' . $to_userid . '</h3>
-        <form id="sh_priv_mess" action="powerpack.php" method="post">
+        <h2>'. translate("Message à un membre") .'</h2>
+        <h3><i class="fa fa-at me-1"></i>'. $to_userid .'</h3>
+        <form id="sh_priv_mess" action="'. site_url('powerpack.php') .'" method="post">
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="subject" >' . translate("Sujet") . '</label>
+                <label class="col-form-label col-sm-12" for="subject" >'. translate("Sujet") .'</label>
                 <div class="col-sm-12">
                     <input class="form-control" type="text" id="subject" name="subject" maxlength="100" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="message" >' . translate("Message") . '</label>
+                <label class="col-form-label col-sm-12" for="message" >'. translate("Message") .'</label>
                 <div class="col-sm-12">
                     <textarea class="form-control"  id="message" name="message" rows="10"></textarea>
                 </div>
@@ -135,16 +134,16 @@ class messenger
                 <div class="col-sm-12">
                     <div class="form-check" >
                     <input class="form-check-input" type="checkbox" id="copie" name="copie" />
-                    <label class="form-check-label" for="copie">' . translate("Conserver une copie") . '</label>
+                    <label class="form-check-label" for="copie">'. translate("Conserver une copie") .'</label>
                     </div>
                 </div>
             </div>
             <div class="mb-3 row">
-                <input type="hidden" name="to_userid" value="' . $to_userid . '" />
+                <input type="hidden" name="to_userid" value="'. $to_userid .'" />
                 <input type="hidden" name="op" value="write_instant_message" />
                 <div class="col-sm-12">
-                    <input class="btn btn-primary" type="submit" name="submit" value="' . translate("Valider") . '" accesskey="s" />&nbsp;
-                    <button class="btn btn-secondary" type="reset">' . translate("Annuler") . '</button>
+                    <input class="btn btn-primary" type="submit" name="submit" value="'. translate("Valider") .'" accesskey="s" />&nbsp;
+                    <button class="btn btn-secondary" type="reset">'. translate("Annuler") .'</button>
                 </div>
             </div>
         </form>';
@@ -184,9 +183,9 @@ class messenger
                 $timex = time() - $ibid[$i]['time'];
                 
                 if ($timex >= 60) {
-                    $timex = '<i class="fa fa-plug text-muted" title="' . $ibid[$i]['username'] . ' ' . translate("n'est pas connecté") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;';
+                    $timex = '<i class="fa fa-plug text-muted" title="'. $ibid[$i]['username'] .' '. translate("n'est pas connecté") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;';
                 } else {
-                    $timex = '<i class="fa fa-plug faa-flash animated text-primary" title="' . $ibid[$i]['username'] . ' ' . translate("est connecté") . '" data-bs-toggle="tooltip" data-bs-placement="right" ></i>&nbsp;';
+                    $timex = '<i class="fa fa-plug faa-flash animated text-primary" title="'. $ibid[$i]['username'] .' '. translate("est connecté") .'" data-bs-toggle="tooltip" data-bs-placement="right" ></i>&nbsp;';
                 }
 
                 $query = DB::table('users')->select('uid');
@@ -206,15 +205,23 @@ class messenger
 
                 if ($userid) {
 
-                    $rowQ1 = cache::Q_Select3(DB::table('users_status')->select('rang')->where('uid', $userid['uid'])->get(), 3600, 'users_status(rang)');
+                    $rowQ1 = cache::Q_Select3(
+                        DB::table('users_status')
+                            ->select('rang')
+                            ->where('uid', $userid['uid'])
+                            ->get(), 3600, crypt::encrypt('users_status(rang)')
+                    );
 
                     $rank = $rowQ1[0]['rang'];
-                    $tmpR = '';
 
                     if ($rank) {
                         if ($rank1 == '') {
 
-                            if ($myrow = cache::Q_Select3(DB::table('config')->select('rank1', 'rank2', 'rank3', 'rank4', 'rank5')->get(), 86400, 'config(rank)')) {
+                            if ($myrow = cache::Q_Select3(
+                                    DB::table('config')
+                                    ->select('rank1', 'rank2', 'rank3', 'rank4', 'rank5')
+                                    ->get(), 86400, crypt::encrypt('config(rank)'))) 
+                            {
                                 
                                 $rank1 = $myrow[0]['rank1'];
                                 $rank2 = $myrow[0]['rank2'];
@@ -231,16 +238,21 @@ class messenger
                         }
 
                         $messR = 'rank' . $rank;
-                        $tmpR = "<img src=\"" . $imgtmpA . "\" border=\"0\" alt=\"" . language::aff_langue($$messR) . "\" title=\"" . language::aff_langue($$messR) . "\" loading=\"lazy\" />";
+                        $tmpR = '<img src="'. $imgtmpA .'" border="0" alt="'. language::aff_langue($$messR) .'" title="'. language::aff_langue($$messR) .'" loading="lazy" />';
                     } else {
                         $tmpR = '&nbsp;';
                     }
 
-                    $new_messages = DB::table('priv_msgs')->select('msg_id')->where('to_userid', $userid['uid'])->where('read_msg', 0)->where('type_msg', 0)->count();
+                    $new_messages = DB::table('priv_msgs')
+                                        ->select('msg_id')
+                                        ->where('to_userid', $userid['uid'])
+                                        ->where('read_msg', 0)
+                                        ->where('type_msg', 0)
+                                        ->count();
 
                     if ($new_messages > 0) {
-                        $PopUp = java::JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
-                        $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
+                        $PopUp = java::JavaPopUp(site_url('readpmsg_imm.php?op=new_msg'), "IMM", 600, 500);
+                        $PopUp = '<a href="javascript:void(0);" onclick="window.open($PopUp);">';
                         
                         if ($ibid[$i]['username'] == users::cookieUser(1)) {
                             $icon = $PopUp;
@@ -248,18 +260,22 @@ class messenger
                             $icon = "";
                         }
 
-                        $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="' . translate("Nouveau") . '<span class=\'rounded-pill bg-danger ms-2\'>' . $new_messages . '</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
+                        $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="'. translate("Nouveau") .'<span class="rounded-pill bg-danger ms-2">'. $new_messages .'</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
                         
                         if ($ibid[$i]['username'] == users::cookieUser(1)) {
                             $icon .= '</a>';
                         }
                     } else {
-                        $messages = DB::table('priv_msgs')->select('msg_id')->where('to_userid', $userid['uid'])->where('type_msg', 0)->where('dossier', '...')->count();
-
+                        $messages = DB::table('priv_msgs')
+                                        ->select('msg_id')
+                                        ->where('to_userid', $userid['uid'])
+                                        ->where('type_msg', 0)
+                                        ->where('dossier', '...')
+                                        ->count();
 
                         if ($messages > 0) {
-                            $PopUp = java::JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
-                            $PopUp = '<a href="javascript:void(0);" onclick="window.open(' . $PopUp . ');">';
+                            $PopUp = java::JavaPopUp(site_url('readpmsg_imm.php?op=msg'), "IMM", 600, 500);
+                            $PopUp = '<a href="javascript:void(0);" onclick="window.open('. $PopUp .');">';
                             
                             if ($ibid[$i]['username'] == users::cookieUser(1)) {
                                 $icon = $PopUp;
@@ -267,7 +283,7 @@ class messenger
                                 $icon = '';
                             }
 
-                            $icon .= '<i class="far fa-envelope-open fa-lg " title="' . translate("Nouveau") . ' : ' . $new_messages . '" data-bs-toggle="tooltip"></i></a>';
+                            $icon .= '<i class="far fa-envelope-open fa-lg " title="'. translate("Nouveau") .' : '. $new_messages .'" data-bs-toggle="tooltip"></i></a>';
                         } else {
                             $icon = '&nbsp;';
                         }
@@ -281,12 +297,11 @@ class messenger
                         $M = $N;
                     }
 
-                    $boxstuff .= '<li class="">' . $timex . '&nbsp;<a href="powerpack.php?op=instant_message&amp;to_userid=' . $N . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip" >' . $M . '</a><span class="float-end">' . $icon . '</span></li>';
+                    $boxstuff .= '<li class="">'. $timex .'&nbsp;<a href="'. site_url('powerpack.php?op=instant_message&amp;to_userid='. $N) .'" title="'. translate("Envoyer un message interne") .'" data-bs-toggle="tooltip">'. $M .'</a><span class="float-end">'. $icon .'</span></li>';
                 } 
             }
 
-            $boxstuff .= '
-            </ul>';
+            $boxstuff .= '</ul>';
 
             themesidebox($block_title, $boxstuff);
         } else {
@@ -299,7 +314,7 @@ class messenger
                     for ($i = 1; $i <= $ibid[0]; $i++) {
                         $N = $ibid[$i]['username'];
                         $M = ((strlen($N) > Config::get('npds.theme.long_chain')) 
-                            ? substr($N, 0, Config::get('npds.theme.long_chain')) . '.' 
+                            ? substr($N, 0, Config::get('npds.theme.long_chain')) .'.' 
                             : $N
                         );
                         

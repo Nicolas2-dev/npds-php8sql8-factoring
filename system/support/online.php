@@ -32,12 +32,12 @@ class online
     {
         list($member_online_num, $guest_online_num) = static::site_load();
 
-        $content1 = "$guest_online_num " . translate("visiteur(s) et") . " $member_online_num " . translate("membre(s) en ligne.");
+        $content1 = $guest_online_num . translate("visiteur(s) et") . $member_online_num . translate("membre(s) en ligne.");
         
         if (users::getUser()) {
-            $content2 = translate("Vous êtes connecté en tant que") . " <b>" . users::cookieUser(1) . "</b>";
+            $content2 = translate("Vous êtes connecté en tant que") .' <b>'. users::cookieUser(1) .'</b>';
         } else {
-            $content2 = translate("Devenez membre privilégié en cliquant") . " <a href=\"user.php?op=only_newuser\">" . translate("ici") . "</a>";
+            $content2 = translate("Devenez membre privilégié en cliquant") .' <a href="'. site_url('user.php?op=only_newuser') .'">'. translate("ici") .'</a>';
         }
 
         return array($content1, $content2);

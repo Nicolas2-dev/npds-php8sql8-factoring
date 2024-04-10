@@ -129,7 +129,7 @@ class edito
 
             if ($ret == false) {
                 if (!$notitle) {
-                    echo '<span class="edito">' . translate("EDITO") . '</span>';
+                    echo '<span class="edito">'. translate("EDITO") .'</span>';
                 }
                 
                 echo $Xcontents;

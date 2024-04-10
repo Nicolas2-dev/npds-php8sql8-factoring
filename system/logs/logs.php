@@ -34,7 +34,7 @@ class logs
             $mot_log = "IP=>" . getip();
         }
 
-        $ibid = sprintf("%-10s %-60s %-10s\r\n", date("m/d/Y H:i:s", time()), basename($_SERVER['PHP_SELF']) . "=>" . strip_tags(urldecode($req_log)), strip_tags(urldecode($mot_log)));
+        $ibid = sprintf("%-10s %-60s %-10s\r\n", date("m/d/Y H:i:s", time()), basename($_SERVER['PHP_SELF']) ."=>". strip_tags(urldecode($req_log)), strip_tags(urldecode($mot_log)));
         
         fwrite($fp, $ibid);
         flock($fp, 3);

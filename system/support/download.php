@@ -60,26 +60,27 @@ class download
 
                 $ori_dfilename = $download['dfilename'];
                 
-                if (strlen($download['dfilename']) > Config::get('npds.theme.long_chain')) {
-                    $dfilename = (substr($download['dfilename'], 0, Config::get('npds.theme.long_chain'))) . " ...";
-                }
+                // not used !!!!
+                // if (strlen($download['dfilename']) > Config::get('npds.theme.long_chain')) {
+                //     $dfilename = (substr($download['dfilename'], 0, Config::get('npds.theme.long_chain'))) ." ...";
+                // }
 
                 if ($form == 'short') {
                     if ($okfile) {
-                        $ibid .= '<li class="list-group-item list-group-item-action d-flex justify-content-start p-2 flex-wrap">' . $lugar . ' 
-                            <a class="ms-2" href="download.php?op=geninfo&amp;did=' . $download['did'] . '&amp;out_template=1" title="' . $ori_dfilename . ' ' . $dd . '" >
-                                ' . $download['dfilename'] . '
+                        $ibid .= '<li class="list-group-item list-group-item-action d-flex justify-content-start p-2 flex-wrap">'. $lugar .' 
+                            <a class="ms-2" href="'. site_url('download.php?op=geninfo&amp;did='. $download['did'] .'&amp;out_template=1') .'" title="'. $ori_dfilename .' '. $dd .'" >
+                                '. $download['dfilename'] .'
                             </a>
-                            <span class="badge bg-secondary ms-auto align-self-center">' . $dd . '</span>
+                            <span class="badge bg-secondary ms-auto align-self-center">'. $dd .'</span>
                         </li>';
                     }
                 } else {
                     if ($okfile) {
                         $ibid .= '<li class="ms-4 my-1">
-                            <a href="download.php?op=mydown&amp;did=' . $download['did'] . '" >
-                                ' . $download['dfilename'] . '
-                            </a> (' . translate("Catégorie") . ' : ' . language::aff_langue(stripslashes($download['dcategory'])) . ')&nbsp;
-                            <span class="badge bg-secondary float-end align-self-center">' . str::wrh($download['dcounter']) . '</span>
+                            <a href="'. site_url('download.php?op=mydown&amp;did='. $download['did']) .'" >
+                                '. $download['dfilename'] .'
+                            </a> ('. translate("Catégorie") .' :'. language::aff_langue(stripslashes($download['dcategory'])) .')&nbsp;
+                            <span class="badge bg-secondary float-end align-self-center">'. str::wrh($download['dcounter']) .'</span>
                         </li>';
                     }
                 }

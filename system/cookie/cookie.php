@@ -52,8 +52,6 @@ class cookie
         if ($user) {
             $cookie = explode(':', base64_decode($user));
             
-            settype($cookie[0], "integer");
-            
             if (trim($cookie[1]) != '') {
 
                 $users = DB::table('users')

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace npds\system\security;
 
+use npds\system\config\Config;
 use npds\system\support\editeur;
+use npds\system\support\facades\Request;
 
 class hack
 {
@@ -246,13 +248,13 @@ class hack
      */
     public static function MNSremoveHack($Xstring)
     {
-        global $op, $tiny_mce, $tiny_mce_theme;
+        $op = Request::query('op');
 
         static $blog_editor;
 
-        if ($tiny_mce) {
+        if (Config::get('npds.tiny_mce')) {
             if (!$blog_editor) {
-                $tiny_mce_theme = 'full';
+                Config::set('editeur.tiny_mce_theme', 'full');
                 $blog_editor = editeur::aff_editeur('tiny_mce', 'begin') . editeur::aff_editeur('story', 'false') . editeur::aff_editeur('tiny_mce', 'end');
             }
         }
@@ -465,7 +467,7 @@ class hack
             "'&#160;'i" => '&nbsp;',
             "'.htaccess'i" => "",
             "'!blog_editeur!'i" => $blog_editor,
-            "'!l_blog_ajouterOK!'i" => '<a class="list-group-item list-group-item-action" href="minisite.php?op=' . $op . '&amp;action=A"><i class="fas fa-pencil-alt fa-lg me-2"></i> ' . translate("Ajouter un article") . '</a>',
+            "'!l_blog_ajouterOK!'i" => '<a class="list-group-item list-group-item-action" href="'. site_url('minisite.php?op='. $op .'&amp;action=A') .'"><i class="fas fa-pencil-alt fa-lg me-2"></i>'. translate("Ajouter un article") .'</a>',
             "'\<\?php'i" => "&lt;?php",
             "'\<\?'i" => "&lt;?",
             "'\?\>'i" => "?&gt;",

@@ -40,7 +40,7 @@ class editeur
                 tinymce.init({
                     selector: 'textarea.tin',
                     mobile: {menubar: true},
-                    language : '" . language::language_iso(1, '', '') . "',";
+                    language : '". language::language_iso(1, '', '') ."',";
 
                         include("assets/shared/editeur/tinymce/themes/advanced/npds.conf.php");
                         $tmp .= '
@@ -53,7 +53,7 @@ class editeur
                     $tmp .= '<script type="text/javascript" src="assets/shared/editeur/tinymce/tinymce.min.js"></script>';
                 }
             } else {
-                $tmp_Xzone .= $Xzone != 'custom' ? $Xzone . ',' : $Xactiv . ',';
+                $tmp_Xzone .= $Xzone != 'custom' ? $Xzone .',' : $Xactiv .',';
             }
         } else {
             $tmp = '';

@@ -870,7 +870,7 @@ class metafunction
         </div>
         <div class="card card-body m-3">
            <h5 class="mb-3"><i class="fas fa-sign-in-alt fa-lg"></i>&nbsp;' . translate("Connexion") . '</h5>
-           <form action="user.php" method="post" name="userlogin_b">
+           <form action="'. site_url('user.php') .'" method="post" name="userlogin_b">
               <div class="row g-2">
                  <div class="col-12">
                     <div class="mb-3 form-floating">

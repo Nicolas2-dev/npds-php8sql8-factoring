@@ -21,7 +21,10 @@ class polls
     public static function pollSecur(string|int $pollID): array
     {
         $pollClose = '';
-        $result = DB::table('poll_data')->select('pollType')->where('pollID', $pollID)->first();
+        $result = DB::table('poll_data')
+                    ->select('pollType')
+                    ->where('pollID', $pollID)
+                    ->first();
 
         if ($result) {
             
@@ -59,8 +62,12 @@ class polls
                 boxe::pollMain($ibid, $pollClose);
             }
 
-        } elseif ($result = DB::table('poll_data')->select('pollID')->orderBy('pollID', 'asc')->limit(1)->first()) {
-            
+        } elseif ($result = DB::table('poll_data')
+                                ->select('pollID')
+                                ->orderBy('pollID', 'asc')
+                                ->limit(1)
+                                ->first()) 
+        {
             list($ibid, $pollClose) = static::pollSecur($result['pollID']);
             
             if ($ibid) {

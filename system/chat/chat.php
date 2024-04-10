@@ -33,7 +33,12 @@ class chat
         $numofchatters = 0;
 
         if ($dimauto <= 1) {
-            $numofchatters = DB::table('chatbox')->distinct()->select('ip')->where('id', $auto[0])->where('date', '>=', (time() - (60 * 3)))->count();
+            $numofchatters = DB::table('chatbox')
+                                ->distinct()
+                                ->select('ip')
+                                ->where('id', $auto[0])
+                                ->where('date', '>=', (time() - (60 * 3)))
+                                ->count();
         }
 
         return $numofchatters;
@@ -56,9 +61,6 @@ class chat
             $message =  hack::removeHack(stripslashes(str::FixQuotes(strip_tags(trim($message)))));
 
             $ip = getip();
-
-            settype($id, 'integer');
-            settype($dbname, 'integer');
 
             DB::table('chatbox')->insert(array(
                 'username'  => $username,
@@ -95,7 +97,10 @@ class chat
         $une_ligne = false;
 
         if ($dimauto <= 1) {
-            $counter = DB::table('chatbox')->select('message')->where('id', $auto[0])->get();
+            $counter = DB::table('chatbox')
+                        ->select('message')
+                        ->where('id', $auto[0])
+                        ->get();
 
             if ($counter < 0) {
                 $counter = 0;
@@ -118,21 +123,22 @@ class chat
                             $admin = authors::getAdmin();
 
                             $thing .= ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) ?
-                                '<span class="">' . substr($chatbox['username'], 0, 8) . '.</span>' :
-                                "<a href=\"user.php?op=userinfo&amp;uname=" . $chatbox['username'] ."\">" . substr($chatbox['username'], 0, 8) . ".</a>";
+                                '<span class="">'. substr($chatbox['username'], 0, 8) .'.</span>' :
+                                "<a href=\"". site_url('user.php?op=userinfo&amp;uname='. $chatbox['username']) ."\">". substr($chatbox['username'], 0, 8) .".</a>";
                         } else {
-                            $thing .= '<span class="">' . substr($chatbox['username'], 0, 8) . '.</span>';
+                            $thing .= '<span class="">'. substr($chatbox['username'], 0, 8) .'.</span>';
                         }
                     }
 
                     $une_ligne = true;
-                    $thing .= (strlen($chatbox['message']) > Config::get('npds.theme.long_chain'))  ?
-                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes(substr($chatbox['message'], 0, Config::get('npds.theme.long_chain')))) . " </span><br />\n" :
-                        "&gt;&nbsp;<span>" . forum::smilie(stripslashes($chatbox['message'])) . " </span><br />\n";
+                    $thing .= ((strlen($chatbox['message']) > Config::get('npds.theme.long_chain'))  
+                        ? "&gt;&nbsp;<span>". forum::smilie(stripslashes(substr($chatbox['message'], 0, Config::get('npds.theme.long_chain')))) ." </span><br />\n" 
+                        : "&gt;&nbsp;<span>". forum::smilie(stripslashes($chatbox['message'])) ." </span><br />\n"
+                    );
                 }
             }
 
-            $PopUp = java::JavaPopUp("chat.php?id=" . $auto[0] . "&amp;auto=" . crypt::encrypt(serialize($auto[0])), "chat" . $auto[0], 380, 480);
+            $PopUp = java::JavaPopUp(site_url('chat.php?id='. $auto[0] .'&amp;auto='. crypt::encrypt(serialize($auto[0]))), "chat" . $auto[0], 380, 480);
             
             if ($une_ligne) {
                 $thing .= '<hr />';
@@ -145,9 +151,22 @@ class chat
                                 ->where('date', '>=', (time() - (60 * 2)))
                                 ->count();
 
-            $thing .= $numofchatters > 0 ?
-                '<div class="d-flex"><a id="' . $pour . '_encours" class="fs-4" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . translate("Cliquez ici pour entrer") . ' ' . $pour . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-comments fa-2x nav-link faa-pulse animated faa-slow"></i></a><span class="badge rounded-pill bg-primary ms-auto align-self-center" title="' . translate("personne connectée.") . '" data-bs-toggle="tooltip">' . $numofchatters . '</span></div>' :
-                '<div><a id="' . $pour . '" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . translate("Cliquez ici pour entrer") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-comments fa-2x "></i></a></div>';
+            $thing .= (($numofchatters > 0) 
+                ? '<div class="d-flex">
+                    <a id="'. $pour .'_encours" class="fs-4" href="javascript:void(0);" onclick="window.open('. $PopUp .');" title="'. translate("Cliquez ici pour entrer") .' '. $pour .'" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa fa-comments fa-2x nav-link faa-pulse animated faa-slow"></i>
+                    </a>
+                    <span class="badge rounded-pill bg-primary ms-auto align-self-center" title="' . translate("personne connectée.") . '" data-bs-toggle="tooltip">
+                        ' . $numofchatters . '</span>
+                    </div>'
+                 
+                : '<div>
+                    <a id="'. $pour .'" href="javascript:void(0);" onclick="window.open('. $PopUp .');" title="'. translate("Cliquez ici pour entrer") .'" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <i class="fa fa-comments fa-2x "></i>
+                    </a>
+                </div>
+                '
+                );
         } else {
             if (count($auto) > 1) {
                 $numofchatters = 0;
@@ -155,15 +174,24 @@ class chat
                 
                 foreach ($auto as $autovalue) {
 
-                    $autovalueX = cache::Q_select3(DB::table('groupes')->select('groupe_id', 'groupe_name')->where('groupe_id', $autovalue)->get(), 3600, 'groupe(groupr_id)');
+                    $autovalueX = cache::Q_select3(DB::table('groupes')
+                        ->select('groupe_id', 'groupe_name')
+                        ->where('groupe_id', $autovalue)
+                        ->get(), 3600, crypt::encrypt('groupe(groupr_id)')
+                    );
 
-                    $PopUp = java::JavaPopUp("chat.php?id=" . $autovalueX[0]['groupe_id'] . "&auto=" . crypt::encrypt(serialize($autovalueX[0]['groupe_id'])), "chat" . $autovalueX[0]['groupe_id'], 380, 480);
-                    $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">" . $autovalueX[0]['groupe_name'] . "</a>";
+                    $PopUp = java::JavaPopUp(site_url('chat.php?id='. $autovalueX[0]['groupe_id'] .'&auto='. crypt::encrypt(serialize($autovalueX[0]['groupe_id']))), "chat" . $autovalueX[0]['groupe_id'], 380, 480);
+                    $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">". $autovalueX[0]['groupe_name'] ."</a>";
                     
-                    $numofchatters = DB::table('chatbox')->distinct()->select('ip')->where('id', $autovalueX[0]['groupe_id'])->where('date', '>=', (time() - (60 * 3)))->count();
+                    $numofchatters = DB::table('chatbox')
+                                        ->distinct()
+                                        ->select('ip')
+                                        ->where('id', $autovalueX[0]['groupe_id'])
+                                        ->where('date', '>=', (time() - (60 * 3)))
+                                        ->count();
 
                     if ($numofchatters) {
-                        $thing .= '&nbsp;(<span class="text-danger"><b>' . $numofchatters . '</b></span>)';
+                        $thing .= '&nbsp;(<span class="text-danger"><b>'. $numofchatters .'</b></span>)';
                     }
 
                     echo '</li>';

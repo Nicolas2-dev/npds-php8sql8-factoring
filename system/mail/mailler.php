@@ -43,10 +43,10 @@ class mailler
             
             if ($config['dkim_auto'] == 2) {
                 //Private key filename for this selector 
-                $privatekeyfile = 'storage/mailer/key/' . Config::get('app.NPDS_Key') . '_dkim_private.pem';
+                $privatekeyfile = 'storage/mailer/key/'. Config::get('app.NPDS_Key') .'_dkim_private.pem';
                 
                 //Public key filename for this selector 
-                $publickeyfile = 'storage/mailer/key/' . Config::get('app.NPDS_Key') . '_dkim_public.pem';
+                $publickeyfile = 'storage/mailer/key/'. Config::get('app.NPDS_Key') .'_dkim_public.pem';
                 
                 if (!file_exists($privatekeyfile)) {
                     //Create a 2048-bit RSA key with an SHA256 digest 
@@ -87,7 +87,7 @@ class mailler
                         }
                     }
 
-                    $mail->Port       = $config['smtp_port'];
+                    $mail->Port = $config['smtp_port'];
                 }
 
                 $mail->CharSet = 'utf-8';
@@ -175,7 +175,10 @@ class mailler
      */
     public static function copy_to_email(string $to_userid, string $sujet, string $message): void
     {
-        $user = DB::table('users')->select('email', 'send_email')->where('uid', $to_userid)->first();
+        $user = DB::table('users')
+                    ->select('email', 'send_email')
+                    ->where('uid', $to_userid)
+                    ->first();
 
         if (($user['mail']) and ($user['send_mail'] == 1)) {
             static::send_email($user['mail'], $sujet, $message, '', true, 'html', '');
@@ -216,15 +219,15 @@ class mailler
         
         if ($username == Config::get('npds.anonymous')) {
             if ($imgtmp) {
-                echo "<img alt=\"\" src=\"$imgtmp\" align=\"center\" />$username - <a href=\"user.php\" $class>" . translate("Votre compte") . "</a>";
+                echo '<img alt="" src="'. $imgtmp .'" align="center" />'. $username .' - <a href="'. site_url('user.php') .'" '. $class .'>' . translate("Votre compte") . '</a>';
             } else {
-                echo "[$username - <a href=\"user.php\" $class>" . translate("Votre compte") . "</a>]";
+                echo '['. $username .' - <a href="'. site_url('user.php') .'" '. $class .'>' . translate("Votre compte") . '</a>]';
             }
         } else {
             if ($imgtmp) {
-                echo "<a href=\"user.php\" $class><img alt=\"\" src=\"$imgtmp\" align=\"center\" />" . translate("Votre compte") . "</a>&nbsp;" . static::Mess_Check_Mail_Sub($username, $class);
+                echo '<a href="'. site_url('user.php') .'" '. $class .'><img alt="" src="'. $imgtmp .'" align="center" />'. translate("Votre compte") .'</a>&nbsp;'. static::Mess_Check_Mail_Sub($username, $class);
             } else {
-                echo "[<a href=\"user.php\" $class>" . translate("Votre compte") . "</a>&nbsp;&middot;&nbsp;" . static::Mess_Check_Mail_Sub($username, $class) . "]";
+                echo '[<a href="'. site_url('user.php') .'" $class>'. translate("Votre compte") .'</a>&nbsp;&middot;&nbsp;'. static::Mess_Check_Mail_Sub($username, $class) .']';
             }
         }
     }
@@ -240,7 +243,6 @@ class mailler
     public static function Mess_Check_Mail_Sub(string $username, string $class): string
     {
         if ($username) {
-
             $user = users::getUser();
 
             $userdata = explode(':', base64_decode($user));
@@ -274,15 +276,15 @@ class mailler
 
         $YNmail = "$Xcheck_Nmail";
         $Ymail = "$Xcheck_mail";
-        $Mel = "<a href=\"viewpmsg.php\" $class>Mel</a>";
+        $Mel = '<a href="'. site_url('viewpmsg.php') .'" '. $class .'>Mel</a>';
         
         if ($Xcheck_Nmail > 0) {
-            $YNmail = "<a href=\"viewpmsg.php\" $class>$Xcheck_Nmail</a>";
+            $YNmail = '<a href="'. site_url('viewpmsg.php') .'" '. $class .'>'. $Xcheck_Nmail .'</a>';
             $Mel = 'Mel';
         }
 
         if ($Xcheck_mail > 0) {
-            $Ymail = "<a href=\"viewpmsg.php\" $class>$Xcheck_mail</a>";
+            $Ymail = '<a href="'. site_url('viewpmsg.php') .'" '. $class .'>'. $Xcheck_mail .'</a>';
             $Mel = 'Mel';
         }
 
@@ -326,7 +328,7 @@ class mailler
 
         fclose($handle);
 
-        if (strstr($contents, '#' . $utilisateur . '|')) {
+        if (strstr($contents, '#' . $utilisateur .'|')) {
             return true;
         } else {
             return false;

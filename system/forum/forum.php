@@ -957,7 +957,7 @@ class forum
     public static function searchblock(): string
     {
         $ibid = '
-                <form class="row" id="searchblock" action="searchbb.php" method="post" name="forum_search">
+                <form class="row" id="searchblock" action="'. site_url('searchbb.php') .'" method="post" name="forum_search">
                     <input type="hidden" name="addterm" value="any" />
                     <input type="hidden" name="sortby" value="0" />
                     <div class="col">
@@ -1491,7 +1491,7 @@ class forum
                                     if ((file_exists("themes/$theme/view/forum-cat". $row['cat_id'] .".html")) or (file_exists("themes/default/view/forum-cat". $row['cat_id'] .".html"))) {
                                         $ibid .= '
                                         <div class=" mt-3" id="catfo_'. $row['cat_id'] .'" >
-                                            <a class="list-group-item list-group-item-action active" href="forum.php?catid='. $row['cat_id'] .'"><h5>'. $title .'</h5></a>';
+                                            <a class="list-group-item list-group-item-action active" href="'. site_url('forum.php?catid='. $row['cat_id']) .'"><h5>'. $title .'</h5></a>';
                                     } else {
                                         $ibid .= '
                                         <div class=" mt-3" id="catfo_'. $row['cat_id'] .'">

@@ -108,6 +108,6 @@ switch ($op) {
         break;
 
     default:
-        select_start_page($op, '');
+        select_start_page($op);
         break;
 }

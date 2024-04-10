@@ -27,8 +27,6 @@ class news
      */
     public static function ultramode(): void
     {
-        $nuke_url = Config::get('npds.nuke_url');
-
         $ultra = "storage/news/ultramode.txt";
         $netTOzone = "storage/news/net2zone.txt";
 
@@ -69,8 +67,8 @@ class news
 
             $hometext = metalang::meta_lang(strip_tags($hometext));
             
-            fwrite($file, "%%\n$title\n$nuke_url/article.php?sid=$sid\n$time\n$aid\n". $res['topictext'] ."\n$hometext\n" .$res['topicimage'] ."\n");
-            fwrite($file2, "<NEWS>\n<NBX>". $res['topictext'] ."</NBX>\n<TITLE>" . stripslashes($title) . "</TITLE>\n<SUMMARY>$hometext</SUMMARY>\n<URL>$nuke_url/article.php?sid=$sid</URL>\n<AUTHOR>" . $aid . "</AUTHOR>\n</NEWS>\n\n");
+            fwrite($file, "%%\n$title\n". site_url('article.php?sid='.$sid) ."\n$time\n$aid\n". $res['topictext'] ."\n$hometext\n" .$res['topicimage'] ."\n");
+            fwrite($file2, "<NEWS>\n<NBX>". $res['topictext'] ."</NBX>\n<TITLE>" . stripslashes($title) . "</TITLE>\n<SUMMARY>$hometext</SUMMARY>\n<URL>". site_url('article.php?sid='. $sid) ."/</URL>\n<AUTHOR>" . $aid . "</AUTHOR>\n</NEWS>\n\n");
         
             $story_limit++;
         }
@@ -563,15 +561,15 @@ class news
             if (sizeof($news_tab) == $storynum) {
                 $marqeur = $marqeur + sizeof($news_tab);
                 echo '<div class="text-end">
-                    <a href="index.php?op=' . $url . '&catid=' . $catid . '&marqeur=' . $marqeur . '" class="page_suivante" >
-                        ' . $transl1 . '<i class="fa fa-chevron-right fa-lg ms-2" title="' . $transl1 . '" data-bs-toggle="tooltip"></i>
+                    <a href="'. site_url('index.php?op='. $url .'&catid='. $catid .'&marqeur='. $marqeur) .'" class="page_suivante" >
+                        '. $transl1 .'<i class="fa fa-chevron-right fa-lg ms-2" title="'. $transl1 .'" data-bs-toggle="tooltip"></i>
                     </a>
                 </div>';
             } else {
                 if ($marqeur >= $storynum) {
                     echo '<div class="text-end">
-                        <a href="index.php?op=' . $url . '&catid=' . $catid . '&marqeur=0" class="page_suivante" title="' . $transl2 . '">
-                            ' . $transl2 . '<i class="fa fa-chevron-right fa-lg ms-2" title="' . $transl2 . '" data-bs-toggle="tooltip"></i>
+                        <a href="'. site_url('index.php?op='. $url .'&catid='. $catid .'&marqeur=0') .'" class="page_suivante" title="'. $transl2 .'">
+                            '. $transl2 .'<i class="fa fa-chevron-right fa-lg ms-2" title="'. $transl2 .'" data-bs-toggle="tooltip"></i>
                         </a>
                     </div>';
                 }
@@ -582,15 +580,15 @@ class news
             if (sizeof($news_tab) == $storynum) {
                 $marqeur = $marqeur + sizeof($news_tab);
                 echo '<div class="text-end">
-                    <a href="index.php?op=' . $url . '&catid=' . $catid . '&marqeur=' . $marqeur . '" class="page_suivante" >
-                        ' . $transl1 . '<i class="fa fa-chevron-right fa-lg ms-2" title="' . $transl1 . '" data-bs-toggle="tooltip"></i>
+                    <a href="'. site_url('index.php?op='. $url .'&catid='. $catid .'&marqeur='. $marqeur) .'" class="page_suivante" >
+                        '. $transl1 .'<i class="fa fa-chevron-right fa-lg ms-2" title="'. $transl1 .'" data-bs-toggle="tooltip"></i>
                     </a>
                 </div>';
             } else {
                 if ($marqeur >= $storynum) {
                     echo '<div class="text-end">
-                        <a href="index.php?op=' . $url . '&catid=' . $catid . '&marqeur=0" class="page_suivante" title="' . $transl2 . '">
-                            ' . $transl2 . '<i class="fa fa-chevron-right fa-lg ms-2" title="' . $transl2 . '" data-bs-toggle="tooltip"></i>
+                        <a href="'. site_url('index.php?op='. $url .'&catid='. $catid .'&marqeur=0') .'" class="page_suivante" title="'. $transl2 .'">
+                            '. $transl2 .'<i class="fa fa-chevron-right fa-lg ms-2" title="'. $transl2 .'" data-bs-toggle="tooltip"></i>
                         </a>
                     </div>';
                 }
@@ -601,15 +599,15 @@ class news
             if (sizeof($news_tab) == $storynum) {
                 $marqeur = $marqeur + sizeof($news_tab);
                 echo '<div align="right">
-                    <a href="index.php?op=newtopic&topic=' . $topic . '&marqeur=' . $marqeur . '" class="page_suivante" >
-                        ' . $transl1 . '<i class="fa fa-chevron-right fa-lg ms-2" title="' . $transl1 . '" data-bs-toggle="tooltip"></i>
+                    <a href="'. site_url('index.php?op=newtopic&topic='. $topic .'&marqeur='. $marqeur) .'" class="page_suivante" >
+                        '. $transl1 .'<i class="fa fa-chevron-right fa-lg ms-2" title="'. $transl1 .'" data-bs-toggle="tooltip"></i>
                     </a>
                 </div>';
             } else {
                 if ($marqeur >= $storynum) {
                     echo '<div class="text-end">
-                        <a href="index.php?op=newtopic&topic=' . $topic . '&marqeur=0" class="page_suivante" title="' . $transl2 . '">
-                            ' . $transl2 . '<i class="fa fa-chevron-right fa-lg ms-2" title="' . $transl2 . '" data-bs-toggle="tooltip"></i>
+                        <a href="'. site_url('index.php?op=newtopic&topic='. $topic .'&marqeur=0') .'" class="page_suivante" title="'. $transl2 .'">
+                            '. $transl2 .'<i class="fa fa-chevron-right fa-lg ms-2" title="'. $transl2 .'" data-bs-toggle="tooltip"></i>
                         </a>
                     </div>';
                 }
@@ -751,8 +749,8 @@ class news
             $informant  = $xtab[$story_limit]['informant'];
             $notes      = $xtab[$story_limit]['notes'];
 
-            $printP = '<a href="print.php?sid=' . $sid . '" class="me-3" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp;';
-            $sendF = '<a href="friend.php?op=FriendSend&amp;sid=' . $sid . '" class="me-3" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a>';
+            $printP = '<a href="'. site_url('print.php?sid='. $sid) .'" class="me-3" title="'. translate("Page spéciale pour impression") .'" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-print"></i></a>&nbsp;';
+            $sendF = '<a href="'. site_url('friend.php?op=FriendSend&amp;sid='. $sid) .'" class="me-3" title="'. translate("Envoyer cet article à un ami") .'" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a>';
             
             list($topicname, $topicimage, $topictext) = static::getTopics($sid);
             
@@ -765,12 +763,12 @@ class news
                 $bodycount = strlen(strip_tags(language::aff_langue($bodytext)));
                 
                 if ($bodycount > 0) {
-                    $morelink[0] = str::wrh($bodycount) . ' ' . translate("caractères de plus");
+                    $morelink[0] = str::wrh($bodycount) .' '. translate("caractères de plus");
                 } else {
                     $morelink[0] = ' ';
                 }
 
-                $morelink[1] = ' <a href="article.php?sid=' . $sid . '" >' . translate("Lire la suite...") . '</a>';
+                $morelink[1] = ' <a href="'. site_url('article.php?sid='. $sid) .'" >'. translate("Lire la suite...") .'</a>';
             } else {
                 $morelink[0] = '';
                 $morelink[1] = '';
@@ -778,13 +776,13 @@ class news
 
             if ($comments == 0) {
                 $morelink[2] = 0;
-                $morelink[3] = '<a href="article.php?sid=' . $sid . '" class="me-3"><i class="far fa-comment fa-lg" title="' . translate("Commentaires ?") . '" data-bs-toggle="tooltip"></i></a>';
+                $morelink[3] = '<a href="'. site_url('article.php?sid='. $sid) .'" class="me-3"><i class="far fa-comment fa-lg" title="'. translate("Commentaires ?") .'" data-bs-toggle="tooltip"></i></a>';
             } elseif ($comments == 1) {
                 $morelink[2] = $comments;
-                $morelink[3] = '<a href="article.php?sid=' . $sid . '" class="me-3"><i class="far fa-comment fa-lg" title="' . translate("Commentaire") . '" data-bs-toggle="tooltip"></i></a>';
+                $morelink[3] = '<a href="'. site_url('article.php?sid='. $sid) .'" class="me-3"><i class="far fa-comment fa-lg" title="'. translate("Commentaire") .'" data-bs-toggle="tooltip"></i></a>';
             } else {
                 $morelink[2] = $comments;
-                $morelink[3] = '<a href="article.php?sid=' . $sid . '" class="me-3" ><i class="far fa-comment fa-lg" title="' . translate("Commentaires") . '" data-bs-toggle="tooltip"></i></a>';
+                $morelink[3] = '<a href="'. site_url('article.php?sid='. $sid) .'" class="me-3" ><i class="far fa-comment fa-lg" title="'. translate("Commentaires") .'" data-bs-toggle="tooltip"></i></a>';
             }
 
             $morelink[4] = $printP;
@@ -797,7 +795,7 @@ class news
                             ->first(); 
 
                 // Attention à cela aussi ????? pourquoi pas compris !!!!
-                $morelink[6] = ' <a href="index.php?op=newcategory&amp;catid=' . $catid . '">&#x200b;' . language::aff_langue($title1['title']) . '</a>';
+                $morelink[6] = '<a href="'. site_url('index.php?op=newcategory&amp;catid='. $catid) .'">&#x200b;'. language::aff_langue($title1['title']) .'</a>';
             } else {
                 $morelink[6] = '';
             }
@@ -833,8 +831,11 @@ class news
      */
     public static function getTopics(string|int $sid): bool|array
     {
-        if ($result = DB::table('stories')->select('topic')->where('sid', $sid)->first()) {
-
+        if ($result = DB::table('stories')
+                        ->select('topic')
+                        ->where('sid', $sid)
+                        ->first()) 
+        {
             $res_topic = DB::table('topics')
                         ->select('topicname', 'topicimage', 'topictext')
                         ->where('topicid', $result['topic'])
