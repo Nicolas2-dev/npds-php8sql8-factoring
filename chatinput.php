@@ -62,11 +62,11 @@ echo '</head>
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="assets/shared/font-awesome/css/all.min.css">
-        <form name="coolsus" action="' . site_url('chatinput.php') .'" method="post">
+        <form name="coolsus" action="'. site_url('chatinput.php') .'" method="post">
         <input type="hidden" name="op" value="set" />
         <input type="hidden" name="id" value="' . $id . '" />
         <input type="hidden" name="auto" value="' . $auto . '" />
-        '.translate("Vous êtes connecté en tant que :") . ' <strong>' . $pseudo . '</strong>&nbsp;
+        '. translate("Vous êtes connecté en tant que :") .' <strong>' . $pseudo . '</strong>&nbsp;
         <input type="hidden" name="name" value="' . $pseudo . '" />
         <textarea id="chatarea" class="form-control my-3" type="text" rows="2" name="message" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)" placeholder="🖋"></textarea>
             <div class="float-end">';

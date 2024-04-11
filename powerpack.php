@@ -53,7 +53,7 @@ switch ($op) {
             }
         }
 
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php'));
         break;
 
         // Instant Members Message
@@ -71,7 +71,7 @@ switch ($op) {
             }
         }
         
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php'));
         break;
         // Purge Chat Box
 }

@@ -53,6 +53,6 @@ if ($uriBlocNote) {
             sql_query("UNLOCK TABLES");
         }
     }
-    header("location: " . urldecode($uriBlocNote));
+    header('location: '. site_url(urldecode($uriBlocNote)));
 } else
-    header("location: index.php");
+    header('location: '. site_url('index.php'));

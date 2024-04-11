@@ -32,7 +32,7 @@ if (!users::AutoReg()) {
 }
 
 if ((Config::get('npds.member_list') == 1) and !isset($user) and !isset($admin)) {
-    Header("Location: user.php");
+    Header('Location: '. site_url('user.php'));
 }
 
 if (isset($gr_from_ws) and ($gr_from_ws != 0)) {
@@ -63,7 +63,7 @@ function alpha()
     $counter = 0;
 
     foreach ($alphabet as $ltr) {
-        echo '<a href="memberslist.php?letter=' . $ltr . '&amp;sortby=' . $sortby . '&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . $ltr . '</a>';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $ltr . '&amp;sortby=' . $sortby . '&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . $ltr . '</a>';
         
         if ($counter != $num) {
             echo ' | ';
@@ -74,7 +74,7 @@ function alpha()
 
     echo '
     <br />
-    <form action="memberslist.php" method="post">
+    <form action="'. site_url('memberslist.php') .'" method="post">
         <div class="mb-3 row">
             <label class="col-form-label col-sm-3" for="mblst_search">' . translate("Recherche") . '</label>
             <div class="col-sm-9">
@@ -118,21 +118,21 @@ function SortLinks($letter)
         echo translate("identifiant") . ' | ';
         $sort = true;
     } else {
-        echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=uname%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("identifiant") . '</a> | ';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=uname%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("identifiant") . '</a> | ';
     }
 
     if ($sortby == 'name ASC') {
         echo translate("vrai nom") . ' | ';
         $sort = true;
     } else {
-        echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=name%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("vrai nom") . '</a> | ';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=name%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("vrai nom") . '</a> | ';
     }
 
     if ($sortby == 'user_avatar ASC') {
         echo translate("Avatar") . ' | ';
         $sort = true;
     } else {
-        echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=user_avatar%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("Avatar") . '</a> | ';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=user_avatar%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("Avatar") . '</a> | ';
     }
 
     if (($sortby == 'femail ASC') or ($sortby == 'email ASC')) {
@@ -140,9 +140,9 @@ function SortLinks($letter)
         $sort = true;
     } else {
         if ($admin) {
-            echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=email%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("Email") . '</a> | ';
+            echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=email%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("Email") . '</a> | ';
         } else {
-            echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=femail%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("Email") . '</a> | ';
+            echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=femail%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("Email") . '</a> | ';
         }
     }
 
@@ -150,28 +150,28 @@ function SortLinks($letter)
         echo translate("Localisation") . ' | ';
         $sort = true;
     } else {
-        echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=user_from%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("Localisation") . '</a> | ';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=user_from%20ASC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("Localisation") . '</a> | ';
     }
 
     if ($sortby == 'url DESC') {
         echo translate("Url") . ' | ';
         $sort = true;
     } else {
-        echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=url%20DESC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("Url") . '</a> | ';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=url%20DESC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("Url") . '</a> | ';
     }
 
     if ($sortby == 'mns DESC') {
         echo translate("MiniSite") . ' | ';
         $sort = true;
     } else {
-        echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=mns%20DESC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">' . translate("MiniSite") . '</a> | ';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=mns%20DESC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">' . translate("MiniSite") . '</a> | ';
     }
 
     if ($sortby == 'uid DESC') {
         echo "I.D";
         $sort = true;
     } else {
-        echo '<a href="memberslist.php?letter=' . $letter . '&amp;sortby=uid%20DESC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '">I.D</a>';
+        echo '<a href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=uid%20DESC&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws) .'">I.D</a>';
     }
 
     if (!$sort) {
@@ -250,7 +250,7 @@ if (!isset($gr_from_ws)) {
     }
     
     echo '<div class="col">
-            ' . translate("Bienvenue au dernier membre affilié : ") . ' <br /><h4><a href="user.php?op=userinfo&amp;uname=' . $lastuser . '">' . $lastuser . '</a></h4>
+            ' . translate("Bienvenue au dernier membre affilié : ") . ' <br /><h4><a href="'. site_url('user.php?op=userinfo&amp;uname=' . $lastuser) .'">' . $lastuser . '</a></h4>
             </div>
         </div>
         <hr />';
@@ -401,11 +401,11 @@ if ($letter != 'front') {
             $useroutils = '';
 
             if ($temp_user['uid'] != 1 and $temp_user['uid'] != '') {
-                $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="user.php?op=userinfo&amp;uname=' . $temp_user['uname'] . '" target="_blank" title="' . translate("Profil") . '" ><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('user.php?op=userinfo&amp;uname=' . $temp_user['uname']) .'" target="_blank" title="' . translate("Profil") . '" ><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
             }
 
             if ($temp_user['uid'] != 1 and $temp_user['uid'] != '') {
-                $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="powerpack.php?op=instant_message&amp;to_userid=' . urlencode($temp_user['uname']) . '" title="' . translate("Envoyer un message interne") . '" ><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . urlencode($temp_user['uname'])) .'" title="' . translate("Envoyer un message interne") . '" ><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
             }
 
             if ($temp_user['femail'] != '') {
@@ -417,18 +417,18 @@ if ($letter != 'front') {
             }
 
             if ($temp_user['mns']) {
-                $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="minisite.php?op=' . $temp_user['uname'] . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" ><i class="fa fa-desktop fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('minisite.php?op=' . $temp_user['uname']) .'" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" ><i class="fa fa-desktop fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
             }
 
             if ($user) {
                 if ($temp_user['uid'] != 1) {
-                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;list=' . $list . urlencode($temp_user['uname']) . ',&amp;page=' . $page . '&amp;gr_from_ws=' . $gr_from_ws . '" title="' . translate("Ajouter à la liste de diffusion") . '" ><i class="fa fa-plus-circle fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Liste de diffusion") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;list=' . $list . urlencode($temp_user['uname']) . ',&amp;page=' . $page . '&amp;gr_from_ws=' . $gr_from_ws) .'" title="' . translate("Ajouter à la liste de diffusion") . '" ><i class="fa fa-plus-circle fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Liste de diffusion") . '</span></a>';
                 }
             }
 
             if ($temp_user['uid'] != 1 and array_key_exists($ch_lat, $posterdata_extend)) {
                 if ($posterdata_extend[$ch_lat] != '') {
-                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u' . $temp_user['uid'] . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Localisation") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u' . $temp_user['uid']) .'" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Localisation") . '</span></a>';
                 }
             }
 
@@ -453,7 +453,7 @@ if ($letter != 'front') {
                 if ($ibid_avatar = avatar($temp_user['user_avatar'])) {
                     echo '<a tabindex="0" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $temp_user['uname'] . '" data-bs-content=\'<div class="list-group mb-3 text-center">' . $useroutils . '</div><div class="mx-auto text-center" style="max-width:170px;">' . $my_rs . '</div>\'></i><img data-bs-html="true" class=" btn-outline-' . $clconnect . ' img-thumbnail img-fluid n-ava-40" src="' . $ibid_avatar . '" alt="' . $temp_user['uname'] . '" loading="lazy" /></a>
                     </td>
-                    <td><a href="user.php?op=userinfo&amp;uname=' . $temp_user['uname'] . '" title="' . translate("Inscription") . ' : ' . date(translate("dateinternal"), (int)$temp_user['user_regdate']);
+                    <td><a href="'. site_url('user.php?op=userinfo&amp;uname=' . $temp_user['uname']) .'" title="' . translate("Inscription") . ' : ' . date(translate("dateinternal"), (int)$temp_user['user_regdate']);
                 }
 
                 if ($admin and $temp_user['user_lastvisit'] != '') {
@@ -493,8 +493,8 @@ if ($letter != 'front') {
                 if ($admin) {
                     echo '
                     <td>
-                    <a class="me-3" href="admin.php?chng_uid=' . $temp_user['uid'] . '&amp;op=modifyUser" ><i class="fa fa-edit fa-lg" title="' . translate("Editer") . '" data-bs-toggle="tooltip"></i></a> 
-                    <a href="admin.php?op=delUser&amp;chng_uid=' . $temp_user['uid'] . '" ><i class="fas fa-trash fa-lg text-danger" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"></i></a>';
+                    <a class="me-3" href="'. site_url('admin.php?chng_uid=' . $temp_user['uid'] . '&amp;op=modifyUser') .'" ><i class="fa fa-edit fa-lg" title="' . translate("Editer") . '" data-bs-toggle="tooltip"></i></a> 
+                    <a href="'. site_url('admin.php?op=delUser&amp;chng_uid=' . $temp_user['uid']) .'" ><i class="fas fa-trash fa-lg text-danger" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"></i></a>';
                     
                     if (!$temp_user['is_visible']) {
                         echo '<img src="assets/images/admin/ws/user_invisible.gif" alt="' . translate("Membre invisible") . '" title="' . translate("Membre invisible") . '" />';
@@ -527,8 +527,8 @@ if ($letter != 'front') {
             echo urldecode($list);
             echo '
                 <span class="float-end">
-                <a href="replypmsg.php?send=' . substr($list, 0, strlen($list) - 3) . '" ><i class="far fa-envelope fa-lg" title="' . translate("Ecrire à la liste") . '" data-bs-toggle="tooltip" ></i></a>
-                <a class="ms-3" href="memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;page=' . $page . '&amp;gr_from_ws=' . $gr_from_ws . '" ><i class="fas fa-trash fa-lg text-danger" title="' . translate("Raz de la liste") . '" data-bs-toggle="tooltip" ></i></a>
+                <a href="'. site_url('replypmsg.php?send=' . substr($list, 0, strlen($list) - 3)) .'" ><i class="far fa-envelope fa-lg" title="' . translate("Ecrire à la liste") . '" data-bs-toggle="tooltip" ></i></a>
+                <a class="ms-3" href="'. site_url('memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;page=' . $page . '&amp;gr_from_ws=' . $gr_from_ws) .'" ><i class="fas fa-trash fa-lg text-danger" title="' . translate("Raz de la liste") . '" data-bs-toggle="tooltip" ></i></a>
                 </span>';
         }
 
@@ -557,7 +557,7 @@ if ($letter != 'front') {
             $current = $nbPages;
         }
 
-        echo paginator::paginate_single('memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '&amp;page=', '', $nbPages, $current, $adj = 3, '', '');
+        echo paginator::paginate_single(site_url('memberslist.php?letter=' . $letter . '&amp;sortby=' . $sortby . '&amp;list=' . $list . '&amp;gr_from_ws=' . $gr_from_ws . '&amp;page='), '', $nbPages, $current, $adj = 3, '', '');
     } else {
         echo '<div class="mt-3 lead align-middle"><span class="badge bg-secondary lead">' . $num_rows_per_order . '</span> ' . translate("Utilisateurs trouvés") . '</div>';
     }

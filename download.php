@@ -40,6 +40,8 @@ function geninfo($did, $out_template)
     $result = sql_query("SELECT dcounter, durl, dfilename, dfilesize, ddate, dweb, duser, dver, dcategory, ddescription, perms FROM " . $NPDS_Prefix . "downloads WHERE did='$did'");
     list($dcounter, $durl, $dfilename, $dfilesize, $ddate, $dweb, $duser, $dver, $dcategory, $ddescription, $dperm) = sql_fetch_row($result);
 
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $okfile = false;
 
     if (!stristr($dperm, ',')) { 
@@ -119,6 +121,8 @@ function tlist()
     $acounter = sql_query("SELECT COUNT(*) FROM " . $NPDS_Prefix . "downloads");
     list($acount) = sql_fetch_row($acounter);
 
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     if (($cate == translate("Tous")) or ($cate == '')) {
         echo '<i class="fa fa-folder-open fa-2x text-muted align-middle me-2"></i><strong><span class="align-middle">' . translate("Tous") . '</span>
     <span class="badge bg-secondary ms-2 float-end my-2">' . $acount . '</span></strong>';
@@ -128,6 +132,8 @@ function tlist()
 
     $result = sql_query("SELECT DISTINCT dcategory, COUNT(dcategory) FROM " . $NPDS_Prefix . "downloads GROUP BY dcategory ORDER BY dcategory");
     
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     echo '</p>';
 
     while (list($category, $dcount) = sql_fetch_row($result)) {
@@ -350,8 +356,12 @@ function listdownloads($dcategory, $sortby, $sortorder)
 
     if ($dcategory == translate("Tous")) {
         $sql = "SELECT COUNT(*) FROM " . $NPDS_Prefix . "downloads";
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
     } else {
         $sql = "SELECT COUNT(*) FROM " . $NPDS_Prefix . "downloads WHERE dcategory='" . addslashes($dcategory) . "'";
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
     }
 
     $result = sql_query($sql);
@@ -393,8 +403,12 @@ function listdownloads($dcategory, $sortby, $sortorder)
 
     if ($dcategory == translate("Tous")) {
         $sql = "SELECT * FROM " . $NPDS_Prefix . "downloads ORDER BY $sortby $sortorder LIMIT $offset,$perpage";
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
     } else {
         $sql = "SELECT * FROM " . $NPDS_Prefix . "downloads WHERE dcategory='" . addslashes($dcategory) . "' ORDER BY $sortby $sortorder LIMIT $offset, $perpage";
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
     }
 
     $result = sql_query($sql);
@@ -513,6 +527,8 @@ function transferfile($did)
     $result = sql_query("SELECT dcounter, durl, perms FROM " . $NPDS_Prefix . "downloads WHERE did='$did'");
     list($dcounter, $durl, $dperm) = sql_fetch_row($result);
 
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+
     if (!$durl) {
         include("themes/default/header.php");
         echo '
@@ -532,6 +548,10 @@ function transferfile($did)
                     $dcounter++;
                     sql_query("UPDATE " . $NPDS_Prefix . "downloads SET dcounter='$dcounter' WHERE did='$did'");
                     
+                    DB::table('')->where('', )->update(array(
+                        ''       => ,
+                    ));
+
                     header("location: " . str_replace(basename($durl), rawurlencode(basename($durl)), $durl));
                     break;
                 } else {
@@ -547,6 +567,10 @@ function transferfile($did)
                 $dcounter++;
                 sql_query("UPDATE " . $NPDS_Prefix . "downloads SET dcounter='$dcounter' WHERE did='$did'");
                 
+                DB::table('')->where('', )->update(array(
+                    ''       => ,
+                ));
+
                 header("location: " . str_replace(basename($durl), rawurlencode(basename($durl)), $durl));
             } else
                 Header('Location: ' . site_url('download.php'));
@@ -562,7 +586,7 @@ function broken($did)
 
     if ($user) {
         if ($did) {
-            global $notify_email, $notify_message, $notify_from; // $notify_message ??? not used
+            global $notify_email, $notify_from;
             
             settype($did, "integer");
             

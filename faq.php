@@ -14,49 +14,66 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\system\cache\cache;
 use npds\system\security\hack;
 use npds\system\language\language;
 use npds\system\language\metalang;
-use npds\system\cache\cacheManager;
-use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\DB;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-function ShowFaq($id_cat, $categories) // cette function ne sert strictement a rien 
+/**
+ *  
+ *
+ * @param   int     $id_cat      [$id_cat description]
+ * @param   string  $categories  [$categories description]
+ *
+ * @return  void
+ */
+function ShowFaq(int $id_cat, string $categories): void 
 {
-    global $NPDS_Prefix;
-
     echo '
     <h2 class="mb-4">' . translate("FAQ - Questions fréquentes") . '</h2>
     <hr />
     <h3 class="mb-3">' . translate("Catégorie") . ' <span class="text-muted"># ' . StripSlashes($categories) . '</span></h3>
     <p class="lead">
-        <a href="faq.php" title="' . translate("Retour à l'index FAQ") . '" data-bs-toggle="tooltip">Index</a>&nbsp;&raquo;&raquo;&nbsp;' . StripSlashes($categories) . '
+        <a href="'. site_url('faq.php') .'" title="' . translate("Retour à l'index FAQ") . '" data-bs-toggle="tooltip">Index</a>&nbsp;&raquo;&raquo;&nbsp;' . StripSlashes($categories) . '
     </p>';
 
-    $result = sql_query("SELECT id, id_categorie, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id='$id_cat'");
-    while (list($id, $id_cat, $question, $answer) = sql_fetch_row($result)) {
-    }
+    // cette requette ne sert a rien !!!
+    // foreach (DB::table('faqanswer')
+    //             ->select('id', 'id_categorie', 'question', 'answer')
+    //             ->where('id', $id_cat)
+    //             ->get() as $faqanswer) 
+    // {
+    // }
 }
 
-function ShowFaqAll($id_cat)
+/**
+ * [ShowFaqAll description]
+ *
+ * @param   int   $id_cat  [$id_cat description]
+ *
+ * @return  void
+ */
+function ShowFaqAll(int $id_cat): void
 {
-    global $NPDS_Prefix;
-
-    $result = sql_query("SELECT id, id_cat, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id_cat='$id_cat'");
-
-    while (list($id, $id_cat, $question, $answer) = sql_fetch_row($result)) {
+    foreach (DB::table('faqanswer')
+            ->select('id', 'id_categorie', 'question', 'answer')
+            ->where('id', $id_cat)
+            ->get() as $faqanswer) 
+    {
         echo '
-        <div class="card mb-3" id="accordion_' . $id . '" role="tablist" aria-multiselectable="true">
+        <div class="card mb-3" id="accordion_' . $faqanswer['id_categorie'] . '" role="tablist" aria-multiselectable="true">
             <div class="card-body">
                 <h4 class="card-title">
-                <a data-bs-toggle="collapse" data-parent="#accordion_' . $id . '" href="#faq_' . $id . '" aria-expanded="true" aria-controls="' . $id . '"><i class="fa fa-caret-down toggle-icon"></i></a>&nbsp;' . language::aff_langue($question) . '
+                <a data-bs-toggle="collapse" data-parent="#accordion_' . $faqanswer['id_categorie'] . '" href="#faq_' . $faqanswer['id_categorie'] . '" aria-expanded="true" aria-controls="' . $faqanswer['id'] . '"><i class="fa fa-caret-down toggle-icon"></i></a>&nbsp;' . language::aff_langue($faqanswer['question']) . '
                 </h4>
-                <div class="collapse" id="faq_' . $id . '" >
+                <div class="collapse" id="faq_' . $faqanswer['id_categorie'] . '" >
                 <div class="card-text">
-                ' . metalang::meta_lang(language::aff_langue($answer)) . '
+                ' . metalang::meta_lang(language::aff_langue($faqanswer['answer'])) . '
                 </div>
                 </div>
             </div>
@@ -65,60 +82,52 @@ function ShowFaqAll($id_cat)
 }
 
 settype($myfaq, 'string');
+settype($id_cat, 'int');
 
 if (!$myfaq) {
     include("themes/default/header.php");
 
-    // Include cache manager
-    if ($SuperCache) {
-        $cache_obj = new cacheManager();
-        $cache_obj->startCachingPage();
-    } else {
-        $cache_obj = new SuperCacheEmpty();
-    }
+    // start Caching page
+    if (cache::cacheManagerStart2()) {
 
-    if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
-        $result = sql_query("SELECT id_cat, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id_cat ASC");
-        
+        $result = DB::table('faqcategories')
+                ->select('id', 'categories')
+                ->orderBy('id', 'asc')
+                ->get();
+
         echo '
         <h2 class="mb-4">' . translate("FAQ - Questions fréquentes") . '</h2>
         <hr />
-        <h3 class="mb-3">' . translate("Catégories") . '<span class="badge bg-secondary float-end">' . sql_num_rows($result) . '</span></h3>
+        <h3 class="mb-3">' . translate("Catégories") . '<span class="badge bg-secondary float-end">' . count($result) . '</span></h3>
         <div class="list-group">';
         
-        while (list($id_cat, $categories) = sql_fetch_row($result)) {
-            $catname = urlencode(language::aff_langue($categories));
-            echo '<a class="list-group-item list-group-item-action" href="faq.php?id_cat=' . $id_cat . '&amp;myfaq=yes&amp;categories=' . $catname . '"><h4 class="list-group-item-heading">' . language::aff_langue($categories) . '</h4></a>';
+        foreach ($result as $categ) 
+        {
+            $catname = urlencode(language::aff_langue($categ['categories']));
+            echo '<a class="list-group-item list-group-item-action" href="'. site_url('faq.php?id_cat=' . $categ['id'] . '&amp;myfaq=yes&amp;categories=' . $catname) .'">
+                <h4 class="list-group-item-heading">' . language::aff_langue($categ['categories']) . '</h4>
+            </a>';
         }
 
         echo '</div>';
     }
 
-    if ($SuperCache) {
-        $cache_obj->endCachingPage();
-    }
+    // end Caching page
+    cache::cacheManagerEnd();
 
     include("themes/default/footer.php");;
 } else {
     $title = "FAQ : " . hack::removeHack(StripSlashes($categories));
     include("themes/default/header.php");
 
-    // Include cache manager
-    if ($SuperCache) {
-        $cache_obj = new cacheManager();
-        $cache_obj->startCachingPage();
-    } else {
-        $cache_obj = new SuperCacheEmpty();
-    }
-
-    if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+    // start Caching page
+    if (cache::cacheManagerStart2()) {
         ShowFaq($id_cat, hack::removeHack($categories));
         ShowFaqAll($id_cat);
     }
 
-    if ($SuperCache) {
-        $cache_obj->endCachingPage();
-    }
+    // end Caching page
+    cache::cacheManagerEnd();
     
     include("themes/default/footer.php");
 }

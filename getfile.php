@@ -77,7 +77,7 @@ switch ($apli) {
                         if (file_exists("$att_id/getfile.conf.php") or file_exists("$att_id/.getfile.conf.php")) {
                             $fic = "$att_id/$att_name";
                         } else {
-                            header("location: index.php");
+                            header('location: '. site_url('index.php'));
                         }
                         break;
 
@@ -147,13 +147,13 @@ switch ($apli) {
 
                     readfile($fic);
                 } else {
-                    header("location: index.php");
+                    header('location: '. site_url('index.php'));
                 }
             } else {
-                header("location: index.php");
+                header('location: '. site_url('index.php'));
             }
         } else {
-            header("location: index.php");
+            header('location: '. site_url('index.php'));
         }
         break;
 
@@ -175,6 +175,6 @@ switch ($apli) {
         break;
 
     default:
-        header('location: index.php');
+        header('location: '. site_url('index.php'));
         break;
 }

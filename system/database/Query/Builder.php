@@ -567,7 +567,7 @@ class Builder
             $query .= ' OFFSET ' .$this->offset;
         }
 
-//vd($query);
+        //vd($query);
 
         return $query;
     }
@@ -600,8 +600,9 @@ class Builder
     {
         extract($where);
 
-        //
-        $column = $this->wrap($column);
+        if(isset($column)) {
+            $column = $this->wrap($column);            
+        }
 
         if ($type === 'Nested') {
             $sql = '(' .$query->compileWheres() .')';

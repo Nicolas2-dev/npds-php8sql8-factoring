@@ -31,7 +31,7 @@ $cache_obj =  $SuperCache ? new cacheManager() : new SuperCacheEmpty();
 include("auth.php");
 
 if (!$user) {
-    Header("Location: user.php");
+    Header('Location: '. site_url('user.php'));
 } else {
     include("themes/default/header.php");
 
@@ -46,8 +46,8 @@ if (!$user) {
 
     echo '
     <div class="card card-body mt-3">
-        <h2><a href="replypmsg.php?send=1" title="' . translate("Ecrire un nouveau message privé") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . translate("Message personnel") . " - </span>" . translate("Boîte de réception") . '</h2>
-        <form id="viewpmsg-dossier" action="viewpmsg.php" method="post">
+        <h2><a href="'. site_url('replypmsg.php?send=1') .'" title="' . translate("Ecrire un nouveau message privé") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . translate("Message personnel") . " - </span>" . translate("Boîte de réception") . '</h2>
+        <form id="viewpmsg-dossier" action="'. site_url('viewpmsg.php') .'" method="post">
             <div class="mb-3">
                 <label class="sr-only" for="dossier" >' . translate("Sujet") . '</label>
                 <select class="form-select" name="dossier" onchange="document.forms[\'viewpmsg-dossier\'].submit()">
@@ -99,7 +99,7 @@ if (!$user) {
         $display = 1;
 
         echo '
-        <form name="prvmsg" method="get" action="replypmsg.php" onkeypress="return event.keyCode != 13;">
+        <form name="prvmsg" method="get" action="'. site_url('replypmsg.php') .'" onkeypress="return event.keyCode != 13;">
             <table class="mb-3" data-toggle="table" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa" data-search="true" data-search-align="left"
                 data-buttons-align="left"
                 data-toolbar-align="left">
@@ -149,9 +149,9 @@ if (!$user) {
                     </td>';
 
             if ($myrow['read_msg'] == "1") {
-                echo '<td><a href="readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier']) . '" title="' . translate("Lu") . '" data-bs-toggle="tooltip"><i class="far fa-envelope-open fa-lg "></i></a></td>';
+                echo '<td><a href="'. site_url('readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier'])) .'" title="' . translate("Lu") . '" data-bs-toggle="tooltip"><i class="far fa-envelope-open fa-lg "></i></a></td>';
             } else {
-                echo '<td><a href="readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier']) . '" title="' . translate("Non lu") . '" data-bs-toggle="tooltip"><i class="fa fa-envelope fa-lg faa-shake animated"></i></a></td>';
+                echo '<td><a href="'. site_url('readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier'])) .'" title="' . translate("Non lu") . '" data-bs-toggle="tooltip"><i class="fa fa-envelope fa-lg faa-shake animated"></i></a></td>';
             }
 
             if ($smilies) {
@@ -214,8 +214,8 @@ if (!$user) {
 
     echo '
         <div class="card card-body mt-3">
-        <h2><a href="replypmsg.php?send=1" title="' . translate("Ecrire un nouveau message privé") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . translate("Message personnel") . " - </span>" . translate("Boîte d'émission") . '<span class="badge bg-secondary float-end">' . $total_messages . '</span></h2>
-        <form id="" name="prvmsgB" method="get" action="replypmsg.php">
+        <h2><a href="'. site_url('replypmsg.php?send=1') .'" title="' . translate("Ecrire un nouveau message privé") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . translate("Message personnel") . " - </span>" . translate("Boîte d'émission") . '<span class="badge bg-secondary float-end">' . $total_messages . '</span></h2>
+        <form id="" name="prvmsgB" method="get" action="'. site_url('replypmsg.php') .'">
             <table class="mb-3" data-toggle="table" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa">
                 <thead class="thead-default">
                 <tr>
@@ -279,7 +279,7 @@ if (!$user) {
         $posterdata = forum::get_userdata_from_id($myrow['to_userid']);
 
         echo '
-                <td><a href="readpmsg.php?start=' . $count . '&amp;total_messages=' . $total_messages . '&amp;type=outbox" >' . $posterdata['uname'] . '</a></td>
+                <td><a href="'. site_url('readpmsg.php?start=' . $count . '&amp;total_messages=' . $total_messages . '&amp;type=outbox') .'" >' . $posterdata['uname'] . '</a></td>
                 <td>' . language::aff_langue($myrow['subject']) . '</td>
                 <td>' . $myrow['msg_time'] . '</td>
                 </tr>';

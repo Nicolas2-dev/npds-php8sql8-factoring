@@ -44,7 +44,7 @@ global $NPDS_Prefix;
 settype($cancel, 'string');
 
 if ($cancel) {
-    header("Location: viewtopic.php?topic=$topic&forum=$forum");
+    header('Location: '. site_url('viewtopic.php?topic='. $topic .'&forum='. $forum));
 }
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
@@ -59,11 +59,11 @@ $forum_type = $myrow['forum_type'];
 $mod = $myrow['forum_moderator'];
 
 if (($forum_type == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if ($forum_access == 9) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if (forum::is_locked($topic)) {
@@ -210,13 +210,11 @@ if ($submitS) {
             $resultZ = sql_query("SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'");
             list($title_topic) = sql_fetch_row($resultZ);
 
-            $nuke_url = Config::get('npds.nuke_url');
-
             $subject = strip_tags($forum_name) . "/" . $title_topic . " : " . html_entity_decode(translate_ml($m['user_langue'], "Une réponse à votre dernier Commentaire a été posté."), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $message = $m['uname'] . "\n\n";
             $message .= translate_ml($m['user_langue'], "Vous recevez ce Mail car vous avez demandé à être informé lors de la publication d'une réponse.") . "\n";
             $message .= translate_ml($m['user_langue'], "Pour lire la réponse") . " : ";
-            $message .= "<a href=\"$nuke_url/viewtopic.php?topic=$topic&forum=$forum&start=9999#lastpost\">$nuke_url/viewtopic.php?topic=$topic&forum=$forum&start=9999</a>\n\n";
+            $message .= "<a href=\"". site_url('viewtopic.php?topic='. $topic .'&forum='. $forum .'&start=9999#lastpost') ."\">". site_url('viewtopic.php?topic='. $topic .'&forum='. $forum .'&start=9999') ."</a>\n\n";
             $message .= Config::get('signature.message');
 
             mailler::send_email($m['email'], $subject, $message, '', true, "html", '');
@@ -291,8 +289,8 @@ if ($submitS) {
 
     echo '
     <p class="lead">
-        <a href="forum.php">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;
-        <a href="viewforum.php?forum=' . $forum . '">' . stripslashes($forum_name) . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $topic_title . '
+        <a href="'. site_url('forum.php') .'">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;
+        <a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . stripslashes($forum_name) . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $topic_title . '
     </p>
     <div class="card">
         <div class="card-body p-1">
@@ -313,7 +311,7 @@ if ($submitS) {
             }
         }
 
-        echo '<a href="user.php?op=userinfo&amp;uname=' . $moderator[$i] . '"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava me-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
+        echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator[$i]) .'"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava me-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
         
         if (isset($user)) {
             if (($userdata[1] == $moderator[$i])) {
@@ -326,7 +324,7 @@ if ($submitS) {
         </div>
     </div>
     <h4 class="d-none d-sm-block my-3"><img width="48" height="48" class=" rounded-circle me-3" src="' . $imgava . '" alt="" />' . translate("Poster une réponse dans le sujet") . '</h4>
-    <form action="reply.php" method="post" name="coolsus">';
+    <form action="'. site_url('reply.php') .'" method="post" name="coolsus">';
 
     echo '<blockquote class="blockquote d-none d-sm-block"><p>' . translate("A propos des messages publiés :") . '<br />';
 
@@ -611,11 +609,11 @@ if ($submitS) {
 
                 if ($user or users::autorisation(-127)) {
                     if ($posterdata['uid'] != 1 and $posterdata['uid'] != '') {
-                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="user.php?op=userinfo&amp;uname=' . $posterdata['uname'] . '" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
+                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('user.php?op=userinfo&amp;uname=' . $posterdata['uname']) .'" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
                     }
 
                     if ($posterdata['uid'] != 1) {
-                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"] . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
+                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"]) .'" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
                     }
 
                     if ($posterdata['femail'] != '') {
@@ -624,7 +622,7 @@ if ($submitS) {
 
                     if ($myrow['poster_id'] != 1 and array_key_exists($ch_lat, $posterdata_extend)) {
                         if ($posterdata_extend[$ch_lat] != '') {
-                            $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&amp;op=u' . $posterdata['uid'] . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw">&nbsp;</i><span class="ms-3 d-none d-md-inline">' . translate("Localisation") . '</span></a>';
+                            $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&amp;op=u' . $posterdata['uid']) .'" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw">&nbsp;</i><span class="ms-3 d-none d-md-inline">' . translate("Localisation") . '</span></a>';
                         }
                     }
                 }
@@ -634,7 +632,7 @@ if ($submitS) {
                 }
 
                 if ($posterdata['mns']) {
-                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="minisite.php?op=' . $posterdata['uname'] . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('minisite.php?op=' . $posterdata['uname']) .'" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
                 }
             }
 

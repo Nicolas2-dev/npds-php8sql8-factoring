@@ -86,7 +86,7 @@ $forum_type = $myrow['forum_type'];
 $forum_access = $myrow['forum_access'];
 
 if (($forum_type == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if (($forum_type == 5) or ($forum_type == 7)) {
@@ -99,12 +99,12 @@ if (($forum_type == 5) or ($forum_type == 7)) {
 
     //:: ici 
     if ((!$ok_affiche) and ($adminforum == 0)) {
-        header("location: forum.php");
+        header('location: '. site_url('forum.php'));
     }
 }
 
 if (($forum_type == 9) and (!$user)) {
-    header("location: forum.php");
+    header('location: '. site_url('forum.php'));
 }
 
 // Moderator
@@ -175,7 +175,7 @@ function aff_pub($lock_state, $topic, $forum, $mod)
     global $language;
 
     if ($lock_state == 0) {
-        echo '<a class="" href="newtopic.php?forum=' . $forum . '" title="' . translate("Nouveau sujet") . '" data-bs-toggle="tooltip" ><i class="fa fa-plus-square me-2"></i><span class="d-none d-md-inline">' . translate("Nouveau sujet") . '<br /></span></a>&nbsp;';
+        echo '<a class="" href="'. site_url('newtopic.php?forum=' . $forum) .'" title="' . translate("Nouveau sujet") . '" data-bs-toggle="tooltip" ><i class="fa fa-plus-square me-2"></i><span class="d-none d-md-inline">' . translate("Nouveau sujet") . '<br /></span></a>&nbsp;';
     } else if ($lock_state == 1) {
         echo '<i class="fa fa-lock fa-lg text-danger me-2" aria-hidden="true" title="' . translate("Vous ne pouvez répondre à ce topic il est verrouillé. Contacter l'administrateur du site.") . '" data-bs-toggle="tooltip"></i>';
     }
@@ -186,7 +186,7 @@ function aff_pub_in($lock_state, $topic, $forum, $mod)
     global $language;
 
     if ($lock_state == 0)
-        echo '<a class="me-3" href="reply.php?topic=' . $topic . '&amp;forum=' . $forum . '" title="' . translate("Répondre") . '" data-bs-toggle="tooltip"><span class="d-none d-md-inline"></span><i class="fa fa-reply me-2"></i><span class="d-none d-md-inline">' . translate("Répondre") . '</span></a>';
+        echo '<a class="me-3" href="'. site_url('reply.php?topic=' . $topic . '&amp;forum=' . $forum) .'" title="' . translate("Répondre") . '" data-bs-toggle="tooltip"><span class="d-none d-md-inline"></span><i class="fa fa-reply me-2"></i><span class="d-none d-md-inline">' . translate("Répondre") . '</span></a>';
 }
 
 $contributeurs = forum::get_contributeurs($forum, $topic);
@@ -201,8 +201,8 @@ include('themes/default/header.php');
 echo '
     <a name="topofpage"></a>
     <p class="lead">
-        <a href="forum.php">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;
-        <a href="viewforum.php?forum=' . $forum . '">' . stripslashes($forum_name) . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $topic_subject . '
+        <a href="'. site_url('forum.php') .'">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;
+        <a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . stripslashes($forum_name) . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $topic_subject . '
     </p>
     <h3 class="mb-3">';
 
@@ -302,7 +302,7 @@ for ($i = 0; $i < $ibidcountmod; $i++) {
             }
         }
     }
-    echo '<a href="user.php?op=userinfo&amp;uname=' . $moderator[$i] . '"><img class=" img-thumbnail img-fluid n-ava-small mb-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . translate("Modéré par : ") . ' ' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
+    echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator[$i]) .'"><img class=" img-thumbnail img-fluid n-ava-small mb-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . translate("Modéré par : ") . ' ' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
 }
 
 echo '
@@ -328,7 +328,7 @@ if ($total > $posts_per_page) {
                 </li>
                 </ul>
             </div>';
-    echo paginator::paginate('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start=', '', $nbPages, $current, $adj = 3, $posts_per_page, $start);
+    echo paginator::paginate(site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start='), '', $nbPages, $current, $adj = 3, $posts_per_page, $start);
     echo '
         </div>';
 }
@@ -475,11 +475,11 @@ do {
         $useroutils = '';
         if ($user or users::autorisation(-127)) {
             if ($posterdata['uid'] != 1 and $posterdata['uid'] != '') {
-                $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="user.php?op=userinfo&amp;uname=' . $posterdata['uname'] . '" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
+                $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="'. site_url('user.php?op=userinfo&amp;uname=' . $posterdata['uname']) .'" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
             }
 
             if ($posterdata['uid'] != 1) {
-                $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"] . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
+                $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"]) .'" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
             }
 
             if ($posterdata['femail'] != '') {
@@ -488,7 +488,7 @@ do {
 
             if ($myrow['poster_id'] != 1 and array_key_exists($ch_lat, $posterdata_extend)) {
                 if ($posterdata_extend[$ch_lat] != '') {
-                    $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&amp;op=u' . $posterdata['uid'] . '" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw">&nbsp;</i><span class="ms-3 d-none d-md-inline">' . translate("Localisation") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&amp;op=u' . $posterdata['uid']) .'" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw">&nbsp;</i><span class="ms-3 d-none d-md-inline">' . translate("Localisation") . '</span></a>';
                 }
             }
         }
@@ -498,7 +498,7 @@ do {
         }
 
         if ($posterdata['mns']) {
-            $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="minisite.php?op=' . $posterdata['uname'] . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-desktop fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
+            $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-start" href="'. site_url('minisite.php?op=' . $posterdata['uname']) .'" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-desktop fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
         }
     }
 
@@ -645,7 +645,7 @@ do {
         }
 
         if (($Mmod) or ($postuser) and (!$lock_state) and ($posterdata['uid'] != '')) {
-            echo '<a class="me-3" href="editpost.php?post_id=' . $myrow["post_id"] . '&amp;topic=' . $topic . '&amp;forum=' . $forum . '&amp;arbre=0" title="' . translate("Editer") . '" data-bs-toggle="tooltip"><i class="fa fa-edit fa-lg"></i></a>';
+            echo '<a class="me-3" href="'. site_url('editpost.php?post_id=' . $myrow["post_id"] . '&amp;topic=' . $topic . '&amp;forum=' . $forum . '&amp;arbre=0') .'" title="' . translate("Editer") . '" data-bs-toggle="tooltip"><i class="fa fa-edit fa-lg"></i></a>';
             
             if ($allow_upload_forum) {
                 $PopUp = win_upload("forum_npds", $myrow['post_id'], $forum, $topic, "popup");
@@ -658,18 +658,18 @@ do {
         }
 
         if ($allow_to_post and !$lock_state and $posterdata['uid'] != '') {
-            echo '<a class="me-3" href="reply.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;post=' . $myrow['post_id'] . '&amp;citation=1" title="' . translate("Citation") . '" data-bs-toggle="tooltip"><i class="fa fa-quote-left fa-lg"></i></a>';
+            echo '<a class="me-3" href="'. site_url('reply.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;post=' . $myrow['post_id'] . '&amp;citation=1') .'" title="' . translate("Citation") . '" data-bs-toggle="tooltip"><i class="fa fa-quote-left fa-lg"></i></a>';
         }
 
-        echo '<a class="me-3" href="prntopic.php?forum=' . $forum . '&amp;topic=' . $topic . '&amp;post_id=' . $myrow['post_id'] . '" title="' . translate("Imprimer") . '" data-bs-toggle="tooltip"><i class="fa fa-print fa-lg"></i></a>';
+        echo '<a class="me-3" href="'. site_url('prntopic.php?forum=' . $forum . '&amp;topic=' . $topic . '&amp;post_id=' . $myrow['post_id']) .'" title="' . translate("Imprimer") . '" data-bs-toggle="tooltip"><i class="fa fa-print fa-lg"></i></a>';
         
         if ($Mmod or $adminforum) {
-            echo '<a class="me-3" href="topicadmin.php?mode=viewip&amp;topic=' . $topic . '&amp;post=' . $myrow['post_id'] . '&amp;forum=' . $forum . '&amp;arbre=0" title="IP" data-bs-toggle="tooltip" ><i class="fa fa-laptop fa-lg"></i></a>';
+            echo '<a class="me-3" href="'. site_url('topicadmin.php?mode=viewip&amp;topic=' . $topic . '&amp;post=' . $myrow['post_id'] . '&amp;forum=' . $forum . '&amp;arbre=0') .'" title="IP" data-bs-toggle="tooltip" ><i class="fa fa-laptop fa-lg"></i></a>';
             
             if (!$myrow['post_aff']) {
-                echo '&nbsp;<a href="topicadmin.php?mode=aff&amp;topic=' . $topic . '&amp;post=' . $myrow['post_id'] . '&amp;ordre=1&amp;forum=' . $forum . '&amp;arbre=0" title="' . translate("Afficher ce post") . '" data-bs-toggle="tooltip"><i class="fa fa-eye text-danger fa-lg"></i></a>&nbsp;';
+                echo '&nbsp;<a href="'. site_url('topicadmin.php?mode=aff&amp;topic=' . $topic . '&amp;post=' . $myrow['post_id'] . '&amp;ordre=1&amp;forum=' . $forum . '&amp;arbre=0') .'" title="' . translate("Afficher ce post") . '" data-bs-toggle="tooltip"><i class="fa fa-eye text-danger fa-lg"></i></a>&nbsp;';
             } else {
-                echo '&nbsp;<a href="topicadmin.php?mode=aff&amp;topic=' . $topic . '&amp;post=' . $myrow['post_id'] . '&amp;ordre=0&amp;forum=' . $forum . '&amp;arbre=0" title="' . translate("Masquer ce post") . '" data-bs-toggle="tooltip"><i class="fa fa-eye-slash fa-lg "></i></a>&nbsp;';
+                echo '&nbsp;<a href="'. site_url('topicadmin.php?mode=aff&amp;topic=' . $topic . '&amp;post=' . $myrow['post_id'] . '&amp;ordre=0&amp;forum=' . $forum . '&amp;arbre=0') .'" title="' . translate("Masquer ce post") . '" data-bs-toggle="tooltip"><i class="fa fa-eye-slash fa-lg "></i></a>&nbsp;';
             }
         }
     }
@@ -704,7 +704,7 @@ if ($total > $posts_per_page) {
                 </li>
                 </ul>
             </nav>'
-        . paginator::paginate('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start=', '', $nbPages, $current, $adj = 3, $posts_per_page, $start) . '
+        . paginator::paginate(site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start='), '', $nbPages, $current, $adj = 3, $posts_per_page, $start) . '
         </div>';
 }
 
@@ -716,7 +716,7 @@ if ($forum_access != 9) {
 
     if ((($Mmod) or ($original_poster == $userdata[0])) and (!$lock_state)) {
         $sec_clef = md5($forum . $topic . md5( (string) Config::get('npds.NPDS_Key')));
-        echo '<p><a href="viewforum.php?forum=' . $forum . '&amp;topic_id=' . $topic . '&amp;topic_title=' . rawurlencode($topic_subject) . '&amp;op=solved&amp;sec_clef=' . $sec_clef . '"><i class="fa fa-lock fa-2x align-middle me-1"></i>' . translate("Résolu") . '</a></p>';
+        echo '<p><a href="'. site_url('viewforum.php?forum=' . $forum . '&amp;topic_id=' . $topic . '&amp;topic_title=' . rawurlencode($topic_subject) . '&amp;op=solved&amp;sec_clef=' . $sec_clef) .'"><i class="fa fa-lock fa-2x align-middle me-1"></i>' . translate("Résolu") . '</a></p>';
         
         unset($sec_clef);
     }
@@ -731,7 +731,7 @@ if ($forum_access != 9) {
 // if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
 //if (cache::cacheManagerStartBlock("forum-jump-to")) {    
     echo '
-    <form action="viewforum.php" method="post">
+    <form action="'. site_url('viewforum.php') .'" method="post">
     <div class="mb-3 row">
         <div class="col-12">
             <label class="visually-hidden" for="forum">' . translate("Sauter à : ") . '</label>
@@ -780,24 +780,24 @@ if ((($Mmod) and ($forum_access != 9)) or ($adminforum == 1)) {
     if ($lock_state == 0) {
         echo '
                 <li class="nav-item">
-                <a class="nav-link" role="button" href="topicadmin.php?mode=lock&amp;topic=' . $topic . '&amp;forum=' . $forum . '" ><i class="fa fa-lock fa-lg d-md-none" title="' . translate("Fermer ce sujet") . '" data-bs-toggle="tooltip" ></i><span class="ms-2 d-none d-md-inline">' . translate("Fermer ce sujet") . '</span></a>
+                <a class="nav-link" role="button" href="'. site_url('topicadmin.php?mode=lock&amp;topic=' . $topic . '&amp;forum=' . $forum) .'" ><i class="fa fa-lock fa-lg d-md-none" title="' . translate("Fermer ce sujet") . '" data-bs-toggle="tooltip" ></i><span class="ms-2 d-none d-md-inline">' . translate("Fermer ce sujet") . '</span></a>
                 </li>';
     } else {
         echo '
                 <li class="nav-item">
-                <a class="nav-link" role="button" href="topicadmin.php?mode=unlock&amp;topic=' . $topic . '&amp;forum=' . $forum . '" ><i class ="fa fa-unlock fa-lg d-md-none" title="' . translate("Ouvrir ce sujet") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Ouvrir ce sujet") . '</span></a>
+                <a class="nav-link" role="button" href="'. site_url('topicadmin.php?mode=unlock&amp;topic=' . $topic . '&amp;forum=' . $forum) .'" ><i class ="fa fa-unlock fa-lg d-md-none" title="' . translate("Ouvrir ce sujet") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Ouvrir ce sujet") . '</span></a>
                 </li>';
     }
 
     echo '
                 <li class="nav-item">
-                <a class="nav-link" role="button" href="topicadmin.php?mode=move&amp;topic=' . $topic . '&amp;forum=' . $forum . '" ><i class="fa fa-share fa-lg d-md-none" title="' . translate("Déplacer ce sujet") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Déplacer ce sujet") . '</span></a>
+                <a class="nav-link" role="button" href="'. site_url('topicadmin.php?mode=move&amp;topic=' . $topic . '&amp;forum=' . $forum) .'" ><i class="fa fa-share fa-lg d-md-none" title="' . translate("Déplacer ce sujet") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Déplacer ce sujet") . '</span></a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" role="button" href="topicadmin.php?mode=first&amp;topic=' . $topic . '&amp;forum=' . $forum . '" ><i class="fas fa-level-up-alt fa-lg d-md-none" title="' . translate("Mettre ce sujet en premier") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Mettre ce sujet en premier") . '</span></a>
+                <a class="nav-link" role="button" href="'. site_url('topicadmin.php?mode=first&amp;topic=' . $topic . '&amp;forum=' . $forum) .'" ><i class="fas fa-level-up-alt fa-lg d-md-none" title="' . translate("Mettre ce sujet en premier") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Mettre ce sujet en premier") . '</span></a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link text-danger" role="button" href="topicadmin.php?mode=del&amp;topic=' . $topic . '&amp;forum=' . $forum . '" ><i class="fas fa-trash fa-lg d-md-none" title="' . translate("Effacer ce sujet") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Effacer ce sujet") . '</span></a>
+                <a class="nav-link text-danger" role="button" href="'. site_url('topicadmin.php?mode=del&amp;topic=' . $topic . '&amp;forum=' . $forum) .'" ><i class="fas fa-trash fa-lg d-md-none" title="' . translate("Effacer ce sujet") . '" data-bs-toggle="tooltip"></i><span class="ms-2 d-none d-md-inline">' . translate("Effacer ce sujet") . '</span></a>
                 </li>
             </ul>';
 }

@@ -56,7 +56,7 @@ $forum_type = $myrow['forum_type'];
 $forum_access = $myrow['forum_access'];
 
 if (($forum_type == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if (($forum_type == 5) or ($forum_type == 7)) {
@@ -65,12 +65,12 @@ if (($forum_type == 5) or ($forum_type == 7)) {
     $ok_affiche = groupe::groupe_forum($myrow['forum_pass'], $tab_groupe);
 
     if (!$ok_affiche) {
-        header("location: forum.php");
+        header('location: '. site_url('forum.php'));
     }
 }
 
 if (($forum_type == 9) and (!$user)) {
-    header("location: forum.php");
+    header('location: '. site_url('forum.php'));
 }
 
 // Moderator
@@ -251,7 +251,7 @@ $nuke_url = Config::get('npds.nuke_url');
 echo '
                 <hr />
                 <p class="text-center">' . translate("Cet article provient de") . ' ' . Config::get('npds.sitename') . '<br />
-                <a href="' . $nuke_url . '/viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;post_id=' . $post_id . '">' . $nuke_url . '/viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '</a></p>
+                <a href="'. site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;post_id=' . $post_id) .'">'. site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum) .'</a></p>
             </div>
         </div>
     </body>

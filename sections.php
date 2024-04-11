@@ -77,7 +77,7 @@ function listsections($rubric)
         $aff = '';
 
         if ($rubric) {
-            $aff .= '<span class="lead"><a href="sections.php" title="' . translate("Retour à l'index des rubriques") . '" data-bs-toggle="tooltip">Index</a></span><hr />';
+            $aff .= '<span class="lead"><a href="'. site_url('sections.php') .'" title="' . translate("Retour à l'index des rubriques") . '" data-bs-toggle="tooltip">Index</a></span><hr />';
         }
 
         $aff .= '
@@ -99,7 +99,7 @@ function listsections($rubric)
                 }
 
                 $aff .= '
-                    <a class="ms-2" href="sections.php?rubric=' . $rubid . '">' . language::aff_langue($rubname) . '</a><span class=" float-end">#NEW#<span class="badge bg-secondary" title="' . translate("Sous-rubrique") . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_section . '</span></span>
+                    <a class="ms-2" href="'. site_url('sections.php?rubric=' . $rubid) .'">' . language::aff_langue($rubname) . '</a><span class=" float-end">#NEW#<span class="badge bg-secondary" title="' . translate("Sous-rubrique") . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_section . '</span></span>
                 </h3>';
 
                 if ($intro != '') {
@@ -161,7 +161,7 @@ function listsections($rubric)
                                     $nouveau = '';
                                 }
 
-                                $aff2 .= '<a href="sections.php?op=viewarticle&amp;artid=' . $artid . '">' . language::aff_langue($title) . '</a><span class="float-end"><small>' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</small>';
+                                $aff2 .= '<a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . language::aff_langue($title) . '</a><span class="float-end"><small>' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</small>';
                                 
                                 if ($nouveau == '') {
                                     $aff2 .= '<i class="far fa-star ms-3 text-success"></i>';
@@ -188,7 +188,7 @@ function listsections($rubric)
         echo $aff; //la sortie doit se faire en html !!!
 
         // if ($rubric) {
-        //     echo '<a class="btn btn-secondary" href="sections.php">'.translate("Return to Sections Index").'</a>';
+        //     echo '<a class="btn btn-secondary" href="'. site_url('sections.php') .'">'.translate("Return to Sections Index").'</a>';
         // }
         
         sql_free_result($result);
@@ -212,7 +212,7 @@ function listarticles($secid)
     $config = Config::get('sections');
     
     if ($config['sections_chemin'] == 1) {
-        $chemin = '<span class="lead"><a href="sections.php" title="' . translate("Retour à l'index des rubriques") . '" data-bs-toggle="tooltip">Index</a>&nbsp;/&nbsp;<a href="sections.php?rubric=' . $rubid . '">' . language::aff_langue($rubname) . '</a></span>';
+        $chemin = '<span class="lead"><a href="'. site_url('sections.php') .'" title="' . translate("Retour à l'index des rubriques") . '" data-bs-toggle="tooltip">Index</a>&nbsp;/&nbsp;<a href="'. site_url('sections.php?rubric=' . $rubid) .'">' . language::aff_langue($rubname) . '</a></span>';
     }
 
     $title =  language::aff_langue($secname);
@@ -277,8 +277,8 @@ function listarticles($secid)
 
                     echo '
                     <div class="mb-1">
-                    <a href="sections.php?op=viewarticle&amp;artid=' . $artid . '">' . language::aff_langue($title) . '</a><small>
-                    ' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</small><span class="float-end"><a href="sections.php?op=printpage&amp;artid=' . $artid . '" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg"></i></a></span>';
+                    <a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . language::aff_langue($title) . '</a><small>
+                    ' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</small><span class="float-end"><a href="'. site_url('sections.php?op=printpage&amp;artid=' . $artid) .'" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg"></i></a></span>';
                         
                     if ($nouveau == '') {
                         echo '&nbsp;<i class="fa fa-star-o text-success"></i>';
@@ -292,7 +292,7 @@ function listarticles($secid)
             </div>';
             /*
             echo '
-            <a class="btn btn-secondary" href="sections.php">'.translate("Return to Sections Index").'</a>';
+            <a class="btn btn-secondary" href="'. site_url('sections.php') .'">'.translate("Return to Sections Index").'</a>';
             */
         } else {
             url::redirect_url("sections.php");
@@ -344,7 +344,7 @@ function viewarticle($artid, $page)
         $config = Config::get('sections');
 
         if ($config['sections_chemin'] == 1) {
-            $chemin = '<span class="lead"><a href="sections.php">Index</a>&nbsp;/&nbsp;<a href="sections.php?rubric=' . $rubid . '">' . language::aff_langue($rubname) . '</a>&nbsp;/&nbsp;<a href="sections.php?op=listarticles&amp;secid=' . $secid . '">' . language::aff_langue($secname) . '</a></span>';
+            $chemin = '<span class="lead"><a href="'. site_url('sections.php') .'">Index</a>&nbsp;/&nbsp;<a href="'. site_url('sections.php?rubric=' . $rubid) .'">' . language::aff_langue($rubname) . '</a>&nbsp;/&nbsp;<a href="'. site_url('sections.php?op=listarticles&amp;secid=' . $secid) .'">' . language::aff_langue($secname) . '</a></span>';
         }
 
         $title = language::aff_langue($title);
@@ -373,7 +373,7 @@ function viewarticle($artid, $page)
                 <hr />
                 <h3 class="mb-2">' . $title . '<span class="small text-muted"> - ' . $pindex . '</span></h3>
                 <p><span class="text-muted small">(' . $words . ' ' . translate("mots dans ce texte )") . '&nbsp;-&nbsp;
-            ' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</span><span class="float-end"><a href="sections.php?op=printpage&amp;artid=' . $artid . '" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg ms-3"></i></a></span></p><hr />';
+            ' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</span><span class="float-end"><a href="'. site_url('sections.php?op=printpage&amp;artid=' . $artid) .'" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg ms-3"></i></a></span></p><hr />';
             }
 
             preg_match_all('#\[page.*\]#', $Xcontent, $rs);
@@ -400,19 +400,19 @@ function viewarticle($artid, $page)
 
                 if ($pageS !== '[page0]') {
                     $Xcontent .= '
-                    <li class="page-item"><a class="page-link" href="sections.php?op=viewarticle&amp;artid=' . $artid . '">' . translate("Début de l'article") . '</a></li>';
+                    <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . translate("Début de l'article") . '</a></li>';
                 }
 
                 $Xcontent .= '
                     <li class="page-item active"><a class="page-link">' . preg_replace('#\[(page)(.*)(\])#', '\1 \2', $pageS) . '</a></li>
-                    <li class="page-item"><a class="page-link" href="sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=' . $pageS . '" >' . translate("Page suivante") . '</a></li>
+                    <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=' . $pageS) .'" >' . translate("Page suivante") . '</a></li>
                 </ul>
                 </nav>';
             } elseif ($multipage) {
                 $Xcontent .= '
                 <nav class="d-flex mt-3">
                 <ul class="mx-auto pagination pagination-sm">
-                <li class="page-item"><a class="page-link" href="sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=[page0]">' . translate("Début de l'article") . '</a></li>
+                <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=[page0]') .'">' . translate("Début de l'article") . '</a></li>
                 </ul>
                 </nav>';
             }
@@ -424,9 +424,9 @@ function viewarticle($artid, $page)
 
             if ($rubname != 'Divers') {
 
-                // echo '<hr /><p><a class="btn btn-secondary" href="sections.php">'.translate("Return to Sections Index").'</a></p>'; 
+                // echo '<hr /><p><a class="btn btn-secondary" href="'. site_url(sections.php'') .'">'.translate("Return to Sections Index").'</a></p>'; 
                 // echo '<h4>***<strong>'.translate("Back to chapter:").'</strong></h4>';
-                // echo '<ul class="list-group"><li class="list-group-item"><a href="sections.php?op=listarticles&amp;secid='.$secid.'">'.language::aff_langue($secname).'</a></li></ul>';
+                // echo '<ul class="list-group"><li class="list-group-item"><a href="'. site_url('sections.php?op=listarticles&amp;secid='.$secid) .'">'.language::aff_langue($secname).'</a></li></ul>';
 
                 $result3 = sql_query("SELECT artid, secid, title, userlevel FROM " . $NPDS_Prefix . "seccont WHERE (artid<>'$artid' AND secid='$secid') ORDER BY ordre");
                 $nb_article = sql_num_rows($result3);
@@ -440,7 +440,7 @@ function viewarticle($artid, $page)
                         $okprint2 = autorisation_section($userlevel);
 
                         if ($okprint2) {
-                            echo '<li class="list-group-item list-group-item-action"><a href="sections.php?op=viewarticle&amp;artid=' . $artid . '">' . language::aff_langue($title) . '</a></li>';
+                            echo '<li class="list-group-item list-group-item-action"><a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . language::aff_langue($title) . '</a></li>';
                         }
                     }
                     echo '</ul>';
@@ -462,7 +462,7 @@ function viewarticle($artid, $page)
                     $okprint2 = autorisation_section($userlevel);
 
                     if ($okprint2) {
-                        echo '<li class="list-group-item list-group-item-action"><a href="sections.php?op=viewarticle&amp;artid=' . $artid2 . '">' . language::aff_langue($title) . '</a></li>';
+                        echo '<li class="list-group-item list-group-item-action"><a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid2) .'">' . language::aff_langue($title) . '</a></li>';
                     }
                 }
                 echo '</ul>';
@@ -477,7 +477,7 @@ function viewarticle($artid, $page)
 
         include("themes/default/footer.php");;
     } else {
-        header("Location: sections.php");
+        header('Location: '. site_url('sections.php'));
     }
 }
 
@@ -515,14 +515,12 @@ function PrintSecPage($artid)
 
     echo metalang::meta_lang($content);
 
-    $nuke_url = Config::get('npds.nuke_url');
-
     echo '
                 <hr />
                 <p class="text-center">
                 ' . translate("Cet article provient de") . ' ' . Config::get('npds.sitename') . '<br /><br />
                 ' . translate("L'url pour cet article est : ") . '
-                <a href="' . $nuke_url . '/sections.php?op=viewarticle&amp;artid=' . $artid . '">' . $nuke_url . '/sections.php?op=viewarticle&amp;artid=' . $artid . '</a>
+                <a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'</a>
                 </p>
                 </div>
                 <script type="text/javascript" src="assets/js/jquery.min.js"></script>
@@ -557,7 +555,7 @@ switch ($op) {
             settype($page, 'string');
             viewarticle($artid, $page);
         } else {
-            header('location: sections.php');
+            header('location: '. site_url('sections.php'));
         }
         break;
 
@@ -569,7 +567,7 @@ switch ($op) {
         if (verif_aff($artid)) {
             PrintSecPage($artid);
         } else {
-            header('location: sections.php');
+            header('location: '. site_url('sections.php'));
         }
         break;
 

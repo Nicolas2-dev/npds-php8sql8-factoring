@@ -16,12 +16,14 @@ declare(strict_types=1);
 
 use npds\system\logs\logs;
 use npds\system\assets\css;
+use npds\system\auth\users;
 use npds\system\routing\url;
 use npds\system\mail\mailler;
 use npds\system\utility\spam;
+use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\language\language;
-use npds\system\config\Config;
+use npds\system\support\facades\DB;
 
 
 if (!function_exists("Mysql_Connexion"))  {
@@ -30,16 +32,13 @@ if (!function_exists("Mysql_Connexion"))  {
 
 function FriendSend($sid, $archive)
 {
-    global $NPDS_Prefix, $user, $cookie;
+    $res = DB::table('stories')
+                ->select('title', 'aid')
+                ->where('sid', $sid)
+                ->first();
 
-    settype($sid, "integer");
-    settype($archive, "integer");
-
-    $result = sql_query("SELECT title, aid FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
-    list($title, $aid) = sql_fetch_row($result);
-
-    if (!$aid) {
-        header("Location: index.php");
+    if (!$res['aid']) {
+        header('Location: '. site_url('index.php'));
     }
 
     include("themes/default/header.php");
@@ -48,13 +47,19 @@ function FriendSend($sid, $archive)
     <div class="card card-body">
     <h2><i class="fa fa-at fa-lg text-muted"></i>&nbsp;' . translate("Envoi de l'article à un ami") . '</h2>
     <hr />
-    <p class="lead">' . translate("Vous allez envoyer cet article") . ' : <strong>' . language::aff_langue($title) . '</strong></p>
-    <form id="friendsendstory" action="friend.php" method="post">
+    <p class="lead">' . translate("Vous allez envoyer cet article") . ' : <strong>' . language::aff_langue($res['title']) . '</strong></p>
+    <form id="friendsendstory" action="'. site_url('friend.php') .'" method="post">
         <input type="hidden" name="sid" value="' . $sid . '" />';
 
-    if ($user) {
-        $result = sql_query("SELECT name, email FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
-        list($yn, $ye) = sql_fetch_row($result);
+    if (users::hetUser()) {
+        $res_user = DB::table('users')
+                ->select('name', 'email')
+                ->where('uname', users::cookieUser(1))
+                ->first();
+
+        $yn = $res_user['name'];
+        $ye = $res_user['email'];  
+
     } else {
         $yn = '';
         $ye = '';  
@@ -100,11 +105,23 @@ function FriendSend($sid, $archive)
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question, $asb_reponse)
+/**
+ * [SendStory description]
+ *
+ * @param   int     $sid           [$sid description]
+ * @param   string  $yname         [$yname description]
+ * @param   string  $ymail         [$ymail description]
+ * @param   string  $fname         [$fname description]
+ * @param   string  $fmail         [$fmail description]
+ * @param   int     $archive       [$archive description]
+ * @param   string  $asb_question  [$asb_question description]
+ * @param   string  $asb_reponse   [$asb_reponse description]
+ *
+ * @return  void
+ */
+function SendStory(int $sid, string $yname, string $ymail, string $fname, string $fmail, int $archive, string $asb_question, string $asb_reponse): void
 {
-    global $user, $NPDS_Prefix;
-
-    if (!$user) {
+    if (!users::getUser()) {
         //anti_spambot
         if (!spam::R_spambot($asb_question, $asb_reponse, '')) {
             logs::Ecr_Log('security', "Send-Story Anti-Spam : name=" . $yname . " / mail=" . $ymail, '');
@@ -114,21 +131,26 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
         }
     }
 
-    settype($sid, 'integer');
-    settype($archive, 'integer');
+    $res_storie = DB::table('stories')
+                    ->select('title', 'time', 'topic')
+                    ->where('sid', $sid)
+                    ->first();
 
-    $result2 = sql_query("SELECT title, time, topic FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
-    list($title, $time, $topic) = sql_fetch_row($result2);
-
-    $result3 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-    list($topictext) = sql_fetch_row($result3);
+    $res_topic = DB::table('topics')
+                    ->select('topictext')
+                    ->where('topicid', $res_storie['topic'])
+                    ->first();
 
     $subject = html_entity_decode(translate("Article intéressant sur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . Config::get('npds.sitename');
 
     $nuke_url = Config::get('npds.nuke_url');
 
     $fname = hack::removeHack($fname);
-    $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.") . "\n\n" . language::aff_langue($title) . "\n" . translate("Date :") . " $time\n" . translate("Sujet : ") . " " . language::aff_langue($topictext) . "\n\n" . translate("L'article") . " : <a href=\"$nuke_url/article.php?sid=$sid&amp;archive=$archive\">$nuke_url/article.php?sid=$sid&amp;archive=$archive</a>\n\n";
+    $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.") . "\n\n"
+         . language::aff_langue($res_storie['title']) . "\n" . translate("Date :") . " ". $res_storie['time'] ."\n" . translate("Sujet : ") . " " . language::aff_langue($res_topic['topictext']) . "\n\n"
+         . translate("L'article") . " : <a href=\"". site_url('article.php?sid='. $sid .'&amp;archive='. $archive) ."\">"
+         . site_url('article.php?sid='. $sid .'&amp;archive='. $archive) ."</a>\n\n";
+    
     $message .= Config::get('signature.message');
 
     $fmail = hack::removeHack($fmail);
@@ -150,17 +172,25 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
     if (!$stop){
         mailler::send_email($fmail, $subject, $message, $ymail, false, 'html', '');
     }else {
-        $title = '';
+        $res_storie['title'] = '';
         $fname = '';
     }
 
-    $title = urlencode(language::aff_langue($title));
+    $title = urlencode(language::aff_langue($res_storie['title']));
     $fname = urlencode($fname);
 
-    Header("Location: friend.php?op=StorySent&title=$title&fname=$fname");
+    Header('Location: '. site_url('friend.php?op=StorySent&title='. $title .'&fname='. $fname));
 }
 
-function StorySent($title, $fname)
+/**
+ * [StorySent description]
+ *
+ * @param   string  $title  [$title description]
+ * @param   string  $fname  [$fname description]
+ *
+ * @return  void
+ */
+function StorySent(string $title, string $fname): void
 {
     include("themes/default/header.php");
 
@@ -176,15 +206,22 @@ function StorySent($title, $fname)
     include("themes/default/footer.php");;
 }
 
-function RecommendSite()
+/**
+ * [RecommendSite description]
+ *
+ * @return  void
+ */
+function RecommendSite(): void
 {
-    global $user;
+    if (users::getUser()) {
+        $res_user = DB::table('users')
+                        ->select('name', 'email')
+                        ->where('uname', users::cookieUser(1))
+                        ->first();
 
-    if ($user) {
-        global $cookie, $NPDS_Prefix;
+        $yn = $res_user['name'];
+        $ye = $res_user['email'];
 
-        $result = sql_query("SELECT name, email FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
-        list($yn, $ye) = sql_fetch_row($result);
     } else {
         $yn = '';
         $ye = '';
@@ -196,7 +233,7 @@ function RecommendSite()
     <div class="card card-body">
     <h2>' . translate("Recommander ce site à un ami") . '</h2>
     <hr />
-    <form id="friendrecomsite" action="friend.php" method="post">
+    <form id="friendrecomsite" action="'. site_url('friend.php') .'" method="post">
         <input type="hidden" name="op" value="SendSite" />
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="yname" name="yname" value="' . $yn . '" required="required" maxlength="100" />
@@ -236,7 +273,19 @@ function RecommendSite()
     css::adminfoot('fv', '', $arg1, '');
 }
 
-function SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse)
+/**
+ * [SendSite description]
+ *
+ * @param   string  $yname         [$yname description]
+ * @param   string  $ymail         [$ymail description]
+ * @param   string  $fname         [$fname description]
+ * @param   string  $fmail         [$fmail description]
+ * @param   string  $asb_question  [$asb_question description]
+ * @param   string  $asb_reponse   [$asb_reponse description]
+ *
+ * @return  void
+ */
+function SendSite(string $yname, string $ymail, string $fname, string $fmail, string $asb_question, string $asb_reponse): void
 {
     global $user;
 
@@ -256,8 +305,7 @@ function SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse)
     $subject = html_entity_decode(translate("Site à découvrir : "), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
     $fname = hack::removeHack($fname);
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé notre site") . " $sitename " . translate("intéressant et a voulu vous le faire connaître.") . "\n\n$sitename : <a href=\"$nuke_url\">$nuke_url</a>\n\n";
-    
-    include("config/signat.php");
+    $message .= Config::get('sinature.message');
 
     $fmail = hack::removeHack($fmail);
     $subject = hack::removeHack($subject);
@@ -281,10 +329,17 @@ function SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse)
         $fname = '';
     }
 
-    Header("Location: friend.php?op=SiteSent&fname=$fname");
+    Header('Location: '. site_url('friend.php?op=SiteSent&fname='. $fname));
 }
 
-function SiteSent($fname)
+/**
+ * [SiteSent description]
+ *
+ * @param   string  $fname  [$fname description]
+ *
+ * @return  void
+ */
+function SiteSent(string $fname): void
 {
     include("themes/default/header.php");
 
@@ -307,7 +362,7 @@ function SiteSent($fname)
 }
 
 settype($op, 'string');
-settype($archive, 'string');
+settype($archive, 'string'); 
 
 switch ($op) {
     case 'FriendSend':

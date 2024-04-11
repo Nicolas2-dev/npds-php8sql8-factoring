@@ -81,12 +81,12 @@ if (($op == "mark") and ($forum)) {
             }
         }
 
-        header("location: forum.php");
+        header('location: '. site_url('forum.php'));
     }
 }
 
 if ($forum == "index") {
-    header("location: forum.php");
+    header('location: '. site_url('forum.php'));
 }
 
 settype($forum, "integer");
@@ -164,16 +164,16 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                 }
             }
         }
-        echo '<a href="user.php?op=userinfo&amp;uname=' . $moderator_data[$i] . '"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
+        echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator_data[$i]) .'"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
     }
 
     echo '</p>';
     echo '
         <p class="lead">
-            <a href="forum.php">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
+            <a href="'. site_url('forum.php') .'">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
         </p>
         <div class="card p-3">
-            <form id="privforumentry" action="viewforum.php" method="post">
+            <form id="privforumentry" action="'. site_url('viewforum.php') .'" method="post">
                 <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="forum_pass">' . translate("Ceci est un forum privé. Vous devez entrer le mot de passe pour y accéder") . '</label>
                 <div class="col-sm-12">
@@ -197,7 +197,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
 } elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1)) {
     if (($myrow['forum_type'] == 9) and (!$user)) {
-        header("location: forum.php");
+        header('location: '. site_url('forum.php'));
     }
 
     $title = $forum_name;
@@ -211,10 +211,10 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     if ($solved) {
         if (isset($closoled)) {
             $closol = "and topic_status='2'";
-            $mess_closoled = '<a href="viewforum.php?forum=' . $forum . '">' . translate("Sans") . ' ' . translate("Résolu") . '</a>';
+            $mess_closoled = '<a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . translate("Sans") . ' ' . translate("Résolu") . '</a>';
         } else {
             $closol = "and topic_status!='2'";
-            $mess_closoled = '<a href="viewforum.php?forum=' . $forum . '&amp;closoled=on">' . translate("Seulement") . ' ' . translate("Résolu") . '</a>';
+            $mess_closoled = '<a href="'. site_url('viewforum.php?forum=' . $forum . '&amp;closoled=on') .'">' . translate("Seulement") . ' ' . translate("Résolu") . '</a>';
         }
 
     } else {
@@ -224,7 +224,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     echo '
     <p class="lead">
-        <a href="forum.php" >' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
+        <a href="'. site_url('forum.php') .'" >' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
     </p>
     <h3 class="mb-3">';
 
@@ -238,7 +238,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         }
 
         if ($allow_to_post){
-            echo '<a href="newtopic.php?forum=' . $forum . '" title="' . translate("Nouveau") . '"><i class="fa fa-plus-square me-2"></i><span class="d-none d-sm-inline">' . translate("Nouveau sujet") . '<br /></span></a>';
+            echo '<a href="'. site_url('newtopic.php?forum=' . $forum) .'" title="' . translate("Nouveau") . '"><i class="fa fa-plus-square me-2"></i><span class="d-none d-sm-inline">' . translate("Nouveau sujet") . '<br /></span></a>';
         }
     }
 
@@ -278,7 +278,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
             }
         }
 
-        echo '<a href="user.php?op=userinfo&amp;uname=' . $moderator_data[$i] . '"><img class=" img-thumbnail img-fluid n-ava-small me-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . translate("Modéré par : ") . ' ' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
+        echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator_data[$i]) .'"><img class=" img-thumbnail img-fluid n-ava-small me-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . translate("Modéré par : ") . ' ' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
     }
 
     echo '
@@ -447,11 +447,11 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         </table>';
 
         if ($user){
-            echo '<p class="mt-1"><a href="viewforum.php?op=mark&amp;forum=' . $forum . '"><i class="far fa-check-square fa-lg"></i></a>&nbsp;' . translate("Marquer tous les messages comme lus") . '</p>';
+            echo '<p class="mt-1"><a href="'. site_url('viewforum.php?op=mark&amp;forum=' . $forum) .'"><i class="far fa-check-square fa-lg"></i></a>&nbsp;' . translate("Marquer tous les messages comme lus") . '</p>';
         }
     } else {
         if ($forum_access != 9) {
-            echo '<div class="alert alert-danger my-3">' . translate("Il n'y a aucun sujet pour ce forum. ") . '<br /><a href="newtopic.php?forum=' . $forum . '" >' . translate("Vous pouvez en poster un ici.") . '</a></div>';
+            echo '<div class="alert alert-danger my-3">' . translate("Il n'y a aucun sujet pour ce forum. ") . '<br /><a href="'. site_url('newtopic.php?forum=' . $forum) .'" >' . translate("Vous pouvez en poster un ici.") . '</a></div>';
         }
     }
 
@@ -481,7 +481,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         $current = $nbPages;
     }
 
-    echo '<div class="mb-2"></div>' . paginator::paginate('viewforum.php?forum=' . $forum . '&amp;start=', $closol, $nbPages, $current, 1, $topics_per_page, $start);
+    echo '<div class="mb-2"></div>' . paginator::paginate(site_url('viewforum.php?forum=' . $forum . '&amp;start='), $closol, $nbPages, $current, 1, $topics_per_page, $start);
 
     echo forum::searchblock();
 
@@ -513,7 +513,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     // if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
 
         echo '
-        <form class="my-3" action="viewforum.php" method="post">
+        <form class="my-3" action="'. site_url('viewforum.php') .'" method="post">
             <div class="mb-3 row">
                 <div class="col-12">
                     <label class="visually-hidden" for="forum">' . translate("Sauter à : ") . '</label>
@@ -553,5 +553,5 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     //     $cache_obj->endCachingBlock($cache_clef);
     // }
 } else {
-    header("location: forum.php");
+    header('location: '. site_url('forum.php'));
 }

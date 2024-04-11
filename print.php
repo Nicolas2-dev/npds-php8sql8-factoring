@@ -183,14 +183,14 @@ function PrintPage($oper, $DB, $nl, $sid)
                 <hr />
                 <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
                 ' . translate("L'url pour cet article est : ") . '
-                <a href="' . $nuke_url . '/article.php?sid=' . $sid . '">' . $nuke_url . '/article.php?sid=' . $sid . '</a>
+                <a href="'. site_url('article.php?sid=' . $sid) .'">'. site_url('article.php?sid=' . $sid) .'</a>
                 </p>';
             } else {
                 echo '
                 <hr />
                 <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
                 ' . translate("L'url pour cet article est : ") . '
-                <a href="' . $nuke_url . '/article.php?sid=' . $sid . '&amp;archive=1">' . $nuke_url . '/article.php?sid=' . $sid . '&amp;archive=1</a>
+                <a href="'. site_url('article.php?sid=' . $sid . '&amp;archive=1') .'">'. site_url('article.php?sid=' . $sid . '&amp;archive=1') .'</a>
                 </p>';
             }
         }
@@ -206,7 +206,7 @@ function PrintPage($oper, $DB, $nl, $sid)
             <div>' . language::aff_langue($description) . '</div>
             <hr />
             <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
-            <a href="' . $nuke_url . '">' . $nuke_url . '</a></p>';
+            <a href="'. site_url('') .'">'. site_url('') .'</a></p>';
         }
 
         if ($oper == 'static') {
@@ -216,7 +216,7 @@ function PrintPage($oper, $DB, $nl, $sid)
             </div>
             <hr />
             <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
-            <a href="' . $nuke_url . '/static.php?op=' . $sid . '&npds=1">' . $nuke_url . '/static.php?op=' . $sid . '&npds=1</a></p>';
+            <a href="'. site_url('static.php?op=' . $sid . '&npds=1') .'">'. site_url('static.php?op=' . $sid . '&npds=1') .'</a></p>';
         }
 
         echo '
@@ -224,7 +224,7 @@ function PrintPage($oper, $DB, $nl, $sid)
         </body>
         </html>';
     } else {
-        header("location: index.php");
+        header('location: '. site_url('index.php'));
     }
 }
 
@@ -250,5 +250,5 @@ if (!empty($sid)) {
     
     PrintPage("links", $DB, '', $lid);
 } else {
-    header("location: index.php");
+    header('location: '. site_url('index.php'));
 }

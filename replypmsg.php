@@ -23,6 +23,7 @@ use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\cache\cacheManager;
+use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -49,9 +50,9 @@ settype($copie, 'string');
 
 if ($cancel) {
     if ($full_interface != 'short') {
-        header("Location: viewpmsg.php");
+        header('Location: '. site_url('viewpmsg.php'));
     } else {
-        header("Location: readpmsg_imm.php?op=new_msg");
+        header('Location: '. site_url('readpmsg_imm.php?op=new_msg'));
     }
     die();
 }
@@ -128,7 +129,7 @@ if (isset($user)) {
                     if ($subscribe) {
                         $old_message = $message; // what this
                         $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('npds.sitename');
-                        $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . Config::get('npds.nuke_url') . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
+                        $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="'. site_url('viewpmsg.php') .'">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
                         $message .= Config::get('signature.message');
 
                         mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
@@ -162,7 +163,7 @@ if (isset($user)) {
                 global $subscribe;
                 if ($subscribe) {
                     $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('npds.sitename');
-                    $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="' . Config::get('npds.nuke_url') . '/viewpmsg.php">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
+                    $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="'. site_url('viewpmsg.php') .'">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
                     $message .= Config::get('signature.message');
 
                     mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
@@ -174,9 +175,9 @@ if (isset($user)) {
         unset($sujet);
 
         if ($full_interface != 'short') {
-            header("Location: viewpmsg.php");
+            header('Location: '. site_url('viewpmsg.php'));
         } else {
-            header("Location: readpmsg_imm.php?op=new_msg");
+            header('Location: '. site_url('readpmsg_imm.php?op=new_msg'));
         }
     }
 
@@ -200,11 +201,11 @@ if (isset($user)) {
         }
 
         if ($status == 1) {
-            header("Location: viewpmsg.php");
+            header('Location: '. site_url('viewpmsg.php'));
         }
 
     } elseif ($delete_messages = '' and !$msg_id) {
-        header("Location: viewpmsg.php");
+        header('Location: '. site_url('viewpmsg.php'));
     }
 
     //   settype($delete,'integer');
@@ -218,7 +219,7 @@ if (isset($user)) {
         if (!sql_query($sql)) {
             forum::forumerror('0021');
         } else {
-            header("Location: viewpmsg.php");
+            header('Location: '. site_url('viewpmsg.php'));
         }
     }
 
@@ -237,7 +238,7 @@ if (isset($user)) {
             forum::forumerror('0005');
         }
 
-        header("Location: viewpmsg.php");
+        header('Location: '. site_url('viewpmsg.php'));
     }
 
     // Interface
@@ -301,7 +302,7 @@ if (isset($user)) {
         }
 
         echo '
-        <h2><a href="viewpmsg.php"><i class="me-2 fa fa-inbox"></i></a>' . translate("Message personnel") . '</h2>
+        <h2><a href="'. site_url('viewpmsg.php') .'"><i class="me-2 fa fa-inbox"></i></a>' . translate("Message personnel") . '</h2>
         <hr />
         <blockquote class="blockquote">' . translate("A propos des messages publiés :") . '<br />' .
             translate("Tous les utilisateurs enregistrés peuvent poster des messages privés.") . '</blockquote>';
@@ -338,7 +339,7 @@ if (isset($user)) {
         }
 
         echo '
-            <form id="pmessage" action="replypmsg.php" method="post" name="coolsus">
+            <form id="pmessage" action="'. site_url('replypmsg.php') .'" method="post" name="coolsus">
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-3" for="to_user">' . translate("Destinataire") . '</label>
                 <div class="col-sm-9">';
@@ -362,7 +363,7 @@ if (isset($user)) {
         }
 
         if (!$reply) {
-            $carnet = java::JavaPopUp("carnet.php", "CARNET", 300, 350);
+            $carnet = java::JavaPopUp(site_url('carnet.php'), "CARNET", 300, 350);
             $carnet = '<a href="javascript:void(0);" onclick="window.open(' . $carnet . '); ">';
 
             echo $carnet . '<span class="small">' . translate("Carnet d'adresses") . '</span></a>';
@@ -587,5 +588,5 @@ if (isset($user)) {
         css::adminfoot('', '', $arg1, 'foo');
     }
 } else {
-    Header("Location: user.php");
+    Header('Location: '. site_url('user.php'));
 }

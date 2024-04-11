@@ -39,7 +39,7 @@ settype($user, 'string');
 
 if (Config::get('npds.mod_admin_news') > 0) {
     if ($admin == '' and $user == '') {
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php'));
         exit;
     }
 
@@ -52,7 +52,7 @@ if (Config::get('npds.mod_admin_news') > 0) {
                 list($userlevel) = sql_fetch_row($result);
                 
                 if ($userlevel == 1) {
-                    Header("Location: index.php");
+                    Header('Location: '. site_url('index.php'));
                     exit;
                 }
             }
@@ -74,14 +74,14 @@ function defaultDisplay()
     echo '
     <h2>' . translate("Proposer un article") . '</h2>
     <hr />
-    <form action="submit.php" method="post" name="adminForm">';
+    <form action="'. site_url('submit.php') .'" method="post" name="adminForm">';
     echo '<p class="lead"><strong>' . translate("Votre nom") . '</strong> : ';
 
     if ($user) {
-        echo '<a href="user.php">' . $userinfo['uname'] . '</a> [ <a href="user.php?op=logout">' . translate("Déconnexion") . '</a> ]</p>
+        echo '<a href="'. site_url('user.php') .'">' . $userinfo['uname'] . '</a> [ <a href="'. site_url('user.php?op=logout') .'">' . translate("Déconnexion") . '</a> ]</p>
         <input type="hidden" name="name" value="' . $userinfo['name'] . '" />';
     } else {
-        echo Config::get('npds.anonymous') . '[ <a href="user.php">' . translate("Nouveau membre") . '</a> ]</p>
+        echo Config::get('npds.anonymous') . '[ <a href="'. site_url('user.php') .'">' . translate("Nouveau membre") . '</a> ]</p>
         <input type="hidden" name="name" value="' . Config::get('npds.anonymous') . '" />';
     }
 
@@ -176,7 +176,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
     echo '
     <h2>' . translate("Proposer un article") . '</h2>
     <hr />
-    <form action="submit.php" method="post" name="adminForm">
+    <form action="'. site_url('submit.php') .'" method="post" name="adminForm">
         <p class="lead"><strong>' . translate("Votre nom") . '</strong> : ' . $name . '</p>
         <input type="hidden" name="name" value="' . $name . '" />
         <div class="card card-body mb-4">';

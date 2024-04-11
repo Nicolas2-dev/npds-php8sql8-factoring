@@ -52,7 +52,7 @@ function show_imm($op)
     global $smilies, $user, $allow_bbcode, $language, $theme, $short_user, $Titlesitename, $NPDS_Prefix; // $Titlesitename ??? not used
 
     if (!$user) {
-        Header("Location: user.php");
+        Header('Location: '. site_url('user.php'));
     } else {
         $userX = base64_decode($user);
         $userdata = explode(':', $userX);
@@ -172,12 +172,12 @@ function show_imm($op)
 
             if ($posterdata['uid'] <> 1) {
                 echo '
-                <a class="me-3" href="readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=reply" title="' . translate("Répondre") . '" data-bs-toggle="tooltip"><i class="fa fa-reply fa-lg me-1"></i>' . translate("Répondre") . '</a>';
+                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=reply') .'" title="' . translate("Répondre") . '" data-bs-toggle="tooltip"><i class="fa fa-reply fa-lg me-1"></i>' . translate("Répondre") . '</a>';
             }
             
             echo '
-                <a class="me-3" href="readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=read" title="' . translate("Lu") . '" data-bs-toggle="tooltip"><i class="far fa-check-square fa-lg"></i></a>
-                <a class="me-3" href="readpmsg_imm.php?op=delete&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>
+                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=read') .'" title="' . translate("Lu") . '" data-bs-toggle="tooltip"><i class="far fa-check-square fa-lg"></i></a>
+                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=delete&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op) .'" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>
             </div>
             </div>';
         }
@@ -199,7 +199,7 @@ function sup_imm($msg_id)
     global $cookie;
 
     if (!$cookie) {
-        Header("Location: user.php");
+        Header('Location: '. site_url('user.php'));
     } else {
         $r = DB::table('priv_msgs')
                 ->where('msg_id', $msg_id)
@@ -217,7 +217,7 @@ function read_imm($msg_id, $sub_op)
     global $cookie, $NPDS_Prefix;
 
     if (!$cookie) {
-        Header("Location: user.php");
+        Header('Location: '. site_url('user.php'));
     } else {
         $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET read_msg='1' WHERE msg_id='$msg_id' AND to_userid='$cookie[0]'";
         
@@ -226,17 +226,17 @@ function read_imm($msg_id, $sub_op)
         }
 
         if ($sub_op == 'reply') {
-            echo "<script type=\"text/javascript\">
+            echo '<script type="text/javascript">
                 //<![CDATA[
-                window.location='replypmsg.php?reply=1&msg_id=$msg_id&userid=$cookie[0]&full_interface=short';
+                window.location="'. site_url('replypmsg.php?reply=1&msg_id='. $msg_id .'&userid='. $cookie[0] .'&full_interface=short') .'";
                 //]]>
-                </script>";
+                </script>';
             die();
         }
 
         echo '<script type="text/javascript">
                 //<![CDATA[
-                window.location="readpmsg_imm.php?op=new_msg";
+                window.location="'. site_url('readpmsg_imm.php?op=new_msg') .'";
                 //]]>
                 </script>';
         die();

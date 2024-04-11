@@ -37,7 +37,7 @@ function convert_ressources($Xcontent)
         if (strtoupper(substr($Xcontent, $i, 4)) == "src=") {
             if ((strtoupper(substr($Xcontent, $i + 4, 3)) != "HTT") 
             and (strtoupper(substr($Xcontent, $i + 4, 4)) != "\"HTT")) {
-                $Xcontent = substr_replace($Xcontent, "src=getfile.php?att_id=$op&amp;apli=minisite&amp;att_type=&amp;att_size=&amp;att_name=", $i, 4);
+                $Xcontent = substr_replace($Xcontent, 'src='. site_url('getfile.php?att_id='. $op .'&amp;apli=minisite&amp;att_type=&amp;att_size=&amp;att_name='), $i, 4);
             }
             $i = $i + 4;
         }
@@ -137,7 +137,7 @@ if ($affich) {
 
     if (file_exists($fic)) {
         $Titlesitename = "Minisite - $op";
-        $nuke_url = Config::get('npds.nuke_url') . '/minisite.php?op=' . $op;
+        $nuke_url = site_url('minisite.php?op='. $op); // not used ????
 
         include("storage/meta/meta.php");
 

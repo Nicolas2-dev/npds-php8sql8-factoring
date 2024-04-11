@@ -107,7 +107,7 @@ function pollList()
 
         echo '
         <div class="col-sm-8">' . language::aff_langue($pollTitle) . '</div>
-        <div class="col-sm-4 text-end">(<a href="pollBooth.php?op=results&amp;pollID=' . $id . '">' . translate("Résultats") . '</a> - ' . $sum . ' ' . translate("votes") . ')</div>';
+        <div class="col-sm-4 text-end">(<a href="'. site_url('pollBooth.php?op=results&amp;pollID=' . $id) .'">' . translate("Résultats") . '</a> - ' . $sum . ' ' . translate("votes") . ')</div>';
     }
 
     echo '
@@ -183,11 +183,11 @@ function pollboxbooth($pollID, $pollClose)
     }
 
     if (!isset($url)) {
-        $url = sprintf("pollBooth.php?op=results&amp;pollID=%d", $pollID);
+        $url = sprintf(site_url('pollBooth.php?op=results&amp;pollID=%d'), $pollID);
     }
 
     $boxContent = '
-    <form action="pollBooth.php" method="post">
+    <form action="'. site_url('pollBooth.php') .'" method="post">
         <input type="hidden" name="pollID" value="' . $pollID . '" />
         <input type="hidden" name="forwarder" value="' . $url . '" />';
 
@@ -236,7 +236,7 @@ function pollboxbooth($pollID, $pollClose)
             <div class="mb-3">' . $inputvote . '</div>
     </form>';
 
-    $boxContent .= '<div><ul><li><a href="pollBooth.php">' . translate("Anciens sondages") . '</a></li>';
+    $boxContent .= '<div><ul><li><a href="'. site_url('pollBooth.php') .'">' . translate("Anciens sondages") . '</a></li>';
 
     if ($pollcomm) {
         if (file_exists("modules/comments/config/pollBoth.conf.php")) {
@@ -255,7 +255,7 @@ function pollboxbooth($pollID, $pollClose)
 
 function PollMain_aff()
 {
-    $boxContent = '<p><strong><a href="pollBooth.php">' . translate("Anciens sondages") . '</a></strong></p>';
+    $boxContent = '<p><strong><a href="'. site_url('pollBooth.php') .'">' . translate("Anciens sondages") . '</a></strong></p>';
     echo $boxContent;
 }
 

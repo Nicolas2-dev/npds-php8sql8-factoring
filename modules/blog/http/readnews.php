@@ -41,7 +41,7 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
                 '
              <li class=" page-item active"><a class="page-link" href="#">' . $j . '</a></li>' :
                 '
-             <li class="page-item"><a href="minisite.php?op=' . $op . '&amp;startpage=' . $j . '" class="page-link blog_lien">' . $j . '</a></li>';
+             <li class="page-item"><a href="'. site_url('minisite.php?op=' . $op . '&amp;startpage=' . $j) .'" class="page-link blog_lien">' . $j . '</a></li>';
         }
         $contentT .= '
          </ul>
@@ -83,7 +83,7 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
         // Ajouter
         if (substr($action, 0, 1) == 'A') {
             $content .= '
-         <form name="adminForm" method="post" action="minisite.php?op=' . $op . '&action=AOK">
+         <form name="adminForm" method="post" action="'. site_url('minisite.php?op=' . $op . '&action=AOK') .'">
             <div class="mb-3 row">
                <label class="form-label" for="title">' . translate("Titre") . '</label>
                <div class="col-sm-12">
@@ -137,7 +137,7 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
                 $crtsplit[2] = preg_replace('#(' . $v . ')_(video)\((.*[^\)])\)#m', '[\2_\1]\3[/\2_\1]', $crtsplit[2]);
             }
             $content .= '
-         <form name="adminForm" method="post" action="minisite.php?op=' . $op . '&action=MOK&index=' . $index . '">
+         <form name="adminForm" method="post" action="'. site_url('minisite.php?op=' . $op . '&action=MOK&index=' . $index) .'">
             <div class="mb-3">
                <label class="form-label" for="title">' . translate("Titre") . '</label>
                <input class="form-control" type="text" name="title" value="' . $crtsplit[1] . '" />
@@ -160,8 +160,8 @@ function readnews($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
     $new_pages = false;
     for ($i = $startpage * $perpage; $i < $startpage * $perpage + $perpage && $i < $ubound; $i++) {
         $crtsplit = explode('!;!', $xnews[$i]);
-        $actionM = '<a class="" href="minisite.php?op=' . $op . '&amp;action=M' . $i . '" title="' . translate("Modifier") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit fa-lg me-1"></i></a>';
-        $actionD = '<a class="" href="minisite.php?op=' . $op . '&amp;action=D' . $i . '" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>';
+        $actionM = '<a class="" href="'. site_url('minisite.php?op=' . $op . '&amp;action=M' . $i) .'" title="' . translate("Modifier") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit fa-lg me-1"></i></a>';
+        $actionD = '<a class="" href="'. site_url('minisite.php?op=' . $op . '&amp;action=D' . $i) .'" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>';
         $content .= '
       <div class="card mb-3">
          <div class="card-body">

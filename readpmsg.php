@@ -35,7 +35,7 @@ if ($SuperCache){
 include('auth.php');
 
 if (!$user) {
-    Header('Location: user.php');
+    Header('Location: '. site_url('user.php'));
 } else {
     include('themes/default/header.php');
 
@@ -97,7 +97,7 @@ if (!$user) {
     } else {
         echo '
         <p class="lead">
-            <a href="viewpmsg.php">' . translate("Messages personnels") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $Xdossier . '&nbsp;&raquo;&raquo;&nbsp;' . language::aff_langue($myrow['subject']) . '
+            <a href="'. site_url('viewpmsg.php') .'">' . translate("Messages personnels") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $Xdossier . '&nbsp;&raquo;&raquo;&nbsp;' . language::aff_langue($myrow['subject']) . '
         </p>
         <div class="card mb-3">
             <div class="card-header">';
@@ -161,11 +161,11 @@ if (!$user) {
             $useroutils .= '<hr />';
 
             if ($posterdata['uid'] != 1 and $posterdata['uid'] != '') {
-                $useroutils .= '<a class="list-group-item text-primary" href="user.php?op=userinfo&amp;uname=' . $posterdata['uname'] . '" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('user.php?op=userinfo&amp;uname=' . $posterdata['uname']) .'" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
             }
 
             if ($posterdata['uid'] != 1) {
-                $useroutils .= '<a class="list-group-item text-primary" href="powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"] . '" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle "></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"]) .'" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle "></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
             }
 
             if ($posterdata['femail'] != ''){
@@ -177,7 +177,7 @@ if (!$user) {
             }
 
             if ($posterdata['mns']) {
-                $useroutils .= '<a class="list-group-item text-primary" href="minisite.php?op=' . $posterdata['uname'] . '" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('minisite.php?op=' . $posterdata['uname']) .'" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
             }
         }
 
@@ -267,7 +267,7 @@ if (!$user) {
             if ($posterdata['uid'] <> 1) {
                 echo '
                 <li class="page-item">
-                <a class="page-link" href="replypmsg.php?reply=1&amp;msg_id=' . $myrow['msg_id'] . '"><span class="d-none d-md-inline"></span><i class="fa fa-reply fa-lg me-2"></i><span class="d-none d-md-inline">' . translate("Répondre") . '</span></a>
+                <a class="page-link" href="'. site_url('replypmsg.php?reply=1&amp;msg_id=' . $myrow['msg_id']) .'"><span class="d-none d-md-inline"></span><i class="fa fa-reply fa-lg me-2"></i><span class="d-none d-md-inline">' . translate("Répondre") . '</span></a>
                 </li>';
             }
         }
@@ -275,7 +275,7 @@ if (!$user) {
         if ($previous >= 0) {
             echo '
                 <li class="page-item">
-                <a class="page-link" href="readpmsg.php?start=' . $previous . '&amp;total_messages=' . $total_messages . $tmpx . '" >
+                <a class="page-link" href="'. site_url('readpmsg.php?start=' . $previous . '&amp;total_messages=' . $total_messages . $tmpx) .'" >
                     <span class="d-none d-md-inline">' . translate("Message précédent") . '</span>
                     <span class="d-md-none" title="' . translate("Message précédent") . '" data-bs-toggle="tooltip"><i class="fa fa-angle-double-left fa-lg"></i></span>
                 </a>
@@ -293,7 +293,7 @@ if (!$user) {
         if ($next < $total_messages) {
             echo '
                 <li class="page-item" >
-                <a class="page-link" href="readpmsg.php?start=' . $next . '&amp;total_messages=' . $total_messages . $tmpx . '" >
+                <a class="page-link" href="'. site_url('readpmsg.php?start=' . $next . '&amp;total_messages=' . $total_messages . $tmpx) .'" >
                     <span class="d-none d-md-inline">' . translate("Message suivant") . '</span>
                     <span class="d-md-none" title="' . translate("Message suivant") . '" data-bs-toggle="tooltip"><i class="fa fa-angle-double-right fa-lg"></i></span>
                 </a>
@@ -313,9 +313,9 @@ if (!$user) {
                 </li>';
 
         if ($type != 'outbox') {
-            echo '<li class="page-item"><a class="page-link " href="replypmsg.php?delete=1&amp;msg_id=' . $myrow['msg_id'] . '" title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
+            echo '<li class="page-item"><a class="page-link " href="'. site_url('replypmsg.php?delete=1&amp;msg_id=' . $myrow['msg_id']) .'" title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
         } else {
-            echo '<li class="page-item"><a class="page-link " href="replypmsg.php?delete=1&amp;msg_id=' . $myrow['msg_id'] . '&amp;type=outbox"  title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
+            echo '<li class="page-item"><a class="page-link " href="'. site_url('replypmsg.php?delete=1&amp;msg_id=' . $myrow['msg_id'] . '&amp;type=outbox') .'"  title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
         }
 
         echo '</ul>';
@@ -328,7 +328,7 @@ if (!$user) {
             <div class="collapse" id="sortbox">
                 <div class="card card-body" >
                 <p class="lead">' . translate("Classer ce message") . '</p>
-                    <form action="replypmsg.php" method="post">
+                    <form action="'. site_url('replypmsg.php') .'" method="post">
                     <div class="mb-3 row">
                         <label class="col-form-label col-sm-4" for="dossier">' . translate("Sujet") . '</label>
                         <div class="col-sm-8">

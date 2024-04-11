@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 use npds\system\assets\css;
+use npds\system\auth\users;
 use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\utility\crypt;
@@ -22,16 +23,17 @@ if (!function_exists("Mysql_Connexion")) {
 
 function L_encrypt($txt)
 {
-    global $userdata;
+    $user = users::getUser();
+    
+    $userX = base64_decode($user);
+    $userdata = explode(':', $userX);
 
     $key = substr($userdata[2], 8, 8);
 
     return crypt::encryptK($txt, $key);
 }
 
-global $user;
-
-if (!$user) {
+if (!$user = users::getUser()) {
     Header('Location: ' . site_url('user.php'));
 } else {
     $userX = base64_decode($user);

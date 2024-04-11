@@ -50,7 +50,7 @@ function blocnotes($typeBlocNote = 'shared', $nomBlocNote = '', $largeur = '', $
         else
             $title = $block_title;
         $aff .= '
-            <form class="' . $largeur . '" method="post" action="modules.php?ModPath=bloc-notes&amp;ModStart=blocnotes" name="A' . $bnid . '">
+            <form class="' . $largeur . '" method="post" action="'. site_url('modules.php?ModPath=bloc-notes&amp;ModStart=blocnotes') .'" name="A' . $bnid . '">
                 <div class="mb-3">
                 <textarea class="form-control ' . $bnclass . '" rows="' . $nblBlocNote . '" name="texteBlocNote" id="texteBlocNote_' . $bnid . '" placeholder="..."></textarea>
                 </div>
@@ -66,7 +66,7 @@ function blocnotes($typeBlocNote = 'shared', $nomBlocNote = '', $largeur = '', $
                 </div>
                 </div>
             </form>
-            <script type="text/javascript" src="modules.php?ModPath=bloc-notes&amp;ModStart=blocnotes-read&amp;bnid=' . $bnid . '"></script>';
+            <script type="text/javascript" src="'. site_url('modules.php?ModPath=bloc-notes&amp;ModStart=blocnotes-read&amp;bnid=' . $bnid) .'"></script>';
     }
     if ($affiche)
         themesidebox($title, $aff);

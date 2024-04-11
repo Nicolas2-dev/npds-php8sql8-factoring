@@ -30,7 +30,7 @@ function filtre_module($strtmp)
         stristr($strtmp, 'object') ||
         stristr($strtmp, 'meta')       
     ) {
-        Header("Location: die.php?op=module");
+        Header('Location: '. site_url('die.php?op=module'));
     } else {
         return $strtmp != '' ? true : false;
     }
@@ -46,8 +46,8 @@ if (filtre_module($ModPath) and filtre_module($ModStart)) {
         die();
         
     } else {
-        Header("Location: die.php?op=module-exist");
+        Header('Location: '. site_url('die.php?op=module-exist'));
     }
 } else {
-    Header("Location: die.php?op=module");
+    Header('Location: '. site_url('die.php?op=module'));
 }

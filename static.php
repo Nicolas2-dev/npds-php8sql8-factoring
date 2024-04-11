@@ -96,7 +96,7 @@ if (($op != '') and ($op)) {
                 echo $remp;
             }
 
-            echo '<div class=" my-3"><a href="print.php?sid=static:' . $op . '&amp;metalang=' . $metalang . '&amp;nl=' . $nl . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Page spéciale pour impression") . '"><i class="fa fa-2x fa-print"></i></a></div>';
+            echo '<div class=" my-3"><a href="'. site_url('print.php?sid=static:' . $op . '&amp;metalang=' . $metalang . '&amp;nl=' . $nl) .'" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Page spéciale pour impression") . '"><i class="fa fa-2x fa-print"></i></a></div>';
 
             // Si vous voulez tracer les appels au pages statiques : supprimer les // devant la ligne ci-dessous
             // logs::Ecr_Log("security", "storage/static/$op", "");

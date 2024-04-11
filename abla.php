@@ -200,13 +200,11 @@ if ($admin) {
         </thead>
         <tbody>';
 
-    settype($xdownload, 'array');
-
-    $downloads = DB::table('downloads')->select('dcounter', 'dfilename')->get();
-
     $num_dow = 0;    
-    foreach ($downloads as $download) {  
-
+    foreach (DB::table('downloads')
+                ->select('dcounter', 'dfilename')
+                ->get() as $download) 
+    {  
         echo '
             <tr>
                 <td><span class="text-danger">';
@@ -245,10 +243,11 @@ if ($admin) {
             </tr>
         </thead>';
 
-    $catagories = DB::table('catagories')->select('cat_id', 'cat_title')->orderBy('cat_id')->get();
-
     $num_for = 0;
-    foreach ($catagories as $categ) {    
+    foreach (DB::table('catagories')
+        ->select('cat_id', 'cat_title')
+        ->orderBy('cat_id')
+        ->get() as $categ) {    
 
         $forums = DB::table('forums')
             ->select('forums.forum_id', 'forums.forum_name', 'forums.forum_desc', 'forums.forum_access', 'forums.forum_moderator', 'forums.cat_id', 'forums.forum_type', 'forums.forum_pass', 'forums.arbre', 'forums.attachement', 'forums.forum_index', 'users.uname')

@@ -30,7 +30,7 @@ use npds\system\cache\SuperCacheEmpty;
 settype($cancel, 'string');
 
 if ($cancel) {
-    header("Location: viewforum.php?forum=$forum");
+    header('Location: '. site_url('viewforum.php?forum='. $forum));
 }
 
 if (!function_exists("Mysql_Connexion")) {
@@ -75,11 +75,11 @@ if (isset($user)) {
 }
 
 if (($myrow['forum_type'] == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if ($forum_access == 9) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if (!forum::does_exists($forum, "forum")) {
@@ -273,7 +273,7 @@ if ($submitS) {
 
     echo '
     <p class="lead">
-        <a href="forum.php" >' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;<a href="viewforum.php?forum=' . $forum . '">' . stripslashes($forum_name) . '</a>
+        <a href="'. site_url('forum.php') .'" >' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;<a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . stripslashes($forum_name) . '</a>
     </p>
         <div class="card">
             <div class="card-block-small">
@@ -295,7 +295,7 @@ if ($submitS) {
             }
         }
 
-        echo '<a href="user.php?op=userinfo&amp;uname=' . $moderator_data[$i] . '"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava me-1 mx-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
+        echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator_data[$i]) .'"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava me-1 mx-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
     }
 
     echo '
@@ -314,7 +314,7 @@ if ($submitS) {
 
     echo '
         </blockquote>
-        <form id="new_top" action="newtopic.php" method="post" name="coolsus">';
+        <form id="new_top" action="'. site_url('newtopic.php') .'" method="post" name="coolsus">';
 
     echo '<br />';
 

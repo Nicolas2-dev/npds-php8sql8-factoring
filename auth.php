@@ -20,7 +20,11 @@ if (!function_exists("Mysql_Connexion")) {
     header('location: ' . site_url('index.php'));
 }
 
-if ($rowQ1 = cache::Q_Select3(DB::table('config')->select('*')->get(), 3600, 'tbl_config(*)')) {
+if ($rowQ1 = cache::Q_Select3(
+    DB::table('config')
+        ->select('*')
+        ->get(), 3600, 'tbl_config(*)')) 
+{
     foreach ($rowQ1[0] as $key => $value) {
         $$key = $value;
     }
@@ -31,14 +35,25 @@ if ($rowQ1 = cache::Q_Select3(DB::table('config')->select('*')->get(), 3600, 'tb
 settype($forum, 'integer');
 
 if ($allow_upload_forum) {
-    if ($rowQ1 = cache::Q_Select3(DB::table('forums')->select('attachement')->where('forum_id', $forum)->get(), 3600, 'tbl_forum(attachement)')) {
+    if ($rowQ1 = cache::Q_Select3(
+        DB::table('forums')
+            ->select('attachement')
+            ->where('forum_id', $forum)
+            ->get(), 3600, 'tbl_forum(attachement)')) 
+    {
         foreach ($rowQ1[0] as $value) {
             $allow_upload_forum = $value;
         }
     }
 }
 
-if ($rowQ1 = cache::Q_Select3(DB::table('forums')->select('forum_pass')->where('forum_id', $forum)->where('forum_type', 1)->get(), 3600, 'tbl_forum(forum_pass)')) {
+if ($rowQ1 = cache::Q_Select3(
+    DB::table('forums')
+        ->select('forum_pass')
+        ->where('forum_id', $forum)
+        ->where('forum_type', 1)
+        ->get(), 3600, 'tbl_forum(forum_pass)')) 
+{
     if (isset($Forum_Priv[$forum])) {
         $Xpasswd = base64_decode($Forum_Priv[$forum]);
         

@@ -331,6 +331,24 @@ if (! function_exists('array_set'))
 /**
  * 
  */
+if (! function_exists('manuel'))
+{
+    /**
+     * [manuel description]
+     *
+     * @param   [type]  $manuel  [$manuel description]
+     *
+     * @return  [type]
+     */
+    function manuel($manuel)  
+    {
+        return 'modules/manuels/view/'. Config::get('npds.language') .'/'. $manuel .'.html';
+    }
+}
+
+/**
+ * 
+ */
 if (! function_exists('with'))
 {
     /**

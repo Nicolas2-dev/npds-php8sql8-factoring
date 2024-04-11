@@ -30,8 +30,8 @@ include("modules/$ModPath/config/cache.timings.php");
 
 include("themes/default/header.php");
 
-// start caching page
-if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->genereting_output == -1) or (!$SuperCache)) {
+// start Caching page
+if (cache::cacheManagerStart2()) {   
     
     if (!isset($start)) { 
         $start = 0;
@@ -119,11 +119,11 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
         $topic      = $xtab[$story_limit]['topic'];
         $informant  = $xtab[$story_limit]['informant'];
 
-        $printP = '<a href="print.php?sid=' . $sid . '&amp;archive=' . $arch . '">
+        $printP = '<a href="'. site_url('print.php?sid=' . $sid . '&amp;archive=' . $arch) .'">
                 <i class="fa fa-print fa-lg" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" data-bs-placement="left"></i>
             </a>';
 
-        $sendF = '<a class="ms-4" href="friend.php?op=FriendSend&amp;sid=' . $sid . '&amp;archive=' . $arch . '">
+        $sendF = '<a class="ms-4" href="'. site_url('friend.php?op=FriendSend&amp;sid=' . $sid . '&amp;archive=' . $arch) .'">
                 <i class="fa fa-at fa-lg" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip" data-bs-placement="left" ></i>
             </a>';
         
@@ -134,14 +134,14 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
                                 ->where('catid', $catid)
                                 ->first();
 
-            $title = '<a href="article.php?sid=' . $sid . '&amp;archive=' . $arch . '" >
+            $title = '<a href="'. site_url('article.php?sid=' . $sid . '&amp;archive=' . $arch) .'" >
                     ' . language::aff_langue(ucfirst($title)) . '
                 </a>
-                [ <a href="index.php?op=newindex&amp;catid=' . $catid . '">
+                [ <a href="'. site_url('index.php?op=newindex&amp;catid=' . $catid) .'">
                     ' . language::aff_langue($stories_cat['title']) . '
                 </a> ]';
         } else {
-            $title = '<a href="article.php?sid=' . $sid . '&amp;archive=' . $arch . '" >
+            $title = '<a href="'. site_url('article.php?sid=' . $sid . '&amp;archive=' . $arch) .'" >
                     ' . language::aff_langue(ucfirst($title)) . '
                 </a>';
         }
@@ -170,7 +170,7 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
             <li class="page-item disabled"><a class="page-link" href="#" >' . $nbPages . ' ' . translate("pages") . '</a></li>
         </ul>';
 
-    echo paginator::paginate('modules.php?ModPath=archive-stories&amp;ModStart=archive-stories&amp;start=', '&amp;count=' . $count, $nbPages, $current, 1, $maxcount, $start);
+    echo paginator::paginate(site_url('modules.php?ModPath=archive-stories&amp;ModStart=archive-stories&amp;start='), '&amp;count=' . $count, $nbPages, $current, 1, $maxcount, $start);
     
     echo '</div>';
 }

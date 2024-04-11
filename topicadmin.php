@@ -128,7 +128,7 @@ if ((isset($submit)) and ($mode == 'move')) {
     echo '
         <div class="alert alert-success">
         <h4 class="alert-heading">' . translate("Le sujet a été déplacé.") . '</h4>
-        <hr /><a href="' . $url_ret . '?topic=' . $topic . '&amp;forum=' . $newforum . '" class="alert-link">' . translate("Cliquez ici pour voir le nouveau sujet.") . '</a><br /><a href="forum.php" class="alert-link">' . translate("Cliquez ici pour revenir à l'index des Forums.") . '</a>
+        <hr /><a href="' . $url_ret . '?topic=' . $topic . '&amp;forum=' . $newforum . '" class="alert-link">' . translate("Cliquez ici pour voir le nouveau sujet.") . '</a><br /><a href="'. site_url('forum.php') .'" class="alert-link">' . translate("Cliquez ici pour revenir à l'index des Forums.") . '</a>
         </div>';
 
     cache::Q_Clean();
@@ -144,7 +144,7 @@ if ((isset($submit)) and ($mode == 'move')) {
 
                 echo '
         <h2>' . translate("Forum") . '</h2>
-        <form action="topicadmin.php" method="post">
+        <form action="'. site_url('topicadmin.php') .'" method="post">
             <div class="mb-3 row">
                 <label class="form-label" for="newforum">' . translate("Déplacer le sujet vers : ") . '</label>
                 <div class="col-sm-12">
@@ -204,7 +204,7 @@ if ((isset($submit)) and ($mode == 'move')) {
 
                 forum::control_efface_post("forum_npds", "", $topic, "");
 
-                header("location: viewforum.php?forum=$forum");
+                header('location: '. site_url('viewforum.php?forum='. $forum));
                 break;
 
             case 'lock':
@@ -228,7 +228,7 @@ if ((isset($submit)) and ($mode == 'move')) {
                     forum::forumerror('0012');
                 }
 
-                header("location: $url_ret?topic=$topic&forum=$forum");
+                header('location: '. site_url($url_ret .'?topic='. $topic .'&forum='. $forum));
                 break;
 
             case 'first':
@@ -237,7 +237,7 @@ if ((isset($submit)) and ($mode == 'move')) {
                     forum::forumerror('0011');
                 }
 
-                header("location: $url_ret?topic=$topic&forum=$forum");
+                header('location: '. site_url($url_ret .'?topic='. $topic .'&forum='. $forum));
                 break;
 
             case 'viewip':
@@ -261,7 +261,7 @@ if ((isset($submit)) and ($mode == 'move')) {
             <div class="row">
                 <div class="col mb-3">
                 <span class="text-muted">' . translate("Identifiant : ") . '</span><span class="">' . $m['uname'] . '</span><br />
-                <span class="text-muted">' . translate("Adresse IP de l'utilisateur : ") . '</span><span class="">' . $m['poster_ip'] . ' => <a class="text-danger" href="topicadmin.php?mode=banip&topic=' . $topic . '&post=' . $post . '&forum=' . $forum . '&arbre=' . $arbre . '" >' . translate("Bannir cette @Ip") . '</a></span><br />
+                <span class="text-muted">' . translate("Adresse IP de l'utilisateur : ") . '</span><span class="">' . $m['poster_ip'] . ' => <a class="text-danger" href="'. site_url('topicadmin.php?mode=banip&topic=' . $topic . '&post=' . $post . '&forum=' . $forum . '&arbre=' . $arbre) .'" >' . translate("Bannir cette @Ip") . '</a></span><br />
                 <span class="text-muted">' . translate("Adresse DNS de l'utilisateur : ") . '</span><span class="">' . $m['poster_dns'] . '</span><br />
                 <span class="text-muted">GeoTool : </span><span class=""><a href="http://www.ip-tracker.org/?ip=' . $m['poster_ip'] . '" target="_blank" >IP tracker</a><br />
                 </div>';

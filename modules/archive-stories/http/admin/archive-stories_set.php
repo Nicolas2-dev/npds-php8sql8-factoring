@@ -47,7 +47,7 @@ function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
     echo '
     <hr />
     <h3 class="mb-3">' . adm_translate("Paramètres") . '</h3>
-    <form id="archiveadm" action="admin.php" method="post">
+    <form id="archiveadm" action="'. site_url('admin.php') .'" method="post">
         <div class="form-floating mb-3">
             <textarea id="arch_titre" class="form-control" type="text" name="arch_titre"  maxlength="400" style="height: 100px" placeholder="' . adm_translate("Titre de votre page") . '" >' . $arch_titre . '</textarea>
             <label for="arch_titre">' . adm_translate("Titre de la page") . '</label>
@@ -93,7 +93,7 @@ function ConfigureArchive($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
         <button class="btn btn-primary" type="submit">' . adm_translate("Sauver") . '</button>
     </form>
     <hr />
-    <a href= "modules.php?ModPath=' . $ModPath . '&amp;ModStart=' . $ModPath . '" ><i class="fas fa-external-link-alt fa-lg me-1" title="Voir le module en mode utilisation." data-bs-toggle="tooltip" data-bs-placement="right"></i>Voir le module en mode utilisation.</a>';
+    <a href= "'. site_url('modules.php?ModPath=' . $ModPath . '&amp;ModStart=' . $ModPath) .'" ><i class="fas fa-external-link-alt fa-lg me-1" title="Voir le module en mode utilisation." data-bs-toggle="tooltip" data-bs-placement="right"></i>Voir le module en mode utilisation.</a>';
 
     $fv_parametres = '
     maxcount: {

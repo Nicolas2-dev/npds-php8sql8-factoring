@@ -27,13 +27,11 @@ function sitemapforum($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('npds.nuke_url');
-
     $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE forum_access='0' ORDER BY forum_id");
     while (list($forum_id) = sql_fetch_row($result)) {
         // Forums
         $tmp .= "<url>\n";
-        $tmp .= "<loc>$nuke_url/viewforum.php?forum=$forum_id</loc>\n";
+        $tmp .= "<loc>". site_url('viewforum.php?forum='. $forum_id) ."</loc>\n";
         $tmp .= "<lastmod>" . date("Y-m-d", time()) . "</lastmod>\n";
         $tmp .= "<changefreq>hourly</changefreq>\n";
         $tmp .= "<priority>$prio</priority>\n";
@@ -44,7 +42,7 @@ function sitemapforum($prio)
         while (list($topic_id, $topic_time) = sql_fetch_row($sub_result)) {
             // Topics
             $tmp .= "<url>\n";
-            $tmp .= "<loc>$nuke_url/viewtopic.php?topic=$topic_id&amp;forum=$forum_id</loc>\n";
+            $tmp .= "<loc>". site_url('viewtopic.php?topic='. $topic_id .'&amp;forum='. $forum_id) ."</loc>\n";
             $tmp .= "<lastmod>" . substr($topic_time, 0, 10) . "</lastmod>\n";
             $tmp .= "<changefreq>hourly</changefreq>\n";
             $tmp .= "<priority>$prio</priority>\n";
@@ -61,14 +59,12 @@ function sitemaparticle($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('npds.nuke_url');
-
     $result = sql_query("SELECT sid,time FROM " . $NPDS_Prefix . "stories WHERE ihome='0' AND archive='0' ORDER BY sid");
 
     while (list($sid, $time) = sql_fetch_row($result)) {
         // Articles
         $tmp .= "<url>\n";
-        $tmp .= "<loc>$nuke_url/article.php?sid=$sid</loc>\n";
+        $tmp .= "<loc>". site_url('article.php?sid='. $sid) ."</loc>\n";
         $tmp .= "<lastmod>" . substr($time, 0, 10) . "</lastmod>\n";
         $tmp .= "<changefreq>daily</changefreq>\n";
         $tmp .= "<priority>$prio</priority>\n";
@@ -84,11 +80,9 @@ function sitemaprub($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('npds.nuke_url');
-
     // Sommaire des rubriques
     $tmp .= "<url>\n";
-    $tmp .= "<loc>$nuke_url/sections.php</loc>\n";
+    $tmp .= "<loc>". site_url('sections.php') ."</loc>\n";
     $tmp .= "<lastmod>" . date("Y-m-d", time()) . "</lastmod>\n";
     $tmp .= "<changefreq>weekly</changefreq>\n";
     $tmp .= "<priority>$prio</priority>\n";
@@ -99,7 +93,7 @@ function sitemaprub($prio)
     while (list($artid, $timestamp) = sql_fetch_row($result)) {
         // Rubriques
         $tmp .= "<url>\n";
-        $tmp .= "<loc>$nuke_url/sections.php?op=viewarticle&amp;artid=$artid</loc>\n";
+        $tmp .= "<loc>". site_url('sections.php?op=viewarticle&amp;artid='. $artid) ."</loc>\n";
         $tmp .= "<lastmod>" . date("Y-m-d", (int) $timestamp) . "</lastmod>\n";
         $tmp .= "<changefreq>weekly</changefreq>\n";
         $tmp .= "<priority>$prio</priority>\n";
@@ -115,11 +109,9 @@ function sitemapdown($prio)
 
     $tmp = '';
 
-    $nuke_url = Config::get('npds.nuke_url');
-
     // Sommaire des downloads
     $tmp .= "<url>\n";
-    $tmp .= "<loc>$nuke_url/download.php</loc>\n";
+    $tmp .= "<loc>". site_url('download.php') ."</loc>\n";
     $tmp .= "<lastmod>" . date("Y-m-d", time()) . "</lastmod>\n";
     $tmp .= "<changefreq>weekly</changefreq>\n";
     $tmp .= "<priority>$prio</priority>\n";
@@ -129,7 +121,7 @@ function sitemapdown($prio)
 
     while (list($did, $ddate) = sql_fetch_row($result)) {
         $tmp .= "<url>\n";
-        $tmp .= "<loc>$nuke_url/download.php?op=geninfo&amp;did=$did</loc>\n";
+        $tmp .= "<loc>". site_url('download.php?op=geninfo&amp;did='. $did) ."</loc>\n";
         $tmp .= "<lastmod>$ddate</lastmod>\n";
         $tmp .= "<changefreq>weekly</changefreq>\n";
         $tmp .= "<priority>$prio</priority>\n";
@@ -141,15 +133,13 @@ function sitemapdown($prio)
 
 function sitemapothers($PAGES)
 {
-    $nuke_url = Config::get('npds.nuke_url');
-
     $tmp = '';
 
     foreach ($PAGES as $name => $loc) {
         if (isset($PAGES[$name]['sitemap'])) {
             if (($PAGES[$name]['run'] == "yes") and ($name != "article.php") and ($name != "forum.php") and ($name != "sections.php") and ($name != "download.php")) {
                 $tmp .= "<url>\n";
-                $tmp .= "<loc>$nuke_url/" . str_replace("&", "&amp;", $name) . "</loc>\n";
+                $tmp .= "<loc>". site_url(str_replace("&", "&amp;", $name)) ."</loc>\n";
                 $tmp .= "<lastmod>" . date("Y-m-d", time()) . "</lastmod>\n";
                 $tmp .= "<changefreq>daily</changefreq>\n";
                 $tmp .= "<priority>" . $PAGES[$name]['sitemap'] . "</priority>\n";

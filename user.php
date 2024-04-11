@@ -204,7 +204,7 @@ function Only_NewUser()
         echo '</div>';
         css::adminfoot('fv', $fv_parametres, $arg1, '');
     } else {
-        header("location: user.php");
+        header('location: '. site_url('user.php'));
     }
 }
 
@@ -217,7 +217,7 @@ function hidden_form()
     }
 
     echo '
-    <form action="user.php" method="post">
+    <form action="'. site_url('user.php') .'" method="post">
         <input type="hidden" name="uname" value="' . $uname . '" />
         <input type="hidden" name="name" value="' . hack::removeHack($name) . '" />
         <input type="hidden" name="email" value="' . $email . '" />
@@ -364,7 +364,7 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
                 <hr />
                 <h2><i class="fa fa-user me-2"></i>' . translate("Inscription") . '</h2>
                 <p class="lead">' . translate("Votre mot de passe est : ") . '<strong>' . $makepass . '</strong></p>
-                <p class="lead">' . translate("Vous pourrez le modifier après vous être connecté sur") . ' : <br /><a href="user.php?op=login&amp;uname=' . $uname . '&amp;pass=' . urlencode($makepass) . '"><i class="fas fa-sign-in-alt fa-lg me-2"></i><strong>' . $sitename . '</strong></a></p>';
+                <p class="lead">' . translate("Vous pourrez le modifier après vous être connecté sur") . ' : <br /><a href="'. site_url('user.php?op=login&amp;uname=' . $uname . '&amp;pass=' . urlencode($makepass)) .'"><i class="fas fa-sign-in-alt fa-lg me-2"></i><strong>' . $sitename . '</strong></a></p>';
 
                 $message = translate("Bienvenue sur") . " $sitename !\n\n" . translate("Vous, ou quelqu'un d'autre, a utilisé votre Email identifiant votre compte") . " ($email) " . translate("pour enregistrer un compte sur") . " $sitename.\n\n" . translate("Informations sur l'utilisateur :") . " : \n\n";
                 $message .=
@@ -465,7 +465,7 @@ function userinfo($uname)
     list($uid, $name, $femail, $url, $bio, $user_avatar, $user_from, $user_occ, $user_intrest, $user_sig, $user_journal, $mns) = sql_fetch_row($result);
     
     if (!$uid) {
-        header("location: index.php");
+        header('location: '. site_url('index.php'));
     }
 
     global $cookie;
@@ -542,7 +542,7 @@ function userinfo($uname)
     $useroutils = '';
 
     if (($user) and ($uid != 1)) { 
-        $useroutils .= '<a class=" text-primary me-3" href="powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"] . '" ><i class="far fa-envelope fa-2x" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+        $useroutils .= '<a class=" text-primary me-3" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"]) .'" ><i class="far fa-envelope fa-2x" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
     }
 
     if (array_key_exists('femail', $posterdata)) {
@@ -559,7 +559,7 @@ function userinfo($uname)
 
     if (array_key_exists('mns', $posterdata)) {
         if ($posterdata['mns']) {
-            $useroutils .= '<a class=" text-primary me-3" href="minisite.php?op=' . $posterdata['uname'] . '" target="_blank" ><i class="fa fa-desktop fa-2x" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
+            $useroutils .= '<a class=" text-primary me-3" href="'. site_url('minisite.php?op=' . $posterdata['uname']) .'" target="_blank" ><i class="fa fa-desktop fa-2x" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"></i></a>&nbsp;';
         }
     }
 
@@ -721,11 +721,11 @@ function userinfo($uname)
 
             $content .= '
             <div class="mt-3">
-                <a href="modules.php?ModPath=geoloc&amp;ModStart=geoloc"><i class="fa fa-globe fa-lg"></i>&nbsp;[fr]Carte[/fr][en]Map[/en][zh]&#x5730;&#x56FE;[/zh][es]Mapa[/es][de]Karte[/de]</a>';
+                <a href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc') .'"><i class="fa fa-globe fa-lg"></i>&nbsp;[fr]Carte[/fr][en]Map[/en][zh]&#x5730;&#x56FE;[/zh][es]Mapa[/es][de]Karte[/de]</a>';
             
             if ($admin) {
                 $content .= '
-                <a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=geoloc&amp;ModStart=admin/geoloc_set"><i class="fa fa-cogs fa-lg ms-3"></i>&nbsp;[fr]Admin[/fr][en]Admin[/en][zh]Admin[/zh][es]Admin[/es][de]Admin[/de]</a>';
+                <a href="'. site_url('admin.php?op=Extend-Admin-SubModule&amp;ModPath=geoloc&amp;ModStart=admin/geoloc_set') .'"><i class="fa fa-cogs fa-lg ms-3"></i>&nbsp;[fr]Admin[/fr][en]Admin[/en][zh]Admin[/zh][es]Admin[/es][de]Admin[/de]</a>';
             }
 
             $content .= '
@@ -800,7 +800,7 @@ function userinfo($uname)
         
         echo '
         <div class="d-flex">
-            <div class="p-2"><a href="article.php?sid=' . $sid . '">' . language::aff_langue($title) . '</a></div>
+            <div class="p-2"><a href="'. site_url('article.php?sid=' . $sid) .'">' . language::aff_langue($title) . '</a></div>
             <div class="ms-auto p-2">' . $time . '</div>
         </div>';
     }
@@ -863,7 +863,7 @@ function userinfo($uname)
                 <span class="badge bg-secondary ms-1" title="' . translate("Réponses") . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $replys . '</span>
                 </span>
             </span>
-            <span class="d-flex w-100"><br /><a href="viewtopic.php?topic=' . $topic_id . '&forum=' . $forum_id . '" data-bs-toggle="tooltip" title="' . $forum_name . '">' . $topic_title . '</a><span class="ms-auto mt-1">' . $image . '</span></span>
+            <span class="d-flex w-100"><br /><a href="'. site_url('viewtopic.php?topic=' . $topic_id . '&forum=' . $forum_id) .'" data-bs-toggle="tooltip" title="' . $forum_name . '">' . $topic_title . '</a><span class="ms-auto mt-1">' . $image . '</span></span>
             </p>';
             $j++;
         }
@@ -898,11 +898,11 @@ function main($user)
         if (!$user) {
             echo '
             <div class="card card-body mb-3">
-                <h3><a href="user.php?op=only_newuser" role="button" title="' . translate("Nouveau membre") . '"><i class="fa fa-user-plus"></i>&nbsp;' . translate("Nouveau membre") . '</a></h3>
+                <h3><a href="'. site_url('user.php?op=only_newuser') .'" role="button" title="' . translate("Nouveau membre") . '"><i class="fa fa-user-plus"></i>&nbsp;' . translate("Nouveau membre") . '</a></h3>
             </div>
             <div class="card card-body">
                 <h3 class="mb-4"><i class="fas fa-sign-in-alt fa-lg me-2 align-middle"></i>' . translate("Connexion") . '</h3>
-                <form action="user.php" method="post" name="userlogin">
+                <form action="'. site_url('user.php') .'" method="post" name="userlogin">
                 <div class="row g-2">
                     <div class="col-sm-6">
                         <div class="mb-3 form-floating">
@@ -915,7 +915,7 @@ function main($user)
                             <input type="password" class="form-control" name="pass" id="inputPassuser" placeholder="' . translate("Mot de passe") . '" required="required" />
                             <label for="inputPassuser">' . translate("Mot de passe") . '</label>
                         </div>
-                        <span class="help-block small float-end"><a href="user.php?op=forgetpassword" title="' . translate("Vous avez perdu votre mot de passe ?") . '">' . translate("Vous avez perdu votre mot de passe ?") . '</a></span>
+                        <span class="help-block small float-end"><a href="'. site_url('user.php?op=forgetpassword') .'" title="' . translate("Vous avez perdu votre mot de passe ?") . '">' . translate("Vous avez perdu votre mot de passe ?") . '</a></span>
                     </div>
                 </div>
                 <input type="hidden" name="op" value="login" />
@@ -951,7 +951,7 @@ function logout()
     setcookie('user_language', '', 0);
     unset($user_language);
 
-    Header('Location: index.php');
+    Header('Location: '. site_url('index.php'));
 }
 
 function ForgetPassword()
@@ -963,7 +963,7 @@ function ForgetPassword()
     <div class="card card-body">
         <div class="alert alert-danger lead"><i class="fa fa-exclamation me-2"></i>' . translate("Vous avez perdu votre mot de passe ?") . '</div>
         <div class="alert alert-success"><i class="fa fa-exclamation me-2"></i>' . translate("Pas de problème. Saisissez votre identifiant et le nouveau mot de passe que vous souhaitez utiliser puis cliquez sur envoyer pour recevoir un Email de confirmation.") . '</div>
-        <form id="forgetpassword" action="user.php" method="post">
+        <form id="forgetpassword" action="'. site_url('user.php') .'" method="post">
             <div class="row g-2">
                 <div class="col-sm-6 ">
                 <div class="mb-3 form-floating">
@@ -1019,7 +1019,7 @@ function mail_password($uname, $code)
         list($uname, $email, $pass) = $tmp_result;
 
         // On envoie une URL avec dans le contenu : username, email, le MD5 du passwd retenu et le timestamp
-        $url = Config::get('npds.nuke_url'). "/user.php?op=validpasswd&code=" . urlencode(crypt::encrypt($uname) . "#fpwd#" . crypt::encryptK($email . "#fpwd#" . $code . "#fpwd#" . time(), $pass));
+        $url = site_url('user.php?op=validpasswd&code=' . urlencode(crypt::encrypt($uname) . '#fpwd#' . crypt::encryptK($email . "#fpwd#" . $code . "#fpwd#" . time(), $pass)));
 
         $message = translate("Le compte utilisateur") . ' ' . $uname . ' ' . translate("at") . ' ' . Config::get('npds.sitename') . ' ' . translate("est associé à votre Email.") . "\n\n";
         $message .= translate("Un utilisateur web ayant l'adresse IP ") . " $host_name " . translate("vient de demander une confirmation pour changer de mot de passe.") . "\n\n" . translate("Votre url de confirmation est :") . " <a href=\"$url\">$url</a> \n\n" . translate("Si vous n'avez rien demandé, ne vous inquiétez pas. Effacez juste ce Email. ") . "\n\n";
@@ -1058,7 +1058,7 @@ function valid_password($code)
                 <div class="blockquote">' . translate("Pour valider votre nouveau mot de passe, merci de le re-saisir.") . '<br />' . translate("Votre mot de passe est : ") . ' <strong>' . $ibid[1] . '</strong></div>
                 </div>
                 <div class="col-sm-5">
-                <form id="lostpassword" action="user.php" method="post">
+                <form id="lostpassword" action="'. site_url('user.php') .'" method="post">
                     <div class="mb-3 row">
                         <label class="col-form-label col-sm-12" for="passwd">' . translate("Mot de passe") . '</label>
                         <div class="col-sm-12">
@@ -1116,7 +1116,7 @@ function update_password($code, $passwd)
                     
                     sql_query("UPDATE " . $NPDS_Prefix . "users SET pass='$cryptpass', hashkey='1' WHERE uname='$uname'");
 
-                    message_pass('<div class="alert alert-success lead text-center"><a class="alert-link" href="user.php"><i class="fa fa-exclamation me-2"></i>' . translate("Mot de passe mis à jour. Merci de vous re-connecter") . '<i class="fas fa-sign-in-alt fa-lg ms-2"></i></a></div>');
+                    message_pass('<div class="alert alert-success lead text-center"><a class="alert-link" href="'. site_url('user.php') .'"><i class="fa fa-exclamation me-2"></i>' . translate("Mot de passe mis à jour. Merci de vous re-connecter") . '<i class="fas fa-sign-in-alt fa-lg ms-2"></i></a></div>');
                     logs::Ecr_Log('security', 'Lost_password_update OK : ' . $uname, '');
                 } else {
                     message_pass('<div class="alert alert-danger lead text-center">' . translate("Erreur") . ' : ' . translate("Les mots de passe sont différents. Ils doivent être identiques.") . '</div>');
@@ -1166,7 +1166,7 @@ function login($uname, $pass)
         list($open_user) = sql_fetch_row($result);
         
         if ($open_user == 0) {
-            Header("Location: user.php?stop=99");
+            Header('Location: '. site_url('user.php?stop=99'));
             return;
         }
 
@@ -1200,7 +1200,7 @@ function login($uname, $pass)
         } elseif (password_verify($dbpass, $scryptPass) or strcmp($dbpass, $pass) == 0) {
             $CryptpPWD = $pass;
         } else {
-            Header("Location: user.php?stop=1");
+            Header('Location: '. site_url('user.php?stop=1'));
             return;
         }
 
@@ -1213,9 +1213,9 @@ function login($uname, $pass)
             DB::table('session')->where('host_addr', $ip)->where('guest', 1)->delete();
         }
 
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php'));
     } else {
-        Header("Location: user.php?stop=1");
+        Header('Location: '. site_url('user.php?stop=1'));
     }
 }
 
@@ -1384,14 +1384,14 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
                 if ($pass != '') {
                     logout();
                 } else {
-                    header("location: user.php?op=edituser");
+                    header('location: '. site_url('user.php?op=edituser'));
                 }
             } else {
                 message_error($stop, '');
             }
         }
     } else {
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php');
     }
 }
 
@@ -1413,7 +1413,7 @@ function edithome()
 
     echo '
     <h2 class="mb-3">' . translate("Editer votre page principale") . '</h2>
-    <form id="changehome" action="user.php" method="post">
+    <form id="changehome" action="'. site_url('user.php') .'" method="post">
     <div class="mb-3 row">
         <label class="col-form-label col-sm-7" for="storynum">' . translate("Nombre d'articles sur la page principale") . ' (max. 127) :</label>
         <div class="col-sm-5">
@@ -1496,9 +1496,9 @@ function savehome($uid, $uname, $theme, $storynum, $ublockon, $ublock)
         // Include cache manager for purge cache Page
         $cache_obj = new cacheManager();
         $cache_obj->UsercacheCleanup();
-        Header("Location: user.php?op=edithome");
+        Header('Location: '. site_url('user.php?op=edithome'));
     } else {
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php'));
     }
 }
 
@@ -1522,7 +1522,7 @@ function chgtheme()
 
     echo '
     <h2 class="mb-3">' . translate("Changer le thème") . '</h2>
-    <form action="user.php" method="post">
+    <form action="'. site_url('user.php') .'" method="post">
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 form-floating">
@@ -1646,9 +1646,9 @@ function savetheme($uid, $theme)
         // Include cache manager for purge cache Page
         $cache_obj = new cacheManager();
         $cache_obj->UsercacheCleanup();
-        Header("Location: user.php");
+        Header('Location: '. site_url('user.php'));
     } else {
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php'));
     }
 }
 
@@ -1663,7 +1663,7 @@ function editjournal()
 
     echo '
     <h2 class="mb-3">' . translate("Editer votre journal") . '</h2>
-    <form action="user.php" method="post" name="adminForm">
+    <form action="'. site_url('user.php') .'" method="post" name="adminForm">
         <div class="mb-3 row">
             <div class="col-sm-12">
                 <textarea class="tin form-control" rows="25" name="journal">' . $userinfo['user_journal'] . '</textarea>'
@@ -1732,9 +1732,9 @@ function savejournal($uid, $journal, $datetime)
             sql_query("UPDATE " . $NPDS_Prefix . "users SET user_journal='$journal' WHERE uid='$uid'");
         }
 
-        Header("Location: user.php");
+        Header('Location: '. site_url('user.php'));
     } else {
-        Header("Location: index.php");
+        Header('Location: '. site_url('index.php'));
     }
 }
 
@@ -1793,7 +1793,7 @@ switch ($op) {
 
     case 'userinfo':
         if (($member_list == 1) and ((!isset($user)) and (!isset($admin)))) {
-            Header("Location: index.php");
+            Header('Location: '. site_url('index.php'));
         }
 
         if ($uname != '') {
@@ -1811,7 +1811,7 @@ switch ($op) {
         if ($user) {
             edituser();
         }  else {
-            Header("Location: index.php");
+            Header('Location: '. site_url('index.php'));
         }
         break;
 
@@ -1832,7 +1832,7 @@ switch ($op) {
             settype($raz_avatar, 'integer');
             saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bio, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $attach, $usend_email, $uis_visible, $user_lnl, $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1, $MAX_FILE_SIZE, $raz_avatar);
         } else {
-            Header("Location: user.php");
+            Header('Location: '. site_url('user.php'));
         }
         break;
 
@@ -1840,7 +1840,7 @@ switch ($op) {
         if ($user) {
             edithome();
         } else {
-            Header("Location: index.php");
+            Header('Location: '. site_url('index.php'));
         }
         break;
 
@@ -1853,7 +1853,7 @@ switch ($op) {
         if ($user) {
             chgtheme();
         } else {
-            Header("Location: index.php");
+            Header('Location: i'. site_url('ndex.php'));
         }
         break;
 
@@ -1866,7 +1866,7 @@ switch ($op) {
         if ($user) {
             editjournal();
         } else {
-            Header("Location: index.php");
+            Header('Location: '. site_url('index.php'));
         }
         break;
 
@@ -1899,9 +1899,9 @@ switch ($op) {
                 fopen('storage/users_private/groupe/ask4group_' . $userdata[0] . '_' . $askedgroup . '_.txt', 'w');
             }
 
-            Header("Location: index.php");
+            Header('Location: '. site_url('index.php'));
         } else {
-            Header("Location: index.php");
+            Header('Location: '. site_url('index.php'));
         }
         break;
 

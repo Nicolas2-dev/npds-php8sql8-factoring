@@ -64,7 +64,7 @@ function write_review()
     echo '
     <h2>' . translate("Ecrire une critique") . '</h2>
     <hr />
-    <form id="writereview" method="post" action="reviews.php">
+    <form id="writereview" method="post" action="'. site_url('reviews.php') .'">
         <div class="form-floating mb-3">
             <textarea class="form-control" id="title_rev" name="title" required="required" maxlength="150" style="height:70px"></textarea>
             <label for="title_rev">' . translate("Objet") . '</label>
@@ -177,7 +177,7 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
     echo $id != 0 ? translate("Modification d'une critique") : translate("Ecrire une critique");
     echo '
     </h2>
-    <form id="prevreview" method="post" action="reviews.php">';
+    <form id="prevreview" method="post" action="'. site_url('reviews.php') .'">';
 
     if ($title == '') {
         $error = 1;
@@ -278,7 +278,7 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
         }
 
         // nimporte quoi ça !!!!
-        $consent = '[fr]Pour conna&icirc;tre et exercer vos droits notamment de retrait de votre consentement &agrave; l\'utilisation des donn&eacute;es collect&eacute;es veuillez consulter notre <a href="static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1">politique de confidentialit&eacute;</a>.[/fr][en]To know and exercise your rights, in particular to withdraw your consent to the use of the data collected, please consult our <a href="static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1">privacy policy</a>.[/en][es]Para conocer y ejercer sus derechos, en particular para retirar su consentimiento para el uso de los datos recopilados, consulte nuestra <a href="static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1">pol&iacute;tica de privacidad</a>.[/es][de]Um Ihre Rechte zu kennen und auszu&uuml;ben, insbesondere um Ihre Einwilligung zur Nutzung der erhobenen Daten zu widerrufen, konsultieren Sie bitte unsere <a href="static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1">Datenschutzerkl&auml;rung</a>.[/de][zh]&#x8981;&#x4E86;&#x89E3;&#x5E76;&#x884C;&#x4F7F;&#x60A8;&#x7684;&#x6743;&#x5229;&#xFF0C;&#x5C24;&#x5176;&#x662F;&#x8981;&#x64A4;&#x56DE;&#x60A8;&#x5BF9;&#x6240;&#x6536;&#x96C6;&#x6570;&#x636E;&#x7684;&#x4F7F;&#x7528;&#x7684;&#x540C;&#x610F;&#xFF0C;&#x8BF7;&#x67E5;&#x9605;&#x6211;&#x4EEC;<a href="static.php?op=politiqueconf.html&#x26;npds=1&#x26;metalang=1">&#x7684;&#x9690;&#x79C1;&#x653F;&#x7B56;</a>&#x3002;[/zh]';
+        $consent = '[fr]Pour conna&icirc;tre et exercer vos droits notamment de retrait de votre consentement &agrave; l\'utilisation des donn&eacute;es collect&eacute;es veuillez consulter notre <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">politique de confidentialit&eacute;</a>.[/fr][en]To know and exercise your rights, in particular to withdraw your consent to the use of the data collected, please consult our <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">privacy policy</a>.[/en][es]Para conocer y ejercer sus derechos, en particular para retirar su consentimiento para el uso de los datos recopilados, consulte nuestra <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">pol&iacute;tica de privacidad</a>.[/es][de]Um Ihre Rechte zu kennen und auszu&uuml;ben, insbesondere um Ihre Einwilligung zur Nutzung der erhobenen Daten zu widerrufen, konsultieren Sie bitte unsere <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">Datenschutzerkl&auml;rung</a>.[/de][zh]&#x8981;&#x4E86;&#x89E3;&#x5E76;&#x884C;&#x4F7F;&#x60A8;&#x7684;&#x6743;&#x5229;&#xFF0C;&#x5C24;&#x5176;&#x662F;&#x8981;&#x64A4;&#x56DE;&#x60A8;&#x5BF9;&#x6240;&#x6536;&#x96C6;&#x6570;&#x636E;&#x7684;&#x4F7F;&#x7528;&#x7684;&#x540C;&#x610F;&#xFF0C;&#x8BF7;&#x67E5;&#x9605;&#x6211;&#x4EEC;<a href="'. site_url('static.php?op=politiqueconf.html&#x26;npds=1&#x26;metalang=1') .'">&#x7684;&#x9690;&#x79C1;&#x653F;&#x7B56;</a>&#x3002;[/zh]';
         $accept = "[fr]En soumettant ce formulaire j'accepte que les informations saisies soient exploit&#xE9;es dans le cadre de l'utilisation et du fonctionnement de ce site.[/fr][en]By submitting this form, I accept that the information entered will be used in the context of the use and operation of this website.[/en][es]Al enviar este formulario, acepto que la informaci&oacute;n ingresada se utilizar&aacute; en el contexto del uso y funcionamiento de este sitio web.[/es][de]Mit dem Absenden dieses Formulars erkl&auml;re ich mich damit einverstanden, dass die eingegebenen Informationen im Rahmen der Nutzung und des Betriebs dieser Website verwendet werden.[/de][zh]&#x63D0;&#x4EA4;&#x6B64;&#x8868;&#x683C;&#x5373;&#x8868;&#x793A;&#x6211;&#x63A5;&#x53D7;&#x6240;&#x8F93;&#x5165;&#x7684;&#x4FE1;&#x606F;&#x5C06;&#x5728;&#x672C;&#x7F51;&#x7AD9;&#x7684;&#x4F7F;&#x7528;&#x548C;&#x64CD;&#x4F5C;&#x8303;&#x56F4;&#x5185;&#x4F7F;&#x7528;&#x3002;[/zh]";
         
         echo '
@@ -391,7 +391,7 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
 
     echo '
     </div>
-    <a class="btn btn-secondary" href="reviews.php" title="' . translate("Retour à l'index des critiques") . '"><i class="fa fa-lg fa-undo"></i>  ' . translate("Retour à l'index des critiques") . '</a>';
+    <a class="btn btn-secondary" href="'. site_url('reviews.php') .'" title="' . translate("Retour à l'index des critiques") . '"><i class="fa fa-lg fa-undo"></i>  ' . translate("Retour à l'index des critiques") . '</a>';
     
     include("themes/default/footer.php");;
 }
@@ -436,7 +436,7 @@ function reviews($field, $order)
     <hr />
     <h3>' . language::aff_langue($r_title) . '</h3>
     <p class="lead">' . language::aff_langue($r_description) . '</p>
-    <h4><a href="reviews.php?op=write_review"><i class="fa fa-edit"></i></a>&nbsp;' . translate("Ecrire une critique") . '</h4><br />
+    <h4><a href="'. site_url('reviews.php?op=write_review') .'"><i class="fa fa-edit"></i></a>&nbsp;' . translate("Ecrire une critique") . '</h4><br />
     ';
 
     echo '
@@ -445,16 +445,16 @@ function reviews($field, $order)
             <i class="fa fa-sort-amount-down me-2"></i>' . translate("Critiques") . '
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=date&amp;order=ASC"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Date") . '</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=date&amp;order=DESC"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Date") . '</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=title&amp;order=ASC"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Titre") . '</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=title&amp;order=DESC"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Titre") . '</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=reviewer&amp;order=ASC"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Posté par") . '</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=reviewer&amp;order=DESC"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Posté par") . '</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=score&amp;order=ASC"><i class="fa fa-sort-amount-down me-2"></i>Score</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=score&amp;order=DESC"><i class="fa fa-sort-amount-up me-2"></i>Score</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=hits&amp;order=ASC"><i class="fa fa-sort-amount-down"></i>Hits</a>
-            <a class="dropdown-item" href="reviews.php?op=sort&amp;field=hits&amp;order=DESC"><i class="fa fa-sort-amount-up"></i>Hits</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Date") . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Date") . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Titre") . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Titre") . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Posté par") . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Posté par") . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>Score</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>Score</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i>Hits</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i>Hits</a>
         </div>
     </div>';
 
@@ -464,19 +464,19 @@ function reviews($field, $order)
             <thead>
                 <tr>
                 <th data-align="center">
-                    <a href="reviews.php?op=sort&amp;field=date&amp;order=ASC"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Date") . ' <a href="reviews.php?op=sort&amp;field=date&amp;order=DESC"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Date") . ' <a href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th data-align="left" data-halign="center" data-sortable="true" data-sorter="htmlSorter">
-                    <a href="reviews.php?op=sort&amp;field=title&amp;order=ASC"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Titre") . ' <a href="reviews.php?op=sort&amp;field=title&amp;order=DESC"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Titre") . ' <a href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th data-align="center" data-sortable="true">
-                    <a href="reviews.php?op=sort&amp;field=reviewer&amp;order=ASC"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Posté par") . ' <a href="reviews.php?op=sort&amp;field=reviewer&amp;order=DESC"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Posté par") . ' <a href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th class="n-t-col-xs-2" data-align="center" data-sortable="true">
-                    <a href="reviews.php?op=sort&amp;field=score&amp;order=ASC"><i class="fa fa-sort-amount-down"></i></a> Score <a href="reviews.php?op=sort&amp;field=score&amp;order=DESC"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> Score <a href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th class="n-t-col-xs-2" data-align="right" data-sortable="true">
-                    <a href="reviews.php?op=sort&amp;field=hits&amp;order=ASC"><i class="fa fa-sort-amount-down"></i></a> Hits <a href="reviews.php?op=sort&amp;field=hits&amp;order=DESC"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> Hits <a href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 </tr>
         </thead>
@@ -493,7 +493,7 @@ function reviews($field, $order)
             echo '
                 <tr>
                 <td>' . f_date($date) . '</td>
-                <td><a href="reviews.php?op=showcontent&amp;id=' . $id . '">' . ucfirst($title) . '</a></td>
+                <td><a href="'. site_url('reviews.php?op=showcontent&amp;id='. $id) .'">' . ucfirst($title) . '</a></td>
                 <td>';
 
             if ($reviewer != '') {
@@ -558,7 +558,7 @@ function showcontent($id)
     echo '
     <h2>' . translate("Critiques") . '</h2>
     <hr />
-    <a href="reviews.php">' . translate("Retour à l'index des critiques") . '</a>
+    <a href="'. site_url('reviews.php') .'">' . translate("Retour à l'index des critiques") . '</a>
     <div class="card card-body my-3">
         <div class="card-text text-muted text-end small">
     ' . translate("Ajouté :") . ' ' . $fdate . '<br />
@@ -605,10 +605,10 @@ function showcontent($id)
                 <a class="page-link" href="#"><i class="fa fa-cogs fa-lg"></i><span class="ms-2 d-none d-lg-inline">' . translate("Outils administrateur") . '</span></a>
                 </li>
                 <li class="page-item">
-                <a class="page-link" role="button" href="reviews.php?op=mod_review&amp;id=' . $id . '" title="' . translate("Editer") . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-edit" ></i></a>
+                <a class="page-link" role="button" href="'. site_url('reviews.php?op=mod_review&amp;id='. $id) .'" title="' . translate("Editer") . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-edit" ></i></a>
                 </li>
                 <li class="page-item">
-                <a class="page-link text-danger" role="button" href="reviews.php?op=del_review&amp;id_del=' . $id . '" title="' . translate("Effacer") . '" data-bs-toggle="tooltip" ><i class="fas fa-trash fa-lg" ></i></a>
+                <a class="page-link text-danger" role="button" href="'. site_url('reviews.php?op=del_review&amp;id_del='. $id) .'" title="' . translate("Effacer") . '" data-bs-toggle="tooltip" ><i class="fas fa-trash fa-lg" ></i></a>
                 </li>
             </ul>
         </nav>';
@@ -654,7 +654,7 @@ function mod_review($id)
         echo '
     <h2 class="mb-4">' . translate("Modification d'une critique") . '</h2>
     <hr />
-    <form id="modreview" method="post" action="reviews.php?op=preview_review">
+    <form id="modreview" method="post" action="'. site_url('reviews.php?op=preview_review') .'">
         <input type="hidden" name="id" value="' . $id . '">
         <div class="form-floating mb-3">
             <input type="text" class="form-control w-100" id="date_modrev" name="date" value="' . $date . '" />

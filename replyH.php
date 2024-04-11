@@ -46,7 +46,7 @@ global $NPDS_Prefix;
 settype($cancel, 'string');
 
 if ($cancel) {
-    header("Location: viewtopicH.php?topic=$topic&forum=$forum");
+    header('Location: '. site_url('viewtopicH.php?topic='. $topic .'&forum='. $forum));
 }
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
@@ -61,11 +61,11 @@ $forum_type = $myrow['forum_type'];
 $mod = $myrow['forum_moderator'];
 
 if (($forum_type == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if ($forum_access == 9) {
-    header("Location: forum.php");
+    header('Location: '. site_url('forum.php'));
 }
 
 if (forum::is_locked($topic)) {
@@ -218,13 +218,11 @@ if ($submitS) {
             $resultZ = sql_query("SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'");
             list($title_topic) = sql_fetch_row($resultZ);
 
-            $nuke_url = Config::get('npds.nuke_url');
-
             $subject = strip_tags($forum_name) . "/" . $title_topic . " : " . html_entity_decode(translate_ml($m['user_langue'], "Une réponse à votre dernier Commentaire a été posté."), ENT_COMPAT | ENT_HTML401, 'utf-8');
             $message = $m['uname'] . "\n\n";
             $message .= translate_ml($m['user_langue'], "Vous recevez ce Mail car vous avez demandé à être informé lors de la publication d'une réponse.") . "\n";
             $message .= translate_ml($m['user_langue'], "Pour lire la réponse") . " : ";
-            $message .= "<a href=\"$nuke_url/viewtopicH.php?topic=$topic&forum=$forum\">$nuke_url/viewtopicH.php?topic=$topic&forum=$forum</a>\n\n";
+            $message .= "<a href=\"". site_url('viewtopicH.php?topic='. $topic .'&forum='. $forum) ."">"". site_url('viewtopicH.php?topic='. $topic .'&forum='. $forum) ."</a>\n\n";
             $message .= Config::get('signature.message');
 
             mailler::send_email($m['email'], $subject, $message, '', true, 'html', '');
@@ -268,8 +266,8 @@ if ($submitS) {
 
     echo '
     <p class="lead">
-        <a href="forum.php">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;
-        <a href="viewforum.php?forum=' . $forum . '">' . stripslashes($forum_name) . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $topic_title . '
+        <a href="'. site_url('forum.php') .'">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;
+        <a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . stripslashes($forum_name) . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $topic_title . '
     </p>
     <div class="card">
         <div class="card-block-small">
@@ -290,7 +288,7 @@ if ($submitS) {
             }
         }
 
-        echo '<a href="user.php?op=userinfo&amp;uname=' . $moderator[$i] . '"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
+        echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator[$i]) .'"><img width="48" height="48" class=" img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
         
         if (isset($user)) {
             if (($userdata[1] == $moderator[$i])) {
@@ -303,7 +301,7 @@ if ($submitS) {
         </div>
     </div>
     <h4 class="hidden-xs-down">' . translate("Poster une réponse dans le sujet") . '</h4>
-    <form action="replyH.php" method="post" name="coolsus">';
+    <form action="'. site_url('replyH.php') .'" method="post" name="coolsus">';
 
     echo '<blockquote class="blockquote hidden-xs-down"><p>' . translate("A propos des messages publiés :") . '<br />';
 

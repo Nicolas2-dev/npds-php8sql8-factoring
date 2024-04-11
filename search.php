@@ -80,7 +80,7 @@ if ($type == 'users') {
     echo '<h2 class="mb-3">' . translate("Rechercher dans") . ' ' . language::aff_langue($topictext) . '</h2><hr />';
 }
 
-echo '<form action="search.php" method="get">';
+echo '<form action="'. site_url('search.php') .'" method="get">';
     
 // if (($type == 'users') OR ($type == 'sections') OR ($type == 'reviews')) {
 //     echo "<img src=\"".$tipath."all-topics.gif\" align=\"left\" border=\"0\" alt=\"\" />";
@@ -336,7 +336,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
     }
 
     for ($i = $min; $i < ($increment + $min); $i++) {
-        $furl = 'article.php?sid=' . $tab_sid[$i]['sid'];
+        $furl = site_url('article.php?sid=' . $tab_sid[$i]['sid']);
 
         if ($type == 'archive') {
             $furl .= '&amp;archive=1';
@@ -345,7 +345,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
         $datetime = date::formatTimestamp($tab_sid[$i]['time']);
         echo '
                 <tr>
-                <td><span>[' . ($i + 1) . ']</span>&nbsp;' . translate("Contribution de") . ' <a href="user.php?op=userinfo&amp;uname=' . $tab_sid[$i]['informant'] . '">' . $tab_sid[$i]['informant'] . '</a> :<br /><strong><a href="' . $furl . '">' . language::aff_langue($tab_sid[$i]['title']) . '</a></strong><br /><span>' . translate("Posté par ") . '<a href="' . $tab_sid[$i]['url'] . '" >' . $tab_sid[$i]['aid'] . '</a></span> ' . translate("le") . ' ' . $datetime . '</td>
+                <td><span>[' . ($i + 1) . ']</span>&nbsp;' . translate("Contribution de") . ' <a href="'. site_url('user.php?op=userinfo&amp;uname=' . $tab_sid[$i]['informant']) .'">' . $tab_sid[$i]['informant'] . '</a> :<br /><strong><a href="' . $furl . '">' . language::aff_langue($tab_sid[$i]['title']) . '</a></strong><br /><span>' . translate("Posté par ") . '<a href="' . $tab_sid[$i]['url'] . '" >' . $tab_sid[$i]['aid'] . '</a></span> ' . translate("le") . ' ' . $datetime . '</td>
                 </tr>';
     }
 
@@ -373,7 +373,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
             echo "&nbsp;|&nbsp;";
         }
 
-        echo "<a href=\"search.php?author=$author&amp;topic=$t&amp;min=$max&amp;query=$query&amp;type=$type&amp;category=$category&amp;member=$member&amp;days=$days\">";
+        echo "<a href=\"". site_url('search.php?author='. $author .'&amp;topic='. $t .'&amp;min='. $max .'&amp;query='. $query .'&amp;type='. $type .'amp;category='. $category .'&amp;member='. $member .'&amp;days='. $days) ."\">";
         echo translate("réponses suivantes") . "</a>";
     }
 
@@ -399,7 +399,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
             <tbody>';
 
         while (list($id, $title, $text, $reviewer) = sql_fetch_row($result)) {
-            $furl = "reviews.php?op=showcontent&amp;id=$id";
+            $furl = site_url('reviews.php?op=showcontent&amp;id='. $id);
             echo '
                 <tr>
                 <td><a href="' . $furl . '">' . $title . '</a> ' . translate("par") . ' <i class="fa fa-user text-muted"></i>&nbsp;' . $reviewer . '</td>
@@ -421,11 +421,11 @@ if ($type == "stories" or $type == "archive" or !$type) {
                 <li class="page-item disabled"><a class="page-link" href="#">' . $nrows . '</a></li>';
 
     if ($prev >= 0) {
-        echo '<li class="page-item"><a class="page-link" href="search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $prev . '&amp;query=' . $query . '&amp;type=' . $type . '" >' . $offset . ' ' . translate("réponses précédentes") . '</a></li>';
+        echo '<li class="page-item"><a class="page-link" href="'. site_url('search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $prev . '&amp;query=' . $query . '&amp;type=' . $type) .'" >' . $offset . ' ' . translate("réponses précédentes") . '</a></li>';
     }
 
     if ($x >= ($offset - 1)) {
-        echo '<li class="page-item"><a class="page-link" href="search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $max . '&amp;query=' . $query . '&amp;type=' . $type . '" >' . translate("réponses suivantes") . '</a></li>';
+        echo '<li class="page-item"><a class="page-link" href="'. site_url('search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $max . '&amp;query=' . $query . '&amp;type=' . $type) .'" >' . translate("réponses suivantes") . '</a></li>';
     }
 
     echo '
@@ -459,8 +459,8 @@ if ($type == "stories" or $type == "archive" or !$type) {
             $row3 = $rowQ3[0];
 
             if ($row3['rubname'] != 'Divers' and $row3['rubname'] != 'Presse-papiers') {
-                $surl = "sections.php?op=listarticles&amp;secid=$secid";
-                $furl = "sections.php?op=viewarticle&amp;artid=$artid";
+                $surl = site_url('sections.php?op=listarticles&amp;secid='. $secid);
+                $furl = site_url('sections.php?op=viewarticle&amp;artid='. $artid);
                 echo '
                 <tr>
                 <td><a href="' . $furl . '">' . language::aff_langue($title) . '</a> ' . translate("dans la sous-rubrique") . ' <a href="' . $surl . '">' . language::aff_langue($row2['secname']) . '</a></td>
@@ -488,11 +488,11 @@ if ($type == "stories" or $type == "archive" or !$type) {
                 <li class="page-item disabled"><a class="page-link" href="#">' . $nrows . '</a></li>';
                 
     if ($prev >= 0) {
-        echo '<li class="page-item"><a class="page-link" href="search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $prev . '&amp;query=' . $query . '&amp;type=' . $type . '">' . $offset . ' ' . translate("réponses précédentes") . '</a></li>';
+        echo '<li class="page-item"><a class="page-link" href="'. site_url('search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $prev . '&amp;query=' . $query . '&amp;type=' . $type) .'">' . $offset . ' ' . translate("réponses précédentes") . '</a></li>';
     }
 
     if ($x >= ($offset - 1)) {
-        echo '<li class="page-item"><a class="page-link" href="search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $max . '&amp;query=' . $query . '&amp;type=' . $type . '">' . translate("réponses suivantes") . '</a></li>';
+        echo '<li class="page-item"><a class="page-link" href="'. site_url('search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $max . '&amp;query=' . $query . '&amp;type=' . $type) .'">' . translate("réponses suivantes") . '</a></li>';
     }
 
     echo '
@@ -520,7 +520,7 @@ if ($type == "stories" or $type == "archive" or !$type) {
                 <tbody>';
 
             while (list($uname, $name) = sql_fetch_row($result)) {
-                $furl = "user.php?op=userinfo&amp;uname=$uname";
+                $furl = site_url('user.php?op=userinfo&amp;uname='. $uname);
                 
                 if ($name == '') {
                     $name = translate("Aucun nom n'a été entré");
@@ -548,11 +548,11 @@ if ($type == "stories" or $type == "archive" or !$type) {
                 <li class="page-item disabled"><a class="page-link" href="#">' . $nrows . '</a></li>';
 
         if ($prev >= 0){
-            echo '<li class="page-item"><a class="page-link" href="search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $prev . '&amp;query=' . $query . '&amp;type=' . $type . '">' . $offset . ' ' . translate("réponses précédentes") . '</a></li>';
+            echo '<li class="page-item"><a class="page-link" href="'. site_url('search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $prev . '&amp;query=' . $query . '&amp;type=' . $type) .'">' . $offset . ' ' . translate("réponses précédentes") . '</a></li>';
         }
 
         if ($x >= ($offset - 1)){
-            echo '<li class="page-item"><a class="page-link" href="search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $max . '&amp;query=' . $query . '&amp;type=' . $type . '" >' . translate("réponses suivantes") . '</a></li>';
+            echo '<li class="page-item"><a class="page-link" href="'. site_url('search.php?author=' . $author . '&amp;topic=' . $t . '&amp;min=' . $max . '&amp;query=' . $query . '&amp;type=' . $type) .'" >' . translate("réponses suivantes") . '</a></li>';
         }
 
         echo '

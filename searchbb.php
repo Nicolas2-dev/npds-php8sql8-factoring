@@ -302,7 +302,7 @@ if ($affiche) {
             echo '
                 <tr>
                 <td><span class="badge bg-success">' . ($count + 1) . '</span></td>
-                <td><a href="viewforum.php?forum=' . $row['forum_id'] . '">' . stripslashes($row['forum_name']) . '</a></td>';
+                <td><a href="'. site_url('viewforum.php?forum=' . $row['forum_id']) .'">' . stripslashes($row['forum_name']) . '</a></td>';
 
             if ($row['arbre']) {
                 $Hplus = "H";
@@ -313,8 +313,8 @@ if ($affiche) {
             $ancre = ancre($row['forum_id'], $row['topic_id'], $row['post_id'], $posts_per_page);
 
             echo '
-                <td><a href="viewtopic' . $Hplus . '.php?topic=' . $row['topic_id'] . '&amp;forum=' . $row['forum_id'] . $ancre . '" >' . stripslashes($row['topic_title']) . '</a></td>
-                <td><a href="user.php?op=userinfo&amp;uname=' . $row['uname'] . '" >' . $row['uname'] . '</a></td>
+                <td><a href="'. site_url('viewtopic' . $Hplus . '.php?topic=' . $row['topic_id'] . '&amp;forum=' . $row['forum_id'] . $ancre) .'" >' . stripslashes($row['topic_title']) . '</a></td>
+                <td><a href="'. site_url('user.php?op=userinfo&amp;uname=' . $row['uname']) .'" >' . $row['uname'] . '</a></td>
                 <td><small>' . date::convertdate($row['post_time']) . '</small></td>
                 </tr>';
             $count++;

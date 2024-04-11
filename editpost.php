@@ -40,6 +40,8 @@ include("auth.php");
 
 global $NPDS_Prefix;
 
+= DB::table('')->select()->where('', )->orderBy('')->get();
+
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
     forum::forumerror('0001');
@@ -72,6 +74,8 @@ if ($submitS) {
 
     $sql = "SELECT poster_id, topic_id FROM " . $NPDS_Prefix . "posts WHERE post_id = '$post_id'";
     $result = sql_query($sql);
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if (!$result) {
         forum::forumerror('0022');
@@ -126,16 +130,30 @@ if ($submitS) {
     if (!isset($delete)) {
         $sql = "UPDATE " . $NPDS_Prefix . "posts SET post_text = '$message', image='$image_subject' WHERE (post_id = '$post_id')";
         
+        DB::table('')->where('', )->update(array(
+            ''       => ,
+        ));
+
         if (!$result = sql_query($sql)) {
             forum::forumerror('0001');
         }
         
         $sql = "UPDATE " . $NPDS_Prefix . "forum_read SET status='0' WHERE topicid = '" . $row['topic_id'] . "'";
+
+        DB::table('')->where('', )->update(array(
+            ''       => ,
+        ));
+
         if (!$r = sql_query($sql)) {
             forum::forumerror('0001');
         }
 
         $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_title = '$subject', topic_time = '" . date("Y-m-d H:i:s", time() + ((int)$gmt * 3600)) . "', current_poster='" . $userdata['uid'] . "' WHERE topic_id = '" . $row['topic_id'] . "'";
+        
+        DB::table('')->where('', )->update(array(
+            ''       => ,
+        ));
+        
         if (!$result = sql_query($sql)) { 
             forum::forumerror('0020');
         }
@@ -143,6 +161,8 @@ if ($submitS) {
         url::redirect_url("$hrefX?topic=" . $row['topic_id'] . "&forum=$forum");
     } else {
         $indice = sql_num_rows(sql_query("SELECT post_id FROM " . $NPDS_Prefix . "posts WHERE post_idH='$post_id'"));
+
+        = DB::table('')->select()->where('', )->orderBy('')->get();
 
         if (!$indice) {
             $r = DB::table('posts')->where('post_id', $post_id)->delete();
@@ -168,8 +188,14 @@ if ($submitS) {
                 $result = sql_query("SELECT post_time, poster_id FROM " . $NPDS_Prefix . "posts WHERE topic_id='" . $row['topic_id'] . "' ORDER BY post_id DESC LIMIT 0,1");
                 $rowX = sql_fetch_row($result);
 
+                = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_time = '$rowX[0]', current_poster='$rowX[1]' WHERE topic_id = '" . $row['topic_id'] . "'";
                 
+                DB::table('')->where('', )->update(array(
+                    ''       => ,
+                ));
+
                 if (!$r = sql_query($sql)) {
                     forum::forumerror('0001');
                 }
@@ -188,6 +214,9 @@ if ($submitS) {
     }
 
     $sql = "SELECT p.*, u.uname, u.uid, u.user_sig FROM " . $NPDS_Prefix . "posts p, " . $NPDS_Prefix . "users u WHERE (p.post_id = '$post_id') AND ((p.poster_id = u.uid) XOR (p.poster_id=0))";
+    
+    = DB::table('')->select()->where('', )->orderBy('')->get();
+    
     if (!$result = sql_query($sql)) {
         forum::forumerror('0001');
     }
@@ -197,6 +226,8 @@ if ($submitS) {
     if ((!$Mmod) and ($userdata[0] != $myrow['uid'])) {
         forum::forumerror('0035');
     }
+
+    = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if (!$result = sql_query("SELECT topic_title, topic_status FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='" . $myrow['topic_id'] . "'")) {
         forum::forumerror('0001');
@@ -240,7 +271,7 @@ if ($submitS) {
         <div>
         <h3>' . translate("Edition de la soumission") . ' de <span class="text-muted">' . $qui . '</span></h3>
         <hr />
-        <form action="editpost.php" method="post" name="coolsus">';
+        <form action="'. site_url('editpost.php') .'" method="post" name="coolsus">';
         
         if ($Mmod)
             echo '
