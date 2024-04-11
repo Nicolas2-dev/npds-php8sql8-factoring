@@ -51,7 +51,7 @@ function FriendSend($sid, $archive)
     <form id="friendsendstory" action="'. site_url('friend.php') .'" method="post">
         <input type="hidden" name="sid" value="' . $sid . '" />';
 
-    if (users::hetUser()) {
+    if (users::getUser()) {
         $res_user = DB::table('users')
                 ->select('name', 'email')
                 ->where('uname', users::cookieUser(1))
@@ -287,9 +287,7 @@ function RecommendSite(): void
  */
 function SendSite(string $yname, string $ymail, string $fname, string $fmail, string $asb_question, string $asb_reponse): void
 {
-    global $user;
-
-    if (!$user) {
+    if (!users::getUser()) {
         //anti_spambot
         if (!spam::R_spambot($asb_question, $asb_reponse, '')) {
             logs::Ecr_Log('security', "Friend Anti-Spam : name=" . $yname . " / mail=" . $ymail, '');
