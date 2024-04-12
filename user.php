@@ -1391,7 +1391,7 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
             }
         }
     } else {
-        Header('Location: '. site_url('index.php');
+        Header('Location: '. site_url('index.php'));
     }
 }
 

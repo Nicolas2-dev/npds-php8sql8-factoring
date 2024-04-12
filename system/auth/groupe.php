@@ -36,7 +36,7 @@ class groupe
 
             $tab_groupe = explode(',', $user_temp[0]['groupe']);
         } else {
-            $tab_groupe = '';
+            $tab_groupe = [];
         }
 
         return $tab_groupe;

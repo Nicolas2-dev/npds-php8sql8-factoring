@@ -17,7 +17,7 @@ class cookie
      *
      * @return  string|bool
      */
-    public static function extratCookie(string $name): string|bool
+    public static function extratCookie(string $name)//: string|bool
     {
         if (!empty($_COOKIE)) {
             extract($_COOKIE, EXTR_OVERWRITE);
@@ -27,7 +27,7 @@ class cookie
             return $$name;            
         }
 
-        return  false;
+        //return  false;
     }
 
     /**
@@ -37,7 +37,7 @@ class cookie
      *
      * @return  array|bool
      */    
-    public static function cookiedecode(string|bool $user): array|bool
+    public static function cookiedecode(string|bool $user) : array|bool
     {
         $stop = false;
 
@@ -92,5 +92,7 @@ class cookie
                 return true;
             }
         }
+
+        return false;
     }
 }

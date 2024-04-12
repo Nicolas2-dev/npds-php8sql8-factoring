@@ -74,7 +74,7 @@ class chat
 
             DB::table('chatbox')->insert(array(
                 'username'  => $username,
-                'ip'        => Request::ip(),
+                'ip'        => Request::getIp(),
                 'message'   => $message,
                 'date'      => time(),
                 'id'        => Request::input('id'),

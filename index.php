@@ -36,7 +36,8 @@ install::checkInstall();
  *
  * @return  void
  */
-function select_start_page(string $op): void
+//function select_start_page(string $op): void
+function select_start_page(): void
 {
     global $index;
 
@@ -46,6 +47,8 @@ function select_start_page(string $op): void
         global $user;
         unset($user);
     }
+
+    $op = Request::query('op');
 
     if (($Start_Page == '') 
     or ($op == "index.php") 
@@ -70,7 +73,8 @@ function select_start_page(string $op): void
  *
  * @return  void
  */
-function theindex(string $op, int|string $catid, int|string $marqeur): void
+//function theindex(string $op, int|string $catid, int|string $marqeur): void
+function theindex(): void
 {
     include("themes/default/header.php");
 
@@ -79,6 +83,10 @@ function theindex(string $op, int|string $catid, int|string $marqeur): void
 
         // Appel de la publication de News et la purge automatique
         news::automatednews();
+
+        $op         = Request::query('op');
+        $catid      = (int) Request::query('catid');
+        $marqeur    = (int) Request::query('marqeur');
 
         if (($op == 'newcategory') 
         or ($op == 'newtopic') 
@@ -113,14 +121,14 @@ switch (Request::query('op')) {
     case 'newindex':
     case 'edito-newindex':
     case 'newcategory':
-        theindex((string) Request::query('op'), (int) Request::query('catid'), (int) Request::query('marqeur'));
+        theindex();
         break;
 
     case 'newtopic':
-        theindex((string) Request::query('op'), (int) Request::query('topic'), (int) Request::query('marqeur'));
+        theindex();
         break;
 
     default:
-        select_start_page((string) Request::query('op'));
+        select_start_page();
         break;
 }

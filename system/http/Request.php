@@ -68,7 +68,7 @@ class Request
         return parse_url($this->server['REQUEST_URI'], PHP_URL_PATH) ?: '/';
     }
 
-    public function ip()
+    public function getIp()
     {
         if (! empty($this->server)) {
             if (! empty($this->server['HTTP_X_FORWARDED_FOR'])) {

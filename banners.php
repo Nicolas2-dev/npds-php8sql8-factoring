@@ -23,6 +23,7 @@ use npds\system\mail\mailler;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 include_once('boot/bootstrap.php');
 
@@ -125,7 +126,7 @@ function viewbanner(): void
             }
 
             if ($banner['imageurl'] != '') {
-                echo '<a href="' . site_url('banners.php?op=click&amp;bid=' . $bid) .'" target="_blank"><img class="img-fluid" src="' . language::aff_langue($banner['imageurl']) . '" alt="" /></a>';
+                echo '<a href="' . site_url('banners.php?client=click&amp;bid=' . $bid) .'" target="_blank"><img class="img-fluid" src="' . language::aff_langue($banner['imageurl']) . '" alt="" /></a>';
             } else {
                 if (stristr($banner['clickurl'], '.txt')) {
                     if (file_exists($banner['clickurl'])) {
@@ -184,7 +185,7 @@ function clientlogin(): void
                     <label for="pass">' . translate("Mot de passe") . '</label>
                     <span class="help-block">' . translate("Merci de saisir vos informations") . '</span>
                 </div>
-                <input type="hidden" name="op" value="Ok" />
+                <input type="hidden" name="client" value="Ok" />
                 <button class="btn btn-primary my-3" type="submit">' . translate("Valider") . '</button>
                 </div>
                 </fieldset>
@@ -333,7 +334,7 @@ function bannerstats(string $login, string $pass): void
                     <td>' . $left . '</td>
                     <td>' . $banner['clicks'] . '</td>
                     <td>' . $percent . '%</td>
-                    <td><a href="' . site_url('banners.php?op=EmailStats&amp;login=' . $login . '&amp;cid=' . $bannerclient['id'] . '&amp;bid=' . $banner['id']) .'" ><i class="far fa-envelope fa-lg me-2 tooltipbyclass" data-bs-placement="top" title="E-mail Stats"></i></a></td>
+                    <td><a href="' . site_url('banners.php?client=EmailStats&amp;login=' . $login . '&amp;cid=' . $bannerclient['id'] . '&amp;bid=' . $banner['id']) .'" ><i class="far fa-envelope fa-lg me-2 tooltipbyclass" data-bs-placement="top" title="E-mail Stats"></i></a></td>
                 </tr>';
             }
 
@@ -391,7 +392,7 @@ function bannerstats(string $login, string $pass): void
                 <input type="hidden" name="bid" value="' . $banner['id'] . '" />
                 <input type="hidden" name="pass" value="' . $pass . '" />
                 <input type="hidden" name="cid" value="' . $bannerclient['id'] . '" />
-                <input class="btn btn-primary" type="submit" name="op" value="' . translate("Changer") . '" />
+                <input class="btn btn-primary" type="submit" name="client" value="' . translate("Changer") . '" />
                 </form>
                 </p>
                 </div>';
@@ -543,16 +544,12 @@ function change_banner_url_by_client(string $login, string $pass, int $cid, int 
 
     $bannerclient = DB::table('bannerclient')
                         ->select('passwd')
-                        ->where('cid', $cid)
+                        ->where('id', $cid)
                         ->first();
 
     if (!empty($pass) and $pass == $bannerclient['passwd']) {
         DB::table('banner')->where('id', $bid)->update(array(
             'clickurl'       => $url,
-        ));
-
-        DB::table('banner')->where('clickurl', $url)->update(array(
-            'id'       => $bid,
         ));
 
         echo '
@@ -568,7 +565,7 @@ function change_banner_url_by_client(string $login, string $pass, int $cid, int 
             <div class="alert alert-danger">
                 ' . translate("Identifiant incorrect !") . '
                 <br />' . translate("Merci de") . ' 
-                <a href="' . site_url('banners.php?op=login') .'" class="alert-link">
+                <a href="' . site_url('banners.php?client=login') .'" class="alert-link">
                     ' . translate("vous reconnecter.") . '
                 </a>
             </div>';
@@ -576,9 +573,9 @@ function change_banner_url_by_client(string $login, string $pass, int $cid, int 
     footer_page();
 }
 
-settype($op, 'string');
+$client = ($client = Request::query('client') ? $client : Request::input('client'));
 
-switch ($op) {
+switch ($client) {
     case 'click':
 
         settype($bid , 'int');

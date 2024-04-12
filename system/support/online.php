@@ -32,7 +32,7 @@ class online
     {
         list($member_online_num, $guest_online_num) = static::site_load();
 
-        $content1 = $guest_online_num . translate("visiteur(s) et") . $member_online_num . translate("membre(s) en ligne.");
+        $content1 = $guest_online_num .' '. translate("visiteur(s) et").' '. $member_online_num.' '.translate("membre(s) en ligne.");
         
         if (users::getUser()) {
             $content2 = translate("Vous êtes connecté en tant que") .' <b>'. users::cookieUser(1) .'</b>';

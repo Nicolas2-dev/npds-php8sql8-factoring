@@ -128,7 +128,7 @@ class boxe
 
         $member_online_num = DB::table('session')->select('username')->where('guest', 0)->count();
 
-        $who_online = '<p class="text-center">'. translate("Il y a actuellement") .' <span class="badge bg-secondary">'. $guest_online_num .'</span> '. translate("visiteur(s) et") .' <span class="badge bg-secondary">'. $member_online_num .' </span> '. translate("membre(s) en ligne.") .'<br />';
+        $who_online = '<p class="text-center">'. translate("Il y a actuellement") .' <span class="badge bg-secondary">'. $guest_online_num .'</span> '. translate("visiteur(s) et") .' <span class="badge bg-secondary"> '. $member_online_num .' </span> '. translate("membre(s) en ligne.") .'<br />';
         $content = $who_online;
 
         $user = users::getUser();
@@ -1139,7 +1139,7 @@ class boxe
             $ibix = explode('+', urldecode(users::cookieUser(9)));
             $skinOn = substr($ibix[0], -3) != '_sk' ? '' : $ibix[1];
         } else {
-            $skinOn = substr(Config::get('npds.Default_Theme'), -3) != '_sk' ? '' : Config::get('npds.Default_Skin');;
+            $skinOn = substr(Config::get('npds.Default_Theme'), -3) != '_sk' ? '' : Config::get('npds.Default_Skin');
         }
 
         $content = '';

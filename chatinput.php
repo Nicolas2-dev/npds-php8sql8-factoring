@@ -54,7 +54,7 @@ $cookie = users::cookieUser(1);
 if (!isset($cookie)) {
     $name = Request::input('name');
     
-    $pseudo = ((isset($name)) ? ($name) : urldecode(getip()));
+    $pseudo = ((isset($name)) ? ($name) : urldecode(Request::getIp()));
 } else {
     $pseudo = $cookie;
 }

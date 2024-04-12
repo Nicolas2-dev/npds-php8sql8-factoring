@@ -15,28 +15,27 @@ class authors
     /**
      * 
      *
-     * @return  string|bool
+     * @return  string|null
      */
-    public static function extractAdmin(): string|bool 
+    public static function extractAdmin(): string|null 
     {
         $admin = cookie::extratCookie('admin');
 
-        //if (isset($admin)) {
-        if ($admin === true) {
+        if (isset($admin)) {
             $ibid = explode(':', base64_decode($admin));
             array_walk($ibid, [protect::class, 'url']);
-            $admin = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($admin))));
+            return base64_encode(str_replace("%3A", ":", urlencode(base64_decode($admin))));
         }
 
-        return $admin;
+        return null;
     }
 
     /**
      * 
      *
-     * @return  string|bool
+     * @return  string|null
      */
-    public static function getAdmin(): string|bool
+    public static function getAdmin(): string|null
     {
         return static::extractAdmin();
     }
@@ -50,8 +49,7 @@ class authors
     {
         $admin = static::extractAdmin();
 
-        //if (isset($admin)) {
-        if ($admin === true) {    
+        if (isset($admin)) {   
             return cookie::cookiedecode($admin);
         }
 

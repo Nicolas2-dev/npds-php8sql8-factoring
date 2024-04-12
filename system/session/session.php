@@ -24,7 +24,7 @@ class session
 
         $cookie = users::cookieUser(1);
 
-        $username = isset($cookie) ? $cookie : $ip; // pas bon ...
+        $username = $cookie ? $cookie : $ip; // pas bon ...
 
         if ($username == $ip) {
             $guest = 1;

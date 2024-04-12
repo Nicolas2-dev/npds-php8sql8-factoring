@@ -17,27 +17,27 @@ class users
     /**
      * 
      *
-     * @return  string
+     * @return  string|null
      */
-    public static function extractUser(): string  
+    public static function extractUser(): string|null  
     {
         $user = cookie::extratCookie('user');
 
         if (isset($user)) {
             $ibid = explode(':', base64_decode($user));
             array_walk($ibid, [protect::class, 'url']);
-            $user = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
+            return base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
         }
 
-        return $user;
+        return null;
     }
 
     /**
      * 
      *
-     * @return  string
+     * @return  string|null
      */
-    public static function getUser(): string
+    public static function getUser(): string|null
     {
         return static::extractUser();
     }
