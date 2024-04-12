@@ -147,9 +147,12 @@ function viewbanner(): void
  *
  * @return  void
  */
-function clickbanner(int $bid): void
+function clickbanner(): void
 {
-    $banner = DB::table('banner')->select('clickurl')->where('id', $bid)->first();
+    $banner = DB::table('banner')
+                ->select('clickurl')
+                ->where('id', $bid = Request::query('bid'))
+                ->first();
 
     DB::table('banner')->where('id', $bid)->update(array(
         'clicks'       => DB::raw('clicks+1'),
@@ -223,10 +226,8 @@ function header_page(): void
     include_once("modules/upload/config/upload.conf.php");
     include("storage/meta/meta.php");
 
-    $language = Config::get('npds.language');
-
     if ($url_upload_css) {
-        $url_upload_cssX = str_replace('style.css', $language . '-style.css', $url_upload_css);
+        $url_upload_cssX = str_replace('style.css', Config::get('npds.language') . '-style.css', $url_upload_css);
         
         if (is_readable($url_upload . $url_upload_cssX)) {
             $url_upload_css = $url_upload_cssX;
@@ -239,14 +240,14 @@ function header_page(): void
         include('themes/default/view/include/header_head.inc');
     }
 
-    $Default_Theme = Config::get('npds.Default_Theme');
+    $theme = Config::get('npds.Default_Theme');
 
-    if (file_exists('themes/' . $Default_Theme . '/include/header_head.inc')) {
-        include('themes/' . $Default_Theme . '/include/header_head.inc');
+    if (file_exists('themes/' . $theme . '/include/header_head.inc')) {
+        include('themes/' . $theme . '/include/header_head.inc');
     }
 
-    if (file_exists('themes/' . $Default_Theme . '/style/style.css')) {
-        echo '<link href="themes/' . $Default_Theme . '/style/style.css" rel="stylesheet" type=\"text/css\" media="all" />';
+    if (file_exists('themes/' . $theme . '/style/style.css')) {
+        echo '<link href="themes/' . $theme . '/style/style.css" rel="stylesheet" type=\"text/css\" media="all" />';
     }
 
     echo '
@@ -286,13 +287,17 @@ function footer_page(): void
  *
  * @return  void
  */
-function bannerstats(string $login, string $pass): void
+function bannerstats(): void
 {
+    $login = Request::input('login');
+
     $bannerclient = DB::table('bannerclient')
                         ->select('id', 'name', 'passwd')
                         ->where('login', $login)
                         ->first();
 
+    $pass = Request::input('pass');    
+                        
     if ($login == '' and $pass == '' or $pass == '') {
         IncorrectLogin();
     } else {
@@ -315,12 +320,11 @@ function bannerstats(string $login, string $pass): void
                 </thead>
                 <tbody>';
 
-            $banners = DB::table('banner')
+            foreach (DB::table('banner')
                         ->select('id', 'imptotal', 'impmade', 'clicks', 'date')
                         ->where('cid', $bannerclient['id'])
-                        ->get();
-
-            foreach ($banners as $banner) {
+                        ->get() as $banner) 
+            {
                 $float = (100 * $banner['clicks'] / $banner['impmade']);
 
                 $percent = $banner['impmade'] == 0 ? '0' : substr( (string) $float, 0, 5);
@@ -345,13 +349,11 @@ function bannerstats(string $login, string $pass): void
                 <a href="' . Config::get('npds.nuke_url') . '" target="_blank">' . Config::get('npds.sitename') . '</a>
             </div>';
 
-            $banners= DB::table('banner')
+            foreach (DB::table('banner')
                         ->select('id', 'imageurl', 'clickurl')
                         ->where('cid', $bannerclient['id'])
-                        ->get();
-
-            foreach ($banners as $banner) {
-
+                        ->get() as $banner) 
+            {
                 echo '<div class="card card-body mb-3">';
 
                 if ($banner['imageurl'] != '') {
@@ -415,12 +417,11 @@ function bannerstats(string $login, string $pass): void
                 </thead>
                 <tbody>';
 
-            $bannerfinish = DB::table('bannerfinish')
-                                ->select('id', 'impressions', 'clicks', 'datestart', 'dateend')
-                                ->where('cid', $bannerclient['id'])
-                                ->get();
-
-            foreach ($bannerfinish as $finish) {  
+            foreach (DB::table('bannerfinish')
+                        ->select('id', 'impressions', 'clicks', 'datestart', 'dateend')
+                        ->where('cid', $bannerclient['id'])
+                        ->get() as $finish) 
+            {  
                 $float = (100 * $finish['clicks'] / $finish['impressions']);
                 $percent = substr((string) $float, 0, 5);
                 
@@ -457,14 +458,17 @@ function bannerstats(string $login, string $pass): void
  *
  * @return  void
  */
-function EmailStats(string $login, int $cid, int $bid): void
+function EmailStats(): void
 {
+    $cid = (int) Request::query('cid');
+    $bid = (int) Request::query('bid');
+
     $bannerclient = DB::table('bannerclient')
                         ->select('login')
                         ->where('id', $cid)
                         ->first();
 
-    if ($login == $bannerclient['login']) {
+    if (Request::query('login') == $bannerclient['login']) {
 
         $bannerclient = DB::table('bannerclient')
                             ->select('name', 'email')
@@ -538,18 +542,22 @@ function EmailStats(string $login, int $cid, int $bid): void
  *
  * @return  void
  */
-function change_banner_url_by_client(string $login, string $pass, int $cid, int $bid, string $url): void
+function change_banner_url_by_client(): void
 {
     header_page();
 
     $bannerclient = DB::table('bannerclient')
-                        ->select('passwd')
-                        ->where('id', $cid)
+                        ->select('passwd', 'login')
+                        ->where('id', Request::query('cid'))
                         ->first();
 
-    if (!empty($pass) and $pass == $bannerclient['passwd']) {
-        DB::table('banner')->where('id', $bid)->update(array(
-            'clickurl'       => $url,
+    $login = Request::query('login');                    
+    $pass = Request::query('pass');
+
+    if (!empty($pass) and !empty($login) and $pass == $bannerclient['passwd'] and $login == $bannerclient['login']) {
+
+        DB::table('banner')->where('id', Request::query('bid'))->update(array(
+            'clickurl'       => Request::query('url'),
         ));
 
         echo '
@@ -573,14 +581,9 @@ function change_banner_url_by_client(string $login, string $pass, int $cid, int 
     footer_page();
 }
 
-$client = ($client = Request::query('client') ? $client : Request::input('client'));
-
-switch ($client) {
+switch ($client = Request::query('client') ? $client : Request::input('client')) {
     case 'click':
-
-        settype($bid , 'int');
-
-        clickbanner($bid);
+        clickbanner();
         break;
 
     case 'login':
@@ -588,31 +591,15 @@ switch ($client) {
         break;
 
     case 'Ok':
-
-        settype($login , 'string');
-        settype($pass , 'string');
-
-        bannerstats($login, $pass);
+        bannerstats();
         break;
 
     case translate('Changer'):
-
-        settype($login , 'string');
-        settype($pass , 'string');
-        settype($cid , 'int');
-        settype($bid , 'int');
-        settype($url , 'string');
-
-        change_banner_url_by_client($login, $pass, $cid, $bid, $url);
+        change_banner_url_by_client();
         break;
 
     case 'EmailStats':
-
-        settype($login , 'string');
-        settype($cid , 'int');
-        settype($bid , 'int');
-
-        EmailStats($login, $cid, $bid);
+        EmailStats();
         break;
         
     default:

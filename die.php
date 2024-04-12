@@ -1,4 +1,5 @@
 <?php
+
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /* ===========================                                          */
@@ -11,6 +12,10 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+use npds\system\support\facades\Request;
+
+
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
@@ -154,9 +159,7 @@ function accessError()
     die();
 }
 
-settype($op, 'string');
-
-switch ($op) {
+switch (Request::query('op')) {
 
     case 'admin':
         accessAdmin();
