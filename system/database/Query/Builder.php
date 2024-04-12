@@ -321,6 +321,20 @@ class Builder
         return $this->where($column, $operator, $value, 'or');
     }
 
+
+    /**
+     * Add an "OR WHERE" clause to the query.
+     *
+     * @param  string  $column
+     * @param  string  $operator
+     * @param  mixed   $value
+     * @return static
+     */
+    public function xOrWhere($column, $operator = null, $value = null)
+    {
+        return $this->where($column, $operator, $value, 'xor');
+    }
+
     /**
      * Add a nested where statement to the query.
      *

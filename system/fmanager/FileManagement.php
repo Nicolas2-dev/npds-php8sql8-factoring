@@ -29,16 +29,17 @@ class FileManagement
     /**
      * [file_size_format description]
      *
-     * @param   int  $fileName   [$fileName description]
+     * @param   int|string  $fileName   [$fileName description]
      * @param   int     $precision  [$precision description]
      *
      * @return  string
      */
-    function file_size_format(int $fileName, int $precision): string
+    function file_size_format(int|string $fileName, int $precision): string
     {
         $bytes = $fileName;
         $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $float = ($bytes ? log( (float) $bytes) : (float) 0) / log( (float) 1024);
+        $pow = floor($float);
         $pow = min($pow, count($this->units) - 1);
         $bytes /= pow(1024, $pow);
         $retValue = round($bytes, $precision) . ' ' . $this->units[$pow];
@@ -49,16 +50,17 @@ class FileManagement
     /**
      * [file_size_auto description]
      *
-     * @param   string  $fileName   [$fileName description]
+     * @param   int|string  $fileName   [$fileName description]
      * @param   int     $precision  [$precision description]
      *
      * @return  string
      */
-    function file_size_auto(string $fileName, int $precision): string 
+    function file_size_auto(int|string $fileName, int $precision): string 
     {
         $bytes = @filesize($fileName);
         $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $float = ($bytes ? log( (float) $bytes) : (float) 0) / log( (float) 1024);
+        $pow = floor($float);
         $pow = min($pow, count($this->units) - 1);
         $bytes /= pow(1024, $pow);
         $retValue = round($bytes, $precision) . ' ' . $this->units[$pow];

@@ -356,7 +356,11 @@ class news
                         ->get();
                 }
 
-                $tab[$ibid] = $result2[0];
+                if (!empty($result2[0])) {
+                    $tab[$ibid] = $result2[0];
+                } else {
+                    return [];
+                }
                 
                 if (is_array($tab[$ibid])) {
                     $ibid++;

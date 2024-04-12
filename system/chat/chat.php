@@ -15,6 +15,7 @@ use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\utility\crypt;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 class chat
 {
@@ -54,20 +55,29 @@ class chat
      *
      * @return  void
      */
-    public static function insertChat(string $username, string $message, int $dbname, int $id) : void
+    public static function insertChat() : void
     {
-        if ($message != '') {
-            $username = hack::removeHack(stripslashes(str::FixQuotes(strip_tags(trim($username)))));
-            $message =  hack::removeHack(stripslashes(str::FixQuotes(strip_tags(trim($message)))));
+        $cookie = users::cookieUser(1);
+        $name   = Request::input('name');
 
-            $ip = getip();
+        if (!isset($cookie) && isset($name)) {
+            $username = $name;
+            $dbname = 0;
+        } else {
+            $username = $cookie;
+            $dbname = 1;
+        }
+
+        if ($message = Request::input('message')) {
+            $message =  hack::removeHack(stripslashes(strip_tags(trim($message))));
+            $message =  hack::removeHack(stripslashes(strip_tags(trim($message))));
 
             DB::table('chatbox')->insert(array(
                 'username'  => $username,
-                'ip'        => $ip,
+                'ip'        => Request::ip(),
                 'message'   => $message,
                 'date'      => time(),
-                'ip'        => $id,
+                'id'        => Request::input('id'),
                 'dbname'    => $dbname,
             ));
         }

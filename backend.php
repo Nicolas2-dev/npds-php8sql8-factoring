@@ -22,12 +22,21 @@ use npds\system\feed\FeedImage;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 use npds\system\feed\UniversalFeedCreator;
 
 include('boot/bootstrap.php');
 
-
-function fab_feed($type, $filename, $timeout)
+/**
+ * [fab_feed description]
+ *
+ * @param   string  $type      [$type description]
+ * @param   string  $filename  [$filename description]
+ * @param   int     $timeout   [$timeout description]
+ *
+ * @return  void
+ */
+function fab_feed(string $type, string $filename, int $timeout): void
 {
     $rss = new UniversalFeedCreator();
     $rss->useCached($type, $filename, $timeout);
@@ -68,7 +77,13 @@ function fab_feed($type, $filename, $timeout)
     $story_limit = 0;
     
     while (($story_limit < $storyhome) and ($story_limit < sizeof($xtab))) {
-        list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[$story_limit];
+
+        $sid        = $xtab[$story_limit]['sid']; 
+        $aid        = $xtab[$story_limit]['aid']; 
+        $title      = $xtab[$story_limit]['title']; 
+        $time       = $xtab[$story_limit]['time']; 
+        $hometext   = $xtab[$story_limit]['hometext']; 
+
         $story_limit++;
         $item = new FeedItem();
         $item->title = language::preview_local_langue(Config::get('backend_language'), str_replace('&quot;', '\"', $title));
@@ -86,10 +101,7 @@ function fab_feed($type, $filename, $timeout)
 }
 
 // Format : RSS0.91, RSS1.0, RSS2.0, MBOX, OPML, ATOM
-settype($op, 'string');
-
-$op = strtoupper($op);
-switch ($op) {
+switch (Request::query('op')) {
     case 'MBOX':
         fab_feed('MBOX', 'storage/rss/MBOX-feed', 3600);
         break;

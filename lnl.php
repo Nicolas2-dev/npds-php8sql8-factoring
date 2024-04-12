@@ -248,6 +248,9 @@ settype($op, 'string');
 
 switch ($op) {
     case 'subscribe':
+
+        settype($email, 'string');
+
         subscribe($email);
         break;
 
@@ -260,10 +263,15 @@ switch ($op) {
             die();
         }
 
+        settype($email, 'string');
+
         subscribe_ok($email);
         break;
 
     case 'unsubscribe':
+
+        settype($email, 'string');
+
         unsubscribe($email);
         break;
 }

@@ -16,42 +16,36 @@
 declare(strict_types=1);
 
 use npds\system\date\date;
+use npds\system\auth\users;
 use npds\system\cache\cache;
 use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\security\hack;
-use npds\system\cache\cacheManager;
+use npds\system\utility\crypt;
 use npds\system\support\facades\DB;
-use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if ($SuperCache) {
-    $cache_obj = new cacheManager();
-} else {
-    $cache_obj = new SuperCacheEmpty();
-}
-
 include("auth.php");
 
-global $NPDS_Prefix;
-
-= DB::table('')->select()->where('', )->orderBy('')->get();
-
-$rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
+$rowQ1 = cache::Q_Select3(DB::table('forums')
+                ->select('forum_name', 'forum_moderator', 'forum_type', 'forum_pass', 'forum_access', 'arbre')
+                ->where('forum_id', $forum)
+                ->get(), 3600, crypt::encrypt('forum(forum_id)'));
 if (!$rowQ1) {
     forum::forumerror('0001');
 }
 
-$myrow = $rowQ1[0];
+$forum_type     = $rowQ1[0]['forum_type'];
+$forum_access   = $rowQ1[0]['forum_access'];
+$moderator      = forum::get_moderator($rowQ1[0]['forum_moderator']);
 
-$forum_type = $myrow['forum_type'];
-$forum_access = $myrow['forum_access'];
-$moderator = forum::get_moderator($myrow['forum_moderator']);
+$user = users::getUser();
 
 if (isset($user)) {
     $userX = base64_decode($user);
@@ -67,23 +61,24 @@ if (isset($user)) {
     }
 }
 
-settype($submitS, 'string');
+// settype($submitS, 'string');
+// if ($submitS) {Request::query('op')
+//if (isset($submitS)) {
 
-if ($submitS) {
+if (Request::query('submitS')) {
+
     include("themes/default/header.php");
 
-    $sql = "SELECT poster_id, topic_id FROM " . $NPDS_Prefix . "posts WHERE post_id = '$post_id'";
-    $result = sql_query($sql);
+    $result_post = DB::table('posts')
+                    ->select('poster_id', 'topic_id')
+                    ->where('post_id', $post_id)
+                    ->first();
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    if (!$result) {
+    if (!$result_post) {
         forum::forumerror('0022');
     }
 
-    $row = sql_fetch_assoc($result);
-
-    if ($userdata[0] == $row['poster_id']) {
+    if ($userdata[0] == $result_post['poster_id']) {
         $ok_maj = true;
     } else {
         if (!$Mmod) {
@@ -109,9 +104,10 @@ if ($submitS) {
         $message = forum::make_clickable($message);
         $message = code::af_cod($message);
         $message = str_replace("\n", "<br />", hack::removeHack($message));
-        $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int)$gmt * 3600)) . '</div>';
+        $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . $userdata['uname'] . " / "
+                    . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';
     } else {
-        $message .= "\n\n" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int)$gmt * 3600));
+        $message .= "\n\n" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
     }
 
     $message = addslashes($message);
@@ -128,44 +124,44 @@ if ($submitS) {
     }
 
     if (!isset($delete)) {
-        $sql = "UPDATE " . $NPDS_Prefix . "posts SET post_text = '$message', image='$image_subject' WHERE (post_id = '$post_id')";
-        
-        DB::table('')->where('', )->update(array(
-            ''       => ,
+        $r = DB::table('posts')->where('post_id', $post_id)->update(array(
+            'post_text'     => $message,
+            'image'         => $image_subject,
         ));
 
-        if (!$result = sql_query($sql)) {
+        if (!$r) {
             forum::forumerror('0001');
         }
         
-        $sql = "UPDATE " . $NPDS_Prefix . "forum_read SET status='0' WHERE topicid = '" . $row['topic_id'] . "'";
-
-        DB::table('')->where('', )->update(array(
-            ''       => ,
+        $r = DB::table('forum_read')->where('topicid', $result_post['topic_id'])->update(array(
+            'status'       => 0,
         ));
 
-        if (!$r = sql_query($sql)) {
+        if (!$r) {
             forum::forumerror('0001');
         }
 
-        $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_title = '$subject', topic_time = '" . date("Y-m-d H:i:s", time() + ((int)$gmt * 3600)) . "', current_poster='" . $userdata['uid'] . "' WHERE topic_id = '" . $row['topic_id'] . "'";
-        
-        DB::table('')->where('', )->update(array(
-            ''       => ,
+        $r = DB::table('forumtopics')->where('topic_id', $result_post['topic_id'])->update(array(
+            'topic_title'      => $subject,
+            'topic_time'       => date("Y-m-d H:i:s", time() + ((int) Config::get('npds.gmt') * 3600)),
+            'current_poster'   => $userdata['uid'],
         ));
         
-        if (!$result = sql_query($sql)) { 
+        if (!$r) { 
             forum::forumerror('0020');
         }
 
-        url::redirect_url("$hrefX?topic=" . $row['topic_id'] . "&forum=$forum");
+        url::redirect_url($hrefX .'?topic=' . $result_post['topic_id'] . '&forum=$forum');
     } else {
-        $indice = sql_num_rows(sql_query("SELECT post_id FROM " . $NPDS_Prefix . "posts WHERE post_idH='$post_id'"));
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $indice = DB::table('posts')
+                    ->select('post_id')
+                    ->where('post_idH', $post_id)
+                    ->count();
 
         if (!$indice) {
-            $r = DB::table('posts')->where('post_id', $post_id)->delete();
+            $r = DB::table('posts')
+                    ->where('post_id', $post_id)
+                    ->delete();
 
             if (!$r) {
                 forum::forumerror('0001');
@@ -173,8 +169,11 @@ if ($submitS) {
 
             forum::control_efface_post("forum_npds", $post_id, "", "");
 
-            if (forum::get_total_posts($forum, $row['topic_id'], "topic", $Mmod) == 0) {
-                $r = DB::table('forumtopics')->where('topic_id', $row['topic_id'])->delete();
+            if (forum::get_total_posts($forum, $result_post['topic_id'], "topic", $Mmod) == 0) {
+                
+                $r = DB::table('forumtopics')
+                        ->where('topic_id', $result_post['topic_id'])
+                        ->delete();
 
                 if (!$r) {
                     forum::forumerror('0001');
@@ -182,26 +181,28 @@ if ($submitS) {
 
                 DB::table('forum_read')->where('topicid', $row['topic_id'])->delete();
 
-                url::redirect_url("viewforum.php?forum=$forum");
+                url::redirect_url('viewforum.php?forum='. $forum);
                 die();
             } else {
-                $result = sql_query("SELECT post_time, poster_id FROM " . $NPDS_Prefix . "posts WHERE topic_id='" . $row['topic_id'] . "' ORDER BY post_id DESC LIMIT 0,1");
-                $rowX = sql_fetch_row($result);
+                $rowX = DB::table('posts')
+                        ->select('post_time', 'poster_id')
+                        ->where('topic_id', $result_post['topic_id'])
+                        ->orderBy('post_id', 'desc')
+                        ->limit(1)
+                        ->offset(0)
+                        ->first();
 
-                = DB::table('')->select()->where('', )->orderBy('')->get();
-
-                $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_time = '$rowX[0]', current_poster='$rowX[1]' WHERE topic_id = '" . $row['topic_id'] . "'";
-                
-                DB::table('')->where('', )->update(array(
-                    ''       => ,
+                $r = DB::table('forumtopics')->where('topic_id', $result_post['topic_id'])->update(array(
+                    'topic_time'        => $rowX['post_time'],
+                    'current_poster'    => $rowX['poster_id'],
                 ));
 
-                if (!$r = sql_query($sql)) {
+                if (!$r) {
                     forum::forumerror('0001');
                 }
             }
 
-            url::redirect_url("$hrefX?topic=" . $row['topic_id'] . "&forum=$forum");
+            url::redirect_url($hrefX .'?topic=' . $result_post['topic_id'] . '&forum='. $forum);
         } else {
             echo '<div class="alert alert-danger">' . translate("Votre contribution n'a pas été supprimée car au moins un post est encore rattaché (forum arbre).") . '</div>';
         }
@@ -212,45 +213,49 @@ if ($submitS) {
     if ($allow_bbcode == 1) {
         include("assets/formhelp.java.php");
     }
-
-    $sql = "SELECT p.*, u.uname, u.uid, u.user_sig FROM " . $NPDS_Prefix . "posts p, " . $NPDS_Prefix . "users u WHERE (p.post_id = '$post_id') AND ((p.poster_id = u.uid) XOR (p.poster_id=0))";
     
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $res_post = DB::table('posts')
+            ->select('posts.*', 'users.uname', 'users.uid', 'users.user_sig')
+            ->join('users', 'posts.poster_id', '=', 'users.uid')
+            ->where('posts.post_id', $post_id)
+            ->xOrWhere('posts.poster_id', '=', '0')
+            ->first();
     
-    if (!$result = sql_query($sql)) {
+    if (!$res_post) {
         forum::forumerror('0001');
     }
 
-    $myrow = sql_fetch_assoc($result);
-
-    if ((!$Mmod) and ($userdata[0] != $myrow['uid'])) {
+    if ((!$Mmod) and ($userdata[0] != $res_post['uid'])) {
         forum::forumerror('0035');
     }
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $res_forumtopic = DB::table('forumtopics')
+                ->select('topic_title', 'topic_status')
+                ->where('topic_id', $res_post['topic_id'])
+                ->first();
 
-    if (!$result = sql_query("SELECT topic_title, topic_status FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='" . $myrow['topic_id'] . "'")) {
+    if (!$res_forumtopic) {
         forum::forumerror('0001');
     } else {
-        list($title, $topic_status) = sql_fetch_row($result);
-        
-        if (($topic_status != 0) and !$Mmod) {
+        if (($res_forumtopic['topic_status'] != 0) and !$Mmod) {
             forum::forumerror('0025');
         }
     }
 
-    settype($submitP, 'string');
+    //settype($submitP, 'string');
+    //if ($submitP) {  
+    //if (isset($submitP)) {
 
-    if ($submitP) {
+    if (Request::query('submitP')) {
         $acc = 'editpost';
         $title = stripslashes($subject);
         $message = stripslashes(forum::make_clickable($message));
 
         include("preview.php");
     } else {
-        $image_subject = $myrow['image'];
-        $title = stripslashes($title);
-        $message = $myrow['post_text'];
+        $image_subject = $res_post['image'];
+        $title = stripslashes($res_forumtopic['topic_title']);
+        $message = $res_post['post_text'];
 
         if (($forum_type != 6) and ($forum_type != 5)) {
             $message = str_replace("<br />", "\n", $message);
@@ -264,8 +269,8 @@ if ($submitS) {
         $message = stripslashes($message);
     }
 
-    if ((($Mmod) or ($userdata[0] == $myrow['uid'])) and ($forum_access != 9)) {
-        $qui = $myrow['poster_id'] == 0 ? Config::get('npds.anonymous') : $myrow['uname'];
+    if ((($Mmod) or ($userdata[0] == $res_post['uid'])) and ($forum_access != 9)) {
+        $qui = $res_post['poster_id'] == 0 ? Config::get('npds.anonymous') : $res_post['uname'];
 
         echo '
         <div>
@@ -289,7 +294,7 @@ if ($submitS) {
         forum::forumerror('0036');
     }
 
-    if ($smilies) {
+    if (Config::get('npds.smilies')) {
         echo '
         <div class="d-none d-sm-block mb-3 row">
             <label class="col-form-label col-sm-12">' . translate("Icone du message") . '</label>

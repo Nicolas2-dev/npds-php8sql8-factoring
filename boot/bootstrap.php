@@ -86,7 +86,8 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     // extract cookie admin
     $admin = authors::extractAdmin();
 
-    if (isset($admin)) {
+    //if (isset($admin)) {
+    if ($admin == true) {
         $ibid = explode(':', base64_decode($admin));
         array_walk($ibid, [protect::class, 'url']);
         $admin = base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));

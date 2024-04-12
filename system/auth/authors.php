@@ -15,13 +15,14 @@ class authors
     /**
      * 
      *
-     * @return  string
+     * @return  string|bool
      */
-    public static function extractAdmin(): string 
+    public static function extractAdmin(): string|bool 
     {
         $admin = cookie::extratCookie('admin');
 
-        if (isset($admin)) {
+        //if (isset($admin)) {
+        if ($admin === true) {
             $ibid = explode(':', base64_decode($admin));
             array_walk($ibid, [protect::class, 'url']);
             $admin = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($admin))));
@@ -33,9 +34,9 @@ class authors
     /**
      * 
      *
-     * @return  string
+     * @return  string|bool
      */
-    public static function getAdmin(): string
+    public static function getAdmin(): string|bool
     {
         return static::extractAdmin();
     }
@@ -49,7 +50,8 @@ class authors
     {
         $admin = static::extractAdmin();
 
-        if (isset($admin)) {
+        //if (isset($admin)) {
+        if ($admin === true) {    
             return cookie::cookiedecode($admin);
         }
 
@@ -66,8 +68,9 @@ class authors
     public static function is_admin(string $xadmin): bool
     {
         $admin = static::getAdmin();
-        
-        if (isset($admin) and ($admin != '')) {
+
+        if (($admin === true) and ($admin != '')) {
+        //if (isset($admin) and ($admin != '')) {
             return true;
         } else {
             return false;
@@ -156,7 +159,7 @@ class authors
     {
         setcookie("admin");
         setcookie("adm_exp");
-        unset($admin);
+        unset($admin); // normalement ne sert plus par la suite a verifier !
         Header("Location: index.php");
     }
 }

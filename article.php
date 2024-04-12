@@ -14,21 +14,23 @@
 declare(strict_types=1);
 
 use npds\system\news\news;
+use npds\system\cache\cache;
 use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if (!isset($sid) && !isset($tid)) {
+if (!Request::query('sid') && !Request::query('tid')) {
     header("Location: index.php");
 }
 
-if (!isset($archive)) {
+if (!$archive = Request::query('archive')) {
     $archive = 0;
 }
 
@@ -44,20 +46,20 @@ $xtab = (!$archive)
             ->where('sid', $sid)
             ->get(), 1, 1);
 
-$sid        = $xtab[0]['sid']; 
-$catid      = $xtab[0]['catid']; 
-$aid        = $xtab[0]['aid']; 
-$title      = $xtab[0]['title']; 
-$time       = $xtab[0]['time']; 
-$hometext   = $xtab[0]['hometext']; 
-$bodytext   = $xtab[0]['bodytext']; 
-$comments   = $xtab[0]['comments']; 
-$counter    = $xtab[0]['counter']; 
-$topic      = $xtab[0]['topic']; 
-$informant  = $xtab[0]['informant']; 
-$notes      = $xtab[0]['notes'];
-
-if (!$aid) {
+if (!empty($xtab)) {
+    $sid        = $xtab[0]['sid']; 
+    $catid      = $xtab[0]['catid']; 
+    $aid        = $xtab[0]['aid']; 
+    $title      = $xtab[0]['title']; 
+    $time       = $xtab[0]['time']; 
+    $hometext   = $xtab[0]['hometext']; 
+    $bodytext   = $xtab[0]['bodytext']; 
+    $comments   = $xtab[0]['comments']; 
+    $counter    = $xtab[0]['counter']; 
+    $topic      = $xtab[0]['topic']; 
+    $informant  = $xtab[0]['informant']; 
+    $notes      = $xtab[0]['notes'];
+} else {
     header('Location: ' . site_url('index.php'));
 }
 
@@ -67,9 +69,9 @@ DB::table('stories')->where('sid', $sid)->update(array(
 
 include("themes/default/header.php");
 
-// Include cache manager
-if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->genereting_output == -1) or (!Config::get('cache.config.SuperCache'))) {
-
+// start Caching page
+if (cache::cacheManagerStart2()) {
+    
     $title      = language::aff_langue(stripslashes($title));
     $hometext   = code::aff_code(language::aff_langue(stripslashes($hometext)));
     $bodytext   = code::aff_code(language::aff_langue(stripslashes($bodytext)));
@@ -291,6 +293,6 @@ if ((cacheManagerStart()->genereting_output == 1) or (cacheManagerStart()->gener
 }
 
 // end Caching page
-cacheManagerEnd();
+cache::cacheManagerEnd();
 
 include("themes/default/footer.php");

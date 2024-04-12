@@ -63,7 +63,7 @@ include("themes/default/header.php");
 if (cache::cacheManagerStart2()) {
     $inclusion = false;
 
-    $catid = Request::query('$catid');
+    $catid = Request::query('catid');
     $theme = theme::getTheme();
     
     if ($catid) {

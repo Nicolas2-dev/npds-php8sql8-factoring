@@ -97,11 +97,9 @@ function viewbanner(): void
     }
 
     if ($okprint) {
-        global $myIP;
-        
         $myhost = getip();
         
-        if ($myIP != $myhost) {
+        if (Config::get('npds.myIP') != $myhost) {
             DB::table('banner')->where('id', $bid)->update(array(
                 'impmade'       => DB::raw('impmade+1'),
             ));
@@ -582,6 +580,9 @@ settype($op, 'string');
 
 switch ($op) {
     case 'click':
+
+        settype($bid , 'int');
+
         clickbanner($bid);
         break;
 
@@ -590,14 +591,30 @@ switch ($op) {
         break;
 
     case 'Ok':
+
+        settype($login , 'string');
+        settype($pass , 'string');
+
         bannerstats($login, $pass);
         break;
 
     case translate('Changer'):
+
+        settype($login , 'string');
+        settype($pass , 'string');
+        settype($cid , 'int');
+        settype($bid , 'int');
+        settype($url , 'string');
+
         change_banner_url_by_client($login, $pass, $cid, $bid, $url);
         break;
 
     case 'EmailStats':
+
+        settype($login , 'string');
+        settype($cid , 'int');
+        settype($bid , 'int');
+
         EmailStats($login, $cid, $bid);
         break;
         

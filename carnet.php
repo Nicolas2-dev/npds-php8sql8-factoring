@@ -21,24 +21,22 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-function L_encrypt($txt)
+/**
+ * [L_encrypt description]
+ *
+ * @param   string  $txt  [$txt description]
+ *
+ * @return  string
+ */
+function L_encrypt(string $txt): string 
 {
-    $user = users::getUser();
-    
-    $userX = base64_decode($user);
-    $userdata = explode(':', $userX);
-
-    $key = substr($userdata[2], 8, 8);
-
-    return crypt::encryptK($txt, $key);
+    return crypt::encryptK($txt, substr(users::cookieUser(2), 8, 8));
 }
 
-if (!$user = users::getUser()) {
+
+if (!users::getUser()) {
     Header('Location: ' . site_url('user.php'));
 } else {
-    $userX = base64_decode($user);
-    $userdata = explode(':', $userX);
-    
     $theme = theme::getTheme();
 
     include("themes/$theme/theme.php");
@@ -54,7 +52,7 @@ if (!$user = users::getUser()) {
 
     include("assets/formhelp.java.php");
 
-    $fic = "storage/users_private/" . $userdata[1] . "/mns/carnet.txt";
+    $fic = "storage/users_private/" . users::cookieUser(1) . "/mns/carnet.txt";
 
     echo '
     </head>
@@ -73,7 +71,7 @@ if (!$user = users::getUser()) {
             fwrite($fp, "CRYPT" . L_encrypt($contents));
             fclose($fp);
         } else {
-            $contents = crypt::decryptK(substr($contents, 5), substr($userdata[2], 8, 8));
+            $contents = crypt::decryptK(substr($contents, 5), substr(users::cookieUser(2), 8, 8));
         }
 
         echo '<div class="row">';

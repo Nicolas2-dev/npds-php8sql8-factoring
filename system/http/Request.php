@@ -70,13 +70,30 @@ class Request
 
     public function ip()
     {
-        if (! empty($this->server['HTTP_CLIENT_IP'])) {
-            return $this->server['HTTP_CLIENT_IP'];
-        } else if (! empty($this->server['HTTP_X_FORWARDED_FOR'])) {
-            return $this->server['HTTP_X_FORWARDED_FOR'];
+        if (! empty($this->server)) {
+            if (! empty($this->server['HTTP_X_FORWARDED_FOR'])) {
+                $realip = $this->server['HTTP_X_FORWARDED_FOR'];
+            } elseif (! empty($this->server['HTTP_CLIENT_IP'])) {
+                $realip = $this->server['HTTP_CLIENT_IP'];
+            } else {
+                $realip = $this->server['REMOTE_ADDR'];
+            }
+        } else {
+            if (getenv('HTTP_X_FORWARDED_FOR')) {
+                $realip = getenv('HTTP_X_FORWARDED_FOR');
+            } elseif (getenv('HTTP_CLIENT_IP')) {
+                $realip = getenv('HTTP_CLIENT_IP');
+            } else {
+                $realip = getenv('REMOTE_ADDR');
+            }
         }
 
-        return $this->server['REMOTE_ADDR'];
+        if (strpos($realip, ",") > 0) {
+            $realip = substr($realip, 0, strpos($realip, ",") - 1);
+        }
+
+        // from Gu1ll4um3r0m41n - 08-05-2007 - dev 2012
+        return urlencode(trim($realip));
     }
 
     public function ajax()

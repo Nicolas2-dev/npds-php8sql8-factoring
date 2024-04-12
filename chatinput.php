@@ -19,13 +19,14 @@ use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\utility\crypt;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
 // chatbox avec salon privatif - on utilise id pour filtrer les messages -> id = l'id du groupe au sens autorisation de NPDS (-127,-1,0,1,2...126))
-settype($id, 'integer');
+$id = (($id = Request::query('id')) ? $id : Request::input('id')); 
 
 if ($id === '' || unserialize(crypt::decrypt($auto)) != $id) { 
     die();
@@ -47,12 +48,15 @@ include("storage/meta/meta.php");
 echo css::import_css(theme::getTheme(), Config::get('npds.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), '');
 
 include("assets/formhelp.java.php");
+    
+$cookie = users::cookieUser(1);
 
-global $cookie;    
-if (!isset($cookie[1])) {
+if (!isset($cookie)) {
+    $name = Request::input('name');
+    
     $pseudo = ((isset($name)) ? ($name) : urldecode(getip()));
 } else {
-    $pseudo = $cookie[1];
+    $pseudo = $cookie;
 }
 
 // cookie chat_info (1 par groupe)
@@ -84,18 +88,8 @@ echo '
     </body>
 </html>';
 
-settype($op, 'string');
-
-switch ($op) {
+switch (Request::input('op')) {
     case 'set':
-        if (!isset($cookie[1]) && isset($name)) {
-            $uname = $name;
-            $dbname = 0;
-        } else {
-            $uname = $cookie[1];
-            $dbname = 1;
-        }
-        
-        chat::insertChat($uname, $message, $dbname, $id);
+        chat::insertChat();
         break;
 }

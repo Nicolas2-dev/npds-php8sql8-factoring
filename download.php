@@ -22,32 +22,37 @@ use npds\system\config\Config;
 use npds\system\fmanager\File;
 use npds\system\security\hack;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 use npds\system\pagination\paginator;
 use npds\system\fmanager\FileManagement;
+use npds\system\support\facades\Request;
 
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-function geninfo($did, $out_template)
+/**
+ * [geninfo description]
+ *
+ * @param   int   $did           [$did description]
+ * @param   int   $out_template  [$out_template description]
+ *
+ * @return  void
+ */
+function geninfo(int $did, int $out_template): void 
 {
-    global $NPDS_Prefix;
-
-    settype($did, 'integer');
-    settype($out_template, 'integer');
-
-    $result = sql_query("SELECT dcounter, durl, dfilename, dfilesize, ddate, dweb, duser, dver, dcategory, ddescription, perms FROM " . $NPDS_Prefix . "downloads WHERE did='$did'");
-    list($dcounter, $durl, $dfilename, $dfilesize, $ddate, $dweb, $duser, $dver, $dcategory, $ddescription, $dperm) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $res_download = DB::table('downloads')
+        ->select('dcounter', 'durl', 'dfilename', 'dfilesize', 'ddate', 'dweb', 'duser', 'dver', 'dcategory', 'ddescription', 'perms')
+        ->where('did', $did)
+        ->first();
 
     $okfile = false;
 
-    if (!stristr($dperm, ',')) { 
-        $okfile = users::autorisation($dperm);
+    if (!stristr($res_download['perms'], ',')) { 
+        $okfile = users::autorisation($res_download['perms']);
     } else {
-        $ibidperm = explode(',', $dperm);
+        $ibidperm = explode(',', $res_download['perms']);
         
         foreach ($ibidperm as $v) {
             if (users::autorisation($v)) {
@@ -58,41 +63,39 @@ function geninfo($did, $out_template)
     }
 
     if ($okfile) {
-        //$title = $dfilename; // ??? not used
-        
+
         if ($out_template == 1) {
             include('themes/default/header.php');
 
             echo '
             <h2 class="mb-3">' . translate("Chargement de fichiers") . '</h2>
             <div class="card">
-                <div class="card-header"><h4>' . $dfilename . '<span class="ms-3 text-muted small">@' . $durl . '</h4></div>
+                <div class="card-header"><h4>' . $res_download['filename'] . '<span class="ms-3 text-muted small">@' . $res_download['durl'] . '</h4></div>
                 <div class="card-body">';
         }
 
         echo '<p><strong>' . translate("Taille du fichier") . ' : </strong>';
 
-        //$Fichier = new File($durl); // ??? not used
         $objZF = new FileManagement;
 
-        if ($dfilesize != 0) {
-            echo $objZF->file_size_format($dfilesize, 1);
+        if ($res_download['dfilesize'] != 0) {
+            echo $objZF->file_size_format($res_download['dfilesize'], 1);
         } else {
-            echo $objZF->file_size_auto($durl, 2);
+            echo $objZF->file_size_auto($res_download['durl'], 2);
         }
 
         echo '</p>
-                <p><strong>' . translate("Version") . '&nbsp;:</strong>&nbsp;' . $dver . '</p>
-                <p><strong>' . translate("Date de chargement sur le serveur") . '&nbsp;:</strong>&nbsp;' . date::convertdate($ddate) . '</p>
-                <p><strong>' . translate("Chargements") . '&nbsp;:</strong>&nbsp;' . str::wrh($dcounter) . '</p>
-                <p><strong>' . translate("Catégorie") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($dcategory)) . '</p>
-                <p><strong>' . translate("Description") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($ddescription)) . '</p>
-                <p><strong>' . translate("Auteur") . '&nbsp;:</strong>&nbsp;' . $duser . '</p>
-                <p><strong>' . translate("Page d'accueil") . '&nbsp;:</strong>&nbsp;<a href="http://' . $dweb . '" target="_blank">' . $dweb . '</a></p>';
+                <p><strong>' . translate("Version") . '&nbsp;:</strong>&nbsp;' . $res_download['dver'] . '</p>
+                <p><strong>' . translate("Date de chargement sur le serveur") . '&nbsp;:</strong>&nbsp;' . date::convertdate($res_download['ddate']) . '</p>
+                <p><strong>' . translate("Chargements") . '&nbsp;:</strong>&nbsp;' . str::wrh($res_download['dcounter']) . '</p>
+                <p><strong>' . translate("Catégorie") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($res_download['dcategory'])) . '</p>
+                <p><strong>' . translate("Description") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($res_download['ddescription'])) . '</p>
+                <p><strong>' . translate("Auteur") . '&nbsp;:</strong>&nbsp;' . $res_download['duser'] . '</p>
+                <p><strong>' . translate("Page d'accueil") . '&nbsp;:</strong>&nbsp;<a href="http://' . $res_download['dweb'] . '" target="_blank">' . $res_download['dweb'] . '</a></p>';
         
         if ($out_template == 1) {
             echo '
-                <a class="btn btn-primary" href="' . site_url('download.php?op=mydown&amp;did=' . $did) .'" target="_blank" title="' . translate("Charger maintenant") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-lg fa-download"></i></a>
+                <a class="btn btn-primary" href="'. site_url('download.php?op=mydown&amp;did='. $did) .'" target="_blank" title="'. translate("Charger maintenant") .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-lg fa-download"></i></a>
                 </div>
             </div>';
 
@@ -103,11 +106,16 @@ function geninfo($did, $out_template)
     }
 }
 
-function tlist()
+/**
+ * [tlist description]
+ *
+ * @return  void
+ */
+function tlist(): void
 {
-    global $sortby, $dcategory, $download_cat, $NPDS_Prefix;
+    global $sortby, $dcategory, $download_cat;
 
-    if ($dcategory == '') {
+    if (!isset($dcategory)) {
         $dcategory = addslashes($download_cat);
     }
 
@@ -118,10 +126,9 @@ function tlist()
     <div class="d-flex flex-column flex-sm-row flex-wrap justify-content-between my-3 border rounded">
         <p class="p-2 mb-0 ">';
 
-    $acounter = sql_query("SELECT COUNT(*) FROM " . $NPDS_Prefix . "downloads");
-    list($acount) = sql_fetch_row($acounter);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $acount = DB::table('downloads')
+                ->select(DB::raw('COUNT(*)'))
+                ->count();
 
     if (($cate == translate("Tous")) or ($cate == '')) {
         echo '<i class="fa fa-folder-open fa-2x text-muted align-middle me-2"></i><strong><span class="align-middle">' . translate("Tous") . '</span>
@@ -130,22 +137,23 @@ function tlist()
         echo '<a href="' . site_url('download.php?dcategory=' . translate("Tous") . '&amp;sortby=' . $sortby) .'"><i class="fa fa-folder fa-2x align-middle me-2"></i><span class="align-middle">' . translate("Tous") . '</span></a><span class="badge bg-secondary ms-2 float-end my-2">' . $acount . '</span>';
     }
 
-    $result = sql_query("SELECT DISTINCT dcategory, COUNT(dcategory) FROM " . $NPDS_Prefix . "downloads GROUP BY dcategory ORDER BY dcategory");
-    
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     echo '</p>';
 
-    while (list($category, $dcount) = sql_fetch_row($result)) {
-        $category = stripslashes($category);
+    foreach (DB::table('downloads')
+                ->distinct()
+                ->select('dcategory', DB::raw('COUNT(dcategory) as count'))
+                ->groupeBy('dcategory')
+                ->orderBy('dcategory')
+                ->get() as $download) 
+    {
+        $category = stripslashes($download['dcategory']);
         
         echo '<p class="p-2 mb-0">';
         
         if ($category == $cate) {
-            echo '<i class="fa fa-folder-open fa-2x text-muted align-middle me-2"></i><strong class="align-middle">' . language::aff_langue($category) . '<span class="badge bg-secondary ms-2 float-end my-2">' . $dcount . '</span></strong>';
+            echo '<i class="fa fa-folder-open fa-2x text-muted align-middle me-2"></i><strong class="align-middle">' . language::aff_langue($category) . '<span class="badge bg-secondary ms-2 float-end my-2">' . $download['count'] . '</span></strong>';
         } else {
-            $category2 = urlencode($category);
-            echo '<a href="' . site_url('download.php?dcategory=' . $category2 . '&amp;sortby=' . $sortby) .'"><i class="fa fa-folder fa-2x align-middle me-2"></i><span class="align-middle">' . language::aff_langue($category) . '</span></a><span class="badge bg-secondary ms-2 my-2 float-end">' . $dcount . '</span>';
+            echo '<a href="' . site_url('download.php?dcategory=' . urlencode($category) . '&amp;sortby=' . $sortby) .'"><i class="fa fa-folder fa-2x align-middle me-2"></i><span class="align-middle">' . language::aff_langue($category) . '</span></a><span class="badge bg-secondary ms-2 my-2 float-end">' . $download['count'] . '</span>';
         }
 
         echo '</p>';
@@ -154,7 +162,16 @@ function tlist()
     echo '</div>';
 }
 
-function act_dl_tableheader($dcategory, $sortby, $fieldname, $englishname)
+/**
+ * [act_dl_tableheader description]
+ *
+ * @param   string  $dcategory    [$dcategory description]
+ * @param   string  $fieldname    [$fieldname description]
+ * @param   string  $englishname  [$englishname description]
+ *
+ * @return  void
+ */
+function act_dl_tableheader(string $dcategory, string $fieldname, string $englishname): void
 {
     echo '
     <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname) .'" title="' . translate("Croissant") . '" data-bs-toggle="tooltip" ><i class="fa fa-sort-amount-down"></i></a>&nbsp;
@@ -162,7 +179,16 @@ function act_dl_tableheader($dcategory, $sortby, $fieldname, $englishname)
     <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname . '&amp;sortorder=DESC') .'" title="' . translate("Décroissant") . '" data-bs-toggle="tooltip" ><i class="fa fa-sort-amount-up"></i></a>';
 }
 
-function inact_dl_tableheader($dcategory, $sortby, $fieldname, $englishname)
+/**
+ * [inact_dl_tableheader description]
+ *
+ * @param   string  $dcategory    [$dcategory description]
+ * @param   string  $fieldname    [$fieldname description]
+ * @param   string  $englishname  [$englishname description]
+ *
+ * @return  void
+ */
+function inact_dl_tableheader(string $dcategory, string $fieldname, string $englishname): void
 {
     echo '
     <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname) .'" title="' . translate("Croissant") . '" data-bs-toggle="tooltip"><i class="fa fa-sort-amount-down" ></i></a>&nbsp;
@@ -170,16 +196,28 @@ function inact_dl_tableheader($dcategory, $sortby, $fieldname, $englishname)
     <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname . '&amp;sortorder=DESC') .'" title="' . translate("Décroissant") . '" data-bs-toggle="tooltip"><i class="fa fa-sort-amount-up" ></i></a>';
 }
 
-function dl_tableheader()
+/**
+ * [dl_tableheader description]
+ *
+ * @return  void
+ */
+function dl_tableheader(): void
 {
     echo '</td>
     <td>';
 }
 
-function popuploader($did, $ddescription, $dcounter, $dfilename, $aff) // $ddescription, $dcounter ??? not used
+/**
+ * [popuploader description]
+ *
+ * @param   int     $did        [$did description]
+ * @param   string  $dfilename  [$dfilename description]
+ * @param   bool    $aff        [$aff description]
+ *
+ * @return  [type]
+ */
+function popuploader(int $did, string $dfilename, bool $aff)
 {
-    global $dcategory, $sortby; // ??? not used
-
     $out_template = 0;
 
     if ($aff) {
@@ -208,10 +246,16 @@ function popuploader($did, $ddescription, $dcounter, $dfilename, $aff) // $ddesc
     }
 }
 
-function SortLinks($dcategory, $sortby)
+/**
+ * [SortLinks description]
+ *
+ * @param   string  $dcategory  [$dcategory description]
+ * @param   string  $sortby     [$sortby description]
+ *
+ * @return  void
+ */
+function SortLinks(string $dcategory, string $sortby): void
 {
-    global $user;
-
     $dcategory = stripslashes($dcategory);
 
     echo '
@@ -222,59 +266,59 @@ function SortLinks($dcategory, $sortby)
                 <th class="text-center">';
 
     if ($sortby == 'dfilename' or !$sortby) {
-        act_dl_tableheader($dcategory, $sortby, "dfilename", "Nom");
+        act_dl_tableheader($dcategory, "dfilename", "Nom");
     } else {
-        inact_dl_tableheader($dcategory, $sortby, "dfilename", "Nom");
+        inact_dl_tableheader($dcategory, "dfilename", "Nom");
     }
 
     echo '</th>
                 <th class="text-center">';
 
     if ($sortby == "dfilesize") {
-        act_dl_tableheader($dcategory, $sortby, "dfilesize", "Taille");
+        act_dl_tableheader($dcategory, "dfilesize", "Taille");
     } else {
-        inact_dl_tableheader($dcategory, $sortby, "dfilesize", "Taille");
+        inact_dl_tableheader($dcategory, "dfilesize", "Taille");
     }
 
     echo '</th>
                 <th class="text-center">';
 
     if ($sortby == "dcategory") {
-        act_dl_tableheader($dcategory, $sortby, "dcategory", "Catégorie");
+        act_dl_tableheader($dcategory, "dcategory", "Catégorie");
     } else {
-        inact_dl_tableheader($dcategory, $sortby, "dcategory", "Catégorie");
+        inact_dl_tableheader($dcategory, "dcategory", "Catégorie");
     }
 
     echo '</th>
                 <th class="text-center">';
 
     if ($sortby == "ddate") {
-        act_dl_tableheader($dcategory, $sortby, "ddate", "Date");
+        act_dl_tableheader($dcategory, "ddate", "Date");
     } else {
-        inact_dl_tableheader($dcategory, $sortby, "ddate", "Date");
+        inact_dl_tableheader($dcategory, "ddate", "Date");
     }
 
     echo '</th>
                 <th class="text-center">';
 
     if ($sortby == "dver") {
-        act_dl_tableheader($dcategory, $sortby, "dver", "Version");
+        act_dl_tableheader($dcategory, "dver", "Version");
     } else {
-        inact_dl_tableheader($dcategory, $sortby, "dver", "Version");
+        inact_dl_tableheader($dcategory, "dver", "Version");
     }
 
     echo '</th>
                 <th class="text-center">';
 
     if ($sortby == "dcounter") {
-        act_dl_tableheader($dcategory, $sortby, "dcounter", "Compteur");
+        act_dl_tableheader($dcategory, "dcounter", "Compteur");
     } else {
-        inact_dl_tableheader($dcategory, $sortby, "dcounter", "Compteur");
+        inact_dl_tableheader($dcategory, "dcounter", "Compteur");
     }
 
     echo '</th>';
 
-    if ($user or users::autorisation(-127)) {
+    if (users::getUser() or users::autorisation(-127)) {
         echo '<th class="text-center n-t-col-xs-1"></th>';
     }
 
@@ -283,11 +327,20 @@ function SortLinks($dcategory, $sortby)
         </thead>';
 }
 
-function listdownloads($dcategory, $sortby, $sortorder)
+/**
+ * [listdownloads description]
+ *
+ * @param   string  $dcategory  [$dcategory description]
+ * @param   string  $sortby     [$sortby description]
+ * @param   string  $sortorder  [$sortorder description]
+ *
+ * @return  void
+ */
+function listdownloads(string $dcategory, string $sortby, string $sortorder): void
 {
-    global $perpage, $page, $download_cat, $user, $NPDS_Prefix;
+    global $page, $download_cat;
 
-    if ($dcategory == '') {
+    if (!isset($dcategory)) {
         $dcategory = addslashes($download_cat);
     }
 
@@ -355,19 +408,13 @@ function listdownloads($dcategory, $sortby, $sortorder)
     echo '<tbody>';
 
     if ($dcategory == translate("Tous")) {
-        $sql = "SELECT COUNT(*) FROM " . $NPDS_Prefix . "downloads";
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $total = DB::table('downloads')->select(DB::raw('COUNT(*) as count'))->count();
     } else {
-        $sql = "SELECT COUNT(*) FROM " . $NPDS_Prefix . "downloads WHERE dcategory='" . addslashes($dcategory) . "'";
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $total = DB::table('downloads')->select(DB::raw('COUNT(*) as count'))->where('dcategory', addslashes($dcategory))->count();
     }
 
-    $result = sql_query($sql);
-    list($total) =  sql_fetch_row($result);
+    $perpage = Config::get('npds.perpage');
 
-    //
     if ($total > $perpage) {
         $pages = ceil($total / $perpage);
         
@@ -398,30 +445,32 @@ function listdownloads($dcategory, $sortby, $sortorder)
         $current = $nbPages;
     }
 
-    settype($offset, 'integer');
-    settype($perpage, 'integer');
-
     if ($dcategory == translate("Tous")) {
-        $sql = "SELECT * FROM " . $NPDS_Prefix . "downloads ORDER BY $sortby $sortorder LIMIT $offset,$perpage";
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $result  = DB::table('downloads')
+                    ->select('*')
+                    ->orderBy($sortby, $sortorder)
+                    ->limit($perpage)
+                    ->offset($offset)
+                    ->get();
     } else {
-        $sql = "SELECT * FROM " . $NPDS_Prefix . "downloads WHERE dcategory='" . addslashes($dcategory) . "' ORDER BY $sortby $sortorder LIMIT $offset, $perpage";
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $result  = DB::table('downloads')
+                    ->select('*')
+                    ->where('dcategory', addslashes($dcategory))
+                    ->limit($perpage)
+                    ->offset($offset)
+                    ->get();
     }
 
-    $result = sql_query($sql);
+    foreach ($result as $download) { 
 
-    while (list($did, $dcounter, $durl, $dfilename, $dfilesize, $ddate, $dweb, $duser, $dver, $dcat, $ddescription, $dperm) = sql_fetch_row($result)) {
-        $Fichier = new File($durl); // keep for extension
+        $Fichier = new File($download['durl']); // keep for extension
         $FichX = new FileManagement;
         $okfile = '';
         
-        if (!stristr($dperm, ',')) {
-            $okfile = users::autorisation($dperm);
+        if (!stristr($download['perms'], ',')) {
+            $okfile = users::autorisation($download['perms']);
         } else {
-            $ibidperm = explode(',', $dperm);
+            $ibidperm = explode(',', $download['perms']);
             
             foreach ($ibidperm as $v) {
                 if (users::autorisation($v) == true) {
@@ -436,9 +485,9 @@ function listdownloads($dcategory, $sortby, $sortorder)
                 <td class="text-center">';
 
         if ($okfile == true) {
-            echo popuploader($did, $ddescription, $dcounter, $dfilename, true);
+            echo popuploader((int) $download['did'], $download['dfilename'], true);
         } else {
-            echo popuploader($did, $ddescription, $dcounter, $dfilename, false);
+            echo popuploader((int) $download['did'], $download['dfilename'], false);
             echo '<span class="text-danger"><i class="fa fa-ban fa-lg me-1"></i>' . translate("Privé") . '</span>';
         }
 
@@ -447,7 +496,7 @@ function listdownloads($dcategory, $sortby, $sortorder)
                 <td>';
 
         if ($okfile == true) {
-            echo '<a href="' . site_url('download.php?op=mydown&amp;did=' . $did) .'" target="_blank">' . $dfilename . '</a>';
+            echo '<a href="' . site_url('download.php?op=mydown&amp;did=' . $download['did']) .'" target="_blank">' . $download['dfilename'] . '</a>';
         } else {
             echo '<span class="text-danger"><i class="fa fa-ban fa-lg me-1"></i>...</span>';
         }
@@ -455,23 +504,23 @@ function listdownloads($dcategory, $sortby, $sortorder)
         echo '</td>
                 <td class="small text-center">';
 
-        if ($dfilesize != 0) {
-            echo $FichX->file_size_format($dfilesize, 1);
+        if ($download['dfilesize'] != 0) {
+            echo $FichX->file_size_format($download['dfilesize'], 1);
         } else {
-            echo $FichX->file_size_auto($durl, 2);
+            echo $FichX->file_size_auto($download['durl'], 2);
         }
 
         echo '</td>
-                <td>' . language::aff_langue(stripslashes($dcat)) . '</td>
-                <td class="small text-center">' . date::convertdate($ddate) . '</td>
-                <td class="small text-center">' . $dver . '</td>
-                <td class="small text-center">' . str::wrh($dcounter) . '</td>';
+                <td>' . language::aff_langue(stripslashes($download['dcategory'])) . '</td>
+                <td class="small text-center">' . date::convertdate($download['ddate']) . '</td>
+                <td class="small text-center">' . $download['dver'] . 'hhh</td>
+                <td class="small text-center">' . str::wrh($download['dcounter']) . '</td>';
 
-        if ($user != '' or users::autorisation(-127)) {
+        if (users::getUser() != '' or users::autorisation(-127)) {
             echo '<td>';
 
-            if (($okfile == true and $user != '') or users::autorisation(-127)) {
-                echo '<a href="' . site_url('download.php?op=broken&amp;did=' . $did) .'" title="' . translate("Rapporter un lien rompu") . '" data-bs-toggle="tooltip"><i class="fas fa-lg fa-unlink"></i></a>';
+            if (($okfile == true and users::getUser() != '') or users::autorisation(-127)) {
+                echo '<a href="' . site_url('download.php?op=broken&amp;did=' . $download['did']) .'" title="' . translate("Rapporter un lien rompu") . '" data-bs-toggle="tooltip"><i class="fas fa-lg fa-unlink"></i></a>';
             }
 
             echo '</td>';
@@ -489,7 +538,12 @@ function listdownloads($dcategory, $sortby, $sortorder)
     echo '<div class="mt-3"></div>' . paginator::paginate_single(site_url('download.php?dcategory='. $dcategory .'&amp;sortby='. $sortby .'&amp;sortorder='. $sortorder .'&amp;page='), '', $nbPages, $current, $adj = 3, '', $page);
 }
 
-function main()
+/**
+ * [main description]
+ *
+ * @return  void
+ */
+function main(): void
 {
     global $dcategory, $sortby, $sortorder;
 
@@ -518,19 +572,27 @@ function main()
     include("themes/default/footer.php");
 }
 
-function transferfile($did)
+/**
+ * [transferfile description]
+ *
+ * @param   int  $did  [$did description]
+ *
+ * @return  [type]
+ */
+function transferfile(int $did)
 {
-    global $NPDS_Prefix;
+    $res = DB::table('downloads')
+            ->select('dcounter', 'durl', 'perms')
+            ->where('did', $did)
+            ->first();
 
-    settype($did, 'integer');
-
-    $result = sql_query("SELECT dcounter, durl, perms FROM " . $NPDS_Prefix . "downloads WHERE did='$did'");
-    list($dcounter, $durl, $dperm) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $dcounter = $res['dcounter']; 
+    $durl = $res['durl'];
+    $dperm = $res['perms'];
 
     if (!$durl) {
         include("themes/default/header.php");
+
         echo '
         <h2>' . translate("Chargement de fichiers") . '</h2>
         <hr />
@@ -546,10 +608,8 @@ function transferfile($did)
                 
                 if (users::autorisation($v) == true) {
                     $dcounter++;
-                    sql_query("UPDATE " . $NPDS_Prefix . "downloads SET dcounter='$dcounter' WHERE did='$did'");
-                    
-                    DB::table('')->where('', )->update(array(
-                        ''       => ,
+                    DB::table('downloads')->where('did', $did)->update(array(
+                        'dcounter'       => $dcounter,
                     ));
 
                     header("location: " . str_replace(basename($durl), rawurlencode(basename($durl)), $durl));
@@ -565,10 +625,8 @@ function transferfile($did)
         } else {
             if (users::autorisation($dperm)) {
                 $dcounter++;
-                sql_query("UPDATE " . $NPDS_Prefix . "downloads SET dcounter='$dcounter' WHERE did='$did'");
-                
-                DB::table('')->where('', )->update(array(
-                    ''       => ,
+                DB::table('downloads')->where('did', $did)->update(array(
+                    'dcounter'       => $dcounter,
                 ));
 
                 header("location: " . str_replace(basename($durl), rawurlencode(basename($durl)), $durl));
@@ -578,22 +636,15 @@ function transferfile($did)
     }
 }
 
-function broken($did)
+function broken(int $did)
 {
-    global $user, $cookie;
-
-    settype($did, 'integer');
-
-    if ($user) {
+    if (users::getUser()) {
         if ($did) {
-            global $notify_email, $notify_from;
             
-            settype($did, "integer");
-            
-            $message = Config::get('npds.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . " $cookie[1] / IP : " . getip() . "\n\n";
+            $message = Config::get('npds.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . users::cookieUser(1) ." / IP : " . getip() . "\n\n";
             $message .= Config::get('signature.message');
             
-            mailler::send_email($notify_email, html_entity_decode(translate("Rapporter un lien rompu"), ENT_COMPAT | ENT_HTML401, 'utf-8'), nl2br($message), $notify_from, false, "html", '');
+            mailler::send_email(Config::get('npds.notify_email'), html_entity_decode(translate("Rapporter un lien rompu"), ENT_COMPAT | ENT_HTML401, 'utf-8'), nl2br($message), Config::get('npds.notify_from'), false, "html", '');
             
             include("themes/default/header.php");
             
@@ -611,22 +662,30 @@ function broken($did)
     }
 }
 
-settype($op, 'string');
-
-switch ($op) {
+switch (Request::query('op')) {
     case 'main':
         main();
         break;
-
+ 
     case 'mydown':
+
+        settype($did, 'integer');
+
         transferfile($did);
         break;
 
     case 'geninfo':
+
+        settype($did, 'int');
+        settype($out_template, 'int');
+
         geninfo($did, $out_template);
         break;
 
     case 'broken':
+
+        settype($did, 'integer');
+
         broken($did);
         break;
         

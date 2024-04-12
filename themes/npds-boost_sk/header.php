@@ -14,16 +14,15 @@
 declare(strict_types=1);
 
 use npds\system\block\block;
+use npds\system\support\facades\DB;
 
-global $NPDS_Prefix, $pdst;
+global $pdst;
 
 $moreclass = 'col';
 
-$blg_actif = sql_query("SELECT * FROM " . $NPDS_Prefix . "lblocks WHERE actif ='1'");
-$nb_blg_actif = sql_num_rows($blg_actif);
+$nb_blg_actif = DB::table('lblocks')->select('*')->where('actif', 1)->get();
 
-$bld_actif = sql_query("SELECT * FROM " . $NPDS_Prefix . "rblocks WHERE actif ='1'");
-$nb_bld_actif = sql_num_rows($bld_actif);
+$nb_bld_actif = DB::table('rblocks')->select('*')->where('actif', 1)->get();
 
 /*
 Nomination des div par l'attribut id:

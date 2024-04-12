@@ -15,25 +15,29 @@ class cookie
      *
      * @param   string  $name  [$name description]
      *
-     * @return  string
+     * @return  string|bool
      */
-    public static function extratCookie(string $name): string
+    public static function extratCookie(string $name): string|bool
     {
         if (!empty($_COOKIE)) {
             extract($_COOKIE, EXTR_OVERWRITE);
         }
 
-        return $$name;
+        if(isset($$name)) {
+            return $$name;            
+        }
+
+        return  false;
     }
 
     /**
      * Décode le cookie membre et vérifie certaines choses (password)
      *
-     * @param   string  $user  [$user description]
+     * @param   string|bool  $user  [$user description]
      *
      * @return  array|bool
      */    
-    public static function cookiedecode(string $user): array|bool
+    public static function cookiedecode(string|bool $user): array|bool
     {
         $stop = false;
 

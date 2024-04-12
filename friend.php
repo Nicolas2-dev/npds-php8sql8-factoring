@@ -30,7 +30,15 @@ if (!function_exists("Mysql_Connexion"))  {
     include('boot/bootstrap.php');
 }
 
-function FriendSend($sid, $archive)
+/**
+ * [FriendSend description]
+ *
+ * @param   int   $sid      [$sid description]
+ * @param   int   $archive  [$archive description]
+ *
+ * @return  void
+ */
+function FriendSend(int $sid, int $archive): void
 {
     $res = DB::table('stories')
                 ->select('title', 'aid')
@@ -359,27 +367,55 @@ function SiteSent(string $fname): void
     include("themes/default/footer.php");
 }
 
-settype($op, 'string');
-settype($archive, 'string'); 
+settype($op, 'string'); 
 
 switch ($op) {
     case 'FriendSend':
+
+        settype($sid, 'int');
+        settype($archive, 'int');
+
         FriendSend($sid, $archive);
         break;
 
     case 'SendStory':
+
+        settype($sid, 'int');
+        settype($yname, 'string');
+        settype($ymail, 'string');
+        settype($fname, 'string');
+        settype($fmail, 'string');
+        settype($archive, 'int');
+        settype($asb_question, 'string');
+        settype($asb_reponse, 'string');
+
         SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question, $asb_reponse);
         break;
 
     case 'StorySent':
+
+        settype($title, 'string');
+        settype($fname, 'string');
+
         StorySent($title, $fname);
         break;
 
     case 'SendSite':
+
+        settype($yname, 'string');
+        settype($ymail, 'string');
+        settype($fname, 'string');
+        settype($fmail, 'string');
+        settype($asb_question, 'string');
+        settype($asb_reponse, 'string');
+
         SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse);
         break;
 
     case 'SiteSent':
+
+        settype($fname, 'string');
+
         SiteSent($fname);
         break;
         

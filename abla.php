@@ -17,6 +17,7 @@ use npds\system\assets\css;
 use npds\system\forum\forum;
 use npds\system\routing\url;
 use npds\system\support\str;
+use npds\system\auth\authors;
 use npds\system\support\stats;
 use npds\system\support\facades\DB;
 
@@ -37,8 +38,7 @@ $f_titre = translate("Tableau de bord");
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-global $admin;
-if ($admin) {
+if (authors::getAdmin()) {
     include("themes/default/header.php");
 
     GraphicAdmin(manuel('abla'));

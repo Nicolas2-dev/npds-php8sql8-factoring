@@ -19,6 +19,7 @@ use npds\system\security\hack;
 use npds\system\language\language;
 use npds\system\language\metalang;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
@@ -81,10 +82,7 @@ function ShowFaqAll(int $id_cat): void
     }
 }
 
-settype($myfaq, 'string');
-settype($id_cat, 'int');
-
-if (!$myfaq) {
+if (!Request::query('myfaq')) {
     include("themes/default/header.php");
 
     // start Caching page
@@ -122,8 +120,9 @@ if (!$myfaq) {
 
     // start Caching page
     if (cache::cacheManagerStart2()) {
-        ShowFaq($id_cat, hack::removeHack($categories));
-        ShowFaqAll($id_cat);
+
+        ShowFaq((int) Request::query('id_cat'), hack::removeHack($categories));
+        ShowFaqAll((int) Request::query('id_cat'));
     }
 
     // end Caching page

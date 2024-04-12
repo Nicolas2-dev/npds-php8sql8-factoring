@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 use npds\system\cache\cache;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     header('location: ' . site_url('index.php'));
@@ -32,7 +33,7 @@ if ($rowQ1 = cache::Q_Select3(
     $upload_table = $NPDS_Prefix . $upload_table;
 }
 
-settype($forum, 'integer');
+$forum = Request::query('forum');
 
 if ($allow_upload_forum) {
     if ($rowQ1 = cache::Q_Select3(

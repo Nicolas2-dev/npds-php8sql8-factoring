@@ -21,6 +21,7 @@ use npds\system\utility\spam;
 use npds\system\config\Config;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\system\support\facades\DB;
 
 
 global $meta_glossaire;
@@ -320,11 +321,11 @@ function themedito($content)
 #autodoc userpopover($who, $dim, $avpop) : à partir du nom de l'utilisateur ($who) $avpop à 1 : affiche son avatar (ou avatar defaut) au dimension ($dim qui défini la class n-ava-$dim)<br /> $avpop à 2 : l'avatar affiché commande un popover contenant diverses info de cet utilisateur et liens associés
 function userpopover($who, $dim, $avpop)
 {
-    global $user, $NPDS_Prefix;
-
-    $result = sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uname ='$who'");
-
-    if (sql_num_rows($result)) {
+    if (DB::table('users')
+        ->select('uname')
+        ->where('uname', $who)
+        ->first()) 
+    {
         $temp_user = forum::get_userdata($who);
 
         $socialnetworks = array();
@@ -340,7 +341,7 @@ function userpopover($who, $dim, $avpop)
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 include('modules/geoloc/config/geoloc.conf');
 
-                if ($user or users::autorisation(-127)) {
+                if (users::getUser() or users::autorisation(-127)) {
                     if ($posterdata_extend['M2'] != '') {
                         $socialnetworks = explode(';', $posterdata_extend['M2']);
 
@@ -379,7 +380,7 @@ function userpopover($who, $dim, $avpop)
         settype($ch_lat, 'string');
 
         $useroutils = '';
-        if ($user or users::autorisation(-127)) {
+        if (users::getUser() or users::autorisation(-127)) {
             if ($temp_user['uid'] != 1 and $temp_user['uid'] != '') {
                 $useroutils .= '<li><a class="dropdown-item text-center text-md-start" href="user.php?op=userinfo&amp;uname=' . $temp_user['uname'] . '" target="_blank" title="' . translate("Profil") . '" ><i class="fa fa-lg fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">' . translate("Profil") . '</span></a></li>';
             }

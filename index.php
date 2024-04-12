@@ -20,6 +20,7 @@ use npds\system\cache\cache;
 use npds\system\theme\theme;
 use npds\system\config\Config;
 use npds\system\support\edito;
+use npds\system\support\facades\Request;
 use npds\modules\install\support\install;
 
 if (!function_exists("Mysql_Connexion")) {
@@ -28,8 +29,14 @@ if (!function_exists("Mysql_Connexion")) {
 
 install::checkInstall();
 
-// Redirect for default Start Page of the portal - look at Admin Preferences for choice
-function select_start_page($op)
+/**
+ * Redirect for default Start Page of the portal - look at Admin Preferences for choice
+ *
+ * @param   string  $op  [$op description]
+ *
+ * @return  void
+ */
+function select_start_page(string $op): void
 {
     global $index;
 
@@ -52,7 +59,18 @@ function select_start_page($op)
     }
 }
 
-function theindex($op, $catid, $marqeur)
+/**
+ * [theindex description]
+ *
+ * @param   string  $op       [$op description]
+ * @param   int               [ description]
+ * @param   string  $catid    [$catid description]
+ * @param   int               [ description]
+ * @param   string  $marqeur  [$marqeur description]
+ *
+ * @return  void
+ */
+function theindex(string $op, int|string $catid, int|string $marqeur): void
 {
     include("themes/default/header.php");
 
@@ -90,24 +108,19 @@ function theindex($op, $catid, $marqeur)
     include("themes/default/footer.php");
 }
 
-settype($op, 'string');
-settype($catid, 'integer');
-settype($marqeur, 'integer');
-settype($topic, 'integer');
-
-switch ($op) {
+switch (Request::query('op')) {
 
     case 'newindex':
     case 'edito-newindex':
     case 'newcategory':
-        theindex($op, $catid, $marqeur);
+        theindex((string) Request::query('op'), (int) Request::query('catid'), (int) Request::query('marqeur'));
         break;
 
     case 'newtopic':
-        theindex($op, $topic, $marqeur);
+        theindex((string) Request::query('op'), (int) Request::query('topic'), (int) Request::query('marqeur'));
         break;
 
     default:
-        select_start_page($op);
+        select_start_page((string) Request::query('op'));
         break;
 }

@@ -2,18 +2,22 @@
 use npds\system\forum\forum;
 use npds\system\auth\users;
 use npds\system\theme\theme;
+use npds\system\support\facades\DB;
 
-   global $cookie, $NPDS_Prefix, $Default_Skin, $user;
-   $ava='';$cha='';$bal='';$menuser='';
+   $ava='';
+   $cha='';
+   $bal='';
+   $menuser='';
 
-   if ($user) {
-      $userdata = forum::get_userdata_from_id($cookie[0]);
-      $username = $cookie[1];
-      $ibix=explode('+', urldecode($cookie[9]));
+   if (users::getUser()) {
+      $userdata = forum::get_userdata_from_id(users::cookieUser(0));
+      
+      $username = users::cookieUser(1);
+      $ibix=explode('+', urldecode(users::cookieUser(9)));
       $skinname = array_key_exists(1, $ibix) ? $ibix[1] : "default";
    }
    else {
-      $skinname = $Default_Skin;
+      $skinname = theme::getSkin();
       $username='';
    }
    switch ($skinname) {
@@ -42,8 +46,14 @@ use npds\system\theme\theme;
       $ava='<a class="dropdown-item" href="user.php"><i class="fa fa-user fa-3x text-muted"></i></a>';
    }
    elseif (users::autorisation(1)) {
-      list($nbmes)=sql_fetch_row(sql_query("SELECT COUNT(*) FROM ".$NPDS_Prefix."priv_msgs WHERE to_userid='".$cookie[0]."' AND read_msg='0'"));
-      $cl = $nbmes>0 ? ' faa-shake animated ' : '';
+      
+      $nbmes = DB::table('priv_msgs')
+                  ->where('to_userid', users::cookieUser(0))
+                  ->where('read_msg', 0)
+                  ->count();
+      vd();
+      $cl = $nbmes > 0 ? ' faa-shake animated ' : '';
+      
       $menuser .='
                   <li><a class="dropdown-item" href="user.php?op=edituser" title="'.translate("Vous").'"  ><i class="fa fa-user-edit fa-lg me-2"></i>'.translate("Vous").'</a></li>
                   <li><a class="dropdown-item" href="user.php?op=editjournal" title="'.translate("Editer votre journal").'" ><i class="fa fa-edit fa-lg me-2"></i>'.translate("Journal").'</a></li>';
@@ -61,19 +71,29 @@ use npds\system\theme\theme;
                   <li><a class="dropdown-item " href="user.php?op=chgtheme" title="'.translate("Changer le thème").'" ><i class="fa fa-paint-brush fa-lg me-2"></i>'.translate("Thème").'</a></li>
                   <li><a class="dropdown-item " href="modules.php?ModPath=reseaux-sociaux&amp;ModStart=reseaux-sociaux" title="'.translate("Réseaux sociaux").'" ><i class="fa fa-share-alt-square fa-lg me-2"></i>'.translate("Réseaux sociaux").'</a></li>
                   <li><a class="dropdown-item " href="viewpmsg.php" title="'.translate("Message personnel").'" ><i class="fa fa-envelope fa-lg me-2 '.$cl.'"></i>'.translate("Message").'</a></li>';
-      settype($cookie[0], 'integer');
-      list($user_avatar)=sql_fetch_row(sql_query("SELECT user_avatar FROM ".$NPDS_Prefix."users WHERE uname='".$username."'"));
 
-      if (!$user_avatar)
-         $imgtmp='assets/images/forum/avatar/blank.gif';
-      else if (stristr($user_avatar,"users_private"))
-         $imgtmp=$user_avatar;
-      else {
-         if ($ibid=theme::theme_image("forum/avatar/$user_avatar")) {$imgtmp=$ibid;} else {$imgtmp="assets/images/forum/avatar/$user_avatar";}
-         if (!file_exists($imgtmp)) {$imgtmp="assets/images/forum/avatar/blank.gif";}
+      $res_user = DB::table('users')
+                     ->select('user_avatar')
+                     ->where('uname', $username)
+                     ->first();
+
+      if (!$res_user['user_avatar']) {
+         $imgtmp = 'assets/images/forum/avatar/blank.gif';
+      } else if (stristr($res_user['user_avatar'], "users_private")) {
+         $imgtmp = $res_user['user_avatar'];
+      } else {
+         if ($ibid=theme::theme_image("forum/avatar/". $res_user['user_avatar'])) {
+            $imgtmp=$ibid;
+         } else {
+            $imgtmp="assets/images/forum/avatar/". $res_user['user_avatar'];
+         }
+         
+         if (!file_exists($imgtmp)) {
+            $imgtmp="assets/images/forum/avatar/blank.gif";
+         }
       }
 
-      if ($nbmes>0)
+      if ($nbmes > 0)
          $bal = '<li class="nav-item"><a class="nav-link" href="viewpmsg.php"><i class="fa fa-envelope fs-4 faa-shake animated" title="'.translate("Message personnel").' <span class=\'badge rounded-pill bg-danger ms-2\'>'.$nbmes.'</span>" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right"></i></a></li>';
 
       $ava='<a class="dropdown-item" href="user.php" ><img src="'.$imgtmp.'" class="n-ava-64" alt="avatar" title="'.translate("Votre compte").'" data-bs-toggle="tooltip" data-bs-placement="right" /></a><li class="dropdown-divider"></li>';

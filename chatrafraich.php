@@ -17,25 +17,23 @@ use npds\system\auth\users;
 use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\theme\theme;
+use npds\system\auth\authors;
 use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\utility\crypt;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
 // chatbox avec salon privatif - on utilise id pour filtrer les messages -> id = l'id du groupe au sens autorisation de NPDS (-127,-1,0,1,2...126))
-settype($id, 'integer');
+$id = (($id = Request::query('id')) ? $id : Request::input('id'));
 
-if ($id === '' || unserialize(crypt::decrypt($auto)) != $id) {
+if ($id === ''|| unserialize(crypt::decrypt($auto)) != $id) {
     die();
 }
-
-settype($repere, 'integer');
-settype($aff_entetes, 'integer');
-settype($connectes, 'integer');
 
 // Savoir si le 'connecté' a le droit à ce chat ?
 if (!users::autorisation($id)) {
@@ -45,7 +43,7 @@ if (!users::autorisation($id)) {
 $chatbox = DB::table('chatbox')
             ->select('username', 'message', 'dbname', 'date')
             ->where('id', $id)
-            ->where('date', '>', $repere)
+            ->where('date', '>', $repere = Request::query('repere'))
             ->orderBy('date', 'ASC')
             ->get();
 
@@ -60,14 +58,14 @@ if ($chatbox) {
         $username = $instance_chat['username'];
 
         if ($instance_chat['dbname'] == 1) {
-            global $user;
-            if ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) {
-                $thing .= "<div class='chatnom'>".$username."</div>";
+
+            if ((!users::getUser()) and (Config::get('npds.member_list') == 1) and (!authors::getAdmin())) {
+                $thing .= "<div class='chatnom'>". $username ."</div>";
             } else {
-                $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', userpopover($username, 36, 1)) . "</div> <a href='". site_url('user.php?op=userinfo&amp;uname='. $username) ."' target='_blank'>$username</a></div>";
+                $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', userpopover($username, 36, 1)) . "</div> <a href='". site_url('user.php?op=userinfo&amp;uname='. $username) ."' target='_blank'>". $username ."</a></div>";
             }
         } else {
-            $thing .= "<div class='chatnom'>".$username."</div>";
+            $thing .= "<div class='chatnom'>". $username ."</div>";
         }
 
         $message = forum::smilie($instance_chat['message']);
@@ -90,14 +88,14 @@ if ($chatbox) {
     $thing = "\"" . $thing . "\"";
 }
 
+$aff_entetes = Request::query('aff_entetes');
+
 if ($aff_entetes == '1') {
     $meta_op = true;
 
-    settype($Xthing, 'string');
-
     include("storage/meta/meta.php");
 
-    $Xthing .= $l_meta;
+    $Xthing = $l_meta;
     $Xthing .= str_replace("\n", "", css::import_css_javascript(theme::getTheme(), Config::get('npds.language'), theme::getSkin(), basename($_SERVER['PHP_SELF']), ""));
     $Xthing .= "</head><body id='chat'>";
     $Xthing = "\"" . str_replace("'", "\'", $Xthing) . "\"";
@@ -106,6 +104,8 @@ if ($aff_entetes == '1') {
 $numofchatters = count(DB::table('chatbox')->select('ip')->distinct()->where('id', $id)->where('date', '>=', (time() - (60 * 2)))->get());
 
 $rafraich_connectes = 0;
+
+$connectes = Request::query('connectes');
 
 if (intval($connectes) != $numofchatters) {
     $rafraich_connectes = 1;

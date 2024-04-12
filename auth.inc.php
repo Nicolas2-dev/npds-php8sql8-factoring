@@ -13,10 +13,14 @@
 /************************************************************************/
 
 use npds\system\auth\users;
+use npds\system\auth\authors;
 use npds\system\config\Config;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
-if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
+
+if (($aid = Request::input('aid')) and ($pwd = Request::input('pwd')) and (Request::input('op') == 'login')) {
+    
     if ($aid != '' and $pwd != '') {
 
         $author_setinfo = DB::table('authors')
@@ -27,7 +31,7 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
         if ($author_setinfo) {
 
             $dbpass = $author_setinfo['pwd'];
-            $scryptPass = null;
+            $scryptPass = false;
 
             if (password_verify($pwd, $dbpass) or (strcmp($dbpass, $pwd) == 0)) {
                 
@@ -110,7 +114,6 @@ if (isset($admin) and ($admin != '')) {
         }
     }
     
-    //unset($res_author);
     unset($AIpass);
     unset($AIpwd);
     unset($Xadmin);
