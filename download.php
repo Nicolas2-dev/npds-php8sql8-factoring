@@ -113,10 +113,11 @@ function geninfo(int $did, int $out_template): void
  */
 function tlist(): void
 {
-    global $sortby, $dcategory, $download_cat;
+    $dcategory = Request::query('dcategory');
+    $sortby = Request::query('sortby');
 
     if (!isset($dcategory)) {
-        $dcategory = addslashes($download_cat);
+        $dcategory = addslashes(Config::get('npds.download_cat'));
     }
 
     $cate = stripslashes($dcategory);
@@ -338,10 +339,10 @@ function SortLinks(string $dcategory, string $sortby): void
  */
 function listdownloads(string $dcategory, string $sortby, string $sortorder): void
 {
-    global $page, $download_cat;
+    global $page;
 
     if (!isset($dcategory)) {
-        $dcategory = addslashes($download_cat);
+        $dcategory = addslashes(Config::get('npds.download_cat'));
     }
 
     if (!$sortby) {
@@ -545,13 +546,26 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
  */
 function main(): void
 {
-    global $dcategory, $sortby, $sortorder;
+    $dcategory = Request::query('dcategory');
+    $sortorder = Request::query('sortorder');
+    $sortby = Request::query('sortby');
 
-    $dcategory  = hack::removeHack(stripslashes(htmlspecialchars(urldecode((string) $dcategory), ENT_QUOTES, 'utf-8'))); // electrobug
+    if (!isset($dcategory)) {
+        $dcategory = addslashes(Config::get('npds.download_cat'));
+    } else {
+        $dcategory  = hack::removeHack(stripslashes(htmlspecialchars(urldecode((string) $dcategory), ENT_QUOTES, 'utf-8')));
+        $dcategory = str_replace("&#039;", "\'", $dcategory);
+    }
 
-    $dcategory = str_replace("&#039;", "\'", $dcategory);
+    if (!isset($sortorder)) {
+        $sortorder = 'ASC';
+    }
 
-    $sortby  = hack::removeHack(stripslashes(htmlspecialchars(urldecode((string) $sortby), ENT_QUOTES, 'utf-8'))); // electrobug
+    if (!isset($sortby)) {
+        $sortby = '';
+    } else {
+        $sortby  = hack::removeHack(stripslashes(htmlspecialchars(urldecode((string) $sortby), ENT_QUOTES, 'utf-8')));        
+    }
 
     include("themes/default/header.php");
 
@@ -575,15 +589,15 @@ function main(): void
 /**
  * [transferfile description]
  *
- * @param   int  $did  [$did description]
+ * @param   int   $did  [$did description]
  *
- * @return  [type]
+ * @return  void
  */
-function transferfile(int $did)
+function transferfile(): void
 {
     $res = DB::table('downloads')
             ->select('dcounter', 'durl', 'perms')
-            ->where('did', $did)
+            ->where('did', $did = Request::query('did'))
             ->first();
 
     $dcounter = $res['dcounter']; 
@@ -636,10 +650,17 @@ function transferfile(int $did)
     }
 }
 
-function broken(int $did)
+/**
+ * [broken description]
+ *
+ * @param   int   $did  [$did description]
+ *
+ * @return  void
+ */
+function broken(): void
 {
     if (users::getUser()) {
-        if ($did) {
+        if ($did = Request::query('bid')) {
             
             $message = Config::get('npds.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . users::cookieUser(1) ." / IP : " . getip() . "\n\n";
             $message .= Config::get('signature.message');
@@ -668,25 +689,11 @@ switch (Request::query('op')) {
         break;
  
     case 'mydown':
-
-        settype($did, 'integer');
-
-        transferfile($did);
-        break;
-
-    case 'geninfo':
-
-        settype($did, 'int');
-        settype($out_template, 'int');
-
-        geninfo($did, $out_template);
+        transferfile();
         break;
 
     case 'broken':
-
-        settype($did, 'integer');
-
-        broken($did);
+        broken();
         break;
         
     default:
