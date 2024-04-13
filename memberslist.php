@@ -47,20 +47,11 @@ if (isset($gr_from_ws) and ($gr_from_ws != 0)) {
 
     $uid_from_ws = "^(";
 
-    $res = ((mysqli_get_client_info() <= '8.0') 
-        ? DB::table('users_status')
+    foreach (DB::table('users_status')
                 ->select('uid', 'groupe')
                 ->where('groupe', 'REGEXP', '[[:<:]]'. $gr_from_ws .'[[:>:]]')
                 ->orderBy('uid', 'asc')
-                ->get()
-        : DB::table('users_status')
-                ->select('uid', 'groupe')
-                ->where('groupe', 'REGEXP', '\\\\b'. $gr_from_ws .'\\\\b')
-                ->orderBy('uid', 'asc')
-                ->get()
-    );
-
-    foreach ($res as $status) 
+                ->get() as $status) 
     {
         $uid_from_ws .= $status['ws_uid'] . "|";
     }
