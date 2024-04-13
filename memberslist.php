@@ -112,10 +112,9 @@ function alpha(): void
  */
 function unique(array $ibid): array
 {
+    $Xto_user = array();
+
     foreach ($ibid as $to_user) {
-
-        settype($Xto_user, 'array');
-
         if (!array_key_exists($to_user, $Xto_user)) {
             $Xto_user[$to_user] = $to_user;
         }
