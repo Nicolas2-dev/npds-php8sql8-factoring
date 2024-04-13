@@ -61,10 +61,6 @@ if (isset($user)) {
     }
 }
 
-// settype($submitS, 'string');
-// if ($submitS) {Request::query('op')
-//if (isset($submitS)) {
-
 if (Request::query('submitS')) {
 
     include("themes/default/header.php");
@@ -241,10 +237,6 @@ if (Request::query('submitS')) {
             forum::forumerror('0025');
         }
     }
-
-    //settype($submitP, 'string');
-    //if ($submitP) {  
-    //if (isset($submitP)) {
 
     if (Request::query('submitP')) {
         $acc = 'editpost';

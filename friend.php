@@ -24,6 +24,7 @@ use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\language\language;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 
 if (!function_exists("Mysql_Connexion"))  {
@@ -38,11 +39,11 @@ if (!function_exists("Mysql_Connexion"))  {
  *
  * @return  void
  */
-function FriendSend(int $sid, int $archive): void
+function FriendSend(): void
 {
     $res = DB::table('stories')
                 ->select('title', 'aid')
-                ->where('sid', $sid)
+                ->where('sid', $sid = Request::query('sid'))
                 ->first();
 
     if (!$res['aid']) {
@@ -98,7 +99,7 @@ function FriendSend(int $sid, int $archive): void
     echo '' . spam::Q_spambot();
 
     echo '
-        <input type="hidden" name="archive" value="' . $archive . '" />
+        <input type="hidden" name="archive" value="' . Request::query('archive') . '" />
         <input type="hidden" name="op" value="SendStory" />
         <button type="submit" class="btn btn-primary" title="' . translate("Envoyer") . '"><i class="fa fa-lg fa-at"></i>&nbsp;' . translate("Envoyer") . '</button>
     </form>';
@@ -127,17 +128,22 @@ function FriendSend(int $sid, int $archive): void
  *
  * @return  void
  */
-function SendStory(int $sid, string $yname, string $ymail, string $fname, string $fmail, int $archive, string $asb_question, string $asb_reponse): void
+function SendStory(): void
 {
+    $yname = Request::input('yname');
+    $ymail = Request::input('ymail');
+
     if (!users::getUser()) {
         //anti_spambot
-        if (!spam::R_spambot($asb_question, $asb_reponse, '')) {
+        if (!spam::R_spambot(Request::input('asb_question'), Request::input('asb_reponse'), '')) {
             logs::Ecr_Log('security', "Send-Story Anti-Spam : name=" . $yname . " / mail=" . $ymail, '');
             
             url::redirect_url("index.php");
             die();
         }
     }
+
+    $sid = Request::input('sid');
 
     $res_storie = DB::table('stories')
                     ->select('title', 'time', 'topic')
@@ -151,9 +157,10 @@ function SendStory(int $sid, string $yname, string $ymail, string $fname, string
 
     $subject = html_entity_decode(translate("Article intéressant sur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . Config::get('npds.sitename');
 
-    $nuke_url = Config::get('npds.nuke_url');
+    $fname = hack::removeHack(Request::input('fname'));
 
-    $fname = hack::removeHack($fname);
+    $archive = Request::input('archive');
+
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.") . "\n\n"
          . language::aff_langue($res_storie['title']) . "\n" . translate("Date :") . " ". $res_storie['time'] ."\n" . translate("Sujet : ") . " " . language::aff_langue($res_topic['topictext']) . "\n\n"
          . translate("L'article") . " : <a href=\"". site_url('article.php?sid='. $sid .'&amp;archive='. $archive) ."\">"
@@ -161,7 +168,7 @@ function SendStory(int $sid, string $yname, string $ymail, string $fname, string
     
     $message .= Config::get('signature.message');
 
-    $fmail = hack::removeHack($fmail);
+    $fmail = hack::removeHack(Request::input('fmail'));
     $subject = hack::removeHack($subject);
     $message = hack::removeHack($message);
     $yname = hack::removeHack($yname);
@@ -198,12 +205,12 @@ function SendStory(int $sid, string $yname, string $ymail, string $fname, string
  *
  * @return  void
  */
-function StorySent(string $title, string $fname): void
+function StorySent(): void
 {
     include("themes/default/header.php");
 
-    $title = urldecode($title);
-    $fname = urldecode($fname);
+    $title = urldecode(Request::query('title'));
+    $fname = urldecode(Request::query('fname'));
 
     if ($fname == '') {
         echo '<div class="alert alert-danger">' . translate("Erreur : Email invalide") . '</div>';
@@ -293,11 +300,14 @@ function RecommendSite(): void
  *
  * @return  void
  */
-function SendSite(string $yname, string $ymail, string $fname, string $fmail, string $asb_question, string $asb_reponse): void
+function SendSite(): void
 {
+    $yname = Request::input('yname');
+    $ymail = Request::input('ymail');
+
     if (!users::getUser()) {
         //anti_spambot
-        if (!spam::R_spambot($asb_question, $asb_reponse, '')) {
+        if (!spam::R_spambot(Request::input('asb_question'), Request::input('asb_reponse'), '')) {
             logs::Ecr_Log('security', "Friend Anti-Spam : name=" . $yname . " / mail=" . $ymail, '');
             
             url::redirect_url("index.php");
@@ -309,11 +319,13 @@ function SendSite(string $yname, string $ymail, string $fname, string $fmail, st
     $sitename = Config::get('npds.sitename');
 
     $subject = html_entity_decode(translate("Site à découvrir : "), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
-    $fname = hack::removeHack($fname);
+
+    $fname = hack::removeHack(Request::input('fname'));
+
     $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé notre site") . " $sitename " . translate("intéressant et a voulu vous le faire connaître.") . "\n\n$sitename : <a href=\"$nuke_url\">$nuke_url</a>\n\n";
     $message .= Config::get('sinature.message');
 
-    $fmail = hack::removeHack($fmail);
+    $fmail = hack::removeHack(Request::input('fmail'));
     $subject = hack::removeHack($subject);
     $message = hack::removeHack($message);
     $yname = hack::removeHack($yname);
@@ -345,9 +357,11 @@ function SendSite(string $yname, string $ymail, string $fname, string $fmail, st
  *
  * @return  void
  */
-function SiteSent(string $fname): void
+function SiteSent(): void
 {
     include("themes/default/header.php");
+
+    $fname = Request::query('fname');
 
     if ($fname == '') {
         echo '
@@ -367,56 +381,25 @@ function SiteSent(string $fname): void
     include("themes/default/footer.php");
 }
 
-settype($op, 'string'); 
-
-switch ($op) {
+switch ($op = Request::query('op') ? $op : Request::input('op')) {
     case 'FriendSend':
-
-        settype($sid, 'int');
-        settype($archive, 'int');
-
-        FriendSend($sid, $archive);
+        FriendSend();
         break;
 
     case 'SendStory':
-
-        settype($sid, 'int');
-        settype($yname, 'string');
-        settype($ymail, 'string');
-        settype($fname, 'string');
-        settype($fmail, 'string');
-        settype($archive, 'int');
-        settype($asb_question, 'string');
-        settype($asb_reponse, 'string');
-
-        SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question, $asb_reponse);
+        SendStory();
         break;
 
     case 'StorySent':
-
-        settype($title, 'string');
-        settype($fname, 'string');
-
-        StorySent($title, $fname);
+        StorySent();
         break;
 
     case 'SendSite':
-
-        settype($yname, 'string');
-        settype($ymail, 'string');
-        settype($fname, 'string');
-        settype($fmail, 'string');
-        settype($asb_question, 'string');
-        settype($asb_reponse, 'string');
-
-        SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse);
+        SendSite();
         break;
 
     case 'SiteSent':
-
-        settype($fname, 'string');
-
-        SiteSent($fname);
+        SiteSent();
         break;
         
     default:

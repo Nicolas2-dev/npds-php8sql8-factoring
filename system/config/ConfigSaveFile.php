@@ -123,7 +123,7 @@ class ConfigSaveFile
         $lineblock .= static::lineBlockWhite('Allow only Moderator and Admin to Post News? (1=Yes 0=No)', 'mod_admin_news', $xmod_admin_news);
         $lineblock .= static::lineBlockWhite('Don\'t record Admin\'s Hits in stats (1=Yes=>don\'t rec 0=No=>rec)', 'not_admin_count', $xnot_admin_count);
         $lineblock .= static::lineBlockWhite('Default Theme for your site (See /themes directory for the complete list, case sensitive!)', 'Default_Theme', $xDefault_Theme);
-        $lineblock .= static::lineBlockWhite('Default Skin for Theme ... with skins (See /themes/_skins directory for the complete list, case sensitive!)', 'Default_Skin', ((substr($xDefault_Theme, -3) != "_sk") ? $xDefault_Skin : ''));
+        $lineblock .= static::lineBlockWhite('Default Skin for Theme ... with skins (See /themes/_skins directory for the complete list, case sensitive!)', 'Default_Skin', ((substr($xDefault_Theme, -3) != "_sk") ? '' : $xDefault_Skin ));
         $lineblock .= static::lineBlockWhite('Default Page for your site (default : index.php but you can use : topics.php, links.php ...)', 'Start_Page', $xstart_page);
         $lineblock .= static::lineBlockWhite('Messages for all footer pages (Can include HTML code)', 'foot1', $xfoot1);
         $lineblock .= static::lineBlockWhite('Messages for all footer pages (Can include HTML code)', 'foot2', $xfoot2);

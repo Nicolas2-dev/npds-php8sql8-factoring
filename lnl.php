@@ -20,6 +20,7 @@ use npds\system\mail\mailler;
 use npds\system\utility\spam;
 use npds\system\config\Config;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -35,8 +36,6 @@ if (!function_exists("Mysql_Connexion")) {
  */
 function SuserCheck(string $email): string 
 {
-    global $stop;
-
     $stop = '';
 
     if ((!$email) || ($email == '') || (!preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $email))) {
@@ -105,18 +104,18 @@ function error_handler(string $ibid): void
  *
  * @return  void
  */
-function subscribe(string $var): void
+function subscribe(): void
 {
-    if ($var != '') {
+    if ($xemail = Request::query('email')) {
         include("themes/default/header.php");
 
         echo '
         <h2>' . translate("La lettre") . '</h2>
         <hr />
-        <p class="lead mb-2">' . translate("Gestion de vos abonnements") . ' : <strong>' . $var . '</strong></p>
+        <p class="lead mb-2">' . translate("Gestion de vos abonnements") . ' : <strong>' . $xemail . '</strong></p>
         <form action="'. site_url('lnl.php') .'" method="POST">
             ' . spam::Q_spambot() . '
-            <input type="hidden" name="email" value="' . $var . '" />
+            <input type="hidden" name="email" value="' . $xemail . '" />
             <input type="hidden" name="op" value="subscribeOK" />
             <input type="submit" class="btn btn-outline-primary me-2" value="' . translate("Valider") . '" />
             <a href="'. site_url('index.php') .'" class="btn btn-outline-secondary">' . translate("Retour en arrière") . '</a>
@@ -135,15 +134,23 @@ function subscribe(string $var): void
  *
  * @return  void
  */
-function subscribe_ok(string $xemail): void
+function subscribe_ok(): void
 {
-    global $stop;
-
     include("themes/default/header.php");
 
-    if ($xemail != '') {
+    $xemail = Request::input('email');
 
-        SuserCheck($xemail);
+    //anti_spambot
+    if (!spam::R_spambot(Request::input('asb_question'), Request::input('asb_reponse'), "")) {
+        logs::Ecr_Log("security", "LNL Anti-Spam : email=" . $xemail, "");
+        
+        url::redirect_url("index.php");
+        die();
+    }
+
+    if ($xemail) {
+
+        $stop = SuserCheck($xemail);
 
         if ($stop == '') {
             $host_name = getip();
@@ -194,9 +201,9 @@ function subscribe_ok(string $xemail): void
  *
  * @return  void
  */
-function unsubscribe(string $xemail): void
+function unsubscribe(): void
 {
-    if ($xemail != '') {
+    if ($xemail = Request::input('email')) {
 
         if ((!$xemail) || ($xemail == '') || (!preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $xemail))) {
             header('location: '. site_url('index.php'));
@@ -244,34 +251,16 @@ function unsubscribe(string $xemail): void
     }
 }
 
-settype($op, 'string');
-
-switch ($op) {
+switch ($op = Request::query('op') ? $op : Request::input('op')) {
     case 'subscribe':
-
-        settype($email, 'string');
-
-        subscribe($email);
+        subscribe();
         break;
 
     case 'subscribeOK':
-        //anti_spambot
-        if (!spam::R_spambot($asb_question, $asb_reponse, "")) {
-            logs::Ecr_Log("security", "LNL Anti-Spam : email=" . $email, "");
-            
-            url::redirect_url("index.php");
-            die();
-        }
-
-        settype($email, 'string');
-
-        subscribe_ok($email);
+        subscribe_ok();
         break;
 
     case 'unsubscribe':
-
-        settype($email, 'string');
-
-        unsubscribe($email);
+        unsubscribe();
         break;
 }

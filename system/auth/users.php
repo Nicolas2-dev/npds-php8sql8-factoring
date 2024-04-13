@@ -47,7 +47,7 @@ class users
      *
      * @return  string|array|bool|int
      */
-    public static function cookieUser($arg = null): string|array|bool|int
+    public static function cookieUser($arg = null): string|array|bool|int|null
     {
         $user = static::extractUser();
 
@@ -61,11 +61,11 @@ class users
                     return $cookie[$arg];
                 }
                 
-                return false;
+                return null;
             }
         }
 
-        return false;
+        return null;
     }
 
     /**

@@ -339,8 +339,6 @@ function SortLinks(string $dcategory, string $sortby): void
  */
 function listdownloads(string $dcategory, string $sortby, string $sortorder): void
 {
-    global $page;
-
     if (!isset($dcategory)) {
         $dcategory = addslashes(Config::get('npds.download_cat'));
     }
@@ -415,6 +413,12 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
     }
 
     $perpage = Config::get('npds.perpage');
+
+    $page = Request::query('page');
+
+    if (!isset($page)) {
+        $page = 0;
+    }
 
     if ($total > $perpage) {
         $pages = ceil($total / $perpage);

@@ -607,7 +607,8 @@ class boxe
         $user = users::getUser();
         $cookie = users::cookieUser(3);
 
-        $storynum = isset($cookie) ? $cookie : Config::get('npds.storyhome');
+        //$storynum = isset($cookie) ? $cookie : Config::get('npds.storyhome');
+        $storynum = !is_null($cookie) ? $cookie : Config::get('npds.storyhome');
 
         $query = DB::table('stories')->select('sid', 'catid', 'ihome', 'time');
 

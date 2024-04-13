@@ -44,11 +44,12 @@ class mailler
             if ($config['dkim_auto'] == 2) {
                 //Private key filename for this selector 
                 $privatekeyfile = 'storage/mailer/key/'. Config::get('app.NPDS_Key') .'_dkim_private.pem';
-                
+
                 //Public key filename for this selector 
                 $publickeyfile = 'storage/mailer/key/'. Config::get('app.NPDS_Key') .'_dkim_public.pem';
                 
                 if (!file_exists($privatekeyfile)) {
+
                     //Create a 2048-bit RSA key with an SHA256 digest 
                     $pk = openssl_pkey_new(
                         [
@@ -56,7 +57,7 @@ class mailler
                             'private_key_bits' => 2048,
                             'private_key_type' => OPENSSL_KEYTYPE_RSA,
                         ]
-                        );
+                    );
 
                     //Save private key 
                     openssl_pkey_export_to_file($pk, $privatekeyfile);
@@ -312,11 +313,11 @@ class mailler
     /**
      * utilisateur dans le fichier des mails incorrect true or false 
      *
-     * @param   string  $utilisateur  [$utilisateur description]
+     * @param   int  $utilisateur  [$utilisateur description]
      *
      * @return  bool
      */
-    public static function isbadmailuser(string $utilisateur): bool
+    public static function isbadmailuser(int $utilisateur): bool
     {
         $contents = '';
         $filename = "storage/users_private/usersbadmail.txt";
