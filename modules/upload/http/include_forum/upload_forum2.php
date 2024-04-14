@@ -69,7 +69,7 @@ if ($skin != '') {
             <link rel="stylesheet" href="assets/shared/bootstrap/dist/css/bootstrap.min.css" />';
 echo '
             <link rel="stylesheet" href="assets/shared/bootstrap-table/dist/bootstrap-table.min.css" />'; //hardcoded lol
-echo css::import_css($theme, $language, '', '', '');
+echo css::import_css($theme, Config::get('npds.language'), '', '', '');
 echo '
         </head>
     <body>';

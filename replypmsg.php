@@ -30,11 +30,11 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if ($SuperCache) {
-    $cache_obj = new cacheManager();
-} else {
-    $cache_obj = new SuperCacheEmpty();
-}
+// if ($SuperCache) {
+//     $cache_obj = new cacheManager();
+// } else {
+//     $cache_obj = new SuperCacheEmpty();
+// }
 
 include('auth.php');
 
@@ -260,7 +260,7 @@ if (isset($user)) {
         include("themes/default/view/include/header_before.inc");
         include("themes/default/view/include/header_head.inc");
 
-        echo css::import_css($tmp_theme, $language, '', '', '');
+        echo css::import_css($tmp_theme, Config::get('npds.language'), '', '', '');
 
         echo '
     </head>

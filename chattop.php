@@ -12,14 +12,17 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\system\config\Config;
+
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-$Titlesitename = 'NPDS';
+
 $nuke_url = '';
 $meta_op = '';
 
+Config::set('npds.Titlesitename', 'NPDS Chat');
 include('storage/meta/meta.php');
 
 echo '

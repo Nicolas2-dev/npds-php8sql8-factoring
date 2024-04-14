@@ -391,7 +391,7 @@ class forum
     }
 
     /**
-     * 
+     * [user_is_moderator description]
      *
      * @param   string                  [ description]
      * @param   int     $uidX           [$uidX description]
@@ -399,22 +399,22 @@ class forum
      * @param   string                  [ description]
      * @param   int     $forum_accessX  [$forum_accessX description]
      *
-     * @return  string
+     * @return  int|bool
      */
-    public static function user_is_moderator(string|int $uidX, string $passwordX, string|int $forum_accessX): string|bool
+    public static function user_is_moderator(string|int $uidX, string $passwordX, string|int $forum_accessX): int|bool
     {
-        $userX = DB::table('users')
+        $user = DB::table('users')
                     ->select('pass')
                     ->where('uid', $uidX)
                     ->first();
 
-        $userXX = DB::table('users_status')
+        $user_status = DB::table('users_status')
                     ->select('level')
                     ->where('uid', $uidX)
                     ->first();
 
-        if ((md5($userX['pass']) == $passwordX) and ($forum_accessX <= $userXX['level']) and ($userXX['level'] > 1)) {
-            return $userX['level'];
+        if ((md5($user['pass']) == $passwordX) and ($forum_accessX <= $user_status['level']) and ($user_status['level'] > 1)) {
+            return $user_status['level'];
         } else {
             return false;
         }
@@ -440,6 +440,7 @@ class forum
                     ->first();
 
         if (!$sql1) {
+            vd('0016 -> get_userdata_from_id');
             static::forumerror('0016');
         }
 
@@ -459,14 +460,18 @@ class forum
      *
      * @return  array
      */
-    public static function get_userdata_extend_from_id(string $userid): array 
+    public static function get_userdata_extend_from_id( $userid): array 
     {
+
+vd($userid);
+
         $sql1 = DB::table('users_extend')
                     ->select('*')
                     ->where('uid', $userid)
                     ->first();
 
         if (!$sql1) { 
+            vd('0016 -> get_userdata_extend_from_id');
             forum::forumerror('0016');
         }
 
@@ -488,6 +493,7 @@ class forum
                     ->first();
 
         if (!$sql) {
+            vd('0016 -> get_userdata');
             static::forumerror('0016');
         }
     
@@ -1299,7 +1305,7 @@ class forum
     /**
      * 
      *
-     * @param   string  $modoX       [$modoX description]
+     * @param   bool    $modoX       [$modoX description]
      * @param   string  $paramAFX    [$paramAFX description]
      * @param   string  $poster_ipX  [$poster_ipX description]
      * @param   array   $userdataX   [$userdataX description]
@@ -1307,7 +1313,7 @@ class forum
      *
      * @return  void
      */
-    public static function anti_flood(string $modoX, string $paramAFX, string $poster_ipX, array $userdataX, int $gmtX): void
+    public static function anti_flood(int|bool $modoX, string $paramAFX, string $poster_ipX, array $userdataX, int $gmtX): void
     {
         // anti_flood : nb de post dans les 90 puis 30 dernières minutes / les modérateurs echappent à cette règle
         // security.log est utilisée pour enregistrer les tentatives

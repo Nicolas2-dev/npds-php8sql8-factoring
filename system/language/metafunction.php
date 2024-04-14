@@ -68,6 +68,31 @@ class metafunction
     }
 
     /**
+     * Cette fonction est utilisée pour intégrer des smilies et comme service pour theme_img()
+     *
+     * @param   string  $ibid  [$ibid description]
+     *
+     * @return  string
+     */
+    public static function MM_img(string $ibid): string 
+    {
+        $ibid = metalang::arg_filter($ibid);
+        $ibidX = theme::theme_image($ibid);
+        
+        if ($ibidX) {
+            $ret = "<img src=\"$ibidX\" border=\"0\" alt=\"\" />";
+        } else {
+            if (@file_exists("assets/images/$ibid")) {
+                $ret = "<img src=\"assets/images/$ibid\" border=\"0\" alt=\"\" />";
+            } else {
+                $ret = false;
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
      * 
      *
      * @return  string

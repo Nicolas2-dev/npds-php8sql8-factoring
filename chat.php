@@ -15,14 +15,15 @@
 // token_de_securite = encrypt(serialize(gp_id)) => Permet d'éviter le lancement du Chat sans autorisation
 declare(strict_types=1);
 
+use npds\system\config\Config;
+
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-$Titlesitename = 'NPDS';
 $meta_op = '';
 $meta_doctype = '<!DOCTYPE html>';
-
+Config::set('npds.Titlesitename', 'NPDS Chat');
 include("storage/meta/meta.php");
 
 echo '

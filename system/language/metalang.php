@@ -374,6 +374,8 @@ class metalang
                         @eval($Cword);
                     }
                    
+
+
                     if (is_array($arguments)) 
                     {
                         array_walk($arguments, [metalang::class, 'arg_filter']);

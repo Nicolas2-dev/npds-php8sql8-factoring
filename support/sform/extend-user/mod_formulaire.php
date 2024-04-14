@@ -11,7 +11,7 @@
 /************************************************************************/
 /* Dont modify this file if you dont know what you do                   */
 /************************************************************************/
-declare(strict_types=1);
+//declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\theme\theme;
@@ -59,7 +59,7 @@ if (Config::get('npds.subscribe')) {
     }
 }   
 
-if ($member_invisible) {
+if (Config::get('npds.member_invisible')) {
     if ($userinfo['is_visible'] == 1) {
         $checked = false;
     } else {
@@ -133,9 +133,9 @@ if (Config::get('npds.smilies')) {
         Config::set('npds.avatar_size', '80*100');
     }
 
-    $avatar_wh = explode('*', $avatar_size);
+    $avatar_wh = explode('*', Config::get('npds.avatar_size'));
     Sform::add_upload('B1', '', 30, $taille_fichier);
-    Sform::add_extender('B1', '', '<span class="help-block text-end">Taille maximum du fichier image :&nbsp;=>&nbsp;<strong>' . $taille_fichier . '</strong> octets et <strong>' . $avatar_size . '</strong> pixels</span>');
+    Sform::add_extender('B1', '', '<span class="help-block text-end">Taille maximum du fichier image :&nbsp;=>&nbsp;<strong>' . $taille_fichier . '</strong> octets et <strong>' . Config::get('npds.avatar_size') . '</strong> pixels</span>');
     
     Sform::add_extra('<div id="avatarPreview" class="preview"></div>');
     Sform::add_checkbox('raz_avatar', translate("Revenir aux avatars standards"), 1, false, false);
@@ -154,9 +154,10 @@ Sform::add_extender('user_intrest', '', '<span class="help-block text-end" id="c
 
 // ---- SIGNATURE
 
+
 $users_status = DB::table('users_status')->select('attachsig')->where('uid', $userinfo['uid'])->first();
 
-if ($users_status['attsig'] == 1) {
+if ($users_status['attachsig'] == 1) {
     $checked = true;
 } else {
     $checked = false;

@@ -33,7 +33,6 @@ function L_encrypt(string $txt): string
     return crypt::encryptK($txt, substr(users::cookieUser(2), 8, 8));
 }
 
-
 if (!users::getUser()) {
     Header('Location: ' . site_url('user.php'));
 } else {
@@ -41,8 +40,7 @@ if (!users::getUser()) {
 
     include("themes/$theme/theme.php");
 
-    $Titlesitename = translate("Carnet d'adresses");
-
+    config::get('npds.Titlesitename', translate("Carnet d'adresses"));
     include("storage/meta/meta.php");
 
     echo '<link id="bsth" rel="stylesheet" href="themes/_skins/default/bootstrap.min.css" />';
@@ -76,9 +74,7 @@ if (!users::getUser()) {
 
         echo '<div class="row">';
 
-        $contents = explode("\n", $contents);
-
-        foreach ($contents as $tab) {
+        foreach (explode("\n", $contents) as $tab) {
             $tabi = explode(';', $tab);
             
             if ($tabi[0] != '') {

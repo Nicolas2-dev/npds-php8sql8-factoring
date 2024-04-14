@@ -258,12 +258,12 @@ class users
     /**
      * retourne un menu utilisateur 
      *
-     * @param   string  $mns  [$mns description]
+     * @param   int     $mns  [$mns description]
      * @param   string  $qui  [$qui description]
      *
      * @return  void
      */
-    public static function member_menu(string $mns, string $qui): void
+    public static function member_menu(int $mns, string $qui): void
     {
         $op = Request::query('op');
 
@@ -324,7 +324,10 @@ class users
             </li>';
         }
         
-        $cl_rs = ($_SERVER['QUERY_STRING'] == 'ModPath=reseaux-sociaux&ModStart=reseaux-sociaux' or $_SERVER['QUERY_STRING'] == 'ModPath=reseaux-sociaux&ModStart=reseaux-sociaux&op=EditReseaux') ? 'active' : '';
+        $cl_rs = ($_SERVER['QUERY_STRING'] == 'ModPath=reseaux-sociaux&ModStart=reseaux-sociaux' or  $_SERVER['QUERY_STRING'] == 'ModPath=reseaux-sociaux&ModStart=reseaux-sociaux&op=EditReseaux' 
+            ? 'active' 
+            : ''
+        );
         
         echo '
             <li class="nav-item">
@@ -338,7 +341,7 @@ class users
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link '. (strstr($_SERVER['REQUEST_URI'], '/viewpmsg.php') ? 'active' : '') .'" href="'. site_url('viewpmsg.php') .'" title="'. translate("Message personnel") .'"  data-bs-toggle="tooltip" ><i class="far fa-envelope fa-2x d-xl-none">
+                <a class="nav-link '. (strstr($_SERVER['REQUEST_URI'], '/viewpmsg.php') ? 'active' : '') .' " href="'. site_url('viewpmsg.php') .'" title="'. translate("Message personnel") .'"  data-bs-toggle="tooltip" ><i class="far fa-envelope fa-2x d-xl-none"></i>
                     <span class="d-none d-xl-inline">&nbsp;' . translate("Message") . '</span>
                 </a>
             </li>

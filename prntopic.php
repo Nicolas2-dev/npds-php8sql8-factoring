@@ -148,7 +148,7 @@ include("storage/meta/meta.php");
 
 echo '
     <link rel="stylesheet" href="assets/shared/bootstrap/dist/css/bootstrap.min.css" />
-    ' . css::import_css($tmp_theme, $language, '', '', '') . '
+    ' . css::import_css($tmp_theme, Config::get('npds.language'), '', '', '') . '
     </head>
     <body>
         <div max-width="640" class="container p-3 n-hyphenate">

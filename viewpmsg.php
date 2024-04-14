@@ -26,7 +26,7 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-$cache_obj =  $SuperCache ? new cacheManager() : new SuperCacheEmpty();
+// $cache_obj =  $SuperCache ? new cacheManager() : new SuperCacheEmpty();
 
 include("auth.php");
 

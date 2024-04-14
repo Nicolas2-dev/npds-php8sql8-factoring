@@ -31,13 +31,13 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-$cache_obj = $SuperCache ? new cacheManager() : new SuperCacheEmpty();
+// $cache_obj = $SuperCache ? new cacheManager() : new SuperCacheEmpty();
 
 include('auth.php');
 
 global $NPDS_Prefix;
 
-if ($allow_upload_forum) {
+if (Config::get('forum.config.allow_upload_forum')) {
     include("modules/upload/upload_forum.php");
 }
 
@@ -100,10 +100,10 @@ if (isset($user)) {
 $sql = "SELECT topic_title, topic_status, topic_poster FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
 $total = forum::get_total_posts($forum, $topic, "topic", $Mmod);
 
-if ($total > $posts_per_page) {
+if ($total > Config::get('forum.config.posts_per_page')) {
     $times = 0;
     
-    for ($x = 0; $x < $total; $x += $posts_per_page) {
+    for ($x = 0; $x < $total; $x += Config::get('forum.config.posts_per_page')) {
         $times++;
     }
 
@@ -146,18 +146,18 @@ function maketree($rootcatid, $sql, $maxlevel)
 
 function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $idtog)
 {
-    global $imgtmpPI, $imgtmpNE, $user;
-    global $smilies, $theme, $forum, $forum_type, $allow_bbcode, $allow_to_post, $forum_access, $Mmod, $topic, $lock_state, $userdata;
-    global $allow_upload_forum, $att, $short_user, $last_read, $toggle;
+    global $imgtmpPI, $user;
+    global $smilies, $forum, $forum_type, $allow_bbcode, $allow_to_post, $forum_access, $Mmod, $topic, $lock_state, $userdata;
+    global $allow_upload_forum, $att, $last_read;
 
     settype($result, 'string');
 
-    $my_rsos = array();
     $count = 0;
 
     settype($idtog, 'integer');
 
     $list = $table[$parcat];
+
     foreach ($list as $key => $val) {
         $myrow = unserialize($val);
 
@@ -184,7 +184,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
             $res_id = array();
             $my_rs = '';
 
-            if (!$short_user) {
+            if (!Config::get('npds.short_user')) {
                 $posterdata_extend = forum::get_userdata_extend_from_id($myrow['poster_id']);
 
                 include('modules/reseaux-sociaux/config/reseaux-sociaux.conf.php');
@@ -288,7 +288,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                 <div class="card ' . $cardcla . ' border-dark">
                 <div class="card-header">';
 
-        if ($smilies) {
+        if (Config::get('npds.smilies')) {
             if ($myrow['poster_id'] !== '0') {
                 if ($posterdata['user_avatar'] != '') {
                     
@@ -632,7 +632,7 @@ if (isset($start)) {
     $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'" . $post_aff . "ORDER BY post_id";
 }
 
-if ($allow_upload_forum) {
+if (Config::get('forum.config.allow_upload_forum')) {
     $visible = '';
 
     if (!$Mmod) {
@@ -668,13 +668,13 @@ if ($forum_access != 9) {
     }
 }
 
-if ($SuperCache) {
-    $cache_clef = "forum-jump-to";
-    $CACHE_TIMINGS[$cache_clef] = 600;
-    $cache_obj->startCachingBlock($cache_clef);
-}
+// if ($SuperCache) {
+//     $cache_clef = "forum-jump-to";
+//     $CACHE_TIMINGS[$cache_clef] = 600;
+//     $cache_obj->startCachingBlock($cache_clef);
+// }
 
-if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+// if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
     echo '
     <form action="'. site_url('viewforum.php') .'" method="post">
     <div class="mb-3 row">
@@ -709,11 +709,11 @@ if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1
     </div>
     </form>
     <a name="botofpage"></a>';
-}
+// }
 
-if ($SuperCache) {
-    $cache_obj->endCachingBlock($cache_clef);
-}
+// if ($SuperCache) {
+//     $cache_obj->endCachingBlock($cache_clef);
+// }
 
 if ((($Mmod) and ($forum_access != 9)) or (isset($adminforum))) {
     echo '

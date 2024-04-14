@@ -10,8 +10,9 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-declare(strict_types=1);
+//declare(strict_types=1);
 
+use npds\system\auth\users;
 use npds\system\auth\groupe;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
@@ -19,38 +20,21 @@ use npds\system\config\Config;
 use npds\system\security\hack;
 use npds\system\language\language;
 use npds\system\language\metalang;
+use npds\modules\blog\support\blog;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-settype($gr_name, 'string');
-settype($new_pages, 'string');
-
-define('CITRON', 'tarteaucitron');
-
-function convert_ressources($Xcontent)
-{
-    global $op;
-
-    for ($i = 0; $i < strlen($Xcontent); $i++) {
-        if (strtoupper(substr($Xcontent, $i, 4)) == "src=") {
-            if ((strtoupper(substr($Xcontent, $i + 4, 3)) != "HTT") 
-            and (strtoupper(substr($Xcontent, $i + 4, 4)) != "\"HTT")) {
-                $Xcontent = substr_replace($Xcontent, 'src='. site_url('getfile.php?att_id='. $op .'&amp;apli=minisite&amp;att_type=&amp;att_size=&amp;att_name='), $i, 4);
-            }
-            $i = $i + 4;
-        }
-    }
-
-    return language::aff_langue($Xcontent);
-}
 
 // NPDS copyright ... don't remove !
 $copyright = '<span class="blog_sname">' . Config::get('npds.sitename') . '</span>&nbsp;<span class="blog_npds">NPDS&nbsp;HUB-BLOG&nbsp;<a href="http://www.npds.org">NPDS</a></span>';
 
 // Troll Control for security
 $affich = false;
+
+$op = ($op = Request::query('op') ? $op : Request::input('op'));
 
 if (($op != '') and ($op)) {
     if (preg_match('#^[a-z0-9_\.-]#i', $op) 
@@ -64,27 +48,29 @@ if (($op != '') and ($op)) {
     and !stristr($op, "object") 
     and !stristr($op, "meta")) {
         
-        global $user, $super_admintest;
+        global $super_admintest;
         
         $adminblog = ($super_admintest) ? true : false;
+        
         $dir = "storage/users_private/$op/mns/";
 
         if (dirname($op) != 'groupe') {
             // single user
             $userdata = forum::get_userdata($op);
             
+            settype($gr_name, 'string');
+
             if ($userdata['mns'] == true) {
                 $affich = true;
                 
                 if (stristr($userdata['user_avatar'], "users_private")) {
                     $direktori = '';
                 } else {
-                    global $theme;
                     $direktori = 'assets/images/forum/avatar/';
                     
-                    if (function_exists("theme_image")) {
+                    if (method_exists( theme::class, 'theme_image')) {
                         if (theme::theme_image("forum/avatar/blank.gif")) {
-                            $direktori = "themes/$theme/images/forum/avatar/";
+                            $direktori = 'themes/'. theme::getTheme() .'/images/forum/avatar/';
                         }
                     }
                 }
@@ -92,6 +78,7 @@ if (($op != '') and ($op)) {
                 $avatar_mns = $direktori . $userdata['user_avatar'];
             }
 
+            $user = users::getUser();
             $userX = base64_decode($user);
             $userdataX = explode(':', $userX);
 
@@ -136,9 +123,8 @@ if ($affich) {
     $fic = $dir . 'index.html';
 
     if (file_exists($fic)) {
-        $Titlesitename = "Minisite - $op";
-        $nuke_url = site_url('minisite.php?op='. $op); // not used ????
 
+        Config::set('npds.Titlesitename', 'Minisite - '.Request::query('op'));
         include("storage/meta/meta.php");
 
         echo '
@@ -198,23 +184,22 @@ if ($affich) {
             $cpt = file($compteur);
             $cpt = $cpt[0] + 1;
             $fp = fopen($compteur, "w");
-            fwrite($fp, $cpt);
+            
+            fwrite($fp, (string) $cpt);
             fclose($fp);
         }
 
         // Analyse et convertion des liens et images, blog, header, footer ...
-        $perpage = strstr($Xcontent, '!blog_page!') 
+        $perpage = (strstr($Xcontent, '!blog_page!') 
             ? substr($Xcontent, strpos($Xcontent, "!blog_page!", 0) + 11, 2) 
-            : 4;
+            : 4
+        );
 
+        settype($new_pages, 'string');
+        
         if (strstr($Xcontent, '!blog!')) {
-            include("modules/blog/http/readnews.php");
 
-            settype($startpage, 'integer');
-            settype($perpage, 'integer');
-            settype($action, 'string');
-
-            $content = readnews($dir, $op, $perpage, $startpage, $action, $adminblog);
+            $content = blog::readnews($dir, $op, $perpage, $adminblog);
 
             if (strstr($content, '!l_new_pages!')) {
                 $new_pages = substr($content, strpos($content, "!l_new_pages!") + 13);
@@ -230,7 +215,7 @@ if ($affich) {
                 $fp = fopen($l_fic, 'r');
 
                 if (filesize($l_fic) > 0) {
-                    $Hcontent = convert_ressources(fread($fp, filesize($l_fic)));
+                    $Hcontent = blog::convert_ressources($op, fread($fp, filesize($l_fic)));
                 }
 
                 fclose($fp);
@@ -245,7 +230,7 @@ if ($affich) {
                 $fp = fopen($l_fic, 'r');
 
                 if (filesize($l_fic) > 0) {
-                    $Fcontent = convert_ressources(fread($fp, filesize($l_fic)));
+                    $Fcontent = blog::convert_ressources($op, fread($fp, filesize($l_fic)));
                 }
 
                 fclose($fp);
@@ -253,21 +238,21 @@ if ($affich) {
         }
 
         $blog_ajouter = (($adminblog) and (strstr($Xcontent, '!l_blog_ajouter!'))) ? '!l_blog_ajouterOK!' : '';
-        $Xcontent = convert_ressources($Xcontent);
+        $Xcontent = blog::convert_ressources($op, $Xcontent);
 
         // Meta-lang et removehack local
         $MNS_METALANG_words = array(
-            "'!l_header!'i" => "$Hcontent",
-            "'!l_footer!'i" => "$Fcontent",
+            "'!l_header!'i"          => "$Hcontent",
+            "'!l_footer!'i"          => "$Fcontent",
             "'!blog_page!$perpage'i" => '',
-            "'!l_compteur!'i" => $cpt,
-            "'!l_new_pages!'i" => $new_pages,
-            "'!l_blog_ajouter!'i" => $blog_ajouter,
-            "'!blog!'i" => $content,
-            "'!copyright!'i" => $copyright,
-            "'!avatar!'i" => $avatar_mns,
-            "'!id_mns!'i" => $op,
-            "'!gr_name!'i" => language::aff_langue($gr_name)
+            "'!l_compteur!'i"        => $cpt,
+            "'!l_new_pages!'i"       => $new_pages,
+            "'!l_blog_ajouter!'i"    => $blog_ajouter,
+            "'!blog!'i"              => $content,
+            "'!copyright!'i"         => $copyright,
+            "'!avatar!'i"            => $avatar_mns,
+            "'!id_mns!'i"            => $op,
+            "'!gr_name!'i"           => language::aff_langue($gr_name)
         );
 
         $Xcontent = preg_replace(array_keys($MNS_METALANG_words), array_values($MNS_METALANG_words), $Xcontent);
@@ -276,14 +261,14 @@ if ($affich) {
         //applique aff_video que sur la partie affichage
         $rupt = strpos($Xcontent, '#v_yt#');
 
-        echo substr($Xcontent, 0, $rupt);
+        echo substr($Xcontent, 0, (int) $rupt);
         echo forum::aff_video_yt(substr($Xcontent, $rupt + 6));
 
         if ($adminblog) {
             echo '
                 <script type="text/javascript">
                     //<![CDATA[
-                        $(".modal-body").load("modules/blog/view/matrice/readme.' . $language . '.txt"
+                        $(".modal-body").load("modules/blog/view/matrice/readme.' . Config::get('npds.language') . '.txt"
                         , function(dataaide, textStatus, jqxhr) {
                             $("#aide_mns").html(dataaide.replace(/(\r\n|\n\r|\r|\n)/g, "<br />"));
                         });

@@ -49,7 +49,7 @@ if (isset($user) and $user != '') {
 $Titlesitename = "NPDS wspad";
 include("storage/meta/meta.php");
 echo '<link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />';
-echo css::import_css($tmp_theme, $language, $skin, '', '');
+echo css::import_css($tmp_theme, Config::get('npds.language'), $skin, '', '');
 echo '
     </head>
     <body style="padding: 10px; background:#ffffff;">';

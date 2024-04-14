@@ -74,7 +74,7 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     }
 
     // extract cookie user
-    //$user = users::extractUser();
+    $user = users::extractUser();
 
     // extract cookie user_language
     if (isset($user_language)) {
@@ -84,14 +84,7 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
     }
 
     // extract cookie admin
-    //$admin = authors::extractAdmin();
-
-    //if (isset($admin)) {
-    // if ($admin == true) {
-    //     $ibid = explode(':', base64_decode($admin));
-    //     array_walk($ibid, [protect::class, 'url']);
-    //     $admin = base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));
-    // }
+    $admin = authors::extractAdmin();
 
     // Cookies - analyse et purge - shiney 07-11-2010
     if (!empty($_SERVER)) {
@@ -151,7 +144,7 @@ if (isset($choice_user_language)) {
 }
 
 // si multilanguage est actif
-if ((Config::get('npds.$multi_langue')) && isset($user_language)) {
+if ((Config::get('npds.multi_langue')) && isset($user_language)) {
     if (($user_language != '') and ($user_language != " ")) {
         $tmpML = stristr($languageslist, $user_language);
         $tmpML = explode(' ', $tmpML);

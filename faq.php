@@ -46,12 +46,10 @@ function ShowFaq(): void
         <a href="'. site_url('faq.php') .'" title="' . translate("Retour à l'index FAQ") . '" data-bs-toggle="tooltip">Index</a>&nbsp;&raquo;&raquo;&nbsp;' . StripSlashes($categories) . '
     </p>';
 
-    $id_cat = Request::query('id_cat');
-
     //cette requette ne sert a rien !!!
     foreach (DB::table('faqanswer')
                 ->select('id', 'id_categorie', 'question', 'answer')
-                ->where('id', $id_cat)
+                ->where('id', Request::query('id_cat'))
                 ->get() as $faqanswer) 
     {
     }

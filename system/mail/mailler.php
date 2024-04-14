@@ -313,11 +313,11 @@ class mailler
     /**
      * utilisateur dans le fichier des mails incorrect true or false 
      *
-     * @param   int  $utilisateur  [$utilisateur description]
+     * @param   string|int  $utilisateur  [$utilisateur description]
      *
      * @return  bool
      */
-    public static function isbadmailuser(int $utilisateur): bool
+    public static function isbadmailuser(string|int $utilisateur): bool
     {
         $contents = '';
         $filename = "storage/users_private/usersbadmail.txt";

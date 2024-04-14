@@ -13,6 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+use npds\system\config\Config;
 use npds\system\support\facades\Request;
 
 
@@ -22,11 +23,11 @@ if (!function_exists("Mysql_Connexion")) {
 
 function accessAdmin()
 {
-    global $pdst, $Titlesitename;
+    global $pdst;
 
     $pdst = -1;
-    $Titlesitename = 'NPDS - admin erreur !';
 
+    Config::set('npds.Titlesitename', 'NPDS - admin erreur !');
     include("themes/default/header.php");
 
     echo '
@@ -58,11 +59,11 @@ function accessAdmin()
 
 function accessModule()
 {
-    global $pdst, $Titlesitename;
+    global $pdst;
 
     $pdst = 0;
-    $Titlesitename = 'NPDS - Modules erreur !';
 
+    Config::set('npds.Titlesitename', 'NPDS - Modules erreur !');
     include("themes/default/header.php");
 
     echo '
@@ -94,11 +95,11 @@ function accessModule()
 
 function accessNotModule()
 {
-    global $pdst, $Titlesitename;
+    global $pdst;
 
     $pdst = 0;
-    $Titlesitename = 'NPDS - Modules erreur !';
 
+    Config::set('npds.Titlesitename', 'NPDS - Modules erreur !');
     include("themes/default/header.php");
 
     echo '
@@ -126,8 +127,8 @@ function accessNotModule()
 
 function accessError()
 {
-    $Titlesitename = 'NPDS - Access erreur !';
-
+    Config::set('npds.Titlesitename', 'NPDS - Access erreur !');
+    
     if (file_exists("storage/meta/meta.php")) {
         include("storage/meta/meta.php");
     }

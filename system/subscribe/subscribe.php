@@ -15,15 +15,15 @@ class subscribe
     /**
      * Assure l'envoi d'un mail pour un abonnement
      *
-     * @param   string  $Xtype         [$Xtype description]
-     * @param   int|string  $Xtopic    [$Xtopic description]
+     * @param   string       $Xtype         [$Xtype description]
+     * @param   int|string   $Xtopic    [$Xtopic description]
      * @param   int|string   $Xforum   [$Xforum description]
-     * @param   string  $Xresume       [$Xresume description]
-     * @param   string  $Xsauf         [$Xsauf description]
+     * @param   string       $Xresume       [$Xresume description]
+     * @param   int          $Xsauf         [$Xsauf description]
      *
      * @return  void
      */
-    public static function subscribe_mail(string $Xtype, int|string $Xtopic, int|string $Xforum, string $Xresume, string $Xsauf): void
+    public static function subscribe_mail(string $Xtype, int|string $Xtopic, int|string $Xforum, string $Xresume, string|int $Xsauf): void
     {
         // $Xtype : topic, forum ... 
         // $Xtopic clause WHERE 
@@ -118,13 +118,13 @@ class subscribe
     /**
      * Retourne true si le membre est abonné; à un topic ou forum
      *
-     * @param   string  $Xuser  [$Xuser description]
+     * @param   int  $Xuser  [$Xuser description]
      * @param   string  $Xtype  [$Xtype description]
-     * @param   int     $Xclef  [$Xclef description]
+     * @param   string     $Xclef  [$Xclef description]
      *
      * @return  bool
      */
-    public static function subscribe_query(string $Xuser, string $Xtype, int $Xclef): bool
+    public static function subscribe_query(int $Xuser, string $Xtype, string $Xclef): bool
     {
         if ($Xtype == 'topic') {
             $result = DB::table('subscribe')

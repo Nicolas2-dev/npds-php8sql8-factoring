@@ -85,7 +85,7 @@ function show_imm($op)
                 include("storage/meta/meta.php");
                 include("themes/default/view/include/header_head.inc");
 
-                echo css::import_css($theme, $language, '', '', '');
+                echo css::import_css($theme, Config::get('npds.language'), '', '', '');
 
                 echo '
                 </head>

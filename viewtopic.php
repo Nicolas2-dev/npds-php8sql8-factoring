@@ -41,7 +41,7 @@ if (!function_exists("Mysql_Connexion")) {
 include('auth.php');
 global $NPDS_Prefix, $admin, $adminforum;
 
-if ($allow_upload_forum) {
+if (Config::get('forum.config.allow_upload_forum')) {
     include("modules/upload/upload_forum.php");
 }
 
@@ -130,11 +130,11 @@ if (isset($user)) {
 $sql = "SELECT topic_title, topic_status, topic_poster FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
 $total = forum::get_total_posts($forum, $topic, "topic", $Mmod);
 
-if ($total > $posts_per_page) {
+if ($total > Config::get('forum.config.posts_per_page')) {
     $times = 0;
     $current_page = 0;
 
-    for ($x = 0; $x < $total; $x += $posts_per_page) {
+    for ($x = 0; $x < $total; $x += Config::get('forum.config.posts_per_page')) {
         if (($x >= $start) and ($current_page == 0)) {
             $current_page = $times + 1;
         }
@@ -144,17 +144,17 @@ if ($total > $posts_per_page) {
 }
 
 if ($start == 9999) {
-    $start = $posts_per_page * ($pages - 1);
+    $start = Config::get('forum.config.posts_per_page') * ($pages - 1);
     if ($start < 0) {
         $start = 0;
     }
 }
 
-$nbPages = ceil($total / $posts_per_page);
+$nbPages = ceil($total / Config::get('forum.config.posts_per_page'));
 $current = 1;
 
 if ($start >= 1) {
-    $current = $start / $posts_per_page;
+    $current = $start / Config::get('forum.config.posts_per_page');
 } else if ($start < 1) {
     $current = 0;
 } else {
@@ -311,7 +311,7 @@ echo '
         </div>
     </div>';
 
-if ($total > $posts_per_page) {
+if ($total > Config::get('forum.config.posts_per_page')) {
     $times = 1;
     echo '
         <div class="d-flex my-2 justify-content-between flex-wrap">
@@ -328,7 +328,7 @@ if ($total > $posts_per_page) {
                 </li>
                 </ul>
             </div>';
-    echo paginator::paginate(site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start='), '', $nbPages, $current, $adj = 3, $posts_per_page, $start);
+    echo paginator::paginate(site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start='), '', $nbPages, $current, $adj = 3, Config::get('forum.config.posts_per_page'), $start);
     echo '
         </div>';
 }
@@ -340,21 +340,21 @@ if ($Mmod) {
 }
 
 settype($start, "integer");
-settype($posts_per_page, "integer");
+// settype($posts_per_page, "integer");
 settype($pages, "integer");
 
 if (isset($start)) {
     if ($start == 9999) {
-        $start = $posts_per_page * ($pages - 1);
+        $start = Config::get('forum.config.posts_per_page') * ($pages - 1);
         
         if ($start < 0) {
             $start = 0;
         }
     }
 
-    $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'" . $post_aff . "ORDER BY post_id LIMIT $start, $posts_per_page";
+    $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'" . $post_aff . "ORDER BY post_id LIMIT $start, ". Config::get('forum.config.posts_per_page');
 } else {
-    $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'" . $post_aff . "ORDER BY post_id LIMIT $start, $posts_per_page";
+    $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'" . $post_aff . "ORDER BY post_id LIMIT $start, ". Config::get('forum.config.posts_per_page');
 }
 
 if (!$result = sql_query($sql)) {
@@ -365,7 +365,7 @@ $mycount = sql_num_rows($result);
 $myrow = sql_fetch_assoc($result);
 $count = 0;
 
-if ($allow_upload_forum) {
+if (Config::get('forum.config.allow_upload_forum')) {
     $visible = '';
 
     if (!$Mmod) { 
@@ -580,7 +580,7 @@ do {
                 </div>
                 <div class="card-text pt-2">';
 
-    if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) {
+    if ((Config::get('forum.config.allow_bbcode')) and ($forum_type != 6) and ($forum_type != 5)) {
         $message = forum::smilie($message);
         $message = forum::aff_video_yt($message);
         $message = code::af_cod($message);
@@ -599,7 +599,7 @@ do {
         echo '</div>';
     }
 
-    if ($allow_upload_forum and ($att > 0)) {
+    if (Config::get('forum.config.allow_upload_forum') and ($att > 0)) {
         $post_id = $myrow['post_id'];
         echo '<div class="card-text">';
         echo display_upload("forum_npds", $post_id, $Mmod);
@@ -647,7 +647,7 @@ do {
         if (($Mmod) or ($postuser) and (!$lock_state) and ($posterdata['uid'] != '')) {
             echo '<a class="me-3" href="'. site_url('editpost.php?post_id=' . $myrow["post_id"] . '&amp;topic=' . $topic . '&amp;forum=' . $forum . '&amp;arbre=0') .'" title="' . translate("Editer") . '" data-bs-toggle="tooltip"><i class="fa fa-edit fa-lg"></i></a>';
             
-            if ($allow_upload_forum) {
+            if (Config::get('forum.config.allow_upload_forum')) {
                 $PopUp = win_upload("forum_npds", $myrow['post_id'], $forum, $topic, "popup");
                 echo '<a class="me-3" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . translate("Fichiers") . '" data-bs-toggle="tooltip"><i class="fa fa-download fa-lg"></i></a>';
 
@@ -691,7 +691,7 @@ unset($tmp_imp);
 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
 sql_query($sql);
 
-if ($total > $posts_per_page) {
+if ($total > Config::get('forum.config.posts_per_page')) {
     echo '
         <div class="d-flex my-2 justify-content-between flex-wrap">
             <nav>
@@ -704,7 +704,7 @@ if ($total > $posts_per_page) {
                 </li>
                 </ul>
             </nav>'
-        . paginator::paginate(site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start='), '', $nbPages, $current, $adj = 3, $posts_per_page, $start) . '
+        . paginator::paginate(site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;start='), '', $nbPages, $current, $adj = 3, Config::get('forum.config.posts_per_page'), $start) . '
         </div>';
 }
 

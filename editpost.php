@@ -280,7 +280,7 @@ if (Request::query('submitS')) {
             </div>';
         else {
             echo '<strong>' . translate("Edition de la soumission") . '</strong> : ' . $title;
-            echo "<input type=\"hidden\" name=\"subject\" value=\"" . htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'utf-8') . "\" />";
+            echo '<input type="hidden" name="subject" value="' . htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'utf-8') . '" />';
         }
     } else {
         forum::forumerror('0036');

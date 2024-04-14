@@ -17,11 +17,17 @@ use npds\system\assets\css;
 use npds\system\config\Config;
 use npds\system\utility\crypt;
 use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
+
+
+vd(
+    Request::all()
+);
 
 switch ($apli) {
     case 'f-manager':
@@ -122,7 +128,7 @@ switch ($apli) {
                     if ($att_type == 'text/source') {
                         include('storage/meta/meta.php');
 
-                        echo css::import_css(Config::get('npds.Default_Theme'), $language, '', '', '');
+                        echo css::import_css(Config::get('npds.Default_Theme'), Config::get('npds.language'), '', '', '');
                         
                         echo '
                         </head>
@@ -166,12 +172,13 @@ switch ($apli) {
         $blanc = imagecolorallocate($img, 255, 255, 255);
         $noir = imagecolorallocate($img, 0, 0, 0);
         imagecolortransparent($img, $blanc);
-        // if ('utf-8'=="utf-8")
+        // if ('utf-8'=="utf-8") {
         //    $mot=utf8_decode($mot);
+        // }
         imagestring($img, $font, 1, 1, $mot, $noir);
         imagepng($img);
         imagedestroy($img);
-        //      header('Content-type: image/png');// no need ? as included in other pages we have header already send ..?!
+        // header('Content-type: image/png');// no need ? as included in other pages we have header already send ..?!
         break;
 
     default:

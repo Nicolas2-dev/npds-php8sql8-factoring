@@ -208,7 +208,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         $userR = explode(':', $userX);
     }
 
-    if ($solved) {
+    if (Config::get('forum.config.solved')) {
         if (isset($closoled)) {
             $closol = "and topic_status='2'";
             $mess_closoled = '<a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . translate("Sans") . ' ' . translate("Résolu") . '</a>';
@@ -288,9 +288,11 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         </div>';
 
     settype($start, "integer");
-    settype($topics_per_page, "integer");
+    //settype($topics_per_page, "integer");
 
-    $sql = "SELECT * FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum' $closol ORDER BY topic_first,topic_time DESC LIMIT $start, $topics_per_page";
+
+
+    $sql = "SELECT * FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum' $closol ORDER BY topic_first,topic_time DESC LIMIT $start, ". Config::get('forum.config.topics_per_page');
     if (!$result = sql_query($sql)) {
         forum::forumerror('0004');
     }
@@ -338,14 +340,14 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                     $image_subject = $rowQ1[0]['image'];
                 }
 
-                if (($replys + 1) > $posts_per_page) {
+                if (($replys + 1) > Config::get('forum.config.posts_per_page')) {
                     $pages = 0;
                     
-                    for ($x = 0; $x < ($replys + 1); $x += $posts_per_page) {
+                    for ($x = 0; $x < ($replys + 1); $x += Config::get('forum.config.posts_per_page')) {
                         $pages++;
                     }
 
-                    $last_post_url = "$hrefX?topic=" . $myrow['topic_id'] . "&amp;forum=$forum&amp;start=" . (($pages - 1) * $posts_per_page);
+                    $last_post_url = "$hrefX?topic=" . $myrow['topic_id'] . "&amp;forum=$forum&amp;start=" . (($pages - 1) * Config::get('forum.config.posts_per_page'));
                 } else {
                     $last_post_url = "$hrefX?topic=" . $myrow['topic_id'] . "&amp;forum=$forum";
                 }
@@ -353,7 +355,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                 if ($user) {
                     $sqlR = "SELECT rid FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum' AND uid='$userR[0]' AND topicid='" . $myrow['topic_id'] . "' AND status!='0'";
                     
-                    if ($replys >= $hot_threshold) {
+                    if ($replys >= Config::get('forum.config.hot_threshold')) {
                         $image = sql_num_rows(sql_query($sqlR)) == 0 ?
                             '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt faa-shake animated"></i></a>' :
                             '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>';
@@ -363,7 +365,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                             '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
                     }
                 } else {
-                    $image = ($replys >= $hot_threshold) ?
+                    $image = ($replys >= Config::get('forum.config.hot_threshold')) ?
                         '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>' :
                         '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
                 }
@@ -470,18 +472,18 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     }
 
     $count = 1;
-    $nbPages = ceil($all_topics / $topics_per_page);
+    $nbPages = ceil($all_topics / Config::get('forum.config.topics_per_page'));
 
     $current = 1;
     if ($start >= 1) {
-        $current = $start / $topics_per_page;
+        $current = $start / Config::get('forum.config.topics_per_page');
     } else if ($start < 1) {
         $current = 0;
     } else {
         $current = $nbPages;
     }
 
-    echo '<div class="mb-2"></div>' . paginator::paginate(site_url('viewforum.php?forum=' . $forum . '&amp;start='), $closol, $nbPages, $current, 1, $topics_per_page, $start);
+    echo '<div class="mb-2"></div>' . paginator::paginate(site_url('viewforum.php?forum=' . $forum . '&amp;start='), $closol, $nbPages, $current, 1, Config::get('forum.config.topics_per_page'), $start);
 
     echo forum::searchblock();
 
@@ -491,12 +493,12 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     if ($user) {
         echo '
         <i class="far fa-file-alt fa-lg faa-shake animated text-primary"></i> = ' . translate("Les nouvelles contributions depuis votre dernière visite.") . '<br />
-        <i class="fas fa-file-alt fa-lg faa-shake animated text-primary"></i> = ' . translate("Plus de") . ' ' . $hot_threshold . ' ' . translate("Contributions") . '<br />
+        <i class="fas fa-file-alt fa-lg faa-shake animated text-primary"></i> = ' . translate("Plus de") . ' ' . Config::get('forum.config.hot_threshold') . ' ' . translate("Contributions") . '<br />
         <i class="far fa-file-alt fa-lg text-primary"></i> = ' . translate("Aucune nouvelle contribution depuis votre dernière visite.") . '<br />
-        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . translate("Plus de") . ' ' . $hot_threshold . ' ' . translate("Contributions") . '<br />';
+        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . translate("Plus de") . ' ' . Config::get('forum.config.hot_threshold') . ' ' . translate("Contributions") . '<br />';
     } else {
         echo '
-        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . translate("Plus de") . ' ' . $hot_threshold . ' ' . translate("Contributions") . '<br />
+        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . translate("Plus de") . ' ' . Config::get('forum.config.hot_threshold') . ' ' . translate("Contributions") . '<br />
         <i class="far fa-file-alt fa-lg text-primary"></i> = ' . translate("Contributions") . '.<br />';
     }
 

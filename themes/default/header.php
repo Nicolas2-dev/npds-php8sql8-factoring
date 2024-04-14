@@ -31,7 +31,7 @@ if (!function_exists("Mysql_Connexion")) {
 
 function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords)
 {
-    global $theme, $language;
+    global $theme;
 
     if (Config::get('npds.gzhandler') == 1) {
         ob_start("ob_gzhandler");
@@ -103,7 +103,7 @@ function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_k
         include("themes/$tmp_theme/view/include/header_head.inc");
     }
 
-    echo css::import_css($tmp_theme, $language, '', $css_pages_ref, $css);
+    echo css::import_css($tmp_theme, Config::get('npds.language'), '', $css_pages_ref, $css);
 
     // Mod by Jireck - Chargeur de JS via routes/pages.php
     //importPageRefJs($js);

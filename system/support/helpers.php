@@ -2,11 +2,41 @@
 
 use npds\system\logs\logs;
 use npds\system\news\gzfile;
+use npds\system\theme\theme;
 use npds\system\auth\authors;
 use npds\system\news\zipfile;
 use npds\system\config\Config;
+use npds\system\language\metalang;
 use npds\system\support\facades\Request;
 
+
+if (! function_exists('MM_img'))
+{
+    /**
+     * Cette fonction est utilisée pour intégrer des smilies et comme service pour theme_img()
+     *
+     * @param   string  $ibid  [$ibid description]
+     *
+     * @return  string
+     */
+    function MM_img(string $ibid): string 
+    {
+        $ibid = metalang::arg_filter($ibid);
+        $ibidX = theme::theme_image($ibid);
+        
+        if ($ibidX) {
+            $ret = "<img src=\"$ibidX\" border=\"0\" alt=\"\" />";
+        } else {
+            if (@file_exists("assets/images/$ibid")) {
+                $ret = "<img src=\"assets/images/$ibid\" border=\"0\" alt=\"\" />";
+            } else {
+                $ret = false;
+            }
+        }
+
+        return $ret;
+    }
+}
 
 if (! function_exists('site_url'))
 {

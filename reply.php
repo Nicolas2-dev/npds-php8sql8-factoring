@@ -30,12 +30,13 @@ use npds\system\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\subscribe\subscribe;
 use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-$cache_obj = $SuperCache ? new cacheManager() : new SuperCacheEmpty();
+// $cache_obj = $SuperCache ? new cacheManager() : new SuperCacheEmpty();
 
 include('auth.php');
 
@@ -46,6 +47,9 @@ settype($cancel, 'string');
 if ($cancel) {
     header('Location: '. site_url('viewtopic.php?topic='. $topic .'&forum='. $forum));
 }
+
+$forum = Request::input('forum');
+
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
@@ -137,7 +141,7 @@ if ($submitS) {
         $hostname = Config::get('npds.dns_verif') ? @gethostbyaddr($poster_ip) : '';
         
         // anti flood
-        forum::anti_flood($modo, $anti_flood, $poster_ip, $userdata, Config::get('npds.gmt'));
+        forum::anti_flood($modo, Config::get('forum.config.anti_flood'), $poster_ip, $userdata, Config::get('npds.gmt'));
         //anti_spambot
         
         if (!spam::R_spambot($asb_question, $asb_reponse, $message)) {
@@ -146,7 +150,7 @@ if ($submitS) {
             die();
         }
 
-        if ($allow_html == 0 || isset($html)) {
+        if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
             $message = htmlspecialchars($message, ENT_COMPAT | ENT_HTML401, 'utf-8');
         }
 
@@ -159,7 +163,7 @@ if ($submitS) {
             //         $message =  str_replace(array("\r\n", "\r", "\n"), "<br />", $message);
         }
 
-        if (($allow_bbcode == 1) and ($forum_type != '6') and ($forum_type != '5')) {
+        if ((Config::get('forum.config.allow_bbcode') == 1) and ($forum_type != '6') and ($forum_type != '5')) {
             $message = forum::smile($message);
         }
 
@@ -172,7 +176,9 @@ if ($submitS) {
         $message = addslashes($message);
         $time = date("Y-m-d H:i:s", time() + ((int) Config::get('npds.gmt') * 3600));
 
-        $sql = "INSERT INTO " . $NPDS_Prefix . "posts (post_idH, topic_id, image, forum_id, poster_id, post_text, post_time, poster_ip, poster_dns) VALUES ('0', '$topic', '$image_subject', '$forum', '" . $userdata['uid'] . "', '$message', '$time', '$poster_ip', '$hostname')";
+        $sql = "INSERT INTO " . $NPDS_Prefix . "posts (post_idH, topic_id, image, forum_id, poster_id, post_text, post_time, poster_ip, poster_dns)
+             VALUES ('0', '$topic', '$image_subject', '$forum', '" . $userdata['uid'] . "', '$message', '$time', '$poster_ip', '$hostname')";
+             
         if (!$result = sql_query($sql)) {
             forum::forumerror('0020');
         } else {
@@ -249,7 +255,7 @@ if ($submitS) {
 } else {
     include('themes/default/header.php');
 
-    if ($allow_bbcode == 1) {
+    if (Config::get('forum.config.allow_bbcode') == 1) {
         include("assets/formhelp.java.php");
     }
 
@@ -393,7 +399,7 @@ if ($submitS) {
         echo '
                     </div>';
 
-        if ($allow_html == 1) {
+        if (Config::get('forum.config.allow_html') == 1) {
             echo '<span class="text-success float-end mt-2" title="HTML ' . translate("Activé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
         } else {
             echo '<span class="text-danger float-end mt-2" title="HTML ' . translate("Désactivé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
@@ -431,7 +437,7 @@ if ($submitS) {
             $reply = $message;
         }
 
-        if ($allow_bbcode) {
+        if (Config::get('forum.config.allow_bbcode')) {
             $xJava = ' onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
         }
 
@@ -450,7 +456,7 @@ if ($submitS) {
             <label class="form-label">' . translate("Options") . '</label>
             <div class="col-sm-12">';
 
-        if (($allow_html == 1) and ($forum_type != '6') and ($forum_type != '5')) {
+        if ((Config::get('forum.config.allow_html') == 1) and ($forum_type != '6') and ($forum_type != '5')) {
             if (isset($html)) {
                 $sethtml = 'checked';
             } else {
@@ -467,7 +473,7 @@ if ($submitS) {
         }
 
         if ($user) {
-            if ($allow_sig == 1 || $sig == 'on') {
+            if (Config::get('forum.config.allow_sig') == 1 || $sig == 'on') {
                 $asig = sql_query("SELECT attachsig FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'");
                 list($attachsig) = sql_fetch_row($asig);
                 
@@ -492,7 +498,7 @@ if ($submitS) {
             settype($upload, 'string');
             settype($up, 'string');
 
-            if ($allow_upload_forum) {
+            if (Config::get('forum.config.allow_upload_forum')) {
                 if ($upload == 'on') {
                     $up = 'checked="checked"';
                 }
@@ -692,7 +698,7 @@ if ($submitS) {
                     <div class="card-text pt-4">';
 
             $message = stripslashes($myrow['post_text']);
-            if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) {
+            if ((Config::get('forum.config.allow_bbcode')) and ($forum_type != 6) and ($forum_type != 5)) {
                 $message = forum::smilie($message);
                 $message = forum::aff_video_yt($message);
                 $message = code::af_cod($message);

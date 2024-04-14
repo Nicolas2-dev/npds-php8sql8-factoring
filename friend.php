@@ -60,18 +60,11 @@ function FriendSend(): void
     <form id="friendsendstory" action="'. site_url('friend.php') .'" method="post">
         <input type="hidden" name="sid" value="' . $sid . '" />';
 
-    if (users::getUser()) {
+    if ($user = users::getUser()) {
         $res_user = DB::table('users')
                 ->select('name', 'email')
                 ->where('uname', users::cookieUser(1))
                 ->first();
-
-        $yn = $res_user['name'];
-        $ye = $res_user['email'];  
-
-    } else {
-        $yn = '';
-        $ye = '';  
     }
 
     echo '
@@ -86,12 +79,12 @@ function FriendSend(): void
             <span class="help-block text-end"><span class="muted" id="countcar_fmail"></span></span>
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="yname" name="yname" value="' . $yn . '" maxlength="100" required="required" />
+            <input type="text" class="form-control" id="yname" name="yname" value="' . ($user ? $res_user['name'] : '') . '" maxlength="100" required="required" />
             <label for="yname">' . translate("Votre nom") . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_yname"></span></span>
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="ymail" name="ymail" value="' . $ye . '" maxlength="254" required="required" />
+            <input type="email" class="form-control" id="ymail" name="ymail" value="' . ($user ? $res_user['email'] : '') . '" maxlength="254" required="required" />
             <label for="ymail">' . translate("Votre Email") . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_ymail"></span></span>
         </div>';
@@ -228,18 +221,11 @@ function StorySent(): void
  */
 function RecommendSite(): void
 {
-    if (users::getUser()) {
+    if ($user = users::getUser()) {
         $res_user = DB::table('users')
                         ->select('name', 'email')
                         ->where('uname', users::cookieUser(1))
                         ->first();
-
-        $yn = $res_user['name'];
-        $ye = $res_user['email'];
-
-    } else {
-        $yn = '';
-        $ye = '';
     }
 
     include("themes/default/header.php");
@@ -251,12 +237,12 @@ function RecommendSite(): void
     <form id="friendrecomsite" action="'. site_url('friend.php') .'" method="post">
         <input type="hidden" name="op" value="SendSite" />
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="yname" name="yname" value="' . $yn . '" required="required" maxlength="100" />
+            <input type="text" class="form-control" id="yname" name="yname" value="' . ($user ? $res_user['name'] : '') . '" required="required" maxlength="100" />
             <label for="yname">' . translate("Votre nom") . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_yname"></span></span>
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="ymail" name="ymail" value="' . $ye . '" required="required" maxlength="100" />
+            <input type="email" class="form-control" id="ymail" name="ymail" value="' . ($user ? $res_user['email'] : '') . '" required="required" maxlength="100" />
             <label for="ymail">' . translate("Votre Email") . '</label>
         </div>
         <span class="help-block text-end"><span class="muted" id="countcar_ymail"></span></span>
@@ -361,9 +347,7 @@ function SiteSent(): void
 {
     include("themes/default/header.php");
 
-    $fname = Request::query('fname');
-
-    if ($fname == '') {
+    if ($fname = Request::query('fname')) {
         echo '
             <div class="alert alert-danger lead" role="alert">
                 <i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp;

@@ -14,11 +14,21 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\system\routing\url;
+
+
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-function filtre_module($strtmp)
+/**
+ * [filtre_module description]
+ *
+ * @param   string  $strtmp  [$strtmp description]
+ *
+ * @return  string
+ */
+function filtre_module(string $strtmp): string|bool|url
 {
     if (
         strstr($strtmp, '..') ||
@@ -30,7 +40,7 @@ function filtre_module($strtmp)
         stristr($strtmp, 'object') ||
         stristr($strtmp, 'meta')       
     ) {
-        Header('Location: '. site_url('die.php?op=module'));
+        url::redirect_url('die.php?op=module');
     } else {
         return $strtmp != '' ? true : false;
     }

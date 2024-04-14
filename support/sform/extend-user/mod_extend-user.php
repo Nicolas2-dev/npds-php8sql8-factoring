@@ -11,7 +11,7 @@
 /************************************************************************/
 /* Dont modify this file is you dont know what you make                 */
 /************************************************************************/
-declare(strict_types=1);
+//declare(strict_types=1);
 
 use npds\system\support\facades\Sform;
 

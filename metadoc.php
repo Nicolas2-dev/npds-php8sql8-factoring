@@ -14,76 +14,78 @@ declare(strict_types=1);
 
 use npds\system\assets\css;
 use npds\system\theme\theme;
+use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\DB;
 
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-$tmp_theme = theme::getTheme();
+include('themes/'. $theme = theme::getTheme() .'/theme.php');
 
-include("themes/$tmp_theme/theme.php");
-
-$Titlesitename = "META-LANG";
+Config::set('npds.Titlesitename', 'META-LANG');
 include("storage/meta/meta.php");
 
-echo css::import_css($tmp_theme, $language, theme::getSkin(), '', '');
-
-global $NPDS_Prefix;
-$Q = sql_query("SELECT def, content, type_meta, type_uri, uri, description FROM " . $NPDS_Prefix . "metalang ORDER BY 'type_meta','def' ASC");
+echo css::import_css($theme, Config::get('npds.language'), theme::getSkin(), '', '');
 
 echo '
     <div class="p-2">
     <table class="table table-striped table-responsive table-hover table-sm table-bordered" >
         <thead class="thead-default">
             <tr>
-                <th>META</th>
-                <th>Type</th>
-                <th>Description</th>
+                <th>'. translate("META") .'</th>
+                <th>'. translate("Type") .'</th>
+                <th>'. translate("Description") .'</th>
             </tr>
         </thead>';
 
 $cur_type = '';
+
 $ibid = 0;
-
-while (list($def, $content, $type_meta, $type_uri, $uri, $description) = sql_fetch_row($Q)) {
+foreach (DB::table('metalang ')
+            ->select('def', 'content', 'type_meta', 'type_uri', 'uri', 'description')
+            ->orderBy('type_meta, def', 'asc')
+            ->get() as $meta) 
+{   
     if ($cur_type == '') {
-        $cur_type = $type_meta;
+        $cur_type = $meta['type_meta'];
     }
-
-    if ($type_meta != $cur_type) {
+    
+    if ($meta['type_meta'] != $cur_type) {
         echo '
             </tr>
             <tr>
-                <td class="lead" colspan="3">' . $type_meta . '</td>
+                <td class="lead" colspan="3">'. $meta['type_meta'] .'</td>
             </tr>
         <tbody>';
 
-        $cur_type = $type_meta;
+        $cur_type = $meta['type_meta'];
     }
 
     if (isset($_SERVER['HTTP_REFERER']) and strstr($_SERVER['HTTP_REFERER'], 'submit.php')) {
-        $def_modifier = "<a class=\"tooltipbyclass\" href=\"#\" onclick=\"javascript:parent.tinymce.activeEditor.selection.setContent(' " . $def . " ');top.tinymce.activeEditor.windowManager.close();
-    \" title=\"Cliquer pour utiliser ce méta-mot dans votre texte.\">$def</a>";
+        $def_modifier = '<a class="tooltipbyclass" href="#" onclick="javascript:parent.tinymce.activeEditor.selection.setContent('. $meta['def'] .');top.tinymce.activeEditor.windowManager.close();
+    " title="'. translate("Cliquer pour utiliser ce méta-mot dans votre texte.") .'">'. $meta['def'] .'</a>';
     } else {
-        $def_modifier = $def;
+        $def_modifier = $meta['def'];
     }
 
     echo '<tr>
-                <td valign="top" align="left"><strong>' . $def_modifier . '</strong></td>
-                <td class="table-secondary" valign="top" align="left">' . $type_meta . '</td>';
+                <td valign="top" align="left"><strong>'. $def_modifier .'</strong></td>
+                <td class="table-secondary" valign="top" align="left">'. $meta['type_meta'] .'</td>';
 
-    if ($type_meta == "smil") {
-        eval($content);
-        echo '<td valign="top" align="left">' . $cmd . '</td>
+    if ($meta['type_meta'] == "smil") {
+        eval($meta['content']);
+        
+        echo '<td valign="top" align="left">'. $cmd .'</td> 
             </tr>';
-    } elseif ($type_meta == "mot") {
-        echo '<td valign="top" align="left">' . $content . '</td>
+    } elseif ($meta['type_meta'] == "mot") {
+        echo '<td valign="top" align="left">'. $meta['content'] .'</td>
             </tr>';
 
     } else {
-        echo '<td valign="top" align="left">' . language::aff_langue($description) . '</td>
+        echo '<td valign="top" align="left">'. language::aff_langue( (string) $meta['description']) .'</td>
             </tr>';
     }
 
@@ -91,7 +93,7 @@ while (list($def, $content, $type_meta, $type_uri, $uri, $description) = sql_fet
 }
 
 echo '
-            <tr><td colspan="3" >Meta-lang pour <a href="http://www.npds.org" >NPDS</a> ==> ' . $ibid . ' META(s)
+            <tr><td colspan="3" >'. sprintf(translate('Meta-lang pour %s : %d => %s'), '<a href="http://www.npds.org">NPDS</a>', $ibid, ($ibid > 2 ? 'Metas' : 'Meta')) .' 
                 </td>
             </tr>
         </tbody>

@@ -135,7 +135,7 @@ class form_handler
     /**
      * The orm_handler instance
      *
-     * @var orm_handler
+     * @var form_handler
      */
     private static ?form_handler $instance = null;
 

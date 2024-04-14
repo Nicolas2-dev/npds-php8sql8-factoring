@@ -14,6 +14,7 @@
 declare(strict_types=1);
 
 use npds\system\cache\cache;
+use npds\system\config\Config;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 
@@ -27,23 +28,30 @@ if ($rowQ1 = cache::Q_Select3(
         ->get(), 3600, 'tbl_config(*)')) 
 {
     foreach ($rowQ1[0] as $key => $value) {
-        $$key = $value;
+       // $$key = $value;
+        
+        if ($key == 'upload_table') {
+            Config::set('forum.config.upload_table', DB::getTablePrefix() . $value);
+        } else {
+            Config::set('forum.config.'.$key, $value);            
+        }       
     }
-
-    $upload_table = $NPDS_Prefix . $upload_table;
 }
 
+vd(Config::get('forum.config'));
 $forum = Request::query('forum');
+vd($forum);
 
-if ($allow_upload_forum) {
+if (Config::get('forum.config.allow_upload_forum')) {
     if ($rowQ1 = cache::Q_Select3(
         DB::table('forums')
             ->select('attachement')
-            ->where('forum_id', $forum)
+            ->where('forum_id', Request::query('forum'))
             ->get(), 3600, 'tbl_forum(attachement)')) 
     {
         foreach ($rowQ1[0] as $value) {
-            $allow_upload_forum = $value;
+            //$allow_upload_forum = $value;
+            Config::set('forum.config.allow_upload_forum', $value);
         }
     }
 }
@@ -51,12 +59,13 @@ if ($allow_upload_forum) {
 if ($rowQ1 = cache::Q_Select3(
     DB::table('forums')
         ->select('forum_pass')
-        ->where('forum_id', $forum)
+        ->where('forum_id', $forum_id = Request::query('forum'))
         ->where('forum_type', 1)
         ->get(), 3600, 'tbl_forum(forum_pass)')) 
 {
-    if (isset($Forum_Priv[$forum])) {
-        $Xpasswd = base64_decode($Forum_Priv[$forum]);
+    // forum_priv cookie
+    if (isset($Forum_Priv[$forum_id])) {
+        $Xpasswd = base64_decode($Forum_Priv[$forum_id]);
         
         foreach ($rowQ1[0] as $value) {
             $forum_xpass = $value;
@@ -65,16 +74,17 @@ if ($rowQ1 = cache::Q_Select3(
         if (md5($forum_xpass) == $Xpasswd) {
             $Forum_passwd = $forum_xpass;
         } else {
-            setcookie("Forum_Priv[$forum]", '', 0);
+            setcookie("Forum_Priv[$forum_id]", '', 0);
         }
 
     } else {
         if (isset($Forum_passwd)) {
             foreach ($rowQ1[0] as $value) {
                 if ($value == $Forum_passwd) {
-                    setcookie("Forum_Priv[$forum]", base64_encode(md5($Forum_passwd)), time() + 900);
+                    setcookie("Forum_Priv[$forum_id]", base64_encode(md5($Forum_passwd)), time() + 900);
                 }
             }
         }
     }
 }
+

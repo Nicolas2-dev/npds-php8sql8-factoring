@@ -468,7 +468,8 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
 
     foreach ($result as $download) { 
 
-        $Fichier = new File($download['durl']); // keep for extension
+        // keep for extension
+        $Fichier = new File($download['durl']); 
         $FichX = new FileManagement;
         $okfile = '';
         
