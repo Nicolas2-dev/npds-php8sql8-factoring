@@ -86,10 +86,6 @@ if (Request::input('submitS')) {
         }
     }
 
-    // requete inutile peut etre supprimer puisque on peut recuperer le name et l'uid 
-    // via le cookie pour refaire une requette ici juste pour recuper le uname et le uid de l'user;
-    // $userdata = forum::get_userdata(users::cookieUser(1));
-
     if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
         $message = htmlspecialchars($message, ENT_COMPAT | ENT_HTML401, 'utf-8');
     }
@@ -102,14 +98,9 @@ if (Request::input('submitS')) {
         $message = forum::make_clickable($message);
         $message = code::af_cod($message);
         $message = str_replace("\n", "<br />", hack::removeHack($message));
-        // $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . $userdata['uname'] . " / "
-        //         . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';
-
         $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . users::cookieUser(1) . " / "
                 . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
     } else {
-        // $message .= "\n\n" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
-
         $message .= "\n\n" . translate("Message édité par") . " : " . users::cookieUser(1) . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
     }
 
