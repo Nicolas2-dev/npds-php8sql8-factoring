@@ -1,34 +1,0 @@
-04/12/2024 21:48:58 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: ómoÕ•ÅJ›¿*úlÕ
-nqš˜¾v"Q¶ı÷¾QÉME]ĞÚ!'¾÷ZÔäÉÓQPjĞ}¦U[òI®Şb{WpO2\AÀïò™'fVÒ$v='‡jŸZ¼7²×äe‰4ıcoI×ÎQ­ÈÎyÎB5eÙUóTØ\ºfÀ½A^¹`^€ÂSlüfK”AJÃÓhÍGËØØÆ¿p¹x'.~¦ßùOĞg5|$^Ô0gw	•’-I™üÎEòríıšDù±:yòÉët”ƒfè6RnJ(2Ë¬Ä]'7^c¹ÇĞÑZ˜ƒ08„¹_:}¤JU!_hË_%b–"c·šô˜Œd#I2Mh0±E¡ìH³&T»Ù1°:ˆ~Õ»rû;æ"Âè;CYkıKC(É}
-04/12/2024 21:50:36 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: b‹ g2•1#°‚ı9½èláŠ…ºC@(°Äeas}¯(Yì»î¾‚ÂTÔ€ K1	)&—’ÙµP™}ÒŞù=l)!j „Fo^9[ÒÌaHLoÈœÛàî_‰òYN¦yÒ0,ZİéÁ‰Ú{WtÄA=œÃ9‡6ËL$ùuSÖÃŞeiW‘*ğ$¾‚°Æ—Ç3ÏÀ†ÄÿÓè 1ÜÁ‚ôpk)GØø¿­Mˆ¥¤c ş©n›}]R¨İÖSë&¹¯¹ÖÔëÎM{	?Û™ÑÛ
-Ö‹uC@Ş7>Ì¶´æ"sXc>Âñpv  ÷NØW—Ífàp'!UŠEEPÔó,ÿÇßfN0y)ÇÄ]ßH“ º¨ ıa¥ã÷ÚÉÃ¨3ĞI€h‰uÖfI)”7×\ ôà›7
-04/12/2024 22:05:07 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: ô¿âEÚ4ˆ¦¯4ä¬‘;ïŸíÆ{´L_XMäá#wÌ±Ù±Ø%Û'b–bdcùÖ2D:h¹[ôsLlÔ{%5Z£o¨8|ß,J£Í“ÚìMª†{Ú°Ô,Ü Œör[äSL\¹Õ²Lâ\«È'$U÷
-04/12/2024 22:05:28 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: GlÌê½ı— åŠ°^ó)ĞÇ¥ÀaúÊHÍ¹ÃÁ&µı²A¸…å‘)?åÜ-÷WN±s‡ç¿pèëÆæVO
-“ sdøCy’¬'şÿ|š¢‰HìNŞÒ(ùy@¤¨ù¦ÿ€u‘‚!­¼‰é“:®ıŠşà4g?|TAv¨œñ*ÀÆSYÖÜP2ÙÌïıÔÜÛÜã'Ò¸´·
-04/12/2024 22:05:53 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: î°dd^,:/Íú¯:Ñ$Ÿ§Ü%åƒuß“	nÚ¾Š!ÂŞ&Z„¿ÂïÇyè)Lä×ÃYNTŠ?ši!Ì®‡·g%MÅšB®£†ÜZşß}áÑ§ı(f€FŒœ_ª~©TëBrñ~»õ}o†Dã¤—;eÛ¥7ç¹zØ•ğ9
-oõ
-
-04/12/2024 22:07:31 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: ííLÚï(ôu7à•d“ºqkï8– sjÑ¯WÜi@“üy’{åïCÈ`ge2éBnHKr‚² ÙùÚâó¢ ²ˆ¯·µGÈòÔÖÙü¢—u"¬ÂÚÁréĞX²;e¤%èª´½qÌP°yF°Ã††Ú­˜h®ÿŒŸ#Ãè®ïÉGîBüj˜Ğò»*k&N AsE=˜Gá¦ıKNb,;’Ïî±uªÁlÛå5=ïÒ†óÄš¥±jæ¥$?ÉÕ~š¾R¢µ‘jg.PrÄ¼kß:ÙúW~µ¤yŞ~ åò}H·ŒcDÁzxhîùêG_¶–¼‡®_#@fSÏ¥¿–¬Cƒ¸œ_•™Ø;i¿:vDÇEAZ~R_¾®bù1­¥F˜2|¢:@Æ‡çÏN‡%4´ÅqSn‘„ÒŞ¨®¼^çöïÅ;4ïï	Ñvñ5œEŞj2 Ä
-04/12/2024 22:08:03 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: ûIû±¨÷ÓÛ±¢®?öÂÕˆ¹×^5°åÂ=ŞÈ_®ç_)\Š)
-04/12/2024 22:09:06 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: Ô=EÊuR=dİZ_¥Ošm!l©°H¡a÷#”ÿh¨áe?gé•øõj
-*WÉÅrÍIñİÕe…¼ÎÀNCõôşÜº×Oá¡ã×OJ_ûÉQ´à{!8W`„ ˆIS–‰ÏY"şpŠÜÛ•z^0üïmsÏ)Òmöd«ö4y§%p"aš¸4,†¸jÒİ’¹#¯ÖaÖu™âÖ6AË'=\É&_E1òivéAó|ú¨¶*g¤§i¡àÂÅö“n~f!ád
-ú›}‡¯7¬WÌŒ'A;«D2}Ë¸Ë*yX‹V
-04/12/2024 22:09:28 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: Y†I]·é=%Õ¨1>ì@èI×ÊÌô8½KûI,°?
-¬¶ÔåD¶1ÃòRW'Ò\GìÜI‡ßá-W¡§Ï3ƒüBÌj»ÄAêÇVrÌQP¾›>À_©v6UéÃ¥ûZRÍõ_Ô5©AÀ!ê„MXˆ7Şí…,[,© ÜŠ¶ŒZL­
-04/12/2024 22:20:40 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: ûócb·ŞjXå)Å·Pgj	H¨1“ïKùÛ“ˆö7Â?¶ aÆ0WÙFÌQí_’å®Òzôşš×sqg€>¥pÛëqKÌ©C£p¨ÿ«!)ı\«MşELº;
-04/12/2024 22:20:59 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: _ŒVOïâÄ¿Y™–g÷zOtÖè®8ºöã'ßo),,&²0}ßşşÍ8°Øé”ô=Íœ†À}‘Ç¸œ9lœDÆølh©„ñU!_™Üd}®/èğ±×šJf…Px0ÉmºnV¾dDqlS&e|–ùADİ¢èŸXr	¢nÏ“@õÄ›§ó¢Zİy}æğï'À{çàş7‡ÓE9õâriIË:7­Pô•o]… ]õ>Şe¸„ÃFCËbŒÑmiÃW£qâobÃ	æ¦ßàÁqÌêsœÊ¦F€’õ@—Íğ-~UJ%'Ğ·‡œK§
-ç–CñÔÂ‚ZøQ¡ K—2L¸„,·´T»EBÆóJc$
-04/12/2024 22:22:59 friend.php=>send Smtp mail by nicolas.l.devoy@gmail.com      Message could not be sent. Mailer Error: SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
-error:0A000086:SSL routines::certificate verify failedSMTP server error: QUIT command failed Detail: u¦$­;õxÚbß¼Y%ÿ–gÉãû.ñ‡Áñ=áU8‹E©»TÓH€èºXˆÒß ÿÒãl
-ÖÍ´ö=­F²äj²}F¿ÉÕà¦t7,
