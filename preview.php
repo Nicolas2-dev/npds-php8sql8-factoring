@@ -20,6 +20,7 @@ use npds\system\theme\theme;
 use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\security\hack;
+use npds\system\support\facades\Request;
 
 $userdatat = users::cookieUser();
 $messageP = $message;
@@ -42,10 +43,13 @@ switch ($acc) {
         //     $messageP = htmlspecialchars($messageP, ENT_COMPAT|ENT_HTML401, 'utf-8');
         // }
 
-        if (isset($sig) && $userdata['0'] != 1 && $myrow['forum_type'] != 6 && $myrow['forum_type'] != 5) {
+        $sig = Request::input('sig');
+
+        //if (isset($sig) && $userdata['0'] != 1 && $myrow['forum_type'] != 6 && $myrow['forum_type'] != 5) {
+        if (isset($sig) && users::cookieUser(0) != 1 && $myrow['forum_type'] != 6 && $myrow['forum_type'] != 5) {
             $messageP .= ' [addsig]';
         }
-
+        
         if (($forum_type != 6) and ($forum_type != 5)) {
             $messageP = code::af_cod($messageP);
             $messageP = str_replace("\n", '<br />', $messageP);
