@@ -341,8 +341,7 @@ class forum
                         ->first(), 3600, crypt::encrypt('user(uname_uid)'));
 
                 $val = date::convertdate($myrow['topic_time']);
-                // $rowQ1[0]['uname']
-                $val .= $rowQ1 ? ' '. userpopover($rowQ1[0][0], 40, 2) : '';
+                $val .= $rowQ1 ? ' '. userpopover($rowQ1['uname'], 40, 2) : '';
             }
         }
     
@@ -1428,8 +1427,8 @@ vd($userid);
         foreach (DB::table('forum_read')
             ->select('forum_id', DB::raw('COUNT(DISTINCT topicid) AS total'))
             ->where('uid', $userR[0])
-            ->where('topicid', '>', 0)
-            ->where('status', '!=', 0)
+            ->where('topicid', '>', 0, 'and')
+            ->where('status', '!=', 0, 'and')
             ->groupeBy('forum_id')
             ->get() as $forum_read) 
         { 
@@ -1466,7 +1465,8 @@ vd($userid);
                         ->select('*')
                         ->where('cat_id', $row['cat_id'])
                         ->where(DB::raw('SUBSTRING(forum_name, 1, 3)'), '!=', '<!>', 'AND')
-                        ->groupeBy('forum_index, forum_id')
+                        //->whereRaw('SUBSTRING forum_name, 1, 3 != <!>')
+                        //->groupeBy('forum_index, forum_id')
                         ->get(), 600, crypt::encrypt('SUBSTRING(forum_name, 1, 3)')
                 );
 
@@ -1521,14 +1521,9 @@ vd($userid);
                                 $ibid .= '
                                     <p class="mb-0 list-group-item list-group-item-action flex-column align-items-start">
                                         <span class="d-flex w-100 mt-1">';
-    
-                                // bizare ce bug ! $tab_folder[$myrow['forum_id']][0] $tab_folder[$myrow['forum_id']][1] si forum sans posts
-                                if (array_key_exists($myrow['forum_id'], $tab_folder)) {
-                                    if (($tab_folder[$myrow['forum_id']][0] - $tab_folder[$myrow['forum_id']][1]) > 0) {
-                                        $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Les nouvelles contributions depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
-                                    } else {
-                                        $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Aucune nouvelle contribution depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
-                                    }
+
+                                if (($tab_folder[$myrow['forum_id']][0] - $tab_folder[$myrow['forum_id']][1]) > 0) {
+                                    $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Les nouvelles contributions depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                 } else {
                                     $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Aucune nouvelle contribution depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                 }
@@ -1545,14 +1540,8 @@ vd($userid);
                                 if (!$redirect) {
                                     $ibid .= '
                                         <span class="ms-auto"> 
-                                            <span class="badge bg-secondary ms-1" title="'. translate("Contributions") .'" data-bs-toggle="tooltip">'. $tab_total_post[$myrow['forum_id']] .'</span>';
-                                    
-                                    // bizare ce bug ! $tab_folder[$myrow['forum_id']][0] si forum sans posts
-                                    if (array_key_exists($myrow['forum_id'], $tab_folder)) {
-                                        $ibid .= '<span class="badge bg-secondary ms-1" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">'. $tab_folder[$myrow['forum_id']][0] .'</span>';
-                                    }
-
-                                    $ibid .= ' 
+                                            <span class="badge bg-secondary ms-1" title="'. translate("Contributions") .'" data-bs-toggle="tooltip">'. $tab_total_post[$myrow['forum_id']] .'</span>
+                                            <span class="badge bg-secondary ms-1" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">'. $tab_folder[$myrow['forum_id']][0] .'</span>
                                         </span>
                                     </span>';
                                 }

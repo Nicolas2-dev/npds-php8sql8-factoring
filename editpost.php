@@ -35,33 +35,33 @@ include("auth.php");
 
 $rowQ1 = cache::Q_Select3(DB::table('forums')
                 ->select('forum_name', 'forum_moderator', 'forum_type', 'forum_pass', 'forum_access', 'arbre')
-                ->where('forum_id', $forum)
-                ->get(), 3600, crypt::encrypt('forum(forum_id)'));
+                ->where('forum_id', $forum = Request::input('forum'))
+                ->first(), 3600, crypt::encrypt('forum(forum_id)')
+);
+
 if (!$rowQ1) {
     forum::forumerror('0001');
 }
 
-$forum_type     = $rowQ1[0]['forum_type'];
-$forum_access   = $rowQ1[0]['forum_access'];
-$moderator      = forum::get_moderator($rowQ1[0]['forum_moderator']);
+$forum_type     = $rowQ1['forum_type'];
+$forum_access   = $rowQ1['forum_access'];
+$moderator      = forum::get_moderator($rowQ1['forum_moderator']);
 
 $user = users::getUser();
 
 if (isset($user)) {
-    $userX = base64_decode($user);
-    $userdata = explode(':', $userX);
     $moderator = explode(' ', $moderator);
     $Mmod = false;
 
     for ($i = 0; $i < count($moderator); $i++) {
-        if (($userdata[1] == $moderator[$i])) {
+        if ((users::cookieUser(1) == $moderator[$i])) {
             $Mmod = true;
             break;
         }
     }
 }
 
-if (Request::query('submitS')) {
+if (Request::input('submitS')) {
 
     include("themes/default/header.php");
 
@@ -74,25 +74,27 @@ if (Request::query('submitS')) {
         forum::forumerror('0022');
     }
 
-    if ($userdata[0] == $result_post['poster_id']) {
+    if (users::cookieUser(0) == $result_post['poster_id']) {
         $ok_maj = true;
     } else {
         if (!$Mmod) {
             forum::forumerror('0035');
         }
 
-        if ((forum::user_is_moderator($userdata[0], $userdata[2], $forum_access) < 2)) {
+        if ((forum::user_is_moderator(users::cookieUser(0), users::cookieUser(2), $forum_access) < 2)) {
             forum::forumerror('0036');
         }
     }
 
-    $userdata = forum::get_userdata($userdata[1]);
+    // requete inutile peut etre supprimer puisque on peut recuperer le name et l'uid 
+    // via le cookie pour refaire une requette ici juste pour recuper le uname et le uid de l'user;
+    // $userdata = forum::get_userdata(users::cookieUser(1));
 
-    if ($allow_html == 0 || isset($html)) {
+    if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
         $message = htmlspecialchars($message, ENT_COMPAT | ENT_HTML401, 'utf-8');
     }
 
-    if (($allow_bbcode == 1) and ($forum_type != '6') and ($forum_type != '5'))  {
+    if ((Config::get('forum.config.allow_bbcode') == 1) and ($forum_type != '6') and ($forum_type != '5'))  {
         $message = forum::smile($message);
     }
 
@@ -100,10 +102,15 @@ if (Request::query('submitS')) {
         $message = forum::make_clickable($message);
         $message = code::af_cod($message);
         $message = str_replace("\n", "<br />", hack::removeHack($message));
-        $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . $userdata['uname'] . " / "
-                    . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';
+        // $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . $userdata['uname'] . " / "
+        //         . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';
+
+        $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . users::cookieUser(1) . " / "
+                . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
     } else {
-        $message .= "\n\n" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
+        // $message .= "\n\n" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
+
+        $message .= "\n\n" . translate("Message édité par") . " : " . users::cookieUser(1) . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
     }
 
     $message = addslashes($message);
@@ -140,14 +147,15 @@ if (Request::query('submitS')) {
         $r = DB::table('forumtopics')->where('topic_id', $result_post['topic_id'])->update(array(
             'topic_title'      => $subject,
             'topic_time'       => date("Y-m-d H:i:s", time() + ((int) Config::get('npds.gmt') * 3600)),
-            'current_poster'   => $userdata['uid'],
+            // 'current_poster'   => $userdata['uid'],
+            'current_poster'   => users::cookieUser(0),
         ));
-        
+
         if (!$r) { 
             forum::forumerror('0020');
         }
 
-        url::redirect_url($hrefX .'?topic=' . $result_post['topic_id'] . '&forum=$forum');
+        url::redirect_url($hrefX .'?topic=' . $result_post['topic_id'] . '&forum='. $forum);
     } else {
         $indice = DB::table('posts')
                     ->select('post_id')
@@ -206,7 +214,7 @@ if (Request::query('submitS')) {
 } else {
     include("themes/default/header.php");
 
-    if ($allow_bbcode == 1) {
+    if (Config::get('forum.config.allow_bbcode') == 1) {
         include("assets/formhelp.java.php");
     }
     
@@ -221,7 +229,7 @@ if (Request::query('submitS')) {
         forum::forumerror('0001');
     }
 
-    if ((!$Mmod) and ($userdata[0] != $res_post['uid'])) {
+    if ((!$Mmod) and (users::cookieUser(0) != $res_post['uid'])) {
         forum::forumerror('0035');
     }
 
@@ -261,7 +269,7 @@ if (Request::query('submitS')) {
         $message = stripslashes($message);
     }
 
-    if ((($Mmod) or ($userdata[0] == $res_post['uid'])) and ($forum_access != 9)) {
+    if ((($Mmod) or (users::cookieUser(0) == $res_post['uid'])) and ($forum_access != 9)) {
         $qui = $res_post['poster_id'] == 0 ? Config::get('npds.anonymous') : $res_post['uname'];
 
         echo '
@@ -302,7 +310,7 @@ if (Request::query('submitS')) {
         <div class="mb-3 row">
             <label class="col-form-label col-sm-12" for="message">' . translate("Message") . '</label>';
 
-    if ($allow_bbcode) {
+    if (Config::get('forum.config.allow_bbcode')) {
         $xJava = ' onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
     }
 
@@ -316,7 +324,7 @@ if (Request::query('submitS')) {
 
     echo '          </div>';
 
-    if ($allow_html == 1) {
+    if (Config::get('forum.config.allow_html') == 1) {
         echo '<span class="text-success float-end mt-2" title="HTML ' . translate("Activé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
     } else {
         echo '<span class="text-danger float-end mt-2" title="HTML ' . translate("Désactivé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
@@ -336,7 +344,7 @@ if (Request::query('submitS')) {
             </div>
         </div>';
 
-    if (($allow_html == 1) and ($forum_type != 6)) {
+    if ((Config::get('forum.config.allow_html') == 1) and ($forum_type != 6)) {
         if (isset($html)) {
             $sethtml = 'checked="checked"';
         } else {

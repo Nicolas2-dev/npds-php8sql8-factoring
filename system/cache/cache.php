@@ -155,7 +155,17 @@ class cache
         }
     }
 
-
+    /**
+     * [Q_Select3 description]
+     *
+     * @param   string              [ description]
+     * @param   array               [ description]
+     * @param   DB      $Xquery     [$Xquery description]
+     * @param   int     $retention  [$retention description]
+     * @param   string  $type_req   [$type_req description]
+     *
+     * @return  array
+     */
     public static function Q_Select3(string|array|DB $Xquery, int $retention = 3600, string $type_req): array
     {
         $cache_obj = SuperCache::getInstance();
@@ -167,10 +177,10 @@ class cache
         } else {
             $tab_tmp = array();
             
-            foreach ($Xquery as $row) {
-                $tab_tmp[] = $row;
+            foreach ($Xquery as $key => $value) {
+                $tab_tmp[$key] = $value;
             }
-            
+
             return $tab_tmp;
         }
     }

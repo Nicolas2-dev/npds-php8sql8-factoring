@@ -38,9 +38,7 @@ if ($rowQ1 = cache::Q_Select3(
     }
 }
 
-vd(Config::get('forum.config'));
 $forum = Request::query('forum');
-vd($forum);
 
 if (Config::get('forum.config.allow_upload_forum')) {
     if ($rowQ1 = cache::Q_Select3(
