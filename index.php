@@ -39,7 +39,7 @@ install::checkInstall();
 //function select_start_page(string $op): void
 function select_start_page(): void
 {
-    global $index;
+    //global $index; // ??? not used !!!         
 
     $Start_Page = Config::get('npds.Start_Page');
 
@@ -54,7 +54,7 @@ function select_start_page(): void
     or ($op == "index.php") 
     or ($op == "edito") 
     or ($op == "edito-nonews")) {
-        $index = 1;
+        //$index = 1; // ??? not used !!!           
         theindex($op, '', '');
         die('');
     } else {

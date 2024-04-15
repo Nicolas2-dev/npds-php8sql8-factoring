@@ -269,7 +269,7 @@ if (authors::getAdmin()) {
             
             foreach ($forums as $forum) {
                 $num_for++;
-                $last_post = forum::get_last_post($forum['forum_id'], 'forum', 'infos', true);
+                $last_post = forum::get_last_post($forum['forum_id'], 'forum', 'infos');
                 
                 echo '<tr>';
 

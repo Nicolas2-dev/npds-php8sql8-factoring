@@ -33,13 +33,11 @@ if (!function_exists("Mysql_Connexion")) {
 
 include("auth.php");
 
-$rowQ1 = cache::Q_Select3(DB::table('forums')
-                ->select('forum_name', 'forum_moderator', 'forum_type', 'forum_pass', 'forum_access', 'arbre')
-                ->where('forum_id', $forum = Request::input('forum'))
-                ->first(), 3600, crypt::encrypt('forum(forum_id)')
-);
-
-if (!$rowQ1) {
+if (!$rowQ1 = cache::Q_Select3(DB::table('forums')
+        ->select('forum_name', 'forum_moderator', 'forum_type', 'forum_pass', 'forum_access', 'arbre')
+        ->where('forum_id', $forum = Request::input('forum'))
+        ->first(), 3600, crypt::encrypt('forum(forum_id)')
+)) {
     forum::forumerror('0001');
 }
 
@@ -65,12 +63,11 @@ if (Request::input('submitS')) {
 
     include("themes/default/header.php");
 
-    $result_post = DB::table('posts')
-                    ->select('poster_id', 'topic_id')
-                    ->where('post_id', $post_id)
-                    ->first();
-
-    if (!$result_post) {
+    if (!$result_post = DB::table('posts')
+        ->select('poster_id', 'topic_id')
+        ->where('post_id', $post_id = Request::input('post_id'))
+        ->first()
+    ) {
         forum::forumerror('0022');
     }
 
@@ -86,6 +83,9 @@ if (Request::input('submitS')) {
         }
     }
 
+    $html       = Request::input('html');
+    $message    = Request::input('message');
+
     if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
         $message = htmlspecialchars($message, ENT_COMPAT | ENT_HTML401, 'utf-8');
     }
@@ -98,67 +98,68 @@ if (Request::input('submitS')) {
         $message = forum::make_clickable($message);
         $message = code::af_cod($message);
         $message = str_replace("\n", "<br />", hack::removeHack($message));
-        $message .= '<div class="text-muted text-end small"><i class="fa fa-edit"></i>&nbsp;' . translate("Message édité par") . " : " . users::cookieUser(1) . " / "
-                . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
+        $message .= "<div class='text-muted text-end small'><i class='fa fa-edit'></i>&nbsp;" . translate("Message édité par") . " : " . users::cookieUser(1) . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
     } else {
         $message .= "\n\n" . translate("Message édité par") . " : " . users::cookieUser(1) . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
     }
 
     $message = addslashes($message);
 
-    if ($subject == '') {
+    $subject = Request::input('subject');
+
+    if (!$subject) {
         $subject = translate("Sans titre");
     }
 
     // Forum ARBRE
-    if ($arbre) {
+    if (Request::input('arbre')) {
         $hrefX = 'viewtopicH.php';
     } else {
         $hrefX = 'viewtopic.php';
     }
 
-    if (!isset($delete)) {
-        $r = DB::table('posts')->where('post_id', $post_id)->update(array(
-            'post_text'     => $message,
-            'image'         => $image_subject,
-        ));
+    if (!Request::input('delete')) {
 
-        if (!$r) {
-            forum::forumerror('0001');
-        }
-        
-        $r = DB::table('forum_read')->where('topicid', $result_post['topic_id'])->update(array(
-            'status'       => 0,
-        ));
-
-        if (!$r) {
+        if (!DB::table('posts')->where('post_id', $post_id)
+            ->update(array(
+                'post_text'     => stripslashes($message),
+                'image'         => Request::input('image_subject'),
+            ))
+        ) {
             forum::forumerror('0001');
         }
 
-        $r = DB::table('forumtopics')->where('topic_id', $result_post['topic_id'])->update(array(
-            'topic_title'      => $subject,
-            'topic_time'       => date("Y-m-d H:i:s", time() + ((int) Config::get('npds.gmt') * 3600)),
-            // 'current_poster'   => $userdata['uid'],
-            'current_poster'   => users::cookieUser(0),
-        ));
+        if (!DB::table('forum_read')->where('topicid', $result_post['topic_id'])
+            ->update(array(
+                'status'       => 0,
+            ))
+        ) {
+            forum::forumerror('0001');
+        }
 
-        if (!$r) { 
+        if (!DB::table('forumtopics')->where('topic_id', $result_post['topic_id'])
+            ->update(array(
+                'topic_title'      => $subject,
+                'topic_time'       => date("Y-m-d H:i:s", time() + ((int) Config::get('npds.gmt') * 3600)),
+                'current_poster'   => users::cookieUser(0),
+            ))
+        ) { 
             forum::forumerror('0020');
         }
 
         url::redirect_url($hrefX .'?topic=' . $result_post['topic_id'] . '&forum='. $forum);
     } else {
-        $indice = DB::table('posts')
+
+        if (!DB::table('posts')
                     ->select('post_id')
                     ->where('post_idH', $post_id)
-                    ->count();
-
-        if (!$indice) {
-            $r = DB::table('posts')
+                    ->count()
+        ) {
+       
+            if (!DB::table('posts')
                     ->where('post_id', $post_id)
-                    ->delete();
-
-            if (!$r) {
+                    ->delete()
+            ) {
                 forum::forumerror('0001');
             }
 
@@ -166,11 +167,10 @@ if (Request::input('submitS')) {
 
             if (forum::get_total_posts($forum, $result_post['topic_id'], "topic", $Mmod) == 0) {
                 
-                $r = DB::table('forumtopics')
+                if (!DB::table('forumtopics')
                         ->where('topic_id', $result_post['topic_id'])
-                        ->delete();
-
-                if (!$r) {
+                        ->delete()
+                ) {
                     forum::forumerror('0001');
                 }
 
@@ -186,13 +186,13 @@ if (Request::input('submitS')) {
                         ->limit(1)
                         ->offset(0)
                         ->first();
-
-                $r = DB::table('forumtopics')->where('topic_id', $result_post['topic_id'])->update(array(
-                    'topic_time'        => $rowX['post_time'],
-                    'current_poster'    => $rowX['poster_id'],
-                ));
-
-                if (!$r) {
+      
+                if (!DB::table('forumtopics')->where('topic_id', $result_post['topic_id'])
+                    ->update(array(
+                        'topic_time'        => $rowX['post_time'],
+                        'current_poster'    => $rowX['poster_id'],
+                    ))
+                ) {
                     forum::forumerror('0001');
                 }
             }
@@ -209,14 +209,13 @@ if (Request::input('submitS')) {
         include("assets/formhelp.java.php");
     }
     
-    $res_post = DB::table('posts')
+    if (!$res_post = DB::table('posts')
             ->select('posts.*', 'users.uname', 'users.uid', 'users.user_sig')
             ->join('users', 'posts.poster_id', '=', 'users.uid')
             ->where('posts.post_id', $post_id)
             ->xOrWhere('posts.poster_id', '=', '0')
-            ->first();
-    
-    if (!$res_post) {
+            ->first()
+    ) {
         forum::forumerror('0001');
     }
 
@@ -224,12 +223,11 @@ if (Request::input('submitS')) {
         forum::forumerror('0035');
     }
 
-    $res_forumtopic = DB::table('forumtopics')
+    if (!$res_forumtopic = DB::table('forumtopics')
                 ->select('topic_title', 'topic_status')
                 ->where('topic_id', $res_post['topic_id'])
-                ->first();
-
-    if (!$res_forumtopic) {
+                ->first()
+    ) {
         forum::forumerror('0001');
     } else {
         if (($res_forumtopic['topic_status'] != 0) and !$Mmod) {
@@ -237,7 +235,7 @@ if (Request::input('submitS')) {
         }
     }
 
-    if (Request::query('submitP')) {
+    if (Request::input('submitP')) {
         $acc = 'editpost';
         $title = stripslashes($subject);
         $message = stripslashes(forum::make_clickable($message));
@@ -269,7 +267,7 @@ if (Request::input('submitS')) {
         <hr />
         <form action="'. site_url('editpost.php') .'" method="post" name="coolsus">';
         
-        if ($Mmod)
+        if ($Mmod) {
             echo '
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12" for="subject">' . translate("Titre") . '</label>
@@ -277,7 +275,7 @@ if (Request::input('submitS')) {
                 <input class="form-control" type="text" id="subject" name="subject" maxlength="100" value="' . htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'utf-8') . '" />
                 </div>
             </div>';
-        else {
+        } else {
             echo '<strong>' . translate("Edition de la soumission") . '</strong> : ' . $title;
             echo '<input type="hidden" name="subject" value="' . htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'utf-8') . '" />';
         }
@@ -336,12 +334,6 @@ if (Request::input('submitS')) {
         </div>';
 
     if ((Config::get('forum.config.allow_html') == 1) and ($forum_type != 6)) {
-        if (isset($html)) {
-            $sethtml = 'checked="checked"';
-        } else {
-            $sethtml = '';
-        }
-
         echo '
         <div class="mb-3 row">
             <label class="col-form-label col-sm-12">' . translate("Options") . '</label>
@@ -354,7 +346,7 @@ if (Request::input('submitS')) {
                 </div>
                 <div class="checkbox">
                     <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="html" name="html" ' . $sethtml . ' />
+                    <input class="form-check-input" type="checkbox" id="html" name="html" ' . (isset($html) ? 'checked="checked"' : '') . ' />
                     <label class="form-check-label" for="html">' . translate("Désactiver le html pour cet envoi") . '</label>
                     </div>
                 </div>

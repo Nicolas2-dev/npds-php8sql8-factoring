@@ -24,6 +24,7 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
+// A revoir pour Request !!!
 
 vd(
     Request::all()

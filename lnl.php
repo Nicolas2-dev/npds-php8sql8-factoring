@@ -214,8 +214,7 @@ function unsubscribe(): void
         }
 
         if (DB::table('lnl_outside_users')->select('email')->where('email', $xemail)->first() > 0) {
-
-            // $timeX = date("Y-m-d H:m:s", time()); // not used 
+ 
             $troll = DB::table('lnl_outside_users')
                     ->select(DB::raw('COUNT(*) as count'))
                     ->where('host_name', getip())

@@ -14,16 +14,19 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\system\auth\users;
 use npds\system\forum\forum;
 use npds\system\theme\theme;
 use npds\system\utility\code;
 use npds\system\config\Config;
 use npds\system\security\hack;
 
-$userdatat = $userdata;
+$userdatat = users::cookieUser();
 $messageP = $message;
 
-$time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
+vd($userdatat);
+
+$time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
 
 switch ($acc) {
     case "newtopic":
@@ -35,7 +38,7 @@ switch ($acc) {
             include("modules/sform/forum/forum_extender.php");
         }
 
-        // if ($allow_html == 0 || isset($html)) {
+        // if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
         //     $messageP = htmlspecialchars($messageP, ENT_COMPAT|ENT_HTML401, 'utf-8');
         // }
 
@@ -48,7 +51,7 @@ switch ($acc) {
             $messageP = str_replace("\n", '<br />', $messageP);
         }
 
-        if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) {
+        if ((Config::get('forum.config.allow_bbcode')) and ($forum_type != 6) and ($forum_type != 5)) {
             $messageP = forum::smile($messageP);
         }
 
@@ -56,7 +59,7 @@ switch ($acc) {
             $messageP = forum::make_clickable($messageP);
             $messageP = hack::removeHack($messageP);
 
-            if ($allow_bbcode) {
+            if (Config::get('forum.config.allow_bbcode')) {
                 $messageP = forum::aff_video_yt($messageP);
             }
         }
@@ -73,7 +76,7 @@ switch ($acc) {
             $userdata = forum::get_userdata($userdata[1]);
         }
 
-        if ($allow_html == 0 || isset($html)) {
+        if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
             $messageP = htmlspecialchars($messageP, ENT_COMPAT | ENT_HTML401, 'utf-8');
         }
 
@@ -86,7 +89,7 @@ switch ($acc) {
             $messageP = str_replace("\n", '<br />', $messageP);
         }
 
-        if (($allow_bbcode) and ($forum_type != '6') and ($forum_type != '5')) {
+        if ((Config::get('forum.config.allow_bbcode')) and ($forum_type != '6') and ($forum_type != '5')) {
             $messageP = forum::smile($messageP);
         }
 
@@ -94,7 +97,7 @@ switch ($acc) {
             $messageP = forum::make_clickable($messageP);
             $messageP = hack::removeHack($messageP);
 
-            if ($allow_bbcode) {
+            if (Config::get('forum.config.allow_bbcode')) {
                 $messageP = forum::aff_video_yt($messageP);
             }
         }
@@ -102,7 +105,7 @@ switch ($acc) {
         break;
 
     case 'editpost':
-        $userdata = forum::get_userdata($userdata[1]);
+        $userdata = forum::get_userdata(users::cookieUser(1));
 
         settype($post_id, "integer");
 
@@ -123,11 +126,11 @@ switch ($acc) {
         $myrow2 = sql_fetch_assoc(sql_query("SELECT forum_type FROM " . $NPDS_Prefix . "forums WHERE (forum_id = '$forum')"));
         $forum_type = $myrow2['forum_type'];
 
-        if ($allow_html == 0 || isset($html)) {
+        if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
             $messageP = htmlspecialchars($messageP, ENT_COMPAT | ENT_HTML401, 'utf-8');
         }
 
-        if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) {
+        if ((Config::get('forum.config.allow_bbcode')) and ($forum_type != 6) and ($forum_type != 5)) {
             $messageP = forum::smile($messageP);
         }
 
@@ -136,7 +139,7 @@ switch ($acc) {
             $messageP = str_replace("\n", '<br />', hack::removeHack($messageP));
             $messageP .= '<br /><div class=" text-muted text-end small"><i class="fa fa-edit"></i> ' . translate("Message édité par") . ' : ' . $userdata['uname'] . '</div';
 
-            if ($allow_bbcode) {
+            if (Config::get('forum.config.allow_bbcode')) {
                 $messageP = forum::aff_video_yt($messageP);
             }
         } else{
@@ -157,7 +160,7 @@ echo '
                 <div class="card">
                     <div class="card-header">';
 
-if ($smilies) {
+if (Config::get('npds.smilies')) {
     if (array_key_exists('user_avatar', $theposterdata)) {
         if ($theposterdata['user_avatar'] != '') {
             
@@ -212,7 +215,7 @@ $messageP = stripslashes($messageP);
 if (($forum_type == '6') or ($forum_type == '5')) {
     highlight_string(stripslashes($messageP));
 } else {
-    if ($allow_bbcode) {
+    if (Config::get('forum.config.allow_bbcode')) {
         $messageP = forum::smilie($messageP);
     }
 

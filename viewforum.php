@@ -435,7 +435,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                     </tr>';
                 } else {
                     echo '
-                        <td class="small">' . forum::get_last_post($myrow['topic_id'], "topic", "infos", $Mmod) . '</td>
+                        <td class="small">' . forum::get_last_post($myrow['topic_id'], "topic", "infos") . '</td>
                     </tr>';
                 }
             }

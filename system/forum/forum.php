@@ -300,11 +300,10 @@ class forum
      * @param   string         [ description]
      * @param   int     $type  [$type description]
      * @param   string  $cmd   [$cmd description]
-     * @param   bool    $Mmod  [$Mmod description]
      *
      * @return  string
      */
-    public static function get_last_post(string|int $id, string|int $type, string $cmd, bool $Mmod): string 
+    public static function get_last_post(string|int $id, string|int $type, string $cmd): string 
     {
         // $Mmod ne sert plus - maintenu pour compatibilité
         switch ($type) {
@@ -324,10 +323,6 @@ class forum
                             ->where('topic_id', $id)
                             ->first();
                 break;
-        }
-    
-        if (!$sql1) {
-            return "ERROR";
         }
     
         if ($cmd == 'infos') {
@@ -439,7 +434,6 @@ class forum
                     ->first();
 
         if (!$sql1) {
-            vd('0016 -> get_userdata_from_id');
             static::forumerror('0016');
         }
 
@@ -461,16 +455,12 @@ class forum
      */
     public static function get_userdata_extend_from_id( $userid): array 
     {
-
-vd($userid);
-
         $sql1 = DB::table('users_extend')
                     ->select('*')
                     ->where('uid', $userid)
                     ->first();
 
         if (!$sql1) { 
-            vd('0016 -> get_userdata_extend_from_id');
             forum::forumerror('0016');
         }
 
@@ -492,7 +482,6 @@ vd($userid);
                     ->first();
 
         if (!$sql) {
-            vd('0016 -> get_userdata');
             static::forumerror('0016');
         }
     
@@ -1216,8 +1205,8 @@ vd($userid);
      */
     public static function control_efface_post(string $apli, string|int $post_id, string|int $topic_id, string|int $IdForum): void
     {
-        global $upload_table;
-    
+        $upload_table = Config::get('forum.config.upload_table');
+
         include("modules/upload/config/upload.conf.php");
     
         $query = DB::table($upload_table)
@@ -1240,15 +1229,13 @@ vd($userid);
             $query->where('topic_id', $topic_id); 
             $query_delete->where('topic_id', $topic_id); 
         }
-    
-        $query_delete->delete();
 
         foreach($query->get() as $apli) {    
             $fic = $DOCUMENTROOT . $app['att_path'] . $app['att_id'] . "." . $apli . "." . $app['att_name'];
             @unlink($fic);
         }
     
-        @sql_query($sql2);
+        $query_delete->delete();
     }
     
     /**
@@ -1401,6 +1388,8 @@ vd($userid);
             $tab_groupe = groupe::valid_group($user);
         }
     
+        $tab_folder = null;
+
         // preparation de la gestion des folders
         foreach (DB::table('forumtopics')
             ->select('forum_id', DB::raw('COUNT(topic_id) AS total'))
@@ -1491,26 +1480,28 @@ vd($userid);
                                     $title_aff = false;
                                 }
     
-                                $forum_moderator = explode(' ', static::get_moderator($myrow['forum_moderator']));
-                                $Mmod = false;
+                                //$forum_moderator = explode(' ', static::get_moderator($myrow['forum_moderator']));
+                                // $Mmod = false;
     
-                                for ($i = 0; $i < count($forum_moderator); $i++) {
-                                    if (($userR[1] == $forum_moderator[$i])) {
-                                        $Mmod = true;
-                                    }
-                                }
+                                // for ($i = 0; $i < count($forum_moderator); $i++) {
+                                //     if (($userR[1] == $forum_moderator[$i])) {
+                                //         $Mmod = true;
+                                //     }
+                                // }
                                 
-                                $last_post = static::get_last_post($myrow['forum_id'], "forum", "infos", $Mmod);
+                                $last_post = static::get_last_post($myrow['forum_id'], "forum", "infos");
                             
                                 $ibid .= '
                                     <p class="mb-0 list-group-item list-group-item-action flex-column align-items-start">
                                         <span class="d-flex w-100 mt-1">';
 
+                            if (!empty($tab_folder[$myrow['forum_id']][0])) {           
                                 if (($tab_folder[$myrow['forum_id']][0] - $tab_folder[$myrow['forum_id']][1]) > 0) {
                                     $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Les nouvelles contributions depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
-                                } else {
-                                    $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Aucune nouvelle contribution depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                 }
+                            } else {
+                                $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Aucune nouvelle contribution depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                            }                          
 
                                 $name = stripslashes($myrow['forum_name']);
                                 $redirect = false;
@@ -1523,10 +1514,17 @@ vd($userid);
     
                                 if (!$redirect) {
                                     $ibid .= '
-                                        <span class="ms-auto"> 
-                                            <span class="badge bg-secondary ms-1" title="'. translate("Contributions") .'" data-bs-toggle="tooltip">'. $tab_total_post[$myrow['forum_id']] .'</span>
-                                            <span class="badge bg-secondary ms-1" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">'. $tab_folder[$myrow['forum_id']][0] .'</span>
-                                        </span>
+                                        <span class="ms-auto">';
+                                
+                                    if (!empty($tab_total_post[$myrow['forum_id']])) {          
+                                            $ibid .= '<span class="badge bg-secondary ms-1" title="'. translate("Contributions") .'" data-bs-toggle="tooltip">'. $tab_total_post[$myrow['forum_id']] .'</span>';
+                                    }            
+                                        
+                                    if (!empty($tab_folder[$myrow['forum_id']][0])) {          
+                                        $ibid .= '<span class="badge bg-secondary ms-1" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">'. $tab_folder[$myrow['forum_id']][0] .'</span>';
+                                }  
+
+                                    $ibid .= '</span>
                                     </span>';
                                 }
     

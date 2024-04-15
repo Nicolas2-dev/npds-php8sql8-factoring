@@ -38,6 +38,8 @@ if ($rowQ1 = cache::Q_Select3(
     }
 }
 
+//vd(Config::get('forum.config'));
+
 $forum = Request::query('forum');
 
 if (Config::get('forum.config.allow_upload_forum')) {
