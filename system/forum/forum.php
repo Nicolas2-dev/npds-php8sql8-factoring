@@ -1401,20 +1401,6 @@ vd($userid);
             $tab_groupe = groupe::valid_group($user);
         }
     
-        // not used !!!!
-        // if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) {
-        //     $imgtmpR = $ibid;
-        // } else {
-        //     $imgtmpR = "assets/images/forum/icons/red_folder.gif";
-        // }
-    
-        // not used !!!!
-        // if ($ibid = theme::theme_image("forum/icons/folder.gif")) {
-        //     $imgtmp = $ibid;
-        // } else {
-        //     $imgtmp = "assets/images/forum/icons/folder.gif";
-        // }
-    
         // preparation de la gestion des folders
         foreach (DB::table('forumtopics')
             ->select('forum_id', DB::raw('COUNT(topic_id) AS total'))
@@ -1427,8 +1413,8 @@ vd($userid);
         foreach (DB::table('forum_read')
             ->select('forum_id', DB::raw('COUNT(DISTINCT topicid) AS total'))
             ->where('uid', $userR[0])
-            ->where('topicid', '>', 0, 'and')
-            ->where('status', '!=', 0, 'and')
+            ->where('topicid', '>', 0)
+            ->where('status', '!=', 0)
             ->groupeBy('forum_id')
             ->get() as $forum_read) 
         { 
@@ -1464,9 +1450,7 @@ vd($userid);
                     DB::table('forums')
                         ->select('*')
                         ->where('cat_id', $row['cat_id'])
-                        ->where(DB::raw('SUBSTRING(forum_name, 1, 3)'), '!=', '<!>', 'AND')
-                        //->whereRaw('SUBSTRING forum_name, 1, 3 != <!>')
-                        //->groupeBy('forum_index, forum_id')
+                        ->where(DB::raw('SUBSTRING(forum_name, 1, 3)'), '!=', '<!>')
                         ->get(), 600, crypt::encrypt('SUBSTRING(forum_name, 1, 3)')
                 );
 
