@@ -93,7 +93,7 @@ function pollCollector(int $pollID, int $voteID, string $forwarder): void
                 $hostname = "";
             }
 
-            DB::table('')->insert(array(
+            DB::table('appli_log')->insert(array(
                 'al_id'         => $al_id,
                 'al_name'       => $al_nom,
                 'al_subid'      => $pollID,
