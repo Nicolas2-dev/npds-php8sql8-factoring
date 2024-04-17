@@ -14,20 +14,29 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\system\auth\authors;
+use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
+
+
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) {
     include('admin/die.php');
 }
 
-function alerte_api()
+/**
+ * [alerte_api description]
+ *
+ * @return  void
+ */
+function alerte_api(): void 
 {
-    global $NPDS_Prefix;
+    $id = Request::input('$id');
 
-    if (isset($_POST['id'])) {
-        $id = $_POST['id'];
-        $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions WHERE fid='$id'");
+    if (isset($id)) {
 
-        if (isset($result)) {
-            $row = sql_fetch_assoc($result);
+        $$row = DB::table('fonctions')->select('*')->where('fid', $id)->first();
+
+        if (isset($$row)) {
             if (count($row) > 0)
                 $data = $row;
         }
@@ -36,28 +45,34 @@ function alerte_api()
     }
 }
 
-function alerte_update()
+/**
+ * [alerte_update description]
+ *
+ * @return  void
+ */
+function alerte_update(): void
 {
-    global $NPDS_Prefix, $admin;
+    $admin = authors::getAdmin();
 
     $Xadmin = base64_decode($admin);
     $Xadmin = explode(':', $Xadmin);
     $aid = urlencode($Xadmin[0]);
 
-    if (isset($_POST['id'])) {
-        $id = $_POST['id'];
+    $id = Request::input('$id');
 
-        $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions WHERE fid=" . $id . "");
-        $row = sql_fetch_assoc($result);
+    if (isset($id)) {
 
-        $newlecture = $aid . '|' . $row['fdroits1_descr'];
-        sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fdroits1_descr='" . $newlecture . "' WHERE fid=" . $id . "");
+        $row = DB::table('fonctions')->select('*')->where('fid', $id)->first();
+
+        DB::table('fonctions')->where('fid', $id)->update(array(
+            'fdroits1_descr'    => ($aid . '|' . $row['fdroits1_descr']),
+        ));
     }
 
     header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
 
-switch ($op) {
+switch (Request::input('op')) {
 
     case "alerte_api":
         alerte_api();

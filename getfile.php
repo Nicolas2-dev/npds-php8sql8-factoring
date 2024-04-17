@@ -14,6 +14,7 @@
 declare(strict_types=1);
 
 use npds\system\assets\css;
+use npds\system\auth\users;
 use npds\system\config\Config;
 use npds\system\utility\crypt;
 use npds\system\support\facades\DB;
@@ -24,20 +25,17 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-// A revoir pour Request !!!
-
-vd(
-    Request::all()
-);
-
-switch ($apli) {
+switch ($apli = Request::query('apli')) {
     case 'f-manager':
-        $fma = rawurldecode(crypt::decrypt($att_id));
+
+
+        $fma = rawurldecode(crypt::decrypt(Request::query('att_id'))));
         $fma = explode('#fma#', $fma);
         $att_id = crypt::decrypt($fma[0]);
         $att_name = crypt::decrypt($fma[1]);
 
     case 'forum_npds':
+        $user = users::getUser();
         if (isset($user)) {
             $userX = base64_decode($user);
             $userdata = explode(':', $userX);
@@ -46,8 +44,10 @@ switch ($apli) {
 
     case 'minisite':
     case 'getfile':
-        $att_name = StripSlashes(str_replace("\"", '', rawurldecode($att_name)));
+        $att_name = StripSlashes(str_replace("\"", '', rawurldecode(Request::query('att_name'))));
         
+        $att_id = Request::query('att_id');
+
         if ((preg_match('#^[a-z0-9_\.-]#i', $att_name) 
         or ($Mmod == $marqueurM)) 
         and !stristr($att_name, ".*://") 
@@ -71,32 +71,35 @@ switch ($apli) {
                 switch ($apli) {
                         // Forum
                     case 'forum_npds':
-                        $fic = "modules/upload/storage/upload_forum/$att_id.$apli.$att_name";
+                        $fic = 'modules/upload/storage/upload_forum/'. $att_id . $apli . $att_name;
                         break;
 
                         // MiniSite
                     case 'minisite':
-                        $fic = "storage/users_private/$att_id/mns/$att_name";
+                        $fic = 'storage/users_private/' . $att_id .'/mns/'. $att_name;
                         break;
 
                         // Application générique : la présence de getfile.conf.php est nécessaire
                     case 'getfile':
-                        if (file_exists("$att_id/getfile.conf.php") or file_exists("$att_id/.getfile.conf.php")) {
-                            $fic = "$att_id/$att_name";
+                        if (file_exists($att_id .'/getfile.conf.php') or file_exists($att_id .'/.getfile.conf.php')) {
+                            $fic = $att_id .'/'. $att_name;
                         } else {
                             header('location: '. site_url('index.php'));
                         }
                         break;
 
                     case 'f-manager';
-                        $fic = "$att_id/$att_name";
+                        $fic = $att_id .'/'. $att_name;
                         break;
                 }
 
-                include("modules/upload/language/$language/language.php");
-                include("modules/upload/http/include/mimetypes.php");
+                include('modules/upload/language/'. Config::get('npds.languaghe') .'/language.php');
+                include('modules/upload/http/include/mimetypes.php');
 
                 $suffix = strtoLower(substr(strrchr($att_name, '.'), 1));
+                
+                $type = Request::query('type');
+                
                 if (isset($type)) {
                     // strip "; name=.... " (Opera6)
                     list($type, $garbage) = explode(';', $type); 
@@ -116,7 +119,7 @@ switch ($apli) {
                         
                         include('auth.php');
 
-                        DB::table($upload_table)->where('att_id', $att_id)->update(array(
+                        DB::table(Config::get('forum.config.upload_table'))->where('att_id', $att_id)->update(array(
                             'compteur'       => DB::raw('compteur+1'),
                         ));
                     }
@@ -165,17 +168,22 @@ switch ($apli) {
         break;
 
     case 'captcha':
-        $mot = rawurldecode(crypt::decrypt($att_id));
+        $mot = rawurldecode(crypt::decrypt(Request::query('att_id')));
         $font = 16;
+
         $width = imagefontwidth($font) * strlen($mot);
         $height = imagefontheight($font);
+
         $img = imagecreate($width + 4, $height + 4);
         $blanc = imagecolorallocate($img, 255, 255, 255);
         $noir = imagecolorallocate($img, 0, 0, 0);
+
         imagecolortransparent($img, $blanc);
+        
         // if ('utf-8'=="utf-8") {
         //    $mot=utf8_decode($mot);
         // }
+
         imagestring($img, $font, 1, 1, $mot, $noir);
         imagepng($img);
         imagedestroy($img);

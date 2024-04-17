@@ -18,7 +18,7 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-
+// va disparaitrfe par la suite !!!
 $nuke_url = '';
 $meta_op = '';
 

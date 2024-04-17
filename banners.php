@@ -581,7 +581,7 @@ function change_banner_url_by_client(): void
     footer_page();
 }
 
-switch ($client = Request::query('client') ? $client : Request::input('client')) {
+switch (Request::input('client')) {
     case 'click':
         clickbanner();
         break;

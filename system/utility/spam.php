@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace npds\system\utility;
 
 use npds\system\utility\crypt;
+use npds\system\support\facades\Request;
 
 class spam
 {
@@ -321,7 +322,7 @@ class spam
         }
 
         if (is_array($tab_spam)) {
-            $ipadr = urldecode(getip());
+            $ipadr = urldecode(Request::getIp());
             $ipv = strstr($ipadr, ':') ? '6' : '4';
             
             if (in_array($ipadr . "|5", $tab_spam)) {

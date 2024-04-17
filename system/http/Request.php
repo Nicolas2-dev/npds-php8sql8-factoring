@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace npds\system\http;
 
+use function apache_request_headers;
+
 class Request
 {
     protected static $instance;

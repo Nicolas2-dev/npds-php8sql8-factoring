@@ -365,7 +365,7 @@ function SiteSent(): void
     include("themes/default/footer.php");
 }
 
-switch ($op = Request::query('op') ? $op : Request::input('op')) {
+switch (Request::input('op')) {
     case 'FriendSend':
         FriendSend();
         break;

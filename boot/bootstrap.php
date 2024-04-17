@@ -3,19 +3,15 @@ declare(strict_types=1);
 
 use npds\system\auth\users;
 use npds\system\support\str;
-use npds\system\theme\theme;
 use npds\system\auth\authors;
-use npds\system\http\Request;
 use npds\system\utility\spam;
 use npds\system\config\Config;
-use npds\system\cookie\cookie;
 use npds\system\app\AliasLoader;
 use npds\system\session\session;
 use npds\system\database\Manager;
 use npds\system\security\protect;
 use npds\system\language\language;
 use npds\system\language\metalang;
-use npds\system\language\metafunction;
 use npds\system\exception\ExceptionHandler;
 
 // Load autolad
@@ -59,13 +55,13 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         reset($_GET); // no need
 
         array_walk_recursive($_GET, [protect::class, 'url']);
-        extract($_GET, EXTR_OVERWRITE);
+        //extract($_GET, EXTR_OVERWRITE);
     }
 
     // Post values, slash, filter and extract
     if (!empty($_POST)) {
         array_walk_recursive($_POST, [str::class, 'addslashes_GPC']);
-        extract($_POST, EXTR_OVERWRITE);
+        //extract($_POST, EXTR_OVERWRITE);
     }
 
     // Cookies - analyse et purge - shiney 07-11-2010

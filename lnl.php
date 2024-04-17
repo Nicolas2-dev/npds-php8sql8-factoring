@@ -250,7 +250,7 @@ function unsubscribe(): void
     }
 }
 
-switch ($op = Request::query('op') ? $op : Request::input('op')) {
+switch (Request::input('op')) {
     case 'subscribe':
         subscribe();
         break;

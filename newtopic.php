@@ -34,12 +34,6 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-vd(
-    
-    Request::all(),
-
-);
-
 $forum = Request::query('forum');
 
 if (Request::input('cancel')) {
@@ -60,24 +54,22 @@ $forum_name = $myrow['forum_name'];
 $forum_access = $myrow['forum_access'];
 
 $moderatorX = forum::get_moderator($myrow['forum_moderator']);
-//$moderator = explode(' ', $moderator);
 
 $user = users::getUser();
 
 if (isset($user)) {
-    // $userX = base64_decode($user);
-    // $userdata = explode(':', $userX);
     $Mmod = false;
-    
+    $userX = base64_decode($user);
+    $userdata = explode(':', $userX);
     $moderator = explode(' ', $moderatorX);
     for ($i = 0; $i < count($moderator); $i++) {
-        if ((users::cookieUser(1) == $moderator[$i])) {
+        if (($userdata[1] == $moderator[$i])) {
             $Mmod = true;
             break;
         }
     }
 
-    $userdata = forum::get_userdata(users::cookieUser(1));
+    $userdata = forum::get_userdata($userdata[1]);
 }
 
 if (($myrow['forum_type'] == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
@@ -99,15 +91,14 @@ if ($myrow['arbre']) {
     $hrefX = "viewtopic.php";
 }
 
-settype($submitS, 'string');
 settype($stop, 'integer');
 
 if (Request::input('submitS')) {
-    if ($message == '') {
+    if (!Request::input('message')) {
         $stop = 1;
     }
 
-    if ($subject == '') {
+    if (!Request::input('subject')) {
         $stop = 1;
     }
 
@@ -123,7 +114,7 @@ if (Request::input('submitS')) {
             } else {
                 $modo = '';
                 
-                $res_user = DB::table('users')
+                $resuser = DB::table('users')
                                 ->select('pass')
                                 ->where('uname', $username)
                                 ->first(); 
@@ -155,8 +146,11 @@ if (Request::input('submitS')) {
         // anti flood
         forum::anti_flood($modo, Config::get('forum.config.anti_flood'), $poster_ip, $userdata, Config::get('npds.gmt'));
 
+        $message = Request::input('message');
+        $subject = Request::input('subject');
+
         //anti_spambot
-        if (!spam::R_spambot($asb_question, $asb_reponse, $message)) {
+        if (!spam::R_spambot(Request::input('asb_question'), Request::input('asb_reponse'), $message)) {
             logs::Ecr_Log('security', 'Forum Anti-Spam : forum=' . $forum . ' / topic_title=' . $subject, '');
             url::redirect_url("index.php");
             die();
@@ -167,6 +161,7 @@ if (Request::input('submitS')) {
             include("modules/sform/forum/forum_extender.php");
         }
 
+        // $html = Request::input('html', '');
         // if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
         //     $message = htmlspecialchars($message, ENT_COMPAT|ENT_HTML401, 'utf-8');
         // }
@@ -196,8 +191,6 @@ if (Request::input('submitS')) {
             $subject = hack::removeHack(strip_tags($subject));
         }
 
-        //$Msubject = $subject;
-
         $time = date("Y-m-d H:i", time() + ((int) Config::get('npds.gmt') * 3600));
 
         if (!$insertGetIdTopicId = DB::table('forumtopics')->insertGetId(array(
@@ -206,17 +199,15 @@ if (Request::input('submitS')) {
                 'current_poster'    => $userdata['uid'],
                 'forum_id'          => $forum,
                 'topic_time'        => $time,
-                'topic_notify'      => ((isset($notify2) && $userdata['uid'] != 1) ? ", '1'" :  ", '0'")
+                'topic_notify'      => ((Request::input('notify2') && $userdata['uid'] != 1) ? ", '1'" :  ", '0'")
             ))
         ) {
             forum::forumerror('0020');
         }
 
-        $topic_id = $insertGetIdTopicId;
-
         $insertGetId = DB::table('posts')->insertGetId(array(
-            'topic_id'      => $topic_id,
-            'image'         => $image_subject,
+            'topic_id'      => $insertGetIdTopicId,
+            'image'         => Request::input('image_subject'),
             'forum_id'      => $forum,
             'poster_id'     => $userdata['uid'],
             'post_text'     => $message,
@@ -227,8 +218,6 @@ if (Request::input('submitS')) {
 
         if (!$insertGetId) {
             forum::forumerror('0020');
-        } else {
-            $IdPost = $insertGetId;
         }
 
         if (!DB::table('users_status')->where('uid', $userdata['uid'])
@@ -239,21 +228,16 @@ if (Request::input('submitS')) {
             forum::forumerror('0029');
         }
 
-        //$topic = $topic_id;
-
         if (Config::get('npds.subscribe')) {
-            //subscribe::subscribe_mail("forum", $topic, stripslashes($forum), stripslashes($Msubject), $userdata['uid']);
-            subscribe::subscribe_mail("forum", $topic_id, stripslashes($forum), stripslashes($subject), $userdata['uid']);
+            subscribe::subscribe_mail("forum", $insertGetIdTopicId, stripslashes($forum), stripslashes($subject), $userdata['uid']);
         }
 
         if (isset($upload)) {
             include("modules/upload/upload_forum.php");
-            //win_upload("forum_npds", $IdPost, $forum, $topic, "win");
-            win_upload("forum_npds", $IdPost, $forum, $topic_id, "win");
+            win_upload("forum_npds", $insertGetId, $forum, $insertGetIdTopicId, "win");
         }
 
-        //url::redirect_url($hrefX . '?forum='. $forum .'&topic='. $topic);
-        url::redirect_url($hrefX . '?forum='. $forum .'&topic='. $topic_id);
+        url::redirect_url($hrefX . '?forum='. $forum .'&topic='. $insertGetIdTopicId);
     } else {
         echo '
         <div class="alert alert-danger lead" role="alert">
@@ -268,35 +252,20 @@ if (Request::input('submitS')) {
         include("assets/formhelp.java.php");
     }
 
-    // $userX = base64_decode($user);
-    // $userdata = explode(':', $userX);
-    // $posterdata = forum::get_userdata_from_id($userdata[0]);
-
     if (Config::get('npds.smilies')) {
         if (isset($user)) {
-
-            $posterdata = forum::get_userdata_from_id(users::cookieUser(0));
+            $userX = base64_decode($user);
+            $userdata = explode(':', $userX);
+            $posterdata = forum::get_userdata_from_id($userdata[0]);
 
             if ($posterdata['user_avatar'] != '') {
                 if (stristr($posterdata['user_avatar'], "users_private")) {
                     $imgava = $posterdata['user_avatar'];
                 } else {
-                    // if ($ibid = theme::theme_image("forum/avatar/" . $posterdata['user_avatar'])) {
-                    //     $imgava = $ibid;
-                    // } else {
-                    //     $imgava = "assets/images/forum/avatar/" . $posterdata['user_avatar'];
-                    // }
-
                     $imgava = theme::theme_image_row('forum/avatar/'. $posterdata['user_avatar'], 'assets/images/forum/avatar/'. $posterdata['user_avatar']);
                 }
             }
         } else {
-            // if ($ibid = theme::theme_image("forum/avatar/blank.gif")) {
-            //     $imgava = $ibid;
-            // } else {
-            //     $imgava = "assets/images/forum/avatar/blank.gif";
-            // }
-
             $imgava = theme::theme_image_row('forum/avatar/blank.gif', 'assets/images/forum/avatar/blank.gif');
         }
     }
@@ -315,8 +284,6 @@ if (Request::input('submitS')) {
             <div class="card-block-small">
             ' . translate("Modéré par : ");
 
-    //$moderatorX = forum::get_moderator($myrow['forum_moderator']);
-    //$moderator_data = explode(' ', $moderatorX);
     $moderator_data = explode(' ', $moderatorX);
 
     for ($i = 0; $i < count($moderator_data); $i++) {
@@ -326,12 +293,6 @@ if (Request::input('submitS')) {
             if (stristr($modera['user_avatar'], "users_private")) {
                 $imgtmp = $modera['user_avatar'];
             } else {
-                // if ($ibid = theme::theme_image("forum/avatar/" . $modera['user_avatar'])) {
-                //     $imgtmp = $ibid;
-                // } else {
-                //     $imgtmp = "assets/images/forum/avatar/" . $modera['user_avatar'];
-                // }
-
                 $imgtmp = theme::theme_image_row('forum/avatar/' . $modera['user_avatar'], 'assets/images/forum/avatar/' . $modera['user_avatar']);
             }
         }
@@ -387,10 +348,10 @@ if (Request::input('submitS')) {
         }
 
     } elseif ($forum_access == 2) {
-        if (forum::user_is_moderator(users::cookieUser(0), users::cookieUser(2), $forum_access)) {
+        if (forum::user_is_moderator($userdata[0],$userdata[2], $forum_access)) {
             
             echo '<strong>' . translate("Auteur") . ' :</strong>';
-            echo users::cookieUser(1);
+            echo $userdata[1];
             
             $allow_to_post = 1;
         }
@@ -398,31 +359,29 @@ if (Request::input('submitS')) {
         $allow_to_post = 1;
     }
 
-    //settype($submitP, 'string');
-
     if ($allow_to_post) {
         
         if (Request::input('submitP')) {
             $acc = 'newtopic';
-            $subject = stripslashes($subject);
-            $message = stripslashes($message);
+            $subject = stripslashes(Request::input('subject'));
+            $message = stripslashes(Request::input('message'));
 
-            if (isset($username)) {
-                $username = stripslashes($username);
-            } else {
-                $username = '';
-            }
+            // if (isset($username)) {
+            //     $username = stripslashes($username);
+            // } else {
+            //     $username = '';
+            // }
 
-            if (isset($password)) {
-                $password = stripslashes($password);
-            } else {
-                $password = '';
-            }
+            // if (isset($password)) {
+            //     $password = stripslashes($password);
+            // } else {
+            //     $password = '';
+            // }
 
             include("preview.php");
         } else {
-            $username = '';
-            $password = '';
+        //     $username = '';
+        //     $password = '';
             $subject = '';
             $message = '';
         }
@@ -498,10 +457,7 @@ if (Request::input('submitS')) {
 
             if ((Config::get('forum.config.allow_html') == 1) and ($myrow['forum_type'] != 6) and ($myrow['forum_type'] != 5)) {
                 
-                //vd(isset($html));
-                $html = Request::input('html');
-
-                if (isset($html)) {
+                if (Request::input('html')) {
                     $sethtml = 'checked="checked"';
                 } else {
                     $sethtml = '';
@@ -521,16 +477,9 @@ if (Request::input('submitS')) {
                     ->where('uid', users::cookieUser(0))
                     ->first(); 
 
-                //if (Config::get('forum.config.allow_sig') == 1 || Request::input('sig') == 'on') {
                 if (Config::get('forum.config.allow_sig') == 1 && $res_status['attachsig'] == 1) {
 
-                    // $res_status = DB::table('users_status')
-                    //                 ->select('attachsig')
-                    //                 ->where('uid', users::cookieUser(0))
-                    //                 ->first(); 
-
-                    //if ($res_status['attachsig'] == 1) { 
-                    if ($res_status['attachsig'] == 1 && !is_null(Request::input('sig'))) { 
+                    if ($res_status['attachsig'] == 1 && Request::input('sig', 'off') == 'on') { 
                         $s = 'checked="checked"';
                     } else {
                         $s = '';
@@ -545,11 +494,8 @@ if (Request::input('submitS')) {
                     }
                 }
 
-                settype($up, 'string');
-                settype($upload, 'string');
-
                 if (Config::get('forum.config.allow_upload_forum')) {
-                    if ($upload == "on") {
+                    if (Request::inpu('upload') == "on") {
                         $up = 'checked="checked"';
                     }
 
@@ -560,7 +506,7 @@ if (Request::input('submitS')) {
                     </div>';
                 }
 
-                if (isset($notify2)) {
+                if (Request::input('notify2')) {
                     $selnot = 'checked="checked"';
                 } else {
                     $selnot = '';

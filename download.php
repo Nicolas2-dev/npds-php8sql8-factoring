@@ -665,7 +665,7 @@ function transferfile(): void
 function broken(): void
 {
     if (users::getUser()) {
-        if ($did = Request::query('bid')) {
+        if ($did = Request::query('did')) {
             
             $message = Config::get('npds.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . users::cookieUser(1) ." / IP : " . getip() . "\n\n";
             $message .= Config::get('signature.message');
@@ -688,7 +688,7 @@ function broken(): void
     }
 }
 
-switch (Request::query('op')) {
+switch (Request::input('op')) {
     case 'main':
         main();
         break;

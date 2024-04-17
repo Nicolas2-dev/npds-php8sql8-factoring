@@ -1,145 +1,48 @@
-03/04/2024 05:24:14 admin.php=>MakeLeftBlock(theme skin) by AID : Root           IP=>::1   
-03/04/2024 05:25:47 admin.php=>MakeLeftBlock(skin 2) by AID : Root               IP=>::1   
-03/04/2024 05:29:41 admin.php=>ChangeLeftBlock(theme skin - 13) by AID : Root    IP=>::1   
-03/04/2024 05:29:57 admin.php=>ChangeLeftBlock(theme skin - 13) by AID : Root    IP=>::1   
-03/04/2024 05:30:08 admin.php=>ChangeLeftBlock(skin 2 - 14) by AID : Root        IP=>::1   
-03/04/2024 05:40:36 admin.php=>DeleteLeftBlock(14) by AID : Root                 IP=>::1   
-03/04/2024 05:40:58 admin.php=>ChangeLeftBlock(theme skin - 13) by AID : Root    IP=>::1   
-03/04/2024 05:47:52 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/04/2024 09:05:12 admin.php=>UpdateUser(2, user) by AID : Root                 IP=>::1   
-03/04/2024 21:05:01 admin.php=>ChangeAdminBlock() by AID : Root                  IP=>::1   
-03/04/2024 21:05:41 admin.php=>ChangeAdminBlock() by AID : Root                  IP=>::1   
-03/04/2024 21:08:36 admin.php=>ChangeMainBlock(Menu) by AID : Root               IP=>::1   
-03/04/2024 21:09:35 admin.php=>ChangeLeftBlock(Un Bloc ... - 1) by AID : Root    IP=>::1   
-03/04/2024 21:10:14 admin.php=>ChangeLeftBlock(Carte - 12) by AID : Root         IP=>::1   
-03/04/2024 21:10:50 admin.php=>ChangeLeftBlock(Menu - 2) by AID : Root           IP=>::1   
-03/04/2024 21:11:33 admin.php=>ChangeLeftBlock(Sondage - 11) by AID : Root       IP=>::1   
-03/04/2024 21:12:13 admin.php=>ChangeRightBlock(Un Bloc ... - 1) by AID : Root   IP=>::1   
-03/04/2024 21:12:58 admin.php=>ChangeLeftBlock(Administration - 7) by AID : Root IP=>::1   
-03/04/2024 21:13:41 admin.php=>ChangeLeftBlock(Message à un membre - 3) by AID : Root IP=>::1   
-03/04/2024 21:14:20 admin.php=>ChangeLeftBlock(Forums Infos - 5) by AID : Root   IP=>::1   
-03/04/2024 21:15:06 admin.php=>ChangeLeftBlock(Les plus téléchargés] - 6) by AID : Root IP=>::1   
-03/04/2024 21:15:52 admin.php=>ChangeLeftBlock(Activité du Site - 10) by AID : Root IP=>::1   
-03/04/2024 21:16:33 admin.php=>ChangeLeftBlock(Grands Titres de sites de News] - 9) by AID : Root IP=>::1   
-03/04/2024 21:17:09 admin.php=>ChangeLeftBlock(Ephémérides - 8) by AID : Root  IP=>::1   
-03/04/2024 21:45:11 admin.php=>MakeLeftBlock(Languages) by AID : Root            IP=>::1   
-03/04/2024 21:45:55 admin.php=>ChangeLeftBlock(Languages - 15) by AID : Root     IP=>::1   
-03/04/2024 21:47:23 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/06/2024 13:00:20 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:00:45 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:00:52 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:13:14 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:13:46 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:14:09 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:17:28 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:17:31 admin.php=>MetaTagsave() by AID : Root                       IP=>::1   
-03/06/2024 13:45:16 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/06/2024 14:14:01 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/06/2024 14:14:15 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/06/2024 14:14:52 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/06/2024 14:15:27 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/07/2024 03:16:19 admin.php=>postStory (pub_immediate, qsdfqsdf) by AID : Root IP=>::1   
-03/07/2024 03:16:19 admin.php=>deleteStoryfromQueue(1) by AID : Root             IP=>::1   
-03/07/2024 03:17:19 submit.php=>Submit Anti-Spam : name= / mail=                 IP=>::1   
-03/07/2024 03:28:42 admin.php=>postStory (pub_immediate, dfqsdqsf) by AID : Root IP=>::1   
-03/07/2024 03:28:42 admin.php=>deleteStoryfromQueue(0) by AID : Root             IP=>::1   
-03/07/2024 03:28:58 admin.php=>postStory (pub_immediate, qdqs) by AID : Root     IP=>::1   
-03/07/2024 03:28:58 admin.php=>deleteStoryfromQueue(0) by AID : Root             IP=>::1   
-03/07/2024 03:29:32 admin.php=>postStory (pub_immediate, dqsQSQd) by AID : Root  IP=>::1   
-03/07/2024 03:29:32 admin.php=>deleteStoryfromQueue(0) by AID : Root             IP=>::1   
-03/07/2024 03:29:45 admin.php=>postStory (pub_immediate, qdQDS) by AID : Root    IP=>::1   
-03/07/2024 03:29:45 admin.php=>deleteStoryfromQueue(0) by AID : Root             IP=>::1   
-03/16/2024 05:09:24 modules.php=>Edit File                                       /header.html IP=>::1
-03/16/2024 05:18:18 admin.php=>postStory (pub_immediate, cvbncvbn) by AID : Root IP=>::1   
-03/16/2024 05:18:18 admin.php=>deleteStoryfromQueue(2) by AID : Root             IP=>::1   
-03/16/2024 05:30:54 admin.php=>ChangeRightBlock(Information - 2) by AID : Root   IP=>::1   
-03/30/2024 04:36:34 admin.php=>ChangeAdminBlock() by AID : Root                  IP=>::1   
-03/30/2024 14:01:18 admin.php=>ModifyAuthor(Root) by AID : Root                  IP=>::1   
-03/30/2024 14:05:52 admin.php=>ModifyAuthor(Root) by AID : Root                  IP=>::1   
-03/30/2024 21:49:18 admin.php=>CreateGroupe(2, test) by AID : Root               IP=>::1   
-03/30/2024 21:51:08 admin.php=>AddMemberToGroup(2, user) by AID : Root           IP=>::1   
-03/31/2024 01:20:35 admin.php=>CreateBlocnoteWS(2) by AID : Root                 IP=>::1   
-03/31/2024 01:24:33 admin.php=>DeleteBlocnoteWS(2) by AID : Root                 IP=>::1   
-03/31/2024 01:25:22 admin.php=>CreateBlocnoteWS(2) by AID : Root                 IP=>::1   
-03/31/2024 01:28:02 admin.php=>ActivateChatWS(2) by AID : Root                   IP=>::1   
-03/31/2024 01:28:51 admin.php=>CreatePadWS(2) by AID : Root                      IP=>::1   
-03/31/2024 01:29:40 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
-03/31/2024 01:51:28 admin.php=>CreateGroupe(3, dqsfqs) by AID : Root             IP=>::1   
-03/31/2024 01:52:39 admin.php=>AddMemberToGroup(3, user) by AID : Root           IP=>::1   
-03/31/2024 20:00:35 admin.php=>CreateWS(2) by AID : Root                         IP=>::1   
-03/31/2024 20:00:39 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
-03/31/2024 20:08:12 admin.php=>CreateMnsWS(2) by AID : Root                      IP=>::1   
-03/31/2024 20:08:22 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
-03/31/2024 20:12:51 admin.php=>CreateMnsWS(3) by AID : Root                      IP=>::1   
-03/31/2024 20:12:54 admin.php=>DeleteMnsWS(3) by AID : Root                      IP=>::1   
-03/31/2024 20:16:50 admin.php=>CreateMnsWS(3) by AID : Root                      IP=>::1   
-03/31/2024 20:16:56 admin.php=>CreatePadWS(3) by AID : Root                      IP=>::1   
-03/31/2024 20:17:09 admin.php=>CreateBlocnoteWS(3) by AID : Root                 IP=>::1   
-03/31/2024 20:17:14 admin.php=>ActivateChatWS(3) by AID : Root                   IP=>::1   
-03/31/2024 20:27:37 admin.php=>DeleteMnsWS(3) by AID : Root                      IP=>::1   
-03/31/2024 20:27:41 admin.php=>DeleteMnsWS(2) by AID : Root                      IP=>::1   
-03/31/2024 20:27:47 admin.php=>ArchiveWS(3) by AID : Root                        IP=>::1   
-03/31/2024 20:27:51 admin.php=>ArchiveWS(2) by AID : Root                        IP=>::1   
-03/31/2024 20:43:32 admin.php=>CreateWS(3) by AID : Root                         IP=>::1   
-03/31/2024 20:44:06 admin.php=>ArchiveWS(3) by AID : Root                        IP=>::1   
-03/31/2024 20:44:08 admin.php=>DeletePadWS(3) by AID : Root                      IP=>::1   
-03/31/2024 20:44:10 admin.php=>DesactivateChatWS(3) by AID : Root                IP=>::1   
-03/31/2024 20:44:12 admin.php=>DeleteBlocnoteWS(3) by AID : Root                 IP=>::1   
-03/31/2024 20:47:33 admin.php=>DeleteAllMemberToGroup(3, 2) by AID : Root        IP=>::1   
-04/02/2024 10:15:16 admin.php=>ChangeLeftBlock(Carte - 12) by AID : root         IP=>::1   
-04/02/2024 10:15:27 admin.php=>ChangeLeftBlock(Un Bloc ... - 1) by AID : root    IP=>::1   
-04/02/2024 10:20:09 admin.php=>SaveConfigFile(header_after) by AID : root        IP=>::1   
-04/02/2024 12:04:45 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/02/2024 12:05:18 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 00:00:57 admin.php=>AddCatLinks(test categ) by AID : root             IP=>::1   
-04/03/2024 00:01:28 admin.php=>AddSubCatLinks(test sous categ) by AID : root     IP=>::1   
-04/03/2024 00:28:32 admin.php=>AddLinks(dfgs) by AID : root                      IP=>::1   
-04/03/2024 00:53:30 admin.php=>AddEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
-04/03/2024 00:54:04 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
-04/03/2024 00:54:33 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
-04/03/2024 00:58:23 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
-04/03/2024 01:04:38 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
-04/03/2024 01:09:32 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
-04/03/2024 01:12:14 admin.php=>ModEditorialLinks(1, sdfgsd) by AID : root        IP=>::1   
-04/03/2024 01:12:25 admin.php=>ModEditorialLinks(1, sdfgsd  dfgdfg) by AID : root IP=>::1   
-04/03/2024 01:14:14 admin.php=>DeteteEditorialLinks(1) by AID : root             IP=>::1   
-04/03/2024 01:14:42 admin.php=>AddEditorialLinks(1, dfghdfg) by AID : root       IP=>::1   
-04/03/2024 01:15:41 admin.php=>DeleteLinks(1) by AID : root                      IP=>::1   
-04/03/2024 19:23:19 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 19:24:43 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 19:25:36 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 19:38:08 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 19:38:42 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 19:39:40 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 19:42:25 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:13:30 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:14:42 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:19:28 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:23:29 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:24:25 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:24:37 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:24:45 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:25:13 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:25:39 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:25:58 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:26:22 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:26:34 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:26:47 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:26:53 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:28:30 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:31:27 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:32:05 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:32:07 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 21:33:11 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 22:35:28 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 23:15:11 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 23:15:44 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 23:16:36 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 23:56:01 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/03/2024 23:59:51 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/04/2024 00:02:27 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/04/2024 00:02:59 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/04/2024 00:06:21 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/04/2024 00:07:40 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/04/2024 00:08:24 admin.php=>OptiMySql() by AID : root                         IP=>::1   
-04/04/2024 03:25:05 admin.php=>OptiMySql() by AID : root                         IP=>::1   
+04/06/2024 00:20:58 admin.php=>CreateRubriques(test rubrique) by AID : root      IP=>::1   
+04/06/2024 00:22:17 admin.php=>CreateArticleSections(3, fghedh) by AID : root    IP=>::1   
+04/06/2024 00:25:01 admin.php=>UpdateArticleSections(1, 3, fghedh) by AID : root IP=>::1   
+04/06/2024 00:25:06 admin.php=>UpdateArticleSections(1, 3, fghedh) by AID : root IP=>::1   
+04/08/2024 13:24:12 admin.php=>ChangeRightBlock(Bloc membre - 3) by AID : Root   IP=>::1   
+04/08/2024 13:24:21 admin.php=>ChangeRightBlock(Anciens Articles - 5) by AID : Root IP=>::1   
+04/08/2024 13:24:28 admin.php=>ChangeRightBlock(Article du Jour - 8) by AID : Root IP=>::1   
+04/08/2024 13:24:35 admin.php=>ChangeRightBlock(Lettre d''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:24:45 admin.php=>ChangeRightBlock(Catégories - 7) by AID : Root   IP=>::1   
+04/08/2024 13:45:31 admin.php=>ChangeRightBlock(Lettre d''''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:45:39 admin.php=>ChangeRightBlock(Lettre d''''''''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:45:49 admin.php=>ChangeRightBlock(Bloc membre - 3) by AID : Root   IP=>::1   
+04/08/2024 13:47:53 admin.php=>ChangeRightBlock(Lettre d''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:49:30 admin.php=>ChangeRightBlock(Lettre d''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:49:40 admin.php=>ChangeRightBlock(Lettre d''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:50:46 admin.php=>ChangeRightBlock(Lettre d''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:51:06 admin.php=>ChangeRightBlock(Lettre d''information - 4) by AID : Root IP=>::1   
+04/08/2024 13:51:56 admin.php=>ChangeRightBlock(Lettre d'information - 4) by AID : Root IP=>::1   
+04/08/2024 13:52:03 admin.php=>ChangeRightBlock(Lettre d'information - 4) by AID : Root IP=>::1   
+04/08/2024 13:54:03 admin.php=>ChangeRightBlock(Bloc membre - 3) by AID : Root   IP=>::1   
+04/08/2024 13:54:09 admin.php=>ChangeRightBlock(Anciens Articles - 5) by AID : Root IP=>::1   
+04/08/2024 13:54:16 admin.php=>ChangeRightBlock(Article du Jour - 8) by AID : Root IP=>::1   
+04/08/2024 13:54:23 admin.php=>ChangeRightBlock(Catégories - 7) by AID : Root   IP=>::1   
+04/09/2024 13:55:06 admin.php=>AddForum(dfsqds) by AID : Root                    IP=>::1   
+04/09/2024 14:37:33 admin.php=>AddForumCat(categ test) by AID : Root             IP=>::1   
+04/09/2024 14:37:55 admin.php=>AddForum(test 3) by AID : Root                    IP=>::1   
+04/10/2024 06:53:25 admin.php=>UpdateForum(1, Demo) by AID : Root                IP=>::1   
+04/10/2024 07:14:37 admin.php=>UpdateForum(8, test 3) by AID : Root              IP=>::1   
+04/10/2024 10:36:26 admin.php=>MakeLeftBlock(fgds) by AID : Root                 IP=>::1   
+04/12/2024 08:59:23 admin.php=>auth.inc.php/Admin_alert : Passwd not in DB#1 : Root IP=>::1   
+04/12/2024 09:00:33 admin.php=>auth.inc.php/Admin_alert : Passwd not in DB#1 : Root IP=>::1   
+04/12/2024 09:02:11 admin.php=>auth.inc.php/Admin_alert : Passwd not in DB#1 : Root IP=>::1   
+04/12/2024 09:26:46 admin.php=>auth.inc.php/Admin_alert : Passwd not in DB#1 : Root IP=>::1   
+04/12/2024 15:10:01 admin.php=>auth.inc.php/Admin_alert : Passwd not in DB#1 : Root IP=>::1   
+04/12/2024 21:19:57 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
+04/12/2024 21:33:27 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
+04/12/2024 21:35:13 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
+04/12/2024 21:50:03 friend.php=>Friend Anti-Spam : name=laurent / mail=nicolas.l.devoy@gmail.com IP=>::1   
+04/12/2024 22:04:39 friend.php=>Friend Anti-Spam : name=my / mail=nicolas@airtek.fr IP=>::1   
+04/12/2024 22:05:34 friend.php=>Friend Anti-Spam : name=my / mail=nicolas@nicodev.fr IP=>::1   
+04/12/2024 22:07:46 friend.php=>Friend Anti-Spam : name=my / mail=nicolas@nicodev.fr IP=>::1   
+04/12/2024 22:09:11 friend.php=>Friend Anti-Spam : name=my / mail=nicolas.l.devoy@gmail.com IP=>::1   
+04/12/2024 22:10:19 friend.php=>Friend Anti-Spam : name=my / mail=nicolas@nicodec.fr IP=>::1   
+04/12/2024 22:22:43 friend.php=>Friend Anti-Spam : name=my / mail=nicolas@airteck.fr IP=>::1   
+04/12/2024 23:31:24 lnl.php=>LNL Anti-Spam : email=admin@gmail.com               IP=>::1   
+04/12/2024 23:33:02 lnl.php=>LNL Anti-Spam : email=admin@gmail.com               IP=>::1   
+04/12/2024 23:43:14 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
+04/12/2024 23:47:57 admin.php=>ConfigSave() by AID : Root                        IP=>::1   

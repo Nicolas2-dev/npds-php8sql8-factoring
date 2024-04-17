@@ -15,6 +15,7 @@
 declare(strict_types=1);
 
 use npds\system\routing\url;
+use npds\system\support\facades\Request;
 
 
 if (!function_exists("Mysql_Connexion")) {
@@ -45,6 +46,9 @@ function filtre_module(string $strtmp): string|bool|url
         return $strtmp != '' ? true : false;
     }
 }
+
+$ModPath = Request::input('ModPath');
+$ModStart = Request::input('ModStart');
 
 if (filtre_module($ModPath) and filtre_module($ModStart)) {
     if (file_exists("modules/$ModPath/http/$ModStart.php")) {

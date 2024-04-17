@@ -48,11 +48,13 @@ $moderator      = forum::get_moderator($rowQ1['forum_moderator']);
 $user = users::getUser();
 
 if (isset($user)) {
+    $userX = base64_decode($user);
+    $userdata = explode(':', $userX);
     $moderator = explode(' ', $moderator);
     $Mmod = false;
 
     for ($i = 0; $i < count($moderator); $i++) {
-        if ((users::cookieUser(1) == $moderator[$i])) {
+        if (($userdata[1] == $moderator[$i])) {
             $Mmod = true;
             break;
         }
@@ -71,17 +73,19 @@ if (Request::input('submitS')) {
         forum::forumerror('0022');
     }
 
-    if (users::cookieUser(0) == $result_post['poster_id']) {
+    if ($userdata[0] == $result_post['poster_id']) {
         $ok_maj = true;
     } else {
         if (!$Mmod) {
             forum::forumerror('0035');
         }
 
-        if ((forum::user_is_moderator(users::cookieUser(0), users::cookieUser(2), $forum_access) < 2)) {
+        if ((forum::user_is_moderator($userdata[0],$userdata[2], $forum_access) < 2)) {
             forum::forumerror('0036');
         }
     }
+
+    $userdata = forum::get_userdata($userdata[1]);
 
     $html       = Request::input('html');
     $message    = Request::input('message');
@@ -98,9 +102,9 @@ if (Request::input('submitS')) {
         $message = forum::make_clickable($message);
         $message = code::af_cod($message);
         $message = str_replace("\n", "<br />", hack::removeHack($message));
-        $message .= "<div class='text-muted text-end small'><i class='fa fa-edit'></i>&nbsp;" . translate("Message édité par") . " : " . users::cookieUser(1) . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
+        $message .= "<div class='text-muted text-end small'><i class='fa fa-edit'></i>&nbsp;" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
     } else {
-        $message .= "\n\n" . translate("Message édité par") . " : " . users::cookieUser(1) . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
+        $message .= "\n\n" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
     }
 
     $message = addslashes($message);
@@ -219,7 +223,7 @@ if (Request::input('submitS')) {
         forum::forumerror('0001');
     }
 
-    if ((!$Mmod) and (users::cookieUser(0) != $res_post['uid'])) {
+    if ((!$Mmod) and ($userdata[0] != $res_post['uid'])) {
         forum::forumerror('0035');
     }
 
@@ -258,7 +262,7 @@ if (Request::input('submitS')) {
         $message = stripslashes($message);
     }
 
-    if ((($Mmod) or (users::cookieUser(0) == $res_post['uid'])) and ($forum_access != 9)) {
+    if ((($Mmod) or ($userdata[0] == $res_post['uid'])) and ($forum_access != 9)) {
         $qui = $res_post['poster_id'] == 0 ? Config::get('npds.anonymous') : $res_post['uname'];
 
         echo '
