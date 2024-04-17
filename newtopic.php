@@ -365,23 +365,9 @@ if (Request::input('submitS')) {
             $acc = 'newtopic';
             $subject = stripslashes(Request::input('subject'));
             $message = stripslashes(Request::input('message'));
-
-            // if (isset($username)) {
-            //     $username = stripslashes($username);
-            // } else {
-            //     $username = '';
-            // }
-
-            // if (isset($password)) {
-            //     $password = stripslashes($password);
-            // } else {
-            //     $password = '';
-            // }
-
+            
             include("preview.php");
         } else {
-        //     $username = '';
-        //     $password = '';
             $subject = '';
             $message = '';
         }

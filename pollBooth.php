@@ -29,18 +29,29 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php'); 
 }
 
-function pollCollector($pollID, $voteID, $forwarder)
+/**
+ * [pollCollector description]
+ *
+ * @param   int     $pollID     [$pollID description]
+ * @param   int     $voteID     [$voteID description]
+ * @param   string  $forwarder  [$forwarder description]
+ *
+ * @return  void
+ */
+function pollCollector(int $pollID, int $voteID, string $forwarder): void
 {
-    if ($voteID) {
-        global  $al_id, $al_nom; // config poolbooth
+    if ($voteID) { 
+        $al_id = Config::get('pollbooth.al_id'); 
+        $al_nom = Config::get('pollbooth.al_nom');
 
         $voteValid = "1";
-        $result = sql_query("SELECT timeStamp FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$pollID'");
-        list($timeStamp) = sql_fetch_row($result);
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $res_time = DB::table('poll_desc')
+                ->select('timeStamp')
+                ->where('pollID', $pollID)
+                ->first();
 
-        $cookieName = 'poll' . DB::getTablePrefix() . $timeStamp;
+        $cookieName = 'poll' . DB::getTablePrefix() . $res_time['timeStamp'];
 
         if (Request::cookie($cookieName) == "1") {
             $voteValid = "0";
@@ -48,56 +59,57 @@ function pollCollector($pollID, $voteID, $forwarder)
             setcookie($cookieName, 1, time() + 86400);
         }
 
-        $user = users::getUser();
-        
+        $query = DB::table('appli_log')
+                    ->select('al_id')
+                    ->where('al_id', $al_id)
+                    ->where('al_subid', $pollID)
+                    ->where('al_ip', $ip = Request::getIp());
+           
+        $user        = users::getUser();
+
         if ($user) {
-            $user_req = "OR al_uid='$cookie[0]'";
+            $cookie_user = users::cookieUser(0);
+            $query->orWhere('al_uid', $cookie_user);
         } else {
-            $cookie[0] = "1";
-            $user_req = '';
+            $cookie_user = "1";
         }
 
         if (Config::get('npds.setCookies') == "1") {
-            $ip = Request::getIp();
-
             if (Config::get('npds.dns_verif')) {
-                $hostname = "OR al_hostname='" . @gethostbyaddr($ip) . "' ";
+                $hostname = $query->orWhere('al_hostname', @gethostbyaddr($ip));
             } else {
                 $hostname = "";
             }
 
-            $sql = "SELECT al_id FROM " . $NPDS_Prefix . "appli_log WHERE al_id='$al_id' AND al_subid='$pollID' AND (al_ip='$ip' " . $hostname . $user_req . ")";
-            
-            = DB::table('')->select()->where('', )->orderBy('')->get();
-            
-            if ($result = sql_fetch_row(sql_query($sql))) {
+            if ($voteValid = $query->first()) {
                 $voteValid = "0";
             }
         }
 
         if ($voteValid == "1") {
-            $ip = Request::getIp();
-
             if (Config::get('npds.dns_verif')) {
-                $hostname = "OR al_hostname='" . @gethostbyaddr($ip) . "' ";
+                $hostname = @gethostbyaddr($ip);
             } else {
                 $hostname = "";
             }
 
-            sql_query("INSERT INTO " . $NPDS_Prefix . "appli_log (al_id, al_name, al_subid, al_date, al_uid, al_data, al_ip, al_hostname) VALUES ('$al_id', '$al_nom', '$pollID', now(), '$cookie[0]', '$voteID', '$ip', '$hostname')");
             DB::table('')->insert(array(
-                ''       => ,
+                'al_id'         => $al_id,
+                'al_name'       => $al_nom,
+                'al_subid'      => $pollID,
+                'al_date'       => 'now()',
+                'al_uid'        => $cookie_user,
+                'al_data'       => $voteID,
+                'al_ip'         => $ip,
+                'al_hostname'   => $hostname,
             ));
             
-            sql_query("UPDATE " . $NPDS_Prefix . "poll_data SET optionCount=optionCount+1 WHERE (pollID='$pollID') AND (voteID='$voteID')");
-            DB::table('')->where('', )->update(array(
-                ''       => ,
+            DB::table('poll_data')->where('pollID', $pollID)->where('voteID', $voteID)->update(array(
+                'optionCount'       => DB::raw('optionCount+1'),
             ));
             
-            sql_query("UPDATE " . $NPDS_Prefix . "poll_desc SET voters=voters+1 WHERE pollID='$pollID'");
-
-            DB::table('')->where('', )->update(array(
-                ''       => ,
+            DB::table('poll_desc')->where('pollID', $pollID)->update(array(
+                'voters'       => DB::raw('voters+1'),
             ));
         }
     }
@@ -105,60 +117,74 @@ function pollCollector($pollID, $voteID, $forwarder)
     Header("Location: $forwarder");
 }
 
-function pollList()
+/**
+ * [pollList description]
+ *
+ * @return  void
+ */
+function pollList(): void
 {
-    $result = sql_query("SELECT pollID, pollTitle, voters FROM " . $NPDS_Prefix . "poll_desc ORDER BY timeStamp");
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
     echo '
     <h2 class="mb-3">' . translate("Sondage") . '</h2>
     <hr />
     <div class="row">';
 
-    while ($object = sql_fetch_assoc($result)) {
+    foreach (DB::table('poll_desc')
+            ->select('pollID', 'pollTitle', 'voters')
+            ->orderBy('timeStamp')
+            ->get() as $object) 
+    {
         $id = $object['pollID'];
         $pollTitle = $object['pollTitle']; 
 
-        $result2 = sql_query("SELECT SUM(optionCount) AS SUM FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$id'");
-        list($sum) = sql_fetch_row($result2);
-
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $sum = DB::table('poll_data')
+            ->select(DB::raw('SUM(optionCount) AS count'))
+            ->where('pollID', $id)
+            ->first();
 
         echo '
         <div class="col-sm-8">' . language::aff_langue($pollTitle) . '</div>
-        <div class="col-sm-4 text-end">(<a href="'. site_url('pollBooth.php?op=results&amp;pollID=' . $id) .'">' . translate("Résultats") . '</a> - ' . $sum . ' ' . translate("votes") . ')</div>';
+        <div class="col-sm-4 text-end">(<a href="'. site_url('pollBooth.php?op=results&amp;pollID=' . $id) .'">' . translate("Résultats") . '</a> - ' . $sum['count'] . ' ' . translate("votes") . ')</div>';
     }
 
     echo '
     </div>';
 }
 
+/**
+ * [pollResults description]
+ *
+ * @param   int   $pollID  [$pollID description]
+ *
+ * @return  void
+ */
 function pollResults(int $pollID): void
 {
     if (!isset($pollID) or empty($pollID)) {
         $pollID = 1;
     }
 
-    $result = sql_query("SELECT pollID, pollTitle, timeStamp FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$pollID'");
-    list(, $pollTitle) = sql_fetch_row($result);
+    $res = DB::table('poll_desc')
+            ->select('pollID', 'pollTitle', 'timeStamp')
+            ->where('pollID', $pollID)
+            ->first();
 
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    echo '<h3 class="my-3">' . $res['pollTitle'] . '</h3>';
 
-    echo '<h3 class="my-3">' . $pollTitle . '</h3>';
+    $sum = DB::table('poll_data')
+            ->select(DB::raw('SUM(optionCount) AS count'))
+            ->where('pollID', $pollID)
+            ->first();
 
-    $result = sql_query("SELECT SUM(optionCount) AS SUM FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$pollID'");
-    list($sum) = sql_fetch_row($result);
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    echo '<h4><span class="badge bg-secondary">' . $sum . '</span>&nbsp;' . translate("Résultats") . '</h4>';
+    echo '<h4><span class="badge bg-secondary">' . $sum['count'] . '</span>&nbsp;' . translate("Résultats") . '</h4>';
 
     for ($i = 1; $i <= Config::get('npds.maxOptions'); $i++) {
-        $result = sql_query("SELECT optionText, optionCount, voteID FROM " . $NPDS_Prefix . "poll_data WHERE (pollID='$pollID') AND (voteID='$i')");
-        $object = sql_fetch_assoc($result);
 
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $object = DB::table('poll_data')
+                ->select('optionText', 'optionCount', 'voteID')
+                ->where('pollID', $pollID)
+                ->where('voteID', $i)
+                ->first();
 
         if (!is_null($object)) {
             $optionText = $object['optionText'];
@@ -190,15 +216,22 @@ function pollResults(int $pollID): void
     }
 
     echo '<br />';
-    echo '<p class="text-center"><b>' . translate("Nombre total de votes: ") . ' ' . $sum . '</b></p><br />';
+    echo '<p class="text-center"><b>' . translate("Nombre total de votes: ") . ' ' . $sum['count'] . '</b></p><br />';
 
     if (Config::get('npds.setCookies') > 0) {
         echo '<p class="text-danger">' . translate("Un seul vote par sondage.") . '</p>';
     }
 }
 
-#autodoc pollboxbooth($pollID,$pollClose) : Construit le blocs sondages / code du mainfile avec autre présentation
-function pollboxbooth($pollID, $pollClose)
+/**
+ * Construit le blocs sondages / code du mainfile avec autre présentation
+ *
+ * @param   int   $pollID     [$pollID description]
+ * @param   int   $pollClose  [$pollClose description]
+ *
+ * @return  void
+ */
+function pollboxbooth(int $pollID, int $pollClose): void
 {
     global $boxTitle, $boxContent, $block_title;
 
@@ -215,18 +248,21 @@ function pollboxbooth($pollID, $pollClose)
         <input type="hidden" name="pollID" value="' . $pollID . '" />
         <input type="hidden" name="forwarder" value="' . $url . '" />';
 
-    $result = sql_query("SELECT pollTitle, voters FROM " . $NPDS_Prefix . "poll_desc WHERE pollID='$pollID'"); // ??? $voters not used
-    list($pollTitle, $voters) = sql_fetch_row($result); // ??? $voters not used 
-
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $res_pooldesc = DB::table('poll_desc')
+            ->select('pollTitle')
+            ->where('pollID', $pollID)
+            ->first();
 
     $boxTitle = $block_title == '' ? translate("Sondage") : $block_title;
 
-    $boxContent .= '<h4>' . language::aff_langue($pollTitle) . '</h4>';
+    $boxContent .= '<h4>' . language::aff_langue($res_pooldesc['pollTitle']) . '</h4>';
 
-    $result = sql_query("SELECT pollID, optionText, optionCount, voteID FROM " . $NPDS_Prefix . "poll_data WHERE (pollID='$pollID' AND optionText<>'') ORDER BY voteID");
-    
-    = DB::table('')->select()->where('', )->orderBy('')->get();
+    $result= DB::table('poll_data')
+            ->select('pollID', 'optionText', 'optionCount', 'voteID')
+            ->where('pollID', $pollID)
+            ->where('optionText', '<>', '')
+            ->orderBy('voteID')
+            ->get();
 
     $sum = 0;
     $j = 0;
@@ -234,7 +270,7 @@ function pollboxbooth($pollID, $pollClose)
     if (!$pollClose) {
         $boxContent .= '<div class="custom-controls-stacked">';
         
-        while ($object = sql_fetch_assoc($result)) {
+        foreach ($result as $object) {
             $boxContent .= '
                 <div class="form-check">
                     <input type="radio" class="form-check-input" id="voteID' . $j . '" name="voteID" value="' . $object['voteID'] . '" />
@@ -248,7 +284,7 @@ function pollboxbooth($pollID, $pollClose)
                 </div>
                 <div class="clearfix"></div>';
     } else {
-        while ($object = sql_fetch_assoc($result)) {
+        foreach ($result as $object) {
             $boxContent .= "&nbsp;" . language::aff_langue($object['optionText']) . "<br />\n";
             $sum = $sum + $object['optionCount'];
         }
@@ -266,13 +302,16 @@ function pollboxbooth($pollID, $pollClose)
     $boxContent .= '<div><ul><li><a href="'. site_url('pollBooth.php') .'">' . translate("Anciens sondages") . '</a></li>';
 
     if (Config::get('npds.pollcomm')) {
-        if (file_exists("modules/comments/config/pollBoth.conf.php")) {
-            include("modules/comments/config/pollBoth.conf.php");
+        if (file_exists('modules/comments/config/pollBoth.conf.php')) {
+            include('modules/comments/config/pollBoth.conf.php');
         }
 
-        list($numcom) = sql_fetch_row(sql_query("SELECT COUNT(*) FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$pollID' AND post_aff='1'"));
-        
-        = DB::table('')->select()->where('', )->orderBy('')->get();
+        $numcom = DB::table('posts')
+                ->select('*')
+                ->where('forum_id', $forum)
+                ->where('topic_id', $pollID)
+                ->where('post_aff', 1)
+                ->count();
         
         $boxContent .= '<li>' . translate("Votes : ") . ' ' . $sum . '</li><li>' . translate("Commentaire(s) : ") . ' ' . $numcom . '</li>';
     } else {
@@ -280,6 +319,7 @@ function pollboxbooth($pollID, $pollClose)
     }
 
     $boxContent .= '</ul></div>';
+
     echo '<div class="card card-body">' . $boxContent . '</div>';
 }
 
@@ -293,10 +333,11 @@ function PollMain_aff(): void
     echo '<p><strong><a href="'. site_url('pollBooth.php') .'">' . translate("Anciens sondages") . '</a></strong></p>';
 }
 
+
 $pollID = Request::query('pollID');
 
 if (!isset($pollID)) {
-    include("themes/default/header.php");;
+    include('themes/default/header.php');
     pollList();
 }
 
@@ -315,10 +356,11 @@ if (isset($forwarder)) {
 
     if ($pollID == $ibid) {
         if (Config::get('pollbooth.header') != 1) {
-            include("themes/default/header.php");
+            include('themes/default/header.php');
         }
 
         echo '<h2>' . translate("Sondage") . '</h2><hr />';
+        
         pollResults($pollID);
 
         if (!$pollClose) {
@@ -331,14 +373,14 @@ if (isset($forwarder)) {
         }
 
         if (Config::get('npds.pollcomm')) {
-            if (file_exists("modules/comments/config/pollBoth.conf.php")) {
-                include("modules/comments/config/pollBoth.conf.php");
+            if (file_exists('modules/comments/config/pollBoth.conf.php')) {
+                include('modules/comments/config/pollBoth.conf.php');
                 
                 if ($pollClose == 99) {
                     Config::set('npds.generale.anonpost', 0);
                 }
 
-                include("modules/comments/http/comments.php");
+                include('modules/comments/http/comments.php');
             }
         }
     } else {
@@ -346,4 +388,4 @@ if (isset($forwarder)) {
     }
 }
 
-include("themes/default/footer.php");;
+include('themes/default/footer.php');

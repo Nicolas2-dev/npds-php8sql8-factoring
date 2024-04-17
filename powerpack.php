@@ -24,6 +24,9 @@ if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
+
+// note a revoir function a tranferer et eradiquer powerpack.php !!!!
+
 global $powerpack;
 $powerpack = true;
 
@@ -56,8 +59,8 @@ switch ($op) {
         Header('Location: '. site_url('index.php'));
         break;
 
-        // Instant Members Message
-        // Purge Chat Box
+    // Instant Members Message
+    // Purge Chat Box
     case 'admin_chatbox_write':
         if ($admin) {
             $adminX = base64_decode($admin);
