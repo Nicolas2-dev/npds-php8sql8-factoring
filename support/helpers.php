@@ -1,12 +1,19 @@
 <?php
 declare(strict_types=1);
 
+use npds\support\polls;
+use npds\support\download;
 use npds\support\chat\chat;
+use npds\support\logs\logs;
 use npds\support\block\boxe;
 use npds\support\cache\cache;
 use npds\support\forum\forum;
-use npds\support\polls;
-use npds\support\download;
+use npds\support\news\gzfile;
+use npds\support\theme\theme;
+use npds\support\auth\authors;
+use npds\support\news\zipfile;
+use npds\system\config\Config;
+use npds\support\metalang\metalang;
 use npds\support\messenger\messenger;
 
 // boxe.php
@@ -481,6 +488,258 @@ if (! function_exists('RecentForumPosts_fab'))
 }
 // // .php
 
+/**
+ * 
+ */
+if (! function_exists('manuel'))
+{
+    /**
+     * [manuel description]
+     *
+     * @param   [type]  $manuel  [$manuel description]
+     *
+     * @return  [type]
+     */
+    function manuel($manuel)  
+    {
+        return 'modules/manuels/view/'. Config::get('npds.language') .'/'. $manuel .'.html';
+    }
+}
+
+if (! function_exists('access_denied'))
+{
+    /**
+     * [access_denied description]
+     *
+     * @return  [type]  [return description]
+     */
+    function access_denied()
+    {
+        include("admin/die.php");
+    }
+}
+
+// note A revoir !!!
+if (! function_exists('MM_img'))
+{
+    /**
+     * Cette fonction est utilisée pour intégrer des smilies et comme service pour theme_img()
+     *
+     * @param   string  $ibid  [$ibid description]
+     *
+     * @return  string
+     */
+    function MM_img(string $ibid): string 
+    {
+        $ibid = metalang::arg_filter($ibid);
+        $ibidX = theme::theme_image($ibid);
+        
+        if ($ibidX) {
+            $ret = "<img src=\"$ibidX\" border=\"0\" alt=\"\" />";
+        } else {
+            if (@file_exists("assets/images/$ibid")) {
+                $ret = "<img src=\"assets/images/$ibid\" border=\"0\" alt=\"\" />";
+            } else {
+                $ret = false;
+            }
+        }
+
+        return $ret;
+    }
+}
+
+if (! function_exists('site_url'))
+{
+    /**
+     * 
+     *
+     * @param   string  $url  [$url description]
+     *
+     * @return  string
+     */
+    function site_url(string $url): string
+    {
+        $url = ltrim($url, '/');
+
+        return Config::get('npds.nuke_url') .'/'. $url;
+    }
+}
+
+if (! function_exists('module_url'))
+{
+    /**
+     * [module_url description]
+     *
+     * @param   string  $ModPath   [$ModPath description]
+     * @param   string  $ModStart  [$ModStart description]
+     * @param   string  $url       [$url description]
+     *
+     * @return  string
+     */
+    function module_url(string $ModPath, string $ModStart, string $url): string
+    {
+        $url = ltrim($url, '/');
+
+        return Config::get('npds.nuke_url') .'/modules.php?ModPath='. $ModPath .'&ModStart='. $ModStart .'&'. $url;
+    }
+}
+
+if (! function_exists('Admin_alert'))
+{
+    function Admin_alert($motif)
+    {
+        $admin = authors::getAdmin();
+
+        setcookie('admin', '', 0);
+        unset($admin);
+
+        logs::Ecr_Log('security', 'auth.inc.php/Admin_alert : ' . $motif, '');
+        
+        if (file_exists("storage/meta/meta.php")) {
+            $Titlesitename = 'NPDS';
+            include("storage/meta/meta.php");
+        }
+
+        echo '
+            </head>
+            <body>
+                <br /><br /><br />
+                <p style="font-size: 24px; font-family: Tahoma, Arial; color: red; text-align:center;"><strong>.: ' . translate("Votre adresse Ip est enregistrée") . ' :.</strong></p>
+            </body>
+        </html>';
+        die();
+    }
+}
+
+if (! function_exists('get_os'))
+{
+    /**
+     * retourne true si l'OS de la station cliente est Windows sinon false
+     *
+     * @return  [type]  [return description]
+     */
+    function get_os()
+    {
+        $client = getenv("HTTP_USER_AGENT");
+        
+        if (preg_match('#(\(|; )(Win)#', $client, $regs)) {
+            if ($regs[2] == "Win") {
+                $MSos = true;
+            } else {
+                $MSos = false;
+            }
+        } else {
+            $MSos = false;
+        }
+
+        return $MSos;
+    }
+}
+
+if (! function_exists('send_file'))
+{
+    /**
+     * compresse et télécharge un fichier
+     *
+     * @param   [type]  $line       le flux
+     * @param   [type]  $filename   
+     * @param   [type]  $extension  le fichier
+     * @param   [type]  $MSos       (voir fonction get_os)
+     *
+     * @return  [type]              [return description]
+     */    
+    function send_file($line, $filename, $extension, $MSos)
+    {
+        $compressed = false;
+        if (file_exists("system/news/archive.php")) {
+            if (function_exists("gzcompress")) {
+                $compressed = true;
+            }
+        }
+
+        if ($compressed) {
+            if ($MSos) {
+                $arc = new zipfile();
+                $filez = $filename . ".zip";
+            } else {
+                $arc = new gzfile();
+                $filez = $filename . ".gz";
+            }
+
+            $arc->addfile($line, $filename . "." . $extension, "");
+            $arc->arc_getdata();
+            $arc->filedownload($filez);
+        } else {
+            if ($MSos) {
+                header("Content-Type: application/octetstream");
+            } else {
+                header("Content-Type: application/octet-stream");
+            }
+
+            header("Content-Disposition: attachment; filename=\"$filename." . "$extension\"");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+
+            echo $line;
+        }
+    }
+}
+
+if (! function_exists('send_tofile'))
+{
+    /**
+     * compresse et enregistre un fichier
+     *
+     * @param   [type]  $line        le flux
+     * @param   [type]  $repertoire  
+     * @param   [type]  $filename    
+     * @param   [type]  $extension   
+     * @param   [type]  $MSos        (voir fonction get_os)
+     *
+     * @return  [type]               [return description]
+     */
+    function send_tofile($line, $repertoire, $filename, $extension, $MSos)
+    {
+        $compressed = false;
+
+        if (file_exists("system/news/archive.php")) {
+            if (function_exists("gzcompress")) {
+                $compressed = true;
+            }
+        }
+
+        if ($compressed) {
+            if ($MSos) {
+                $arc = new zipfile();
+                $filez = $filename . ".zip";
+            } else {
+                $arc = new gzfile();
+                $filez = $filename . ".gz";
+            }
+
+            $arc->addfile($line, $filename . "." . $extension, "");
+            $arc->arc_getdata();
+
+            if (file_exists($repertoire . "/" . $filez)) {
+                unlink($repertoire . "/" . $filez);
+            }
+
+            $arc->filewrite($repertoire . "/" . $filez, $perms = null);
+        } else {
+            if ($MSos) {
+                header("Content-Type: application/octetstream");
+            } else {
+                header("Content-Type: application/octet-stream");
+            }
+
+            header("Content-Disposition: attachment; filename=\"$filename." . "$extension\"");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            
+            echo $line;
+        }
+    }
+}
 
 // if (! function_exists(''))
 // {
