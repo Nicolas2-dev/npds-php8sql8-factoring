@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace npds\support\assets;
+namespace npds\support\alerte;
 
 
 class alerte
