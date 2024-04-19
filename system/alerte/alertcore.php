@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace npds\system\assets;
+namespace npds\support\assets;
 
 
 class alertcore

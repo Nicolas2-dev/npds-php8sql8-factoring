@@ -14,8 +14,8 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\logs\logs;
-use npds\system\assets\css;
+use npds\support\logs\logs;
+use npds\support\assets\css;
 use npds\system\config\Config;
 use npds\system\support\facades\DB;
 

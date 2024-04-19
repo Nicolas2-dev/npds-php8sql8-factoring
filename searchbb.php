@@ -15,12 +15,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\js;
-use npds\system\date\date;
-use npds\system\auth\groupe;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\security\hack;
+use npds\support\assets\js;
+use npds\support\date\date;
+use npds\support\auth\groupe;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 

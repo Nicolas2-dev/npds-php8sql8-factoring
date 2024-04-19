@@ -15,14 +15,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\date\date;
-use npds\system\auth\users;
-use npds\system\auth\groupe;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\routing\url;
-use npds\system\theme\theme;
-use npds\system\utility\spam;
+use npds\support\date\date;
+use npds\support\auth\users;
+use npds\support\auth\groupe;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\routing\url;
+use npds\support\theme\theme;
+use npds\support\utility\spam;
 use npds\system\config\Config;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;

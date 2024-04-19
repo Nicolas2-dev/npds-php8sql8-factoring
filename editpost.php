@@ -15,15 +15,15 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\date\date;
-use npds\system\auth\users;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\routing\url;
-use npds\system\utility\code;
+use npds\support\date\date;
+use npds\support\auth\users;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\routing\url;
+use npds\support\utility\code;
 use npds\system\config\Config;
-use npds\system\security\hack;
-use npds\system\utility\crypt;
+use npds\support\security\hack;
+use npds\support\utility\crypt;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 

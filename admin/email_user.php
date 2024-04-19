@@ -14,13 +14,13 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\js;
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\mail\mailler;
+use npds\support\assets\js;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\mail\mailler;
 use npds\system\config\Config;
-use npds\system\support\editeur;
-use npds\system\language\language;
+use npds\support\editeur;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {

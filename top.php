@@ -12,8 +12,8 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 

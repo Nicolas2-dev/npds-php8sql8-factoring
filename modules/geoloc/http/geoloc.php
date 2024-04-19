@@ -17,9 +17,9 @@
 /* dev team : Philippe Revilliod (Phr), A.NICOL                         */
 /************************************************************************/
 
-use npds\system\auth\users;
+use npds\support\auth\users;
 use npds\system\config\Config;
-use npds\system\security\hack;
+use npds\support\security\hack;
 
 /*
     le géoréférencement des anonymes est basé sur un décodage des adresse ip

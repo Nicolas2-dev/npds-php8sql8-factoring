@@ -12,10 +12,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\logs\logs;
-use npds\system\cache\cache;
-use npds\system\support\str;
-use npds\system\config\ConfigSaveFile;
+use npds\support\logs\logs;
+use npds\support\cache\cache;
+use npds\support\str;
+use npds\support\config\ConfigSaveFile;
 
 /**
  * [ConfigSave description]

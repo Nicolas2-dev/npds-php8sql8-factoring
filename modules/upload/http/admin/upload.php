@@ -13,7 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\assets\css;
+use npds\support\assets\css;
 
 // For More security
 if (!function_exists('admindroits'))

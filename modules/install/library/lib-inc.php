@@ -19,7 +19,7 @@
 /************************************************************************/
 
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 
 if (version_compare(PHP_VERSION, '5.3.0') >= 0 and extension_loaded('mysqli')) {
     $file = file("config/config.php");

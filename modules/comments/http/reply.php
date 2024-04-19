@@ -14,16 +14,16 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\date\date;
-use npds\system\logs\logs;
-use npds\system\forum\forum;
-use npds\system\routing\url;
-use npds\system\theme\theme;
-use npds\system\mail\mailler;
-use npds\system\pixels\image;
-use npds\system\utility\code;
-use npds\system\utility\spam;
-use npds\system\security\hack;
+use npds\support\date\date;
+use npds\support\logs\logs;
+use npds\support\forum\forum;
+use npds\support\routing\url;
+use npds\support\theme\theme;
+use npds\support\mail\mailler;
+use npds\support\pixels\image;
+use npds\support\utility\code;
+use npds\support\utility\spam;
+use npds\support\security\hack;
 use npds\system\config\Config;
 
 

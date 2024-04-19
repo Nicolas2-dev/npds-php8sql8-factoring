@@ -14,14 +14,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\js;
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\forum\forum;
-use npds\system\theme\theme;
-use npds\system\language\language;
+use npds\support\assets\js;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\forum\forum;
+use npds\support\theme\theme;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
-use npds\system\messenger\messenger;
+use npds\support\messenger\messenger;
 
 if (!function_exists('admindroits')) {
     include('die.php');

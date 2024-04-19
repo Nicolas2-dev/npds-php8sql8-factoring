@@ -12,8 +12,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\assets\css;
-use npds\system\forum\forum;
+use npds\support\assets\css;
+use npds\support\forum\forum;
 use npds\system\config\Config;
 
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();

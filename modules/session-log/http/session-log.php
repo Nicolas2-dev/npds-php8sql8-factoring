@@ -13,8 +13,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\assets\css;
-use npds\system\mail\mailler;
+use npds\support\assets\css;
+use npds\support\mail\mailler;
 use npds\system\config\Config;
 
 if (!function_exists('admindroits'))

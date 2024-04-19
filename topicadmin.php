@@ -15,9 +15,9 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\utility\spam;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\utility\spam;
 use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;

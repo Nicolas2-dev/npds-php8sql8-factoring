@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace npds\system\cache;
 
-use npds\system\auth\users;
+use npds\support\auth\users;
 use npds\system\config\Config;
 
 

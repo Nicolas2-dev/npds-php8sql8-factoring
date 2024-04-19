@@ -11,7 +11,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\utility\spam;
+use npds\support\utility\spam;
 
 // Champ Combo : hauteur = 5 
 $tmp = array(

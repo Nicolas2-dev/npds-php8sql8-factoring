@@ -14,7 +14,7 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\routing\url;
+use npds\support\routing\url;
 
 if (!function_exists('admindroits')) {
     include('die.php');

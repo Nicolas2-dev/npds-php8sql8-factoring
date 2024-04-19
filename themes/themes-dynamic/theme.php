@@ -13,14 +13,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\date\date;
-use npds\system\auth\users;
-use npds\system\forum\forum;
-use npds\system\theme\theme;
-use npds\system\utility\spam;
+use npds\support\date\date;
+use npds\support\auth\users;
+use npds\support\forum\forum;
+use npds\support\theme\theme;
+use npds\support\utility\spam;
 use npds\system\config\Config;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 
 

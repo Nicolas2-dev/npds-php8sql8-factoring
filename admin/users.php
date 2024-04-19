@@ -14,11 +14,11 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\js;
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\auth\users;
-use npds\system\mail\mailler;
+use npds\support\assets\js;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\auth\users;
+use npds\support\mail\mailler;
 use npds\system\config\Config;
 use npds\system\support\facades\DB;
 

@@ -13,7 +13,7 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\theme\theme;
+use npds\support\theme\theme;
 use npds\system\support\facades\Sform;
 
 

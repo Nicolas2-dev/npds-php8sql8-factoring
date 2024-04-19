@@ -22,7 +22,7 @@ return array(
         /**
          * MySQL Password
          */
-        'dbpass' => '',
+        'dbpass' => '13Kyl09&72',
         
         /**
          * MySQL Database Name
@@ -53,12 +53,19 @@ return array(
     'aliases' => array(
  
         /**
-         * Facades
+         * Facades sysem
          */
         'DB'        => 'npds\system\support\facades\DB',
-        'Sform'     => 'npds\system\support\facades\Sform',
         'Cache'     => 'npds\system\support\facades\Cache',
         'Request'   => 'npds\system\support\facades\Request',
+
+        /**
+         * Facades support
+         */
+        'Sform'     => 'npds\system\support\facades\Sform',
+
+
+
 
     ),
 );

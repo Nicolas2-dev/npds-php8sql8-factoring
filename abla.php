@@ -13,12 +13,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\css;
-use npds\system\forum\forum;
-use npds\system\routing\url;
-use npds\system\support\str;
-use npds\system\auth\authors;
-use npds\system\support\stats;
+use npds\support\assets\css;
+use npds\support\forum\forum;
+use npds\support\routing\url;
+use npds\support\str;
+use npds\support\auth\authors;
+use npds\support\stats;
 use npds\system\support\facades\DB;
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) {

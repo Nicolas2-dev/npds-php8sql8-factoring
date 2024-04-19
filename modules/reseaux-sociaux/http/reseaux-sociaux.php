@@ -16,10 +16,10 @@
 /* version 1.0 17/02/2016                                               */
 /************************************************************************/
 
-use npds\system\assets\css;
-use npds\system\auth\users;
-use npds\system\forum\forum;
-use npds\system\security\hack;
+use npds\support\assets\css;
+use npds\support\auth\users;
+use npds\support\forum\forum;
+use npds\support\security\hack;
 
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
     die();

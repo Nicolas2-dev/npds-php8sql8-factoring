@@ -14,8 +14,8 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\support\str;
-use npds\system\theme\theme;
+use npds\support\str;
+use npds\support\theme\theme;
 use npds\system\config\Config;
 
 if (!function_exists("Mysql_Connexion")) {

@@ -18,7 +18,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\theme\theme;
+use npds\support\theme\theme;
 use npds\system\config\Config;
 
 if (!stristr($_SERVER['PHP_SELF'], 'install.php')) die();

@@ -17,9 +17,9 @@
 /* dev team : Philippe Revilliod (Phr), A.NICOL                         */
 /************************************************************************/
 
-use npds\system\auth\authors;
+use npds\support\auth\authors;
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 
 $ModPath = 'geoloc';
 

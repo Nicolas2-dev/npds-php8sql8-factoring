@@ -13,10 +13,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\assets\css;
+use npds\support\assets\css;
 use npds\system\config\Config;
-use npds\system\utility\crypt;
-use npds\system\language\language;
+use npds\support\utility\crypt;
+use npds\support\language\language;
 
 
 // For More security

@@ -14,9 +14,9 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\routing\url;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\routing\url;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 
 

@@ -13,13 +13,13 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\news\news;
-use npds\system\cache\cache;
+use npds\support\news\news;
+use npds\support\cache\cache;
 use npds\system\config\Config;
-use npds\system\utility\crypt;
-use npds\system\language\language;
+use npds\support\utility\crypt;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
-use npds\system\pagination\paginator;
+use npds\support\pagination\paginator;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');

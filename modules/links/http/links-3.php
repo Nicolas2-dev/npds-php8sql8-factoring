@@ -15,10 +15,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\assets\css;
+use npds\support\assets\css;
 use npds\system\config\Config;
-use npds\system\support\editeur;
-use npds\system\language\language;
+use npds\support\editeur;
+use npds\support\language\language;
 
 
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();

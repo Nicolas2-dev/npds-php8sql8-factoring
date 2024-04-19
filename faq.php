@@ -14,11 +14,11 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\cache\cache;
+use npds\support\cache\cache;
 use npds\system\config\Config;
-use npds\system\security\hack;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\security\hack;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 

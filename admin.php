@@ -13,11 +13,11 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\auth\authors;
+use npds\support\auth\authors;
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
-use npds\system\pagination\paginator;
+use npds\support\pagination\paginator;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');

@@ -23,7 +23,7 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\css;
+use npds\support\assets\css;
 use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {

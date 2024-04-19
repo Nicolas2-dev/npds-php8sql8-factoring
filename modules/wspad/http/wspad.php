@@ -18,15 +18,15 @@
 /* member='-1'      => PAD des admins (si un admin est connecté)          */
 /**************************************************************************/
 
-use npds\system\assets\java;
-use npds\system\auth\groupe;
-use npds\system\support\str;
-use npds\system\pixels\image;
-use npds\system\security\hack;
-use npds\system\utility\crypt;
-use npds\system\support\editeur;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\assets\java;
+use npds\support\auth\groupe;
+use npds\support\str;
+use npds\support\pixels\image;
+use npds\support\security\hack;
+use npds\support\utility\crypt;
+use npds\support\editeur;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 
 // For More security
 if (!stristr($_SERVER['PHP_SELF'], "modules.php")) die();

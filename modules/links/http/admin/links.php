@@ -15,12 +15,12 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\date\date;
-use npds\system\auth\users;
-use npds\system\mail\mailler;
+use npds\support\date\date;
+use npds\support\auth\users;
+use npds\support\mail\mailler;
 use npds\system\config\Config;
-use npds\system\support\editeur;
-use npds\system\language\language;
+use npds\support\editeur;
+use npds\support\language\language;
 
 if (!function_exists("Access_Error")) die();
 if (!stristr($_SERVER['PHP_SELF'], "modules.php")) Header("Location: die.php?op=module");;

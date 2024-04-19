@@ -4,366 +4,362 @@ declare(strict_types=1);
 
 namespace npds\system\language;
 
-use npds\system\config\Config;
+
+//$lang = language::configure($language, $user_language);
+
+// var_dump($lang, 
+// language::isLocale('de'), 
+// language::getConfig(), 
+// language::getInfo(), 
+// language::getInfo('de'), 
+// language::getName(), 
+// language::getName('de'), 
+// language::getIso(), 
+// language::getIso('de'), 
+// language::getDir(), 
+// language::getDir('de'), 
+// language::getIso('es', '-'),
+// language::getUserLocale()
+// );
+
+// var_dump(
+//    language::localeList(),
+//    language::localeList(true, ' | '),
+//    language::getLoclaleList(', ')
+// );
+
 
 class language
 {
 
     /**
-     * [initLocale description]
+     * The define language
      *
-     * @return  void
+     * @var string
      */
-    public static function initLocale(): void
-    {
-        $locale = static::getLocaleIso();
+    private static string $language;
 
-        setlocale(LC_ALL, $locale . 'utf_8');
+    /**
+     * The define user language
+     *
+     * @var string
+     */
+    private static string $user_language;
+
+    /**
+     * The define config languages
+     *
+     * @var array
+     */
+    private static array $config;
+
+    /**
+     * The define config languages
+     *
+     * @var string
+     */
+    private static array $list = [];
+
+    /**
+     * The language instance
+     *
+     * @var language
+     */
+    private static ?language $instance = null;
+
+
+    /**
+     * Language constructor.
+     *
+     * @param string $language
+     * @param string $user_language
+     */
+    public function __construct(string $language, string $user_language)
+    {
+        static::$language = $language;
+
+        static::$user_language = $user_language;
+
+        static::$config = static::languagesConfig();
+    }    
+
+    /**
+     * Configure language
+     *
+     * @param string $language
+     * @param string $user_language
+     *
+     * @return language
+     */
+    public static function configure(string $language, string $user_language): language
+    {
+        if (static::$instance === null) {
+            static::$instance = new self($language, $user_language);
+        }
+
+        return static::$instance;
     }
 
     /**
-     * [getLocale description]
+     * Get singleton instance
+     *
+     * @return language
+     */
+    public static function getInstance(): language
+    {
+        return static::$instance;
+    }
+
+    /**
+     * Retourne le tableau des languages disponible dans le fichier config languages
+     *
+     * @return  array
+     */
+    private static function languagesConfig(): array
+    {
+       return require ('config/languages.php');
+    }
+
+    /**
+     * Check the locale
+     *
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public static function isLocale(string $locale): bool
+    {
+        return static::$language == $locale;
+    }
+
+    /**
+     * La liste des languages
+     *
+     * @param   bool    $cache      [$cache description]
+     * @param   string  $separator  [$separator description]
+     *
+     * @return  array
+     */
+    public static function localeList(bool $cache = false, string $separator = ' '): array
+    {
+        $list = [];
+    
+        foreach(static::getConfig() as $code => $lang) {
+            $list[] .= "$code";
+        }
+    
+        if ($cache) {
+            static::languageWhiteToCache(implode($separator, (array) static::$list));
+        }
+        
+        return static::$list = $list;
+    }
+
+    /**
+     * Get locale list
+     *
+     * @param   string  $separator  [$separator description]
+     *
+     * @return  string              [return description]
+     */
+    public static function getLoclaleList(string $separator = ' '): string
+    {
+        return implode($separator, (array) static::$list);
+    }
+
+    /**
+     * Ont génère le fichier de cache
+     *
+     * @param   [type]  $list  [$list description]
+     *
+     * @return  void
+     */
+    private static function languageWhiteToCache($list): void
+    {
+       $file = fopen('storage/language/lang_code.php', 'w');
+       fwrite($file, "<?php \$languageslist=\"".trim($list)."\"; ?>");
+       fclose($file);
+    }
+
+    /**
+     * Update locale
+     *
+     * @param   string  $locale  [$locale description]
+     *
+     * @return  void
+     */
+    public static function setLocale(string $locale): void
+    {
+        static::$language = $locale;
+    }
+
+    /**
+     * Get locale
      *
      * @return  string
      */
     public static function getLocale(): string
     {
-        global $user_language;
-
-        if (isset($user_language)) {
-            $locale = $user_language;
-        } else {
-            $locale = Config::get('npds.language');
-        }
-
-        return $locale;
+        return static::$language;
     }
 
     /**
-     * [languages description]
+     * Update user locale
      *
-     * @return  array
-     */
-    public static function languages(): array 
-    {
-        return Config::get('languages');
-    }
-
-    /**
-     * [getLocale2 description]
-     *
-     * @return  string
-     */
-    public static function getLocale2(): string 
-    {
-        $locale = static::getLocale();
-
-        $languages = static::languages();
-        
-        return $languages[$locale]['locale'];
-    }
-
-    /**
-     * [getLocaleIso description]
-     *
-     * @return  string
-     */
-    public static function getLocaleIso(): string 
-    {
-        $locale = static::getLocale();
-
-        $languages = static::languages();
-        
-        return $languages[$locale]['iso'];
-    }
- 
-    /**
-     * Analyse le contenu d'une chaine et converti la section correspondante ([langue] OU [!langue] ...[/langue])
-     * à la langue / [transl] ... [/transl] permet de simuler un appel translate("xxxx")
-     *
-     * @param   string  $ibid  [$ibid description]
-     *
-     * @return  string         [return description]
-     */
-    public static function aff_langue(string $ibid): string
-    {
-        global $tab_langue;
-
-        // copie du tableau + rajout de transl pour gestion de l'appel à translate(...); - Theme Dynamic
-        $tab_llangue = $tab_langue;
-        $tab_llangue[] = 'transl';
-
-        reset($tab_llangue);
-
-        $ok_language = false;
-        $trouve_language = false;
-       
-        foreach ($tab_llangue as $key => $lang) {
-            $pasfin = true;
-            $pos_deb = false;
-            $abs_pos_deb = false;
-            $pos_fin = false;
-
-            while ($pasfin) {
-                // tags [langue] et [/langue]
-                $pos_deb = strpos(  $ibid, "[$lang]", 0); 
-                $pos_fin = strpos(  $ibid, "[/$lang]", 0); 
-
-                if ($pos_deb === false) {
-                    $pos_deb = -1;
-                }
-
-                if ($pos_fin === false) {
-                    $pos_fin = -1;
-                }
-
-                // tags [!langue]
-                $abs_pos_deb = strpos(  $ibid, "[!$lang]", 0); 
-                if ($abs_pos_deb !== false) {
-                    $ibid = str_replace("[!$lang]", "[$lang]", $ibid);
-                    $pos_deb = $abs_pos_deb;
-
-                    if ($lang != Config::get('npds.language')) {
-                        $trouve_language = true;
-                    }
-                }
-
-                $decal = strlen($lang) + 2;
-
-                if (($pos_deb >= 0) and ($pos_fin >= 0)) {
-                    $fragment = substr($ibid, $pos_deb + $decal, ($pos_fin - $pos_deb - $decal));
-                    
-                    if ($trouve_language == false) {
-                        if ($lang != 'transl') {
-                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", $fragment, $ibid);
-                        } else {
-                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", translate($fragment), $ibid);
-                        }
-                        $ok_language = true;
-                    } else {
-                        if ($lang != 'transl') {
-                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", "", $ibid);
-                        } else {
-                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", translate($fragment), $ibid);
-                        }
-                    }
-                } else {
-                    $pasfin = false;
-                }
-            }
-
-            if ($ok_language)
-                $trouve_language = true;
-        }
-
-        return $ibid;
-    }
- 
-    /**
-     * Charge le tableau TAB_LANGUE qui est utilisé par les fonctions multi-langue
-     *
-     * @return  array
-     */
-    public static function make_tab_langue(): array
-    {
-        global $languageslist;
-
-        $languageslocal = Config::get('npds.language') . ' ' . str_replace(Config::get('npds.language'), '', $languageslist);
-        $languageslocal = trim(str_replace('  ', ' ', $languageslocal));
-        $tab_langue = explode(' ', $languageslocal);
-
-        return $tab_langue;
-    }
- 
-    /**
-     * Charge une zone de formulaire de selection de la langue
-     *
-     * @param   string  $ibid  [$ibid description]
-     *
-     * @return  string
-     */
-    public static function aff_localzone_langue(string $ibid): string
-    {
-        global $tab_langue;
-
-        $flag = array('fr' => '🇫🇷', 'es' => '🇪🇸', 'de' => '🇩🇪', 'en' => '🇺🇸', 'zh' => '🇨🇳');
-
-        $M_langue = '
-        <div class="mb-3">
-        <select name="' . $ibid . '" class="form-select" onchange="this.form.submit()">
-            <option value="">' . translate("Choisir une langue") . '</option>';
-        
-        foreach ($tab_langue as $bidon => $langue) {
-            $M_langue .= '
-                <option value="' . $langue . '">' . $flag[$langue] . ' ' . translate("$langue") . '</option>';
-        }
-
-        $M_langue .= '
-                <option value="">- ' . translate("Aucune langue") . '</option>
-            </select>
-        </div>
-        <noscript>
-            <input class="btn btn-primary" type="submit" name="local_sub" value="' . translate("Valider") . '" />
-        </noscript>';
-
-        return $M_langue;
-    }
- 
-    /**
-     * Charge une FORM de selection de langue $ibid_index = URL de la Form, $ibid = nom du champ
-     *
-     * @param   string  $ibid_index  [$ibid_index description]
-     * @param   string  $ibid        [$ibid description]
-     * @param   string  $mess        [$mess description]
-     *
-     * @return  string
-     */    
-    public static function aff_local_langue(string $ibid_index, string $ibid, ?string $mess = ''): string
-    {
-        if ($ibid_index == '') {
-            global $REQUEST_URI;
-            $ibid_index = $REQUEST_URI;
-        }
-
-        $M_langue = '<form action="' . $ibid_index . '" name="local_user_language" method="post">';
-        $M_langue .= $mess . static::aff_localzone_langue($ibid);
-        $M_langue .= '</form>';
-
-        return $M_langue;
-    }
- 
-    /**
-     * appel la fonction aff_langue en modifiant temporairement la valeur de la langue
-     *
-     * @param   string  $local_user_language  [$local_user_language description]
-     * @param   string  $ibid                 [$ibid description]
-     *
-     * @return  string
-     */
-    public static function preview_local_langue(?string $local_user_language, string $ibid): string
-    {
-        global $tab_langue;
-
-        if ($local_user_language) {
-            $old_langue = Config::get('npds.language');
-            Config::set('npds.language', $local_user_language);
-
-            $tab_langue = static::make_tab_langue();
-            $ibid = static::aff_langue($ibid);
-
-            Config::set('npds.language.old_langue', $old_langue);
-        }
-
-        return $ibid;
-    }
- 
-    /**
-     * renvoi le code language iso 639-1 et code pays ISO 3166-2 
-     * $l=> 0 ou 1(requis), 
-     * $s (séparateur - | _) , 
-     * $c=> 0 ou 1 (requis)
-     *
-     * @param   string|int  $l  [$l description]
-     * @param   string|int  $s  [$s description]
-     * @param   string|int  $c  [$c description]
-     *
-     * @return  string
-     */
-    public static function language_iso(string|int $l, string|int $s, string|int $c): string
-    {
-        global $user_language;
-
-        $iso_lang = '';
-        $iso_country = '';
-        $ietf = '';
-        $select_lang = '';
-        $select_lang = !empty($user_language) ? $user_language : Config::get('npds.language');
-        
-        switch ($select_lang) {
-            case "fr":
-                $iso_lang = 'fr';
-                $iso_country = 'FR';
-                break;
-
-            case "en":
-                $iso_lang = 'en';
-                $iso_country = 'US';
-                break;
-
-            case "es":
-                $iso_lang = 'es';
-                $iso_country = 'ES';
-                break;
-
-            case "de":
-                $iso_lang = 'de';
-                $iso_country = 'DE';
-                break;
-
-            case "zh":
-                $iso_lang = 'zh';
-                $iso_country = 'CN';
-                break;
-
-            default:
-                break;
-        }
-
-        if ($c !== 1) {
-            $ietf = $iso_lang;
-        }
-
-        if (($l == 1) and ($c == 1)) {
-            $ietf = $iso_lang . $s . $iso_country;
-        }
-
-        if (($l !== 1) and ($c == 1)) {
-            $ietf = $iso_country;
-        }
-
-        if (($l !== 1) and ($c !== 1)) {
-            $ietf = '';
-        }
-
-        if (($l == 1) and ($c !== 1)) {
-            $ietf = $iso_lang;
-        }
-
-        return $ietf;
-    }
-
-    /**
-     * [languageList description]
-     *
-     * @return  string
-     */
-    public static function languageList(): string
-    {
-        $languageslist = '';
-        $handle = opendir('language');
-        while (false !== ($file = readdir($handle))) {
-            if (!strstr($file, '.')) {
-                $languageslist .= "$file ";
-            }
-        }
-        closedir($handle);
-
-        static::languageWhiteToCache($languageslist);
-
-        return $languageslist;
-    }
-
-    /**
-     * [languageWhiteToCache description]
-     *
-     * @param   [type]  $languageslist  [$languageslist description]
+     * @param   string  $locale  [$locale description]
      *
      * @return  void
      */
-    public static function languageWhiteToCache($languageslist): void
+    public static function setUserLocale(string $locale): void
     {
-        $file = fopen('storage/language/lang_code.php', 'w');
-        fwrite($file, "<?php \$languageslist=\"" . trim($languageslist) . "\"; ?>");
-        fclose($file);
+        static::$user_language = $locale;
     }
+
+    /**
+     * Get user locale
+     *
+     * @return  string
+     */
+    public static function getUserLocale(): string
+    {
+        return static::$user_language;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return  array
+     */
+    public static function getConfig(): array
+    {
+        return static::$config;
+    }
+
+    /**
+     * Get locale info
+     *
+     * @param   string  $locale  [$locale description]
+     *
+     * @return  string
+     */
+    public static function getInfo(string $locale = null): string
+    {
+        if (!is_null($locale)) {
+            $info = static::$config[$locale]['info'];
+        } else {
+            $info = static::$config[static::$language]['info'];
+        }
+
+        return $info;
+    }
+
+    /**
+     * Get locale name
+     *
+     * @param   string  $locale  [$locale description]
+     *
+     * @return  string
+     */
+    public static function getName(string $locale = null): string
+    {
+        if (!is_null($locale)) {
+            $name = static::$config[$locale]['name'];
+        } else {
+            $name = static::$config[static::$language]['name'];
+        }
+
+        return $name;
+    }
+
+    /**
+     * Get locale name
+     *
+     * @param   string  $locale  [$locale description]
+     *
+     * @return  string
+     */
+    public static function getCode(string $locale = null): string
+    {
+        if (!is_null($locale)) {
+            $name = static::$config[$locale]['locale'];
+        } else {
+            $name = static::$config[static::$language]['locale'];
+        }
+
+        return $name;
+    }
+
+    /**
+     *  Get locale iso
+     *
+     * @param   string  $locale     [$locale description]
+     * @param   string  $separator  [$separator description]
+     *
+     * @return  string
+     */
+    public static function getIso(string $locale = null, string $separator = null): string
+    {
+        if (!is_null($locale)) {
+            $iso = static::$config[$locale]['iso'];
+        } else {
+            $iso = static::$config[static::$language]['iso'];
+        }
+
+        if (!is_null($separator)) {
+            $iso = static::isoSeparator($iso, $separator);
+        }
+
+        return $iso;
+    }
+
+    /**
+     * Get locale dir
+     *
+     * @param   string  $locale  [$locale description]
+     *
+     * @return  string
+     */
+    public static function getDir(string $locale = null): string
+    {
+        if (!is_null($locale)) {
+            $dir = static::$config[$locale]['dir'];
+        } else {
+            $dir = static::$config[static::$language]['dir'];
+        }
+
+        return $dir;
+    }
+
+    /**
+     * Replace Separator Iso
+     *
+     * @param   [type]  $iso        [$iso description]
+     * @param   [type]  $separator  [$separator description]
+     *
+     * @return  string
+     */
+    private static function isoSeparator($iso, $separator): string
+    {
+        $iso_temp = explode('_', $iso);
+
+        return $iso_temp[0] . $separator . $iso_temp[1];
+    }
+
+    /**
+     * __call
+     *
+     * @param  string $name
+     * @param  array $arguments
+     * 
+     * @return string
+     */
+    public function __call(string $name, array $arguments)
+    {
+        if (method_exists(static::$instance, $name)) {
+            return call_user_func_array([static::$instance, $name], $arguments);
+        }
+
+        throw new \BadMethodCallException('Undefined method ' . $name);
+    }
+
 }

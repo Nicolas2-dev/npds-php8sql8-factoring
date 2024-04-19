@@ -9,7 +9,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-use npds\system\language\language;
+use npds\support\language\language;
 
 // OBJET : Ce fichier vous permet de personnaliser la page de Login et le plan du site
    echo '

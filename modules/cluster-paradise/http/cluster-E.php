@@ -13,9 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\logs\logs;
-use npds\system\security\hack;
-use npds\system\utility\crypt;
+use npds\support\logs\logs;
+use npds\support\security\hack;
+use npds\support\utility\crypt;
 
 
 function V_secur_cluster($Xkey)

@@ -14,13 +14,13 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\date\date;
-use npds\system\auth\users;
-use npds\system\forum\forum;
-use npds\system\theme\theme;
-use npds\system\utility\spam;
+use npds\support\date\date;
+use npds\support\auth\users;
+use npds\support\forum\forum;
+use npds\support\theme\theme;
+use npds\support\utility\spam;
 use npds\system\config\Config;
-use npds\system\pagination\paginator;
+use npds\support\pagination\paginator;
 
 
 if (!function_exists("Mysql_Connexion"))

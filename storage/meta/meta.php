@@ -1,7 +1,7 @@
 <?php
 
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 
 /* Do not change anything in this file manually. Use the administration interface. */
 /* généré le : 06-03-2024 13:17:31 */

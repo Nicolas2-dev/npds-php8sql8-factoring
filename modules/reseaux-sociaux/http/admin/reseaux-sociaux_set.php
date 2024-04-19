@@ -16,7 +16,7 @@
 /* version 1.0 17/02/2016                                               */
 /************************************************************************/
 
-use npds\system\assets\css;
+use npds\support\assets\css;
 
 // For More security
 // if (!function_exists('admindroits')) {

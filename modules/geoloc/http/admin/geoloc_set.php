@@ -17,7 +17,7 @@
 /* dev team : Philippe Revilliod (Phr), A.NICOL                         */
 /************************************************************************/
 
-use npds\system\assets\css;
+use npds\support\assets\css;
 
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');

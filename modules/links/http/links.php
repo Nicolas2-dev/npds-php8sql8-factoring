@@ -15,11 +15,11 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\date\date;
-use npds\system\auth\users;
-use npds\system\language\language;
+use npds\support\date\date;
+use npds\support\auth\users;
+use npds\support\language\language;
 use npds\system\cache\cacheManager;
-use npds\system\pagination\paginator;
+use npds\support\pagination\paginator;
 use npds\system\cache\SuperCacheEmpty;
 
 if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))

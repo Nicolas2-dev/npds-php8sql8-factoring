@@ -15,11 +15,11 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\auth\users;
-use npds\system\cache\cache;
-use npds\system\theme\theme;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\auth\users;
+use npds\support\cache\cache;
+use npds\support\theme\theme;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 

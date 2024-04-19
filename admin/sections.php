@@ -13,14 +13,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\auth\groupe;
-use npds\system\support\str;
-use npds\system\mail\mailler;
-use npds\system\pixels\image;
-use npds\system\support\editeur;
-use npds\system\language\language;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\auth\groupe;
+use npds\support\str;
+use npds\support\mail\mailler;
+use npds\support\pixels\image;
+use npds\support\editeur;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {

@@ -14,10 +14,10 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\cache\cache;
-use npds\system\support\str;
+use npds\support\cache\cache;
+use npds\support\str;
 use npds\system\support\facades\DB;
-use npds\system\messenger\messenger;
+use npds\support\messenger\messenger;
 
 
 if (!function_exists("Mysql_Connexion")) {

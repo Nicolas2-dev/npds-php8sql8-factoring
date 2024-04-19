@@ -18,16 +18,16 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\date\date;
-use npds\system\auth\users;
-use npds\system\auth\groupe;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\theme\theme;
-use npds\system\utility\code;
-use npds\system\utility\spam;
+use npds\support\date\date;
+use npds\support\auth\users;
+use npds\support\auth\groupe;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\theme\theme;
+use npds\support\utility\code;
+use npds\support\utility\spam;
 use npds\system\config\Config;
-use npds\system\pagination\paginator;
+use npds\support\pagination\paginator;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');

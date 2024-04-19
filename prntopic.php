@@ -15,13 +15,13 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\date\date;
-use npds\system\assets\css;
-use npds\system\auth\groupe;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\support\str;
-use npds\system\theme\theme;
+use npds\support\date\date;
+use npds\support\assets\css;
+use npds\support\auth\groupe;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\str;
+use npds\support\theme\theme;
 use npds\system\config\Config;
 
 if (!function_exists("Mysql_Connexion")) { 

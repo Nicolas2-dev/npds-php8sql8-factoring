@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-use npds\system\chat\chat;
-use npds\system\block\boxe;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\support\polls;
-use npds\system\support\download;
-use npds\system\messenger\messenger;
+use npds\support\chat\chat;
+use npds\support\block\boxe;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\polls;
+use npds\support\download;
+use npds\support\messenger\messenger;
 
 // boxe.php
 

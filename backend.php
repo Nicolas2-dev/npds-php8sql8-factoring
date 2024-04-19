@@ -13,17 +13,17 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\date\date;
-use npds\system\news\news;
-use npds\system\cache\cache;
+use npds\support\date\date;
+use npds\support\news\news;
+use npds\support\cache\cache;
 use npds\system\config\Config;
-use npds\system\feed\FeedItem;
-use npds\system\feed\FeedImage;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\feed\FeedItem;
+use npds\support\feed\FeedImage;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
-use npds\system\feed\UniversalFeedCreator;
+use npds\support\feed\UniversalFeedCreator;
 
 include('boot/bootstrap.php');
 

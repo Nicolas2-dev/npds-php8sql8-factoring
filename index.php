@@ -14,12 +14,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\news\news;
-use npds\system\auth\users;
-use npds\system\cache\cache;
-use npds\system\theme\theme;
+use npds\support\news\news;
+use npds\support\auth\users;
+use npds\support\cache\cache;
+use npds\support\theme\theme;
 use npds\system\config\Config;
-use npds\system\support\edito;
+use npds\support\edito;
 use npds\system\support\facades\Request;
 use npds\modules\install\support\install;
 

@@ -14,10 +14,10 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\routing\url;
-use npds\system\support\editeur;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\routing\url;
+use npds\support\editeur;
 
 if (!function_exists('admindroits')) {
     include('die.php');

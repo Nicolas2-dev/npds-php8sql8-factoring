@@ -14,14 +14,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\js;
-use npds\system\assets\css;
-use npds\system\assets\java;
-use npds\system\forum\forum;
-use npds\system\mail\mailler;
-use npds\system\utility\code;
+use npds\support\assets\js;
+use npds\support\assets\css;
+use npds\support\assets\java;
+use npds\support\forum\forum;
+use npds\support\mail\mailler;
+use npds\support\utility\code;
 use npds\system\config\Config;
-use npds\system\security\hack;
+use npds\support\security\hack;
 use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;

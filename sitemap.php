@@ -13,7 +13,7 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\logs\logs;
+use npds\support\logs\logs;
 use npds\system\config\Config;
 
 

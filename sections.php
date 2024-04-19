@@ -14,12 +14,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\auth\users;
-use npds\system\routing\url;
-use npds\system\utility\code;
+use npds\support\auth\users;
+use npds\support\routing\url;
+use npds\support\utility\code;
 use npds\system\config\Config;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 

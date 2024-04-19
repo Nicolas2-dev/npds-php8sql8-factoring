@@ -14,11 +14,11 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\date\date;
-use npds\system\news\news;
-use npds\system\cache\cache;
-use npds\system\security\hack;
-use npds\system\language\language;
+use npds\support\date\date;
+use npds\support\news\news;
+use npds\support\cache\cache;
+use npds\support\security\hack;
+use npds\support\language\language;
 use npds\system\cache\SuperCacheEmpty;
 
 use npds\system\support\facades\Cache as SuperCache;

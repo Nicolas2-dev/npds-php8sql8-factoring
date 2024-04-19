@@ -11,7 +11,7 @@
 /************************************************************************/
 
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 use npds\system\support\facades\Sform;
 
 settype($nom, 'string');

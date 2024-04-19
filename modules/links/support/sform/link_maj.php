@@ -13,9 +13,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\routing\url;
-use npds\system\language\language;
-use npds\system\sform\form_handler;
+use npds\support\routing\url;
+use npds\support\language\language;
+use npds\system\sform\sform;
 
 global $ModPath, $ModStart;
 $pos = strpos($ModPath, '/admin');
@@ -25,7 +25,7 @@ global $sform_path;
 $sform_path = 'support/sform/';
 //********************
 global $m;
-$m = new form_handler();
+$m = new sform();
 //********************
 $m->add_form_title($ModPathX);
 $m->add_form_method("get");

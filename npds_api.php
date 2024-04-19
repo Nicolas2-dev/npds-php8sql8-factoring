@@ -14,7 +14,7 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\auth\authors;
+use npds\support\auth\authors;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 

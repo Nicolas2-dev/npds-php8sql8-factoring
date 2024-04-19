@@ -1,12 +1,12 @@
 <?php
 
-use npds\system\logs\logs;
-use npds\system\news\gzfile;
-use npds\system\theme\theme;
-use npds\system\auth\authors;
-use npds\system\news\zipfile;
+use npds\support\logs\logs;
+use npds\support\news\gzfile;
+use npds\support\theme\theme;
+use npds\support\auth\authors;
+use npds\support\news\zipfile;
 use npds\system\config\Config;
-use npds\system\language\metalang;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\Request;
 
 // note A revoir !!!

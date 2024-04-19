@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace npds\modules\blog\support;
 
-use npds\system\routing\url;
-use npds\system\pixels\image;
+use npds\support\routing\url;
+use npds\support\pixels\image;
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 use npds\system\support\facades\Request;
 
 

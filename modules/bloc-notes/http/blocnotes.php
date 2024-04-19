@@ -13,7 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\security\hack;
+use npds\support\security\hack;
 
 
 global $NPDS_Prefix;

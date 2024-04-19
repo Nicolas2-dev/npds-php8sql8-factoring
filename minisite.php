@@ -12,14 +12,14 @@
 /************************************************************************/
 //declare(strict_types=1);
 
-use npds\system\auth\users;
-use npds\system\auth\groupe;
-use npds\system\forum\forum;
-use npds\system\theme\theme;
+use npds\support\auth\users;
+use npds\support\auth\groupe;
+use npds\support\forum\forum;
+use npds\support\theme\theme;
 use npds\system\config\Config;
-use npds\system\security\hack;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\security\hack;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\modules\blog\support\blog;
 use npds\system\support\facades\Request;
 

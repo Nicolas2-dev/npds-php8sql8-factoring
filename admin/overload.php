@@ -12,9 +12,9 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\cache\cache;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\cache\cache;
 
 if (!function_exists('admindroits')) {
     include('die.php');

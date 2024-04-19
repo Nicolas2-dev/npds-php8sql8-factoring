@@ -13,11 +13,11 @@
 /* Dont modify this file is you dont know what you make                 */
 /************************************************************************/
 
-use npds\system\language\language;
-use npds\system\sform\form_handler;
+use npds\support\language\language;
+use npds\system\sform\sform;
 
 global $m;
-$m = new form_handler();
+$m = new sform();
 //********************
 $m->add_form_title("coolsus");
 $m->add_form_method("post");

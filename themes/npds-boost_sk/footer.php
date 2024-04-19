@@ -20,7 +20,7 @@
 /* =====================================================================*/
 declare(strict_types=1);
 
-use npds\system\block\block;
+use npds\support\block\block;
 
 global $pdst;
 

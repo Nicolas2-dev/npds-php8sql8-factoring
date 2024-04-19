@@ -1,6 +1,6 @@
 <?php
 
-use npds\system\fmanager\FileManagement;
+use npds\support\fmanager\FileManagement;
 
 /************************************************************************/
 /* DUNE by NPDS                                                         */

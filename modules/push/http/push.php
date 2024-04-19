@@ -14,13 +14,13 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\date\date;
-use npds\system\news\news;
-use npds\system\theme\theme;
-use npds\system\utility\code;
+use npds\support\date\date;
+use npds\support\news\news;
+use npds\support\theme\theme;
+use npds\support\utility\code;
 use npds\system\config\Config;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\cache\cacheManager;
 use npds\system\cache\SuperCacheEmpty;
 

@@ -16,11 +16,11 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\auth\users;
-use npds\system\support\str;
+use npds\support\auth\users;
+use npds\support\str;
 use npds\system\config\Config;
-use npds\system\support\polls;
-use npds\system\language\language;
+use npds\support\polls;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 

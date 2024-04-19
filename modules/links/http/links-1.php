@@ -15,16 +15,16 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\auth\users;
-use npds\system\routing\url;
-use npds\system\pixels\image;
-use npds\system\utility\spam;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\auth\users;
+use npds\support\routing\url;
+use npds\support\pixels\image;
+use npds\support\utility\spam;
 use npds\system\config\Config;
-use npds\system\security\hack;
-use npds\system\support\editeur;
-use npds\system\language\language;
+use npds\support\security\hack;
+use npds\support\editeur;
+use npds\support\language\language;
 
 if (!stristr($_SERVER['PHP_SELF'], "modules.php")) die();
 function error_head($class)

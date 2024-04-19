@@ -13,10 +13,10 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\js;
-use npds\system\theme\theme;
+use npds\support\assets\js;
+use npds\support\theme\theme;
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 use npds\system\support\facades\Sform;
 
 Sform::add_title(translate("Inscription"));

@@ -14,10 +14,10 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\auth\users;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\language\language;
+use npds\support\auth\users;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
 
 if (!function_exists("Mysql_Connexion")) {

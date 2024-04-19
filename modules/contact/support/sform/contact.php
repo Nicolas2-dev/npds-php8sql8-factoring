@@ -13,11 +13,11 @@
 /* Dont modify this file if you dont know what you make                 */
 /************************************************************************/
 
-use npds\system\logs\logs;
-use npds\system\assets\css;
-use npds\system\mail\mailler;
-use npds\system\utility\spam;
-use npds\system\language\language;
+use npds\support\logs\logs;
+use npds\support\assets\css;
+use npds\support\mail\mailler;
+use npds\support\utility\spam;
+use npds\support\language\language;
 use npds\system\support\facades\Sform;
 
 global $ModPath, $ModStart;

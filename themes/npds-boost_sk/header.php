@@ -13,7 +13,7 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\block\block;
+use npds\support\block\block;
 use npds\system\support\facades\DB;
 
 global $pdst;

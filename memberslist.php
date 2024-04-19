@@ -12,16 +12,16 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\auth\users;
-use npds\system\forum\forum;
-use npds\system\theme\theme;
-use npds\system\auth\authors;
-use npds\system\mail\mailler;
-use npds\system\utility\spam;
+use npds\support\auth\users;
+use npds\support\forum\forum;
+use npds\support\theme\theme;
+use npds\support\auth\authors;
+use npds\support\mail\mailler;
+use npds\support\utility\spam;
 use npds\system\config\Config;
-use npds\system\security\hack;
+use npds\support\security\hack;
 use npds\system\support\facades\DB;
-use npds\system\pagination\paginator;
+use npds\support\pagination\paginator;
 use npds\system\support\facades\Request;
 
 

@@ -13,11 +13,11 @@
 /************************************************************************/
 //declare(strict_types=1);
 
-use npds\system\assets\css;
-use npds\system\theme\theme;
-use npds\system\mail\mailler;
+use npds\support\assets\css;
+use npds\support\theme\theme;
+use npds\support\mail\mailler;
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Sform;
 

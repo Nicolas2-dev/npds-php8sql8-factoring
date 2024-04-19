@@ -13,10 +13,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\routing\url;
-use npds\system\theme\theme;
+use npds\support\routing\url;
+use npds\support\theme\theme;
 use npds\system\config\Config;
-use npds\system\security\hack;
+use npds\support\security\hack;
 
 function marquetapage_add($uri, $topic, $action)
 {

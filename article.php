@@ -13,12 +13,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\news\news;
-use npds\system\cache\cache;
-use npds\system\utility\code;
+use npds\support\news\news;
+use npds\support\cache\cache;
+use npds\support\utility\code;
 use npds\system\config\Config;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 

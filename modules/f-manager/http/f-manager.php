@@ -11,15 +11,15 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\logs\logs;
-use npds\system\auth\groupe;
-use npds\system\cache\cache;
-use npds\system\routing\url;
-use npds\system\theme\theme;
-use npds\system\security\hack;
-use npds\system\utility\crypt;
-use npds\system\support\editeur;
-use npds\system\language\language;
+use npds\support\logs\logs;
+use npds\support\auth\groupe;
+use npds\support\cache\cache;
+use npds\support\routing\url;
+use npds\support\theme\theme;
+use npds\support\security\hack;
+use npds\support\utility\crypt;
+use npds\support\editeur;
+use npds\support\language\language;
 
 
 if (!stristr($_SERVER['PHP_SELF'], "modules.php")) die();

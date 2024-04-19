@@ -19,7 +19,7 @@
 
 use npds\system\config\Config;
 use npds\system\http\response;
-use npds\system\security\hack;
+use npds\support\security\hack;
 
 #autodoc geoloc_refip : contrôle si l'ip est déjà dans la base et incrémentation du compteur de visite de l'ip <br /> ou choisi un fournisseur en fonction du protocol du site et des clefs disponibles et complète la table ip_loc. 
 

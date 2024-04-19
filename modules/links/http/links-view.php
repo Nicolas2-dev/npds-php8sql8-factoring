@@ -15,7 +15,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\language\language;
+use npds\support\language\language;
 
 if (!stristr($_SERVER['PHP_SELF'], 'modules.php')) die();
 global $NPDS_Prefix;

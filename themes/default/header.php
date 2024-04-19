@@ -14,15 +14,15 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\css;
-use npds\system\theme\theme;
+use npds\support\assets\css;
+use npds\support\theme\theme;
 use npds\system\config\Config;
-use npds\system\security\hack;
+use npds\support\security\hack;
 use npds\library\pages\pageref;
-use npds\system\support\counter;
-use npds\system\support\editeur;
-use npds\system\support\referer;
-use npds\system\language\language;
+use npds\support\counter;
+use npds\support\editeur;
+use npds\support\referer;
+use npds\support\language\language;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');

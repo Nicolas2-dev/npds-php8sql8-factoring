@@ -14,14 +14,14 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\css;
-use npds\system\auth\users;
-use npds\system\cache\cache;
-use npds\system\routing\url;
-use npds\system\support\str;
-use npds\system\mail\mailler;
+use npds\support\assets\css;
+use npds\support\auth\users;
+use npds\support\cache\cache;
+use npds\support\routing\url;
+use npds\support\str;
+use npds\support\mail\mailler;
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 use npds\system\support\facades\DB;
 use npds\system\support\facades\Request;
 

@@ -14,12 +14,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\css;
-use npds\system\support\str;
-use npds\system\utility\code;
-use npds\system\support\editeur;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\assets\css;
+use npds\support\str;
+use npds\support\utility\code;
+use npds\support\editeur;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 
 if (!function_exists('admindroits')) {

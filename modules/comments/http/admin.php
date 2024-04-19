@@ -14,8 +14,8 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use npds\system\forum\forum;
-use npds\system\routing\url;
+use npds\support\forum\forum;
+use npds\support\routing\url;
 use npds\system\config\Config;
 
 

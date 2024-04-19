@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-use npds\system\auth\users;
-use npds\system\support\str;
-use npds\system\auth\authors;
-use npds\system\utility\spam;
+use npds\support\auth\users;
+use npds\support\str;
+use npds\support\auth\authors;
+use npds\support\utility\spam;
 use npds\system\config\Config;
 use npds\system\app\AliasLoader;
-use npds\system\session\session;
+use npds\support\session\session;
 use npds\system\database\Manager;
-use npds\system\security\protect;
-use npds\system\language\language;
-use npds\system\language\metalang;
+use npds\support\security\protect;
+use npds\support\language\language;
+use npds\support\metalang\metalang;
 use npds\system\exception\ExceptionHandler;
 
 // Load autolad
@@ -157,7 +157,7 @@ include("language/$language/language.php");
 
 
 // db ancien system qui va disparaitre !!!!
-include('system/database/connexion.php');
+include('system/database/deprecated/connexion.php');
 
 $dblink = Mysql_Connexion();
 

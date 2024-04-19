@@ -15,7 +15,7 @@
 /* dev team :                                                           */
 /************************************************************************/
 
-use npds\system\assets\css;
+use npds\support\assets\css;
 
 if (!function_exists('admindroits'))
     include($_SERVER['DOCUMENT_ROOT'] . '/admin/die.php');

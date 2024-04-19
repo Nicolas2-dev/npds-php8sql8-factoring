@@ -15,18 +15,18 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\logs\logs;
-use npds\system\cache\cache;
-use npds\system\forum\forum;
-use npds\system\routing\url;
-use npds\system\theme\theme;
-use npds\system\mail\mailler;
-use npds\system\utility\code;
-use npds\system\utility\spam;
+use npds\support\logs\logs;
+use npds\support\cache\cache;
+use npds\support\forum\forum;
+use npds\support\routing\url;
+use npds\support\theme\theme;
+use npds\support\mail\mailler;
+use npds\support\utility\code;
+use npds\support\utility\spam;
 use npds\system\config\Config;
-use npds\system\security\hack;
+use npds\support\security\hack;
 use npds\system\cache\cacheManager;
-use npds\system\subscribe\subscribe;
+use npds\support\subscribe\subscribe;
 use npds\system\cache\SuperCacheEmpty;
 use npds\system\support\facades\Request;
 

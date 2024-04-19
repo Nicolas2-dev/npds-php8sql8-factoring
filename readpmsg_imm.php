@@ -14,11 +14,11 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\assets\css;
-use npds\system\forum\forum;
-use npds\system\theme\theme;
+use npds\support\assets\css;
+use npds\support\forum\forum;
+use npds\support\theme\theme;
 use npds\system\config\Config;
-use npds\system\language\language;
+use npds\support\language\language;
 use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
 use npds\system\cache\SuperCacheEmpty;
