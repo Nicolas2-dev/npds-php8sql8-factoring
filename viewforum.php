@@ -45,11 +45,17 @@ $adminforum = false;
 if ($admin) {
     $adminX = base64_decode($admin);
     $adminR = explode(':', $adminX);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$adminR[0]' LIMIT 1"));
 
     if ($Q['radminsuper'] == 1) {
         $adminforum = 1;
     } else {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $R = sql_query("SELECT fnom, fid, radminsuper FROM " . $NPDS_Prefix . "authors a LEFT JOIN " . $NPDS_Prefix . "droits d ON a.aid = d.d_aut_aid LEFT JOIN " . $NPDS_Prefix . "fonctions f ON d.d_fon_fid = f.fid WHERE a.aid='$adminR[0]' AND f.fid BETWEEN 13 AND 15");
         
         if (sql_num_rows($R) >= 1) {
@@ -66,16 +72,31 @@ if (($op == "mark") and ($forum)) {
         $userX = base64_decode($user);
         $userR = explode(':', $userX);
 
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $resultT = sql_query("SELECT topic_id FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum' ORDER BY topic_id ASC");
         $time_actu = time() + ((int)$gmt * 3600);
 
         while (list($topic_id) = sql_fetch_row($resultT)) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $r = sql_query("SELECT rid FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum' AND uid='$userR[0]' AND topicid='$topic_id'");
             
             if ($r) {
                 if (!list($rid) = sql_fetch_row($r)) {
+
+                    //DB::table('')->insert(array(
+                    //    ''       => ,
+                    //));
+
                     $r = sql_query("INSERT INTO " . $NPDS_Prefix . "forum_read (forum_id, topicid, uid, last_read, status) VALUES ('$forum', '$topic_id', '$userR[0]', $time_actu, '1')");
                 } else {
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     $r = sql_query("UPDATE " . $NPDS_Prefix . "forum_read SET last_read='$time_actu', status='1' WHERE rid='$rid'");
                 }
             }
@@ -90,6 +111,8 @@ if ($forum == "index") {
 }
 
 settype($forum, "integer");
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
@@ -107,6 +130,11 @@ if (($op == "solved") and ($topic_id) and ($forum) and ($sec_clef)) {
         $local_sec_clef = md5($forum . $topic_id . md5($NPDS_Key));
 
         if ($local_sec_clef == $sec_clef) {
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             $sqlS = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status='2', topic_title='[" . translate("Résolu") . "] - " . hack::removehack($topic_title) . "' WHERE topic_id='$topic_id'";
             
             if (!$r = sql_query($sqlS)) {
@@ -290,7 +318,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     settype($start, "integer");
     //settype($topics_per_page, "integer");
 
-
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $sql = "SELECT * FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum' $closol ORDER BY topic_first,topic_time DESC LIMIT $start, ". Config::get('forum.config.topics_per_page');
     if (!$result = sql_query($sql)) {
@@ -336,6 +364,9 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
             if ($replys >= 0) {
                 
                 if (Config::get('npds.smilies')) {
+
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                     $rowQ1 = cache::Q_Select("SELECT image FROM " . $NPDS_Prefix . "posts WHERE topic_id='" . $myrow['topic_id'] . "' AND forum_id='$forum' LIMIT 0,1", 86400);
                     $image_subject = $rowQ1[0]['image'];
                 }
@@ -353,6 +384,9 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                 }
 
                 if ($user) {
+
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                     $sqlR = "SELECT rid FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum' AND uid='$userR[0]' AND topicid='" . $myrow['topic_id'] . "' AND status!='0'";
                     
                     if ($replys >= Config::get('forum.config.hot_threshold')) {
@@ -418,6 +452,9 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                     if ($myrow['topic_poster'] == 1) {
                         echo '<td></td>';
                     } else {
+
+                        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                         $rowQ1 = cache::Q_Select("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uid='" . $myrow['topic_poster'] . "'", 3600);
                         
                         if ($rowQ1) {
@@ -456,6 +493,8 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
             echo '<div class="alert alert-danger my-3">' . translate("Il n'y a aucun sujet pour ce forum. ") . '<br /><a href="'. site_url('newtopic.php?forum=' . $forum) .'" >' . translate("Vous pouvez en poster un ici.") . '</a></div>';
         }
     }
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $sql = "SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum' $closol";
     if (!$r = sql_query($sql)) {
@@ -522,6 +561,8 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                     <select class="form-select" name="forum" onchange="submit();">
                     <option value="index">' . translate("Sauter à : ") . '</option>
                     <option value="index">' . translate("Index du forum") . '</option>';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $sub_sql = "SELECT forum_id, forum_name, forum_type, forum_pass FROM " . $NPDS_Prefix . "forums ORDER BY cat_id,forum_index,forum_id";
         if ($res = sql_query($sub_sql)) {

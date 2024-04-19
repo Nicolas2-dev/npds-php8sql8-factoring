@@ -19,18 +19,16 @@ use npds\system\theme\theme;
 use npds\system\utility\spam;
 use npds\system\config\Config;
 use npds\system\language\language;
-use npds\system\cache\cacheManager;
-use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if ($SuperCache){
-    $cache_obj = new cacheManager();
-} else {
-    $cache_obj = new SuperCacheEmpty();
-}
+// if ($SuperCache){
+//     $cache_obj = new cacheManager();
+// } else {
+//     $cache_obj = new SuperCacheEmpty();
+// }
 
 include('auth.php');
 
@@ -48,6 +46,9 @@ if (!$user) {
     settype($dossier, 'string');
 
     if ($type == 'outbox') {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE from_userid='" . $userdata['uid'] . "' AND type_msg='1' ORDER BY msg_id DESC LIMIT $start,1";
     } else {
         if ($dossier == 'All') {
@@ -59,6 +60,8 @@ if (!$user) {
         if (!$dossier) {
             $ibid = "AND dossier='...'";
         }
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND type_msg='0' $ibid ORDER BY msg_id DESC LIMIT $start,1";
     }
@@ -74,6 +77,11 @@ if (!$user) {
             $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET read_msg='1' WHERE msg_id='" . $myrow['msg_id'] . "'";
             $result = sql_query($sql);
             
+            // DB::table('')->where('', )->update(array(
+            //     ''       => ,
+            // ));
+
+
             if (!$result) {
                 forum::forumerror('0005');
             }
@@ -321,6 +329,9 @@ if (!$user) {
         echo '</ul>';
 
         if ($type != 'outbox') {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $sql = "SELECT DISTINCT dossier FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND type_msg='0' ORDER BY dossier";
             $result = sql_query($sql);
             

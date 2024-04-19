@@ -32,6 +32,8 @@ function generatePourcentageAndTotal($count, $total)
     return $tab;
 }
 
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $dkn = sql_query("SELECT type, var, count FROM " . $NPDS_Prefix . "counter ORDER BY type DESC");
 while (list($type, $var, $count) = sql_fetch_row($dkn)) {
     
@@ -430,6 +432,8 @@ echo '
         </thead>
         <tbody>';
 
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $resultX = sql_query("SELECT DISTINCT(theme) FROM " . $NPDS_Prefix . "users");
 
 
@@ -439,8 +443,14 @@ while (list($themelist) = sql_fetch_row($resultX)) {
         $T_exist = is_dir("themes/$ibix[0]") ? '' : '<span class="text-danger">' . translate("Ce fichier n'existe pas ...") . '</span>';
 
         if ($themelist == Config::get('npds.Default_Theme')) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE theme='$themelist'");
             $themeD1 = $result ? sql_num_rows($result) : 0;
+
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
 
             $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE theme=''");
             $themeD2 = $result ? sql_num_rows($result) : 0;
@@ -452,6 +462,9 @@ while (list($themelist) = sql_fetch_row($resultX)) {
                 <td>' . $T_exist . '</td>
                 </tr>';
         } else {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE theme='$themelist'");
             $themeU = $result ? sql_num_rows($result) : 0;
 
@@ -473,26 +486,59 @@ echo '
 
 $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users");
 $unum = $result ? sql_num_rows($result) - 1 : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT groupe_id FROM " . $NPDS_Prefix . "groupes");
 $gnum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories");
 $snum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT aid FROM " . $NPDS_Prefix . "authors");
 $anum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT post_id FROM " . $NPDS_Prefix . "posts WHERE forum_id<0");
 $cnum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "sections");
 $secnum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT artid FROM " . $NPDS_Prefix . "seccont");
 $secanum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT qid FROM " . $NPDS_Prefix . "queue");
 $subnum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT topicid FROM " . $NPDS_Prefix . "topics");
 $tnum = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT lid FROM " . $NPDS_Prefix . "links_links");
 $links = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT cid FROM " . $NPDS_Prefix . "links_categories");
 $cat1 = $result ? sql_num_rows($result) : 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT sid FROM " . $NPDS_Prefix . "links_subcategories");
 $cat2 = $result ? sql_num_rows($result) : 0;
 $cat = $cat1 + $cat2;

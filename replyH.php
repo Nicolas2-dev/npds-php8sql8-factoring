@@ -51,7 +51,9 @@ if ($cancel) {
 }
 
 $forum = Request::input('forum');
-Vd($forum, 'ff');
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
     forum::forumerror('0001');
@@ -98,6 +100,9 @@ if ($submitS) {
                 forum::forumerror('0027');
 
             } else {
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $result = sql_query("SELECT pass FROM " . $NPDS_Prefix . "users WHERE uname='$username'");
                 list($pass) = sql_fetch_row($result);
 
@@ -184,6 +189,10 @@ if ($submitS) {
         $message = addslashes($message);
         $time = date("Y-m-d H:i:s", time() + ((int) Config::get('npds.gmt') * 3600));
 
+        // DB::table('')->insert(array(
+        //     ''       => ,
+        // ));
+
         $sql = "INSERT INTO " . $NPDS_Prefix . "posts (topic_id, image, forum_id, poster_id, post_text, post_time, poster_ip, poster_dns, post_idH) 
         VALUES ('$topic', '$image_subject', '$forum', '" . $userdata['uid'] . "', '$message', '$time', '$poster_ip', '$hostname', $post)";
 
@@ -193,21 +202,35 @@ if ($submitS) {
             $IdPost = sql_last_id();
         }
 
+        // DB::table('')->where('', )->update(array(
+        //     ''       => ,
+        // ));
+
         $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_time = '$time', current_poster = '" . $userdata['uid'] . "' WHERE topic_id = '$topic'";
         if (!$result = sql_query($sql)) {
             forum::forumerror('0020');
         }
+
+        // DB::table('')->where('', )->update(array(
+        //     ''       => ,
+        // ));
 
         $sql = "UPDATE " . $NPDS_Prefix . "forum_read SET status='0' where topicid = '$topic' and uid <> '" . $userdata['uid'] . "'";
         if (!$r = sql_query($sql)) {
             forum::forumerror('0001');
         }
 
+        // DB::table('')->where('', )->update(array(
+        //     ''       => ,
+        // ));
+
         $sql = "UPDATE " . $NPDS_Prefix . "users_status SET posts=posts+1 WHERE (uid = '" . $userdata['uid'] . "')";
         $result = sql_query($sql);
         if (!$result) {
             forum::forumerror('0029');
         }
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $sql = "SELECT t.topic_notify, u.email, u.uname, u.uid, u.user_langue FROM " . $NPDS_Prefix . "forumtopics t, " . $NPDS_Prefix . "users u 
             WHERE t.topic_id = '$topic' AND t.topic_poster = u.uid";
@@ -222,6 +245,8 @@ if ($submitS) {
         if (($m['topic_notify'] == 1) && ($m['uname'] != $userdata['uname'])) {
 
             include_once("language/multilang.php");
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
 
             $resultZ = sql_query("SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'");
             list($title_topic) = sql_fetch_row($resultZ);
@@ -262,6 +287,8 @@ if ($submitS) {
     if (Config::get('forum.config.allow_bbcode') == 1) {
         include("assets/formhelp.java.php");
     }
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     list($topic_title, $topic_status) = sql_fetch_row(sql_query("select topic_title, topic_status from " . $NPDS_Prefix . "forumtopics where topic_id='$topic'"));
 
@@ -398,6 +425,9 @@ if ($submitS) {
                 <div class="card-body">';
 
         if ($citation && !$submitP) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $sql = "SELECT p.post_text, p.post_time, u.uname FROM " . $NPDS_Prefix . "posts p, " . $NPDS_Prefix . "users u WHERE post_id = '$post' AND p.poster_id = u.uid";
             
             if ($r = sql_query($sql)) {
@@ -464,6 +494,9 @@ if ($submitS) {
 
         if ($user) {
             if (Config::get('forum.config.allow_sig') == 1) {
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $asig = sql_query("SELECT attachsig FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'");
                 list($attachsig) = sql_fetch_row($asig);
                 

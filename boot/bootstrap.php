@@ -55,13 +55,13 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
         reset($_GET); // no need
 
         array_walk_recursive($_GET, [protect::class, 'url']);
-        //extract($_GET, EXTR_OVERWRITE);
+        extract($_GET, EXTR_OVERWRITE);
     }
 
     // Post values, slash, filter and extract
     if (!empty($_POST)) {
         array_walk_recursive($_POST, [str::class, 'addslashes_GPC']);
-        //extract($_POST, EXTR_OVERWRITE);
+        extract($_POST, EXTR_OVERWRITE);
     }
 
     // Cookies - analyse et purge - shiney 07-11-2010

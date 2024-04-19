@@ -27,6 +27,8 @@ function sitemapforum($prio)
 
     $tmp = '';
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT forum_id FROM " . $NPDS_Prefix . "forums WHERE forum_access='0' ORDER BY forum_id");
     while (list($forum_id) = sql_fetch_row($result)) {
         // Forums
@@ -36,6 +38,8 @@ function sitemapforum($prio)
         $tmp .= "<changefreq>hourly</changefreq>\n";
         $tmp .= "<priority>$prio</priority>\n";
         $tmp .= "</url>\n\n";
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $sub_result = sql_query("SELECT topic_id, topic_time FROM " . $NPDS_Prefix . "forumtopics WHERE forum_id='$forum_id' AND topic_status!='2' ORDER BY topic_id");
 
@@ -58,6 +62,8 @@ function sitemaparticle($prio)
     global $NPDS_Prefix;
 
     $tmp = '';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT sid,time FROM " . $NPDS_Prefix . "stories WHERE ihome='0' AND archive='0' ORDER BY sid");
 
@@ -88,6 +94,8 @@ function sitemaprub($prio)
     $tmp .= "<priority>$prio</priority>\n";
     $tmp .= "</url>\n\n";
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT artid, timestamp FROM " . $NPDS_Prefix . "seccont WHERE userlevel='0' ORDER BY artid");
 
     while (list($artid, $timestamp) = sql_fetch_row($result)) {
@@ -116,6 +124,8 @@ function sitemapdown($prio)
     $tmp .= "<changefreq>weekly</changefreq>\n";
     $tmp .= "<priority>$prio</priority>\n";
     $tmp .= "</url>\n\n";
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT did, ddate FROM " . $NPDS_Prefix . "downloads WHERE perms='0' ORDER BY did");
 

@@ -29,7 +29,8 @@ if (!function_exists("Mysql_Connexion")) {
 }
 
 // chatbox avec salon privatif - on utilise id pour filtrer les messages -> id = l'id du groupe au sens autorisation de NPDS (-127,-1,0,1,2...126))
-$id = Request::input('id');
+$id = Request::query('id');
+$auto = Request::query('auto');
 
 if ($id === ''|| unserialize(crypt::decrypt($auto)) != $id) {
     die();
@@ -40,6 +41,8 @@ if (!users::autorisation($id)) {
     die();
 }
 
+
+//dd($id, $auto);
 $chatbox = DB::table('chatbox')
             ->select('username', 'message', 'dbname', 'date')
             ->where('id', $id)
@@ -62,7 +65,7 @@ if ($chatbox) {
             if ((!users::getUser()) and (Config::get('npds.member_list') == 1) and (!authors::getAdmin())) {
                 $thing .= "<div class='chatnom'>". $username ."</div>";
             } else {
-                $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', userpopover($username, 36, 1)) . "</div> <a href='". site_url('user.php?op=userinfo&amp;uname='. $username) ."' target='_blank'>". $username ."</a></div>";
+                $thing .= "<div class='chatnom'><div class='float-start'> " . str_replace('"', '\"', (string) userpopover($username, 36, 1)) . "</div> <a href='". site_url('user.php?op=userinfo&amp;uname='. $username) ."' target='_blank'>". $username ."</a></div>";
             }
         } else {
             $thing .= "<div class='chatnom'>". $username ."</div>";

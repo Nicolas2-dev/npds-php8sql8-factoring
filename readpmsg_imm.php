@@ -49,7 +49,7 @@ function cache_ctrl()
 
 function show_imm($op)
 {
-    global $smilies, $user, $allow_bbcode, $language, $theme, $short_user, $Titlesitename, $NPDS_Prefix; // $Titlesitename ??? not used
+    global $smilies, $user, $allow_bbcode, $theme, $short_user, $NPDS_Prefix;
 
     if (!$user) {
         Header('Location: '. site_url('user.php'));
@@ -58,7 +58,7 @@ function show_imm($op)
         $userdata = explode(':', $userX);
 
         if ($userdata[9] != '') {
-            if (!$file = @opendir("themes/$userdata[9]")) {
+            if (!@opendir("themes/$userdata[9]")) {
                 $theme = Config::get('npds.Default_Theme');
             } else {
                 $theme = $userdata[9];
@@ -72,7 +72,13 @@ function show_imm($op)
         $userdata = forum::get_userdata($userdata[1]);
 
         $sql = ($op != 'new_msg') 
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             ? "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND read_msg='1' AND type_msg='0' AND dossier='...' ORDER BY msg_id DESC" 
+            
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+            
             : "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND read_msg='0' AND type_msg='0' ORDER BY msg_id ASC";
         $result = sql_query($sql);
         
@@ -196,8 +202,6 @@ function show_imm($op)
 
 function sup_imm($msg_id)
 {
-    global $cookie;
-
     if (!$cookie) {
         Header('Location: '. site_url('user.php'));
     } else {
@@ -214,13 +218,16 @@ function sup_imm($msg_id)
 
 function read_imm($msg_id, $sub_op)
 {
-    global $cookie, $NPDS_Prefix;
-
     if (!$cookie) {
         Header('Location: '. site_url('user.php'));
     } else {
         $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET read_msg='1' WHERE msg_id='$msg_id' AND to_userid='$cookie[0]'";
         
+        // DB::table('')->where('', )->update(array(
+        //     ''       => ,
+        // ));
+
+
         if (!sql_query($sql)) {
             forum::forumerror('0021');
         }
@@ -243,7 +250,6 @@ function read_imm($msg_id, $sub_op)
     }
 }
 
-settype($op, 'string');
 
 switch ($op) {
     case 'new_msg':

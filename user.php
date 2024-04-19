@@ -106,11 +106,16 @@ function userCheck($uname, $email)
         $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Il ne peut pas y avoir d'espace dans le surnom.");
     }
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     if (sql_num_rows(sql_query("SELECT uname FROM " . $NPDS_Prefix . "users WHERE uname='$uname'")) > 0) {
         $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Erreur : cet identifiant est déjà utilisé");
     }
 
     if ($uname != 'edituser') {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         if (sql_num_rows(sql_query("SELECT email FROM " . $NPDS_Prefix . "users WHERE email='$email'")) > 0) {
             $stop = '<i class="fa fa-exclamation me-2"></i>' . translate("Erreur : adresse Email déjà utilisée");
         }
@@ -345,15 +350,36 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
         $Default_Theme = Config::get('npds.Default_Theme');
         $Default_Skin = Config::get('npds.Default_Skin');
 
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users VALUES (NULL,'$name','$uname','$email','','','$user_avatar','$user_regdate','$user_occ','$user_from','$user_intrest','$user_sig','$user_viewemail','','','$cryptpass', '1', '10','','0','0','0','','0','','$Default_Theme+$Default_Skin','10','0','0','1','0','','','$user_lnl')");
 
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         list($usr_id) = sql_fetch_row(sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$uname'"));
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));    
+
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users_extend VALUES ('$usr_id','$C1','$C2','$C3','$C4','$C5','$C6','$C7','$C8','$M1','$M2','$T1','$T2', '$B1')");
         $attach = $user_sig ? 1 : 0;
 
         if (($AutoRegUser == 1) or (!isset($AutoRegUser))) {
+
+            //DB::table('')->insert(array(
+            //    ''       => ,
+            //));
+
             $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users_status VALUES ('$usr_id','0','$attach','0','1','1','')");
         } else {
+
+            //DB::table('')->insert(array(
+            //    ''       => ,
+            //));
+
             $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users_status VALUES ('$usr_id','0','$attach','0','1','0','')");
         }
 
@@ -434,6 +460,10 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
                 $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
                 $message = metalang::meta_lang(AddSlashes(str_replace("\n", "<br />", $message)));
                 
+                //DB::table('')->insert(array(
+                //    ''       => ,
+                //));
+
                 $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
                 $sql .= "VALUES ('', '$sujet', '$emetteur_id', '$usr_id', '$time', '$message')";
                 sql_query($sql);
@@ -461,6 +491,9 @@ function userinfo($uname)
     global $name, $email, $url, $bio, $user_avatar, $user_from, $user_occ, $user_intrest, $user_sig, $user_journal, $C7, $C8;
 
     $uname = hack::removeHack($uname);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT uid, name, femail, url, bio, user_avatar, user_from, user_occ, user_intrest, user_sig, user_journal, mns FROM " . $NPDS_Prefix . "users WHERE uname='$uname'");
     list($uid, $name, $femail, $url, $bio, $user_avatar, $user_from, $user_occ, $user_intrest, $user_sig, $user_journal, $mns) = sql_fetch_row($result);
     
@@ -768,6 +801,9 @@ function userinfo($uname)
     <div id="last_comment_by" class="card card-body mb-3">';
 
     $url = '';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT topic_id, forum_id, post_text, post_time FROM " . $NPDS_Prefix . "posts WHERE forum_id<0 and poster_id='$uid' ORDER BY post_time DESC LIMIT 0,10");
     
     while (list($topic_id, $forum_id, $post_text, $post_time) = sql_fetch_row($result)) {
@@ -790,6 +826,8 @@ function userinfo($uname)
         <h4 class="my-3">' . translate("Les derniers articles de") . ' ' . $uname . '.</h4>
         <div id="last_article_by" class="card card-body mb-3">';
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     //"SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories
     $xtab = news::news_aff("libre", "WHERE informant='$uname' ORDER BY sid DESC LIMIT 10", '', 10);
 
@@ -811,10 +849,16 @@ function userinfo($uname)
 
     $nbp = 10;
     $content = '';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "posts WHERE forum_id > 0 AND poster_id=$uid ORDER BY post_time DESC LIMIT 0,50");
     $j = 1;
 
     while (list($post_id, $post_text) = sql_fetch_row($result) and $j <= $nbp) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         // Requete detail dernier post
         $res = sql_query("SELECT 
                 us.topic_id, us.forum_id, us.poster_id, us.post_time, 
@@ -843,10 +887,16 @@ function userinfo($uname)
         }
 
         if ($ok_affich) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             // Nbre de postes par sujet
             $TableRep = sql_query("SELECT * FROM " . $NPDS_Prefix . "posts WHERE forum_id > 0 AND topic_id = '$topic_id'");
             $replys = sql_num_rows($TableRep) - 1;
             $id_lecteur = isset($cookie[0]) ? $cookie[0] : '0';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $sqlR = "SELECT rid FROM " . $NPDS_Prefix . "forum_read WHERE topicid = '$topic_id' AND uid = '$id_lecteur' AND status != '0'";
 
             if (sql_num_rows(sql_query($sqlR)) == 0) {
@@ -1008,6 +1058,9 @@ function mail_password($uname, $code)
     global $NPDS_Prefix;
 
     $uname = hack::removeHack(stripslashes(htmlspecialchars(urldecode($uname), ENT_QUOTES, 'utf-8')));
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT uname,email,pass FROM " . $NPDS_Prefix . "users WHERE uname='$uname'");
     $tmp_result = sql_fetch_row($result);
 
@@ -1040,6 +1093,9 @@ function valid_password($code)
     global $NPDS_Prefix;
 
     $ibid = explode("#fpwd#", $code);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT email,pass FROM " . $NPDS_Prefix . "users WHERE uname='" . crypt::decrypt($ibid[0]) . "'");
 
     list($email, $pass) = sql_fetch_row($result);
@@ -1095,6 +1151,8 @@ function update_password($code, $passwd)
     $ibid = explode("#fpwd#", $code);
     $uname = urlencode(crypt::decrypt($ibid[0]));
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT email,pass FROM " . $NPDS_Prefix . "users WHERE uname='$uname'");
     list($email, $pass) = sql_fetch_row($result);
 
@@ -1114,6 +1172,10 @@ function update_password($code, $passwd)
                     $hashpass = password_hash($ibid[1], $AlgoCrypt, $options);
                     $cryptpass = crypt($ibid[1], $hashpass);
                     
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "users SET pass='$cryptpass', hashkey='1' WHERE uname='$uname'");
 
                     message_pass('<div class="alert alert-success lead text-center"><a class="alert-link" href="'. site_url('user.php') .'"><i class="fa fa-exclamation me-2"></i>' . translate("Mot de passe mis à jour. Merci de vous re-connecter") . '<i class="fas fa-sign-in-alt fa-lg ms-2"></i></a></div>');
@@ -1158,10 +1220,14 @@ function login($uname, $pass)
 {
     global $NPDS_Prefix, $setinfo;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT pass, hashkey, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM " . $NPDS_Prefix . "users WHERE uname = '$uname'");
     if (sql_num_rows($result) == 1) {
         $setinfo = sql_fetch_assoc($result);
         
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT open FROM " . $NPDS_Prefix . "users_status WHERE uid='" . $setinfo['uid'] . "'");
         list($open_user) = sql_fetch_row($result);
         
@@ -1181,7 +1247,13 @@ function login($uname, $pass)
                 $hashpass = password_hash($pass, $AlgoCrypt, $options);
                 $pass = crypt($pass, $hashpass);
 
+                //DB::table('')->where('', )->update(array(
+                //    ''       => ,
+                //));
+
                 sql_query("UPDATE " . $NPDS_Prefix . "users SET pass='$pass', hashkey='1' WHERE uname='$uname'");
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
 
                 $result = sql_query("SELECT pass, hashkey, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM " . $NPDS_Prefix . "users WHERE uname = '$uname'");
                 if (sql_num_rows($result) == 1) {
@@ -1207,6 +1279,9 @@ function login($uname, $pass)
         docookie($setinfo['uid'], $setinfo['uname'], $CryptpPWD, $setinfo['storynum'], $setinfo['umode'], $setinfo['uorder'], $setinfo['thold'], $setinfo['noscore'], $setinfo['ublockon'], $setinfo['theme'], $setinfo['commentmax'], $setinfo['user_langue']);
 
         $ip = getip();
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "session WHERE host_addr='$ip' AND guest='1'");
 
         if (sql_num_rows($result) == 1) {
@@ -1230,6 +1305,9 @@ function edituser()
     users::member_menu($userinfo['mns'], $userinfo['uname']);
 
     global $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1;
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT C1, C2, C3, C4, C5, C6, C7, C8, M1, M2, T1, T2, B1 FROM " . $NPDS_Prefix . "users_extend WHERE uid='" . $userinfo['uid'] . "'");
     list($C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1) = sql_fetch_row($result);
 
@@ -1245,6 +1323,8 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
 
     $cookie = cookie::cookiedecode($user);
     $check = $cookie[1];
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT uid, email FROM " . $NPDS_Prefix . "users WHERE uname='$check'");
     list($vuid, $vemail) = sql_fetch_row($result);
@@ -1360,7 +1440,14 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
                     $hashpass = password_hash($pass, PASSWORD_BCRYPT, $options);
                     $pass = crypt($pass, $hashpass);
 
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "users SET name='$name', email='$email', femail='" . hack::removeHack($femail) . "', url='" . hack::removeHack($url) . "', pass='$pass', hashkey='1', bio='" . hack::removeHack($bio) . "', user_avatar='$user_avatar', user_occ='" . hack:: removeHack($user_occ) . "', user_from='" . hack::removeHack($user_from) . "', user_intrest='" . hack::removeHack($user_intrest) . "', user_sig='" . hack::removeHack($user_sig) . "', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
+                    
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+                    
                     $result = sql_query("SELECT uid, uname, pass, storynum, umode, uorder, thold, noscore, ublockon, theme FROM " . $NPDS_Prefix . "users WHERE uname='$uname' AND pass='$pass'");
                     
                     if (sql_num_rows($result) == 1) {
@@ -1369,15 +1456,35 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
                     }
 
                 } else {
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "users SET name='$name', email='$email', femail='" . hack::removeHack($femail) . "', url='" . hack::removeHack($url) . "', bio='" . hack::removeHack($bio) . "', user_avatar='$user_avatar', user_occ='" . hack:: removeHack($user_occ) . "', user_from='" . hack::removeHack($user_from) . "', user_intrest='" . hack::removeHack($user_intrest) . "', user_sig='" . hack::removeHack($user_sig) . "', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
                 }
 
+                //DB::table('')->where('', )->update(array(
+                //    ''       => ,
+                //));
+
                 sql_query("UPDATE " . $NPDS_Prefix . "users_status SET attachsig='$t' WHERE uid='$uid'");
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users_extend WHERE uid='$uid'");
 
                 if (sql_num_rows($result) == 1) {
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "users_extend SET C1='" . hack::removeHack($C1) . "', C2='" . hack::removeHack($C2) . "', C3='" . hack::removeHack($C3) . "', C4='" . hack::removeHack($C4) . "', C5='" . hack::removeHack($C5) . "', C6='" . hack::removeHack($C6) . "', C7='" . hack::removeHack($C7) . "', C8='" . hack::removeHack($C8) . "', M1='" . hack::removeHack($M1) . "', M2='" . hack::removeHack($M2) . "', T1='" . hack::removeHack($T1) . "', T2='" . hack::removeHack($T2) . "', B1='$B1' WHERE uid='$uid'");
                 } else {
+
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                     $result = sql_query("INSERT INTO " . $NPDS_Prefix . "users_extend VALUES ('$uid','" . hack::removeHack($C1) . "', '" . hack::removeHack($C2) . "', '" . hack::removeHack($C3) . "', '" . hack::removeHack($C4) . "', '" . hack::removeHack($C5) . "', '" . hack::removeHack($C6) . "', '" . hack::removeHack($C7) . "', '" . hack::removeHack($C8) . "', '" . hack::removeHack($M1) . "', '" . hack::removeHack($M2) . "', '" . hack::removeHack($T1) . "', '" . hack::removeHack($T2) . "', '$B1')");
                 }
 
@@ -1480,12 +1587,18 @@ function savehome($uid, $uname, $theme, $storynum, $ublockon, $ublock)
     $cookie = cookie::cookiedecode($user);
     $check = $cookie[1];
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$check'");
     list($vuid) = sql_fetch_row($result);
 
     if (($check == $uname) and ($uid == $vuid)) {
         $ublockon = $ublockon ? 1 : 0;
         $ublock = hack::removeHack(str::FixQuotes($ublock));
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
 
         sql_query("UPDATE " . $NPDS_Prefix . "users SET storynum='$storynum', ublockon='$ublockon', ublock='$ublock' WHERE uid='$uid'");
 
@@ -1634,10 +1747,18 @@ function savetheme($uid, $theme)
     global $NPDS_Prefix, $user;
 
     $cookie = cookie::cookiedecode($user);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
 
     list($vuid) = sql_fetch_row($result);
     if ($uid == $vuid) {
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "users SET theme='$theme' WHERE uid='$uid'");
         $userinfo = users::getusrinfo($user);
         
@@ -1697,6 +1818,8 @@ function savejournal($uid, $journal, $datetime)
 
     $cookie = cookie::cookiedecode($user);
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
     list($vuid) = sql_fetch_row($result);
 
@@ -1727,8 +1850,17 @@ function savejournal($uid, $journal, $datetime)
             global $gmt;
             $journalentry .= date(translate("dateinternal"), time() + ((int)$gmt * 3600));
 
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "users SET user_journal='$journalentry' WHERE uid='$uid'");
         } else {
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "users SET user_journal='$journal' WHERE uid='$uid'");
         }
 
@@ -1819,6 +1951,8 @@ switch ($op) {
         $past = time() - 300;
         
         DB::table('session')->where('time', '<', $past)->delete();
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $result = sql_query("SELECT time FROM " . $NPDS_Prefix . "session WHERE username='$cookie[1]'");
         

@@ -16,6 +16,7 @@
 declare(strict_types=1);
 
 use npds\system\config\Config;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
@@ -25,6 +26,9 @@ $meta_op = '';
 $meta_doctype = '<!DOCTYPE html>';
 Config::set('npds.Titlesitename', 'NPDS Chat');
 include("storage/meta/meta.php");
+
+$id = Request::query('id');
+$auto = Request::query('auto');
 
 echo '
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />

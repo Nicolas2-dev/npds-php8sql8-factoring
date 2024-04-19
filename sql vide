@@ -1,19 +1,19 @@
-    DB::table('')->insert(array(
-        ''       => ,
-    ));
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
 
 
-    DB::table('')->where('', )->delete();
+    // DB::table('')->where('', )->delete();
 
 
-    DB::table('')->where('', )->update(array(
-        ''       => ,
-    ));
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
 
 
-    = DB::table('')->count(); //
+    // = DB::table('')->count(); //
 
 
-    = DB::table('')->select()->where('', )->orderBy('')->get(); //
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     Config::get('cache.SuperCache')

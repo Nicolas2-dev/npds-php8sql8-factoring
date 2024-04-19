@@ -39,6 +39,8 @@ function ancre($forum_id, $topic_id, $post_id, $posts_per_page)
 {
     global $NPDS_Prefix;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $rowQ1 = cache::Q_Select("SELECT post_id FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum_id' AND topic_id='$topic_id' ORDER BY post_id ASC", 600);
     if (!$rowQ1) {
         forum::forumerror('0015');
@@ -103,6 +105,8 @@ echo '
             <div class="col-sm-8">
                 <select class="form-select" name="forum" id="forum">
                 <option value="all">' . translate("Rechercher dans tous les forums") . '</option>';
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
 
 $rowQ1 = cache::Q_Select("SELECT forum_name,forum_id FROM " . $NPDS_Prefix . "forums", 3600);
 if (!$rowQ1) {
@@ -181,6 +185,8 @@ echo '/>
         </div>
     </form>';
 
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $query = "SELECT u.uid, f.forum_id, p.topic_id, p.post_id, u.uname, p.post_time, t.topic_title, f.forum_name, f.forum_type, f.forum_pass, f.arbre FROM " . $NPDS_Prefix . "posts p, " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "forums f, " . $NPDS_Prefix . "forumtopics t";
 
 if (isset($term) && $term != '') {
@@ -210,6 +216,8 @@ if (isset($forum) && $forum != 'all') {
 
 if (isset($username) && $username != '') {
     $username = hack::removeHack(stripslashes(htmlspecialchars(urldecode($username), ENT_QUOTES, 'utf-8'))); // electrobug
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     if (!$result = sql_query("SELECT uid FROM " . $NPDS_Prefix . "users WHERE uname='$username'")) {
         forum::forumerror('0001');

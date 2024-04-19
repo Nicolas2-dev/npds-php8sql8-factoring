@@ -251,7 +251,7 @@ class language
             $tab_langue = static::make_tab_langue();
             $ibid = static::aff_langue($ibid);
 
-            Config::set('npds.language', $old_langue);
+            Config::set('npds.language.old_langue', $old_langue);
         }
 
         return $ibid;

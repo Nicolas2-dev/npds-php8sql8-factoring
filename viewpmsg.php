@@ -39,6 +39,8 @@ if (!$user) {
     $userdata = explode(':', $userX);
     $userdata = forum::get_userdata($userdata[1]);
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $sqlT = "SELECT DISTINCT dossier FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND dossier!='...' AND type_msg='0' ORDER BY dossier";
     $resultT = sql_query($sqlT);
 
@@ -81,6 +83,8 @@ if (!$user) {
     if (!$dossier) {
         $ibid = "AND dossier='...'";
     }
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND type_msg='0' $ibid ORDER BY msg_id DESC";
     $resultID = sql_query($sql);
@@ -202,6 +206,8 @@ if (!$user) {
     }
 
     echo '</div>';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE from_userid = '" . $userdata['uid'] . "' AND type_msg='1' ORDER BY msg_id DESC";
     $resultID = sql_query($sql);

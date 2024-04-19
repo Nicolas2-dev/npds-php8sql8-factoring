@@ -53,6 +53,8 @@ if ($op != "maj_subscribe") {
 
             DB::table('subscribe')->where('uid', $cookie[0])->where('topicid', '!=', 'NULL')->delete();
 
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $selection = sql_query("SELECT topicid FROM " . $NPDS_Prefix . "topics ORDER BY topicid");
 
             while (list($topicid) = sql_fetch_row($selection)) {
@@ -60,6 +62,11 @@ if ($op != "maj_subscribe") {
                     
                     if (array_key_exists($topicid, $Subtopicid)) {
                         if ($Subtopicid[$topicid] == "on") {
+
+                            //DB::table('')->insert(array(
+                            //    ''       => ,
+                            //));
+
                             $resultX = sql_query("INSERT INTO " . $NPDS_Prefix . "subscribe (topicid, uid) VALUES ('$topicid','$cookie[0]')");
                         }
                     }

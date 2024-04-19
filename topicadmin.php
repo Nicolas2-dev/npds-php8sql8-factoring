@@ -42,11 +42,16 @@ if ($admin) {
     $adminX = base64_decode($admin);
     $adminR = explode(':', $adminX);
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$adminR[0]' LIMIT 1"));
 
     if ($Q['radminsuper'] == 1) {
         $adminforum = 1;
     } else {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $R = sql_query("SELECT fnom, fid, radminsuper FROM " . $NPDS_Prefix . "authors a LEFT JOIN " . $NPDS_Prefix . "droits d ON a.aid = d.d_aut_aid LEFT JOIN " . $NPDS_Prefix . "fonctions f ON d.d_fon_fid = f.fid WHERE a.aid='$adminR[0]' AND f.fid BETWEEN 13 AND 15");
         
         if (sql_num_rows($R) >= 1) {
@@ -70,6 +75,8 @@ if (isset($user)) {
     $userdata = explode(':', $userX);
 
     settype($forum, 'integer');
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
     if (!$rowQ1) {
@@ -96,10 +103,19 @@ if ((!$Mmod) and ($adminforum == 0)) {
 //   }
 
 if ((isset($submit)) and ($mode == 'move')) {
+
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
+
     $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET forum_id='$newforum' WHERE topic_id='$topic'";
     if (!$r = sql_query($sql)) {
         forum::forumerror('0010');
     }
+
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
 
     $sql = "UPDATE " . $NPDS_Prefix . "posts SET forum_id='$newforum' WHERE topic_id='$topic' AND forum_id='$forum'";
     if (!$r = sql_query($sql)) {
@@ -111,8 +127,14 @@ if ((isset($submit)) and ($mode == 'move')) {
         forum::forumerror('0001');
     }
 
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
+
     $sql = "UPDATE $upload_table SET forum_id='$newforum' WHERE apli='forum_npds' AND topic_id='$topic' AND forum_id='$forum'";
     sql_query($sql);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $sql = "SELECT arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id='$newforum'";
     $arbre = sql_fetch_assoc(sql_query($sql));
@@ -149,6 +171,8 @@ if ((isset($submit)) and ($mode == 'move')) {
                 <label class="form-label" for="newforum">' . translate("Déplacer le sujet vers : ") . '</label>
                 <div class="col-sm-12">
                 <select class="form-select" name="newforum">';
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
 
                 $sql = "SELECT forum_id, forum_name FROM " . $NPDS_Prefix . "forums WHERE forum_id!='$forum' ORDER BY cat_id,forum_index,forum_id";
                 if ($result = sql_query($sql)) {
@@ -208,6 +232,11 @@ if ((isset($submit)) and ($mode == 'move')) {
                 break;
 
             case 'lock':
+
+                //DB::table('')->where('', )->update(array(
+                //    ''       => ,
+                //));
+
                 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status=1 WHERE topic_id='$topic'";
                 if (!$r = sql_query($sql)) {
                     forum::forumerror('0011');
@@ -218,10 +247,17 @@ if ((isset($submit)) and ($mode == 'move')) {
 
             case 'unlock':
                 $topic_title = '';
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $sql = "SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
                 $r = sql_fetch_assoc(sql_query($sql));
 
                 $topic_title = str_replace("[" . translate("Résolu") . "] - ", "", $r['topic_title']);
+
+                //DB::table('')->where('', )->update(array(
+                //    ''       => ,
+                //));
 
                 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status = '0', topic_first='1', topic_title='" . addslashes($topic_title) . "' WHERE topic_id = '$topic'";
                 if (!$r = sql_query($sql)) {
@@ -232,6 +268,11 @@ if ((isset($submit)) and ($mode == 'move')) {
                 break;
 
             case 'first':
+
+                //DB::table('')->where('', )->update(array(
+                //    ''       => ,
+                //));
+
                 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status = '1', topic_first='0' WHERE topic_id = '$topic'";
                 if (!$r = sql_query($sql)) {
                     forum::forumerror('0011');
@@ -244,6 +285,8 @@ if ((isset($submit)) and ($mode == 'move')) {
                 include("themes/default/header.php");
                 include('modules/geoloc/geoloc_locip.php');
 
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+                
                 $sql = "SELECT u.uname, p.poster_ip, p.poster_dns FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "posts p WHERE p.post_id = '$post' AND u.uid = p.poster_id";
                 
                 if (!$r = sql_query($sql)) {
@@ -277,6 +320,9 @@ if ((isset($submit)) and ($mode == 'move')) {
                 break;
 
             case 'banip':
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $sql = "SELECT p.poster_ip FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "posts p WHERE p.post_id = '$post' AND u.uid = p.poster_id";
 
                 if (!$r = sql_query($sql)) {
@@ -293,6 +339,11 @@ if ((isset($submit)) and ($mode == 'move')) {
                 break;
 
             case 'aff':
+
+                //DB::table('')->where('', )->update(array(
+                //    ''       => ,
+                //));
+
                 $sql = "UPDATE " . $NPDS_Prefix . "posts SET post_aff = '$ordre' WHERE post_id = '$post'";
                 sql_query($sql);
 

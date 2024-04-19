@@ -77,6 +77,9 @@ function write_review()
         </div>';
 
     if ($user) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT uname, email FROM " . $NPDS_Prefix . "users WHERE uname='$cookie[1]'");
         list($uname, $email) = sql_fetch_row($result);
 
@@ -376,15 +379,29 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
 
     echo '<br />';
 
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
+
     if (($admin) && ($id == 0)) {
         sql_query("INSERT INTO " . $NPDS_Prefix . "reviews VALUES (NULL, '$date', '$title', '$text', '$reviewer', '$email', '$score', '$cover', '$url', '$url_title', '1')");
         echo translate("Dès maintenant disponible dans la base de données des critiques.");
 
     } else if (($admin) && ($id != 0)) {
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "reviews SET date='$date', title='$title', text='$text', reviewer='$reviewer', email='$email', score='$score', cover='$cover', url='$url', url_title='$url_title', hits='$hits' WHERE id='$id'");
         echo translate("Dès maintenant disponible dans la base de données des critiques.");
 
     } else {
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         sql_query("INSERT INTO " . $NPDS_Prefix . "reviews_add VALUES (NULL, '$date', '$title', '$text', '$reviewer', '$email', '$score', '$url', '$url_title')");
         echo translate("Nous allons vérifier votre contribution. Elle devrait bientôt être disponible !");
     }
@@ -402,6 +419,8 @@ function reviews($field, $order)
 
     include("themes/default/header.php");
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $r_result = sql_query("SELECT title, description FROM " . $NPDS_Prefix . "reviews_main");
     list($r_title, $r_description) = sql_fetch_row($r_result);
 
@@ -409,22 +428,37 @@ function reviews($field, $order)
 
     switch ($field) {
         case 'reviewer':
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT id, title, hits, reviewer, score, date FROM " . $NPDS_Prefix . "reviews ORDER BY reviewer $order");
             break;
 
         case 'score':
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT id, title, hits, reviewer, score, date FROM " . $NPDS_Prefix . "reviews ORDER BY score $order");
             break;
 
         case 'hits':
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT id, title, hits, reviewer, score, date FROM " . $NPDS_Prefix . "reviews ORDER BY hits $order");
             break;
 
         case 'date':
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT id, title, hits, reviewer, score, date FROM " . $NPDS_Prefix . "reviews ORDER BY id $order");
             break;
 
         default:
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT id, title, hits, reviewer, score, date FROM " . $NPDS_Prefix . "reviews ORDER BY title $order");
             break;
     }
@@ -540,6 +574,9 @@ function showcontent($id)
 
     sql_query("UPDATE " . $NPDS_Prefix . "reviews SET hits=hits+1 WHERE id='$id'");
 
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "reviews WHERE id='$id'");
     $myrow = sql_fetch_assoc($result);
 
@@ -636,6 +673,9 @@ function mod_review($id)
     settype($id, 'integer');
 
     if (($id != 0) && ($admin)) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT * FROM " . $NPDS_Prefix . "reviews WHERE id = '$id'");
         $myrow =  sql_fetch_assoc($result);
 

@@ -46,6 +46,9 @@ if (Config::get('npds.mod_admin_news') > 0) {
     if (Config::get('npds.mod_admin_news') == 1) {
         if ($user != '' and $admin == '') {
             global $cookie;
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT level FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'");
             
             if (sql_num_rows($result) == 1) {
@@ -97,6 +100,8 @@ function defaultDisplay()
             <label class="col-form-label col-sm-3" for="topic">' . translate("Sujet") . '</label>
             <div class="col-sm-9">
                 <select class="form-select" name="topic">';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $toplist = sql_query("SELECT topicid, topicname, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
 
@@ -186,6 +191,9 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
         $warning = '<div class="alert alert-danger"><strong>' . translate("Sélectionner un sujet") . '</strong></div>';
     } else {
         $warning = '';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
         list($topictext, $topicimage) = sql_fetch_row($result);
     }
@@ -227,6 +235,8 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
             <label class="col-form-label col-sm-3" for="topic">' . translate("Sujet") . '</label>
             <div class="col-sm-9">
                 <select class="form-select" name="topic">';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
 
@@ -306,6 +316,10 @@ function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_fi
     $subject = hack::removeHack(stripslashes(str::FixQuotes(str_replace("\"", "&quot;", (strip_tags($subject))))));
     $story = hack::removeHack(stripslashes(str::FixQuotes($story)));
     $bodytext = hack::removeHack(stripslashes(str::FixQuotes($bodytext)));
+
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
 
     $result = sql_query("INSERT INTO " . $NPDS_Prefix . "queue VALUES (NULL, '$uid', '$name', '$subject', '$story', '$bodytext', now(), '$topic','$date_debval','$date_finval','$epur')");
     if (sql_last_id()) {

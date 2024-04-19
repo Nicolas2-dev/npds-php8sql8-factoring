@@ -67,9 +67,15 @@ function listsections($rubric)
         }
 
         if ($admin) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT rubid, rubname, intro FROM " . $NPDS_Prefix . "rubriques WHERE rubname<>'Divers' AND rubname<>'Presse-papiers' $sqladd ORDER BY ordre");
             $nb_r = sql_num_rows($result);
         } else {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT rubid, rubname, intro FROM " . $NPDS_Prefix . "rubriques WHERE enligne='1' AND rubname<>'Divers' AND rubname<>'Presse-papiers' $sqladd ORDER BY ordre");
             $nb_r = sql_num_rows($result);
         }
@@ -85,6 +91,9 @@ function listsections($rubric)
 
         if (sql_num_rows($result) > 0) {
             while (list($rubid, $rubname, $intro) = sql_fetch_row($result)) {
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $result2 = sql_query("SELECT secid, secname, image, userlevel, intro FROM " . $NPDS_Prefix . "sections WHERE rubid='$rubid' ORDER BY ordre");
                 $nb_section = sql_num_rows($result2);
                 
@@ -114,6 +123,9 @@ function listsections($rubric)
                     $aff2 = '';
 
                     if ($okprintLV1) {
+
+                        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                         $result3 = sql_query("SELECT artid, title, counter, userlevel, timestamp FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid' ORDER BY ordre");
                         $nb_art = sql_num_rows($result3);
                         
@@ -204,8 +216,12 @@ function listarticles($secid)
 {
     global $user, $prev, $NPDS_Prefix;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT secname, rubid, image, intro, userlevel FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
     list($secname, $rubid, $image, $intro, $userlevel) = sql_fetch_row($result);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     list($rubname) = sql_fetch_row(sql_query("SELECT rubname FROM " . $NPDS_Prefix . "rubriques WHERE rubid='$rubid'"));
 
@@ -230,6 +246,9 @@ function listarticles($secid)
         $okprint1 = autorisation_section($userlevel);
 
         if ($okprint1) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT artid, secid, title, content, userlevel, counter, timestamp FROM " . $NPDS_Prefix . "seccont WHERE secid='$secid' ORDER BY ordre");
             $nb_art = sql_num_rows($result);
 
@@ -315,13 +334,24 @@ function viewarticle($artid, $page)
     $numpage = $page;
 
     if ($page == '') {
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "seccont SET counter=counter+1 WHERE artid='$artid'");
     }
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result_S = sql_query("SELECT artid, secid, title, content, counter, userlevel FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
     list($artid, $secid, $title, $Xcontent, $counter, $userlevel) = sql_fetch_row($result_S);
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     list($secid, $secname, $rubid) = sql_fetch_row(sql_query("SELECT secid, secname, rubid FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'"));
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     list($rubname) = sql_fetch_row(sql_query("SELECT rubname FROM " . $NPDS_Prefix . "rubriques WHERE rubid='$rubid'"));
 
@@ -428,6 +458,8 @@ function viewarticle($artid, $page)
                 // echo '<h4>***<strong>'.translate("Back to chapter:").'</strong></h4>';
                 // echo '<ul class="list-group"><li class="list-group-item"><a href="'. site_url('sections.php?op=listarticles&amp;secid='.$secid) .'">'.language::aff_langue($secname).'</a></li></ul>';
 
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $result3 = sql_query("SELECT artid, secid, title, userlevel FROM " . $NPDS_Prefix . "seccont WHERE (artid<>'$artid' AND secid='$secid') ORDER BY ordre");
                 $nb_article = sql_num_rows($result3);
 
@@ -448,6 +480,9 @@ function viewarticle($artid, $page)
             }
 
             $artid = $artidtempo;
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $resultconnexe = sql_query("SELECT id2 FROM " . $NPDS_Prefix . "compatsujet WHERE id1='$artid'");
 
             if (sql_num_rows($resultconnexe) > 0) {
@@ -456,6 +491,9 @@ function viewarticle($artid, $page)
                 <ul class="list-group">';
 
                 while (list($connexe) = sql_fetch_row($resultconnexe)) {
+
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                     $resultpdtcompat = sql_query("SELECT artid, title, userlevel FROM " . $NPDS_Prefix . "seccont WHERE artid='$connexe'");
                     list($artid2, $title, $userlevel) = sql_fetch_row($resultpdtcompat);
 
@@ -502,6 +540,8 @@ function PrintSecPage($artid)
         ? '<img src="' . $site_logo . '" alt="logo" />' 
         : '<img src="assets/images/' . $site_logo . '" alt="logo" />';
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT title, content FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
     list($title, $content) = sql_fetch_row($result);
 
@@ -534,8 +574,12 @@ function verif_aff($artid)
 {
     global $NPDS_Prefix;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT secid FROM " . $NPDS_Prefix . "seccont WHERE artid='$artid'");
     list($secid) = sql_fetch_row($result);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT userlevel FROM " . $NPDS_Prefix . "sections WHERE secid='$secid'");
     list($userlevel) = sql_fetch_row($result);

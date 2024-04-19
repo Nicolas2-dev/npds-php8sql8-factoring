@@ -16,11 +16,14 @@ declare(strict_types=1);
 
 use npds\system\theme\theme;
 use npds\system\utility\code;
+use npds\system\config\Config;
 use npds\system\language\language;
+use npds\system\support\facades\Request;
+
 
 function code_aff($subject, $story, $bodytext, $notes)
 {
-    global $local_user_language;
+    $local_user_language = Request::input('local_user_language');
 
     $subjectX = code::aff_code(language::preview_local_langue($local_user_language, $subject));
     $storyX = code::aff_code(language::preview_local_langue($local_user_language, $story));
@@ -32,9 +35,7 @@ function code_aff($subject, $story, $bodytext, $notes)
 
 function publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
 {
-    global $gmt;
-
-    $today = getdate(time() + ((int)$gmt * 3600));
+    $today = getdate(time() + ((int) Config::get('npds.gmt') * 3600));
 
     settype($dd_pub, 'string');
     settype($fd_pub, 'string');
@@ -102,7 +103,7 @@ function publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
     echo '
     <hr />
     <p class="small text-end">
-    ' . translate(date("l")) . date(" " . translate("dateinternal"), time() + ((int)$gmt * 3600)) . '
+    ' . translate(date("l")) . date(" " . translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600)) . '
     </p>';
 
     if ($dd_pub != -1 and $dh_pub != -1) {

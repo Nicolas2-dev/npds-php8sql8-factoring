@@ -105,10 +105,18 @@ if (isset($user)) {
             $tempo = explode(',', $to_user);
 
             foreach ($tempo as $to_user) {
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $res = sql_query("SELECT uid, user_langue FROM " . $NPDS_Prefix . "users WHERE uname='$to_user'");
                 list($to_userid, $user_langue) = sql_fetch_row($res);
 
                 if (($to_userid != '') and ($to_userid != 1)) {
+
+                    //DB::table('')->insert(array(
+                    //    ''       => ,
+                    //));
+
                     $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
                     $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message')";
 
@@ -117,6 +125,11 @@ if (isset($user)) {
                     }
 
                     if ($copie) {
+
+                        //DB::table('')->insert(array(
+                        //    ''       => ,
+                        //));
+
                         $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text, type_msg, read_msg) ";
                         $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message', '1', '1')";
 
@@ -138,12 +151,20 @@ if (isset($user)) {
                 }
             }
         } else {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $res = sql_query("SELECT uid, user_langue FROM " . $NPDS_Prefix . "users WHERE uname='$to_user'");
             list($to_userid, $user_langue) = sql_fetch_row($res);
 
             if (($to_userid == '') or ($to_userid == 1)) {
                 forum::forumerror('0016');
             } else {
+
+                //DB::table('')->insert(array(
+                //    ''       => ,
+                //));
+
                 $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
                 $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message')";
                 
@@ -152,6 +173,11 @@ if (isset($user)) {
                 }
                 
                 if ($copie) {
+
+                    //DB::table('')->insert(array(
+                    //    ''       => ,
+                    //));
+
                     $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text, type_msg, read_msg) ";
                     $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message', '1', '1')";
                     
@@ -231,6 +257,11 @@ if (isset($user)) {
         }
 
         $dossier = strip_tags($dossier);
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET dossier='$dossier' WHERE msg_id='$msg_id' AND to_userid='" . $userdata['uid'] . "'";
         $result = sql_query($sql);
 
@@ -276,6 +307,9 @@ if (isset($user)) {
         }
 
         if ($reply) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $sql = "SELECT msg_image, subject, from_userid, to_userid FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND msg_id='$msg_id' AND type_msg='0'";
             $result = sql_query($sql);
 
@@ -446,6 +480,9 @@ if (isset($user)) {
         settype($message, 'string');
 
         if ($reply and $message == '') {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $sql = "SELECT p.msg_text, p.msg_time, u.uname FROM " . $NPDS_Prefix . "priv_msgs p, " . $NPDS_Prefix . "users u ";
             $sql .= "WHERE (p.msg_id='$msg_id') AND (p.from_userid=u.uid) AND (p.type_msg='0')";
 

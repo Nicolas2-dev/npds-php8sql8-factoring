@@ -23,18 +23,16 @@ use npds\system\forum\forum;
 use npds\system\support\str;
 use npds\system\theme\theme;
 use npds\system\config\Config;
-use npds\system\cache\cacheManager;
-use npds\system\cache\SuperCacheEmpty;
 
 if (!function_exists("Mysql_Connexion")) { 
     include('boot/bootstrap.php');
 }
 
-$cache_obj = $SuperCache ? new cacheManager() : new SuperCacheEmpty();
-
 global $NPDS_Prefix;
 
 include('auth.php');
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
 
 $rowQ1 = cache::Q_Select("SELECT forum_id FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'", 3600);
 if (!$rowQ1) {
@@ -43,6 +41,8 @@ if (!$rowQ1) {
 
 $myrow = $rowQ1[0];
 $forum = $myrow['forum_id'];
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
@@ -92,6 +92,8 @@ if (isset($user)) {
     }
 }
 
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $sql = "SELECT topic_title, topic_status FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
 if (!$result = sql_query($sql)) {
     forum::forumerror('0001');
@@ -119,6 +121,9 @@ if (isset($user)) {
     $tmp_theme = Config::get('npds.Default_Theme');
 }
 
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
+
 $post_aff = $Mmod ? ' ' : " AND post_aff='1' ";
 
 $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND post_id='$post_id'" . $post_aff;
@@ -129,6 +134,9 @@ if (!$result = sql_query($sql)) {
 $myrow = sql_fetch_assoc($result);
 
 if ($allow_upload_forum) {
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $visible = !$Mmod ? ' AND visible = 1' : '';
 
     $sql = "SELECT att_id FROM $upload_table WHERE apli='forum_npds' && topic_id = '$topic' $visible";

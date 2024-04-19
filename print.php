@@ -29,14 +29,14 @@ if (!function_exists("Mysql_Connexion")) {
 
 function PrintPage($oper, $DB, $nl, $sid)
 {
-    // global $user, $cookie, $theme, $Default_Theme, $language ??? Not used
-    global $user, $cookie, $theme, $language, $datetime, $Titlesitename, $NPDS_Prefix;
+    global $NPDS_Prefix, $datetime;
 
     $sitename = Config::get('npds.sitename');
-    $nuke_url = Config::get('npds.nuke_url');
 
     $aff = true;
     if ($oper == 'news') {
+
+        //= DB::table('')->select()->where('', )->orderBy('')->get();
 
         //"SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories
         $xtab = news::news_aff('libre', "WHERE sid='$sid'", 1, 1);
@@ -45,6 +45,8 @@ function PrintPage($oper, $DB, $nl, $sid)
         if ($topic != '') {
             $result2 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
             list($topictext) = sql_fetch_row($result2);
+
+           // = DB::table('')->select()->where('', )->orderBy('')->get();
         } else {
             $aff = false;
         }
@@ -53,12 +55,17 @@ function PrintPage($oper, $DB, $nl, $sid)
     if ($oper == 'archive') {
 
         //"SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel"
+
+        //= DB::table('')->select()->where('', )->orderBy('')->get();
+
         $xtab = news::news_aff('archive', "WHERE sid='$sid'", 1, 1);
         list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[0];
         
         if ($topic != '') {
             $result2 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
             list($topictext) = sql_fetch_row($result2);
+
+            //= DB::table('')->select()->where('', )->orderBy('')->get();
         } else {
             $aff = false;
         }
@@ -70,6 +77,8 @@ function PrintPage($oper, $DB, $nl, $sid)
         $result = sql_query("SELECT url, title, description, date FROM " . $DB . "links_links WHERE lid='$sid'");
         list($url, $title, $description, $time) = sql_fetch_row($result);
         
+        //= DB::table('')->select()->where('', )->orderBy('')->get();
+
         $title = stripslashes($title);
         $description = stripslashes($description);
     }
@@ -111,33 +120,13 @@ function PrintPage($oper, $DB, $nl, $sid)
     }
 
     if ($aff == true) {
-        $Titlesitename = 'NPDS - ' . translate("Page spéciale pour impression") . ' / ' . $title;
 
         if (isset($time)) {
-            date::formatTimestamp($time);
+            $datetime = date::formatTimestamp($time);
         }
 
+        $Titlesitename = 'NPDS - ' . translate("Page spéciale pour impression") . ' / ' . $title;
         include("storage/meta/meta.php");
-
-        // not used 
-        // if (isset($user)) {
-        //     if ($cookie[9] == '') {
-        //         $cookie[9] = Config::get('npds.Default_Theme');
-        //     }
-
-        //     if (isset($theme)) {
-        //         $cookie[9] = $theme;
-        //     }
-
-        //     $tmp_theme = $cookie[9];
-
-        //     if (!$file = @opendir("themes/$cookie[9]")) {
-        //         $tmp_theme = Config::get('npds.Default_Theme');
-        //     }
-
-        // } else {
-        //     $tmp_theme = Config::get('npds.Default_Theme');
-        // }
 
         echo '
             <link rel="stylesheet" href="assets/shared/bootstrap/dist/css/bootstrap.min.css" />

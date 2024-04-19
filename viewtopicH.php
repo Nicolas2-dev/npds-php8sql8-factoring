@@ -41,6 +41,8 @@ if (Config::get('forum.config.allow_upload_forum')) {
     include("modules/upload/upload_forum.php");
 }
 
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $rowQ1 = cache::Q_Select("SELECT forum_id FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'", 3600);
 if (!$rowQ1) {
     forum::forumerror('0001');
@@ -48,6 +50,8 @@ if (!$rowQ1) {
 
 $myrow = $rowQ1[0];
 $forum = $myrow['forum_id'];
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
 
 $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
 if (!$rowQ1) {
@@ -97,6 +101,8 @@ if (isset($user)) {
     }
 }
 
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $sql = "SELECT topic_title, topic_status, topic_poster FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
 $total = forum::get_total_posts($forum, $topic, "topic", $Mmod);
 
@@ -130,6 +136,8 @@ function maketree($rootcatid, $sql, $maxlevel)
     $result = sql_query($sql);
     $max_post_id = 0;
 
+    // foreach 
+    //foreach ($result as $tempo) {
     while ($tempo = sql_fetch_assoc($result)) {
         $table[$tempo['post_idH']][$tempo['post_id']] = serialize($tempo);
 
@@ -141,7 +149,7 @@ function maketree($rootcatid, $sql, $maxlevel)
     $resultX = '';
     $resultX .= makebranch($rootcatid, $table, 0, $maxlevel, $max_post_id, $clas, $idtog);
 
-    return ($resultX);
+    return $resultX;
 }
 
 function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $idtog)
@@ -584,15 +592,28 @@ echo '
 // Forum Read
 if (isset($user)) {
     $time_actu = time() + ((int) Config::get('npds.gmt') * 3600);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $sqlR = "SELECT last_read FROM " . $NPDS_Prefix . "forum_read WHERE forum_id='$forum' AND uid='$userdata[0]' AND topicid='$topic'";
     $result_LR = sql_query($sqlR);
     $last_read = '';
 
     if (sql_num_rows($result_LR) == 0) {
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $sqlR = "INSERT INTO " . $NPDS_Prefix . "forum_read (forum_id, topicid, uid, last_read, status) VALUES ('$forum', '$topic', '$userdata[0]', '$time_actu', '1')";
         $resultR = sql_query($sqlR);
     } else {
         list($last_read) = sql_fetch_row($result_LR);
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         $sqlR = "UPDATE " . $NPDS_Prefix . "forum_read SET last_read='$time_actu', status='1' WHERE forum_id='$forum' AND uid='$userdata[0]' AND topicid='$topic'";
         $resultR = sql_query($sqlR);
     }
@@ -627,8 +648,14 @@ if (isset($start)) {
             $start = 0;
         }
     }
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'" . $post_aff . "ORDER BY post_id";
 } else {
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND forum_id='$forum'" . $post_aff . "ORDER BY post_id";
 }
 
@@ -639,6 +666,8 @@ if (Config::get('forum.config.allow_upload_forum')) {
         $visible = " AND visible = 1";
     }
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $sql2 = "SELECT att_id FROM $upload_table WHERE apli='forum_npds' && topic_id = '$topic' $visible";
     $att = sql_num_rows(sql_query($sql2));
 
@@ -648,6 +677,10 @@ if (Config::get('forum.config.allow_upload_forum')) {
 }
 
 echo maketree(0, $sql, 0);
+
+//DB::table('')->where('', )->update(array(
+//    ''       => ,
+//));
 
 $sql = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
 sql_query($sql);
@@ -683,6 +716,8 @@ if ($forum_access != 9) {
             <select class="form-select" id="forum" name="forum" onchange="submit();">
                 <option value="index">' . translate("Sauter à : ") . '</option>
                 <option value="index">' . translate("Index du forum") . '</option>';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $sub_sql = "SELECT forum_id, forum_name, forum_type, forum_pass FROM " . $NPDS_Prefix . "forums ORDER BY cat_id,forum_index,forum_id";
     

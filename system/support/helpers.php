@@ -9,7 +9,7 @@ use npds\system\config\Config;
 use npds\system\language\metalang;
 use npds\system\support\facades\Request;
 
-
+// note A revoir !!!
 if (! function_exists('MM_img'))
 {
     /**
@@ -55,6 +55,24 @@ if (! function_exists('site_url'))
     }
 }
 
+if (! function_exists('module_url'))
+{
+    /**
+     * [module_url description]
+     *
+     * @param   string  $ModPath   [$ModPath description]
+     * @param   string  $ModStart  [$ModStart description]
+     * @param   string  $url       [$url description]
+     *
+     * @return  string
+     */
+    function module_url(string $ModPath, string $ModStart, string $url): string
+    {
+        $url = ltrim($url, '/');
+
+        return Config::get('npds.nuke_url') .'/modules.php?ModPath='. $ModPath .'&ModStart='. $ModStart .'&'. $url;
+    }
+}
 
 if (! function_exists('Admin_alert'))
 {
