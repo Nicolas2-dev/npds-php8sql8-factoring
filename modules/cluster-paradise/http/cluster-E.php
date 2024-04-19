@@ -46,6 +46,9 @@ if ($tmp = V_secur_cluster($key)) {
     if (($Xop == "NEWS") and ($tmp['SUBSCRIBE'] == "NEWS") and ($tmp['OP'] == "IMPORT")) {
         // vérifie que le membre existe bien sur le site
         $author = crypt::decryptK(hack::removeHack($Xauthor), $tmp['KEY']);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT name FROM " . $NPDS_Prefix . "users WHERE uname='$author'");
         list($name) = sql_fetch_row($result);
         if ($name == $author) {
@@ -56,6 +59,9 @@ if ($tmp = V_secur_cluster($key)) {
 
         // vérifie que le l'auteur existe bien et ne dispose que des droits minimum
         $aid = crypt::decryptK(hack::removeHack($Xaid), $tmp['KEY']);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT radminarticle FROM " . $NPDS_Prefix . "authors WHERE aid='$aid'");
         list($radminarticle) = sql_fetch_row($result);
         if ($radminarticle == 1) {
@@ -66,11 +72,17 @@ if ($tmp = V_secur_cluster($key)) {
 
         // vérifie que la catégorie existe : sinon met la catégorie générique
         $catid = crypt::decryptK(hack::removeHack($Xcatid), $tmp['KEY']);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT catid FROM " . $NPDS_Prefix . "stories_cat WHERE title='" . addslashes($catid) . "'");
         list($catid) = sql_fetch_row($result);
 
         // vérifie que le Topic existe : sinon met le Topic générique
         $topic = crypt::decryptK(hack::removeHack($Xtopic), $tmp['KEY']);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT topicid FROM " . $NPDS_Prefix . "topics WHERE topictext='" . addslashes($topic) . "'");
         list($topicid) = sql_fetch_row($result);
 
@@ -87,6 +99,11 @@ if ($tmp = V_secur_cluster($key)) {
             // autonews ou pas ?
             $date_debval = crypt::decryptK(hack::removeHack($Xdate_debval), $tmp['KEY']);
             if ($date_debval == '') {
+
+                //DB::table('')->insert(array(
+                //    ''       => ,
+                //));
+
                 $result = sql_query("INSERT INTO " . $NPDS_Prefix . "stories VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '0', '0', '$topicid', '$author', '$notes', '$ihome', '0', '$date_finval','$epur')");
                 logs::Ecr_Log("security", "Cluster Paradise : insert_stories ($subject - $date_finval) by AID : $aid", "");
                 // Réseaux sociaux
@@ -98,11 +115,25 @@ if ($tmp = V_secur_cluster($key)) {
                 }
                 // Réseaux sociaux
             } else {
+
+                //DB::table('')->insert(array(
+                //    ''       => ,
+                //));
+
                 $result = sql_query("INSERT INTO " . $NPDS_Prefix . "autonews VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '$topicid', '$author', '$notes', '$ihome','$date_debval','$date_finval','$epur')");
                 logs::Ecr_Log("security", "Cluster Paradise : insert_autonews ($subject - $date_debval - $date_finval) by AID : $aid", "");
             }
 
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "users SET counter=counter+1 WHERE uname='$author'");
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "authors SET counter=counter+1 WHERE aid='$aid'");
         }
     }

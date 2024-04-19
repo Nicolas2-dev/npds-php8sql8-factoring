@@ -268,20 +268,13 @@ class blog
 
         $newsto = date("d m Y") . '!;!' . $title . '!;!' . $formatted;
         $newsto = image::dataimagetofileurl($newsto, 'storage/users_private/' . $op . '/mns');
-        
-        vd($xnews);
-        
+
         $xnews[$index] = StripSlashes($newsto) . "\n";        
         $xnews = array_reverse($xnews);
-
-        vd($xnews);
 
         $fp = fopen($blog_file, "w");
         for ($j = 0; $j < count($xnews); $j++) {
             fwrite($fp, $xnews[$j]);
-
-            vd($xnews[$j]);
-
         }
         fclose($fp);
 

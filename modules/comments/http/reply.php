@@ -60,6 +60,9 @@ if ($moderate == 1 and isset($admin))
 elseif ($moderate == 2) {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT level FROM " . $NPDS_Prefix . "users_status WHERE uid='" . $userdata[0] . "'");
     list($level) = sql_fetch_row($result);
     $Mmod = $level >= 2 ? true : false;
@@ -78,6 +81,9 @@ if (isset($submitS)) {
             if (($username == '') or ($password == ''))
                 forum::forumerror('0027');
             else {
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $result = sql_query("SELECT pass FROM " . $NPDS_Prefix . "users WHERE uname='$username'");
                 list($pass) = sql_fetch_row($result);
                 $passwd = (!$system) ? crypt($password, $pass) : $password;
@@ -122,11 +128,20 @@ if (isset($submitS)) {
         $image_subject = '';
         $message = addslashes(image::dataimagetofileurl($message, 'modules/upload/storage/upload/co'));
         $time = date("Y-m-d H:i:s", time() + ((int)$gmt * 3600));
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $sql = "INSERT INTO " . $NPDS_Prefix . "posts (post_idH, topic_id, image, forum_id, poster_id, post_text, post_time, poster_ip, poster_dns) VALUES ('0', '$topic', '$image_subject', '$forum', '" . $userdata['uid'] . "', '$message', '$time', '$poster_ip', '$hostname')";
         if (!$result = sql_query($sql))
             forum::forumerror('0020');
         else
             $IdPost = sql_last_id();
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
 
         $sql = "UPDATE " . $NPDS_Prefix . "users_status SET posts=posts+1 WHERE (uid = '" . $userdata['uid'] . "')";
         $result = sql_query($sql);
@@ -134,6 +149,11 @@ if (isset($submitS)) {
             forum::forumerror('0029');
         // ordre de mise à jour d'un champ externe ?
         if ($comments_req_add != '')
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . $comments_req_add);
         // envoi mail alerte
         if ($notify) {
@@ -234,6 +254,9 @@ if (isset($submitS)) {
             if ($allow_bbcode)
                 $xJava = 'name="message" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
             if (isset($citation) && !isset($submitP)) {
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $sql = "SELECT p.post_text, p.post_time, u.uname FROM " . $NPDS_Prefix . "posts p, " . $NPDS_Prefix . "users u WHERE post_id='$post' AND ((p.poster_id = u.uid) XOR (p.poster_id=0))";
                 if ($r = sql_query($sql)) {
                     $m = sql_fetch_assoc($r);
@@ -295,6 +318,9 @@ if (isset($submitS)) {
             }
             if ($user) {
                 if ($allow_sig == 1 || isset($sig)) {
+
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                     $asig = sql_query("SELECT attachsig FROM " . $NPDS_Prefix . "users_status WHERE uid='$cookie[0]'");
                     list($attachsig) = sql_fetch_row($asig);
                     if ($attachsig == 1 or isset($sig)) $s = 'checked="checked"';
@@ -335,6 +361,9 @@ if (isset($submitS)) {
         </form>';
     if ($allow_to_reply) {
         $post_aff = $Mmod ? '' : " AND post_aff='1' ";
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic'" . $post_aff . " AND forum_id='$forum' ORDER BY post_id DESC LIMIT 0,10";
         $result = sql_query($sql);
         if (sql_num_rows($result)) {

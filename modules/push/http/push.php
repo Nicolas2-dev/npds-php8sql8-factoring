@@ -94,6 +94,9 @@ function push_news()
     global $NPDS_Prefix;
 
     settype($push_news_limit, "integer");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT sid, title, ihome, catid FROM " . $NPDS_Prefix . "stories ORDER BY sid DESC limit $push_news_limit");
     if ($result) {
         echo "document.write('<a name=\"article\"></a>');\n";
@@ -118,11 +121,16 @@ function new_show($sid, $offset)
 
     $nuke_url = Config::get('npds.nuke_url');
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT hometext, bodytext, notes, title, time, informant, topic FROM " . $NPDS_Prefix . "stories WHERE sid='$sid'");
     if ($result) {
         push_header("suite");
         list($hometext, $bodytext, $notes, $title, $time, $informant, $topic) = sql_fetch_row($result);
         sql_free_result($result);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
         if ($result) {
             list($topictext) = sql_fetch_row($result);
@@ -156,13 +164,20 @@ function push_poll()
     echo "document.write('<a name=\"poll\"></a>');\n";
     echo "document.write('<li><b>" . push_translate("Latest Poll Results") . "</b></li>');\n";
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT pollID, polltitle FROM " . $NPDS_Prefix . "poll_desc ORDER BY pollID DESC LIMIT 1");
     list($pollID, $polltitle) = sql_fetch_row($result);
     sql_free_result($result);
     if ($pollID) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT SUM(optionCount) FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$pollID'");
         list($sum) = sql_fetch_row($result);
         sql_free_result($result);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
 
         $result = sql_query("SELECT optionText, optionCount FROM " . $NPDS_Prefix . "poll_data WHERE pollID='$pollID' and optionText != \"\" ORDER BY voteID");
         echo "document.write('<p align=\"center\"><b>.:|" . language::aff_langue($polltitle) . "|:.</b></p><table width=\"100%\" border=\"0\">');\n";
@@ -192,6 +207,9 @@ function push_faq()
 
     echo "document.write('<a name=\"faq\"></a>');\n";
     echo "document.write('<li><b>Faqs</b></li><br />');\n";
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT id_cat, categories FROM " . $NPDS_Prefix . "faqcategories ORDER BY id_cat ASC");
     while (list($id_cat, $categories) = sql_fetch_row($result)) {
         $categories = str_replace("'", "\'", $categories);
@@ -206,10 +224,15 @@ function faq_show($id_cat)
     global $NPDS_Prefix;
 
     push_header("suite");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT categories FROM " . $NPDS_Prefix . "faqcategories WHERE id_cat='$id_cat'");
     list($categories) = sql_fetch_row($result);
     $categories = str_replace("'", "\'", $categories);
     echo "document.write('<p align=\"center\"><a name=\"$id_cat\"></a><b>" . language::aff_langue($categories) . "</b></p>');\n";
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT id, id_cat, question, answer FROM " . $NPDS_Prefix . "faqanswer WHERE id_cat='$id_cat'");
     while (list($id, $id_cat, $question, $answer) = sql_fetch_row($result)) {
@@ -238,6 +261,9 @@ function push_members()
     $count_user = 0;
     settype($page, "integer");
     settype($push_member_limit, "integer");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT uname FROM " . $NPDS_Prefix . "users ORDER BY uname ASC LIMIT $page,$push_member_limit");
     while (list($uname) = sql_fetch_row($result)) {
         $offset = $offset + 1;
@@ -275,9 +301,15 @@ function push_links()
     echo "document.write('<li><b>" . push_translate("Web links") . "</b></li><br />');\n";
 
     echo "document.write('<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr>');\n";
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT cid, title, cdescription FROM " . $NPDS_Prefix . "links_categories ORDER BY $orderby");
     $count = 0;
     while (list($cid, $title, $cdescription) = sql_fetch_row($result)) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $cresult = sql_query("SELECT * FROM " . $NPDS_Prefix . "links_links WHERE cid='$cid'");
         $cnumrows = sql_num_rows($cresult);
         $title = str_replace("'", "\'", $title);
@@ -288,6 +320,9 @@ function push_links()
         } else {
             echo "document.write('<br />');\n";
         }
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result2 = sql_query("SELECT sid, title FROM " . $NPDS_Prefix . "links_subcategories WHERE cid='$cid' ORDER BY $orderby LIMIT 0,3");
         $space = 0;
         while (list($sid, $stitle) = sql_fetch_row($result2)) {
@@ -324,15 +359,23 @@ function viewlink_show($cid, $min)
     $perpage = $push_view_perpage;
     $orderby = "title " . $push_orderby;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT title FROM " . $NPDS_Prefix . "links_categories WHERE cid='$cid'");
     list($title) = sql_fetch_row($result);
     $title = str_replace("'", "\'", $title);
     echo "document.write('<span  style=\"font-size: 11px;\"><b>" . language::aff_langue($title) . "</b></span>');\n";
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $subresult = sql_query("SELECT sid, title FROM " . $NPDS_Prefix . "links_subcategories WHERE cid='$cid' ORDER BY $orderby");
     $numrows = sql_num_rows($subresult);
     if ($numrows != 0) {
         echo "document.write('<b> / Sub-Cat</b><br />');\n";
         while (list($sid, $title) = sql_fetch_row($subresult)) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result2 = sql_query("SELECT * FROM " . $NPDS_Prefix . "links_links WHERE sid='$sid'");
             $numrows = sql_num_rows($result2);
             $title = str_replace("'", "\'", $title);
@@ -344,7 +387,13 @@ function viewlink_show($cid, $min)
     }
     settype($min, "integer");
     settype($perpage, "integer");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT lid, title FROM " . $NPDS_Prefix . "links_links WHERE cid='$cid' AND sid=0 ORDER BY $orderby LIMIT $min,$perpage");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $fullcountresult = sql_query("SELECT lid, title FROM " . $NPDS_Prefix . "links_links WHERE cid='$cid' AND sid=0");
     $totalselectedlinks = sql_num_rows($fullcountresult);
 
@@ -379,8 +428,12 @@ function viewslink_show($sid, $min)
     $perpage = $push_view_perpage;
     $orderby = "title " . $push_orderby;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT cid, title FROM " . $NPDS_Prefix . "links_subcategories WHERE sid='$sid'");
     list($cid, $stitle) = sql_fetch_row($result);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result2 = sql_query("SELECT cid, title FROM " . $NPDS_Prefix . "links_categories WHERE cid='$cid'");
     list($cid, $title) = sql_fetch_row($result2);
@@ -391,7 +444,13 @@ function viewslink_show($sid, $min)
 
     settype($min, "integer");
     settype($perpage, "integer");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT lid, title FROM " . $NPDS_Prefix . "links_links WHERE cid='$cid' AND sid='$sid' ORDER BY $orderby LIMIT $min,$perpage");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $fullcountresult = sql_query("SELECT lid, title FROM " . $NPDS_Prefix . "links_links WHERE cid='$cid' AND sid='$sid'");
     $totalselectedlinks = sql_num_rows($fullcountresult);
 

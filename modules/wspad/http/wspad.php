@@ -108,8 +108,14 @@ function Liste_Page()
 
     $aff = '
     <h3 class="mb-3"><a class="arrow-toggle text-primary" id="show_paddoc" data-bs-toggle="collapse" data-bs-target="#lst_paddoc" title="' . wspad_trans("Déplier la liste") . '"><i id="i_lst_paddoc" class="toggle-icon fa fa-caret-down fa-lg" ></i></a>&nbsp;';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $nb_pages = sql_num_rows(sql_query("SELECT COUNT(page) FROM " . $NPDS_Prefix . "wspad WHERE member='$groupe' GROUP BY page"));
     if ($groupe > 0) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $gp = sql_fetch_assoc(sql_query("SELECT groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$groupe'"));
         $aff .= '<span class="badge bg-secondary me-2">' . $nb_pages . '</span>' . wspad_trans("Document(s) et révision(s) disponible(s) pour le groupe") . ' <span class="text-muted">' . language::aff_langue($gp['groupe_name']) . " [$groupe]</span></h3>";
     } else
@@ -118,6 +124,9 @@ function Liste_Page()
     if ($nb_pages > 0) {
         $ibid = 0;
         $pgibid = 0;
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT DISTINCT page FROM " . $NPDS_Prefix . "wspad WHERE member='$groupe' ORDER BY page ASC");
         while (list($page) = sql_fetch_row($result)) {
 
@@ -127,6 +136,11 @@ function Liste_Page()
             $filename = "modules/$ModPath/storage/locks/$page-vgp-$groupe.txt";
             if (file_exists($filename)) {
                 if ((time() - $refresh) > filemtime($filename)) {
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='' WHERE page='$page' AND member='$groupe'");
                     @unlink($filename);
                     $verrou = '';
@@ -174,6 +188,9 @@ function Liste_Page()
                 </span>
             </h4>
             <div id="lst_page_' . $pgibid . '" class="collapse" style ="padding-left:10px;">';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result2 = sql_query("SELECT modtime, editedby, ranq, verrou FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$groupe' ORDER BY ranq ASC");
 
             $aff .= '
@@ -311,7 +328,17 @@ function Page($page, $ranq)
             $fp = fopen($filename, "w");
             fwrite($fp, $auteur);
             fclose($fp);
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='' WHERE verrou='$auteur'");
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='$auteur' WHERE page='$page' AND member='$groupe'");
             $edition = true;
             echo $tmp;
@@ -321,12 +348,24 @@ function Page($page, $ranq)
         $fp = fopen($filename, "w");
         fwrite($fp, $auteur);
         fclose($fp);
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='' WHERE verrou='$auteur'");
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='$auteur' WHERE page='$page' AND member='$groupe'");
         $edition = true;
         echo $tmp;
     }
     // Analyse des verrous
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $row = sql_fetch_assoc(sql_query("SELECT content, modtime, editedby, ranq FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$groupe' AND ranq='$ranq'"));
     if (!$edition)
@@ -372,19 +411,43 @@ switch ($op) {
     case "sauve":
         $content = hack::removeHack(stripslashes(FixQuotes(image::dataimagetofileurl($content, 'modules/upload/upload/ws'))));
         $auteur = hack::removeHack(stripslashes(FixQuotes($auteur)));
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $row = sql_fetch_assoc(sql_query("SELECT MAX(ranq) AS ranq FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$groupe'"));
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "wspad VALUES ('0', '$page', '$content', '" . time() . "', '$auteur', '" . ($row['ranq'] + 1) . "', '$groupe','')");
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='' WHERE verrou='$auteur'");
         @unlink("modules/$ModPath/storage/locks/$page-vgp-$groupe.txt");
         $mess = wspad_trans("révision") . " " . ($row['ranq'] + 1) . " " . wspad_trans("sauvegardée");
         break;
     case "supp":
         $auteur = hack::removeHack(stripslashes(FixQuotes($auteur)));
+
+        // DB::table('')->where('', )->delete();
+
         $result = sql_query("DELETE FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$groupe' AND ranq='$ranq'");
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "wspad SET verrou='' WHERE verrou='$auteur'");
         break;
     case "suppdoc":
         settype($member, 'integer');
+
+        // DB::table('')->where('', )->delete();
+
         $result = sql_query("DELETE FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$member'");
         @unlink("modules/$ModPath/storage/locks/$page-vgp-$groupe.txt");
         break;
@@ -392,14 +455,27 @@ switch ($op) {
         // Filtre les caractères interdits dans les noms de pages
         $newpage = preg_replace('#[^a-zA-Z0-9\\s\\_\\.\\-]#i', '_', hack::removeHack(stripslashes(urldecode($newpage))));
         settype($member, 'integer');
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         $result = sql_query("UPDATE " . $NPDS_Prefix . "wspad SET page='$newpage', verrou='' WHERE page='$page' AND member='$member'");
         @unlink("modules/$ModPath/storage/locks/$page-vgp-$groupe.txt");
         break;
     case "conv_new":
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $row = sql_fetch_assoc(sql_query("SELECT content FROM " . $NPDS_Prefix . "wspad WHERE page='$page' AND member='$groupe' AND ranq='$ranq'"));
         $date_debval = date("Y-d-m H:i:s", time());
         $deb_year = substr($date_debval, 0, 4);
         $date_finval = ($deb_year + 99) . "-01-01 00:00:00";
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $result = sql_query("INSERT INTO " . $NPDS_Prefix . "queue VALUES (NULL, $cookie[0], '$auteur', '$page', '" . FixQuotes($row['content']) . "', '', now(), '','$date_debval','$date_finval','0')");
         break;
 }

@@ -37,19 +37,35 @@ function marquetapage_add($uri, $topic, $action)
                 $uri = "http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . $uri;
         }
 
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         sql_query("INSERT INTO " . $NPDS_Prefix . "marquetapage (uid, uri, topic) VALUES ('$cookie[0]', '$uri', '$topic')");
         url::redirect_url($uri);
     }
     if (($action == "sp_tapage") and ($cookie[0])) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT uri FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]' AND uri='$uri'");
         if (sql_num_rows($result) > 0) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             sql_query("DELETE FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]' AND uri='$uri'");
             url::redirect_url($uri);
         }
     }
     if (($action == 'sp_tespages') and ($cookie[0])) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT uri FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]'");
         if (sql_num_rows($result) > 0) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             sql_query("DELETE FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]'");
             url::redirect_url($uri);
         }
@@ -71,6 +87,9 @@ function marquetapage()
         } else {
             $addj = "modules/marquetapage/assets/images/addj.gif";
         }
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT uri, topic FROM " . $NPDS_Prefix . "marquetapage WHERE uid='$cookie[0]' ORDER BY topic ASC");
         $content = '';
         if (sql_num_rows($result)) {

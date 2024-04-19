@@ -55,6 +55,9 @@ echo '
     <body style="padding: 10px; background:#ffffff;">';
 $wspad = rawurldecode(crypt::decrypt($pad));
 $wspad = explode("#wspad#", $wspad);
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $row = sql_fetch_assoc(sql_query("SELECT content, modtime, editedby, ranq  FROM " . $NPDS_Prefix . "wspad WHERE page='" . $wspad[0] . "' AND member='" . $wspad[1] . "' AND ranq='" . $wspad[2] . "'"));
 echo '
         <h2>' . $wspad[0] . '</h2>

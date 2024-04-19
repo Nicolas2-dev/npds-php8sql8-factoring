@@ -34,6 +34,9 @@ if ($links_DB == '')
 $hlpfile = "modules/" . substr($ModPath, 0, $pos) . "/view/manuels/$language/mod-weblinks.html";
 
 if (users::autorisation(-127)) {
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT radminsuper FROM " . $NPDS_Prefix . "authors WHERE aid='$aid'");
     list($radminsuper) = sql_fetch_row($result);
     if ($radminsuper != 1) //intégrer les droits nouveau système
@@ -76,6 +79,8 @@ function links()
 
     helpwindow();
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT * FROM " . $links_DB . "links_links");
     $numrows = sql_num_rows($result);
     echo '
@@ -85,8 +90,14 @@ function links()
     echo '
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT * FROM " . $links_DB . "links_modrequest WHERE brokenlink=1");
     $totalbrokenlinks = sql_num_rows($result);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result2 = sql_query("SELECT * FROM " . $links_DB . "links_modrequest WHERE brokenlink=0");
     $totalmodrequests = sql_num_rows($result2);
     if ($totalbrokenlinks > 0)
@@ -95,6 +106,8 @@ function links()
     if ($totalmodrequests > 0)
         echo '
             <li class="breadcrumb-item"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksListModRequests">' . translate("Proposition de modifications de liens") . '</a><span class="badge bg-danger ms-1">' . $totalmodrequests . '</span></li>';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT lid, cid, sid, title, url, description, name, email, submitter, topicid_card FROM " . $links_DB . "links_newlink ORDER BY lid ASC LIMIT 0,1");
     $numrows = sql_num_rows($result);
@@ -107,6 +120,9 @@ function links()
         $adminform = 'adminForm';
         list($lid, $cid, $sid, $title, $url, $description, $name, $email, $submitter, $topicid_card) = sql_fetch_row($result);
         // Le lien existe déjà dans la table ?
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $resultAE = sql_query("SELECT url FROM " . $links_DB . "links_links WHERE url='$url'");
         $numrowsAE = sql_num_rows($resultAE);
         echo '
@@ -135,6 +151,9 @@ function links()
                     <input class="form-control" type="url" id="urllinkvalid" name="url" value="' . $url . '" maxlength="255" /> <a href="' . $url . '" target="_blank" >' . translate("Visite") . '</a>
                 </div>
             </div>';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result2 = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
             <div class="mb-3 row">
@@ -147,6 +166,9 @@ function links()
                 $sel = 'selected="selected"';
             echo '
                     <option value="' . $ccid . '" ' . $sel . '>' . language::aff_langue($ctitle) . '</option>';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result3 = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$ccid' ORDER BY title");
             while (list($ssid, $stitle) = sql_fetch_row($result3)) {
                 $sel = '';
@@ -167,6 +189,9 @@ function links()
                 <label class="col-form-label col-sm-3" for="topicL">' . translate("Sujets") . '</label>
                 <div class="col-sm-9">
                     <select class="form-select" id="topicL" name="topicL">';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
                     <option value="">' . translate("Tous les sujets") . '</option>';
@@ -221,6 +246,9 @@ function links()
 
 
     // Add a New Link to Database
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories");
     $numrows = sql_num_rows($result);
     if ($numrows > 0) {
@@ -251,6 +279,9 @@ function links()
                 <input class="form-control" type="url" id="urllinkadd" name="url" maxlength="255" value="http://" required="required" />
                 </div>
             </div>';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
             <div class="mb-3 row">
@@ -260,6 +291,9 @@ function links()
         while (list($cid, $title) = sql_fetch_row($result)) {
             echo '
                     <option value="' . $cid . '">' . language::aff_langue($title) . '</option>';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result2 = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$cid' ORDER BY title");
             while (list($sid, $stitle) = sql_fetch_row($result2)) {
                 echo '
@@ -277,6 +311,9 @@ function links()
                 <label class="col-form-label col-sm-3" for="topiclinkadd">' . translate("Sujets") . '</label>
                 <div class="col-sm-9">
                 <select class="form-select" id="topiclinkadd" name="topicL">';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
                     <option value="">' . translate("Tous les sujets") . '</option>';
@@ -351,6 +388,9 @@ function links()
     </div>';
 
     // Modify Category
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT * FROM " . $links_DB . "links_categories");
     $numrows = sql_num_rows($result);
     if ($numrows > 0) {
@@ -360,6 +400,9 @@ function links()
     <form method="post" action="modules.php">
         <input type="hidden" name="ModPath" value="' . $ModPath . '" />
         <input type="hidden" name="ModStart" value="' . $ModStart . '" />';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
         <div class="mb-3 row">
@@ -369,6 +412,9 @@ function links()
         while (list($cid, $title) = sql_fetch_row($result)) {
             echo '
                 <option value="' . $cid . '">' . language::aff_langue($title) . '</option>';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result2 = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$cid' ORDER BY title");
             while (list($sid, $stitle) = sql_fetch_row($result2)) {
                 echo '
@@ -390,6 +436,9 @@ function links()
     }
 
     // Add a New Sub-Category
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT * FROM " . $links_DB . "links_categories");
     $numrows = sql_num_rows($result);
     if ($numrows > 0) {
@@ -405,6 +454,9 @@ function links()
                 <input class="form-control" type="text" id="titlesubcatadd" name="title" maxlength="100" />
             </div>
         </div>';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
         <div class="mb-3 row">
@@ -470,12 +522,20 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
     $description = stripslashes(FixQuotes($description));
     $name = stripslashes(FixQuotes($name));
     $email = stripslashes(FixQuotes($email));
+
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
+
     sql_query("INSERT INTO " . $links_DB . "links_links VALUES (NULL, '$cat[0]', '$cat[1]', '$title', '$url', '$description', now(), '$name', '$email', '0','$submitter',0,0,0,'$topicL')");
     include("themes/default/header.php");
     echo '
         <div class="alert alert-success">' . translate("Nouveau lien ajouté dans la base de données") . '</div>
         <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
     if ($new == 1) {
+
+        // DB::table('')->where('', )->delete();
+
         sql_query("DELETE FROM " . $links_DB . "links_newlink WHERE lid='$lid'");
         if ($email != '') {
             $nuke_url = Config::get('npds.nuke_url');
@@ -494,6 +554,8 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
     global $ModPath, $ModStart, $links_DB, $hlpfile, $NPDS_Prefix;
     include("themes/default/header.php");
     echo helpwindow();
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT cid, sid, title, url, description, name, email, hits, topicid_card FROM " . $links_DB . "links_links WHERE lid='$lid'");
 
@@ -529,6 +591,9 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
                 <input class="form-control" type="text" name="url" value="' . $url . '" maxlength="255" /><a href="' . $url . '" target="_blank" >' . translate("Visite") . '</a>
                 </div>
             </div>';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result2 = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
             <div class="mb-3 row">
@@ -542,6 +607,9 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
             }
             echo '
                     <option value="' . $ccid . '" ' . $sel . '>' . language::aff_langue($ctitle) . '</option>';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result3 = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$ccid' ORDER BY title");
             while (list($ssid, $stitle) = sql_fetch_row($result3)) {
                 $sel = '';
@@ -563,6 +631,9 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
                 <label class="col-form-label col-sm-4" for="topicL">' . translate("Sujets") . '</label>
                 <div class="col-sm-8">
                 <select class="form-select" name="topicL">';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
                     <option value="0">' . translate("Tous les sujets") . '</option>';
@@ -613,6 +684,9 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
                 </div>
             </div>
         </form>';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $resulted2 = sql_query("SELECT adminid, editorialtimestamp, editorialtext, editorialtitle FROM " . $links_DB . "links_editorials WHERE linkid='$lid'");
         $recordexist = sql_num_rows($resulted2);
         if ($recordexist == 0) {
@@ -682,6 +756,11 @@ function LinksModLinkS($lid, $title, $url, $description, $name, $email, $hits, $
     $description = stripslashes(FixQuotes($description));
     $name = stripslashes(FixQuotes($name));
     $email = stripslashes(FixQuotes($email));
+
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
+
     sql_query("UPDATE " . $links_DB . "links_links SET cid='$cat[0]', sid='$cat[1]', title='$title', url='$url', description='$description', name='$name', email='$email', hits='$hits', submitter='$name', topicid_card='$topicL' WHERE lid='$lid'");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksModLink&lid=$lid");
 }
@@ -693,12 +772,21 @@ function LinksDelLink($lid)
     include_once("modules/" . substr($ModPath, 0, $pos) . "/support/sform/link_maj.php");
     // Cette fonction fait partie du formulaire de SFROM !
     Supprimer_function($lid);
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_editorials WHERE linkid='$lid'");
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_links WHERE lid='$lid'");
 }
 function LinksDelNew($lid)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_newlink WHERE lid='$lid'");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath");
 }
@@ -708,12 +796,20 @@ function LinksModEditorial($linkid, $editorialtitle, $editorialtext)
 {
     global $ModPath, $ModStart, $links_DB;
     $editorialtext = stripslashes(FixQuotes($editorialtext));
+
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
+
     sql_query("UPDATE " . $links_DB . "links_editorials SET editorialtext='$editorialtext', editorialtitle='$editorialtitle' WHERE linkid='$linkid'");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksModLink&lid=$linkid");
 }
 function LinksDelEditorial($linkid)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_editorials WHERE linkid='$linkid'");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksModLink&lid=$linkid");
 }
@@ -722,6 +818,11 @@ function LinksAddEditorial($linkid, $editorialtitle, $editorialtext)
     global $ModPath, $ModStart, $links_DB;
     $editorialtext = stripslashes(FixQuotes($editorialtext));
     global $aid;
+
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
+
     sql_query("INSERT INTO " . $links_DB . "links_editorials VALUES ('$linkid', '$aid', now(), '$editorialtext', '$editorialtitle')");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksModLink&lid=$linkid");
 }
@@ -730,6 +831,9 @@ function LinksAddEditorial($linkid, $editorialtitle, $editorialtext)
 function LinksAddSubCat($cid, $title)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT cid FROM " . $links_DB . "links_subcategories WHERE title='$title' AND cid='$cid'");
     $numrows = sql_num_rows($result);
     if ($numrows > 0) {
@@ -741,6 +845,11 @@ function LinksAddSubCat($cid, $title)
         <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
         include("themes/default/footer.php");
     } else {
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("INSERT INTO " . $links_DB . "links_subcategories VALUES (NULL, '$cid', '$title')");
         Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath");
     }
@@ -759,6 +868,9 @@ function LinksModCat($cat)
     <div class="text-end"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '"><i class="fa fa-cogs fa-lg me-2"></i></a></div>
     <h3 class="my-3">' . translate("Modifier la catégorie") . '</h3>';
     if ($cat[1] == 0) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT title, cdescription FROM " . $links_DB . "links_categories WHERE cid='$cat[0]'");
         list($title, $cdescription) = sql_fetch_row($result);
         $cdescription = stripslashes($cdescription);
@@ -792,8 +904,14 @@ function LinksModCat($cat)
             <input type="submit" class="btn btn-danger" value="' . translate("Effacer") . '" />
         </form>';
     } else {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT title FROM " . $links_DB . "links_categories WHERE cid='$cat[0]'");
         list($ctitle) = sql_fetch_row($result);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result2 = sql_query("SELECT title FROM " . $links_DB . "links_subcategories WHERE sid='$cat[1]'");
         list($stitle) = sql_fetch_row($result2);
         echo '
@@ -826,6 +944,9 @@ function LinksModCat($cat)
 function LinksAddCat($title, $cdescription)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT cid FROM " . $links_DB . "links_categories WHERE title='$title'");
     $numrows = sql_num_rows($result);
     if ($numrows > 0) {
@@ -837,6 +958,11 @@ function LinksAddCat($title, $cdescription)
         <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
         include("themes/default/footer.php");
     } else {
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("INSERT INTO " . $links_DB . "links_categories VALUES (NULL, '$title', '$cdescription')");
         Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath");
     }
@@ -846,8 +972,18 @@ function LinksModCatS($cid, $sid, $sub, $title, $cdescription)
 {
     global $ModPath, $ModStart, $links_DB;
     if ($sub == 0)
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $links_DB . "links_categories SET title='$title', cdescription='$cdescription' WHERE cid='$cid'");
     else
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $links_DB . "links_subcategories SET title='$title' WHERE sid='$sid'");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath");
 }
@@ -860,18 +996,36 @@ function LinksDelCat($cid, $sid, $sub, $ok = 0)
         $modifylinkrequest_adv_infos = "Supprimer_MySql";
         include_once("modules/" . substr($ModPath, 0, $pos) . "/support/sform/link_maj.php");
         if ($sub > 0) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT lid FROM " . $links_DB . "links_links WHERE sid='$sid'");
             while (list($lid) = sql_fetch_row($result)) {
                 LinksDelLink($lid);
             }
+
+            // DB::table('')->where('', )->delete();
+
             sql_query("DELETE FROM " . $links_DB . "links_subcategories WHERE sid='$sid'");
+
+            // DB::table('')->where('', )->delete();
+
             sql_query("DELETE FROM " . $links_DB . "links_links WHERE sid='$sid'");
         } else {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT lid FROM " . $links_DB . "links_links WHERE cid='$cid'");
             while (list($lid) = sql_fetch_row($result)) {
                 LinksDelLink($lid);
             }
+
+            // DB::table('')->where('', )->delete();
+
             sql_query("DELETE FROM " . $links_DB . "links_categories WHERE cid='$cid'");
+
+            // DB::table('')->where('', )->delete();
+
             sql_query("DELETE FROM " . $links_DB . "links_subcategories WHERE cid='$cid'");
         }
         Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath");
@@ -891,6 +1045,8 @@ function LinksListModRequests()
 {
     global $ModPath, $ModStart, $links_DB, $NPDS_Prefix;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $resultX = sql_query("SELECT requestid, lid, cid, sid, title, url, description, modifysubmitter, topicid_card FROM " . $links_DB . "links_modrequest WHERE brokenlink=0 ORDER BY requestid");
     $totalmodrequests = sql_num_rows($resultX);
     if ($totalmodrequests == 0)
@@ -908,16 +1064,46 @@ function LinksListModRequests()
     <hr class="mb-0" />
     <div class="text-end"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '"><i class="fa fa-cogs me-2 fa-lg"></i></a></div>';
     while (list($requestid, $lid, $cid, $sid, $title, $url, $description, $modifysubmitter, $topicid_card) = sql_fetch_row($resultX)) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result2 = sql_query("SELECT cid, sid, title, url, description, submitter, topicid_card FROM " . $links_DB . "links_links WHERE lid='$lid'");
         list($origcid, $origsid, $origtitle, $origurl, $origdescription, $owner, $oritopicid_card) = sql_fetch_row($result2);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result3 = sql_query("SELECT title FROM " . $links_DB . "links_categories WHERE cid='$cid'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result4 = sql_query("SELECT title FROM " . $links_DB . "links_subcategories WHERE cid='$cid' AND sid='$sid'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result5 = sql_query("SELECT title FROM " . $links_DB . "links_categories WHERE cid='$origcid'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result6 = sql_query("SELECT title FROM " . $links_DB . "links_subcategories WHERE cid='$origcid' AND sid='$origsid'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result7 = sql_query("SELECT email FROM " . $NPDS_Prefix . "users WHERE uname='$modifysubmitter'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result8 = sql_query("SELECT email FROM " . $NPDS_Prefix . "users WHERE uname='$owner'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result9 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$oritopicid_card'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result9b = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid_card'");
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         list($cidtitle) = sql_fetch_row($result3);
         list($sidtitle) = sql_fetch_row($result4);
         list($origcidtitle) = sql_fetch_row($result5);
@@ -1002,6 +1188,8 @@ function LinksListBrokenLinks()
 {
     global $ModPath, $ModStart, $links_DB, $NPDS_Prefix;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $resultBrok = sql_query("SELECT requestid, lid, modifysubmitter FROM " . $links_DB . "links_modrequest WHERE brokenlink=1 ORDER BY requestid");
     $totalbrokenlinks = sql_num_rows($resultBrok);
     if ($totalbrokenlinks == 0)
@@ -1028,12 +1216,21 @@ function LinksListBrokenLinks()
         </thead>
         <tbody>';
         while (list($requestid, $lid, $modifysubmitter) = sql_fetch_row($resultBrok)) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result2 = sql_query("SELECT title, url, submitter FROM " . $links_DB . "links_links WHERE lid='$lid'");
             if ($modifysubmitter != Config::get('npds.anonymous')) {
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $result3 = sql_query("SELECT email FROM " . $NPDS_Prefix . "users WHERE uname='$modifysubmitter'");
                 list($email) = sql_fetch_row($result3);
             }
             list($title, $url, $owner) = sql_fetch_row($result2);
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result4 = sql_query("SELECT email FROM " . $NPDS_Prefix . "users WHERE uname='$owner'");
             list($owneremail) = sql_fetch_row($result4);
             echo '
@@ -1067,6 +1264,9 @@ function LinksListBrokenLinks()
 function LinksDelBrokenLinks($lid)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_modrequest WHERE lid='$lid'");
     LinksDelLink($lid);
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksListBrokenLinks");
@@ -1075,6 +1275,9 @@ function LinksDelBrokenLinks($lid)
 function LinksIgnoreBrokenLinks($lid)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_modrequest WHERE lid='$lid' AND brokenlink=1");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksListBrokenLinks");
 }
@@ -1083,18 +1286,32 @@ function LinksIgnoreBrokenLinks($lid)
 function LinksChangeModRequests($Xrequestid)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT requestid, lid, cid, sid, title, url, description, topicid_card FROM " . $links_DB . "links_modrequest WHERE requestid='$Xrequestid'");
     while (list($requestid, $lid, $cid, $sid, $title, $url, $description, $topicid_card) = sql_fetch_row($result)) {
         $title = stripslashes($title);
         $description = stripslashes($description);
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $links_DB . "links_links SET cid=$cid, sid=$sid, title='$title', url='$url', description='$description', topicid_card='$topicid_card' WHERE lid='$lid'");
     }
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_modrequest WHERE requestid='$Xrequestid'");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksListModRequests");
 }
 function LinksChangeIgnoreRequests($requestid)
 {
     global $ModPath, $ModStart, $links_DB;
+
+    // DB::table('')->where('', )->delete();
+
     sql_query("DELETE FROM " . $links_DB . "links_modrequest WHERE requestid='$requestid'");
     Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath&op=LinksListModRequests");
 }

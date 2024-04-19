@@ -29,6 +29,8 @@ function admindroits($aid, $f_meta_nom)
 {
     global $NPDS_Prefix, $radminsuper;
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $res = sql_query("SELECT fnom, radminsuper FROM " . $NPDS_Prefix . "authors a LEFT JOIN " . $NPDS_Prefix . "droits d ON a.aid = d.d_aut_aid LEFT JOIN " . $NPDS_Prefix . "fonctions f ON d.d_fon_fid = f.fdroits1 WHERE a.aid='$aid'");
     $foncts = array();
     $supers = array();
@@ -48,6 +50,8 @@ function admindroits($aid, $f_meta_nom)
 function adminhead($f_meta_nom, $f_titre, $null = '')
 {
     global $NPDS_Prefix, $f_meta_nom, $ModPath, $adm_img_mod;
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     list($furlscript, $ficone) = sql_fetch_row(sql_query("SELECT furlscript, ficone FROM " . $NPDS_Prefix . "fonctions WHERE fnom='$f_meta_nom'"));
 
@@ -78,31 +82,72 @@ function GraphicAdmin(string $hlpfile = null)
     $bloc_foncts = '';
     $bloc_foncts_A = '';
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $Q = sql_fetch_assoc(sql_query("SELECT * FROM " . $NPDS_Prefix . "authors WHERE aid='$aid' LIMIT 1"));
 
     //==> recupérations des états des fonctions d'ALERTE ou activable et maj (faire une fonction avec cache court dev ..)
     //article à valider
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $newsubs = sql_num_rows(sql_query("SELECT qid FROM " . $NPDS_Prefix . "queue"));
     
     if ($newsubs) 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newsubs . "',fretour_h='" . adm_translate("Articles en attente de validation !") . "' WHERE fid='38'");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='38'");
     
     //news auto
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $newauto = sql_num_rows(sql_query("SELECT anid FROM " . $NPDS_Prefix . "autonews"));
     if ($newauto) 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newauto . "',fretour_h='" . adm_translate("Articles programmés pour la publication.") . "' WHERE fid=37");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0',fretour_h='' WHERE fid=37");
     
     //etat filemanager
     if (Config::get('filemanager.manager')) 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1' WHERE fid='27'");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0' WHERE fid='27'");
     
     //==> recuperation traitement des messages de NPDS
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $QM = sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions WHERE fnom REGEXP'mes_npds_[[:digit:]]'");
     
     settype($f_mes, 'array');
@@ -121,8 +166,18 @@ function GraphicAdmin(string $hlpfile = null)
     $versus_info = explode('|', $messages_npds[0]);
 
     if ($versus_info[1] == Config::get('versioning.Version_Sub') and $versus_info[2] == Config::get('versioning.Version_Num'))
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . Config::get('versioning.Version_Sub') . " " . Config::get('versioning.Version_Num') . "', furlscript='' WHERE fid='36'");
     else
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
 
     $mess = array_slice($messages_npds, 1);
@@ -130,6 +185,8 @@ function GraphicAdmin(string $hlpfile = null)
     if (empty($mess)) {
         //si pas de message on nettoie la base
         DB::table('fonctions')->where('fnom', 'REGEXP', 'mes_npds_[[:digit:]]')->delete();
+
+        //DB::statement();
 
         sql_query("ALTER TABLE " . $NPDS_Prefix . "fonctions AUTO_INCREMENT = (SELECT MAX(fid)+1 FROM " . $NPDS_Prefix . "fonctions)");
     } else {
@@ -139,9 +196,17 @@ function GraphicAdmin(string $hlpfile = null)
         foreach ($mess as $v) {
             $ibid = explode('|', $v);
             $fico = $ibid[0] != 'Note' ? 'message_npds_a' : 'message_npds_i';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $QM = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions WHERE fnom='mes_npds_" . $o . "'"));
             
             if ($QM === false)
+
+                //DB::table('')->insert(array(
+                //    ''       => ,
+                //));
+
                 sql_query("INSERT INTO " . $NPDS_Prefix . "fonctions (fnom,fretour_h,fcategorie,fcategorie_nom,ficone,fetat,finterface,fnom_affich,furlscript) VALUES ('mes_npds_" . $o . "','" . addslashes($ibid[1]) . "','9','Alerte','" . $fico . "','1','1','" . addslashes($ibid[2]) . "','data-bs-toggle=\"modal\" data-bs-target=\"#messageModal\");\n");
             
             $o++;
@@ -161,15 +226,25 @@ function GraphicAdmin(string $hlpfile = null)
                 $k = (array_search($ibid[1], $f_mes));
                 unset($f_mes[$k]);
                 
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $result = sql_query("SELECT fnom_affich FROM " . $NPDS_Prefix . "fonctions WHERE fnom='mes_npds_$i'");
                 
                 if (sql_num_rows($result) == 1) {
                     $alertinfo = sql_fetch_assoc($result);
                     
                     if ($alertinfo['fnom_affich'] != $ibid[2])
+
+                        //DB::table('')->where('', )->update(array(
+                        //    ''       => ,
+                        //));
+
                         sql_query('UPDATE ' . $NPDS_Prefix . 'fonctions SET fdroits1_descr="", fnom_affich="' . addslashes($ibid[2]) . '" WHERE fnom="mes_npds_' . $i . '"');
                 }
             } else
+
+                //DB::statement()
+
                 sql_query('REPLACE ' . $NPDS_Prefix . 'fonctions SET fnom="mes_npds_' . $i . '",fretour_h="' . $ibid[1] . '",fcategorie="9", fcategorie_nom="Alerte", ficone="' . $fico . '",fetat="1", finterface="1", fnom_affich="' . addslashes($ibid[2]) . '", furlscript="data-bs-toggle=\"modal\" data-bs-target=\"#messageModal\"",fdroits1_descr=""');
         }
 
@@ -182,50 +257,131 @@ function GraphicAdmin(string $hlpfile = null)
     //<== recuperation traitement des messages de NPDS
 
     //utilisateur à valider
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $newsuti = sql_num_rows(sql_query("SELECT uid FROM " . $NPDS_Prefix . "users_status WHERE uid!='1' AND open='0'"));
     if ($newsuti) 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newsuti . "',fretour_h='" . adm_translate("Utilisateur en attente de validation !") . "' WHERE fid='44'");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='44'");
     
     //référants à gérer
     if (Config::get('npds.httpref') == 1) {
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_fetch_assoc(sql_query("SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "referer"));
         if ($result['total'] >= Config::get('npds.httprefmax')) 
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "fonctions set fetat='1', fretour='!!!' WHERE fid='39'");
         else 
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0' WHERE fid='39'");
     }
     
     //critique en attente
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $critsubs = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "reviews_add"));
     if ($critsubs) 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $critsubs . "', fretour_h='" . adm_translate("Critique en attente de validation.") . "' WHERE fid='35'");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='35'");
     
     //nouveau lien à valider
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $newlink = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "links_newlink"));
     if ($newlink) 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newlink . "', fretour_h='" . adm_translate("Liens à valider.") . "' WHERE fid='41'");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='41'");
     
     //lien rompu à valider
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $brokenlink = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "links_modrequest where brokenlink='1'"));
-    if ($brokenlink) 
+    if ($brokenlink)
+    
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $brokenlink . "', fretour_h='" . adm_translate("Liens rompus à valider.") . "' WHERE fid='42'");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='42'");
     
     //nouvelle publication
     $newpubli = $Q['radminsuper'] == 1 ?
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "seccont_tempo")) :
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "seccont_tempo WHERE author='$aid'"));
     
     if ($newpubli) 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newpubli . "', fretour_h='" . adm_translate("Publication(s) en attente de validation") . "' WHERE fid='50'");
     else 
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='50'");
     
     //utilisateur(s) en attente de groupe
@@ -240,13 +396,26 @@ function GraphicAdmin(string $hlpfile = null)
     }
 
     if ($j > 0)
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $j . "',fretour_h='" . adm_translate("Utilisateur en attente de groupe !") . "' WHERE fid='46'");
     else
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='0' WHERE fid='46'");
 
     //<== etc...etc recupérations des états des fonctions d'ALERTE et maj
 
     //==> Pour les modules installés produisant des notifications
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $alert_modules = sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f LEFT JOIN " . $NPDS_Prefix . "modules m ON m.mnom = f.fnom WHERE m.minstall=1 AND fcategorie=9");
     
     if ($alert_modules) {
@@ -261,8 +430,18 @@ function GraphicAdmin(string $hlpfile = null)
                 
                 if ($ibid) {
                     $fr = $reqalertes[$i][1] != 1 ? $reqalertes[$i][1] : $ibid;
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $fr . "', fretour_h='" . $reqalertes[$i][2] . "' WHERE fid=" . $am['fid'] . "");
                 } else
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='0',fretour='' WHERE fid=" . $am['fid'] . "");
                 
                 $i++;
@@ -274,7 +453,13 @@ function GraphicAdmin(string $hlpfile = null)
     //==> construction des blocs menu : selection de fonctions actives ayant une interface graphique de premier niveau et dont l'administrateur connecté en posséde les droits d'accès
     // on prend tout ce qui a une interface 
     $R = $Q['radminsuper'] == 1 ?
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f WHERE f.finterface =1 AND f.fetat != '0' ORDER BY f.fcategorie, f.fordre") :
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions f LEFT JOIN " . $NPDS_Prefix . "droits d ON f.fdroits1 = d.d_fon_fid LEFT JOIN " . $NPDS_Prefix . "authors a ON d.d_aut_aid =a.aid WHERE f.finterface =1 AND fetat!=0 AND d.d_aut_aid='$aid' AND d.d_droits REGEXP'^1' ORDER BY f.fcategorie, f.fordre");
     
     $j = 0;
@@ -625,10 +810,14 @@ function adminMain($deja_affiches)
     <div id="adm_men_art" class="adm_workarea">
     <h2><img src="assets/images/admin/submissions.' . Config::get('npds.admf_ext') . '" class="adm_img" title="' . adm_translate("Articles") . '" alt="icon_' . adm_translate("Articles") . '" />&nbsp;' . adm_translate("Derniers") . ' ' . Config::get('npds.admart') . ' ' . adm_translate("Articles") . '</h2>';
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $resul = sql_query("SELECT sid FROM " . $NPDS_Prefix . "stories");
     $nbre_articles = sql_num_rows($resul);
 
     settype($deja_affiches, "integer");
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
 
     $result = sql_query("SELECT sid, title, hometext, topic, informant, time, archive, catid, ihome FROM " . $NPDS_Prefix . "stories ORDER BY sid DESC LIMIT $deja_affiches, ".Config::get('npds.admart'));
 
@@ -663,9 +852,13 @@ function adminMain($deja_affiches)
         while ((list($sid, $title, $hometext, $topic, $informant, $time, $archive, $catid, $ihome) = sql_fetch_row($result)) and ($i < Config::get('npds.admart'))) {
             $affiche = false;
             
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result2 = sql_query("SELECT topicadmin, topictext, topicimage FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
             list($topicadmin, $topictext, $topicimage) = sql_fetch_row($result2);
             
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result3 = sql_query("SELECT title FROM " . $NPDS_Prefix . "stories_cat WHERE catid='$catid'");
             list($cat_title) = sql_fetch_row($result3);
 

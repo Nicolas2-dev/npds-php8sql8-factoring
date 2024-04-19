@@ -55,6 +55,9 @@ if (users::autorisation(-127)) {
     // IP géoréférencées
     if ($geo_ip == 1) {
         $arpostip = array();
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result_postip = sql_query('SELECT COUNT(*) AS nbpost , poster_ip FROM ' . $NPDS_Prefix . 'posts GROUP BY poster_ip');
         $postnb = sql_num_rows($result_postip);
         while ($p = sql_fetch_array($result_postip)) {
@@ -73,6 +76,9 @@ if (users::autorisation(-127)) {
         $sidebarip = '';
         $tab_ip = '';
         $ip_o = 'const ip_features=[';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result_ip = sql_query('SELECT * FROM ' . $NPDS_Prefix . 'ip_loc ORDER BY ip_visite DESC');
         $ipnb = sql_num_rows($result_ip);
         $i = 0;
@@ -200,23 +206,46 @@ if ($mark_typ !== 1) {
 //cherche info user
 $username = isset($cookie) ? $cookie[1] : '';
 if (isset($cookie)) {
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query('SELECT uid FROM ' . $NPDS_Prefix . 'users WHERE uname LIKE "' . $username . '"');
     $row = sql_fetch_array($result);
     $uid = $row['uid'];
     // voir si user existe dans users_extend
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $resul = sql_query('SELECT uid FROM ' . $NPDS_Prefix . 'users_extend WHERE uid = "' . $uid . '"');
     $found = sql_num_rows($resul);
     //mise à jour users_extend si besoin
     if ($found == 0)
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $res = sql_query("INSERT INTO " . $NPDS_Prefix . "users_extend VALUES ('$uid','','','','','','','','','','','','','')");
 }
 //==> georeferencement utilisateur
 if (array_key_exists('mod', $_GET)) {
     if ($f_new_lat != '' and $f_new_long != '' and $f_geomod = "neo")
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query('UPDATE ' . $NPDS_Prefix . 'users_extend SET ' . $ch_lat . ' = "' . $f_new_lat . '", ' . $ch_lon . ' = "' . $f_new_long . '" WHERE uid = "' . $uid . '"');
     if ($f_new_lat != '' and $f_new_long != '' and $f_geomod = "mod")
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         sql_query('UPDATE ' . $NPDS_Prefix . 'users_extend SET ' . $ch_lat . ' = "' . $f_new_lat . '", ' . $ch_lon . ' = "' . $f_new_long . '" WHERE uid = "' . $f_uid . '"');
 }
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
 
 $result = sql_query('SELECT * FROM ' . $NPDS_Prefix . 'users u LEFT JOIN ' . $NPDS_Prefix . 'users_extend ue ON u.uid = ue.uid WHERE uname LIKE "' . $username . '"');
 while ($row = sql_fetch_array($result)) {
@@ -241,10 +270,16 @@ $acg = 0; //==> anonyme connectés géoréférencés
 $mbcg = 0;
 
 //nombre total on line
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result_con = sql_query('SELECT * FROM ' . $NPDS_Prefix . 'session s');
 $total_connect = sql_num_rows($result_con);
 
 // récupération des infos des connectés (membres et ano)
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query('SELECT * FROM ' . $NPDS_Prefix . 'session s
     LEFT JOIN ' . $NPDS_Prefix . 'users u ON s.username = u.uname
     LEFT JOIN ' . $NPDS_Prefix . 'users_extend ue ON u.uid = ue.uid');
@@ -334,6 +369,9 @@ while ($row = sql_fetch_array($result)) {
     }
 
     //==> cherche si l'adresse IP est dans la base
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $tres = sql_query("SELECT * FROM " . $NPDS_Prefix . "ip_loc i WHERE ip_ip LIKE \"$session_host_addr\"");
     settype($test_ip, 'string');
     $r = sql_num_rows($tres);
@@ -392,6 +430,9 @@ $sidebaronline = '
 
 //==>les membres
 $mbgr = 0;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $membre = sql_query('SELECT * FROM ' . $NPDS_Prefix . 'users u LEFT JOIN ' . $NPDS_Prefix . 'users_extend ue ON u.uid = ue.uid ORDER BY u.uname');
 $total_membre = sql_num_rows($membre); //==> membres du site
 $k = 0;

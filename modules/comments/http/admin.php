@@ -54,6 +54,9 @@ if (($moderate == 1) and $admin)
 elseif ($moderate == 2) {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT level FROM " . $NPDS_Prefix . "users_status WHERE uid='" . $userdata[0] . "'");
     list($level) = sql_fetch_row($result);
     if ($level >= 2)
@@ -65,16 +68,27 @@ elseif ($moderate == 2) {
 if ($Mmod) {
     switch ($mode) {
         case 'del':
+
+            // DB::table('')->where('', )->delete();
+
             $sql = "DELETE FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id = '$topic'";
             if (!$result = sql_query($sql))
                 forum::forumerror('0009');
             // ordre de mise à jour d'un champ externe ?
             if ($comments_req_raz != '')
+
+                //DB::table('')->where('', )->update(array(
+                //    ''       => ,
+                //));
+
                 sql_query("UPDATE " . $NPDS_Prefix . $comments_req_raz);
             url::redirect_url("$url_ret");
             break;
         case 'viewip':
             include("themes/default/header.php");
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $sql = "SELECT u.uname, p.poster_ip, p.poster_dns FROM " . $NPDS_Prefix . "users u, " . $NPDS_Prefix . "posts p WHERE p.post_id = '$post' AND u.uid = p.poster_id";
             if (!$r = sql_query($sql))
                 forum::forumerror('0013');
@@ -107,15 +121,30 @@ if ($Mmod) {
             include("themes/default/footer.php");
             break;
         case 'aff':
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             $sql = "UPDATE " . $NPDS_Prefix . "posts SET post_aff = '$ordre' WHERE post_id = '$post'";
             sql_query($sql);
 
             // ordre de mise à jour d'un champ externe ?
             if ($ordre) {
                 if ($comments_req_add != '')
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . $comments_req_add);
             } else {
                 if ($comments_req_del != '')
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . $comments_req_del);
             }
             url::redirect_url("$url_ret");

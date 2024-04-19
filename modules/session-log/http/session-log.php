@@ -90,6 +90,9 @@ if ($subop == 'session') {
                 </tr>
             </thead>
             <tbody>';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT username, host_addr, guest, uri, agent FROM " . $NPDS_Prefix . "session");
     while (list($username, $host_addr, $guest, $uri, $agent) = sql_fetch_row($result)) {
         if ($username == $host_addr) {

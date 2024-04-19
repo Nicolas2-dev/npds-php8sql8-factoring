@@ -37,17 +37,36 @@ if ($uriBlocNote) {
 
     if ($bnid) {
         if ($supBlocNote == 'RAZ')
+
+            // DB::table('')->where('', )->delete();
+
             sql_query("DELETE FROM " . $NPDS_Prefix . "blocnotes WHERE bnid='$bnid'");
         else {
             sql_query("LOCK TABLES " . $NPDS_Prefix . "blocnotes WRITE");
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result = sql_query("SELECT texte FROM " . $NPDS_Prefix . "blocnotes WHERE bnid='$bnid'");
             if (sql_num_rows($result) > 0) {
                 if ($texteBlocNote != '')
+
+                    //DB::table('')->where('', )->update(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("UPDATE " . $NPDS_Prefix . "blocnotes SET texte='" . hack::removeHack($texteBlocNote) . "' WHERE bnid='$bnid'");
                 else
+
+                    // DB::table('')->where('', )->delete();
+
                     sql_query("DELETE FROM " . $NPDS_Prefix . "blocnotes WHERE bnid='$bnid'");
             } else {
                 if ($texteBlocNote != '')
+
+                    //DB::table('')->insert(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("INSERT INTO " . $NPDS_Prefix . "blocnotes (bnid, texte) VALUES ('$bnid', '" . hack::removeHack($texteBlocNote) . "')");
             }
             sql_query("UNLOCK TABLES");

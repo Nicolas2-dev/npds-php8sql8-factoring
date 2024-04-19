@@ -27,6 +27,9 @@ switch ($type) {
     case "doc":
         include "library/html2doc.php";
         $htmltodoc = new HTML_TO_DOC();
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $row = sql_fetch_assoc(sql_query("SELECT content FROM " . $NPDS_Prefix . "wspad WHERE page='" . $wspad[0] . "' AND member='" . $wspad[1] . "' AND ranq='" . $wspad[2] . "'"));
         // nettoyage des SPAN
         $tmp = preg_replace('#style="[^\"]*\"#', "", language::aff_langue($row['content']));

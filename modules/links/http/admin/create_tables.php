@@ -25,6 +25,9 @@ if ($links_DB == '')
 include("themes/default/header.php");
 echo '
     <p class="text-center">Cr&eacute;ation des tables en cours pour / Tables Creation running for : <b>' . $links_DB . '</b><br /><br />.';
+
+// DB::statement();
+
 $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_categories (
     cid int(11) NOT NULL AUTO_INCREMENT,
     title varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -33,6 +36,8 @@ $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_categories (
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 $result = sql_query($sql_query);
 echo '.';
+
+// DB::statement();
 
 $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_editorials (
         linkid int(11) NOT NULL DEFAULT '0',
@@ -44,6 +49,8 @@ $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_editorials (
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 $result = sql_query($sql_query);
 echo '.';
+
+// DB::statement();
 
 $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_links (
         lid int(11) NOT NULL AUTO_INCREMENT,
@@ -66,6 +73,8 @@ $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_links (
 $result = sql_query($sql_query);
 echo '.';
 
+// DB::statement();
+
 $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_modrequest (
         requestid int(11) NOT NULL AUTO_INCREMENT,
         lid int(11) NOT NULL DEFAULT '0',
@@ -82,6 +91,8 @@ $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_modrequest (
 $result = sql_query($sql_query);
 echo '.';
 
+// DB::statement();
+
 $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_newlink (
         lid int(11) NOT NULL AUTO_INCREMENT,
         cid int(11) NOT NULL DEFAULT '0',
@@ -97,6 +108,8 @@ $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_newlink (
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 $result = sql_query($sql_query);
 echo '.';
+
+// DB::statement();
 
 $sql_query = "CREATE TABLE IF NOT EXISTS " . $links_DB . "links_subcategories (
         sid int(11) NOT NULL AUTO_INCREMENT,

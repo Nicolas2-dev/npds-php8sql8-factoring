@@ -209,6 +209,9 @@ if ($FmaRep) {
             if ($tab_groupe) {
                 // si j'ai au moins un groupe est ce que celui-ci dispose d'un fichier de configuration ?  - je m'arrête au premier groupe !
                 foreach ($tab_groupe as $gp) {
+
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                     $groupename = cache::Q_select("SELECT groupe_name FROM " . $NPDS_Prefix . "groupes WHERE groupe_id='$gp' ORDER BY `groupe_id` ASC", 3600);
                     if (file_exists("modules/$ModPath/config/" . $groupename[0]['groupe_name'] . ".conf.php")) {
                         $FmaRep = $groupename[0]['groupe_name'];

@@ -24,6 +24,9 @@ global $npds_twi, $NPDS_Prefix;
 $nuke_url = Config::get('npds.nuke_url');
 
 if (!isset($sid)) {
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT max(sid) FROM " . $NPDS_Prefix . "stories");
     list($sid) = sql_fetch_row($result);
 }

@@ -76,6 +76,9 @@ echo '
 
 // Moderator
 global $NPDS_Prefix;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $sql = "SELECT forum_moderator FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'";
 if (!$result = sql_query($sql))
     forum::forumerror('0001');
@@ -121,6 +124,9 @@ function forum_upload()
 {
     global $apli, $IdPost, $IdForum, $IdTopic, $pcfile, $pcfile_size, $pcfile_name, $pcfile_type, $att_count, $att_size, $total_att_count, $total_att_size;
     global $MAX_FILE_SIZE, $MAX_FILE_SIZE_TOTAL, $mimetypes, $mimetype_default, $upload_table, $rep_upload_forum; // mine......
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     list($sum) = sql_fetch_row(sql_query("SELECT SUM(att_size ) FROM $upload_table WHERE apli = '$apli' AND post_id = '$IdPost'"));
 
     // gestion du quota de place d'un post

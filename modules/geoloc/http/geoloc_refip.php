@@ -31,12 +31,20 @@ use npds\system\security\hack;
     'http://extreme-ip-lookup.com/json/'.urldecode($ip).'?key='.$key_lookup
     );
     $ousursit='';
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $resultat=sql_query("SELECT * FROM ".$NPDS_Prefix."ip_loc WHERE ip_ip LIKE \"$ip\"");
     $controle=sql_num_rows($resultat);
     while ($row = sql_fetch_array($resultat)) {
     $ousursit= preg_replace("#/.*?/#",'',$_SERVER['PHP_SELF']);
     }
     if($controle != 0)
+
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
+
     sql_query("UPDATE ".$NPDS_Prefix."ip_loc SET ip_visite= ip_visite +1 , ip_visi_pag = \"$ousursit\" WHERE ip_ip LIKE \"$ip\" ");
     else {
     $ibid=false;
@@ -124,7 +132,17 @@ use npds\system\security\hack;
     if ($ibid===false)
     return ;
     else {
+
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
+
     sql_query("INSERT INTO ".$NPDS_Prefix."ip_loc (ip_long, ip_lat, ip_ip, ip_country, ip_code_country, ip_city) VALUES ('$long', '$lat', '$ip', '$pay', '$codepay', '$vi')");
+
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
+
     sql_query("UPDATE ".$NPDS_Prefix."ip_loc SET ip_visite= ip_visite +1, ip_visi_pag = \"$ousursit\" WHERE ip_ip LIKE \"$ip\" ");
     }
     }

@@ -148,10 +148,17 @@ function SaveSetReseaux($ModPath, $ModStart)
     }
     $li_rs = rtrim($li_rs, ';');
     $li_rs = hack::removeHack(stripslashes(FixQuotes($li_rs)));
+
+    //DB::table('')->where('', )->update(array(
+    //    ''       => ,
+    //));
+
     sql_query("UPDATE " . $NPDS_Prefix . "users_extend SET M2='$li_rs' WHERE uid='$cookie[0]'");
     Header("Location: modules.php?&ModPath=$ModPath&ModStart=$ModStart");
 }
+
 settype($op, 'string');
+
 switch ($op) {
     case 'SaveSetReseaux':
         SaveSetReseaux($ModPath, $ModStart);

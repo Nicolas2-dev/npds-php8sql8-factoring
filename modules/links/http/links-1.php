@@ -79,6 +79,9 @@ function AddLink()
                 <span class="help-block text-end" id="countcar_url"></span>
             </div>
             </div>';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
             <div class="mb-3 row">
@@ -105,6 +108,9 @@ function AddLink()
                 <label class="col-form-label col-sm-3" for="topicL">' . translate("Sujets") . '</label>
                 <div class="col-sm-9">
                 <select class="form-select" id="topicL" name="topicL">';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
                     <option value="">' . translate("Tous les sujets") . '</option>';
@@ -183,6 +189,8 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
         }
     }
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT lid FROM " . $links_DB . "links_newlink");
     $numrows = sql_num_rows($result);
     if ($numrows >= Config::get('npds.troll_limit')) {
@@ -232,6 +240,11 @@ function Add($title, $url, $name, $cat, $description, $email, $topicL, $asb_ques
     $description = hack::removeHack(stripslashes(FixQuotes($description)));
     $name = hack::removeHack(stripslashes(FixQuotes($name)));
     $email = hack::removeHack(stripslashes(FixQuotes($email)));
+
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
+
     sql_query("INSERT INTO " . $links_DB . "links_newlink VALUES (NULL, '$cat[0]', '$cat[1]', '$title', '$url', '$description', '$name', '$email', '$submitter', '$topicL')");
     error_head('alert-success');
     echo translate("Nous avons bien reçu votre demande de lien, merci") . '<br />';
@@ -251,8 +264,14 @@ function links_search($query, $topicL, $min, $max, $offset)
     $query = hack::removeHack(stripslashes(htmlspecialchars($query, ENT_QUOTES, 'utf-8'))); // Romano et NoSP
 
     if ($topicL != '')
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT lid, url, title, description, date, hits, topicid_card, cid, sid FROM " . $links_DB . "links_links WHERE topicid_card='$topicL' AND (title LIKE '%$query%' OR description LIKE '%$query%') ORDER BY lid ASC LIMIT $min,$offset");
     else
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT lid, url, title, description, date, hits, topicid_card, cid, sid FROM " . $links_DB . "links_links WHERE title LIKE '%$query%' OR description LIKE '%$query%' ORDER BY lid ASC LIMIT $min,$offset");
     if ($result) {
         $link_fiche_detail = '';

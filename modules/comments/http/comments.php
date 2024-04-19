@@ -49,6 +49,9 @@ if (($moderate == 1) and $admin)
 elseif ($moderate == 2) {
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT level FROM " . $NPDS_Prefix . "users_status WHERE uid='" . $userdata[0] . "'");
     list($level) = sql_fetch_row($result);
     if ($level >= 2)
@@ -78,6 +81,9 @@ if ($allow_to_post)
 if (!isset($C_start))
     $C_start = 0;
 settype($comments_per_page, 'integer');
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT COUNT(*) AS total FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id='$topic' AND post_aff='1'");
 list($total) = sql_fetch_row($result);
 
@@ -113,6 +119,9 @@ if ($total >= 1) {
 }
 if ($Mmod) $post_aff = ' ';
 else $post_aff = " AND post_aff='1' ";
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE forum_id='$forum' AND topic_id = '$topic'" . $post_aff . "ORDER BY post_id LIMIT $C_start, $comments_per_page";
 if (!$result = sql_query($sql)) forum::forumerror('0001');
 $mycount = sql_num_rows($result);

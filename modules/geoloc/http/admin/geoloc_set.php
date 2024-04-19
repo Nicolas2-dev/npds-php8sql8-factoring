@@ -41,8 +41,14 @@ $key_lookup = isset($key_lookup) ? $key_lookup : '';
 function vidip()
 {
     global $NPDS_Prefix;
+
+    // DB::table('')->where('', )->delete();
+
     $sql = "DELETE FROM " . $NPDS_Prefix . "ip_loc WHERE ip_id >=1";
     if ($result = sql_query($sql))
+
+        //DB::statemebnt();
+
         sql_query("ALTER TABLE " . $NPDS_Prefix . "ip_loc AUTO_INCREMENT = 0;");
 }
 
@@ -52,12 +58,17 @@ function Configuregeoloc($subop, $ModPath, $ModStart, $ch_lat, $ch_lon, $cartyp,
     include('modules/' . $ModPath . '/config/geoloc.conf');
     $hlpfile = 'modules/' . $ModPath . '/manuels/' . $language . '/aide_admgeo.html';
 
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT CONCAT(ROUND(((DATA_LENGTH + INDEX_LENGTH - DATA_FREE) / 1024 / 1024), 2), ' Mo') AS TailleMo FROM information_schema.TABLES WHERE TABLE_SCHEMA = '$dbname' AND TABLE_NAME = " . $NPDS_Prefix . "'ip_loc'");
     $row = sql_fetch_array($result);
 
     $ar_fields = array('C3', 'C4', 'C5', 'C6', 'C7', 'C8');
     foreach ($ar_fields as $k => $v) {
         $req = '';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $req = sql_query("SELECT $v FROM users_extend WHERE $v !=''");
         if (!sql_num_rows($req)) $dispofield[] = $v;
     }

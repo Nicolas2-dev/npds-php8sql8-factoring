@@ -37,6 +37,9 @@ function load_mimetypes()
 function getAttachments($apli, $post_id, $att_id = 0, $Mmod = 0)
 {
     global $upload_table;
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $query = "SELECT att_id, att_name, att_type, att_size, att_path, inline, compteur, visible FROM $upload_table WHERE apli='$apli' && post_id='$post_id'";
     if ($att_id > 0)
         $query .= " AND att_id=$att_id";
@@ -101,6 +104,11 @@ function insertAttachment($apli, $IdPost, $IdTopic, $IdForum, $name, $path, $inl
     $size = empty($size) ? filesize($path) : $size;
     $type = empty($type) ? "application/octet-stream" : $type;
     $stamp = time();
+
+    //DB::table('')->insert(array(
+    //    ''       => ,
+    //));
+
     $sql = "INSERT INTO $upload_table VALUES ('', '$IdPost', '$IdTopic','$IdForum', '$stamp', '$name', '$type', '$size', '$path', '1', '$apli', '0', '$visible_forum')";
     $ret = sql_query($sql);
     if (!$ret)
@@ -114,6 +122,9 @@ function deleteAttachment($apli, $IdPost, $upload_dir, $id, $att_name)
 {
     global $upload_table;
     @unlink("$upload_dir/$id.$apli.$att_name");
+
+    // DB::table('')->where('', )->delete();
+
     $sql = "DELETE FROM $upload_table WHERE att_id= '$id'";
     sql_query($sql);
 }
@@ -373,11 +384,17 @@ function delete($del_att)
     $rep = $DOCUMENTROOT;
     if (is_array($del_att)) {
         $del_att = implode(',', $del_att);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $sql = "SELECT att_id, att_name, att_path FROM $upload_table WHERE att_id IN ($del_att)";
         $result = sql_query($sql);
         while (list($att_id, $att_name, $att_path) = sql_fetch_row($result)) {
             @unlink($rep . "$att_path/$att_id.$apli.$att_name");
         }
+
+        // DB::table('')->where('', )->delete();
+
         $sql = "DELETE FROM $upload_table WHERE att_id IN ($del_att)";
         sql_query($sql);
     }
@@ -391,6 +408,11 @@ function update_inline($inline_att)
     global $upload_table;
     if (is_array($inline_att)) {
         foreach ($inline_att as $id => $mode) {
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             $sql = "UPDATE $upload_table SET inline='$mode' WHERE att_id=$id";
             sql_query($sql);
         }
@@ -402,6 +424,9 @@ function update_inline($inline_att)
 function renomme_fichier($listeV, $listeU)
 {
     global $upload_table, $apli, $DOCUMENTROOT;
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $query = "SELECT att_id, att_name, att_path FROM $upload_table WHERE att_id in ($listeV) and visible=1";
     $result = sql_query($query);
     while ($attach = sql_fetch_assoc($result)) {
@@ -409,6 +434,9 @@ function renomme_fichier($listeV, $listeU)
             rename($DOCUMENTROOT . $attach['att_path'] . $attach['att_id'] . '.' . $apli . '.@' . $attach['att_name'], $DOCUMENTROOT . $attach['att_path'] . $attach['att_id'] . '.' . $apli . '.' . $attach['att_name']);
         }
     }
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $query = "SELECT att_id, att_name, att_path FROM $upload_table WHERE att_id IN ($listeU) AND visible=0";
     $result = sql_query($query);
     while ($attach = sql_fetch_assoc($result)) {
@@ -422,16 +450,31 @@ function update_visibilite($visible_att, $visible_list)
     global $upload_table;
     if (is_array($visible_att)) {
         $visible = implode(',', $visible_att);
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         $sql = "UPDATE $upload_table SET visible='1' WHERE att_id IN ($visible)";
         sql_query($sql);
         $visible_lst = explode(',', substr($visible_list, 0, strlen($visible_list) - 1));
         $result = array_diff($visible_lst, $visible_att);
         $unvisible = implode(",", $result);
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         $sql = "UPDATE $upload_table SET visible='0' WHERE att_id IN ($unvisible)";
         sql_query($sql);
     } else {
         $visible_lst = explode(',', substr($visible_list, 0, strlen($visible_list) - 1));
         $unvisible = implode(',', $visible_lst);
+
+        //DB::table('')->where('', )->update(array(
+        //    ''       => ,
+        //));
+
         $sql = "UPDATE $upload_table SET visible='0' WHERE att_id IN ($unvisible)";
         sql_query($sql);
     }

@@ -14,6 +14,9 @@ class alertcore
     public static function () 
     {
         //==> recuperation traitement des messages de NPDS
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $QM = sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions WHERE fnom REGEXP'mes_npds_[[:digit:]]'");
         
         settype($f_mes, 'array');
@@ -32,8 +35,18 @@ class alertcore
         $versus_info = explode('|', $messages_npds[0]);
 
         if ($versus_info[1] == Config::get('versioning.Version_Sub') and $versus_info[2] == Config::get('versioning.Version_Num'))
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='', fretour_h='Version NPDS " . Config::get('versioning.Version_Sub') . " " . Config::get('versioning.Version_Num') . "', furlscript='' WHERE fid='36'");
         else
+
+            //DB::table('')->where('', )->update(array(
+            //    ''       => ,
+            //));
+
             sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1', fretour='N', furlscript='data-bs-toggle=\"modal\" data-bs-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />" . $versus_info[1] . " " . $versus_info[2] . "<br />Cliquez pour télécharger.' WHERE fid='36'");
 
         $mess = array_slice($messages_npds, 1);
@@ -41,6 +54,8 @@ class alertcore
         if (empty($mess)) {
             //si pas de message on nettoie la base
             DB::table('fonctions')->where('fnom', 'REGEXP', 'mes_npds_[[:digit:]]')->delete();
+
+            //DB::statement();
 
             sql_query("ALTER TABLE " . $NPDS_Prefix . "fonctions AUTO_INCREMENT = (SELECT MAX(fid)+1 FROM " . $NPDS_Prefix . "fonctions)");
         } else {
@@ -50,9 +65,17 @@ class alertcore
             foreach ($mess as $v) {
                 $ibid = explode('|', $v);
                 $fico = $ibid[0] != 'Note' ? 'message_npds_a' : 'message_npds_i';
+
+                // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                 $QM = sql_num_rows(sql_query("SELECT * FROM " . $NPDS_Prefix . "fonctions WHERE fnom='mes_npds_" . $o . "'"));
                 
                 if ($QM === false)
+
+                    //DB::table('')->insert(array(
+                    //    ''       => ,
+                    //));
+
                     sql_query("INSERT INTO " . $NPDS_Prefix . "fonctions (fnom,fretour_h,fcategorie,fcategorie_nom,ficone,fetat,finterface,fnom_affich,furlscript) VALUES ('mes_npds_" . $o . "','" . addslashes($ibid[1]) . "','9','Alerte','" . $fico . "','1','1','" . addslashes($ibid[2]) . "','data-bs-toggle=\"modal\" data-bs-target=\"#messageModal\");\n");
                 
                 $o++;
@@ -72,15 +95,25 @@ class alertcore
                     $k = (array_search($ibid[1], $f_mes));
                     unset($f_mes[$k]);
                     
+                    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
                     $result = sql_query("SELECT fnom_affich FROM " . $NPDS_Prefix . "fonctions WHERE fnom='mes_npds_$i'");
                     
                     if (sql_num_rows($result) == 1) {
                         $alertinfo = sql_fetch_assoc($result);
                         
                         if ($alertinfo['fnom_affich'] != $ibid[2])
+
+                            //DB::table('')->where('', )->update(array(
+                            //    ''       => ,
+                            //));
+
                             sql_query('UPDATE ' . $NPDS_Prefix . 'fonctions SET fdroits1_descr="", fnom_affich="' . addslashes($ibid[2]) . '" WHERE fnom="mes_npds_' . $i . '"');
                     }
                 } else
+
+                    DB::statement();
+
                     sql_query('REPLACE ' . $NPDS_Prefix . 'fonctions SET fnom="mes_npds_' . $i . '",fretour_h="' . $ibid[1] . '",fcategorie="9", fcategorie_nom="Alerte", ficone="' . $fico . '",fetat="1", finterface="1", fnom_affich="' . addslashes($ibid[2]) . '", furlscript="data-bs-toggle=\"modal\" data-bs-target=\"#messageModal\"",fdroits1_descr=""');
             }
 

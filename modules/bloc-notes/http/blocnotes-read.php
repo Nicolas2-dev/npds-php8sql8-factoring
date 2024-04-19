@@ -16,6 +16,9 @@
 if (strstr($bnid, '..') || strstr($bnid, './') || stristr($bnid, 'script') || stristr($bnid, 'cookie') || stristr($bnid, 'iframe') || stristr($bnid, 'applet') || stristr($bnid, 'object') || stristr($bnid, 'meta'))
     die();
 global $NPDS_Prefix;
+
+// = DB::table('')->select()->where('', )->orderBy('')->get();
+
 $result = sql_query("SELECT texte FROM " . $NPDS_Prefix . "blocnotes WHERE bnid='$bnid'");
 if (sql_num_rows($result) > 0) {
     list($texte) = sql_fetch_row($result);

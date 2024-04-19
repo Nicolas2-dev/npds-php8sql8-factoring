@@ -27,8 +27,14 @@ function NewLinksDate($selectdate)
         include($filen);
     }
     $newlinkDB = Date("Y-m-d", $selectdate);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT lid FROM " . $links_DB . "links_links WHERE date LIKE '%$newlinkDB%'");
     $totallinks = sql_num_rows($result);
+
+    // = DB::table('')->select()->where('', )->orderBy('')->get();
+
     $result = sql_query("SELECT lid, url, title, description, date, hits, topicid_card, cid, sid FROM " . $links_DB . "links_links WHERE date LIKE '%$newlinkDB%' ORDER BY title ASC");
     $link_fiche_detail = '';
     include_once("modules/$ModPath/http/links-view.php");
@@ -47,6 +53,9 @@ function NewLinks($newlinkshowdays)
         $newlinkday = date("d-M-Y", $newlinkdayRaw);
         $newlinkView = date("F d, Y", $newlinkdayRaw);
         $newlinkDB = Date("Y-m-d", $newlinkdayRaw);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT * FROM " . $links_DB . "links_links WHERE date LIKE '%$newlinkDB%'");
         $totallinks = sql_num_rows($result);
         $counter++;
@@ -58,6 +67,9 @@ function NewLinks($newlinkshowdays)
     while ($counter <= 30 - 1) {
         $newlinkdayRaw = (time() - (86400 * $counter));
         $newlinkDB = Date("Y-m-d", $newlinkdayRaw);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT * FROM " . $links_DB . "links_links WHERE date LIKE '%$newlinkDB%'");
         $totallinks = sql_num_rows($result);
         $allmonthlinks = $allmonthlinks + $totallinks;
@@ -82,6 +94,9 @@ function NewLinks($newlinkshowdays)
         $newlinkday = date("d-M-Y", $newlinkdayRaw);
         $newlinkView = date(str_replace("%", "", translate("linksdatestring")), $newlinkdayRaw);
         $newlinkDB = Date("Y-m-d", $newlinkdayRaw);
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT * FROM " . $links_DB . "links_links WHERE date LIKE '%$newlinkDB%'");
         $totallinks = sql_num_rows($result);
         $counter++;

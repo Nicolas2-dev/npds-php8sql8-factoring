@@ -60,7 +60,13 @@ while (list($lid, $url, $title, $description, $time, $hits, $topicid_card, $xcid
         echo '&nbsp;' . newlinkgraphic($datetime, $time) . '</h4>';
 
         if (!empty($xcid)) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result3 = sql_query("SELECT title FROM " . $links_DB . "links_categories WHERE cid='$xcid'");
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result4 = sql_query("SELECT title FROM " . $links_DB . "links_subcategories WHERE sid='$xsid'");
             list($ctitle) = sql_fetch_row($result3);
             list($stitle) = sql_fetch_row($result4);
@@ -70,6 +76,9 @@ while (list($lid, $url, $title, $description, $time, $hits, $topicid_card, $xcid
         }
         global $links_topic;
         if ($links_topic and $topicid_card != 0) {
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             list($topicLX) = sql_fetch_row(sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topicid_card'"));
             echo '<br />' . translate("Sujets") . ' : <strong>' . $topicLX . '</strong>';
         }

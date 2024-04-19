@@ -32,6 +32,9 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
             Header("Location: modules.php?ModStart=$ModStart&ModPath=$ModPath/admin&op=LinksModLink&lid=$lid");
         include("themes/default/header.php");
         mainheader();
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result = sql_query("SELECT cid, sid, title, url, description, topicid_card FROM " . $links_DB . "links_links WHERE lid='$lid'");
         list($cid, $sid, $title, $url, $description, $topicid_card) = sql_fetch_row($result);
         $title = stripslashes($title);
@@ -61,12 +64,18 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
             <label class="col-form-label col-sm-3" for="cat">' . translate("Catégorie") . '</label>
             <div class="col-sm-9">
                 <select class="form-select" id="cat" name="cat">';
+
+        // = DB::table('')->select()->where('', )->orderBy('')->get();
+
         $result2 = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         while (list($ccid, $ctitle) = sql_fetch_row($result2)) {
             $sel = '';
             if ($cid == $ccid and $sid == 0) $sel = 'selected';
             echo '
                 <option value="' . $ccid . '" ' . $sel . '>' . language::aff_langue($ctitle) . '</option>';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $result3 = sql_query("SELECT sid, title FROM " . $links_DB . "links_subcategories WHERE cid='$ccid' ORDER BY title");
             while (list($ssid, $stitle) = sql_fetch_row($result3)) {
                 $sel = '';
@@ -88,6 +97,9 @@ function modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author)
             <label class="col-form-label col-sm-3" for="topicL">' . translate("Sujets") . '</label>
             <div class="col-sm-9">
                 <select class="form-select" id="topicL" name="topicL">';
+
+            // = DB::table('')->select()->where('', )->orderBy('')->get();
+
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
                 <option value="">' . translate("Tous les sujets") . '</option>';
@@ -139,6 +151,11 @@ function modifylinkrequestS($lid, $cat, $title, $url, $description, $modifysubmi
         $url = stripslashes(FixQuotes($url));
         $description = stripslashes(FixQuotes($description));
         if ($modifysubmitter == -9) $modifysubmitter = '';
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         $result = sql_query("INSERT INTO " . $links_DB . "links_modrequest VALUES (NULL, $lid, $cat[0], $cat[1], '$title', '$url', '$description', '$modifysubmitter', '0', '$topicL')");
 
         global $ModPath, $ModStart;
@@ -193,6 +210,11 @@ function brokenlinkS($lid, $modifysubmitter)
         $ratinguser = Config::get('npds.anonymous');
     if ($modifysubmitter == $ratinguser) {
         settype($lid, 'integer');
+
+        //DB::table('')->insert(array(
+        //    ''       => ,
+        //));
+
         sql_query("INSERT INTO " . $links_DB . "links_modrequest VALUES (NULL, $lid, 0, 0, '', '', '', '$ratinguser', 1,0)");
     }
     include("themes/default/header.php");
