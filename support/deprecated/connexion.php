@@ -17,7 +17,7 @@ if (! function_exists('load_Driver'))
     {
         if (Config::get('app.database.mysql_i') == 1)
         {
-            include("system/database/deprecated/drivers/mysqli.php");
+            include("support/deprecated/drivers/mysqli.php");
         }
     }
 }

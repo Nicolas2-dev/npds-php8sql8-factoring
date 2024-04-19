@@ -157,7 +157,7 @@ include("language/$language/language.php");
 
 
 // db ancien system qui va disparaitre !!!!
-include('system/database/deprecated/connexion.php');
+include('support/deprecated/connexion.php');
 
 $dblink = Mysql_Connexion();
 
