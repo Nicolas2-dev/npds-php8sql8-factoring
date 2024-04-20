@@ -50,12 +50,7 @@ class post
     public static function publication(string|int $dd_pub, string|int $fd_pub, string|int $dh_pub, string|int $fh_pub, int $epur): void
     {
         $today = getdate(time() + ((int) Config::get('npds.gmt') * 3600));
-    
-        settype($dd_pub, 'string');
-        settype($fd_pub, 'string');
-        settype($dh_pub, 'string');
-        settype($fh_pub, 'string');
-    
+
         if (!$dd_pub) {
             $dd_pub .= $today['year'] . '-';
             if ($today['mon'] < 10) {
