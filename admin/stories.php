@@ -14,16 +14,17 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\support\str;
+use npds\support\editeur;
 use npds\support\logs\logs;
 use npds\support\news\news;
+use npds\support\news\post;
 use npds\support\assets\css;
 use npds\support\auth\groupe;
 use npds\support\routing\url;
-use npds\support\str;
 use npds\support\theme\theme;
 use npds\support\pixels\image;
 use npds\system\config\Config;
-use npds\support\editeur;
 use npds\support\language\language;
 use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
@@ -34,8 +35,6 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'adminStory';
-
-include("publication.php");
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -677,7 +676,7 @@ function displayStory(int $qid): void
     
     $subject = stripslashes($queue['subject']);
 
-    code_aff('<h4>'. $subject . $topiclogo .'</h4>', '<div class="text-muted">'. metalang::meta_lang($story) .'</div>', metalang::meta_lang($bodytext), "");
+    post::code_aff('<h4>'. $subject . $topiclogo .'</h4>', '<div class="text-muted">'. metalang::meta_lang($story) .'</div>', metalang::meta_lang($bodytext), "");
 
     echo '
             </div>
@@ -780,7 +779,7 @@ function displayStory(int $qid): void
     $dh_pub = substr($queue['date_debval'], 11, 5);
     $fh_pub = substr($queue['date_finval'], 11, 5);
 
-    publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
+    post::publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
 
     echo '
         <input type="hidden" name="qid" value="'. $queue['qid'] .'" />
@@ -886,7 +885,7 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
         }
     }
 
-    code_aff('<h3>'. $subject . $topiclogo .'</h3>', '<div class="text-muted">'. metalang::meta_lang($hometext) .'</div>', metalang::meta_lang($bodytext), metalang::meta_lang($notes));
+    post::code_aff('<h3>'. $subject . $topiclogo .'</h3>', '<div class="text-muted">'. metalang::meta_lang($hometext) .'</div>', metalang::meta_lang($bodytext), metalang::meta_lang($notes));
 
     echo '
             </div>
@@ -984,7 +983,7 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
 
     echo editeur::aff_editeur('notes', '');
 
-    publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
+    post::publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
 
     echo '
         <input type="hidden" name="qid" value="'. $qid .'" />
@@ -1222,7 +1221,7 @@ function editStory(int $sid): void
     echo '
     <div id="art_preview" class="card card-body mb-3">';
 
-    echo code_aff('<h3>'. $subject . $topiclogo .'</h3>', '<div class="text-muted">'. $hometext .'</div>', $bodytext, $notes);
+    echo post::code_aff('<h3>'. $subject . $topiclogo .'</h3>', '<div class="text-muted">'. $hometext .'</div>', $bodytext, $notes);
 
     echo '
     </div>';
@@ -1335,7 +1334,7 @@ function editStory(int $sid): void
         $fh_pub = '00:00';
     }
 
-    publication(-1, $fd_pub, -1, $fh_pub, $epur);
+    post::publication(-1, $fd_pub, -1, $fh_pub, $epur);
 
     global $theme;
     echo '
@@ -1722,7 +1721,7 @@ function adminStory(): void
 
     echo editeur::aff_editeur('bodytext', '');
 
-    publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
+    post::publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
 
     echo '
         <input type="hidden" name="author" value="'. $aid .'" />
@@ -1848,7 +1847,7 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
         }
     }
 
-    code_aff('<h3>'. $subject . $topiclogo .'</h3>', '<div class="text-muted">'. $hometext .'</div>', $bodytext, '');
+    post::code_aff('<h3>'. $subject . $topiclogo .'</h3>', '<div class="text-muted">'. $hometext .'</div>', $bodytext, '');
 
     echo '
         </div>
@@ -1933,7 +1932,7 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
 
     echo editeur::aff_editeur('bodytext', '');
 
-    publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
+    post::publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
 
     echo '
         <div class="mb-3 row">

@@ -24,8 +24,6 @@ use npds\support\metalang\metalang;
 use npds\system\support\facades\DB;
 
 
-global $meta_glossaire;
-
 // include externe JAVASCRIPT file from themes/default/view/include or themes/.../include for functions, codes in the <body onload="..." event...
 function importExternalJavacript()
 {

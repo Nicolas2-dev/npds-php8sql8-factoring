@@ -87,10 +87,8 @@ class language
      */
     public static function aff_langue(string $ibid): string
     {
-        global $tab_langue;
-
         // copie du tableau + rajout de transl pour gestion de l'appel à translate(...); - Theme Dynamic
-        $tab_llangue = $tab_langue;
+        $tab_llangue = static::make_tab_langue();
         $tab_llangue[] = 'transl';
 
         reset($tab_llangue);
@@ -166,7 +164,7 @@ class language
      */
     public static function make_tab_langue(): array
     {
-        global $languageslist;
+        $languageslist = language::languageList();
 
         $languageslocal = Config::get('npds.language') . ' ' . str_replace(Config::get('npds.language'), '', $languageslist);
         $languageslocal = trim(str_replace('  ', ' ', $languageslocal));
@@ -184,8 +182,6 @@ class language
      */
     public static function aff_localzone_langue(string $ibid): string
     {
-        global $tab_langue;
-
         $flag = array('fr' => '🇫🇷', 'es' => '🇪🇸', 'de' => '🇩🇪', 'en' => '🇺🇸', 'zh' => '🇨🇳');
 
         $M_langue = '
@@ -193,7 +189,7 @@ class language
         <select name="' . $ibid . '" class="form-select" onchange="this.form.submit()">
             <option value="">' . translate("Choisir une langue") . '</option>';
         
-        foreach ($tab_langue as $bidon => $langue) {
+        foreach (static::make_tab_langue() as $bidon => $langue) {
             $M_langue .= '
                 <option value="' . $langue . '">' . $flag[$langue] . ' ' . translate("$langue") . '</option>';
         }
@@ -242,13 +238,12 @@ class language
      */
     public static function preview_local_langue(?string $local_user_language, string $ibid): string
     {
-        global $tab_langue;
-
         if ($local_user_language) {
             $old_langue = Config::get('npds.language');
             Config::set('npds.language', $local_user_language);
 
-            $tab_langue = static::make_tab_langue();
+            $tab_langue = static::make_tab_langue(); // ???
+            
             $ibid = static::aff_langue($ibid);
 
             Config::set('npds.language.old_langue', $old_langue);

@@ -15,54 +15,57 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\support\str;
 use npds\support\date\date;
 use npds\support\assets\css;
+use npds\support\auth\users;
 use npds\support\auth\groupe;
 use npds\support\cache\cache;
 use npds\support\forum\forum;
-use npds\support\str;
 use npds\support\theme\theme;
 use npds\system\config\Config;
+use npds\support\utility\crypt;
+use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) { 
     include('boot/bootstrap.php');
 }
 
-global $NPDS_Prefix;
-
 include('auth.php');
 
-// = DB::table('')->select()->where('', )->orderBy('')->get();
-
-$rowQ1 = cache::Q_Select("SELECT forum_id FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id='$topic'", 3600);
-if (!$rowQ1) {
+if (!$rowQ1 = cache::Q_Select3(DB::table('forumtopics')
+    ->select('forum_id')
+    ->where('topic_id', $topic = Request::query('topic'))
+    ->where('forum_id', Request::query('forum'))
+    ->first(), 3600, crypt::encrypt('forumtopics('. $topic .')'))) 
+{
     forum::forumerror('0001');
 }
 
-$myrow = $rowQ1[0];
-$forum = $myrow['forum_id'];
-
-// = DB::table('')->select()->where('', )->orderBy('')->get();
-
-$rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM " . $NPDS_Prefix . "forums WHERE forum_id = '$forum'", 3600);
-if (!$rowQ1) {
+if (!$rowQ2 = cache::Q_Select3(DB::table('forums')
+        ->select('forum_name', 'forum_moderator', 'forum_type', 'forum_pass', 'forum_access', 'arbre')
+        ->where('forum_id', $rowQ1['forum_id'])
+        ->first(), 3600, crypt::encrypt('forum_id('. $rowQ1['forum_id'] .')'))) 
+{
     forum::forumerror('0001');
 }
 
-$myrow = $rowQ1[0];
-$forum_name = $myrow['forum_name'];
-$mod = $myrow['forum_moderator'];
-$forum_type = $myrow['forum_type'];
-$forum_access = $myrow['forum_access'];
+$forum_name   = $rowQ2['forum_name'];
+$mod          = $rowQ2['forum_moderator'];
+$forum_type   = $rowQ2['forum_type'];
+$forum_access = $rowQ2['forum_access'];
 
-if (($forum_type == 1) and ($Forum_passwd != $myrow['forum_pass'])) {
+if (($forum_type == 1) and ($Forum_passwd != $rowQ2['forum_pass'])) {
     header('Location: '. site_url('forum.php'));
 }
+
+$user = users::getUser();
 
 if (($forum_type == 5) or ($forum_type == 7)) {
     $ok_affiche = false;
     $tab_groupe = groupe::valid_group($user);
-    $ok_affiche = groupe::groupe_forum($myrow['forum_pass'], $tab_groupe);
+    $ok_affiche = groupe::groupe_forum($rowQ2['forum_pass'], $tab_groupe);
 
     if (!$ok_affiche) {
         header('location: '. site_url('forum.php'));
@@ -74,73 +77,56 @@ if (($forum_type == 9) and (!$user)) {
 }
 
 // Moderator
-if (isset($user)) {
-    $userX = base64_decode($user);
-    $userdata = explode(':', $userX);
-}
-
 $moderator = forum::get_moderator($mod);
 $moderator = explode(' ', $moderator);
 $Mmod = false;
 
 if (isset($user)) {
     for ($i = 0; $i < count($moderator); $i++) {
-        if (($userdata[1] == $moderator[$i])) {
+        if ((users::cookieUser(1) == $moderator[$i])) {
             $Mmod = true;
             break;
         }
     }
 }
 
-// = DB::table('')->select()->where('', )->orderBy('')->get();
-
-$sql = "SELECT topic_title, topic_status FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
-if (!$result = sql_query($sql)) {
+if (!$myrow = DB::table('forumtopics')
+            ->select('topic_title', 'topic_status')
+            ->where('topic_id', $topic)
+            ->first()) 
+{
     forum::forumerror('0001');
 }
 
-$myrow = sql_fetch_assoc($result);
 $topic_subject = stripslashes($myrow['topic_title']);
 $lock_state = $myrow['topic_status'];
 
-if (isset($user)) {
-    if ($cookie[9] == '') {
-        $cookie[9] = Config::get('npds.Default_Theme');
-    }
+$query = DB::table('posts')
+            ->select('*')
+            ->where('topic_id', $topic)
+            ->where('post_id', $post_id = Request::query('post_id'));
 
-    if (isset($theme)) {
-        $cookie[9] = $theme;
-    }
-
-    $tmp_theme = $cookie[9];
-    
-    if (!$file = @opendir("themes/$cookie[9]")) {
-        $tmp_theme = Config::get('npds.Default_Theme');
-    }
-} else{
-    $tmp_theme = Config::get('npds.Default_Theme');
+if(!$Mmod)
+{
+    $query->where('post_aff', 1);
 }
 
-// = DB::table('')->select()->where('', )->orderBy('')->get();
-
-
-$post_aff = $Mmod ? ' ' : " AND post_aff='1' ";
-
-$sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic' AND post_id='$post_id'" . $post_aff;
-if (!$result = sql_query($sql)) {
+if (!$myrow = $query->first()) {
     forum::forumerror('0001');
 }
 
-$myrow = sql_fetch_assoc($result);
+if (Config::get('forum.config.allow_upload_forum')) {
 
-if ($allow_upload_forum) {
+    $query = DB::table(Config::get('forum.config.upload_table'))
+                ->select('att_id')
+                ->where('apli', 'forum_npds')
+                ->where('topic_id', $topic);
 
-// = DB::table('')->select()->where('', )->orderBy('')->get();
+    if (!$Mmod) {
+        $query->were('visible', 1);
+    }
 
-    $visible = !$Mmod ? ' AND visible = 1' : '';
-
-    $sql = "SELECT att_id FROM $upload_table WHERE apli='forum_npds' && topic_id = '$topic' $visible";
-    $att = sql_num_rows(sql_query($sql));
+    $att = $query->count();
 
     if ($att > 0) {
         include("modules/upload/include_forum/upload.func.forum.php");
@@ -156,7 +142,7 @@ include("storage/meta/meta.php");
 
 echo '
     <link rel="stylesheet" href="assets/shared/bootstrap/dist/css/bootstrap.min.css" />
-    ' . css::import_css($tmp_theme, Config::get('npds.language'), '', '', '') . '
+    ' . css::import_css(theme::getTheme(), Config::get('npds.language'), '', '', '') . '
     </head>
     <body>
         <div max-width="640" class="container p-3 n-hyphenate">
@@ -177,18 +163,14 @@ echo '
         <div class="col-md-2 text-sm-center">
             <strong>' . translate("Auteur") . '</strong><br />';
 
-if ($smilies) {
+if (Config::get('npds.smilies')) {
     if ($myrow['poster_id'] != 0) {
         if ($posterdata['user_avatar'] != '') {
             
             if (stristr($posterdata['user_avatar'], "users_private")) {
                 $imgtmp = $posterdata['user_avatar'];
             } else {
-                if ($ibid = theme::theme_image("forum/avatar/" . $posterdata['user_avatar'])) {
-                    $imgtmp = $ibid;
-                } else {
-                    $imgtmp = "assets/images/forum/avatar/" . $posterdata['user_avatar'];
-                }
+                $imgtmp = theme::theme_image_row('forum/avatar/'. $posterdata['user_avatar'], 'assets/images/forum/avatar/'. $posterdata['user_avatar']);
             }
 
             echo '<img class="n-ava-48 border my-2" src="' . $imgtmp . '" alt="avatar" /><br />';
@@ -210,11 +192,7 @@ echo '
             <small>' . translate("Posté : ") . date::convertdate($myrow['post_time']) . '</small> ';
 
 if ($myrow['image'] != '') {
-    if ($ibid = theme::theme_image("forum/subject/" . $myrow['image'])) {
-        $imgtmp = $ibid;
-    } else {
-        $imgtmp = "assets/images/forum/subject/" . $myrow['image'];
-    }
+    $imgtmp = theme::theme_image_row('forum/subject/' . $myrow['image'], 'assets/images/forum/subject/' . $myrow['image']);
 
     echo '<img class="n-smil" src="' . $imgtmp . '" alt="icone du post" />';
 } else {
@@ -225,7 +203,7 @@ echo '</p>';
 
 $message = stripslashes($myrow['post_text']);
 
-if ($allow_bbcode) {
+if (Config::get('forum.config.allow_bbcode')) {
     $message = forum::smilie($message);
     $message = str_replace('[video_yt]', 'https://www.youtube.com/watch?v=', $message);
     $message = str_replace('[/video_yt]', '', $message);
@@ -249,12 +227,10 @@ if (($forum_type == '6') or ($forum_type == '5')) {
 
 echo $message;
 
-if ($allow_upload_forum and ($att > 0)) {
+if (Config::get('forum.config.allow_upload_forum') and ($att > 0)) {
     $post_id = $myrow['post_id'];
     echo display_upload("forum_npds", $post_id, $Mmod);
 }
-
-$nuke_url = Config::get('npds.nuke_url');
 
 echo '
                 <hr />

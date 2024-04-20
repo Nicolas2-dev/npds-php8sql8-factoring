@@ -32,12 +32,10 @@ class js
 
         foreach (cache::Q_select3(DB::table($nom_tabl)->select($nom_champ)->get(), $temps_cache, crypt::encrypt('auto_complete')) as $ar_data) 
         {
-            foreach ($ar_data as $champ) {
-                if ($id_inpu == '') {
-                    $list_json .= '"' . base64_encode($champ[$nom_champ]) . '",';
-                } else {
-                    $list_json .= '"' . $champ[$nom_champ] . '",';
-                }
+            if ($id_inpu == '') {
+                $list_json .= '"' . base64_encode($ar_data[$nom_champ]) . '",';
+            } else {
+                $list_json .= '"'. $ar_data[$nom_champ] . '",';
             }
         }
 

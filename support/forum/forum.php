@@ -417,11 +417,11 @@ class forum
     /**
      * 
      *
-     * @param   string  $userid  [$userid description]
+     * @param   string|int  $userid  [$userid description]
      *
      * @return  array
      */
-    public static function get_userdata_from_id(string $userid): array
+    public static function get_userdata_from_id(string|int $userid): array
     {
         $sql1 = DB::table('users')
                     ->select('*')

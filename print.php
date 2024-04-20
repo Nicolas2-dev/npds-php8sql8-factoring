@@ -21,32 +21,53 @@ use npds\system\config\Config;
 use npds\support\security\hack;
 use npds\support\language\language;
 use npds\support\metalang\metalang;
+use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-function PrintPage($oper, $DB, $nl, $sid)
+/**
+ * [PrintPage description]
+ *
+ * @param   string  $oper  [$oper description]
+ * @param   string  $DB    [$DB description]
+ * @param   string         [ description]
+ * @param   int     $nl    [$nl description]
+ * @param   string         [ description]
+ * @param   int     $sid   [$sid description]
+ *
+ * @return  void
+ */
+function PrintPage(string $oper, string $DB, string|int $nl, string|int $sid): void
 {
-    global $NPDS_Prefix, $datetime;
+    global $datetime;
 
     $sitename = Config::get('npds.sitename');
 
     $aff = true;
     if ($oper == 'news') {
 
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $xtab = news::news_aff2('libre', DB::table('stories')
+                ->select('sid', 'catid', 'ihome', 'time')
+                ->where('sid', $sid)
+                ->get(), 1, 1);
 
-        //"SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories
-        $xtab = news::news_aff('libre', "WHERE sid='$sid'", 1, 1);
-        list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[0];
-        
+        $sid      = $xtab[0]['sid'];
+        $title    = $xtab[0]['title'];
+        $time     = $xtab[0]['time'];
+        $hometext = $xtab[0]['hometext'];
+        $bodytext = $xtab[0]['bodytext'];
+        $topic    = $xtab[0]['topic'];
+        $notes    = $xtab[0]['notes'];
+
         if ($topic != '') {
-            $result2 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-            list($topictext) = sql_fetch_row($result2);
-
-           // = DB::table('')->select()->where('', )->orderBy('')->get();
+            $rez_topic = DB::table('topics')
+                            ->select('topictext')
+                            ->where('topicid', $topic)
+                            ->first();
         } else {
             $aff = false;
         }
@@ -54,18 +75,24 @@ function PrintPage($oper, $DB, $nl, $sid)
 
     if ($oper == 'archive') {
 
-        //"SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel"
+        $xtab = news::news_aff2('archive', DB::table('stories')
+                    ->select('sid', 'catid', 'ihome')
+                    ->where('sid', $sid)
+                    ->get(), 1, 1);
 
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $sid      = $xtab[0]['sid'];
+        $title    = $xtab[0]['title'];
+        $time     = $xtab[0]['time'];
+        $hometext = $xtab[0]['hometext'];
+        $bodytext = $xtab[0]['bodytext'];
+        $topic    = $xtab[0]['topic'];
+        $notes    = $xtab[0]['notes'];
 
-        $xtab = news::news_aff('archive', "WHERE sid='$sid'", 1, 1);
-        list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[0];
-        
         if ($topic != '') {
-            $result2 = sql_query("SELECT topictext FROM " . $NPDS_Prefix . "topics WHERE topicid='$topic'");
-            list($topictext) = sql_fetch_row($result2);
-
-            //= DB::table('')->select()->where('', )->orderBy('')->get();
+            $rez_topic = DB::table('topics')
+                            ->select('topictext')
+                            ->where('topicid', $topic)
+                            ->first();
         } else {
             $aff = false;
         }
@@ -74,13 +101,14 @@ function PrintPage($oper, $DB, $nl, $sid)
     if ($oper == 'links') {
         $DB = hack::removeHack(stripslashes(htmlentities(urldecode($DB), ENT_NOQUOTES, 'utf-8')));
         
-        $result = sql_query("SELECT url, title, description, date FROM " . $DB . "links_links WHERE lid='$sid'");
-        list($url, $title, $description, $time) = sql_fetch_row($result);
-        
-        //= DB::table('')->select()->where('', )->orderBy('')->get();
+        $rez_link = DB::table($DB .'links_links')
+                        ->select('url', 'title', 'description', 'date')
+                        ->where('lid', $sid)
+                        ->first();
 
-        $title = stripslashes($title);
-        $description = stripslashes($description);
+        $title       = stripslashes($rez_link['title']);
+        $description = stripslashes($rez_link['description']);
+        $time        = $rez_link['time'];
     }
 
     if ($oper == 'static') {
@@ -95,9 +123,9 @@ function PrintPage($oper, $DB, $nl, $sid)
         and !stristr($sid, 'object') 
         and !stristr($sid, 'meta')) {
             
-            if (file_exists("storage/static/$sid")) {
+            if (file_exists('storage/static/'. $sid)) {
                 ob_start();
-                    include("storage/static/$sid");
+                    include('storage/static/'. $sid);
                     $remp = ob_get_contents();
                 ob_end_clean();
                 
@@ -125,7 +153,7 @@ function PrintPage($oper, $DB, $nl, $sid)
             $datetime = date::formatTimestamp($time);
         }
 
-        $Titlesitename = 'NPDS - ' . translate("Page spéciale pour impression") . ' / ' . $title;
+        Config::set('Titlesitename', 'NPDS - ' . translate("Page spéciale pour impression") . ' / ' . $title);
         include("storage/meta/meta.php");
 
         echo '
@@ -154,7 +182,7 @@ function PrintPage($oper, $DB, $nl, $sid)
             echo '
                 <span class="float-end text-capitalize" style="font-size: .8rem;"> ' . $datetime . '</span><br />
                 <hr />
-                <h2 class="mb-3">' . translate("Sujet : ") . ' ' . language::aff_langue($topictext) . '</h2>
+                <h2 class="mb-3">' . translate("Sujet : ") . ' ' . language::aff_langue($rez_topic['topictext']) . '</h2>
             </div>
             <div>' . $hometext . '<br /><br />';
 
@@ -187,8 +215,8 @@ function PrintPage($oper, $DB, $nl, $sid)
         if ($oper == 'links') {
             echo '<span class="float-end text-capitalize" style="font-size: .8rem;">' . $datetime . '</span><br /><hr />';
 
-            if ($url != '') {
-                echo '<h2 class="mb-3">' . translate("Liens") . ' : ' . $url . '</h2>';
+            if ($rez_link['url'] != '') {
+                echo '<h2 class="mb-3">' . translate("Liens") . ' : ' . $rez_link['url'] . '</h2>';
             }
 
             echo '
@@ -217,27 +245,25 @@ function PrintPage($oper, $DB, $nl, $sid)
     }
 }
 
+$sid = Request::query('sid');
+$lid = Request::query('lid');
+
 if (!empty($sid)) {
     $tab = explode(':', $sid);
-    
+
     if ($tab[0] == "static") {
-        settype($metalang, 'integer');
-        settype($nl, 'integer');
-
-        PrintPage("static", $metalang, $nl, $tab[1]);
+        PrintPage("static", Request::query('metalang'), Request::query('nl'), $tab[1]);
     } else {
-        settype($sid, 'integer');
-        //settype ($archive, 'string');
-
+        $archive = Request::query('archive');
+        
         if (!isset($archive)) {
             PrintPage("news", '', '', $sid);
         } else {
-            PrintPage("archive", '', '', $sid);}
+            PrintPage("archive", '', '', $sid);
+        }
     }
 } elseif (!empty($lid)) {
-    settype($lid, "integer");
-    
-    PrintPage("links", $DB, '', $lid);
+    PrintPage("links", Request::query('DB'), '', $lid);
 } else {
     header('location: '. site_url('index.php'));
 }

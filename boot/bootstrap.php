@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use npds\support\auth\users;
 use npds\support\str;
+use npds\support\auth\users;
 use npds\support\auth\authors;
 use npds\support\utility\spam;
 use npds\system\config\Config;
@@ -12,6 +12,7 @@ use npds\system\database\Manager;
 use npds\support\security\protect;
 use npds\support\language\language;
 use npds\support\metalang\metalang;
+use npds\system\support\facades\Request;
 use npds\system\exception\ExceptionHandler;
 
 // Load autolad
@@ -33,75 +34,79 @@ foreach (glob('config/*.php') as $path) {
 }
 
 // grab global
-if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
-    define('NPDS_GRAB_GLOBALS_INCLUDED', 1);
 
-    // initialisation du schek spam boot
-    spam::spam_logs();
+// initialisation du schek spam boot
+spam::spam_logs();
 
-    // include current charset
-    if (file_exists(__DIR__."/constants.php")) {
-        include(__DIR__."/constants.php");
-    }
+// include current charset
+if (file_exists(__DIR__ . "/constants.php")) {
+    include(__DIR__ . "/constants.php");
+}
 
-    // include doctype
-    if (file_exists(__DIR__."/doctype.php")) {
-        include(__DIR__."/doctype.php");
-    }
+// include doctype
+if (file_exists(__DIR__ . "/doctype.php")) {
+    include(__DIR__ . "/doctype.php");
+}
 
-    // Get values, slash, filter and extract
-    if (!empty($_GET)) {
-        array_walk_recursive($_GET, [str::class, 'addslashes_GPC']);
-        reset($_GET); // no need
+// Get values, slash, filter and extract
+if (!empty($_GET)) {
+    array_walk_recursive($_GET, [str::class, 'addslashes_GPC']);
+    reset($_GET); // no need
 
-        array_walk_recursive($_GET, [protect::class, 'url']);
-        extract($_GET, EXTR_OVERWRITE);
-    }
+    array_walk_recursive($_GET, [protect::class, 'url']);
+    extract($_GET, EXTR_OVERWRITE);
+}
 
-    // Post values, slash, filter and extract
-    if (!empty($_POST)) {
-        array_walk_recursive($_POST, [str::class, 'addslashes_GPC']);
-        extract($_POST, EXTR_OVERWRITE);
-    }
+// Post values, slash, filter and extract
+if (!empty($_POST)) {
+    array_walk_recursive($_POST, [str::class, 'addslashes_GPC']);
+    extract($_POST, EXTR_OVERWRITE);
+}
 
-    // Cookies - analyse et purge - shiney 07-11-2010
-    if (!empty($_COOKIE)) {
-        extract($_COOKIE, EXTR_OVERWRITE);
-    }
+// Cookies - analyse et purge - shiney 07-11-2010
+if (!empty($_COOKIE)) {
+    extract($_COOKIE, EXTR_OVERWRITE);
+}
 
-    // extract cookie user
-    $user = users::extractUser();
+// extract cookie user
+$user = users::extractUser();
 
-    // extract cookie user_language
-    if (isset($user_language)) {
-        $ibid = explode(':', $user_language);
-        array_walk($ibid, [protect::class, 'url']);
-        $user_language = str_replace("%3A", ":", urlencode($user_language));
-    }
+// extract cookie user_language
+if (isset($user_language)) {
+    $ibid = explode(':', $user_language);
+    array_walk($ibid, [protect::class, 'url']);
+    $user_language = str_replace("%3A", ":", urlencode($user_language));
+}
 
-    // extract cookie admin
-    $admin = authors::extractAdmin();
+// extract cookie admin
+$admin = authors::extractAdmin();
 
-    // Cookies - analyse et purge - shiney 07-11-2010
-    if (!empty($_SERVER)) {
-        extract($_SERVER, EXTR_OVERWRITE);
-    }
+// Cookies - analyse et purge - shiney 07-11-2010
+if (!empty($_SERVER)) {
+    extract($_SERVER, EXTR_OVERWRITE);
+}
 
-    // Env
-    if (!empty($_ENV)) {
-        extract($_ENV, EXTR_OVERWRITE);
-    }
+//vd($_SERVER);
 
-    // Files
-    if (!empty($_FILES)) {
-        foreach ($_FILES as $key => $value) {
-            $$key = $value['tmp_name'];
-        }
+// Env
+if (!empty($_ENV)) {
+    extract($_ENV, EXTR_OVERWRITE);
+}
+
+//vd($_ENV);
+
+// Files
+if (!empty($_FILES)) {
+    foreach ($_FILES as $key => $value) {
+        $$key = $value['tmp_name'];
     }
 }
 
+//vd($_FILES);
+
 // initialise errror reporting
 error_reporting(-1);
+
 ini_set('display_errors', 'Off');
 
 // Initialize the Exceptions Handler.
@@ -113,12 +118,9 @@ AliasLoader::initialize();
 // initialisation de la database 
 with(Manager::getInstance())->connection()->setFetchMode(PDO::FETCH_ASSOC);
 
+
 // Multi-language
-if (file_exists('storage/language/langcode.php')) {
-    include('storage/language/langcode.php');
-} else {
-    $languageslist = language::languageList();
-}
+$choice_user_language = Request::input('choice_user_language');
 
 // choix de du language utilisateur via block language
 if (isset($choice_user_language)) {
@@ -130,11 +132,11 @@ if (isset($choice_user_language)) {
             $user_cook_duration = 1;
         }
 
-        $timeX = time() + (3600 * $user_cook_duration);
-        
+        $languageslist = language::languageList();
+
         if ((stristr($languageslist, $choice_user_language)) and ($choice_user_language != ' ')) {
-            setcookie('user_language', $choice_user_language, $timeX);
-            $user_language = $choice_user_language;
+            setcookie('user_language', $choice_user_language, (time() + (3600 * $user_cook_duration)));
+            Config::set('npds.user_language', $user_language = $choice_user_language);
         }
     }
 }
@@ -142,19 +144,20 @@ if (isset($choice_user_language)) {
 // si multilanguage est actif
 if ((Config::get('npds.multi_langue')) && isset($user_language)) {
     if (($user_language != '') and ($user_language != " ")) {
+        
+        $languageslist = language::languageList();
+        
         $tmpML = stristr($languageslist, $user_language);
         $tmpML = explode(' ', $tmpML);
         
         if ($tmpML[0]) {
-            Config::get('npds.language', $tmpML[0]);
+            Config::set('npds.language', $tmpML[0]);
         }
     }
 }
 
 // on recupre la language du site 
-$language = Config::get('npds.language');
-include("language/$language/language.php");
-
+include('language/'. Config::get('npds.language') .'/language.php');
 
 // db ancien system qui va disparaitre !!!!
 include('support/deprecated/connexion.php');
@@ -171,12 +174,8 @@ $cookie = users::cookieUser();
 // inbitilisation de la session
 session::session_manage();
 
-// tableau des language a  revoir va disparaitre prochainement !!!!
-$tab_langue = language::make_tab_langue();
-
 // gestion metalang a revoir !!!!
-global $meta_glossaire;
-$meta_glossaire = metalang::charg_metalang();
+metalang::charg_metalang();
 
 // initilisation du time zone A revoir avec la estion des dates a finaliser !!!!
 if (function_exists("date_default_timezone_set")) {

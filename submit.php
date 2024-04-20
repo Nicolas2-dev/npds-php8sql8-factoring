@@ -14,10 +14,12 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\support\str;
+use npds\support\editeur;
 use npds\support\logs\logs;
+use npds\support\news\post;
 use npds\support\auth\users;
 use npds\support\routing\url;
-use npds\support\str;
 use npds\support\theme\theme;
 use npds\support\mail\mailler;
 use npds\support\pixels\image;
@@ -25,15 +27,12 @@ use npds\support\utility\code;
 use npds\support\utility\spam;
 use npds\system\config\Config;
 use npds\support\security\hack;
-use npds\support\editeur;
 use npds\support\language\language;
 
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
-
-include("publication.php");
 
 settype($user, 'string');
 
@@ -150,7 +149,7 @@ function defaultDisplay()
 
     echo editeur::aff_editeur('bodytext', '');
 
-    publication('', '', '', '', 0);
+    post::publication('', '', '', '', 0);
 
     echo '
         <div class="mb-3 row">
@@ -275,7 +274,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
 
     echo editeur::aff_editeur('bodytext', '');
 
-    publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
+    post::publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
 
     echo spam::Q_spambot();
 

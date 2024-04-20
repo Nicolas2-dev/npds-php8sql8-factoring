@@ -15,31 +15,28 @@
 declare(strict_types=1);
 
 use npds\support\assets\css;
+use npds\support\auth\users;
 use npds\support\forum\forum;
 use npds\support\theme\theme;
 use npds\system\config\Config;
 use npds\support\language\language;
-use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
-use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-if ($SuperCache) {
-    $cache_obj = new cacheManager();
-} else {
-    $cache_obj = new SuperCacheEmpty();
-}
-
 include('auth.php');
 
-function cache_ctrl()
+/**
+ * [cache_ctrl description]
+ *
+ * @return  void
+ */
+function cache_ctrl(): void
 {
-    global $cache_verif;
-
-    if ($cache_verif) {
+    if (Config::get('npds.cache_verif')) {
         header("Expires: Sun, 01 Jul 1990 00:00:00 GMT");
         header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         header("Cache-Control: no-cache, must revalidate");
@@ -47,45 +44,50 @@ function cache_ctrl()
     }
 }
 
-function show_imm($op)
+/**
+ * [show_imm description]
+ *
+ * @return  void
+ */
+function show_imm(): void
 {
-    global $smilies, $user, $allow_bbcode, $theme, $short_user, $NPDS_Prefix;
-
+    $user = users::getUser();
+    
     if (!$user) {
         Header('Location: '. site_url('user.php'));
     } else {
-        $userX = base64_decode($user);
-        $userdata = explode(':', $userX);
 
-        if ($userdata[9] != '') {
-            if (!@opendir("themes/$userdata[9]")) {
-                $theme = Config::get('npds.Default_Theme');
-            } else {
-                $theme = $userdata[9];
-            }
-        } else {
-            $theme = Config::get('npds.Default_Theme');
-        }
+        $theme = theme::getTheme();
 
         include("themes/$theme/theme.php");
 
         $userdata = forum::get_userdata($userdata[1]);
 
-        $sql = ($op != 'new_msg') 
+        $op = Request::input('op');
 
-            // = DB::table('')->select()->where('', )->orderBy('')->get();
-
-            ? "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND read_msg='1' AND type_msg='0' AND dossier='...' ORDER BY msg_id DESC" 
-            
-            // = DB::table('')->select()->where('', )->orderBy('')->get();
-            
-            : "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND read_msg='0' AND type_msg='0' ORDER BY msg_id ASC";
-        $result = sql_query($sql);
+        $result = (($op != 'new_msg') 
+            ? DB::table('priv_msgs')
+                    ->select('*')
+                    ->where('to_userid', $userdata['uid'])
+                    ->where('read_msg', 1)
+                    ->where('type_msg', 0)
+                    ->orderBy(' msg_id', 'desc')
+                    ->get()
+            : DB::table('priv_msgs')
+                    ->select('*')
+                    ->where('to_userid', $userdata['uid'])
+                    ->where('read_msg', 0)
+                    ->where('type_msg', 0)
+                    ->orderBy('msg_id', 'asc')
+                    ->get()
+        );
         
         $pasfin = false;
-        while ($myrow = sql_fetch_assoc($result)) {
+
+        foreach ($result as $myrow) {
             if ($pasfin == false) {
                 $pasfin = true;
+                
                 cache_ctrl();
                 
                 include("storage/meta/meta.php");
@@ -131,11 +133,7 @@ function show_imm($op)
                     if (stristr($posterdata['user_avatar'], "users_private")) {
                         $imgtmp = $posterdata['user_avatar'];
                     } else {
-                        if ($ibid = theme::theme_image("forum/avatar/" . $posterdata['user_avatar'])) {
-                            $imgtmp = $ibid;
-                        } else {
-                            $imgtmp = "assets/images/forum/avatar/" . $posterdata['user_avatar'];
-                        }
+                        $imgtmp = theme::theme_image('forum/avatar/'. $posterdata['user_avatar'], 'assets/images/forum/avatar/'. $posterdata['user_avatar']);
                     }
 
                     echo '<img class="btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" />';
@@ -144,11 +142,7 @@ function show_imm($op)
 
             if ($smilies) {
                 if ($myrow['msg_image'] != '') {
-                    if ($ibid = theme::theme_image("forum/subject/" . $myrow['msg_image'])) {
-                        $imgtmp = $ibid;
-                    } else {
-                        $imgtmp = "assets/images/forum/subject/" . $myrow['msg_image'];
-                    }
+                    $imgtmp = theme::theme_image('forum/subject/'. $myrow['msg_image'], 'assets/images/forum/subject/'. $myrow['msg_image']); 
 
                     echo '<img class="n-smil" src="' . $imgtmp . '"  alt="" />&nbsp;';
                 }
@@ -167,10 +161,11 @@ function show_imm($op)
             $message = str_replace("[addsig]", "<br /><br />" . nl2br($posterdata['user_sig']), language::aff_langue($message));
             echo $message . '<br />';
 
-            if ($posterdata['uid'] <> 1) {
-                if (!$short_user) {
-                }
-            }
+            // ??????
+            // if ($posterdata['uid'] <> 1) {
+            //     if (!$short_user) {
+            //     }
+            // }
 
             echo '
             </div>
@@ -200,13 +195,20 @@ function show_imm($op)
     </html>';
 }
 
-function sup_imm($msg_id)
+/**
+ * [sup_imm description]
+ *
+ * @param   int   $msg_id  [$msg_id description]
+ *
+ * @return  void
+ */
+function sup_imm(): void
 {
-    if (!$cookie) {
+    if (!$cookie = users::cookieUser()) {
         Header('Location: '. site_url('user.php'));
     } else {
         $r = DB::table('priv_msgs')
-                ->where('msg_id', $msg_id)
+                ->where('msg_id', Request::suery('msg_id'))
                 ->where('to_userid', $cookie[0])
                 ->delete();
 
@@ -216,26 +218,32 @@ function sup_imm($msg_id)
     }
 }
 
-function read_imm($msg_id, $sub_op)
+/**
+ * [read_imm description]
+ *
+ * @param   int     $msg_id  [$msg_id description]
+ * @param   string  $sub_op  [$sub_op description]
+ *
+ * @return  void
+ */
+function read_imm(): void
 {
-    if (!$cookie) {
+    if (!$cookie = users::cookieUser()) {
         Header('Location: '. site_url('user.php'));
     } else {
-        $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET read_msg='1' WHERE msg_id='$msg_id' AND to_userid='$cookie[0]'";
-        
-        // DB::table('')->where('', )->update(array(
-        //     ''       => ,
-        // ));
 
+        $r = DB::table('priv_msgs')->where('msg_id', Request::query('msg_id'))->where('to_userid', $cookie[0])->update(array(
+            'read_msg'  => 1,
+        ));
 
-        if (!sql_query($sql)) {
+        if (!$r) {
             forum::forumerror('0021');
         }
 
-        if ($sub_op == 'reply') {
+        if (Request::query('sub_op') == 'reply') {
             echo '<script type="text/javascript">
                 //<![CDATA[
-                window.location="'. site_url('replypmsg.php?reply=1&msg_id='. $msg_id .'&userid='. $cookie[0] .'&full_interface=short') .'";
+                window.location="'. site_url('replypmsg.php?reply=1&msg_id='. Request::query('msg_id') .'&userid='. $cookie[0] .'&full_interface=short') .'";
                 //]]>
                 </script>';
             die();
@@ -251,21 +259,21 @@ function read_imm($msg_id, $sub_op)
 }
 
 
-switch ($op) {
+switch (Request::input('op')) {
     case 'new_msg':
-        show_imm($op);
+        show_imm();
         break;
 
     case 'read_msg':
-        read_imm($msg_id, $sub_op);
+        read_imm();
         break;
 
     case 'delete':
-        sup_imm($msg_id);
-        show_imm($op_orig);
+        sup_imm();
+        show_imm();
         break;
         
     default:
-        show_imm($op);
+        show_imm();
         break;
 }

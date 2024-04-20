@@ -14,14 +14,15 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\support\str;
+use npds\support\editeur;
 use npds\support\date\date;
 use npds\support\news\news;
+use npds\support\news\post;
 use npds\support\assets\css;
 use npds\support\auth\groupe;
-use npds\support\str;
 use npds\support\theme\theme;
 use npds\system\config\Config;
-use npds\support\editeur;
 use npds\support\language\language;
 use npds\system\support\facades\DB;
 
@@ -35,8 +36,6 @@ $f_titre = adm_translate("Articles programmés");
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
-
-include("publication.php");
 
 global $language;
 $hlpfile = "manuels/$language/automated.html";
@@ -347,7 +346,7 @@ function autoEdit(int $anid): void
         }
     }
 
-    code_aff('<div class="d-flex">
+    post::code_aff('<div class="d-flex">
     <div class="w-100 p-2 ps-0">
         <h3>'. $autonews['titre'] .'</h3>
     </div>
@@ -442,7 +441,7 @@ function autoEdit(int $anid): void
     $dh_pub = substr($autonews['date_debval'], 11, 5);
     $fh_pub = substr($autonews['date_finval'], 11, 5);
 
-    publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $autonews['auto_epur']);
+    post::publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $autonews['auto_epur']);
 
     echo '
         <div class="mb-3 row">

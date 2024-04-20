@@ -19,30 +19,32 @@ use npds\support\forum\forum;
 use npds\support\theme\theme;
 use npds\system\config\Config;
 use npds\support\language\language;
-use npds\system\cache\cacheManager;
-use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-// $cache_obj =  $SuperCache ? new cacheManager() : new SuperCacheEmpty();
-
 include("auth.php");
+
+$user = users::getUser();
 
 if (!$user) {
     Header('Location: '. site_url('user.php'));
 } else {
     include("themes/default/header.php");
 
-    $userX = base64_decode($user);
-    $userdata = explode(':', $userX);
-    $userdata = forum::get_userdata($userdata[1]);
+    $userdata = forum::get_userdata(users::cookieUser(1));
 
-    // = DB::table('')->select()->where('', )->orderBy('')->get();
-
-    $sqlT = "SELECT DISTINCT dossier FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND dossier!='...' AND type_msg='0' ORDER BY dossier";
-    $resultT = sql_query($sqlT);
+    $resultT = DB::table('priv_msgs')
+                ->distinct()
+                ->select('dossier')
+                ->where('to_userid', $userdata['uid'])
+                ->where('dossier', '!=', '...')
+                ->where('type_msg', 0)
+                ->orderBy('dossier')
+                ->get();
 
     users::member_menu($userdata['mns'], $userdata['uname']);
 
@@ -56,16 +58,20 @@ if (!$user) {
                 <option value="...">' . translate("Choisir un dossier/sujet") . '...</option>';
 
     $tempo["..."] = 0;
-    while (list($dossierX) = sql_fetch_row($resultT)) {
 
-        if (addslashes($dossierX) == $dossier) { 
+    $dossier = Request::input('dossier');
+
+    foreach($resultT as $priv_msgs) {
+
+        if (addslashes($priv_msgs['dossier']) == $dossier) { 
             $sel = 'selected="selected"';
         } else {
             $sel = '';
         }
 
-        echo '<option ' . $sel . ' value="' . $dossierX . '">' . $dossierX . '</option>';
-        $tempo[$dossierX] = 0;
+        echo '<option ' . $sel . ' value="' . $priv_msgs['dossier'] . '">' . $priv_msgs['dossier'] . '</option>';
+        
+        $tempo[$priv_msgs['dossier']] = 0;
     }
 
     $sel = (isset($dossier) and $dossier == 'All') ? 'selected="selected"' : '';
@@ -76,24 +82,24 @@ if (!$user) {
             </div>
         </form>';
 
-    settype($dossier, 'string');
-
-    $ibid = $dossier == "All" ? '' : "AND dossier='$dossier'";
+    $query = DB::table('priv_msgs')
+                ->select('*')
+                ->where('to_userid', $userdata['uid'])
+                ->where('type_msg', 0);
 
     if (!$dossier) {
-        $ibid = "AND dossier='...'";
+        $query->where('dossier', '...');
+    } elseif ($dossier == "All") {
+        // no where
+    } else {
+        $query->where('dossier', $dossier);
     }
 
-    // = DB::table('')->select()->where('', )->orderBy('')->get();
+    $resultID = $query->orderBy('msg_id', 'desc')->get();
 
-    $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND type_msg='0' $ibid ORDER BY msg_id DESC";
-    $resultID = sql_query($sql);
+    $total_messages = Request::query('total_messages');
 
-    if (!$resultID) {
-        forum::forumerror('0005');
-    }
-
-    if (!$total_messages = sql_num_rows($resultID)) {
+    if (!$total_messages = count($resultID)) {
         echo '
         <div class="alert alert-danger lead">
             ' . translate("Vous n'avez aucun message.") . '
@@ -117,12 +123,12 @@ if (!$user) {
                     </th>
                     <th class="n-t-col-xs-1" data-align="center" ><i class="fas fa-long-arrow-alt-down"></i></th>';
 
-        if ($smilies) {
+        if (Config::get('npds.smilies')) {
             echo '<th class="n-t-col-xs-1" data-align="center" >&nbsp;</th>';
         }
 
         echo '
-                    <th data-halign="center" data-sortable="true" data-align="left">' . translate("de") . '</th>
+                    <th data-halign="center" data-sortable="true" data-align="left">' . translate("de ") . '</th>
                     <th data-halign="center" data-sortable="true" >' . translate("Sujet") . '</th>
                     <th data-halign="center" data-sortable="true" data-align="right">' . translate("Date") . '</th>
                 </tr>
@@ -130,9 +136,11 @@ if (!$user) {
                 <tbody>';
 
         $count = 0;
-        while ($myrow = sql_fetch_assoc($resultID)) {
+
+        foreach($resultID as $myrow) {
 
             $myrow['subject'] = strip_tags($myrow['subject']);
+            
             $posterdata = forum::get_userdata_from_id($myrow['from_userid']);
 
             if ($dossier == "All") {
@@ -158,7 +166,7 @@ if (!$user) {
                 echo '<td><a href="'. site_url('readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier'])) .'" title="' . translate("Non lu") . '" data-bs-toggle="tooltip"><i class="fa fa-envelope fa-lg faa-shake animated"></i></a></td>';
             }
 
-            if ($smilies) {
+            if (Config::get('npds.smilies')) {
                 if ($myrow['msg_image'] != '') {
 
                     if ($ibid = theme::theme_image("forum/subject/" . $myrow['msg_image'])) { 
@@ -207,16 +215,14 @@ if (!$user) {
 
     echo '</div>';
 
-    // = DB::table('')->select()->where('', )->orderBy('')->get();
+    $resultID = DB::table('priv_msgs')
+                            ->select('*')
+                            ->where('from_userid', $userdata['uid'])
+                            ->where('type_msg', 1)
+                            ->orderBy('msg_id', 'desc')
+                            ->get();
 
-    $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE from_userid = '" . $userdata['uid'] . "' AND type_msg='1' ORDER BY msg_id DESC";
-    $resultID = sql_query($sql);
-
-    if (!$resultID) {
-        forum::forumerror('0005');
-    }
-
-    $total_messages = sql_num_rows($resultID);
+    $total_messages = count($resultID);
 
     echo '
         <div class="card card-body mt-3">
@@ -232,7 +238,7 @@ if (!$user) {
                         </div>
                     </th>';
 
-    if ($smilies) {
+    if (Config::get('npds.smilies')) {
         echo '<th class="n-t-col-xs-1" data-align="center" >&nbsp;</th>';
     }
 
@@ -256,7 +262,7 @@ if (!$user) {
 
     $count = 0;
 
-    while ($myrow = sql_fetch_assoc($resultID)) {
+    foreach($resultID as $myrow) {
         echo '
                 <tr>
                 <td>
@@ -266,14 +272,10 @@ if (!$user) {
                     </div>
                 </td>';
 
-        if ($smilies) {
+        if (Config::get('npds.smilies')) {
             if ($myrow['msg_image'] != '') {
 
-                if ($ibid = theme::theme_image("forum/subject/" . $myrow['msg_image'])) {
-                    $imgtmp = $ibid;
-                } else {
-                    $imgtmp = "assets/images/forum/subject/" . $myrow['msg_image'];
-                }
+                $imgtmp = theme::theme_image_row('forum/subject/'. $myrow['msg_image'], 'assets/images/forum/subject/'. $myrow['msg_image']);
 
                 echo '<td width="5%" align="center"><img class="n-smil" src="' . $imgtmp . '" alt="Image du topic" /></td>';
             } else {
@@ -282,6 +284,7 @@ if (!$user) {
         }
 
         $myrow['subject'] = strip_tags($myrow['subject']);
+
         $posterdata = forum::get_userdata_from_id($myrow['to_userid']);
 
         echo '
@@ -308,65 +311,66 @@ if (!$user) {
     echo '
         </form>
         </div>';
-?>
+
+    ?>
     <script type="text/javascript">
         //<![CDATA[
-        function CheckAll() {
-            for (var i = 0; i < document.prvmsg.elements.length; i++) {
-                var e = document.prvmsg.elements[i];
-                if ((e.name != 'allbox') && (e.type == 'checkbox'))
-                    e.checked = document.prvmsg.allbox.checked;
-            }
-        }
-
-        function CheckCheckAll() {
-            var TotalBoxes = 0,
-                TotalOn = 0;
-            for (var i = 0; i < document.prvmsg.elements.length; i++) {
-                var e = document.prvmsg.elements[i];
-                if ((e.name != 'allbox') && (e.type == 'checkbox')) {
-                    TotalBoxes++;
-                    if (e.checked) {
-                        TotalOn++;
-                    }
+            function CheckAll() {
+                for (var i = 0; i < document.prvmsg.elements.length; i++) {
+                    var e = document.prvmsg.elements[i];
+                    if ((e.name != 'allbox') && (e.type == 'checkbox'))
+                        e.checked = document.prvmsg.allbox.checked;
                 }
             }
-            if (TotalBoxes == TotalOn) {
-                document.prvmsg.allbox.checked = true;
-            } else {
-                document.prvmsg.allbox.checked = false;
-            }
-        }
 
-        function CheckAllB() {
-            for (var i = 0; i < document.prvmsgB.elements.length; i++) {
-                var e = document.prvmsgB.elements[i];
-                if ((e.name != 'allbox') && (e.type == 'checkbox'))
-                    e.checked = document.prvmsgB.allbox.checked;
-            }
-        }
-
-        function CheckCheckAllB() {
-            var TotalBoxes = 0,
-                TotalOn = 0;
-            for (var i = 0; i < document.prvmsgB.elements.length; i++) {
-                var e = document.prvmsgB.elements[i];
-                if ((e.name != 'allbox') && (e.type == 'checkbox')) {
-                    TotalBoxes++;
-                    if (e.checked) {
-                        TotalOn++;
+            function CheckCheckAll() {
+                var TotalBoxes = 0,
+                    TotalOn = 0;
+                for (var i = 0; i < document.prvmsg.elements.length; i++) {
+                    var e = document.prvmsg.elements[i];
+                    if ((e.name != 'allbox') && (e.type == 'checkbox')) {
+                        TotalBoxes++;
+                        if (e.checked) {
+                            TotalOn++;
+                        }
                     }
                 }
+                if (TotalBoxes == TotalOn) {
+                    document.prvmsg.allbox.checked = true;
+                } else {
+                    document.prvmsg.allbox.checked = false;
+                }
             }
-            if (TotalBoxes == TotalOn) {
-                document.prvmsgB.allbox.checked = true;
-            } else {
-                document.prvmsgB.allbox.checked = false;
+
+            function CheckAllB() {
+                for (var i = 0; i < document.prvmsgB.elements.length; i++) {
+                    var e = document.prvmsgB.elements[i];
+                    if ((e.name != 'allbox') && (e.type == 'checkbox'))
+                        e.checked = document.prvmsgB.allbox.checked;
+                }
             }
-        }
+
+            function CheckCheckAllB() {
+                var TotalBoxes = 0,
+                    TotalOn = 0;
+                for (var i = 0; i < document.prvmsgB.elements.length; i++) {
+                    var e = document.prvmsgB.elements[i];
+                    if ((e.name != 'allbox') && (e.type == 'checkbox')) {
+                        TotalBoxes++;
+                        if (e.checked) {
+                            TotalOn++;
+                        }
+                    }
+                }
+                if (TotalBoxes == TotalOn) {
+                    document.prvmsgB.allbox.checked = true;
+                } else {
+                    document.prvmsgB.allbox.checked = false;
+                }
+            }
         //]]>
     </script>
-<?php
+
+    <?php
     include('themes/default/footer.php');
 }
-?>

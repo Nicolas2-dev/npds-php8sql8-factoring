@@ -129,9 +129,9 @@ class metalang
     /**
      * [charg_metalang description]
      *
-     * @return  array
+     * @return  void
      */
-    public static function charg_metalang(): array
+    public static function charg_metalang(): void
     {
         global $REQUEST_URI;
 
@@ -182,7 +182,7 @@ class metalang
             $cache_obj->endCachingObjet($cache_clef, $glossaire);
         }
 
-        return $glossaire;
+        Config::set('npds.metalang.glossaire', $glossaire);
     }
 
     /**
@@ -212,7 +212,7 @@ class metalang
      */
     public static function meta_lang(string $Xcontent): string
     {
-        global $meta_glossaire, $NPDS_debug, $NPDS_debug_str, $NPDS_debug_cycle;
+        global $NPDS_debug, $NPDS_debug_str, $NPDS_debug_cycle;
 
         // Reduction
         $Xcontent = str_replace("<!--meta", "", $Xcontent);
@@ -304,6 +304,8 @@ class metalang
                 // --- REMPLACEMENTS
                 $type_meta = "";
                 
+                $meta_glossaire = Config::get('npds.metalang.glossaire');
+
                 if (array_key_exists($Rword, $meta_glossaire)) {
                     $Cword = $meta_glossaire[$Rword]['content'];
                     $type_meta = $meta_glossaire[$Rword]['type'];

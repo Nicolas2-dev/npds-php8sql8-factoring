@@ -16,39 +16,36 @@ declare(strict_types=1);
 
 use npds\support\assets\js;
 use npds\support\assets\css;
+use npds\support\auth\users;
 use npds\support\assets\java;
 use npds\support\forum\forum;
 use npds\support\mail\mailler;
 use npds\support\utility\code;
 use npds\system\config\Config;
 use npds\support\security\hack;
-use npds\system\cache\cacheManager;
 use npds\system\support\facades\DB;
-use npds\system\cache\SuperCacheEmpty;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-// if ($SuperCache) {
-//     $cache_obj = new cacheManager();
-// } else {
-//     $cache_obj = new SuperCacheEmpty();
-// }
-
 include('auth.php');
 
-settype($cancel, 'string');
-settype($submitS, 'string');
-//$msg_id = array('');// voir si c'est le bon type
-settype($reply, 'string');
-settype($Xreply, 'string');
-settype($to_user, 'string');
-//settype($send,'string');
-settype($sig, 'string');
-settype($copie, 'string');
 
-if ($cancel) {
+ settype($submitS, 'string');
+// //$msg_id = array('');// voir si c'est le bon type
+ settype($reply, 'string');
+ settype($Xreply, 'string');
+ settype($to_user, 'string');
+// //settype($send,'string');
+ settype($sig, 'string');
+ settype($copie, 'string');
+
+vd(Request::all());
+
+
+if (Request::input('cancel')) {
     if ($full_interface != 'short') {
         header('Location: '. site_url('viewpmsg.php'));
     } else {
@@ -57,11 +54,13 @@ if ($cancel) {
     die();
 }
 
+$user = users::getUser();
+
 if (isset($user)) {
-    $userX = base64_decode($user);
-    $userdataX = explode(':', $userX);
-    $userdata = forum::get_userdata($userdataX[1]);
-    $usermore = forum::get_userdata_from_id($cookie[0]);
+
+    $userdata = forum::get_userdata(users::cookieUser(1));
+
+    $usermore = forum::get_userdata_from_id(users::cookieUser(0));
 
     if ($submitS) {
         if ($subject == '') {
@@ -70,7 +69,7 @@ if (isset($user)) {
 
         $subject = hack::removeHack($subject);
 
-        if ($smilies) {
+        if (Config::get('npds.smilies')) {
             if ($image_subject == '') {
                 forum::forumerror('0018');
             }
@@ -80,7 +79,7 @@ if (isset($user)) {
             forum::forumerror('0019');
         }
 
-        if ($allow_html == 0 || isset($html)) {
+        if (Config::get('forum.config.allow_html') == 0 || isset($html)) {
             $message = htmlspecialchars($message, ENT_COMPAT | ENT_HTML401, 'utf-8');
         }
 
@@ -91,57 +90,67 @@ if (isset($user)) {
         $message = code::aff_code($message);
         $message = str_replace("\n", '<br />', $message);
 
-        if ($allow_bbcode) {
+        if (Config::get('forum.config.allow_bbcode')) {
             $message = forum::smile($message);
         }
 
         $message = forum::make_clickable($message);
         $message = hack::removeHack(addslashes($message));
-        $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
+        $time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
 
-        include_once("language/multilang.php");
+        include_once("language/multilangue.php");
 
         if (strstr($to_user, ',')) {
             $tempo = explode(',', $to_user);
 
             foreach ($tempo as $to_user) {
 
-                // = DB::table('')->select()->where('', )->orderBy('')->get();
+                $res_user = DB::table('users')
+                                ->select('uid', 'user_langue')
+                                ->where('uname', $to_user)
+                                ->first();
 
-                $res = sql_query("SELECT uid, user_langue FROM " . $NPDS_Prefix . "users WHERE uname='$to_user'");
-                list($to_userid, $user_langue) = sql_fetch_row($res);
+                $to_userid   = $res_user['uid'];
+                $user_langue = $res_user['user_langue'];
 
                 if (($to_userid != '') and ($to_userid != 1)) {
 
-                    //DB::table('')->insert(array(
-                    //    ''       => ,
-                    //));
+                    $r = DB::table('priv_msgs')->insert(array(
+                       'msg_image'     => $image_subject,
+                       'subject'       => $subject,
+                       'from_userid'   => $userdata['uid'],
+                       'to_userid'     => $to_userid,
+                       'msg_time'      => $time,
+                       'msg_text'      => $message,
+                    ));
 
-                    $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
-                    $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message')";
-
-                    if (!$result = sql_query($sql)) {
+                    if (!$r) {
                         forum::forumerror('0020');
                     }
 
                     if ($copie) {
 
-                        //DB::table('')->insert(array(
-                        //    ''       => ,
-                        //));
+                        $r = DB::table('priv_msgs')->insert(array(
+                           'msg_image'      => $image_subject,
+                           'subject'        => $subject,
+                           'from_userid'    => $userdata['uid'],
+                           'to_userid'      => $to_userid,
+                           'msg_time'       => $time,
+                           'msg_text'       => $message,
+                           'type_msg'       => 1,
+                           'read_msg'       => 1,
+                        ));
 
-                        $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text, type_msg, read_msg) ";
-                        $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message', '1', '1')";
-
-                        if (!$result = sql_query($sql)) {
+                        if (!$r) {
                             forum::forumerror('0020');
                         }
                     }
 
-                    global $subscribe;
-                    if ($subscribe) {
+                    if (Config::get('npds.subscribe')) {
                         $old_message = $message; // what this
+                        
                         $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('npds.sitename');
+                        
                         $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="'. site_url('viewpmsg.php') .'">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
                         $message .= Config::get('signature.message');
 
@@ -152,43 +161,52 @@ if (isset($user)) {
             }
         } else {
 
-            // = DB::table('')->select()->where('', )->orderBy('')->get();
+            $res_user = DB::table('users')
+                            ->select('uid', 'user_langue')
+                            ->where('uname', $to_user)
+                            ->first();
 
-            $res = sql_query("SELECT uid, user_langue FROM " . $NPDS_Prefix . "users WHERE uname='$to_user'");
-            list($to_userid, $user_langue) = sql_fetch_row($res);
+            $to_userid   = $res_user['uid'];
+            $user_langue = $res_user['user_langue'];
 
             if (($to_userid == '') or ($to_userid == 1)) {
                 forum::forumerror('0016');
             } else {
 
-                //DB::table('')->insert(array(
-                //    ''       => ,
-                //));
+                $r = DB::table('priv_msgs')->insert(array(
+                   'msg_image'       => $image_subject,
+                   'subject'         => $subject,
+                   'from_userid'     => $userdata['uid'],
+                   'to_userid'       => $to_userid,
+                   'msg_time'        => $time,
+                   'msg_text'        => $message,
+                ));
 
-                $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
-                $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message')";
-                
-                if (!$result = sql_query($sql)) {
+                if (!$r) {
                     forum::forumerror('0020');
                 }
                 
                 if ($copie) {
 
-                    //DB::table('')->insert(array(
-                    //    ''       => ,
-                    //));
+                    $r = DB::table('priv_msgs')->insert(array(
+                       'msg_image'       => $image_subject,
+                       'subject'         => $subject,
+                       'from_userid'     => $userdata['uid'],
+                       'to_userid'       => $to_userid,
+                       'msg_time'        => $time,
+                       'msg_text'        => $message,
+                       'type_msg'        => 1,
+                       'read_msg'        => 1,
+                    ));
 
-                    $sql = "INSERT INTO " . $NPDS_Prefix . "priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text, type_msg, read_msg) ";
-                    $sql .= "VALUES ('$image_subject', '$subject', '" . $userdata['uid'] . "', '$to_userid', '$time', '$message', '1', '1')";
-                    
-                    if (!$result = sql_query($sql)) {
+                    if (!$r) {
                         forum::forumerror('0020');
                     }
                 }
 
-                global $subscribe;
-                if ($subscribe) {
+                if (Config::get('npds.subscribe')) {
                     $sujet = translate_ml($user_langue, "Notification message privé.") . '[' . $usermore['uname'] . '] / ' . Config::get('npds.sitename');
+
                     $message = translate_ml($user_langue, "Bonjour") . '<br />' . translate_ml($user_langue, "Vous avez un nouveau message.") . '<br />' . $time . '<br /><br /><b>' . $subject . '</b><br /><br /><a href="'. site_url('viewpmsg.php') .'">' . translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.") . '</a><br /><br />';
                     $message .= Config::get('signature.message');
 
@@ -214,9 +232,16 @@ if (isset($user)) {
 
         foreach ($msg_id as $v) {
             if ($type == 'outbox') {
-                DB::table('priv_msgs')->where('msg_id', $v)->where('from_userid', $userdata['uid'])->where('type_msg', 1)->delete();
+                DB::table('priv_msgs')
+                    ->where('msg_id', $v)
+                    ->where('from_userid', $userdata['uid'])
+                    ->where('type_msg', 1)
+                    ->delete();
             } else {
-                DB::table('priv_msgs')->where('msg_id', $v)->where('to_userid', $userdata['uid'])->delete();
+                DB::table('priv_msgs')
+                    ->where('msg_id', $v)
+                    ->where('to_userid', $userdata['uid'])
+                    ->delete();
             }
 
             if (!sql_query($sql)) {
@@ -235,11 +260,19 @@ if (isset($user)) {
     }
 
     //   settype($delete,'integer');
+    
     if (isset($delete)) {
         if (isset($type) and $type == 'outbox') {
-            DB::table('priv_msgs')->where('msg_id', $msg_id)->where('from_userid', $userdata['uid'])->where('type_msg', 1)->delete();
+            DB::table('priv_msgs')
+                ->where('msg_id', $msg_id)
+                ->where('from_userid', $userdata['uid'])
+                ->where('type_msg', 1)
+                ->delete();
         } else {
-            DB::table('priv_msgs')->where('msg_id', $msg_id)->where('to_userid', $userdata['uid'])->delete();
+            DB::table('priv_msgs')
+                ->where('msg_id', $msg_id)
+                ->where('to_userid', $userdata['uid'])
+                ->delete();
         }
 
         if (!sql_query($sql)) {
@@ -258,14 +291,11 @@ if (isset($user)) {
 
         $dossier = strip_tags($dossier);
 
-        //DB::table('')->insert(array(
-        //    ''       => ,
-        //));
+        $r = DB::table('priv_msgs')->where('msg_id', $msg_id)->where('to_userid', $userdata['uid'])->update(array(
+           'dossier' => $dossier,
+        ));
 
-        $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET dossier='$dossier' WHERE msg_id='$msg_id' AND to_userid='" . $userdata['uid'] . "'";
-        $result = sql_query($sql);
-
-        if (!$result) {
+        if (!$r) {
             forum::forumerror('0005');
         }
 
@@ -302,27 +332,29 @@ if (isset($user)) {
     }
 
     if ($reply || $send || $to_user) {
-        if ($allow_bbcode) {
+        if (config::get('forum.config.allow_bbcode')) {
             include("assets/formhelp.java.php");
         }
 
         if ($reply) {
 
-            // = DB::table('')->select()->where('', )->orderBy('')->get();
+            $row = DB::table('priv_msgs')
+                    ->select('msg_image', 'subject', 'from_userid', 'to_userid')
+                    ->where('to_userid', $userdata['uid'])
+                    ->where('msg_id', $msg_id)
+                    ->where('type_msg', 0)
+                    ->first();
 
-            $sql = "SELECT msg_image, subject, from_userid, to_userid FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND msg_id='$msg_id' AND type_msg='0'";
-            $result = sql_query($sql);
-
-            if (!$result) { 
+            if (!$row) { 
                 forum::forumerror('0022');
             }
 
-            $row = sql_fetch_assoc($result);
             if (!$row) {
                 forum::forumerror('0023');
             }
 
             $fromuserdata = forum::get_userdata_from_id($row['from_userid']);
+            
             if (array_key_exists(0, $fromuserdata)) {
                 if ($fromuserdata[0] == 1) {
                     forum::forumerror('0101');
@@ -448,7 +480,7 @@ if (isset($user)) {
 
         settype($image_subject, 'string');
 
-        if ($smilies) {
+        if (Config::get('npds.smilies')) {
             echo '
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-12">' . translate("Icone du message") . '</label>
@@ -467,7 +499,7 @@ if (isset($user)) {
                 <div class="card">
                 <div class="card-header">';
 
-        if ($allow_html == 1) { 
+        if (Config::get('forum.config.allow_html') == 1) { 
             echo '<span class="text-success float-end" title="HTML ' . translate("Activé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
         } else {
             echo '<span class="text-danger float-end" title="HTML ' . translate("Désactivé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
@@ -481,13 +513,15 @@ if (isset($user)) {
 
         if ($reply and $message == '') {
 
-            // = DB::table('')->select()->where('', )->orderBy('')->get();
+            $row = DB::table('priv_msgs')
+                    ->select('priv_msgs.msg_text', 'priv_msgs.msg_time', 'users.uname')
+                    ->join('users', 'priv_msgs.msg_id', '=', $msg_id)
+                    ->where('priv_msgs.from_userid', 'users.uid')
+                    ->where('priv_msgs.type_msg', 0)
+                    ->get();
 
-            $sql = "SELECT p.msg_text, p.msg_time, u.uname FROM " . $NPDS_Prefix . "priv_msgs p, " . $NPDS_Prefix . "users u ";
-            $sql .= "WHERE (p.msg_id='$msg_id') AND (p.from_userid=u.uid) AND (p.type_msg='0')";
-
-            if ($result = sql_query($sql)) {
-                $row = sql_fetch_assoc($result);
+            if ($row) {
+  
                 $text = forum::smile($row['msg_text']);
                 $text = str_replace("<br />", "\n", $text);
                 $text = str_replace("<BR />", "\n", $text);
@@ -512,7 +546,7 @@ if (isset($user)) {
             $Xreply = $message;
         }
 
-        if ($allow_bbcode) {
+        if (Config::get('forum.config.allow_bbcode')) {
             $xJava = 'name="message" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
         }
 
@@ -531,7 +565,7 @@ if (isset($user)) {
                 </div>
                 <div class="card-footer text-muted">';
 
-        if ($allow_bbcode) {
+        if (Config::get('forum.config.allow_bbcode')) {
             forum::putitems('ta_replypm');
         }
 
@@ -543,7 +577,7 @@ if (isset($user)) {
         <div class="mb-3 row">
             <label class="col-form-label col-sm-3">' . translate("Options") . '</label>';
 
-        if ($allow_html == 1) {
+        if (Config::get('forum.config.allow_html') == 1) {
             settype($html, 'string');
 
             if ($html == 'on') {

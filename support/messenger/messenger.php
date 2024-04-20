@@ -260,7 +260,7 @@ class messenger
                             $icon = "";
                         }
 
-                        $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="'. translate("Nouveau") .'<span class="rounded-pill bg-danger ms-2">'. $new_messages .'</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
+                        $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="'. translate("Nouveau") .'<span class=\'rounded-pill bg-danger ms-2\'>'. $new_messages .'</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
                         
                         if ($ibid[$i]['username'] == users::cookieUser(1)) {
                             $icon .= '</a>';
@@ -275,7 +275,7 @@ class messenger
 
                         if ($messages > 0) {
                             $PopUp = java::JavaPopUp(site_url('readpmsg_imm.php?op=msg'), "IMM", 600, 500);
-                            $PopUp = '<a href="javascript:void(0);" onclick="window.open('. $PopUp .');">';
+                            $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
                             
                             if ($ibid[$i]['username'] == users::cookieUser(1)) {
                                 $icon = $PopUp;

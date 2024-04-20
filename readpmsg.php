@@ -14,81 +14,77 @@
 /************************************************************************/
 declare(strict_types=1);
 
+use npds\support\auth\users;
 use npds\support\forum\forum;
 use npds\support\theme\theme;
 use npds\support\utility\spam;
 use npds\system\config\Config;
 use npds\support\language\language;
+use npds\system\support\facades\DB;
+use npds\system\support\facades\Request;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
 }
 
-// if ($SuperCache){
-//     $cache_obj = new cacheManager();
-// } else {
-//     $cache_obj = new SuperCacheEmpty();
-// }
-
 include('auth.php');
+
+$user = users::getUser();
 
 if (!$user) {
     Header('Location: '. site_url('user.php'));
 } else {
     include('themes/default/header.php');
 
-    $userX = base64_decode($user);
-    $userdata = explode(':', $userX);
-    $userdata = forum::get_userdata($userdata[1]);
+    $userdata = forum::get_userdata(users::cookieUser(1));
 
-    settype($start, 'integer');
-    settype($type, 'string');
-    settype($dossier, 'string');
+    $start   = Request::query('start');
+    $type    = Request::query('type');
+    $dossier = Request::query('dossier');
 
     if ($type == 'outbox') {
 
-        // = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE from_userid='" . $userdata['uid'] . "' AND type_msg='1' ORDER BY msg_id DESC LIMIT $start,1";
+        $resultID = DB::table('priv_msgs')
+                ->select('*')
+                ->where('from_userid', $userdata['uid'])
+                ->where('type_msg', 1)
+                ->orderBy('msg_id', 'desc')
+                ->limit(1)->offset($start)
+                ->first();
     } else {
-        if ($dossier == 'All') {
-            $ibid = '';
-        } else {
-            $ibid = "AND dossier='$dossier'";
+
+        $query = DB::table('priv_msgs')
+                    ->select('*')
+                    ->where('to_userid', $userdata['uid'])
+                    ->where('type_msg', 0);
+
+        if ($dossier != 'All') {
+            $query->where('dossier', $dossier);
         }
         
         if (!$dossier) {
-            $ibid = "AND dossier='...'";
+            $query->where('dossier', '...');
         }
 
-        // = DB::table('')->select()->where('', )->orderBy('')->get();
-
-        $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND type_msg='0' $ibid ORDER BY msg_id DESC LIMIT $start,1";
+        $resultID = $query->orderBy('msg_id', 'desc')->limit(1)->offset($start)->first();
     }
-
-    $resultID = sql_query($sql);
 
     if (!$resultID) {
         forum::forumerror('0005');
     } else {
-        $myrow = sql_fetch_assoc($resultID);
-        
-        if ($myrow['read_msg'] != '1') {
-            $sql = "UPDATE " . $NPDS_Prefix . "priv_msgs SET read_msg='1' WHERE msg_id='" . $myrow['msg_id'] . "'";
-            $result = sql_query($sql);
+        if ($resultID['read_msg'] != '1') {
             
-            // DB::table('')->where('', )->update(array(
-            //     ''       => ,
-            // ));
+            $r = DB::table('priv_msgs')->where(' msg_id', $resultID['msg_id'])->update(array(
+                'read_msg'   => 1,
+            ));
 
-
-            if (!$result) {
+            if (!$r) {
                 forum::forumerror('0005');
             }
         }
     }
 
-    $myrow['subject'] = strip_tags($myrow['subject']);
+    $resultID['subject'] = strip_tags($resultID['subject']);
 
     if ($dossier == 'All') {
         $Xdossier = translate("Tous les sujets");
@@ -100,20 +96,20 @@ if (!$user) {
         <h3>' . translate("Message personnel") . '</h3>
         <hr />';
 
-    if (!sql_num_rows($resultID)) {
+    if (!$resultID) {
         echo '<div class="alert alert-danger lead">' . translate("Vous n'avez aucun message.") . '</div>';
     } else {
         echo '
         <p class="lead">
-            <a href="'. site_url('viewpmsg.php') .'">' . translate("Messages personnels") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $Xdossier . '&nbsp;&raquo;&raquo;&nbsp;' . language::aff_langue($myrow['subject']) . '
+            <a href="'. site_url('viewpmsg.php') .'">' . translate("Messages personnels") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $Xdossier . '&nbsp;&raquo;&raquo;&nbsp;' . language::aff_langue($resultID['subject']) . '
         </p>
         <div class="card mb-3">
             <div class="card-header">';
         
         if ($type == 'outbox') {
-            $posterdata = forum::get_userdata_from_id($myrow['to_userid']);
+            $posterdata = forum::get_userdata_from_id($resultID['to_userid']);
         } else {
-            $posterdata = forum::get_userdata_from_id($myrow['from_userid']);
+            $posterdata = forum::get_userdata_from_id($resultID['from_userid']);
         }
 
         $posts = $posterdata['posts'];
@@ -124,7 +120,7 @@ if (!$user) {
             $res_id = array();
             $my_rs = '';
 
-            if (!$short_user) {
+            if (!Config::get('npds.short_user')) {
                 $posterdata_extend = forum::get_userdata_extend_from_id($posterdata['uid']);
 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
@@ -176,7 +172,7 @@ if (!$user) {
                 $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"]) .'" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle "></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
             }
 
-            if ($posterdata['femail'] != ''){
+            if ($posterdata['femail'] != '') {
                 $useroutils .= '<a class="list-group-item text-primary" href="mailto:' . spam::anti_spam($posterdata['femail'], 1) . '" target="_blank" title="' . translate("Email") . '" data-bs-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ms-3 d-none d-md-inline">' . translate("Email") . '</span></a>';
             }
 
@@ -189,27 +185,23 @@ if (!$user) {
             }
         }
 
-        //         if ($smilies) {
-        if ($posterdata['user_avatar'] != '') {
-            if (stristr($posterdata['user_avatar'], "users_private")) {
-                $imgtmp = $posterdata['user_avatar'];
-            } else {
-                if ($ibid = theme::theme_image("forum/avatar/" . $posterdata['user_avatar'])) {
-                    $imgtmp = $ibid;
+        // if (Config::get('npds.smilies')) {
+            if ($posterdata['user_avatar'] != '') {
+                if (stristr($posterdata['user_avatar'], "users_private")) {
+                    $imgtmp = $posterdata['user_avatar'];
                 } else {
-                    $imgtmp = "assets/images/forum/avatar/" . $posterdata['user_avatar'];
+                    $imgtmp = theme::theme_image_row('forum/avatar/'. $posterdata['user_avatar'], 'assets/images/forum/avatar/'. $posterdata['user_avatar']);
+                }
+
+                if ($posterdata['uid'] <> 1) {
+                    $aff_reso = isset($my_rsos[0]) ? $my_rsos[0] : '';
+                    echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'' . forum::member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '<br /><div class="list-group">' . $useroutils . '</div><hr />' . $aff_reso . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>';
+                } else {
+                    echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title=\'<i class="fa fa-cogs fa-lg"></i>\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>';
                 }
             }
+        // }
 
-            if ($posterdata['uid'] <> 1) {
-                $aff_reso = isset($my_rsos[0]) ? $my_rsos[0] : '';
-                echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" data-bs-title="' . $posterdata['uname'] . '" data-bs-content=\'' . forum::member_qualif($posterdata['uname'], $posts, $posterdata['rang']) . '<br /><div class="list-group">' . $useroutils . '</div><hr />' . $aff_reso . '\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>';
-            } else {
-                echo '<a style="position:absolute; top:1rem;" tabindex="0" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title=\'<i class="fa fa-cogs fa-lg"></i>\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="' . $imgtmp . '" alt="' . $posterdata['uname'] . '" /></a>';
-            }
-        }
-
-        //      }
         if ($posterdata['uid'] <> 1) {
             echo '&nbsp;<span style="position:absolute; left:6em;" class="text-muted"><strong>' . $posterdata['uname'] . '</strong></span>';
         } else {
@@ -218,22 +210,14 @@ if (!$user) {
 
         echo '<span class="float-end">';
 
-        if ($smilies) {
-            if ($myrow['msg_image'] != '') {
-                if ($ibid = theme::theme_image("forum/subject/" . $myrow['msg_image'])) {
-                    $imgtmp = $ibid;
-                } else {
-                    $imgtmp = "assets/images/forum/subject/" . $myrow['msg_image'];
-                }
+        if (Config::get('npds.smilies')) {
+            if ($resultID['msg_image'] != '') {
+                $imgtmp = theme::theme_image_row('forum/subject/'. $resultID['msg_image'], 'assets/images/forum/subject/'. $resultID['msg_image']);
 
                 echo '<img class="n-smil" src="' . $imgtmp . '" alt="icon_post" />';
             } else {
-                if ($ibid = theme::theme_image("forum/subject/00.png")) {
-                    $imgtmpPI = $ibid;
-                } else {
-                    $imgtmpPI = "assets/images/forum/subject/00.png";
-                }
-                
+                $imgtmp = theme::theme_image_row('forum/subject/00.png', 'assets/images/forum/subject/00.png');
+
                 echo '<img class="n-smil" src="' . $imgtmpPI . '" alt="icon_post" />';
             }
         }
@@ -242,12 +226,12 @@ if (!$user) {
                 </div>
                 <div class="card-body">
                 <div class="card-text pt-2">
-                    <div class="text-end small">' . translate("Envoyé") . ' : ' . $myrow['msg_time'] . '</div>
-                    <hr /><strong>' . language::aff_langue($myrow['subject']) . '</strong><br />';
+                    <div class="text-end small">' . translate("Envoyé") . ' : ' . $resultID['msg_time'] . '</div>
+                    <hr /><strong>' . language::aff_langue($resultID['subject']) . '</strong><br />';
 
-        $message = stripslashes($myrow['msg_text']);
+        $message = stripslashes($resultID['msg_text']);
 
-        if ($allow_bbcode) {
+        if (Config::get('forum.config.allow_bbcode')) {
             $message = forum::smilie($message);
             $message = forum::aff_video_yt($message);
         }
@@ -275,7 +259,7 @@ if (!$user) {
             if ($posterdata['uid'] <> 1) {
                 echo '
                 <li class="page-item">
-                <a class="page-link" href="'. site_url('replypmsg.php?reply=1&amp;msg_id=' . $myrow['msg_id']) .'"><span class="d-none d-md-inline"></span><i class="fa fa-reply fa-lg me-2"></i><span class="d-none d-md-inline">' . translate("Répondre") . '</span></a>
+                <a class="page-link" href="'. site_url('replypmsg.php?reply=1&amp;msg_id=' . $resultID['msg_id']) .'"><span class="d-none d-md-inline"></span><i class="fa fa-reply fa-lg me-2"></i><span class="d-none d-md-inline">' . translate("Répondre") . '</span></a>
                 </li>';
             }
         }
@@ -321,20 +305,15 @@ if (!$user) {
                 </li>';
 
         if ($type != 'outbox') {
-            echo '<li class="page-item"><a class="page-link " href="'. site_url('replypmsg.php?delete=1&amp;msg_id=' . $myrow['msg_id']) .'" title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
+            echo '<li class="page-item"><a class="page-link " href="'. site_url('replypmsg.php?delete=1&amp;msg_id=' . $resultID['msg_id']) .'" title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
         } else {
-            echo '<li class="page-item"><a class="page-link " href="'. site_url('replypmsg.php?delete=1&amp;msg_id=' . $myrow['msg_id'] . '&amp;type=outbox') .'"  title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
+            echo '<li class="page-item"><a class="page-link " href="'. site_url('replypmsg.php?delete=1&amp;msg_id=' . $resultID['msg_id'] . '&amp;type=outbox') .'"  title="' . translate("Supprimer ce message") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a></li>';
         }
 
         echo '</ul>';
 
         if ($type != 'outbox') {
 
-            // = DB::table('')->select()->where('', )->orderBy('')->get();
-
-            $sql = "SELECT DISTINCT dossier FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND type_msg='0' ORDER BY dossier";
-            $result = sql_query($sql);
-            
             echo '
             <div class="collapse" id="sortbox">
                 <div class="card card-body" >
@@ -345,8 +324,15 @@ if (!$user) {
                         <div class="col-sm-8">
                             <select class="form-select" id="dossier" name="dossier">';
 
-            while (list($dossier) = sql_fetch_row($result)) {
-                echo '<option value="' . $dossier . '">' . $dossier . '</option>';
+            foreach (DB::table('priv_msgs')
+                    ->distinct()
+                    ->select('dossier')
+                    ->where('to_userid', $userdata['uid'])
+                    ->where('type_msg', 0)
+                    ->orderBy('dossier')
+                    ->get() as $priv_msg) 
+            {
+                echo '<option value="' . $priv_msg['dossier'] . '">' . $priv_msg['dossier'] . '</option>';
             }
 
             echo '
@@ -361,7 +347,7 @@ if (!$user) {
                     </div>
                     <div class="mb-3 row">
                         <div class="col-sm-8 ms-sm-auto">
-                            <input type="hidden" name="msg_id" value="' . $myrow['msg_id'] . '" />
+                            <input type="hidden" name="msg_id" value="' . $resultID['msg_id'] . '" />
                             <input type="hidden" name="classement" value="1" />
                             <button type="submit" class="btn btn-primary" name="classe">OK</button>
                         </div>
