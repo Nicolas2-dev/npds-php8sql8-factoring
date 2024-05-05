@@ -3,9 +3,9 @@
 namespace App\Middleware;
 
 use Closure;
+
 use Npds\Http\Request;
 use Npds\Http\Response;
-
 use Npds\Http\JsonResponse;
 
 use Symfony\Component\Mime\MimeTypes;
@@ -22,7 +22,7 @@ class DispatchAssetFiles
 
             // Check if the Request instance asks for an asset file.
             if (preg_match('#^assets/(.*)$#', $path, $matches) === 1) {
-                $path = BASEPATH .'assets' .DS .str_replace('/', DS, $matches[1]);
+                $path = WEBPATH .'assets' .DS .str_replace('/', DS, $matches[1]);
 
                 return $this->createFileResponse($path, $request);
             }
