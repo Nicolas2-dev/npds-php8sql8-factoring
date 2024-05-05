@@ -25,6 +25,7 @@
    *
    * @param  string $format Date format
    * @param  integer|string|DateTime $timestamp Timestamp
+   * @param  string|null $locale locale
    * @return string
    * @author BohwaZ <https://bohwaz.net/>
    */
@@ -41,7 +42,7 @@
 
     $timestamp->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
-    $locale = Locale::canonicalize($locale ?? setlocale(LC_TIME, '0'));
+    $locale = Locale::canonicalize($locale ?? (Locale::getDefault() ?? setlocale(LC_TIME, '0')));
 
     $intl_formats = [
       '%a' => 'ccc',	// An abbreviated textual representation of the day	Sun through Sat

@@ -13,17 +13,17 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\support\theme\theme;
-use npds\system\config\Config;
-use npds\support\language\language;
-use npds\support\metalang\metalang;
+use APP\Support\Theme\Theme;
+use APP\Support\Language\Language;
+use APP\Support\Metalang\Metalang;
+use Npds\Config\Config;
 
 
 $rep = false;
 
 $Start_Page = str_replace('/', '', Config::get('npds.Start_Page'));
 
-$theme = theme::getTheme();
+$theme = Theme::getTheme();
 
 settype($ContainerGlobal, 'string');
 
@@ -61,5 +61,5 @@ if ($rep) {
         $Xcontent = ob_get_contents();
     ob_end_clean();
 
-    echo metalang::meta_lang(language::aff_langue($Xcontent));
+    echo Metalang::meta_lang(Language::aff_langue($Xcontent));
 }

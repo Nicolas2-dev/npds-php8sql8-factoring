@@ -14,22 +14,22 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\support\assets\css;
-use npds\support\theme\theme;
-use npds\system\config\Config;
-use npds\support\security\hack;
-use npds\library\pages\pageref;
-use npds\support\counter;
-use npds\support\editeur;
-use npds\support\referer;
-use npds\support\language\language;
+use App\Support\Assets\Css;
+use App\Support\Theme\Theme;
+use App\Support\Security\Hack;
+use App\Support\Counter\Counter;
+use App\Support\Editeur\Editeur;
+use App\Support\Referer\Referer;
+use App\Support\Language\Language;
+use Npds\Config\Config;
+
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
     die();
 }
 
-function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords)
+function header_head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords)
 {
     global $theme;
 
@@ -79,7 +79,7 @@ function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_k
 
     // Tiny_mce
     if (Config::get('editeur.tiny_mce_init')) {
-        echo editeur::aff_editeur("tiny_mce", "begin");
+        echo Editeur::aff_editeur("tiny_mce", "begin");
     }
 
     // include externe JAVASCRIPT file from themes/default/view/include or themes/.../include for functions, codes in the <body onload="..." event...
@@ -103,7 +103,7 @@ function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_k
         include("themes/$tmp_theme/view/include/header_head.inc");
     }
 
-    echo css::import_css($tmp_theme, Config::get('npds.language'), '', $css_pages_ref, $css);
+    echo Css::import_css($tmp_theme, Config::get('npds.language'), '', $css_pages_ref, $css);
 
     // Mod by Jireck - Chargeur de JS via routes/pages.php
     //importPageRefJs($js);
@@ -111,7 +111,7 @@ function head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_k
     // function importPageRefJs($js)
     // {
     if ($js) {
-        $theme = theme::getTheme();
+        $theme = Theme::getTheme();
 
         if (is_array($js)) {
             foreach ($js as $k => $tab_js) {
@@ -151,8 +151,8 @@ if (file_exists("themes/default/view/include/header_before.inc")) {
 }
 
 // take the right theme location !
-$tmp_theme = theme::getTheme();
-$skin = theme::getSkin();
+$tmp_theme = Theme::getTheme();
+$skin = Theme::getSkin();
 
 // include page référence
 //include('library/pages/pageref.php');
@@ -164,7 +164,7 @@ settype($m_description, 'string');
 
 global $pdst, $Titlesitename, $PAGES;
 
-require_once("routes/pages.php");
+require_once(APPPATH ."routes/pages.php");
 
 // import routes/pages.php specif values from theme
 if (file_exists("themes/" . $tmp_theme . "/routes/pages.php")) { 
@@ -266,7 +266,7 @@ if (array_key_exists($pages_ref, $PAGES)) {
     $fin_title = substr($PAGES[$pages_ref]['title'], -1);
 
     // on retire le + ou - du title
-    $TitlesitenameX = language::aff_langue(substr($PAGES[$pages_ref]['title'], 0, strlen($PAGES[$pages_ref]['title']) - 1));
+    $TitlesitenameX = Language::aff_langue(substr($PAGES[$pages_ref]['title'], 0, strlen($PAGES[$pages_ref]['title']) - 1));
 
     $Titlesitename = '';
 
@@ -295,23 +295,23 @@ if (array_key_exists($pages_ref, $PAGES)) {
         if ($fin_title == "+" or $fin_title == "-") {
             $title = $TitlesitenameX;
         } else {
-            $title = language::aff_langue(substr($PAGES[$pages_ref]['title'], 0, strlen($PAGES[$pages_ref]['title'])));
+            $title = Language::aff_langue(substr($PAGES[$pages_ref]['title'], 0, strlen($PAGES[$pages_ref]['title'])));
         }
     } else {
-        $title = hack::removeHack($title);
+        $title = Hack::removeHack($title);
     }
 
     // meta description
     settype($m_description, 'string');
     if (array_key_exists('meta-description', $PAGES[$pages_ref]) and ($m_description == '')) {
-        $m_description = language::aff_langue($PAGES[$pages_ref]['meta-description']);
+        $m_description = Language::aff_langue($PAGES[$pages_ref]['meta-description']);
     }
 
 
     // meta keywords
     settype($m_keywords, 'string');
     if (array_key_exists('meta-keywords', $PAGES[$pages_ref]) and ($m_keywords == '')) {
-        $m_keywords = language::aff_langue($PAGES[$pages_ref]['meta-keywords']);
+        $m_keywords = Language::aff_langue($PAGES[$pages_ref]['meta-keywords']);
     }
 }
 
@@ -369,13 +369,13 @@ if (array_key_exists($pages_ref, $PAGES)) {
 } else
     $js = '';
 
-head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords);
+header_head($css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description, $m_keywords);
 
 // Referer update
-referer::refererUpdate();
+Referer::refererUpdate();
 
 // Counter update
-counter::counterUpadate();
+Counter::counterUpadate();
 
 // include externe file from themes/default/view/include for functions, codes ...
 if (file_exists("themes/default/view/include/header_after.inc")) {

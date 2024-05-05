@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
-namespace npds\system\config;
+namespace Npds\Config;
 
-class Config
+use ArrayAccess;
+
+use Npds\Support\Arr;
+
+
+class Config implements ArrayAccess
 {
+
     /**
      * @var array
      */
-    protected static $options = array();
+    protected $items = array();
 
 
     /**
@@ -17,9 +23,9 @@ class Config
      * @param string $key
      * @return bool
      */
-    public static function has($key)
+    public function has($key)
     {
-        return array_has(static::$options, $key);
+        return Arr::array_has($this->items, $key);
     }
 
     /**
@@ -27,19 +33,9 @@ class Config
      * @param string $key
      * @return mixed|null
      */
-    public static function get($key, $default = null)
+    public function get($key, $default = null)
     {
-        return array_get(static::$options, $key, $default);
-    }
-
-    /**
-     * Get the value.
-     * @param string $key
-     * @return mixed|null
-     */
-    public static function all()
-    {
-        return static::$options;
+        return Arr::array_get($this->items, $key, $default);
     }
 
     /**
@@ -47,8 +43,63 @@ class Config
      * @param string $key
      * @param mixed $value
      */
-    public static function set($key, $value)
+    public function set($key, $value)
     {
-        array_set(static::$options, $key, $value);
+        Arr::array_set($this->items, $key, $value);
     }
+
+    /**
+     * Forget the value.
+     * @param string $key
+     */
+    public function forget($key)
+    {
+        Arr::array_forget($this->items, $key);
+    }
+
+    /**
+     * Determine if the given configuration option exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function offsetExists($key): bool
+    {
+        return $this->has($key);
+    }
+
+    /**
+     * Get a configuration option.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function offsetGet($key): mixed
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * Set a configuration option.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function offsetSet($key, $value): void
+    {
+        $this->set($key, $value);
+    }
+
+    /**
+     * Unset a configuration option.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function offsetUnset($key): void
+    {
+        $this->forget($key);
+    }
+
 }

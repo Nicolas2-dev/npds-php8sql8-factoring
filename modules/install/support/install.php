@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace npds\modules\install\support;
+namespace Modules\Install\Support;
 
 
 
-class install
+class Install
 {
 
     public static function checkInstall() {

@@ -9,7 +9,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-use npds\support\language\language;
+use App\Support\Language\Language;
 
 define('CITRON','tarteaucitron');
 
@@ -32,9 +32,9 @@ echo '
 ';
 
 if(defined('CITRON')){
-   if (method_exists(language::class, 'language_iso'))
+   if (method_exists(Language::class, 'language_iso'))
       echo '
-<script type="text/javascript"> var tarteaucitronForceLanguage = "'.language::language_iso(1,'','').'"; </script>
+<script type="text/javascript"> var tarteaucitronForceLanguage = "'.Language::language_iso(1,'','').'"; </script>
 <script type="text/javascript" src="assets/shared/tarteaucitron/tarteaucitron.js"></script>
 <script type="text/javascript">
    //<![CDATA[

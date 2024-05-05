@@ -1,23 +1,23 @@
 <?php
-use npds\support\forum\forum;
-use npds\support\auth\users;
-use npds\support\theme\theme;
-use npds\system\support\facades\DB;
+use App\Support\Forum\Forum;
+use App\Support\Auth\Users;
+use App\Support\Theme\Theme;
+use Npds\Support\Facades\DB;
 
    $ava='';
    $cha='';
    $bal='';
    $menuser='';
 
-   if (users::getUser()) {
-      $userdata = forum::get_userdata_from_id(users::cookieUser(0));
+   if (Users::getUser()) {
+      $userdata = Forum::get_userdata_from_id(users::cookieUser(0));
       
-      $username = users::cookieUser(1);
-      $ibix=explode('+', urldecode(users::cookieUser(9)));
+      $username = Users::cookieUser(1);
+      $ibix=explode('+', urldecode(Users::cookieUser(9)));
       $skinname = array_key_exists(1, $ibix) ? $ibix[1] : "default";
    }
    else {
-      $skinname = theme::getSkin();
+      $skinname = Theme::getSkin();
       $username='';
    }
    switch ($skinname) {
@@ -41,11 +41,11 @@ use npds\system\support\facades\DB;
       break;
    }
 
-   if (users::autorisation(-1)) {
+   if (Users::autorisation(-1)) {
       $btn_con = '<a class="dropdown-item" href="user.php"><i class="fas fa-sign-in-alt fa-lg me-2 align-middle"></i>'.translate("Connexion").'</a>';
       $ava='<a class="dropdown-item" href="user.php"><i class="fa fa-user fa-3x text-muted"></i></a>';
    }
-   elseif (users::autorisation(1)) {
+   elseif (Users::autorisation(1)) {
       
       $nbmes = DB::table('priv_msgs')
                   ->where('to_userid', users::cookieUser(0))
@@ -82,7 +82,7 @@ use npds\system\support\facades\DB;
       } else if (stristr($res_user['user_avatar'], "users_private")) {
          $imgtmp = $res_user['user_avatar'];
       } else {
-         if ($ibid=theme::theme_image("forum/avatar/". $res_user['user_avatar'])) {
+         if ($ibid=Theme::theme_image("forum/avatar/". $res_user['user_avatar'])) {
             $imgtmp=$ibid;
          } else {
             $imgtmp="assets/images/forum/avatar/". $res_user['user_avatar'];

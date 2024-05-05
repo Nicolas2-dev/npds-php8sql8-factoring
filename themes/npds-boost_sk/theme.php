@@ -13,7 +13,8 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\config\Config;
+use Npds\Config\Config;
+
 
 $theme = 'npds-boost_sk';
 $long_chain = '34'; // Nombre de caractères affichés avant troncature pour certains blocs

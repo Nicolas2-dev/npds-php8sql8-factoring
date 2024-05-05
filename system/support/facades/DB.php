@@ -1,18 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
-namespace npds\system\support\facades;
-
-use npds\system\database\Manager;
+namespace Npds\Support\Facades;
 
 
-class DB
+/**
+* @see \Npds\Database\Manager
+*/
+class DB extends Facade
 {
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor() { return 'npds.db'; }
 
-    public static function __callStatic($method, $parameters)
-    {
-        $instance = Manager::getInstance();
-
-        return call_user_func_array(array($instance, $method), $parameters);
-    }
 }

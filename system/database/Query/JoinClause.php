@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
-namespace npds\system\database\Query;
+namespace Npds\Database\Query;
 
-use npds\system\database\Query\Builder as QueryBuilder;
+use Npds\Database\Query\Builder as QueryBuilder;
 
 
 class JoinClause
 {
     /**
-    * @var \npds\system\database\Query\Builder  The QueryBuilder instance.
+    * @var \Database\Query\Builder  The QueryBuilder instance.
     */
     public $query;
 
@@ -31,7 +32,7 @@ class JoinClause
     /**
     * Create a new join clause instance.
     *
-    * @param  \npds\system\database\Query  $query
+    * @param  \Npds\Database\Query  $query
     * @param  string  $type
     * @param  string  $table
     * @return void
@@ -51,7 +52,7 @@ class JoinClause
     * @param  string  $second
     * @param  string  $boolean
     * @param  bool  $where
-    * @return \npds\system\database\Query\JoinClause
+    * @return \Npds\Database\Query\JoinClause
     */
     public function on($first, $operator, $second, $boolean = 'and', $where = false)
     {
@@ -70,7 +71,7 @@ class JoinClause
     * @param  string  $first
     * @param  string  $operator
     * @param  string  $second
-    * @return \npds\system\database\Query\JoinClause
+    * @return \Npds\Database\Query\JoinClause
     */
     public function orOn($first, $operator, $second)
     {
@@ -84,7 +85,7 @@ class JoinClause
     * @param  string  $operator
     * @param  string  $second
     * @param  string  $boolean
-    * @return \npds\system\database\Query\JoinClause
+    * @return \Npds\Database\Query\JoinClause
     */
     public function where($first, $operator, $second, $boolean = 'and')
     {
@@ -98,7 +99,7 @@ class JoinClause
     * @param  string  $operator
     * @param  string  $second
     * @param  string  $boolean
-    * @return \npds\system\database\Query\JoinClause
+    * @return \Npds\Database\Query\JoinClause
     */
     public function orWhere($first, $operator, $second)
     {

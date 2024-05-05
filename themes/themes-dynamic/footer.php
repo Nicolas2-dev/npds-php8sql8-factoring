@@ -13,15 +13,15 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\support\theme\theme;
-use npds\support\language\language;
-use npds\support\metalang\metalang;
+use App\Support\Theme\Theme;
+use App\Support\Language\Language;
+use App\Support\Metalang\Metalang;
 
 $rep = false;
 
 settype($ContainerGlobal, 'string');
 
-$theme = theme::getTheme();
+$theme = Theme::getTheme();
 
 if (file_exists("themes/" . $theme . "/view/footer.html")) {
     $rep = $theme;
@@ -43,5 +43,5 @@ if ($rep) {
         $Xcontent .= $ContainerGlobal;
     }
 
-    echo metalang::meta_lang(language::aff_langue($Xcontent));
+    echo Metalang::meta_lang(Language::aff_langue($Xcontent));
 }

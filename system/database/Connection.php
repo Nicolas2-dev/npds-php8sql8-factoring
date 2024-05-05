@@ -2,32 +2,80 @@
 
 declare(strict_types=1);
 
-namespace npds\system\database;
+namespace Npds\Database;
 
-use \PDO;
+use Closure;
+use DateTime;
+use Exception;
+use PDO;
+
+use Npds\Support\Str;
 
 
 class Connection
 {
     /**
-     * @var  \PDO  The active PDO connection.
+     * The Connector instance.
+     *
+     * @var \Npds\Database\Connector
+     */
+    protected $connector;
+
+    /**
+     * The active PDO connection.
+     *
+     * @var  \PDO
      */
     protected $pdo;
 
     /**
-     * @var  int  The default fetch mode of the connection.
+     * The table prefix for the connection.
+     *
+     * @var  string
+     */
+    protected $tablePrefix = '';
+
+    /**
+     * The database query grammar instance.
+     *
+     * @var \Npds\Database\Query\Grammar
+     */
+    protected $grammar;
+
+    /**
+     * The connection options.
+     *
+     * @var array
+     */
+    protected $config = array();
+
+    /**
+     *  The default fetch mode of the connection.
+     *
+     * @var  int
      */
     protected $fetchMode = PDO::FETCH_OBJ;
 
     /**
-     * @var  string  The table prefix for the connection.
+     *  The number of active transactions.
+     *
+     * @var int
      */
-    protected $tablePrefix = '';
+    protected $transactions = 0;
 
+    /**
+     * All of the queries run against the connection.
+     *
+     * @var  array
+     */
+    protected $queryLog = array();
 
-    protected $errorinfo = [];
-
-    protected $colcount;
+    /**
+     * Indicates whether queries are being logged.
+     *
+     * @var bool
+     */
+    protected $loggingQueries = true;
 
 
     /**
@@ -38,53 +86,42 @@ class Connection
      */
     public function __construct(array $config)
     {
+        $this->config = $config;
+
+        // Setup the connection options.
         $this->tablePrefix = $config['prefix'];
 
-        $this->pdo = $this->createConnection($config);
+        // Create the Connector instance.
+        $this->connector = new Connector();
 
-        //
-        $this->setFetchMode();
-    }
+        // Create the Grammar instance.
+        $this->grammar = $grammar = new Query\Grammar();
 
-    /**
-     * Create a new PDO connection.
-     *
-     * @param  array  $config
-     * @return PDO
-     */
-    protected function createConnection(array $config)
-    {
-        extract($config);
+        $grammar->setTablePrefix($this->tablePrefix);
 
-        $dsn = "$driver:host={$hostname};dbname={$database}";
-
-        $options = array(
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_STRINGIFY_FETCHES  => false,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-
-            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES {$charset} COLLATE '$collation'",
-        );
-
-        return new PDO($dsn, $username, $password, $options);
+        if (isset($config['wrapper'])) {
+            $grammar->setWrapper($config['wrapper']);
+        }
     }
 
     /**
      * Begin a Fluent Query against a database table.
      *
      * @param  string  $table
-     * @return \npds\system\database\Query\Builder
+     * @return \Npds\Database\Query\Builder
      */
     public function table($table)
     {
-        return new Query\Builder($this, $table);
+        $query = new Query\Builder($this, $this->getGrammar());
+
+        return $query->from($table);
     }
 
     /**
      * Get a new raw query expression.
      *
      * @param  mixed  $value
-     * @return \npds\system\database\Query\Expression
+     * @return \Npds\Database\Query\Expression
      */
     public function raw($value)
     {
@@ -100,11 +137,9 @@ class Connection
      */
     public function selectOne($query, $bindings = array())
     {
-        $statement = $this->prepare($query);
-
-        $statement->execute($bindings);
-
-        return $statement->fetch($this->getFetchMode()) ?: null;
+        if (! empty($records = $this->select($query, $bindings))) {
+            return reset($records);
+        }
     }
 
     /**
@@ -116,13 +151,14 @@ class Connection
      */
     public function select($query, array $bindings = array())
     {
-        $statement = $this->prepare($query);
+        return $this->run($query, $bindings, function ($me, $query, $bindings)
+        {
+            $statement = $me->prepare($query);
 
-        $statement->execute($bindings);
+            $statement->execute($me->prepareBindings($bindings));
 
-        $this->colcount = $statement->columnCount();
-
-        return $statement->fetchAll($this->getFetchMode());
+            return $statement->fetchAll($me->getFetchMode());
+        });
     }
 
     /**
@@ -170,24 +206,12 @@ class Connection
      */
     public function statement($query, array $bindings = array())
     {
-        $statement = $this->prepare($query);
+        return $this->run($query, $bindings, function ($me, $query, $bindings)
+        {
+            $statement = $me->prepare($query);
 
-        //return $statement->execute($bindings);
-        try {
-            return $statement->execute($bindings);
-        } catch (\PDOException $e) {
-
-            $this->errorinfo = $e->errorInfo;
-        }
-    }
-
-    /**
-     * [error description]
-     *
-     * @return  array
-     */
-    function error() {
-        return $this->errorinfo;
+            return $statement->execute($me->prepareBindings($bindings));
+        });
     }
 
     /**
@@ -199,26 +223,231 @@ class Connection
      */
     public function affectingStatement($query, array $bindings = array())
     {
-        $statement = $this->prepare($query);
+        return $this->run($query, $bindings, function ($me, $query, $bindings)
+        {
+            $statement = $me->prepare($query);
 
-        $statement->execute($bindings);
+            $statement->execute($me->prepareBindings($bindings));
+
+            return $statement->rowCount();
+        });
+    }
+
+    /**
+     * Run a raw, unprepared query against the PDO connection.
+     *
+     * @param  string  $query
+     * @return bool
+     */
+    public function unprepared($query)
+    {
+        return $this->run($query, array(), function ($me, $query)
+        {
+            return (bool) $me->getPdo()->exec($query);
+        });
+    }
+
+    /**
+     * Execute a Closure within a transaction.
+     *
+     * @param  Closure  $callback
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function transaction(Closure $callback)
+    {
+        $this->beginTransaction();
 
         try {
-            return $statement->rowCount();
-        } catch (\PDOException $e) {
+            $result = $callback($this);
 
-            $this->errorinfo = $e->errorInfo;
+            $this->commit();
         }
+        catch (Exception $e) {
+            $this->rollBack();
+
+            throw $e;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Start a new database transaction.
+     *
+     * @return void
+     */
+    public function beginTransaction()
+    {
+        $this->transactions++;
+
+        if ($this->transactions == 1) {
+            $this->getPdo()->beginTransaction();
+        }
+    }
+
+    /**
+     * Commit the active database transaction.
+     *
+     * @return void
+     */
+    public function commit()
+    {
+        if ($this->transactions == 1) {
+            $this->getPdo()->commit();
+        }
+
+        $this->transactions--;
+    }
+
+    /**
+     * Rollback the active database transaction.
+     *
+     * @return void
+     */
+    public function rollBack()
+    {
+        if ($this->transactions == 1) {
+            $this->transactions = 0;
+
+            $this->getPdo()->rollBack();
+        } else {
+            $this->transactions--;
+        }
+    }
+
+    /**
+     * Get the number of active transactions.
+     *
+     * @return int
+     */
+    public function transactionLevel()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * Run a SQL statement and log its execution context.
+     *
+     * @param  string    $query
+     * @param  array     $bindings
+     * @param  \Closure  $callback
+     * @return mixed
+     *
+     * @throws \Npds\Database\QueryException
+     */
+    protected function run($query, $bindings, Closure $callback)
+    {
+        if (is_null($this->getPdo())) {
+            $this->reconnect();
+        }
+
+        $start = microtime(true);
+
+        try {
+            $result = $this->runQueryCallback($query, $bindings, $callback);
+        }
+        catch (QueryException $e) {
+            $result = $this->tryAgainIfCausedByLostConnection($e, $query, $bindings, $callback);
+        }
+
+        $time = round((microtime(true) - $start) * 1000, 2);
+
+        $this->queryLog[] = compact('query', 'bindings', 'time');
+
+        return $result;
+    }
+
+    /**
+     * Run a SQL statement.
+     *
+     * @param  string    $query
+     * @param  array     $bindings
+     * @param  \Closure  $callback
+     * @return mixed
+     *
+     * @throws \Npds\Database\QueryException
+     */
+    protected function runQueryCallback($query, $bindings, Closure $callback)
+    {
+        try {
+            return call_user_func($callback, $this, $query, $bindings);
+        }
+        catch (Exception $e) {
+            throw new QueryException($query, $this->prepareBindings($bindings), $e);
+        }
+    }
+
+    /**
+     * Handle a query exception that occurred during query execution.
+     *
+     * @param  \Npds\Database\QueryException  $e
+     * @param  string    $query
+     * @param  array     $bindings
+     * @param  \Closure  $callback
+     * @return mixed
+     *
+     * @throws \Npds\Database\QueryException
+     */
+    protected function tryAgainIfCausedByLostConnection(QueryException $e, $query, $bindings, Closure $callback)
+    {
+        $messages = array(
+            'server has gone away',
+            'no connection to the server',
+            'Lost connection',
+            'is dead or not enabled',
+            'Error while sending',
+            'decryption failed or bad record mac',
+            'SSL connection has been closed unexpectedly',
+            'Error writing data to the connection',
+            'Resource deadlock avoided',
+            'Transaction() on null',
+            'child connection forced to terminate due to client_idle_limit',
+        );
+
+        if (Str::contains($e->getMessage(), $messages)) {
+            $this->reconnect();
+
+            return $this->runQueryCallback($query, $bindings, $callback);
+        }
+
+        throw $e;
+    }
+
+    /**
+     * Disconnect from the underlying PDO connection.
+     *
+     * @return void
+     */
+    public function disconnect()
+    {
+        $this->setPdo(null);
+    }
+
+    /**
+     * Reconnect to the database.
+     *
+     * @return void
+     *
+     * @throws \LogicException
+     */
+    public function reconnect()
+    {
+        return $this->setPdo(
+            $this->connector->connect($this->config)
+        );
     }
 
     /**
      * Returns the ID of the last inserted row or sequence value.
      *
+     * @param  string|null  $name
      * @return mixed
      */
-    public function lastInsertId()
+    public function lastInsertId($name = null)
     {
-        $id = $this->getPdo()->lastInsertId();
+        $id = $this->getPdo()->lastInsertId($name);
 
         return is_numeric($id) ? (int) $id : $id;
     }
@@ -233,143 +462,64 @@ class Connection
     {
         $prefix = $this->getTablePrefix();
 
-        $query = preg_replace_callback('#\{(.*?)\}#', function ($matches) use ($prefix)
+        $grammar = $this->getGrammar();
+
+        $query = preg_replace_callback('#\{(.*?)\}#', function ($matches) use ($prefix, $grammar)
         {
-            //@list ($table, $field) = explode('.', $matches[1], 2);
-            $table = $matches[1];
+            list ($table, $field) = array_pad(explode('.', $matches[1], 2), 2, null);
 
-            $result = $this->wrap($prefix .$table);
+            $result = $grammar->wrap($prefix .$table);
 
-            // if (! is_null($field)) {
-            //     $result .= '.' . $this->wrap($field);
-            // }
+            if (! is_null($field)) {
+                $result .= '.' . $grammar->wrap($field);
+            }
 
             return $result;
 
         }, $query);
 
-        try {
-            return $this->getPdo()->prepare($query);
-        } catch (\PDOException $e) {
-            $this->errorinfo = $e;
-        }
+        return $this->getPdo()->prepare($query);
     }
 
     /**
-     * return list a database tables 
+     * Prepare the query bindings for execution.
      *
-     * @return array 
+     * @param  array  $bindings
+     * @return array
      */
-    public function list_tables()
+    public function prepareBindings(array $bindings)
     {
-        if($this->pdo)
-        {
-            $query = $this->pdo->query('SHOW TABLES');
-            
-            return $query->fetchAll(PDO::FETCH_COLUMN);
+        $grammar = $this->getGrammar();
+
+        foreach ($bindings as $key => $value) {
+            if ($value instanceof DateTime) {
+                $bindings[$key] = $value->format($grammar->getDateFormat());
+            } else if ($value === false) {
+                $bindings[$key] = 0;
+            }
         }
 
-        return FALSE;
+        return $bindings;
     }
 
     /**
-     * [columnCount description]
+     * Get the Connector instance.
      *
-     * @return  [type]  [return description]
+     * @return \Npds\Database\Query\Grammar
      */
-    public function columnCount() {
-        return $this->colcount;
-    }
-
-    /**
-     * [dropTable description]
-     *
-     * @param   [type]  $table  [$table description]
-     *
-     * @return  [type]          [return description]
-     */
-    public function dropTable($table)
+    public function getGrammar()
     {
-        if($this->pdo)
-        {
-            $query = $this->pdo->query("DROP TABLE IF EXISTS `$table`");
-            
-            return $query->fetch(PDO::FETCH_COLUMN);
-        }
-
-        return FALSE;
+        return $this->grammar;
     }
 
     /**
-     * [optimyTable description]
+     * Get the Connector instance.
      *
-     * @param   [type]  $table  [$table description]
-     *
-     * @return  [type]          [return description]
+     * @return \Npds\Database\Connector
      */
-    public function optimyTable($table)
+    public function getConnector()
     {
-        if($this->pdo)
-        {
-            $query = $this->pdo->query("OPTIMIZE TABLE `$table`");
-            
-            return $query->fetch(PDO::FETCH_COLUMN);
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * [showFiledsTable description]
-     *
-     * @param   [type]  $table  [$table description]
-     *
-     * @return  [type]          [return description]
-     */
-    public function showFiledsTable($table)
-    {
-        if($this->pdo)
-        {
-            $query = $this->pdo->query("SHOW FIELDS FROM `$table`");
-            
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * [showKeysTable description]
-     *
-     * @param   [type]  $table  [$table description]
-     *
-     * @return  [type]          [return description]
-     */
-    public function showKeysTable($table)
-    {
-        if($this->pdo)
-        {
-            $query = $this->pdo->query("SHOW KEYS FROM `$table`");
-            
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Wrap a single string in keyword identifiers.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function wrap($value)
-    {
-        if ($value === '*') {
-            return $value;
-        }
-
-        return $value;
+        return $this->connector;
     }
 
     /**
@@ -380,6 +530,23 @@ class Connection
     public function getPdo()
     {
         return $this->pdo;
+    }
+
+    /**
+     * Set the PDO connection.
+     *
+     * @param  \PDO|null  $pdo
+     * @return $this
+     */
+    public function setPdo($pdo)
+    {
+        if ($this->transactions >= 1) {
+            throw new \RuntimeException("Can't swap PDO instance while within transaction.");
+        }
+
+        $this->pdo = $pdo;
+
+        return $this;
     }
 
     /**
@@ -408,12 +575,42 @@ class Connection
      * @param  int  $fetchMode
      * @return int
      */
-    public function setFetchMode($fetchMode = null)
+    public function setFetchMode($fetchMode)
     {
-        if (! is_null($fetchMode)) {
-            $this->fetchMode = $fetchMode;
+        $this->fetchMode = $fetchMode;
+    }
+
+    /**
+     * Get the connection query log.
+     *
+     * @return array
+     */
+    public function getQueryLog()
+    {
+        return $this->queryLog;
+    }
+
+    /**
+     * Clear the query log.
+     *
+     * @return void
+     */
+    public function flushQueryLog()
+    {
+        $this->queryLog = array();
+    }
+
+    /**
+     * Determine or set whether we're logging queries.
+     *
+     * @return bool
+     */
+    public function logging($what = null)
+    {
+        if (is_null($what)) {
+            return $this->loggingQueries;
         }
 
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, $this->fetchMode);
+        $this->loggingQueries = (bool) $what;
     }
 }

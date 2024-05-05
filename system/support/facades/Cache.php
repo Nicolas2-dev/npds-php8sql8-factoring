@@ -1,18 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
-namespace npds\system\support\facades;
+namespace Npds\Support\Facades;
 
-use npds\system\config\Config;
-use npds\system\cache\cacheManager;
+use Npds\Support\Facades\Facade;
 
-class Cache
+
+/**
+ * @see \Npds\Cache\CacheManager
+ * @see \Npds\Cache\Repository
+ */
+class Cache extends Facade
 {
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor() { return 'cache'; }
 
-    public static function __callStatic($method, $parameters)
-    {
-        $instance = cacheManager::setInstance(Config::get('cache.config'), Config::get('cache.timings'));
-
-        return call_user_func_array(array($instance, $method), $parameters);
-    }
 }

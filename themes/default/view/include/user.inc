@@ -9,11 +9,11 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-use npds\support\language\language;
+use App\Support\Language\Language;
 
 // OBJET : Ce fichier vous permet de personnaliser la page de Login et le plan du site
    echo '
    <p class="text-center my-3">
-      <a class="btn btn-outline-primary btn-sm" href="static.php?op=charte.html&amp;npds=1&amp;metalang=1">'.language::aff_langue("[fr]Charte d'utilisation du site[/fr][en]Terms of use[/en]").'</a>
+      <a class="btn btn-outline-primary btn-sm" href="static.php?op=charte.html&amp;npds=1&amp;metalang=1">'.Language::aff_langue("[fr]Charte d'utilisation du site[/fr][en]Terms of use[/en]").'</a>
    </p>';
 ?>

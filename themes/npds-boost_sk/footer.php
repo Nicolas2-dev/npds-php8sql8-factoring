@@ -20,7 +20,7 @@
 /* =====================================================================*/
 declare(strict_types=1);
 
-use npds\support\block\block;
+use App\Support\Block\Block;
 
 global $pdst;
 
@@ -44,7 +44,7 @@ switch ($pdst) {
         echo '
             <div id="col_RB" class="collapse show col-lg-3 ">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        block::rightblocks($moreclass);
+        Block::rightblocks($moreclass);
         echo '
                 </div>
             </div>
@@ -59,7 +59,7 @@ switch ($pdst) {
         echo '
             <div id="col_LB" class="collapse show col-lg-3">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        block::leftblocks($moreclass);
+        Block::leftblocks($moreclass);
         echo '
             </div>
         </div>';
@@ -67,7 +67,7 @@ switch ($pdst) {
         echo '
             <div id="col_RB" class="collapse show col-lg-3">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        block::rightblocks($moreclass);
+        Block::rightblocks($moreclass);
         echo '
                 </div>
             </div>
@@ -82,7 +82,7 @@ switch ($pdst) {
         echo '
         <div id="col_LB" class="collapse show col-lg-3">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-1">';
-        block::leftblocks($moreclass);
+        Block::leftblocks($moreclass);
         echo '
             </div>
         </div>

@@ -13,21 +13,21 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\support\date\date;
-use npds\support\auth\users;
-use npds\support\forum\forum;
-use npds\support\theme\theme;
-use npds\support\utility\spam;
-use npds\system\config\Config;
-use npds\support\language\language;
-use npds\support\metalang\metalang;
-use npds\system\support\facades\DB;
+use App\support\Date\Date;
+use App\support\Auth\Users;
+use App\support\Forum\Forum;
+use App\support\Theme\Theme;
+use App\support\Utility\Spam;
+use App\support\Language\Language;
+use App\support\Metalang\Metalang;
+use Npds\Config\Config;
+use Npds\Support\Facades\DB;
 
 
 // include externe JAVASCRIPT file from themes/default/view/include or themes/.../include for functions, codes in the <body onload="..." event...
 function importExternalJavacript()
 {
-    $theme = theme::getTheme();
+    $theme = Theme::getTheme();
 
     $body_onloadH = '
         <script type="text/javascript">
@@ -72,7 +72,7 @@ function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext,
 {
     $inclusion = false;
 
-    $theme = theme::getTheme();
+    $theme = Theme::getTheme();
 
     if (file_exists("themes/" . $theme . "/view/index-news.html")) {
         $inclusion = "themes/" . $theme . "/view/index-news.html";
@@ -123,7 +123,7 @@ function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext,
 
     $Xsujet = '';
     if ($topicimage != '') {
-        if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
+        if (!$imgtmp = Theme::theme_image('topics/' . $topicimage)) {
             $imgtmp = Config::get('npds.tipath') . $topicimage;
         }
 
@@ -135,11 +135,11 @@ function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext,
     $npds_METALANG_words = array(
         "'!N_publicateur!'i" => $aid,
         "'!N_emetteur!'i" => userpopover($informant, 40, 2) . '<a href="user.php?op=userinfo&amp;uname=' . $informant . '">' . $informant . '</a>',
-        "'!N_date!'i" => date::formatTimestamp($time),
+        "'!N_date!'i" => Date::formatTimestamp($time),
         //"'!N_date!'i"=>ucfirst(htmlentities(str_ftime(translate("datestring"), $time, getLocale()), ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401, 'utf-8')),
         "'!N_date_y!'i" => substr($time, 0, 4),
         //"'!N_date_m!'i"=>strftime("%B", mktime(0,0,0, substr($time,5,2),1,2000)),
-        "'!N_date_m!'i" => \PHP81_BC\strftime("%B", $time, language::getLocale()),
+        "'!N_date_m!'i" => \PHP81_BC\strftime("%B", $time, Language::getLocale()),
         "'!N_date_d!'i" => substr($time, 8, 2),
         "'!N_date_h!'i" => substr($time, 11),
         "'!N_print!'i" => $morelink[4],
@@ -158,7 +158,7 @@ function themeindex($aid, $informant, $time, $title, $counter, $topic, $thetext,
         "'!N_suite!'i" => $morel
     );
 
-    echo metalang::meta_lang(language::aff_langue(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent)));
+    echo Metalang::meta_lang(Language::aff_langue(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent)));
 }
 
 function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicname, $topicimage, $topictext, $id, $previous_sid, $next_sid, $archive)
@@ -167,7 +167,7 @@ function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicn
 
     $inclusion = false;
 
-    $theme = theme::getTheme();
+    $theme = Theme::getTheme();
 
     if (file_exists("themes/" . $theme . "/view/detail-news.html")) {
         $inclusion = "themes/" . $theme . "/view/detail-news.html";
@@ -205,7 +205,7 @@ function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicn
     $printP = '<a href="print.php?sid=' . $id . '" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-print"></i></a>';
     $sendF = '<a href="friend.php?op=FriendSend&amp;sid=' . $id . '" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-at"></i></a>';
 
-    if (!$imgtmp = theme::theme_image('topics/' . $topicimage)) {
+    if (!$imgtmp = Theme::theme_image('topics/' . $topicimage)) {
         $imgtmp = Config::get('npds.tipath') . $topicimage;
     }
 
@@ -214,11 +214,11 @@ function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicn
     $npds_METALANG_words = array(
         "'!N_publicateur!'i" => $aid,
         "'!N_emetteur!'i" => userpopover($informant, 40, 2) . '<a href="user.php?op=userinfo&amp;uname=' . $informant . '"><span class="">' . $informant . '</span></a>',
-        "'!N_date!'i" => date::formatTimestamp($time),
+        "'!N_date!'i" => Date::formatTimestamp($time),
         //"'!N_date!'i"=>str_ftime("%A %e %B %Y @ %X", $time, getLocale()),   
         "'!N_date_y!'i" => substr($time, 0, 4),
         //"'!N_date_m!'i"=>strftime("%B", mktime(0,0,0, substr($time,5,2),1,2000)),
-        "'!N_date_m!'i" => \PHP81_BC\strftime("%B", $time, language::getLocale()),
+        "'!N_date_m!'i" => \PHP81_BC\strftime("%B", $time, Language::getLocale()),
         "'!N_date_d!'i" => substr($time, 8, 2),
         "'!N_date_h!'i" => substr($time, 11),
         "'!N_print!'i" => $printP,
@@ -234,7 +234,7 @@ function themearticle($aid, $informant, $time, $title, $thetext, $topic, $topicn
         "'!N_nb_lecture!'i" => $counter
     );
 
-    echo metalang::meta_lang(language::aff_langue(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent)));
+    echo Metalang::meta_lang(Language::aff_langue(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent)));
 }
 
 function themesidebox($title, $content)
@@ -243,7 +243,7 @@ function themesidebox($title, $content)
 
     $inclusion = false;
 
-    $theme = theme::getTheme();
+    $theme = Theme::getTheme();
 
     if (file_exists("themes/" . $theme . "/view/bloc-right.html") and ($bloc_side == "RIGHT")) {
         $inclusion = 'themes/' . $theme . '/view/bloc-right.html';
@@ -282,7 +282,7 @@ function themesidebox($title, $content)
     );
 
     echo $htvar; // modif ji fantôme block
-    echo metalang::meta_lang(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent));
+    echo Metalang::meta_lang(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent));
     echo '</div>'; // modif ji fantôme block
 }
 
@@ -290,7 +290,7 @@ function themedito($content)
 {
     $inclusion = false;
     
-    $theme = theme::getTheme();
+    $theme = Theme::getTheme();
 
     if (file_exists("themes/" . $theme . "/view/editorial.html")) {
         $inclusion = "themes/" . $theme . "/view/editorial.html";
@@ -311,7 +311,7 @@ function themedito($content)
             "'!editorial_content!'i" => $content
         );
 
-        echo metalang::meta_lang(language::aff_langue(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent)));
+        echo Metalang::meta_lang(Language::aff_langue(preg_replace(array_keys($npds_METALANG_words), array_values($npds_METALANG_words), $Xcontent)));
     }
 
     return $inclusion;
@@ -324,7 +324,7 @@ function userpopover($who, $dim, $avpop)
         ->where('uname', $who)
         ->first()) 
     {
-        $temp_user = forum::get_userdata($who);
+        $temp_user = Forum::get_userdata($who);
 
         $socialnetworks = array();
         $posterdata_extend = array();
@@ -334,12 +334,12 @@ function userpopover($who, $dim, $avpop)
 
         if (!Config::get('npds.short_user')) {
             if ($temp_user['uid'] != 1) {
-                $posterdata_extend = forum::get_userdata_extend_from_id($temp_user['uid']);
+                $posterdata_extend = Forum::get_userdata_extend_from_id($temp_user['uid']);
 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 include('modules/geoloc/config/geoloc.conf');
 
-                if (users::getUser() or users::autorisation(-127)) {
+                if (Users::getUser() or Users::autorisation(-127)) {
                     if ($posterdata_extend['M2'] != '') {
                         $socialnetworks = explode(';', $posterdata_extend['M2']);
 
@@ -378,7 +378,7 @@ function userpopover($who, $dim, $avpop)
         settype($ch_lat, 'string');
 
         $useroutils = '';
-        if (users::getUser() or users::autorisation(-127)) {
+        if (Users::getUser() or Users::autorisation(-127)) {
             if ($temp_user['uid'] != 1 and $temp_user['uid'] != '') {
                 $useroutils .= '<li><a class="dropdown-item text-center text-md-start" href="user.php?op=userinfo&amp;uname=' . $temp_user['uname'] . '" target="_blank" title="' . translate("Profil") . '" ><i class="fa fa-lg fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-md-inline">' . translate("Profil") . '</span></a></li>';
             }
@@ -409,7 +409,7 @@ function userpopover($who, $dim, $avpop)
         if (stristr($temp_user['user_avatar'], 'users_private')){
             $imgtmp = $temp_user['user_avatar'];
         } else {
-            if ($ibid = theme::theme_image('forum/avatar/' . $temp_user['user_avatar'])) {
+            if ($ibid = Theme::theme_image('forum/avatar/' . $temp_user['user_avatar'])) {
                 $imgtmp = $ibid;
             } else {
                 $imgtmp = 'assets/images/forum/avatar/' . $temp_user['user_avatar'];

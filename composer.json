@@ -12,15 +12,28 @@
     "require": {
         "php": ">=8.2.0",
         "phpmailer/phpmailer": "dev-master",
-        "php81_bc/strftime": "dev-master"
+        "php81_bc/strftime": "dev-master",
+        "danielstjules/stringy": "~3.1.0",
+        "nesbot/carbon": "^2.16",
+        "doctrine/inflector": "2.0.*",
+        "dragonmantank/cron-expression": "~1.0",
+        "symfony/finder": "^6.4",
+        "symfony/http-foundation": "^6.4",
+        "symfony/http-kernel": "^6.4",
+        "symfony/process": "^6.4", 
+        "symfony/var-dumper": "^6.4",
+        "symfony/event-dispatcher": "^6.4",
+        "symfony/mime": "7.1.x-dev"
     },
     "autoload": {
         "psr-4": {
-            "npds\\": "./"
+            "App\\" : "app/",
+            "Npds\\" : "system/",
+            "Modules\\" : "modules/"
         },
         "files": [
-            "support/helpers.php",
-            "system/support/helpers.php"
+            "app/Support/helpers.php",
+            "system/Support/helpers.php"
         ]
     }
 }

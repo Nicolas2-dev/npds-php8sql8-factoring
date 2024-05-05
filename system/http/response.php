@@ -1,28 +1,111 @@
-<?php
+<?php 
 
 declare(strict_types=1);
 
-namespace npds\system\http;
+namespace Npds\Http;
 
-class response
+use ArrayObject;
+
+use Npds\Support\Contracts\JsonableInterface;
+use Npds\Support\Contracts\RenderableInterface;
+
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+
+
+class Response extends SymfonyResponse
 {
+    /**
+     * The original content of the response.
+     *
+     * @var mixed
+     */
+    public $original;
+
 
     /**
-     * Controle de réponse// c'est pas encore assez fin not work with https probably
+     * Set a header on the Response.
      *
-     * @param   string  $url            [$url description]
-     * @param   int     $response_code  [$response_code description]
-     *
-     * @return  bool
+     * @param  string  $key
+     * @param  string  $value
+     * @param  bool    $replace
+     * @return \Npds\Http\Response
      */
-    public static function file_contents_exist(string $url, int $response_code = 200): bool
+    public function header($key, $value, $replace = true)
     {
-        $headers = get_headers($url);
-        
-        if (substr($headers[0], 9, 3) == $response_code) {
-            return true;
-        } else {
-            return false; 
-        }
+        $this->headers->set($key, $value, $replace);
+
+        return $this;
     }
+
+    /**
+     * Add a cookie to the response.
+     *
+     * @param  \Symfony\Component\HttpFoundation\Cookie  $cookie
+     * @return \Npds\Http\Response
+     */
+    public function withCookie(Cookie $cookie)
+    {
+        $this->headers->setCookie($cookie);
+
+        return $this;
+    }
+
+    /**
+     * Set the content on the response.
+     *
+     * @param  mixed  $content
+     * @return void
+     */
+    public function setContent(?string $content): static
+    {
+        $this->original = $content;
+
+        if ($this->shouldBeJson($content)) {
+            $this->headers->set('Content-Type', 'application/json');
+
+            $content = $this->morphToJson($content);
+        } else if ($content instanceof RenderableInterface) {
+            $content = $content->render();
+        }
+
+        return parent::setContent($content);
+    }
+
+    /**
+     * Morph the given content into JSON.
+     *
+     * @param  mixed   $content
+     * @return string
+     */
+    protected function morphToJson($content)
+    {
+        if ($content instanceof JsonableInterface) {
+            return $content->toJson();
+        }
+
+        return json_encode($content);
+    }
+
+    /**
+     * Determine if the given content should be turned into JSON.
+     *
+     * @param  mixed  $content
+     * @return bool
+     */
+    protected function shouldBeJson($content)
+    {
+        return ($content instanceof JsonableInterface) || ($content instanceof ArrayObject) || is_array($content);
+    }
+
+    /**
+     * Get the original response content.
+     *
+     * @return mixed
+     */
+    public function getOriginalContent()
+    {
+        return $this->original;
+    }
+
 }

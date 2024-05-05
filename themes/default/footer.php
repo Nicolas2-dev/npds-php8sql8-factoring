@@ -14,9 +14,9 @@
 /************************************************************************/
 declare(strict_types=1);
 
-use npds\system\config\Config;
-use npds\support\editeur;
-use npds\support\language\language;
+use App\Support\Editeur\Editeur;
+use App\Support\Language\Language;
+use Npds\Config\Config;
 
 if (!function_exists("Mysql_Connexion")) {
     include('boot/bootstrap.php');
@@ -44,7 +44,7 @@ function footmsg()
 
     $foot .= '</p>';
 
-    echo language::aff_langue($foot);
+    echo Language::aff_langue($foot);
 }
 
 function foot()
@@ -81,7 +81,7 @@ global $cookie9;
 $Default_Theme = Config::get('npds.Default_Theme');
 
 if (Config::get('npds.tiny_mce')) {
-    echo editeur::aff_editeur('tiny_mce', 'end');
+    echo Editeur::aff_editeur('tiny_mce', 'end');
 }
 
 // include externe file from themes/default/view/include for functions, codes ...

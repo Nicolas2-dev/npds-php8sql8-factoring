@@ -1,0 +1,973 @@
+
+May 04, 2024 8:08AM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "App\Middleware\MimeTypeGuesser" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php:90
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(54): App\Middleware\DispatchAssetFiles->guessMimeType('E:\\New_Serv_Wam...')
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(26): App\Middleware\DispatchAssetFiles->createFileResponse('E:\\New_Serv_Wam...', Object(Npds\Http\Request))
+#2 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#5 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(291): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(240): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#10 {main}
+
+---------
+
+May 05, 2024 17:10PM - ERROR:
+
+ErrorException: file_put_contents(E:\New_Serv_Wamp\npds_dune-php8sql8\storage\sessions\fadd00476a67857e710be31f2ee798cf62693a9a): Failed to open stream: No such file or directory in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Filesystem\Filesystem.php:107
+Stack trace:
+#0 [internal function]: Npds\Exceptions\Handler->handleError(2, 'file_put_conten...', 'E:\\New_Serv_Wam...', 107)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Filesystem\Filesystem.php(107): file_put_contents('E:\\New_Serv_Wam...', 'a:4:{s:6:"_toke...', 2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\FileSessionHandler.php(85): Npds\Filesystem\Filesystem->put('E:\\New_Serv_Wam...', 'a:4:{s:6:"_toke...', true)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Store.php(245): Npds\Session\FileSessionHandler->write('fadd00476a67857...', 'a:4:{s:6:"_toke...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(87): Npds\Session\Store->save()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(326): Npds\Session\Middleware\StartSession->terminate(Object(Npds\Http\Request), Object(Npds\Http\Response))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(248): Npds\Foundation\Application->shutdown(Object(Npds\Http\Request), Object(Npds\Http\Response))
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#8 {main}
+
+---------
+
+May 05, 2024 17:10PM - ERROR:
+
+ErrorException: file_put_contents(E:\New_Serv_Wamp\npds_dune-php8sql8\storage\sessions\20825e82c186ef3a78ac020f2648e4b244b958c5): Failed to open stream: No such file or directory in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Filesystem\Filesystem.php:107
+Stack trace:
+#0 [internal function]: Npds\Exceptions\Handler->handleError(2, 'file_put_conten...', 'E:\\New_Serv_Wam...', 107)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Filesystem\Filesystem.php(107): file_put_contents('E:\\New_Serv_Wam...', 'a:4:{s:6:"_toke...', 2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\FileSessionHandler.php(85): Npds\Filesystem\Filesystem->put('E:\\New_Serv_Wam...', 'a:4:{s:6:"_toke...', true)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Store.php(245): Npds\Session\FileSessionHandler->write('20825e82c186ef3...', 'a:4:{s:6:"_toke...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(87): Npds\Session\Store->save()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(326): Npds\Session\Middleware\StartSession->terminate(Object(Npds\Http\Request), Object(Npds\Http\Response))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(248): Npds\Foundation\Application->shutdown(Object(Npds\Http\Request), Object(Npds\Http\Response))
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#8 {main}
+
+---------
+
+May 05, 2024 17:10PM - ERROR:
+
+ErrorException: file_put_contents(E:\New_Serv_Wamp\npds_dune-php8sql8\storage\sessions\f986468f802d7c6d18be79392b2f7634694465a4): Failed to open stream: No such file or directory in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Filesystem\Filesystem.php:107
+Stack trace:
+#0 [internal function]: Npds\Exceptions\Handler->handleError(2, 'file_put_conten...', 'E:\\New_Serv_Wam...', 107)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Filesystem\Filesystem.php(107): file_put_contents('E:\\New_Serv_Wam...', 'a:4:{s:6:"_toke...', 2)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\FileSessionHandler.php(85): Npds\Filesystem\Filesystem->put('E:\\New_Serv_Wam...', 'a:4:{s:6:"_toke...', true)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Store.php(245): Npds\Session\FileSessionHandler->write('f986468f802d7c6...', 'a:4:{s:6:"_toke...')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(87): Npds\Session\Store->save()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(326): Npds\Session\Middleware\StartSession->terminate(Object(Npds\Http\Request), Object(Npds\Http\Response))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(248): Npds\Foundation\Application->shutdown(Object(Npds\Http\Request), Object(Npds\Http\Response))
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#8 {main}
+
+---------
+
+May 05, 2024 20:24PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($app) must be of type Npds\Foundation\Application, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 34 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(34): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:25PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($app) must be of type Npds\Foundation\Application, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 29 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(29): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:29PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($container) must be of type Npds\Container\Container, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 29 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(29): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:30PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($container) must be of type Npds\Container\Container, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 29 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(29): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:30PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($container) must be of type Npds\Container\Container, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 29 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(29): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:30PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($container) must be of type Npds\Container\Container, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 29 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(29): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:32PM - ERROR:
+
+ErrorException: Undefined variable $app in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php:28
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(28): Npds\Exceptions\Handler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 28)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(375): Npds\Translation\TranslationServiceProvider->register()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(468): Npds\Foundation\Application->register(Object(Npds\Translation\TranslationServiceProvider))
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(451): Npds\Foundation\Application->registerDeferredProvider('Npds\\Translatio...', 'translator')
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(494): Npds\Foundation\Application->loadDeferredProvider('translator')
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:32PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($container) must be of type Npds\Container\Container, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 34 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(34): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 20:32PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Npds\Translation\LanguageManager::__construct(): Argument #1 ($app) must be of type Npds\Foundation\Application, Npds\Filesystem\Filesystem given, called in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php on line 29 in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\LanguageManager.php:61
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Translation\TranslationServiceProvider.php(29): Npds\Translation\LanguageManager->__construct(Object(Npds\Filesystem\Filesystem), 'E:\\New_Serv_Wam...')
+#1 [internal function]: Npds\Translation\TranslationServiceProvider->Npds\Translation\{closure}(Object(Npds\Foundation\Application), Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(400): call_user_func(Object(Closure), Object(Npds\Foundation\Application), Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Container\Container.php(376): Npds\Container\Container->build(Object(Closure), Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(497): Npds\Container\Container->make('translator', Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(68): Npds\Foundation\Application->make('translator')
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\helpers.php(446): app('translator')
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\Home.php(20): __('This is the Hom...')
+#8 [internal function]: App\Controllers\Home->index(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Controllers\BaseController.php(42): call_user_func_array(Array, Array)
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(178): App\Controllers\BaseController->callAction('index', Array, Object(Npds\Http\Request))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Route.php(148): Npds\Routing\Route->callControllerCallback(Array, Object(Npds\Http\Request))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(276): Npds\Routing\Route->run(Object(Npds\Http\Request))
+#13 [internal function]: Npds\Routing\Router->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(30): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\View\Middleware\ShareErrorsFromSession.php(46): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#16 [internal function]: Npds\View\Middleware\ShareErrorsFromSession->handle(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\View\Middleware\ShareErrorsFromSession), Object(Npds\Http\Request), Object(Closure))
+#19 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Session\Middleware\StartSession.php(65): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#20 [internal function]: Npds\Session\Middleware\StartSession->handle(Object(Npds\Http\Request), Object(Closure))
+#21 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#22 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Session\Middleware\StartSession), Object(Npds\Http\Request), Object(Closure))
+#23 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\AddQueuedCookiesToResponse.php(41): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#24 [internal function]: Npds\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Npds\Http\Request), Object(Closure))
+#25 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#26 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(Npds\Cookie\Middleware\AddQueuedCookiesToResponse), Object(Npds\Http\Request), Object(Closure))
+#27 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#28 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Cookie\Middleware\EncryptCookies.php(54): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#29 [internal function]: Npds\Cookie\Middleware\EncryptCookies->handle(Object(Npds\Http\Request), Object(Closure))
+#30 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#31 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\EncryptCookies), Object(Npds\Http\Request), Object(Closure))
+#32 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\HandleProfiling.php(47): Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request), Object(Closure))
+#33 [internal function]: App\Middleware\HandleProfiling->handle(Object(Npds\Http\Request), Object(Closure))
+#34 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#35 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\HandleProfiling), Object(Npds\Http\Request), Object(Closure))
+#36 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#37 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#38 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#39 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#40 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#41 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(85): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#42 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#43 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#44 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(131): call_user_func_array(Array, Array)
+#45 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(100): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#46 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#47 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(72): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#48 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#49 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#50 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#51 {main}
+
+---------
+
+May 05, 2024 21:28PM - ERROR:
+
+ErrorException: Undefined variable $tab_spam in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php:325
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(325): Npds\Exceptions\Handler->handleError(2, 'Undefined varia...', 'E:\\New_Serv_Wam...', 325)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:31PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(326): Npds\Support\Facades\Request::__callStatic('getIp', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:36PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('getIp', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:36PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('getIp', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:36PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('getIp', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:37PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('getIp', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:37PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('ip', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:37PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('ip', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:37PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('ip', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:38PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(330): Npds\Support\Facades\Request::__callStatic('ip', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 21:39PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(7): Npds\Support\Facades\Request::__callStatic('ip', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#2 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#8 {main}
+
+---------
+
+May 05, 2024 21:40PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Non-static method Npds\Http\Request::ip() cannot be called statically in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php:7
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require()
+#1 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#7 {main}
+
+---------
+
+May 05, 2024 21:48PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Class "Npds\Http\Request_old" not found in E:\New_Serv_Wamp\npds_dune-php8sql8\system\Support\Facades\Request.php:26
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Support\Utility\Spam.php(329): Npds\Support\Facades\Request::__callStatic('getClientIp', Array)
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Bootstrap.php(17): App\Support\Utility\Spam::spam_logs()
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Platform\Bootstrap.php(136): require('E:\\New_Serv_Wam...')
+#3 [internal function]: {closure}(Object(Npds\Foundation\Application))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(221): call_user_func(Object(Closure), Object(Npds\Foundation\Application))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(170): Npds\Foundation\Application->fireAppCallbacks(Array)
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(284): Npds\Foundation\Application->boot()
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#9 {main}
+
+---------
+
+May 05, 2024 22:07PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Call to undefined method Npds\Translation\TranslationManager::setLocale() in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\SetupLanguage.php:66
+Stack trace:
+#0 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\SetupLanguage.php(43): App\Middleware\SetupLanguage->updateLocale(Object(Npds\Http\Request))
+#1 [internal function]: App\Middleware\SetupLanguage->handle(Object(Npds\Http\Request), Object(Closure))
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#3 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\SetupLanguage), Object(Npds\Http\Request), Object(Closure))
+#4 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#7 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#8 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(84): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#10 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#11 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#13 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(99): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#14 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#16 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#18 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#19 {main}
+
+---------
+
+May 05, 2024 22:47PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Call to undefined method Npds\Support\Facades\Config::get() in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\SetupLanguage.php:43
+Stack trace:
+#0 [internal function]: App\Middleware\SetupLanguage->handle(Object(Npds\Http\Request), Object(Closure))
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\SetupLanguage), Object(Npds\Http\Request), Object(Closure))
+#3 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#7 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(84): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#10 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(99): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#13 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#16 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#18 {main}
+
+---------
+
+May 05, 2024 22:48PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Call to undefined method Npds\Support\Facades\Config::get() in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\SetupLanguage.php:43
+Stack trace:
+#0 [internal function]: App\Middleware\SetupLanguage->handle(Object(Npds\Http\Request), Object(Closure))
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\SetupLanguage), Object(Npds\Http\Request), Object(Closure))
+#3 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#7 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(84): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#10 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(99): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#13 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#16 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#18 {main}
+
+---------
+
+May 05, 2024 22:48PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Call to undefined method Npds\Support\Facades\Config::get() in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\SetupLanguage.php:43
+Stack trace:
+#0 [internal function]: App\Middleware\SetupLanguage->handle(Object(Npds\Http\Request), Object(Closure))
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\SetupLanguage), Object(Npds\Http\Request), Object(Closure))
+#3 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#7 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(84): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#10 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(99): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#13 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#16 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#18 {main}
+
+---------
+
+May 05, 2024 22:48PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Call to undefined method Npds\Support\Facades\Config::get() in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\SetupLanguage.php:43
+Stack trace:
+#0 [internal function]: App\Middleware\SetupLanguage->handle(Object(Npds\Http\Request), Object(Closure))
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\SetupLanguage), Object(Npds\Http\Request), Object(Closure))
+#3 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#7 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(84): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#10 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(99): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#13 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#16 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#18 {main}
+
+---------
+
+May 05, 2024 22:48PM - ERROR:
+
+Npds\Debug\Exception\FatalThrowableError: Call to undefined method Npds\Support\Facades\Config::get() in E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\SetupLanguage.php:43
+Stack trace:
+#0 [internal function]: App\Middleware\SetupLanguage->handle(Object(Npds\Http\Request), Object(Closure))
+#1 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#2 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Pipeline.php(50): Npds\Foundation\Pipeline->call(Object(App\Middleware\SetupLanguage), Object(Npds\Http\Request), Object(Closure))
+#3 [internal function]: Npds\Routing\Pipeline->Npds\Routing\{closure}(Object(Npds\Http\Request))
+#4 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#5 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Routing\Router.php(274): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#6 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(296): Npds\Routing\Router->dispatch(Object(Npds\Http\Request))
+#7 [internal function]: Npds\Foundation\Application->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#8 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(84): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#9 E:\New_Serv_Wamp\npds_dune-php8sql8\app\Middleware\DispatchAssetFiles.php(31): Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#10 [internal function]: App\Middleware\DispatchAssetFiles->handle(Object(Npds\Http\Request), Object(Closure))
+#11 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(130): call_user_func_array(Array, Array)
+#12 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(99): Npds\Foundation\Pipeline->call(Object(App\Middleware\DispatchAssetFiles), Object(Npds\Http\Request), Object(Closure))
+#13 [internal function]: Npds\Foundation\Pipeline->Npds\Foundation\{closure}(Object(Npds\Http\Request))
+#14 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Pipeline.php(71): call_user_func(Object(Closure), Object(Npds\Http\Request))
+#15 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(292): Npds\Foundation\Pipeline->dispatch(Object(Npds\Http\Request), Object(Closure))
+#16 E:\New_Serv_Wamp\npds_dune-php8sql8\system\Foundation\Application.php(241): Npds\Foundation\Application->sendRequestThroughRouter(Object(Npds\Http\Request))
+#17 E:\New_Serv_Wamp\npds_dune-php8sql8\webroot\index.php(31): Npds\Foundation\Application->run()
+#18 {main}
+
+---------
+
