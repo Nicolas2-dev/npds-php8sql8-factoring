@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Support\Subscribe;
 
 use App\Support\Mail\Mailler;
-use Npds\Config\Config;
+
 use Npds\Support\facades\DB;
+use Npds\Support\Facades\Config;
 
 
 class Subscribe

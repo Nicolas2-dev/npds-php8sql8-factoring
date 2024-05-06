@@ -4,19 +4,10 @@ declare(strict_types=1);
 
 namespace App\Support\Chat;
 
-use App\Support\Auth\Users;
-use App\Support\Assets\Java;
-use App\Support\Block\Block;
-use App\Support\Cache\Cache;
-use App\Support\Forum\Forum;
-use App\Support\Str;
-use App\Support\Auth\Authors;
-use App\Support\Security\Hack;
-use App\Support\Utility\Crypt;
-
-use Npds\Config\Config;
 use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Config;
 use Npds\Support\Facades\Request;
+
 
 class Chat
 {

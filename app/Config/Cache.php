@@ -58,7 +58,7 @@ return array(
         /**
          * 
          */
-        'data_dir' =>  'storage/cache/',
+        'data_dir' =>  STORAGE_PATH . 'cache',
 
         /**
          * How the Auto_Cleanup process is run : 0 no cleanup - 1 auto_cleanup

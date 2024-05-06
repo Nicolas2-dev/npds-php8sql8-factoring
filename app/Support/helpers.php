@@ -1,5 +1,6 @@
 <?php
-declare(strict_types=1);
+
+//declare(strict_types=1);
 
 use Npds\Config\Config;
 use App\Support\Chat\Chat;
@@ -16,6 +17,27 @@ use App\Support\Metalang\Metalang;
 use App\Support\Facades\SuperCache;
 use App\Support\Messenger\Messenger;
 
+
+// url
+
+if (! function_exists('redirect_url'))
+{
+    /**
+     * Permet une redirection javascript en lieu et place de header("location: ...");
+     *
+     * @param   string  $urlx  [$urlx description]
+     *
+     * @return  void
+     */
+    function redirect_url(string $urlx): void
+    {
+        echo "<script type=\"text/javascript\">\n";
+        echo "//<![CDATA[\n";
+        echo "document.location.href='". site_url($urlx) ."';\n";
+        echo "//]]>\n";
+        echo "</script>";
+    }
+}
 
 // boxe.php
 

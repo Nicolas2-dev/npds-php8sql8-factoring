@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Date;
 
-use Npds\Config\Config;
+use Npds\Support\Facades\Config;
 
 
 class Date

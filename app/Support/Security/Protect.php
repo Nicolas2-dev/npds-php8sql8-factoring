@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Security;
 
-use Npds\Config\Config;
+use Npds\Support\Facades\Config;
 
 
 class Protect

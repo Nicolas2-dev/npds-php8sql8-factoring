@@ -16,8 +16,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = array(
-        'App\Events\SomeEvent' => array(
-            'App\Listeners\EventListener',
+        'App\Events\CounterUpdateEvent' => array(
+            'App\Listeners\CounterUpdateListener',
+        ),
+        'App\Events\RefererUpdateEvent' => array(
+            'App\Listeners\RefererUpdateListener',
         ),
     );
 

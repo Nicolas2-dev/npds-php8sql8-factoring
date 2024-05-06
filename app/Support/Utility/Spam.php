@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Support\Utility;
 
 use Npds\Support\Facades\Crypt;
-use Npds\Support\Facades\Request;
 
 
 class Spam
