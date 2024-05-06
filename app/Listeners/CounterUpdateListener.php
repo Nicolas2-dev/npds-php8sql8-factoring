@@ -37,8 +37,6 @@ class CounterUpdateListener
     {
         //$admin = Auth::guard('admin')->user();
 
-dump($this->config);
-
         //if ((!$admin) or ($this->config['not_admin_count'])) {
         if ($this->config['not_admin_count']) {
 
