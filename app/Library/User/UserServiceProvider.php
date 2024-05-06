@@ -28,12 +28,13 @@ class UserServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Register UserManager 
         $this->app->singleton('npds.user', function ($app)
         {
             return new UserManager($app);
         });
 
-        // Register Page Ref Manager facade
+        // Register facade
         $loader = AliasLoader::getInstance();
 
         $loader->alias('npds.user', 'App\Support\Facades\User');

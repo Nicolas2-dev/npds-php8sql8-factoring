@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Library\Assets;
+namespace App\Library\Author;
 
-use App\Library\Assets\AssetsManager;
+use App\Library\author\AuthorManager;
 
 use Npds\Foundation\AliasLoader;
 use Npds\Support\ServiceProvider;
 
 
-class AssetsServiceProvider extends ServiceProvider
+class AuthorServiceProvider extends ServiceProvider
 {
 
     /**
@@ -22,16 +22,16 @@ class AssetsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register AssetsManager 
-        $this->app->singleton('npds.assets', function ($app)
+        // Register AuthorManager 
+        $this->app->singleton('npds.author', function ($app)
         {
-            return new AssetsManager($app);
+            return new AuthorManager($app);
         });
 
         // Register facade
         $loader = AliasLoader::getInstance();
 
-        $loader->alias('npds.assets', 'App\Support\Facades\Assets');
+        $loader->alias('npds.author', 'App\Support\Facades\Author');
     }
 
 }

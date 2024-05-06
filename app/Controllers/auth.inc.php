@@ -12,7 +12,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-use App\Support\Auth\Users;
+use App\Support\Facades\User;
 
 use Npds\Config\Config;
 use Npds\Support\Facades\DB;

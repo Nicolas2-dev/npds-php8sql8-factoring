@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Support\Pollbooth;
 
-use App\Support\Auth\Users;
-use App\Support\Block\Boxe;
+use App\Support\Facades\Boxe;
+use App\Support\Facades\User;
+
 use Npds\Support\Facades\DB;
 
 
@@ -32,7 +33,7 @@ class Polls
             $pollClose = (($result['pollType'] / 128) >= 1 ? 1 : 0);
             $pollType = $result['pollType'] % 128;
             
-            $user = Users::getUser();
+            $user = User::getUser();
             
             if (($pollType == 1) and !isset($user)) {
                 $pollClose = 99;

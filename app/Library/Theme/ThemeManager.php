@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Theme;
 
-use App\Support\Auth\Users;
+use App\Support\Facades\User;
 use App\Support\Metalang\Metalang;
 
 use Npds\Foundation\Application;

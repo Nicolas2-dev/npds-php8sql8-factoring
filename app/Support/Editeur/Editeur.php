@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Support\Editeur;
 
-use App\Support\Language\Language;
-use Npds\Config\Config;
+use App\Support\Facades\Language;
+
+use Npds\Support\Facades\Config;
 
 
 class Editeur

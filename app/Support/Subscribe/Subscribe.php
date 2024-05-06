@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Subscribe;
 
-use App\Support\Mail\Mailler;
+use App\Support\Mail\Mailer;
 
 use Npds\Support\facades\DB;
 use Npds\Support\Facades\Config;
@@ -112,7 +112,7 @@ class Subscribe
                 $message .= $url;
                 $message .= Config::get('signature.message');
 
-                Mailler::send_email($email, $subject, $message, '', true, 'html');
+                Mailer::send_email($email, $subject, $message, '', true, 'html');
             }
         }
     }

@@ -2,70 +2,31 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Metalang;
+namespace App\Library\Metalang;
 
-use App\Support\News\News;
-use App\Support\Auth\Users;
-use App\Support\Block\Boxe;
-use App\Support\Auth\Groupe;
-use App\Support\Block\Block;
-use App\Support\Cache\Cache;
-use App\Support\Forum\Forum;
-use App\Support\Str;
-use App\Support\Theme\Theme;
-use App\Support\Auth\Authors;
-use App\Support\Mail\Mailler;
-use App\Support\Utility\Spam;
-use App\Support\Edito\Edito;
-use App\Support\Utility\Crypt;
-use App\Support\Online\Online;
-use App\Support\Language\Language;
-use App\Support\Metalang\Metalang;
-use Npds\Support\Facades\DB;
-use Npds\Config\Config;
+use Npds\Foundation\Application;
 
 
-class Metafunction
+class MetaFunctionManager
 {
 
+
     /**
-     * The metafunction instance
+     * The Application Instance.
      *
-     * @var Metafunction
+     * @var Application
      */
-    private static ?Metafunction $instance = null;
+    public $app;
 
 
     /**
-     * [__construct description]
-     * @param Container $container [description]
-     */
-    public function __construct()
-    {        
-    }
-
-    /**
-     * 
+     * Mailer constructor.
      *
-     * @return  Metafunction
+     * @param string $theme
      */
-    public static function instance(): Metafunction
+    public function __construct(Application $app)
     {
-        if (static::$instance === null) {
-            static::$instance = new self();
-        }
-
-        return static::$instance;  
-    }
-
-    /**
-     * Get singleton instance
-     *
-     * @return Metafunction
-     */
-    public static function getInstance(): Metafunction
-    {
-        return static::$instance;
+        $this->app = $app;
     }
 
     /**

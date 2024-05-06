@@ -8,7 +8,7 @@ define('STORAGE_PATH', BASEPATH .'storage' .DS);
 /**
  * PREFER to be used in database calls default is mini_
  */
-define('PREFIX', 'npds_');
+define('PREFIX', 'two_');
 
 /**
  * Sform

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Library\Assets;
+namespace App\Library\Language;
 
-use App\Library\Assets\AssetsManager;
+use App\Support\Language\LanguageManager;
 
 use Npds\Foundation\AliasLoader;
 use Npds\Support\ServiceProvider;
 
 
-class AssetsServiceProvider extends ServiceProvider
+class LanguageServiceProvider extends ServiceProvider
 {
 
     /**
@@ -22,16 +22,16 @@ class AssetsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register AssetsManager 
-        $this->app->singleton('npds.assets', function ($app)
+        // Register LanguageManager 
+        $this->app->singleton('npds.language', function ($app)
         {
-            return new AssetsManager($app);
+            return new LanguageManager($app);
         });
 
         // Register facade
         $loader = AliasLoader::getInstance();
 
-        $loader->alias('npds.assets', 'App\Support\Facades\Assets');
+        $loader->alias('npds.language', 'App\Support\Facades\Language');
     }
 
 }

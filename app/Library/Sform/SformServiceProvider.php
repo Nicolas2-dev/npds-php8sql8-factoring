@@ -28,12 +28,13 @@ class SformServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Register SformManager 
         $this->app->singleton('npds.sform', function ($app)
         {
             return new SformManager();
         });
 
-        // Register Page Ref Manager facade
+        // Register facade
         $loader = AliasLoader::getInstance();
 
         $loader->alias('npds.sform', 'App\Support\Facades\Sform');

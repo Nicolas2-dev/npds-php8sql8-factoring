@@ -2,22 +2,33 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Metalang;
+namespace App\Library\Metalang;
 
-use App\Support\Theme\Theme;
-use App\Support\Auth\Authors;
-use App\Support\Utility\Code;
-use App\Support\Security\Hack;
-use App\Support\Metalang\Metafunction;
-use Npds\Config\Config;
-use Npds\Cache\SuperCacheEmpty;
-use Npds\Support\Facades\DB;
-use Npds\Support\Facades\Cache as SuperCache;
+use Npds\Foundation\Application;
 
 
-class Metalang
+class MetalangManager
 {
  
+    /**
+     * The Application Instance.
+     *
+     * @var Application
+     */
+    public $app;
+
+
+    /**
+     * Mailer constructor.
+     *
+     * @param string $theme
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+
     /**
      * Cette fonction doit être utilisée pour filtrer les arguments des requêtes SQL et est
      * automatiquement appelée par META-LANG lors de passage de paramètres

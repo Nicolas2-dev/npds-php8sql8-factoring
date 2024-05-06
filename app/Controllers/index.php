@@ -15,7 +15,7 @@
 declare(strict_types=1);
 
 use App\Support\News\News;
-use App\Support\Auth\Users;
+use App\Support\Facades\User;
 use App\Support\Cache\Cache;
 use App\Support\Theme\Theme;
 use App\Support\Edito\Edito;

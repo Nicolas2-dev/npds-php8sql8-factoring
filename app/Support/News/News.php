@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace App\Support\News;
 
 use App\Support\Logs\Logs;
-use App\Support\Auth\Users;
-use App\Support\Auth\Groupe;
-use App\Support\Cache\Cache;
-use App\Support\Str;
-use App\Support\Utility\Code;
 use App\Support\Edito\Edito;
-use App\Support\language\Language;
-use App\Support\Metalang\Metalang;
+use App\Support\Facades\User;
+use App\Support\Utility\Code;
+use App\Support\Facades\Groupe;
+use App\Library\Supercache\Cache;
+use App\Support\Facades\Language;
+use App\Support\Facades\Metalang;
+use App\Support\Utility\Sanitize;
 use App\Support\Subscribe\Subscribe;
-use Npds\Config\Config;
+
 use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Config;
 
 
 class News
@@ -88,7 +89,7 @@ class News
      */
     public static function ctrl_aff(string|int $ihome, string|int $catid = 0): bool
     {
-        $user = users::getUser();
+        $user = User::getUser();
 
         $affich = false;
 
@@ -119,7 +120,6 @@ class News
         return $affich;
     }
  
-    // note va disparaitre par la suite function deprecated !!!!! sert encore pour les fichier du front end !!!
     /**
      * Une des fonctions fondamentales de NPDS
      * assure la gestion de la selection des News en fonctions des critères de publication
@@ -133,169 +133,50 @@ class News
      *
      * @return  array
      */
-    public static function news_aff(string $type_req, string $sel, string|int $storynum, string|int $oldnum): array
-    { // pas stabilisé ...!
-        global $NPDS_Prefix;
-        
-        // Astuce pour afficher le nb de News correct même si certaines News ne sont pas visibles (membres, groupe de membres)
-        // En fait on * le Nb de News par le Nb de groupes
-        $row_Q2 = Cache::Q_select("SELECT COUNT(groupe_id) AS total FROM " . $NPDS_Prefix . "groupes", 86400);
-        $NumG = $row_Q2[0];
-
-        if ($NumG['total'] < 2) {
-            $coef = 2;
-        } else {
-            $coef = $NumG['total'];
-        }
-        
-        settype($storynum, "integer");
-        
-        if ($type_req == 'index') {
-            $Xstorynum = $storynum * $coef;
-            $result = Cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
-            $Znum = $storynum;
-        }
-
-        if ($type_req == 'old_news') {
-            //      $Xstorynum=$oldnum*$coef;
-            $result = Cache::Q_select("SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories $sel ORDER BY time DESC LIMIT $storynum", 3600);
-            $Znum = $oldnum;
-        }
-
-        if (($type_req == 'big_story') or ($type_req == 'big_topic')) {
-            //      $Xstorynum=$oldnum*$coef;
-            $result = Cache::Q_select("SELECT sid, catid, ihome, counter FROM " . $NPDS_Prefix . "stories $sel ORDER BY counter DESC LIMIT $storynum", 0);
-            $Znum = $oldnum;
-        }
-
-        if ($type_req == 'libre') {
-            $Xstorynum = (int) $oldnum * $coef; //need for what ?
-            $result = Cache::Q_select("SELECT sid, catid, ihome, time FROM " . $NPDS_Prefix . "stories $sel", 3600);
-            $Znum = $oldnum;
-        }
-
-        if ($type_req == 'archive') {
-            $Xstorynum = $oldnum * $coef; //need for what ?
-            $result = Cache::Q_select("SELECT sid, catid, ihome FROM " . $NPDS_Prefix . "stories $sel", 3600);
-            $Znum = $oldnum;
-        }
-
-        $ibid = 0;
-        settype($tab, 'array');
-
-        foreach ($result as $myrow) {
-
-            $s_sid = $myrow['sid'];
-            $catid = $myrow['catid'];
-            $ihome = $myrow['ihome'];
-           
-            // not used !!!
-            // if (array_key_exists('time', $myrow)) {
-            //     $time = $myrow['time'];
-            // }
-
-            if ($ibid == $Znum) {
-                break;
-            }
-
-            if ($type_req == "libre") {
-                $catid = 0;
-            }
-
-            if ($type_req == "archive") {
-                $ihome = 0;
-            }
-            
-            if (static::ctrl_aff($ihome, $catid)) {
-                if (($type_req == "index") or ($type_req == "libre")) {
-                    $result2 = sql_query("SELECT sid, catid, aid, title, time, hometext, bodytext, comments, counter, topic, informant, notes FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='0'");
-                }
-                
-                if ($type_req == "archive") {
-                    $result2 = sql_query("SELECT sid, catid, aid, title, time, hometext, bodytext, comments, counter, topic, informant, notes FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='1'");
-                }
-                
-                if ($type_req == "old_news") {
-                    $result2 = sql_query("SELECT sid, title, time, comments, counter FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='0'");
-                }
-                
-                if (($type_req == "big_story") or ($type_req == "big_topic")) {
-                    $result2 = sql_query("SELECT sid, title FROM " . $NPDS_Prefix . "stories WHERE sid='$s_sid' AND archive='0'");
-                }
-
-                $tab[$ibid] = sql_fetch_row($result2);
-                
-                if (is_array($tab[$ibid])) {
-                    $ibid++;
-                }
-                
-                sql_free_result($result2);
-            }
-        }
-
-        @sql_free_result($result);
-
-        return $tab;
-    }
-
-
-    /**
-     * Une des fonctions fondamentales de NPDS
-     * assure la gestion de la selection des News en fonctions des critères de publication
-     *
-     * @param   string  $type_req  [$type_req description]
-     * @param   string  $sel       [$sel description]
-     * @param   string             [ description]
-     * @param   int     $storynum  [$storynum description]
-     * @param   string             [ description]
-     * @param   int     $oldnum    [$oldnum description]
-     *
-     * @return  array
-     */
-    public static function news_aff2(string $type_req, string|array|DB $sel, string|int $storynum, string|int $oldnum): array
+    public static function news_aff(string $type_req, string|array|DB $sel, string|int $storynum, string|int $oldnum): array
     { 
         // pas stabilisé ...!
         // Astuce pour afficher le nb de News correct même si certaines News ne sont pas visibles (membres, groupe de membres)
         // En fait on * le Nb de News par le Nb de groupes
 
-        // $row_Q2 = cache::Q_select3(
+        // $row_Q2 = cache::Q_select(
         //     DB::table('groupes')
         //         ->select(DB::raw('COUNT(groupe_id) AS total'))
-        //         ->get(),
+        //         ->first(),
         //         86400,
         //         ''
         // );
 
-        // if ($row_Q2[0]['total'] < 2) {
+        // if ($row_Q2->total < 2) {
         //     $coef = 2;
         // } else {
-        //     $coef = $row_Q2[0]['total'];
+        //     $coef = $row_Q2->total;
         // }
 
         //settype($storynum, "integer");
         
         if ($type_req == 'index') {
-            $result = Cache::Q_select3($sel, 3600, $type_req);
+            $result = Cache::Q_select($sel, 3600, $type_req);
             $Znum = $storynum;
         }
 
         if ($type_req == 'old_news') {
-            $result = Cache::Q_select3($sel, 3600, $type_req);
+            $result = Cache::Q_select($sel, 3600, $type_req);
             $Znum = $oldnum;
         }
 
         if (($type_req == 'big_story') or ($type_req == 'big_topic')) {
-            $result = Cache::Q_select3($sel, 3600, $type_req);
+            $result = Cache::Q_select($sel, 3600, $type_req);
             $Znum = $oldnum;
         }
 
         if ($type_req == 'libre') {
-            $result = Cache::Q_select3($sel, 3600, $type_req);
+            $result = Cache::Q_select($sel, 3600, $type_req);
             $Znum = $oldnum;
         }
 
         if ($type_req == 'archive') {
-            $result = Cache::Q_select3($sel, 3600, $type_req);
+            $result = Cache::Q_select($sel, 3600, $type_req);
             $Znum = $oldnum;
         }
 
@@ -418,15 +299,15 @@ class News
                         DB::table('stories')->insert(array(
                             'catid'         => $autonews['catid'],
                             'aid'           => $autonews['aid'],
-                            'title'         => $subject = stripslashes(Str::FixQuotes($autonews['title'])),
+                            'title'         => $subject = stripslashes(Sanitize::FixQuotes($autonews['title'])),
                             'time'          => 'now()',
-                            'hometext'      => stripslashes(Str::FixQuotes($autonews['hometext'])),
-                            'bodytext'      => stripslashes(Str::FixQuotes($autonews['bodytext'])),
+                            'hometext'      => stripslashes(Sanitize::FixQuotes($autonews['hometext'])),
+                            'bodytext'      => stripslashes(Sanitize::FixQuotes($autonews['bodytext'])),
                             'comments'      => 0,
                             'counter'       => 0,
                             'topic'         => $autonews['topic'],
                             'informant'     => $autonews['author'],
-                            'notes'         => stripslashes(Str::FixQuotes($autonews['notes'])),
+                            'notes'         => stripslashes(Sanitize::FixQuotes($autonews['notes'])),
                             'ihome'         => $autonews['ihome'],
                             'archive'       => 0,
                             'date_finval'   => $autonews['date_finval'],
@@ -555,7 +436,7 @@ class News
         $transl1 = translate("Page suivante");
         $transl2 = translate("Home");
 
-        $cookie = Users::cookieUser();
+        $cookie = User::cookieUser();
 
         $storynum = ((isset($cookie[3])) 
             ? $cookie[3] 
@@ -635,7 +516,7 @@ class News
      */
     public static function prepa_aff_news(string $op, int|string $catid, string|int $marqeur): array|null
     {
-        $cookie = Users::cookieUser();
+        $cookie = User::cookieUser();
 
         if (isset($cookie[3])) {
             $storynum = $cookie[3];
@@ -654,7 +535,7 @@ class News
                 $marqeur = 0;
             }
 
-            $xtab = static::news_aff2("libre",
+            $xtab = static::news_aff("libre",
                 DB::table('stories')
                     ->select('sid', 'catid', 'ihome', 'time')
                     ->where('catid', $catid)
@@ -675,7 +556,7 @@ class News
                 $marqeur = 0;
             }
 
-            $xtab = static::news_aff2("libre",
+            $xtab = static::news_aff("libre",
                 DB::table('stories')
                     ->select('sid', 'catid', 'ihome', 'time')
                     ->where('topic', $catid)
@@ -696,7 +577,7 @@ class News
                 $marqeur = 0;
             }
 
-            $xtab = static::news_aff2("libre", 
+            $xtab = static::news_aff("libre", 
                 DB::table('stories')
                     ->select('sid', 'catid', 'ihome', 'time')
                     ->where('ihome', '!=', 1)
@@ -712,7 +593,7 @@ class News
             $storynum = sizeof($xtab);
         } elseif ($op == "article") {
 
-            $xtab = static::news_aff2("index", 
+            $xtab = static::news_aff("index", 
                 DB::table('stories')
                     ->select('sid', 'catid', 'ihome')
                     ->where('ihome', '!=', 1)
@@ -725,7 +606,7 @@ class News
             );
         } else {
 
-            $xtab = static::news_aff2("index", 
+            $xtab = static::news_aff("index", 
                 DB::table('stories')
                     ->select('sid', 'catid', 'ihome')
                     ->where('ihome', '!=', 1)
@@ -768,7 +649,7 @@ class News
                 $bodycount = strlen(strip_tags(Language::aff_langue($bodytext)));
                 
                 if ($bodycount > 0) {
-                    $morelink[0] = Str::wrh($bodycount) .' '. translate("caractères de plus");
+                    $morelink[0] = Sanitize::wrh($bodycount) .' '. translate("caractères de plus");
                 } else {
                     $morelink[0] = ' ';
                 }

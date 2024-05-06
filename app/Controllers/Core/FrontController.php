@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Core;
 
-use App\Support\Auth\Users;
+use App\Support\Facades\User;
 use App\Controllers\Core\BaseController;
 
 use Npds\Http\Request;
@@ -30,7 +30,7 @@ class FrontController extends BaseController
     {
         $ip = getip();
 
-        $cookie = Users::cookieUser(1);
+        $cookie = User::cookieUser(1);
 
         $username = $cookie ? $cookie : $ip; // pas bon ...
 

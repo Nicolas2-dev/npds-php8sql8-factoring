@@ -6,18 +6,19 @@ namespace App\Support\Forum;
 
 use App\Support\Date\Date;
 use App\Support\Logs\Logs;
-use App\Support\Auth\Users;
-use App\Support\Auth\Groupe;
-use App\Support\Cache\Cache;
-use App\Support\Str;
-use App\Support\Theme\Theme;
-use App\Support\Auth\Authors;
-use App\Support\Mail\Mailler;
-use App\Support\Utility\Crypt;
-use App\Support\Language\Language;
-use App\Support\Metalang\Metalang;
-use Npds\Config\Config;
-use Npds\Support\facades\DB;
+use App\Support\Mail\Mailer;
+use App\Support\Facades\User;
+use App\Support\Facades\Theme;
+use App\Support\Facades\Author;
+use App\Support\Facades\Groupe;
+use App\Library\Supercache\Cache;
+use App\Support\Facades\Language;
+use App\Support\Facades\Metalang;
+use App\Support\Utility\Sanitize;
+
+use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Crypt;
+use Npds\Support\Facades\Config;
 
 
 class forum
@@ -71,7 +72,7 @@ class forum
     {
         $query = DB::table('forums')->select('*');
 
-        $user = Users::getUser();
+        $user = User::getUser();
 
         if(!$user) {
             $query->where('forum_type', '!=', 9)
@@ -109,8 +110,8 @@ class forum
                 }
 
                 if (Config::get('npds.parse') == 0) {
-                    $forumname  = Str::FixQuotes($forumname);
-                    $forum_desc = Str::FixQuotes($forum_desc);
+                    $forumname  = Sanitize::FixQuotes($forumname);
+                    $forum_desc = Sanitize::FixQuotes($forum_desc);
                 } else {
                     $forumname  = stripslashes($forumname);
                     $forum_desc = stripslashes($forum_desc);
@@ -160,14 +161,14 @@ class forum
                                 DB::table('users')
                                     ->select('uname')
                                     ->where('uid', $posterid)
-                                    ->get(), 3600
+                                    ->get(), 3600, Crypt::encrypt('user(uname)')
                                 );
 
                             $postername = $RowQ1['uname'];
                         }
 
                         if (Config::get('npds.parse') == 0) {
-                            $topictitle = Str::FixQuotes($topicrow['topic_title']);
+                            $topictitle = Sanitize::FixQuotes($topicrow['topic_title']);
                         } else {
                             $topictitle = stripslashes($topicrow['topic_title']);
                         }
@@ -234,7 +235,7 @@ class forum
     {
         $posterids = '';
         
-        foreach (Cache::Q_Select3(DB::table('posts')
+        foreach (Cache::Q_Select(DB::table('posts')
             ->distinct()
             ->select('poster_id')
             ->where('topic_id', $tid)
@@ -330,7 +331,7 @@ class forum
             if (!$myrow = $sql1) { 
                 $val = translate("Rien");
             } else {
-                $rowQ1 = Cache::Q_Select3(
+                $rowQ1 = Cache::Q_Select(
                     DB::table('users')
                         ->select('uname')
                         ->where('uid', $myrow['current_poster'])
@@ -369,7 +370,7 @@ class forum
             $count_id++;
         }
 
-        $rowQ1 = Cache::Q_Select3(
+        $rowQ1 = Cache::Q_Select(
             $query->where('uname', '!=' , 'Anonyme')
                   ->get(), 3600, Crypt::encrypt('user(uid_uname)')
         );
@@ -922,7 +923,7 @@ class forum
     {
         $ret = '';
         $ret = preg_replace('#(^|\s)(http|https|ftp|sftp)(://)([^\s]*)#i', ' <a href="$2$3$4" target="_blank">$2$3$4</a>', $text);
-        $ret = preg_replace_callback('#([_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4})#i', [Mailler::class, 'fakedmail'], $ret);
+        $ret = preg_replace_callback('#([_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4})#i', [Mailer::class, 'fakedmail'], $ret);
     
         return $ret;
     }
@@ -1266,7 +1267,7 @@ class forum
                 $moderator = static::get_moderator($myrow['forum_moderator']);
                 $moderator = explode(' ', $moderator);
                 
-                $user = Users::getUser();
+                $user = User::getUser();
 
                 if (isset($user)) {
                     $userX = base64_decode($user);
@@ -1351,7 +1352,7 @@ class forum
         // droits des admin sur les forums (superadmin et admin avec droit gestion forum)
         $adminforum = false;
 
-        $admin = Authors::getAdmin();
+        $admin = Author::getAdmin();
 
         if ($admin) {
             $adminX = base64_decode($admin);
@@ -1381,7 +1382,7 @@ class forum
         }
         // droits des admin sur les forums (superadmin et admin avec droit gestion forum)
     
-        $user = Users::getUser();
+        $user = User::getUser();
 
         if ($user) {
             $userX = base64_decode($user);
@@ -1425,7 +1426,7 @@ class forum
         }
     
         // preparation du compteur total_post
-        foreach (Cache::Q_Select3(
+        foreach (Cache::Q_Select(
             DB::table('posts')
                 ->select('forum_id', DB::raw('COUNT(post_aff) AS total'))
                 ->groupeBy('forum_id')
@@ -1440,7 +1441,7 @@ class forum
             foreach ($forum_categorie as $row) {
                 $title_aff = true;
 
-                $forums_list = Cache::Q_Select3(
+                $forums_list = Cache::Q_Select(
                     DB::table('forums')
                         ->select('*')
                         ->where('cat_id', $row['cat_id'])
@@ -1593,7 +1594,7 @@ class forum
                                     if ((Config::get('npds.subscribe')) and ($user)) {
                                         if (!$redirect) {
                                             //proto
-                                            if (Mailler::isbadmailuser($userR[0]) === false) { 
+                                            if (Mailer::isbadmailuser($userR[0]) === false) { 
                                                 $ibid .= '
                                                 <span class="d-flex w-100 mt-1" >
                                                     <span class="form-check">';
@@ -1632,7 +1633,7 @@ class forum
     
         if ((Config::get('npds.subscribe')) and ($user) and ($ok_affich)) {
             //proto
-            if (Mailler::isbadmailuser($userR[0]) === false) {
+            if (Mailer::isbadmailuser($userR[0]) === false) {
                 $ibid .= '
                 <div class="form-check mt-1">
                     <input class="form-check-input" type="checkbox" id="ckball_f" />
@@ -1653,7 +1654,7 @@ class forum
      */
     public static function sub_forum_folder(string $forum): string 
     {
-        $user = Users::getUser();
+        $user = User::getUser();
     
         if ($user) {
             $userX = base64_decode($user);

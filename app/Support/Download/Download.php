@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Support\Download;
 
-use App\Support\Auth\Users;
-use App\Support\Str;
-use App\Support\Language\Language;
-use Npds\Config\Config;
+use App\Support\Facades\User;
+use App\Support\Facades\Language;
+use App\Support\Utility\Sanitize;
+
 use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Config;
 
 
 class Download
@@ -40,10 +41,10 @@ class Download
 
         foreach ($result as $download) {    
             if ($download['dcounter'] > 0) {
-                $okfile = Users::autorisation($download['perms']);
+                $okfile = User::autorisation($download['perms']);
                 
                 if ($ordre == 'dcounter') {
-                    $dd = Str::wrh($download['dcounter']);
+                    $dd = Sanitize::wrh($download['dcounter']);
                 }
                 
                 if ($ordre == 'ddate') {
@@ -81,7 +82,7 @@ class Download
                             <a href="'. site_url('download.php?op=mydown&amp;did='. $download['did']) .'" >
                                 '. $download['dfilename'] .'
                             </a> ('. translate("Catégorie") .' :'. Language::aff_langue(stripslashes($download['dcategory'])) .')&nbsp;
-                            <span class="badge bg-secondary float-end align-self-center">'. Str::wrh($download['dcounter']) .'</span>
+                            <span class="badge bg-secondary float-end align-self-center">'. Sanitize::wrh($download['dcounter']) .'</span>
                         </li>';
                     }
                 }

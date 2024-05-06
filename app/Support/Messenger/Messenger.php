@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace App\Support\Messenger;
 
-use App\Support\Auth\Users;
-use App\Support\Assets\Java;
-use App\Support\Cache\Cache;
 use App\Support\Forum\Forum;
-use App\Support\Theme\Theme;
-use App\Support\Auth\Authors;
-use App\Support\Mail\Mailler;
-use App\Support\Security\Hack;
-use App\Support\Utility\Crypt;
+use App\Support\Mail\Mailer;
+use App\Support\Facades\User;
+use App\Support\Facades\Theme;
 use App\Support\Online\Online;
-use App\Support\Language\Language;
-use Npds\Config\Config;
-use Npds\Support\facades\DB;
+use App\Support\Facades\Assets;
+use App\Support\Facades\Author;
+use App\Library\Supercache\Cache;
+use App\Support\Facades\Language;
+use App\Support\Security\Security;
+
+use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Crypt;
+use Npds\Support\Facades\Config;
 
 
 class messenger
@@ -32,7 +33,7 @@ class messenger
     public static function Form_instant_message(string $to_userid): void
     {
         include("themes/default/header.php");
-        static::write_short_private_message(Hack::removeHack($to_userid));
+        static::write_short_private_message(Security::remove($to_userid));
         include("themes/default/footer.php");;
     }
 
@@ -62,9 +63,9 @@ class messenger
 
             include_once("language/multilangue.php");
 
-            $subject = Hack::removeHack($subject);
+            $subject = Security::remove($subject);
             $message = str_replace("\n", "<br />", $message);
-            $message = addslashes(Hack::removeHack($message));
+            $message = addslashes(Security::remove($message));
 
             $r = DB::table('priv_msgs')->insert(array(
                 'msg_image'      => $image,
@@ -101,7 +102,7 @@ class messenger
                 $message = $time .'<br />'. translate_ml($user['user_langue'], "Bonjour") .'<br />'. translate_ml($user['user_langue'], "Vous avez un nouveau message.") .'<br /><br /><b>'. $subject .'</b><br /><br /><a href="'. site_url('viewpmsg.php') .'/">' . translate_ml($user['user_langue'], "Cliquez ici pour lire votre nouveau message.") .'</a><br />';
                 $message .= Config::get('signature.message');
                 
-                Mailler::copy_to_email($user['to_useridx'], $sujet, stripslashes($message));
+                Mailer::copy_to_email($user['to_useridx'], $sujet, stripslashes($message));
             }
         }
     }
@@ -171,7 +172,7 @@ class messenger
             $block_title = translate("M2M bloc");
         }
 
-        $user = Users::getUser();
+        $user = User::getUser();
         
         if ($user) {
 
@@ -193,10 +194,10 @@ class messenger
 
                 if (!Config::get('npds.member_invisible')) {
                     
-                    $admin = Authors::getAdmin();
+                    $admin = Author::getAdmin();
                 
                     if (!$admin) {
-                        if (!$ibid[$i]['username'] == Users::cookieUser(1)) {
+                        if (!$ibid[$i]['username'] == User::cookieUser(1)) {
                             $query->where('is_visible', 1);
                         }
                     }
@@ -206,7 +207,7 @@ class messenger
 
                 if ($userid) {
 
-                    $rowQ1 = Cache::Q_Select3(
+                    $rowQ1 = Cache::Q_Select(
                         DB::table('users_status')
                             ->select('rang')
                             ->where('uid', $userid['uid'])
@@ -218,7 +219,7 @@ class messenger
                     if ($rank) {
                         if ($rank1 == '') {
 
-                            if ($myrow = Cache::Q_Select3(
+                            if ($myrow = Cache::Q_Select(
                                     DB::table('config')
                                     ->select('rank1', 'rank2', 'rank3', 'rank4', 'rank5')
                                     ->get(), 86400, Crypt::encrypt('config(rank)'))) 
@@ -252,10 +253,10 @@ class messenger
                                         ->count();
 
                     if ($new_messages > 0) {
-                        $PopUp = Java::JavaPopUp(site_url('readpmsg_imm.php?op=new_msg'), "IMM", 600, 500);
+                        $PopUp = Assets::JavaPopUp(site_url('readpmsg_imm.php?op=new_msg'), "IMM", 600, 500);
                         $PopUp = '<a href="javascript:void(0);" onclick="window.open($PopUp);">';
                         
-                        if ($ibid[$i]['username'] == Users::cookieUser(1)) {
+                        if ($ibid[$i]['username'] == User::cookieUser(1)) {
                             $icon = $PopUp;
                         } else {
                             $icon = "";
@@ -263,7 +264,7 @@ class messenger
 
                         $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="'. translate("Nouveau") .'<span class=\'rounded-pill bg-danger ms-2\'>'. $new_messages .'</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
                         
-                        if ($ibid[$i]['username'] == Users::cookieUser(1)) {
+                        if ($ibid[$i]['username'] == User::cookieUser(1)) {
                             $icon .= '</a>';
                         }
                     } else {
@@ -275,10 +276,10 @@ class messenger
                                         ->count();
 
                         if ($messages > 0) {
-                            $PopUp = Java::JavaPopUp(site_url('readpmsg_imm.php?op=msg'), "IMM", 600, 500);
+                            $PopUp = Assets::JavaPopUp(site_url('readpmsg_imm.php?op=msg'), "IMM", 600, 500);
                             $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
                             
-                            if ($ibid[$i]['username'] == Users::cookieUser(1)) {
+                            if ($ibid[$i]['username'] == User::cookieUser(1)) {
                                 $icon = $PopUp;
                             } else {
                                 $icon = '';
@@ -306,7 +307,7 @@ class messenger
 
             themesidebox($block_title, $boxstuff);
         } else {
-            $admin = Authors::getAdmin();
+            $admin = Author::getAdmin();
             
             if ($admin) {
                 $ibid = Online::online_members();

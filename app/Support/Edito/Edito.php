@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Support\Edito;
 
 use App\Support\Date\Date;
-use App\Support\Auth\Users;
-use App\Support\Language\Language;
-use App\Support\Metalang\Metalang;
+use App\Support\Facades\User;
+use App\Support\Facades\Language;
+use App\Support\Facades\Metalang;
 
 
 class Edito
@@ -20,7 +20,7 @@ class Edito
      */
     public static function fab_edito(): array
     {
-        $cookie = Users::cookieUser(3);
+        $cookie = User::cookieUser(3);
 
         if (isset($cookie)) {
             if (file_exists("storage/static/edito_membres.txt")) {

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Support\Online;
 
-use App\Support\Auth\Users;
-use Npds\Config\Config;
+use App\Support\Facades\User;
+
 use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Config;
 
 
 class Online
@@ -35,8 +36,8 @@ class Online
 
         $content1 = $guest_online_num .' '. translate("visiteur(s) et").' '. $member_online_num.' '.translate("membre(s) en ligne.");
         
-        if (Users::getUser()) {
-            $content2 = translate("Vous êtes connecté en tant que") .' <b>'. Users::cookieUser(1) .'</b>';
+        if (User::getUser()) {
+            $content2 = translate("Vous êtes connecté en tant que") .' <b>'. User::cookieUser(1) .'</b>';
         } else {
             $content2 = translate("Devenez membre privilégié en cliquant") .' <a href="'. site_url('user.php?op=only_newuser') .'">'. translate("ici") .'</a>';
         }

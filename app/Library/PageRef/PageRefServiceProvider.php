@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Library\Assets;
+namespace App\Library\PageRef;
 
-use App\Library\Assets\AssetsManager;
+use App\Library\PageRef\PageRefManager;
 
 use Npds\Foundation\AliasLoader;
 use Npds\Support\ServiceProvider;
 
 
-class AssetsServiceProvider extends ServiceProvider
+class PageRefServiceProvider extends ServiceProvider
 {
 
     /**
@@ -22,16 +22,16 @@ class AssetsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register AssetsManager 
-        $this->app->singleton('npds.assets', function ($app)
+        // Register PageRefManager 
+        $this->app->singleton('npds.pageref', function ($app)
         {
-            return new AssetsManager($app);
+            return new PageRefManager($app);
         });
 
         // Register facade
         $loader = AliasLoader::getInstance();
 
-        $loader->alias('npds.assets', 'App\Support\Facades\Assets');
+        $loader->alias('npds.pageref', 'App\Support\Facades\PageRef');
     }
 
 }

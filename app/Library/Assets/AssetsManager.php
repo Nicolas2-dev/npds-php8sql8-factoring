@@ -343,7 +343,7 @@ class AssetsManager
         $list_json = '';
         $list_json .= 'var ' . $nom_array_js . ' = [';
 
-        foreach (Cache::Q_select3(DB::table($nom_tabl)->select($nom_champ)->get(), $temps_cache, Crypt::encrypt('auto_complete')) as $ar_data) 
+        foreach (Cache::Q_select(DB::table($nom_tabl)->select($nom_champ)->get(), $temps_cache, Crypt::encrypt('auto_complete')) as $ar_data) 
         {
             if ($id_inpu == '') {
                 $list_json .= '"' . base64_encode($ar_data[$nom_champ]) . '",';

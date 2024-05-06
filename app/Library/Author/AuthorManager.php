@@ -2,28 +2,48 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Auth;
+namespace App\Library\author;
 
-use App\Support\Assets\Css;
 use App\Support\Security\Protect;
-use Npds\Support\facades\DB;
+
+use Npds\Support\Facades\DB;
+use Npds\Foundation\Application;
 
 
-class Authors
+class AuthorManager
 {
- 
+    
+    /**
+     * The Application Instance.
+     *
+     * @var Application
+     */
+    public $app;
+
+    
+    /**
+     * Mailer constructor.
+     *
+     * @param string $theme
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
     /**
      * 
      *
      * @return  string|null
      */
-    public static function extractAdmin(): string|null 
+    public function extractAdmin()
     {
-        $admin = static::extratCookie('admin');
+        $admin = $this->extratCookie('admin');
 
         if (isset($admin)) {
             $ibid = explode(':', base64_decode($admin));
             array_walk($ibid, [Protect::class, 'url']);
+            
             return base64_encode(str_replace("%3A", ":", urlencode(base64_decode($admin))));
         }
 
@@ -37,7 +57,7 @@ class Authors
      *
      * @return  string|bool
      */
-    public static function extratCookie(string $name)//: string|bool
+    public function extratCookie(string $name)
     {
         if (!empty($_COOKIE)) {
             extract($_COOKIE, EXTR_OVERWRITE);
@@ -46,8 +66,6 @@ class Authors
         if(isset($$name)) {
             return $$name;            
         }
-
-        //return  false;
     }
 
     /**
@@ -55,9 +73,9 @@ class Authors
      *
      * @return  string|null
      */
-    public static function getAdmin(): string|null
+    public function getAdmin()
     {
-        return static::extractAdmin();
+        return $this->extractAdmin();
     }
 
     /**
@@ -65,9 +83,9 @@ class Authors
      *
      * @return  string|array|bool|int
      */
-    public static function cookieAdmin($arg = null): string|array|bool|int|null
+    public function cookieAdmin($arg = null)
     {
-        $admin = static::extractAdmin();
+        $admin = $this->extractAdmin();
 
         if (isset($admin)) {
 
@@ -94,12 +112,11 @@ class Authors
      *
      * @return  bool
      */    
-    public static function is_admin(string $xadmin): bool
+    public function is_admin(string $xadmin)
     {
-        $admin = static::getAdmin();
+        $admin = $this->getAdmin();
 
-        if (($admin === true) and ($admin != '')) {
-        //if (isset($admin) and ($admin != '')) {
+        if (isset($admin) and ($admin != '')) {
             return true;
         } else {
             return false;
@@ -113,7 +130,7 @@ class Authors
      *
      * @return  void
      */
-    public static function formatAidHeader(string $aid): void
+    public function formatAidHeader(string $aid)
     {
         $author = DB::table('authors')->select('url', 'email')->where('aid', $aid)->first();
 
@@ -134,7 +151,7 @@ class Authors
      *
      * @return  void
      */
-    public static function login(): void
+    public function login()
     {
         include("themes/default/header.php");
     
@@ -176,7 +193,7 @@ class Authors
             var formulid =["adminlogin"];
             ';
     
-        Css::adminfoot('fv', '', $arg1, '');
+        $this->asset()->adminfoot('fv', '', $arg1, '');
     }
 
     /**
@@ -184,11 +201,40 @@ class Authors
      *
      * @return  void    [return description]
      */
-    public static function logout(): void
+    public function logout()
     {
-        setcookie("admin");
-        setcookie("adm_exp");
-        unset($admin); // normalement ne sert plus par la suite a verifier !
-        Header("Location: index.php");
+        $this->auth()->guarg('admin')->logout();
+
+        return $this->redirect()->to('login')->with('success', 'You have successfully logged out.');
+    }
+
+    /**
+     * [getAssets description]
+     *
+     * @return  [type]  [return description]
+     */
+    public function asset()
+    {
+        return $this->app['npds.assets'];
+    }
+
+    /**
+     * [getAuths description]
+     *
+     * @return  [type]  [return description]
+     */
+    public function auth()
+    {
+        return $this->app['auth'];
+    }
+
+    /**
+     * [redirect description]
+     *
+     * @return  [type]  [return description]
+     */
+    public function redirect()
+    {
+        return $this->app['redirect'];
     }
 }

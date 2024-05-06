@@ -29,17 +29,19 @@ class SuperCacheServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Register SuperCacheManager 
         $this->app->singleton('npds.super.cache.manager', function ($app)
         {
             return new SuperCacheManager($app['config']['cache']);
         });
 
+        // Register SuperCacheEmptyManager
         $this->app->singleton('npds.super.cache.empty', function ($app)
         {
             return new SuperCacheEmpty();
         });
 
-        // Register Page Ref Manager facade
+        // Register facade
         $loader = AliasLoader::getInstance();
 
         $loader->alias('npds.super.cache.manager', 'App\Support\Facades\SuperCacheManager');

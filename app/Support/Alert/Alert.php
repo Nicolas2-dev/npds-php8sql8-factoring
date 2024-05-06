@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Alerte;
+namespace App\Support\Alert;
+
+use DirectoryIterator;
+
+use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Config;
+use App\Support\Facades\Language;
 
 
-class Alerte
+class Alert
 {
 
 
-    public static function () 
+    public static function queu() 
     {
         //==> recupérations des états des fonctions d'ALERTE ou activable et maj (faire une fonction avec cache court dev ..)
         //article à valider
@@ -35,7 +41,7 @@ class Alerte
         
     }
 
-    public static function () 
+    public static function autonews() 
     {
         //news auto
 
@@ -59,7 +65,7 @@ class Alerte
         
     }
 
-    public static function () 
+    public static function filemanager() 
     {
         //etat filemanager
         if (Config::get('filemanager.manager')) 
@@ -79,7 +85,7 @@ class Alerte
         
     }
 
-    public static function () 
+    public static function user() 
     {
         //utilisateur à valider
 
@@ -103,7 +109,7 @@ class Alerte
     
     }
 
-    public static function () 
+    public static function referer() 
     {
         //référants à gérer
         if (Config::get('npds.httpref') == 1) {
@@ -128,7 +134,7 @@ class Alerte
         }
     }
 
-    public static function () 
+    public static function reviews() 
     {
         //critique en attente
 
@@ -152,7 +158,7 @@ class Alerte
     
     }
 
-    public static function () 
+    public static function link() 
     {
         //nouveau lien à valider
 
@@ -176,7 +182,7 @@ class Alerte
     
     }
 
-    public static function () 
+    public static function linkMod() 
     {
         //lien rompu à valider
 
@@ -200,7 +206,7 @@ class Alerte
     
     }
 
-    public static function () 
+    public static function tempo() 
     {
         //nouvelle publication
         $newpubli = $Q['radminsuper'] == 1 ?
@@ -230,7 +236,7 @@ class Alerte
     
     }
 
-    public static function () 
+    public static function groupe() 
     {
         //utilisateur(s) en attente de groupe
         $directory = "storage/users_private/groupe";
@@ -260,7 +266,7 @@ class Alerte
 
     }
 
-    public static function () 
+    public static function adminAlerte() 
     {
         //==> Pour les modules installés produisant des notifications
 
@@ -301,7 +307,7 @@ class Alerte
         //<== Pour les modules installés produisant des notifications
     }
 
-    public static function () 
+    public static function alertUpdate() 
     {
         //==> recuperation traitement des messages de NPDS
 
@@ -416,13 +422,13 @@ class Alerte
         //<== recuperation traitement des messages de NPDS
     }
 
-    public static function () 
+    public static function modalVersion() 
     {
         $adm_ent .= '
         <div id="adm_men_dial" class="border rounded px-2 py-2" >
             <div id="adm_men_alert" >
                 <div id="alertes">
-                ' . language::aff_langue($bloc_foncts_A) . '
+                ' . Language::aff_langue($bloc_foncts_A) . '
                 </div>
             </div>
         </div>
@@ -440,20 +446,19 @@ class Alerte
                 <p>Vous utilisez NPDS ' . Config::get('versioning.Version_Sub') . ' ' . Config::get('versioning.Version_Num') . '</p>';
             
         if (($versus_info[2] > Config::get('versioning.Version_Num'))) {          
-        $adm_ent .= '<p>' . adm_translate("Une nouvelle version de NPDS est disponible !") . '</p>
-                <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
-                <p class="my-3">
-                    <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-bs-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
-                    <a class="mx-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.tar.gz" target="_blank" title="" data-bs-toggle="tooltip" data-bs-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.tar.gz</a>
-                </p></div>';
+            $adm_ent .= '<p>' . adm_translate("Une nouvelle version de NPDS est disponible !") . '</p>
+                    <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
+                    <p class="my-3">
+                        <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-bs-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
+                        <a class="mx-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.tar.gz" target="_blank" title="" data-bs-toggle="tooltip" data-bs-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.tar.gz</a>
+                    </p></div>';
 
         }
     }
 
-    public static function () 
+    public static function modalAlert() 
     {
-                $adm_ent .= '                
-                
+        $adm_ent .= '                
                 <div class="modal-footer">
                 </div>
             </div>

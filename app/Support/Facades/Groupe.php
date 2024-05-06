@@ -7,13 +7,13 @@ namespace App\Support\Facades;
 use Npds\Support\Facades\Facade;
 
 
-class User extends Facade
+class Groupe extends Facade
 {
     /**
      * Get the registered name of the component.
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'npds.user'; }
+    protected static function getFacadeAccessor() { return 'npds.groupe'; }
 
 }

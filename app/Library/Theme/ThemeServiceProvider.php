@@ -28,12 +28,13 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Register ThemeManager 
         $this->app->singleton('npds.sform', function ($app)
         {
             return new ThemeManager($app);
         });
 
-        // Register Page Ref Manager facade
+        // Register facade
         $loader = AliasLoader::getInstance();
 
         $loader->alias('npds.theme', 'App\Support\Facades\Theme');

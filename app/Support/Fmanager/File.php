@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace App\Support\Fmanager;
 
-use App\Support\Theme\Theme;
+use App\Support\Facades\Theme;
 
 
 class File

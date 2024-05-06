@@ -2,27 +2,31 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Block;
+namespace App\Library\Block;
 
-use App\Support\Date\Date;
-use App\Support\News\News;
-use App\Support\Assets\Css;
-use App\Support\Auth\Users;
-use App\Support\Auth\Groupe;
-use App\Support\Cache\Cache;
-use App\Support\Str;
-use App\Support\Theme\Theme;
-use App\Support\Auth\Authors;
-use App\Support\Stats\Stats;
-use App\Support\Utility\Crypt;
-use App\Support\Download\Download;
-use App\Support\Language\Language;
-use Npds\Config\Config;
-use Npds\Support\Facades\DB;
+use Npds\Foundation\Application;
 
 
-class Boxe
+class BoxeManager
 {
+
+    /**
+     * The Application Instance.
+     *
+     * @var Application
+     */
+    public $app;
+
+
+    /**
+     * Mailer constructor.
+     *
+     * @param string $theme
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
     /**
      * Bloc activité du site
@@ -30,7 +34,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function Site_Activ(): void
+    public function Site_Activ()
     {
         list($membres, $totala, $totalb, $totalc, $totald, $totalz) = Stats::req_stat();
 
@@ -88,7 +92,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function online(): void
+    public function online()
     {
         $ip = getip();
 
@@ -165,7 +169,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function lnlbox(): void
+    public function lnlbox()
     {
         global $block_title;
 
@@ -200,7 +204,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function searchbox(): void
+    public function searchbox()
     {
         global $block_title;
 
@@ -220,7 +224,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function adminblock(): void
+    public function adminblock()
     {
         global $aid, $block_title;;
 
@@ -419,7 +423,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function mainblock(): void
+    public function mainblock()
     {
         $block = DB::table('block')
                     ->select('title', 'content')
@@ -445,7 +449,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function ephemblock(): void
+    public function ephemblock()
     {
         $cnt = 0;
         $eday = date("d", time() + ((int) Config::get('npds.gmt') * 3600));
@@ -484,7 +488,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function loginbox(): void
+    public function loginbox()
     {
         $boxstuff = '';
 
@@ -521,7 +525,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function userblock(): void
+    public function userblock()
     {
         if ((users::getUser()) and (users::cookieUser(8))) {
 
@@ -549,7 +553,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function topdownload(): void
+    public function topdownload()
     {
         global $block_title;
 
@@ -572,7 +576,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function lastdownload(): void
+    public function lastdownload()
     {
         global $block_title;
 
@@ -599,7 +603,7 @@ class Boxe
      *
      * @return  void               [return description]
      */
-    public static function oldNews(string $storynum, ?string $typ_aff = ''): void
+    public function oldNews(string $storynum, ?string $typ_aff = '')
     {
         global $categories, $cat;
 
@@ -720,7 +724,7 @@ class Boxe
      *
      * @return  void    [return description]
      */
-    public static function bigstory(): void
+    public function bigstory()
     {
         $content = '';
         $today = getdate();
@@ -782,7 +786,7 @@ class Boxe
      *
      * @return  void
      */
-    public static function category(): void
+    public function category()
     {
         global $cat;
 
@@ -846,7 +850,7 @@ class Boxe
      *
      * @return  string          [return description]
      */
-    public static function headlines(?string $hid = '', string|bool $block = true)
+    public function headlines(?string $hid = '', string|bool $block = true)
     {
         if (file_exists("config/proxy.php")) {
             include("config/proxy.php");
@@ -1008,7 +1012,7 @@ class Boxe
      *
      * @return  void
      */
-    public static function bloc_rubrique(): void
+    public function bloc_rubrique()
     {
         $boxstuff = '<ul>';
 
@@ -1077,7 +1081,7 @@ class Boxe
      *
      * @return  void
      */
-    public static function bloc_espace_groupe(string $gr, string $i_gr): void
+    public function bloc_espace_groupe(string $gr, string $i_gr)
     {
         global $block_title;
 
@@ -1103,7 +1107,7 @@ class Boxe
      *
      * @return  void
      */
-    public static function bloc_groupes(string $im): void
+    public function bloc_groupes(string $im)
     {
         global $block_title;
 
@@ -1118,7 +1122,7 @@ class Boxe
      *
      * @return  void
      */
-    public static function bloc_langue(): void
+    public function bloc_langue()
     {
         global $block_title;
 
@@ -1133,7 +1137,7 @@ class Boxe
      *
      * @return  void
      */
-    public static function blockSkin(): void
+    public function blockSkin()
     {
         $skinOn = '';
 
@@ -1194,7 +1198,7 @@ class Boxe
      *
      * @return  void
      */
-    public static function pollMain(int $pollID, string|int $pollClose): void
+    public function pollMain(int $pollID, string|int $pollClose)
     {
         global $boxTitle, $boxContent;
 

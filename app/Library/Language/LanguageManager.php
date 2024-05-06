@@ -4,20 +4,38 @@ declare(strict_types=1);
 
 namespace App\Support\Language;
 
-use Npds\Config\Config;
+
+use Npds\Foundation\Application;
+use Npds\Support\Facades\Config;
 
 
-class Language
+class LanguageManager
 {
 
+    /**
+     * The Application Instance.
+     *
+     * @var Application
+     */
+    public $app;
 
+
+    /**
+     * Mailer constructor.
+     *
+     * @param string $theme
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
     /**
      * [getLocale description]
      *
      * @return  string
      */
-    public static function getLocale(): string
+    public function getLocale()
     {
         global $user_language;
 
@@ -35,23 +53,9 @@ class Language
      *
      * @return  array
      */
-    public static function languages(): array 
+    public function languages()
     {
         return Config::get('languages');
-    }
-
-    /**
-     * [getLocale2 description]
-     *
-     * @return  string
-     */
-    public static function getLocale2(): string 
-    {
-        $locale = static::getLocale();
-
-        $languages = static::languages();
-        
-        return $languages[$locale]['locale'];
     }
 
     /**
@@ -59,11 +63,11 @@ class Language
      *
      * @return  string
      */
-    public static function getLocaleIso(): string 
+    public function getLocaleIso() 
     {
-        $locale = static::getLocale();
+        $locale = $this->getLocale();
 
-        $languages = static::languages();
+        $languages = $this->languages();
         
         return $languages[$locale]['iso'];
     }
@@ -76,10 +80,10 @@ class Language
      *
      * @return  string         [return description]
      */
-    public static function aff_langue(string $ibid): string
+    public function aff_langue(string $ibid)
     {
         // copie du tableau + rajout de transl pour gestion de l'appel à translate(...); - Theme Dynamic
-        $tab_llangue = static::make_tab_langue();
+        $tab_llangue = $this->make_tab_langue();
         $tab_llangue[] = 'transl';
 
         reset($tab_llangue);
@@ -153,9 +157,9 @@ class Language
      *
      * @return  array
      */
-    public static function make_tab_langue(): array
+    public function make_tab_langue()
     {
-        $languageslist = language::languageList();
+        $languageslist = $this->languageList();
 
         $languageslocal = Config::get('npds.language') . ' ' . str_replace(Config::get('npds.language'), '', $languageslist);
         $languageslocal = trim(str_replace('  ', ' ', $languageslocal));
@@ -171,7 +175,7 @@ class Language
      *
      * @return  string
      */
-    public static function aff_localzone_langue(string $ibid): string
+    public function aff_localzone_langue(string $ibid)
     {
         $flag = array('fr' => '🇫🇷', 'es' => '🇪🇸', 'de' => '🇩🇪', 'en' => '🇺🇸', 'zh' => '🇨🇳');
 
@@ -180,7 +184,7 @@ class Language
         <select name="' . $ibid . '" class="form-select" onchange="this.form.submit()">
             <option value="">' . translate("Choisir une langue") . '</option>';
         
-        foreach (static::make_tab_langue() as $bidon => $langue) {
+        foreach ($this->make_tab_langue() as $bidon => $langue) {
             $M_langue .= '
                 <option value="' . $langue . '">' . $flag[$langue] . ' ' . translate("$langue") . '</option>';
         }
@@ -205,7 +209,7 @@ class Language
      *
      * @return  string
      */    
-    public static function aff_local_langue(string $ibid_index, string $ibid, ?string $mess = ''): string
+    public function aff_local_langue(string $ibid_index, string $ibid, ?string $mess = '')
     {
         if ($ibid_index == '') {
             global $REQUEST_URI;
@@ -213,7 +217,7 @@ class Language
         }
 
         $M_langue = '<form action="' . $ibid_index . '" name="local_user_language" method="post">';
-        $M_langue .= $mess . static::aff_localzone_langue($ibid);
+        $M_langue .= $mess . $this->aff_localzone_langue($ibid);
         $M_langue .= '</form>';
 
         return $M_langue;
@@ -227,15 +231,16 @@ class Language
      *
      * @return  string
      */
-    public static function preview_local_langue(?string $local_user_language, string $ibid): string
+    public function preview_local_langue(?string $local_user_language, string $ibid)
     {
         if ($local_user_language) {
             $old_langue = Config::get('npds.language');
+
             Config::set('npds.language', $local_user_language);
 
-            $tab_langue = static::make_tab_langue(); // ???
+            $tab_langue = $this->make_tab_langue(); // ???
             
-            $ibid = static::aff_langue($ibid);
+            $ibid = $this->aff_langue($ibid);
 
             Config::set('npds.language.old_langue', $old_langue);
         }
@@ -255,7 +260,7 @@ class Language
      *
      * @return  string
      */
-    public static function language_iso(string|int $l, string|int $s, string|int $c): string
+    public function language_iso(string|int $l, string|int $s, string|int $c)
     {
         global $user_language;
 
@@ -323,7 +328,7 @@ class Language
      *
      * @return  string
      */
-    public static function languageList(): string
+    public function languageList()
     {
         $languageslist = '';
         $handle = opendir(APPPATH .'language');
@@ -334,7 +339,7 @@ class Language
         }
         closedir($handle);
 
-        static::languageWhiteToCache($languageslist);
+        $this->languageWhiteToCache($languageslist);
 
         return $languageslist;
     }
@@ -346,7 +351,7 @@ class Language
      *
      * @return  void
      */
-    public static function languageWhiteToCache($languageslist): void
+    public function languageWhiteToCache($languageslist)
     {
         $file = fopen('storage/language/lang_code.php', 'w');
         fwrite($file, "<?php \$languageslist=\"" . trim($languageslist) . "\"; ?>");

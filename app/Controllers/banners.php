@@ -15,7 +15,7 @@
 declare(strict_types=1);
 
 use App\Support\Assets\Css;
-use App\Support\Auth\Users;
+use App\Support\Facades\User;
 use App\Support\Cache\Cache;
 use App\Support\Routing\Url;
 use App\Support\Str;

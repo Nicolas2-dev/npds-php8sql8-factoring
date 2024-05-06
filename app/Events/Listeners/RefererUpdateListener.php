@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Events\Listeners;
 
-use Npds\Support\Facades\Config;
+use App\Events\RefererUpdateEvent;
 use App\Support\Security\Security;
+
+use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Config;
 
 
 class RefererUpdateListener
@@ -28,7 +31,7 @@ class RefererUpdateListener
     /**
      * Handle the event.
      *
-     * @param  \App\Evernts\RefererUpdateEvent  $event
+     * @param  \App\Events\RefererUpdateEvent  $event
      * @return void
      */
     public function handle(RefererUpdateEvent $event)

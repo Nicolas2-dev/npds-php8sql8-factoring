@@ -2,26 +2,32 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Auth;
+namespace App\Library\Groupe;
 
-use App\Support\Str;
-use App\Support\Auth\Users;
-use App\Support\Assets\Java;
-use App\Support\Cache\Cache;
-use App\Support\Forum\Forum;
-use App\Support\Theme\Theme;
-use Npds\Support\Facades\DB;
-use App\Support\Utility\Spam;
-use App\Support\Online\Online;
-use App\Support\Utility\Crypt;
-
-use Npds\Support\Facades\Config;
-use App\Support\Language\Language;
+use Npds\Foundation\Application;
 
 
-class Groupe
+class GroupeManager
 {
+ 
+    /**
+     * The Application Instance.
+     *
+     * @var Application
+     */
+    public $app;
 
+
+    /**
+     * Mailer constructor.
+     *
+     * @param string $theme
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+    
     /**
      * Retourne un tableau contenant la liste des groupes d'appartenance d'un membre
      *
@@ -29,12 +35,12 @@ class Groupe
      *
      * @return  array
      */
-    public static function valid_group(string $xuser): array
+    public function valid_group(string $xuser)
     {
         if ($xuser) {
             $userdata = explode(':', base64_decode($xuser));
 
-            $user_temp = Cache::Q_select3(DB::table('users_status')->select('groupe')->where('uid', $userdata[0])->get(), 3600, 'users_status(ui)');
+            $user_temp = Cache::Q_select(DB::table('users_status')->select('groupe')->where('uid', $userdata[0])->get(), 3600, 'users_status(ui)');
 
             $tab_groupe = explode(',', $user_temp[0]['groupe']);
         } else {
@@ -49,7 +55,7 @@ class Groupe
      *
      * @return  array
      */
-    public static function liste_group(): array
+    public function liste_group()
     {  
         $groupes = DB::table('groupes')->select('groupe_id', 'groupe_name')->orderBy('groupe_id', 'asc')->get();
         
@@ -70,9 +76,9 @@ class Groupe
      *
      * @return  bool
      */
-    public static function groupe_forum(string $forum_groupeX, array $tab_groupeX): bool
+    public function groupe_forum(string $forum_groupeX, array $tab_groupeX)
     {
-        $ok_affich = static::groupe_autorisation($forum_groupeX, $tab_groupeX);
+        $ok_affich = $this->groupe_autorisation($forum_groupeX, $tab_groupeX);
 
         return $ok_affich;
     }
@@ -85,7 +91,7 @@ class Groupe
      *
      * @return  bool
      */
-    public static function groupe_autorisation(string $groupeX, array $tab_groupeX): bool
+    public function groupe_autorisation(string $groupeX, array $tab_groupeX)
     {
         $tab_groupe = explode(',', $groupeX);
         $ok = false;
@@ -117,7 +123,7 @@ class Groupe
      *
      * @return  string
      */
-    public static function fab_espace_groupe(string $gr, string $t_gr, string $i_gr): string
+    public function fab_espace_groupe(string $gr, string $t_gr, string $i_gr)
     {
         $content = '
         <script type="text/javascript">
@@ -440,7 +446,7 @@ class Groupe
      *
      * @return  string
      */
-    public static function fab_groupes_bloc(string $user, string $im): string
+    public function fab_groupes_bloc(string $user, string $im)
     {
         $lstgr = array();
         $userdata = explode(':', base64_decode( (string) $user));
@@ -523,10 +529,12 @@ class Groupe
      *
      * @return  string
      */
-    public static function groupe(string $groupe): string
+    public function groupe(string $groupe)
     {
         $les_groupes = explode(',', $groupe);
-        $mX = static::liste_group();
+
+        $mX = $this->liste_group();
+
         $nbg = 0;
         $str = '';
 
@@ -567,7 +575,7 @@ class Groupe
      *
      * @return  void
      */
-    public static function droits(string $member): void
+    public function droits(string $member)
     {
         echo '
         <fieldset>
@@ -612,7 +620,7 @@ class Groupe
             <div class="mb-3">
                 <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
            
-            echo static::groupe($member) . '</div>';
+            echo $this->groupe($member) . '</div>';
         } else {
             if ($member == 0) { 
                 $checked = ' checked="checked"';
@@ -632,7 +640,7 @@ class Groupe
             <div class="mb-3">
                 <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
                 
-                echo static::groupe($member) . '
+                echo $this->groupe($member) . '
                 </div>
             </fieldset>';
         }

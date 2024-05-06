@@ -2,23 +2,32 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Block;
+namespace App\Library\Block;
 
-use App\Support\Auth\Users;
-use App\Support\Auth\Groupe;
-use App\Support\Auth\Authors;
-use App\Support\Language\Language;
-
-use Npds\Config\Config;
-use Npds\Cache\CacheManager;
-use Npds\Cache\SuperCacheEmpty;
-use Npds\Support\Facades\DB;
-use Npds\Support\Facades\Cache as SuperCache;
+use Npds\Foundation\Application;
 
 
-class Block
+class BlockManager
 {
  
+    /**
+     * The Application Instance.
+     *
+     * @var Application
+     */
+    public $app;
+
+
+    /**
+     * Mailer constructor.
+     *
+     * @param string $theme
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
     /**
      * Assure la gestion des include# et function# des blocs de NPDS
      * le titre du bloc est exporté (global) )dans $block_title
@@ -28,7 +37,7 @@ class Block
      *
      * @return  bool
      */
-    public static function block_fonction(string $title, string $contentX): bool
+    public function block_fonction(string $title, string $contentX)
     {
         global $block_title;
 
@@ -130,7 +139,7 @@ class Block
      *
      * @return  void
      */
-    public static function fab_block(string $title, string $member, string $content, int $Xcache): void
+    public function fab_block(string $title, string $member, string $content, int $Xcache)
     { 
         global $B_class_title, $B_class_content, $REQUEST_URI;
         
@@ -170,7 +179,7 @@ class Block
         
         if ((Config::get('cache.config.SuperCache')) and ($Xcache != 0)) {
             $cache_clef = md5($content);
-            $cache_obj = SuperCache::getInstance();
+            $cache_obj = SuperCacheManager::getInstance();
             $cache_obj->setTimingBlock($cache_clef, $Xcache);
             $cache_obj->startCachingBlock($cache_clef);
         } else {
@@ -287,7 +296,7 @@ class Block
 
             if (!empty($content)) {
                 if (($member == 1) and (isset($user))) {
-                    if (!static::block_fonction($title, $content)) {
+                    if (!$this->block_fonction($title, $content)) {
                         if (!$hidden) {
                             themesidebox($title, $content);
                         } else {
@@ -295,7 +304,7 @@ class Block
                         }
                     }
                 } elseif ($member == 0) {
-                    if (!static::block_fonction($title, $content)) {
+                    if (!$this->block_fonction($title, $content)) {
                         if (!$hidden) {
                             themesidebox($title, $content);
                         } else {
@@ -305,7 +314,7 @@ class Block
                 } elseif (($member > 1) and (isset($user))) {
                     $tab_groupe = Groupe::valid_group($user);
                     if (Groupe::groupe_autorisation($member, $tab_groupe)) {
-                        if (!static::block_fonction($title, $content)) {
+                        if (!$this->block_fonction($title, $content)) {
                             if (!$hidden)  {
                                 themesidebox($title, $content);
                             } else {
@@ -314,7 +323,7 @@ class Block
                         }
                     }
                 } elseif (($member == -1) and (!isset($user))) {
-                    if (!static::block_fonction($title, $content)) {
+                    if (!$this->block_fonction($title, $content)) {
                         if (!$hidden) {
                             themesidebox($title, $content);
                         } else {
@@ -322,7 +331,7 @@ class Block
                         }
                     }
                 } elseif (($member == -127) and (isset($admin)) and ($admin)) {
-                    if (!static::block_fonction($title, $content)) {
+                    if (!$this->block_fonction($title, $content)) {
                         if (!$hidden) {
                             themesidebox($title, $content);
                         } else {
@@ -345,9 +354,9 @@ class Block
      *
      * @return  void
      */
-    public static function leftblocks(string $moreclass): void
+    public function leftblocks(string $moreclass)
     {
-        static::Pre_fab_block('', 'LB', $moreclass);
+        $this->Pre_fab_block('', 'LB', $moreclass);
     }
  
     /**
@@ -357,9 +366,9 @@ class Block
      *
      * @return  void
      */
-    public static function rightblocks(string $moreclass): void
+    public function rightblocks(string $moreclass)
     {
-        static::Pre_fab_block('', 'RB', $moreclass);
+        $this->Pre_fab_block('', 'RB', $moreclass);
     }
  
     /**
@@ -370,11 +379,11 @@ class Block
      *
      * @return  string
      */
-    public static function oneblock(string $Xid, string $Xblock): string
+    public function oneblock(string $Xid, string $Xblock)
     {
         $tmp = '';
         ob_start();
-            static::Pre_fab_block($Xid, $Xblock, '');
+            $this->Pre_fab_block($Xid, $Xblock, '');
             $tmp = ob_get_contents();
         ob_end_clean();
 
@@ -390,7 +399,7 @@ class Block
      *
      * @return  void
      */
-    public static function Pre_fab_block(string $Xid, string $Xblock, string $moreclass): void
+    public function Pre_fab_block(string $Xid, string $Xblock, string $moreclass)
     {
         global $htvar; // modif Jireck
 
@@ -418,7 +427,7 @@ class Block
                     $htvar = '<div class="' . $moreclass . ' ' . strtolower($bloc_side) . 'bloc">'; // modif Jireck
                 }
 
-                static::fab_block($block['title'], $block['member'], $block['content'], $block['cache']);
+                $this->fab_block($block['title'], $block['member'], $block['content'], $block['cache']);
                 // echo "</div>"; // modif Jireck
             }
         }
@@ -432,7 +441,7 @@ class Block
      *
      * @return  string             [return description]
      */
-    public static function niv_block(string $Xcontent): string 
+    public function niv_block(string $Xcontent)
     {
         $result = DB::table('rblocks')->select('member', 'actif')->where('content', 'REGEXP', $Xcontent)->first();
 
@@ -456,10 +465,10 @@ class Block
      *
      * @return  string             [return description]
      */
-    public static function autorisation_block(string $Xcontent): string|array 
+    public function autorisation_block(string $Xcontent) 
     {
         $autoX = array(); //notice .... to follow
-        $auto = explode(',', static::niv_block($Xcontent));
+        $auto = explode(',', $this->niv_block($Xcontent));
 
         // le dernier indice indique si le bloc est actif
         $actif = $auto[count($auto) - 1];

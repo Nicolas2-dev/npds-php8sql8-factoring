@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Library\Assets;
+namespace App\Library\Groupe;
 
-use App\Library\Assets\AssetsManager;
+use App\Library\Groupe\GroupeManager;
 
 use Npds\Foundation\AliasLoader;
 use Npds\Support\ServiceProvider;
 
 
-class AssetsServiceProvider extends ServiceProvider
+class GroupeServiceProvider extends ServiceProvider
 {
 
     /**
@@ -22,16 +22,16 @@ class AssetsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register AssetsManager 
-        $this->app->singleton('npds.assets', function ($app)
+        // Register GroupeManager 
+        $this->app->singleton('npds.groupe', function ($app)
         {
-            return new AssetsManager($app);
+            return new GroupeManager($app);
         });
 
         // Register facade
         $loader = AliasLoader::getInstance();
 
-        $loader->alias('npds.assets', 'App\Support\Facades\Assets');
+        $loader->alias('npds.groupe', 'App\Support\Facades\Groupe');
     }
 
 }

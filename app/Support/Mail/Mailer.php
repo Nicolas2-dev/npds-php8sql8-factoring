@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace App\Support\Mail;
 
 use App\Support\Logs\Logs;
-use App\Support\Auth\Users;
-use App\Support\Theme\Theme;
+use App\Support\Facades\Theme;
+use App\Support\Facades\User;
 use App\Support\Utility\Spam;
-use Npds\Config\Config;
+
 use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Config;
+
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MaillerExecption;
 
 
-class mailler
+class mailer
 {
  
     /**
@@ -245,7 +247,7 @@ class mailler
     public static function Mess_Check_Mail_Sub(string $username, string $class): string
     {
         if ($username) {
-            $user = Users::getUser();
+            $user = User::getUser();
 
             $userdata = explode(':', base64_decode($user));
 

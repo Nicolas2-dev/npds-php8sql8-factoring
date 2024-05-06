@@ -4,7 +4,16 @@ declare(strict_types=1);
 
 namespace App\Support\Chat;
 
+use App\Support\Forum\Forum;
+use App\Support\Facades\User;
+use App\Support\Facades\Block;
+use App\Support\Facades\Assets;
+use App\Support\Facades\Author;
+use App\Library\Supercache\Cache;
+use App\Support\Security\Security;
+
 use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Crypt;
 use Npds\Support\Facades\Config;
 use Npds\Support\Facades\Request;
 
@@ -49,7 +58,7 @@ class Chat
      */
     public static function insertChat() : void
     {
-        $cookie = Users::cookieUser(1);
+        $cookie = User::cookieUser(1);
         $name   = Request::input('name');
 
         if (!isset($cookie) && isset($name)) {
@@ -61,12 +70,12 @@ class Chat
         }
 
         if ($message = Request::input('message')) {
-            $message =  Hack::removeHack(stripslashes(strip_tags(trim($message))));
-            $message =  Hack::removeHack(stripslashes(strip_tags(trim($message))));
+            $message =  Security::remove(stripslashes(strip_tags(trim($message))));
+            $message =  Security::remove(stripslashes(strip_tags(trim($message))));
 
             DB::table('chatbox')->insert(array(
                 'username'  => $username,
-                'ip'        => Request::getIp(),
+                'ip'        => getIp(),
                 'message'   => $message,
                 'date'      => time(),
                 'id'        => Request::input('id'),
@@ -121,8 +130,8 @@ class Chat
                     if (isset($chatbox['username'])) {
                         if ($chatbox['dbname'] == 1) {
 
-                            $user = Users::getUser();
-                            $admin = Authors::getAdmin();
+                            $user = User::getUser();
+                            $admin = Author::getAdmin();
 
                             $thing .= ((!$user) and (Config::get('npds.member_list') == 1) and (!$admin)) ?
                                 '<span class="">'. substr($chatbox['username'], 0, 8) .'.</span>' :
@@ -140,7 +149,7 @@ class Chat
                 }
             }
 
-            $PopUp = Java::JavaPopUp(site_url('chat.php?id='. $auto[0] .'&amp;auto='. Crypt::encrypt(serialize($auto[0]))), "chat" . $auto[0], 380, 480);
+            $PopUp = Assets::JavaPopUp(site_url('chat.php?id='. $auto[0] .'&amp;auto='. Crypt::encrypt(serialize($auto[0]))), "chat" . $auto[0], 380, 480);
             
             if ($une_ligne) {
                 $thing .= '<hr />';
@@ -176,13 +185,13 @@ class Chat
                 
                 foreach ($auto as $autovalue) {
 
-                    $autovalueX = Cache::Q_select3(DB::table('groupes')
+                    $autovalueX = Cache::Q_select(DB::table('groupes')
                         ->select('groupe_id', 'groupe_name')
                         ->where('groupe_id', $autovalue)
                         ->get(), 3600, Crypt::encrypt('groupe(groupr_id)')
                     );
 
-                    $PopUp = Java::JavaPopUp(site_url('chat.php?id='. $autovalueX[0]['groupe_id'] .'&auto='. Crypt::encrypt(serialize($autovalueX[0]['groupe_id']))), "chat" . $autovalueX[0]['groupe_id'], 380, 480);
+                    $PopUp = Assets::JavaPopUp(site_url('chat.php?id='. $autovalueX[0]['groupe_id'] .'&auto='. Crypt::encrypt(serialize($autovalueX[0]['groupe_id']))), "chat" . $autovalueX[0]['groupe_id'], 380, 480);
                     $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">". $autovalueX[0]['groupe_name'] ."</a>";
                     
                     $numofchatters = DB::table('chatbox')

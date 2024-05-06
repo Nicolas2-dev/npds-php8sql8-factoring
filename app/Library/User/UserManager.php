@@ -14,6 +14,7 @@ use Npds\Support\Facades\Request;
 
 class UserManager
 {
+    
     /**
      * The Application Instance.
      *

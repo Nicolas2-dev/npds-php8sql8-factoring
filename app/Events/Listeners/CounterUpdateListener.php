@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Events\Listeners;
+
+use App\Events\CounterUpdateEvent;
 
 use Npds\Support\Facades\DB;
+use Npds\Support\Facades\Auth;
 use Npds\Database\Query\Builder;
 use Npds\Support\Facades\Config;
-use App\Events\CounterUpdateEvent;
 
 
 class CounterUpdateListener
@@ -35,10 +37,9 @@ class CounterUpdateListener
      */
     public function handle(CounterUpdateEvent $event)
     {
-        //$admin = Auth::guard('admin')->user();
+        $admin = Auth::guard('admin')->user();
 
-        //if ((!$admin) or ($this->config['not_admin_count'])) {
-        if ($this->config['not_admin_count']) {
+        if ((!$admin) or ($this->config['not_admin_count'])) {
 
             $user_agent = $event->request->server('HTTP_USER_AGENT');
         
