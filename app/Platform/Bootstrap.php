@@ -1,26 +1,43 @@
 <?php
+/**
+ * Two - Bootstrap
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
-use Npds\Config\Config;
-use Npds\Container\Container;
-use Npds\Foundation\AliasLoader;
-use Npds\Foundation\Application;
+use Two\Foundation\Application;
+use Two\Environment\EnvironmentVariables;
+use Two\Config\Repository as ConfigRepository;
+use Two\Foundation\AliasLoader;
+use Two\Support\Facades\Facade;
+use Two\Http\Request;
+
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
 
 //--------------------------------------------------------------------------
-// Setup the Errors Reporting
+// Définir la version de l'application.
+//--------------------------------------------------------------------------
+
+define('VERSION', '1.0.0');
+
+//--------------------------------------------------------------------------
+// Définir les options de rapport d'erreurs PHP.
 //--------------------------------------------------------------------------
 
 error_reporting(-1);
 
-ini_set('display_errors', 'On');
-
 //--------------------------------------------------------------------------
-// Set PHP Session Cache Limiter
+// Définir le limiteur de cache de session PHP.
 //--------------------------------------------------------------------------
 
 session_cache_limiter('');
 
 //--------------------------------------------------------------------------
-// Use Internally The UTF-8 Encoding
+// Utiliser en interne l'encodage UTF-8.
 //--------------------------------------------------------------------------
 
 if (function_exists('mb_internal_encoding')) {
@@ -28,107 +45,156 @@ if (function_exists('mb_internal_encoding')) {
 }
 
 //--------------------------------------------------------------------------
-// Load Global Configuration
+// Charger la configuration globale.
 //--------------------------------------------------------------------------
 
 require APPPATH .'Config.php';
 
-//--------------------------------------------------------------------------
-// Create The Application
-//--------------------------------------------------------------------------
-
 $app = new Application();
 
-// Setup the Application instance.
-$app->instance('app', $app);
+//--------------------------------------------------------------------------
+// Détecter l'environnement d'application.
+//--------------------------------------------------------------------------
 
-$app->bindInstallPaths(array(
-    'base'    => BASEPATH,
-    'app'     => APPPATH,
-    'storage' => STORAGE_PATH,
+$env = $app->detectEnvironment(array(
+    'local' => array(
+        'darkstar',
+        'darkstar.localdomain',
+        'darkstar.example.org',
+        'NEO14A-4WH64'
+    ),
 ));
 
+//--------------------------------------------------------------------------
+// Lier les chemins.
+//--------------------------------------------------------------------------
+
+$paths = array(
+    'base'    => BASEPATH,
+    'app'     => APPPATH,
+    'module'  => MODULEPATH,
+    'public'  => WEBPATH,
+    'storage' => STORAGE_PATH,
+);
+
+$app->bindInstallPaths($paths);
 
 //--------------------------------------------------------------------------
-// Set The Global Container Instance
+// Lier l'application dans le conteneur.
 //--------------------------------------------------------------------------
 
-Container::setInstance($app);
+$app->instance('app', $app);
 
 //--------------------------------------------------------------------------
-// Bind Important Interfaces
+// Lier l'interface du gestionnaire d'exceptions.
 //--------------------------------------------------------------------------
 
 $app->singleton(
-    'Npds\Foundation\Exceptions\HandlerInterface', 'App\Platform\Exceptions\Handler'
+    'Two\Foundation\Exceptions\HandlerInterface', 'App\Platform\Exceptions\Handler'
 );
 
-
 //--------------------------------------------------------------------------
-// Create The Config Instance
-//--------------------------------------------------------------------------
-
-$app->instance('config', $config = new Config());
-
-
-//--------------------------------------------------------------------------
-// Load The Platform Configuration
+// Charger les façades du cadre.
 //--------------------------------------------------------------------------
 
-foreach (glob(APPPATH .'Config/*.php') as $path) {
-    if (is_readable($path)) {
-        $key = lcfirst(pathinfo($path, PATHINFO_FILENAME));
+Facade::clearResolvedInstances();
 
-        $config->set($key, require_once($path));
-    }
-}
-
+Facade::setFacadeApplication($app);
 
 //--------------------------------------------------------------------------
-// Register Application Exception Handling
+// Enregistrer les alias de façade dans des classes complètes.
+//--------------------------------------------------------------------------
+
+$app->registerCoreContainerAliases();
+
+//--------------------------------------------------------------------------
+// Enregistrer les variables d'environnement.
+//--------------------------------------------------------------------------
+
+with($envVariables = new EnvironmentVariables(
+    $app->getEnvironmentVariablesLoader()
+
+))->load($env);
+
+//--------------------------------------------------------------------------
+// Enregistrez le gestionnaire de configuration.
+//--------------------------------------------------------------------------
+
+$app->instance('config', $config = new ConfigRepository(
+    $app->getConfigLoader(), $env
+));
+
+//--------------------------------------------------------------------------
+// Enregistrer la gestion des exceptions d'application.
 //--------------------------------------------------------------------------
 
 $app->startExceptionHandling();
 
+//if ($env !== 'testing') {
+    ini_set('display_errors', 'On');
+//}
 
 //--------------------------------------------------------------------------
-// Set The Default Timezone
+// Enregistrez le middleware d'application.
+//--------------------------------------------------------------------------
+
+$app->middleware(
+    $config->get('app.middleware', array())
+);
+
+//--------------------------------------------------------------------------
+// Définir le fuseau horaire par défaut à partir de la configuration.
 //--------------------------------------------------------------------------
 
 date_default_timezone_set(
-    $config->get('app.timezone', 'Europe/Paris')
+    $config->get('app.timezone', 'Europe/London')
 );
 
+//--------------------------------------------------------------------------
+// Enregistrez le chargeur d'alias.
+//--------------------------------------------------------------------------
+
+$aliases = $config->get('app.aliases', array());
+
+AliasLoader::getInstance($aliases)->register();
 
 //--------------------------------------------------------------------------
-// Register The Service Providers
+// Activer le remplacement de la méthode HTTP.
+//--------------------------------------------------------------------------
+
+Request::enableHttpMethodParameterOverride();
+
+//--------------------------------------------------------------------------
+// Activer la confiance de l'en-tête de type X-Sendfile.
+//--------------------------------------------------------------------------
+
+BinaryFileResponse::trustXSendfileTypeHeader();
+
+//--------------------------------------------------------------------------
+// Enregistrez les principaux fournisseurs de services.
 //--------------------------------------------------------------------------
 
 $app->getProviderRepository()->load(
-    $app, $providers = $config->get('app.providers', array())
+    $app, $config->get('app.providers', array())
 );
 
-
 //--------------------------------------------------------------------------
-// Register The Alias Loader
-//--------------------------------------------------------------------------
-
-AliasLoader::getInstance(
-    $config->get('app.aliases', array())
-
-)->register();
-
-
-//--------------------------------------------------------------------------
-// Register Booted Start Files
+// Enregistrer les fichiers de démarrage démarrés.
 //--------------------------------------------------------------------------
 
-$app->booted(function() use ($app)
+$app->booted(function() use ($app, $env)
 {
 
+//--------------------------------------------------------------------------
+// Charger le script de démarrage de l'environnement.
+//--------------------------------------------------------------------------
+
+$path = $app['path'] .DS .'Platform' .DS .'Environment' .DS .ucfirst($env) .'.php';
+
+if (is_readable($path)) require $path;
 
 //--------------------------------------------------------------------------
-// Load The Boootstrap Script
+// Charger le script d'amorçage.
 //--------------------------------------------------------------------------
 
 $path = $app['path'] .DS .'Bootstrap.php';
@@ -137,9 +203,8 @@ if (is_readable($path)) require $path;
 
 });
 
-
 //--------------------------------------------------------------------------
-// Return The Application
+// Retourner la demande.
 //--------------------------------------------------------------------------
 
 return $app;

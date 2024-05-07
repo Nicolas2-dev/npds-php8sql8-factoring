@@ -1,26 +1,26 @@
 <?php
+/**
+ * Two - VerifyCsrfToken
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 namespace App\Middleware;
 
-use Npds\Http\Request;
-use Npds\Session\TokenMismatchException;
-
-use Closure;
+use Two\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 
 
-class VerifyCsrfToken
+class VerifyCsrfToken extends BaseVerifier
 {
-
-    public function handle(Request $request, Closure $next)
-    {
-        $session = $request->session();
-
-        $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
-
-        if ($session->token() !== $token) {
-            throw new TokenMismatchException();
-        }
-
-        return $next($request);
-    }
+    /**
+     * Les URI qui doivent être exclus de la vérification CSRF.
+     *
+     * @var array
+     */
+    protected $except = array(
+        'admin/files/connector',
+    );
 }

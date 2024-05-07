@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+
+//--------------------------------------------------------------------------
+// Définir les chemins d'application
+//--------------------------------------------------------------------------
+
+defined('DS') || define('DS', DIRECTORY_SEPARATOR);
+
+/** Définissez les chemins absolus pour les répertoires configurés. */
+define('BASEPATH', realpath(__DIR__) .DS);
+
+define('APPPATH', BASEPATH .'app' .DS);
+
+define('MODULEPATH', realpath(__DIR__.'/../modules/') .DS);
+
+define('WEBPATH', BASEPATH .'webroot' .DS);
+
+//--------------------------------------------------------------------------
+// Enregistrez le chargeur automatique
+//--------------------------------------------------------------------------
+
+require BASEPATH .'vendor' .DS .'autoload.php';
+
+//--------------------------------------------------------------------------
+// Démarrez le Framework
+//--------------------------------------------------------------------------
+
+$app = require_once APPPATH .'Platform' .DS .'Bootstrap.php';
+
+//--------------------------------------------------------------------------
+// Charger l'application console Forge
+//--------------------------------------------------------------------------
+
+use Two\Console\Application as ConsoleApplication;
+
+
+$app->setRequestForConsoleEnvironment();
+
+$forge = ConsoleApplication::start($app);
+
+//--------------------------------------------------------------------------
+// Exécutez l'application Forge
+//--------------------------------------------------------------------------
+
+$status = $forge->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput,
+    new Symfony\Component\Console\Output\ConsoleOutput
+);
+
+//--------------------------------------------------------------------------
+// Arrêter l'application
+//--------------------------------------------------------------------------
+
+$app->terminate();
+
+exit($status);

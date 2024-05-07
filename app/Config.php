@@ -1,32 +1,28 @@
 <?php
+/**
+ * Two - Config
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
+
+//--------------------------------------------------------------------------
+// Config - la configuration globale chargée AVANT le démarrage de l'application Two.
+//--------------------------------------------------------------------------
+
 
 /**
- * Setup the Storage Path.
+ * Définissez le chemin d'accès au stockage.
+ *
+ * NOTE: dans une conception multi-tenant, chaque application doit avoir son stockage unique.
  */
 define('STORAGE_PATH', BASEPATH .'storage' .DS);
 
 /**
- * PREFER to be used in database calls default is mini_
+ * Définissez le préfixe global.
+ *
+ * PRÉFÉREZ être utilisé dans les appels de base de données ou le stockage des données de session, la valeur par défaut est 'Two_'
  */
-define('PREFIX', 'npds_');
-
-/**
- * Sform
- */
-if (!defined("CRLF")) {
-    define('CRLF', "\n");
-}
-
-/**
- * Feed Creator
- */
-if (!defined("TIME_ZONE")) {
-    define("TIME_ZONE", "");
-}
-
-/**
- * Feed Creator : Version string.
- **/
-if (!defined("FEEDCREATOR_VERSION")) {
-    define("FEEDCREATOR_VERSION", "FeedCreator 2.0 for NPDS");
-}
+define('PREFIX', 'Two_');

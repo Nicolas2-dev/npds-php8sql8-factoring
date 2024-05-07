@@ -9,6 +9,7 @@
     </IfModule>
 
     RewriteEngine On
+    RewriteBase /
     
     # Remove www uncomment to activate
     #RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]

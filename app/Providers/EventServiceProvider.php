@@ -1,34 +1,37 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Two - EventServiceProvider
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 namespace App\Providers;
 
-use Npds\Events\Dispatcher;
-use Npds\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Two\Events\Dispatcher;
+use Two\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event listener mappings for the application.
+     * Les mappages d'écouteurs d'événements pour l'application.
      *
      * @var array
      */
     protected $listen = array(
-        'App\Events\CounterUpdateEvent' => array(
-            'App\Events\Listeners\CounterUpdateListener',
-        ),
-        'App\Events\RefererUpdateEvent' => array(
-            'App\Events\Listeners\RefererUpdateListener',
+        'App\Events\SomeEvent' => array(
+            'App\Listeners\EventListener',
         ),
     );
 
 
     /**
-     * Register any other events for your application.
+     * Enregistrez tout autre événement pour votre application.
      *
-     * @param  \Npds\Events\Dispatcher  $events
+     * @param  \Two\Events\Dispatcher  $events
      * @return void
      */
     public function boot(Dispatcher $events)
@@ -36,6 +39,8 @@ class EventServiceProvider extends ServiceProvider
         parent::boot($events);
 
         //
-        require app_path('Events.php');
+        $path = app_path('Events.php');
+
+        $this->loadEventsFrom($path);
     }
 }

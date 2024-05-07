@@ -1,14 +1,22 @@
 <?php
+/**
+ * Two - EncryptCookie
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 namespace App\Middleware;
 
-use Npds\Cookie\Middleware\EncryptCookies as BaseEncrypter;
+use Two\Cookie\Middleware\EncryptCookies as BaseEncrypter;
 
 
 class EncryptCookies extends BaseEncrypter
 {
     /**
-     * The names of the cookies that should not be encrypted.
+     * Les noms des cookies qui ne doivent pas être cryptés.
      *
      * @var array
      */

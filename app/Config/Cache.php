@@ -1,144 +1,88 @@
 <?php
+/**
+ * Two - Cache
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 return array(
-
     /*
-    |--------------------------------------------------------------------------
-    | Default Cache Driver
-    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------- -------------------------
+    | Pilote de cache par défaut
+    |--------------------------------------------------------------- -------------------------
     |
-    | Supported: "file", "database", "array"
+    | Cette option contrôle le "pilote" de cache par défaut qui sera utilisé lorsque
+    | à l'aide de la bibliothèque de mise en cache. Bien entendu, vous pouvez utiliser d'autres pilotes
+    | le temps que vous souhaitez. C'est la valeur par défaut lorsqu'un autre n'est pas spécifié.
+    |
+    | Pris en charge : "file", "database", "apc", "memcached", "redis", "tableau"
     */
 
     'driver' => 'file',
 
     /*
-    |--------------------------------------------------------------------------
-    | File Cache Location
-    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------- -------------------------
+    | Emplacement du cache de fichiers
+    |--------------------------------------------------------------- -------------------------
+    |
+    | Lors de l'utilisation du pilote de cache "fichier", nous avons besoin d'un emplacement où le cache
+    | les fichiers peuvent être stockés. Une valeur par défaut sensible a été spécifiée, mais vous
+    | sont libres de le changer à n'importe quel autre endroit sur le disque que vous désirez.
     */
 
-    'path' => STORAGE_PATH . 'cache',
+    'path' => STORAGE_PATH .'framework' .DS .'cache',
 
     /*
-    |--------------------------------------------------------------------------
-    | Database Cache Connection
-    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------- -------------------------
+    | Connexion au cache de la base de données
+    |--------------------------------------------------------------- -------------------------
+    |
+    | Lorsque vous utilisez le pilote de cache "base de données", vous pouvez spécifier la connexion
+    | qui doit être utilisé pour stocker les éléments mis en cache. Lorsque cette option est
+    | null la connexion à la base de données par défaut sera utilisée pour le cache.
     */
 
     'connection' => null,
 
     /*
-    |--------------------------------------------------------------------------
-    | Database Cache Table
-    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------- -------------------------
+    | Table de cache de base de données
+    |--------------------------------------------------------------- -------------------------
+    |
+    | Lors de l'utilisation du pilote de cache "base de données", nous devons connaître la table qui
+    | doit être utilisé pour stocker les éléments mis en cache. Un nom de table par défaut a
+    | été fourni, mais vous êtes libre de le modifier comme bon vous semble.
     */
 
     'table' => 'cache',
 
     /*
-    |--------------------------------------------------------------------------
-    | Cache Key Prefix
-    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------- -------------------------
+    | Serveurs Memcaché
+    |--------------------------------------------------------------- -------------------------
+    |
+    | Vous pouvez maintenant spécifier un tableau de vos serveurs Memcached qui doivent être
+    | utilisé lors de l'utilisation du pilote de cache Memcached. Tous les serveurs
+    | doit contenir une valeur pour les options "host", "port" et "weight".
     */
 
-    'prefix' => 'npds_',
-
-    /**
-    * 
-    *
-    */
-    'config' => array(
-
-        /**
-         * 
-         */
-        'SuperCache' => true,
-
-        /**
-         * 
-         */
-        'data_dir' =>  STORAGE_PATH . 'cache',
-
-        /**
-         * How the Auto_Cleanup process is run : 0 no cleanup - 1 auto_cleanup
-         */
-        'run_cleanup' =>  1,
-
-        /**
-         * value between 1 and 100. The most important is the value, the most "probabilidad", cleanup process as chance to be runed
-         */
-        'cleanup_freq' =>  20,
-
-        /**
-         * maximum age - 24 Hours
-         */
-        'max_age'=>  86400,
-
-        /**
-         * Instant Stats : 0 no - 1 Yes
-         */
-        'save_stats'=>  0,
-
-        /**
-         * Terminate send http process after sending cache page : 0 no - 1 Yes
-         */
-        'exit'=>  0,
-
-        /**
-         * If the maximum number of "webuser" is ritched : SuperCache not clean the cache
-         * compare with the value store in storage/cache/site_load.log updated by the site_load() function of mainfile.php
-         */
-        'clean_limit'=>  300,
-
-        /**
-         * Same standard cache (not the functions for members) for anonymous and members : 0 no - 1 Yes
-         */
-        'non_differentiate'=>  0,
-        
+    'memcached' => array(
+        array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
     ),
 
-    'timings' => array(
+    /*
+    |--------------------------------------------------------------- -------------------------
+    | Préfixe de clé de cache
+    |--------------------------------------------------------------- -------------------------
+    |
+    | Lors de l'utilisation d'un magasin basé sur la RAM tel qu'APC ou Memcached, il peut y avoir
+    | être d'autres applications utilisant le même cache. Donc, nous allons spécifier un
+    | value pour être préfixé à toutes nos clés afin que nous puissions éviter les collisions.
+    */
 
-        'index' => array(
-            'timings'   => 300,
-            'query'     => '^',
-        ),
-
-        'article' => array(
-            'timings'   => 300,
-            'query'     => '^',
-        ),
-
-        'sections' => array(
-            'timings'   => 300,
-            'query'     => '^op',
-        ),
-
-        'faq' => array(
-            'timings'   => 86400,
-            'query'     => '^myfaq',
-        ),
-
-        'links' => array(
-            'timings'   => 28800,
-            'query'     => '^',
-        ),
-
-        'forum' => array(
-            'timings'   => 3600,
-            'query'     => '^',
-        ),
-
-        'memberslist' => array(
-            'timings'   => 1800,
-            'query'     => '^',
-        ),
-
-        'modules' => array(
-            'timings'   => 3600,
-            'query'     => '^',
-        ),
-    )
+    'prefix' => 'Two',
 
 );

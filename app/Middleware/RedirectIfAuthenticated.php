@@ -1,13 +1,20 @@
 <?php
+/**
+ * Two - RedirectIfAuthenticated
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 namespace App\Middleware;
 
-use Npds\Container\Container;
-use Npds\Http\Request;
-use Npds\Support\Facades\Auth;
-use Npds\Support\Facades\Config;
-use Npds\Support\Facades\Redirect;
-use Npds\Support\Facades\Response;
+use Two\Http\Request;
+use Two\Support\Facades\Auth;
+use Two\Support\Facades\Config;
+use Two\Support\Facades\Redirect;
+use Two\Support\Facades\Response;
 
 use Closure;
 
@@ -15,9 +22,9 @@ use Closure;
 class RedirectIfAuthenticated
 {
     /**
-     * Handle an incoming request.
+     * Traiter une demande entrante.
      *
-     * @param  \Npds\Http\Request  $request
+     * @param  \Two\Http\Request  $request
      * @param  \Closure  $next
      * @param  string|null  $guard
      * @return mixed
@@ -25,14 +32,14 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next, $guard = null)
     {
         if (is_null($guard)) {
-            $guard = Config::get('auth.default', 'web');
+            $guard = Config::get('auth.defaults.guard', 'web');
         }
 
         if (Auth::guard($guard)->guest()) {
             return $next($request);
         }
 
-        // The User is authenticated.
+        // L'Utilisateur est authentifié.
         else if ($request->ajax() || $request->wantsJson() || $request->is('api/*')) {
             return Response::make('Unauthorized Access', 401);
         }

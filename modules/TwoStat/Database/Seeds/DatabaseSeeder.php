@@ -1,0 +1,23 @@
+<?php
+
+namespace Modules\TwoStat\Database\Seeds;
+
+use Two\Database\ORM\Model;
+use Two\Database\Seeder;
+
+
+class DatabaseSeeder extends Seeder
+{
+
+    /**
+     * Run the Database Seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        Model::unguard();
+
+        // $this->call('Modules\TwoStat\Database\Seeds\FoobarTableSeeder');
+    }
+}

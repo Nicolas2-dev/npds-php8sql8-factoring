@@ -1,17 +1,23 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Two - RouteServiceProvider
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 namespace App\Providers;
 
-use Npds\Routing\Router;
-use Npds\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Two\Routing\Router;
+use Two\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * This namespace is applied to the controller routes in your routes file.
+     * Cet espace de noms est appliqué aux routes du contrôleur dans votre fichier de routes.
      *
      * @var string
      */
@@ -19,36 +25,50 @@ class RouteServiceProvider extends ServiceProvider
 
 
     /**
-     * Define your route pattern filters, etc.
+     * Define your route model bindings, pattern filters, etc.
      *
-     * @param  \Npds\Routing\Router  $router
+     * @param  \Two\Routing\Router  $router
      * @return void
      */
     public function boot(Router $router)
     {
-        //
-
         parent::boot($router);
+
+        //
+        $this->registerAssetRoutes();
     }
 
     /**
      * Define the routes for the application.
      *
-     * @param  \Npds\Routing\Router  $router
+     * @param  \Two\Routing\Router  $router
      * @return void
      */
     public function map(Router $router)
     {
-        // Load the Routes for the API group.
-        $router->group(array('prefix' => 'api', 'middleware' => 'api', 'namespace' => $this->namespace), function ($router)
+        $path = app_path('Routes');
+
+        $router->group(array('prefix' => 'api', 'middleware' => 'api', 'namespace' => $this->namespace), function ($router) use ($path)
         {
-            require APPPATH .'Routes' .DS .'Api.php';
+            require $path .DS .'Api.php';
         });
 
-        // Load the Routes for the WEB group.
-        $router->group(array('middleware' => 'web', 'namespace' => $this->namespace), function ($router)
+        $router->group(array('middleware' => 'web', 'namespace' => $this->namespace), function ($router) use ($path)
         {
-            require APPPATH .'Routes' .DS .'Web.php';
+            require $path .DS .'Web.php';
         });
+    }
+
+
+    /**
+     * Define the asset routes for the application.
+     *
+     * @return void
+     */
+    protected function registerAssetRoutes()
+    {
+        $dispatcher = $this->app['assets.dispatcher'];
+
+        require app_path('Routes') .DS .'Assets.php';
     }
 }

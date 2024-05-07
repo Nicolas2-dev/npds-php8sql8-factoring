@@ -1,32 +1,40 @@
 <?php
+/**
+ * Two - HandleProfilers : Implémente un traitement de contenu de réponse.
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas.l.devoy@gmail.com 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 namespace App\Middleware;
 
-use Npds\Foundation\Application;
-use Npds\Http\Request;
-use Npds\Http\Response;
-use Npds\Support\Str;
+use Two\Foundation\Application;
+use Two\Http\Response;
+use Two\Support\Str;
 
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 use Closure;
-use Exception;
+use PDOException;
 
 
 class HandleProfiling
 {
     /**
-     * The application implementation.
+     * L'instance de l'application.
      *
-     * @var \Npds\Foundation\Application
+     * @var \Two\Foundation\Application
      */
     protected $app;
 
 
     /**
-     * Create a new middleware instance.
+     * Créez une nouvelle instance de middleware.
      *
-     * @param  \Npds\Foundation\Application  $app
+     * @param  \Two\Foundation\Application  $app
      * @return void
      */
     public function __construct(Application $app)
@@ -35,7 +43,7 @@ class HandleProfiling
     }
 
     /**
-     * Handle the given request and get the response.
+     * Traiter la requête donnée et obtenir la réponse.
      *
      * @param  $request
      * @param  $next
@@ -46,37 +54,35 @@ class HandleProfiling
     {
         $response = $next($request, $next);
 
-        // Get the debug flags from configuration.
-        $debug = $this->app['config']->get('app.debug', false);
+        // Ajoutez les profileurs au contenu de l'instance Response.
+        $config = $this->app['config'];
+
+        // Obtenez l'indicateur de débogage à partir de la configuration.
+        $debug = $config->get('app.debug', false);
 
         if ($debug && $this->canPatchContent($response)) {
-            $content = str_replace('<!-- DO NOT DELETE! - Profiler -->',
-                $this->getInfo($request),
+            $withDatabase = $config->get('profiler.withDatabase', false);
+
+            $content = str_replace(
+                array(
+                    '<!-- DO NOT DELETE! - Statistics -->',
+                ),
+                array(
+                    $this->getStatistics($request, $withDatabase),
+                ),
                 $response->getContent()
             );
 
+            //
             $response->setContent($content);
         }
 
         return $response;
     }
 
-    protected function getInfo(Request $request)
-    {
-        $requestTime = $request->server('REQUEST_TIME_FLOAT');
-
-        $elapsedTime = sprintf("%01.4f", (microtime(true) - $requestTime));
-
-        $memoryUsage = static::formatSize(memory_get_usage());
-
-        //
-        $queries = $this->getQueries();
-
-        return sprintf('Elapsed Time: <b>%s</b> sec | Memory Usage: <b>%s</b> | SQL: <b>%d</b> %s | UMAX: <b>%0d</b>',
-            $elapsedTime, $memoryUsage, $queries, ($queries == 1) ? 'query' : 'queries', intval(25 / $elapsedTime)
-        );
-    }
-
+    /**
+     * 
+     */
     protected function canPatchContent(SymfonyResponse $response)
     {
         if ((! $response instanceof Response) && is_subclass_of($response, 'Symfony\Component\Http\Foundation\Response')) {
@@ -88,20 +94,50 @@ class HandleProfiling
         return Str::is('text/html*', $contentType);
     }
 
-    protected function getQueries()
+    /**
+     * 
+     */
+    protected function getStatistics(SymfonyRequest $request, $withDatabase)
+    {
+        $requestTime = $request->get('REQUEST_TIME_FLOAT');
+
+        $elapsedTime = sprintf("%01.4f", (microtime(true) - $requestTime));
+
+        //
+        $memoryUsage = static::formatSize(memory_get_usage());
+
+        //
+        $umax = sprintf("%0d", intval(25 / $elapsedTime));
+
+        if (! $withDatabase) {
+            return __('Elapsed Time: <b>{0}</b> sec | Memory Usage: <b>{1}</b> | UMAX: <b>{2}</b>', $elapsedTime, $memoryUsage, $umax);
+        }
+
+        $queryLog = $this->getQueryLog();
+
+        $queries = count($queryLog);
+
+        return __('Elapsed Time: <b>{0}</b> sec | Memory Usage: <b>{1}</b> | SQL: <b>{2}</b> {3, plural, one{query} other{queries}} | UMAX: <b>{4}</b>', $elapsedTime, $memoryUsage, $queries, $queries, $umax);
+    }
+
+    /**
+     * 
+     */
+    protected function getQueryLog()
     {
         try {
             $connection = $this->app['db']->connection();
 
-            $queries = $connection->getQueryLog();
-
-            return count($queries);
+            return $connection->getQueryLog();
         }
-        catch (Exception $e) {
-            return 0;
+        catch (PDOException $e) {
+            return array();
         }
     }
 
+    /**
+     * 
+     */
     protected static function formatSize($bytes, $decimals = 2)
     {
         $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');

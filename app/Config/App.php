@@ -1,175 +1,221 @@
 <?php
+/**
+ * Two - App
+ *
+ * @author  Nicolas Devoy
+ * @email   nicolas@Two-framework.fr 
+ * @version 1.0.0
+ * @date    07 Mai 2024
+ */
 
 return array(
-
     /**
-     * Debug Mode
+     * Mode débogage
+     * Lorsque cette option est activée, les erreurs PHP réelles seront affichées.
      */
-    'debug' => true, // When enabled the actual PHP errors will be shown.
+    'debug' => true, 
 
     /**
-     * The Website URL.
+     * Le moteur de rendu des erreurs: "two, "whoops"
      */
-    'url' => 'http://www.npds.local/',
+    'exception_render' => 'whoops',
 
     /**
-     * Website Name.
+     * L'URL du site Web.
      */
-    'name' => 'Npds MVC Framework',
+    'url' => 'http://www.two.local/',
 
     /**
-     * The default Timezone for your website.
+    * L'adresse e-mail de l'administrateur.
+    */
+    'email' => 'admin@Two.dev',
+
+    /**
+     * Le chemin du site Web.
+     */
+    'path' => '/',
+
+    /**
+     * Nom du site Web.
+     */
+    'name' => 'Two 1.0',
+
+    /**
+     * Le nom du thème par défaut ou false pour désactiver l'utilisation des thèmes.
+     */
+    'theme' => 'TwoFrontend',
+
+    /**
+     * La locale par défaut qui sera utilisée par la traduction.
+     */
+    'locale' => 'fr',
+
+    /**
+     * Le fuseau horaire par défaut de votre site Web.
      * http://www.php.net/manual/en/timezones.php
      */
     'timezone' => 'Europe/Paris',
 
-    /*
-     * Application Default Locale.
-     */
-    'locale' => 'en',
-
-    /*
-     * Application Fallback Locale.
-     */
-    'fallbackLocale' => 'en',
-
     /**
-     * The Encryption Key.
-     * This page can be used to generate key
+     * La clé de cryptage.
      */
     'key' => 'SomeRandomStringThere_1234567890',
 
+    /*
+    |--------------------------------------------------------------- -------------------------
+    | Configuration de la journalisation
+    |--------------------------------------------------------------- -------------------------
+    |
+    | Ici, vous pouvez configurer les paramètres du journal pour votre application. Hors de
+    | la boîte, Laravel utilise la bibliothèque de journalisation PHP Monolog. Cela donne
+    | vous une variété de gestionnaires de journaux / formateurs puissants à utiliser.
+    |
+    | Paramètres disponibles : "single", "daily", "syslog", "errorlog"
+    |
+    */
+
+    'log' => 'single',
+
     /**
-     * NPDS_Key
-     */
-
-    'NPDS_Key' => 'SomeRandomStringThere_1234567890',
-
-
-    /**
-     * The Platform's Middleware stack.
+     * La pile middleware de l'application.
      */
     'middleware' => array(
-        'App\Middleware\DispatchAssetFiles',
+        'Two\Foundation\Http\Middleware\CheckForMaintenanceMode',
+        'Two\Routing\Middleware\DispatchAssetFiles',
     ),
 
     /**
-     * The Platform's route Middleware Groups.
+     * Les groupes de middleware de route de l'application.
      */
     'middlewareGroups' => array(
         'web' => array(
-            'App\Middleware\SetupLanguage',
             'App\Middleware\HandleProfiling',
             'App\Middleware\EncryptCookies',
-            'Npds\Cookie\Middleware\AddQueuedCookiesToResponse',
-            'Npds\Session\Middleware\StartSession',
-            'Npds\View\Middleware\ShareErrorsFromSession',
+            'Two\Cookie\Middleware\AddQueuedCookiesToResponse',
+            'Two\Session\Middleware\StartSession',
+            'Two\Localization\Middleware\SetupLanguage',
+            'Two\View\Middleware\ShareErrorsFromSession',
+            'App\Middleware\VerifyCsrfToken',
+            //'App\Middleware\MarkNotificationAsRead',
         ),
         'api' => array(
             'throttle:60,1',
-        ),
+        )
     ),
 
     /**
-     * The Platform's route Middleware.
+     * Middleware de route de l'Application.
      */
     'routeMiddleware' => array(
-        'auth'     => 'Npds\Auth\Middleware\Authenticate',
+        'auth'     => 'Two\Auth\Middleware\Authenticate',
         'guest'    => 'App\Middleware\RedirectIfAuthenticated',
-        'throttle' => 'Npds\Routing\Middleware\ThrottleRequests',
-        'csrf'     => 'App\Middleware\VerifyCsrfToken',
+        'throttle' => 'Two\Routing\Middleware\ThrottleRequests',
     ),
 
     /**
-     * The registered Service Providers.
+     * Les fournisseurs de services enregistrés.
      */
     'providers' => array(
+        'Two\Auth\AuthServiceProvider',
+        'Two\Bus\BusServiceProvider',
+        'Two\Broadcasting\BroadcastServiceProvider',
+        'Two\Cache\CacheServiceProvider',
+        'Two\Routing\RoutingServiceProvider',
+        'Two\Cookie\CookieServiceProvider',
+        'Two\Database\DatabaseServiceProvider',
+        'Two\Encryption\EncryptionServiceProvider',
+        'Two\Filesystem\FilesystemServiceProvider',
+        'Two\Localization\LocalizationServiceProvider',
+        'Two\Hashing\HashServiceProvider',
+        'Two\Mail\MailServiceProvider',
+        'Two\Notifications\NotificationServiceProvider',
+        'Two\Packages\PackageServiceProvider',
+        'Two\Pagination\PaginationServiceProvider',
+        'Two\Queue\QueueServiceProvider',
+        'Two\Redis\RedisServiceProvider',
+        'Two\Session\SessionServiceProvider',
+        'Two\Validation\ValidationServiceProvider',
+        'Two\View\ViewServiceProvider',
 
-        // the Core system Npds
-        'Npds\Auth\AuthServiceProvider',
-        'Npds\Database\DatabaseServiceProvider',
-        'Npds\Routing\RoutingServiceProvider',
-        'Npds\Cookie\CookieServiceProvider',
-        'Npds\Session\SessionServiceProvider',
-        'Npds\Encryption\EncryptionServiceProvider',
-        'Npds\Filesystem\FilesystemServiceProvider',
-        'Npds\Hashing\HashServiceProvider',
-        'Npds\Cache\CacheServiceProvider',
-        'Npds\Pagination\PaginationServiceProvider',
-        'Npds\Translation\TranslationServiceProvider',
-        'Npds\Validation\ValidationServiceProvider',
-        'Npds\View\ViewServiceProvider',
+        // Les fournisseurs Forge.
+        'Two\Cache\ConsoleServiceProvider',
+        'Two\Foundation\Providers\ConsoleSupportServiceProvider',
+        'Two\Foundation\Providers\ForgeServiceProvider',
+        'Two\Database\MigrationServiceProvider',
+        'Two\Database\SeedingServiceProvider',
+        'Two\Localization\ConsoleServiceProvider',
+        'Two\Notifications\ConsoleServiceProvider',
+        'Two\Packages\ConsoleServiceProvider',
+        'Two\Routing\ConsoleServiceProvider',
+        'Two\Session\ConsoleServiceProvider',
 
-        // The Application Providers
+        // Les fournisseurs d'applications.
         'App\Providers\AppServiceProvider',
+        'App\Providers\AuthServiceProvider',
         'App\Providers\EventServiceProvider',
         'App\Providers\RouteServiceProvider',
-        
-        // Npds Providers
-        'App\Library\Assets\AssetsServiceProvider',
-        'App\Library\Author\AuthorServiceProvider',
-        'App\Library\Block\BlockServiceProvider',
-        'App\Library\Groupe\GroupeServiceProvider',
-        'App\Library\Language\LanguageServiceProvider',
-        'App\Library\Metalang\MetaLangServiceProvider',
-        'App\Library\PageRef\PageRefServiceProvider',
-        'App\Library\Sform\SformServiceProvider',
-        'App\Library\SuperCache\SuperCacheServiceProvider',
-        'App\Library\Theme\ThemeServiceProvider',
-        'App\Library\User\UserServiceProvider',
+        'App\Providers\BroadcastServiceProvider',
+
+        // shareds
+        'Shared\RgpdCitron\RgpdCitronServiceProvider',
+        'Shared\TinyMce\TinyMceServiceProvider',
     ),
 
-
-    'manifest' => storage_path(),
-
-    
     /**
-     * The registered Class Aliases.
+     * Le chemin du manifeste des fournisseurs de services.
+     */
+    'manifest' => STORAGE_PATH .'framework',
+
+    /**
+     * Les alias de classe enregistrés.
      */
     'aliases' => array(
- 
-        /**
-         * Facades sysem
-         */
-        'App'               => 'Npds\Support\Facades\App',
-        'Auth'              => 'Npds\Support\Facades\Auth',
-        'Cache'             => 'Npds\Support\Facades\Cache',
-        'Config'            => 'Npds\Support\Facades\Config',
-        'Cookie'            => 'Npds\Support\Facades\Cookie',
-        'Crypt'             => 'Npds\Support\Facades\Crypt',
-        'DB'                => 'Npds\Support\Facades\DB',
-        'Event'             => 'Npds\Support\Facades\Event',
-        'File'              => 'Npds\Support\Facades\File',
-        'Forge'             => 'Npds\Support\Facades\Forge',
-        'Hash'              => 'Npds\Support\Facades\Hash',
-        'Input'             => 'Npds\Support\Facades\Input',
-        'Lang'              => 'Npds\Support\Facades\Lang',
-        'Log'               => 'Npds\Support\Facades\Log',
-        'Redirect'          => 'Npds\Support\Facades\Redirect',
-        'Response'          => 'Npds\Support\Facades\Response',
-        'Route'             => 'Npds\Support\Facades\Route',
-        'Schedule'          => 'Npds\Support\Facades\Schedule',
-        'Session'           => 'Npds\Support\Facades\Session',
-        'Url'               => 'Npds\Support\Facades\Url',
-        'Validator'         => 'Npds\Support\Facades\Validator',
-        'View'              => 'Npds\Support\Facades\View',
 
-        /**
-         * Facades App
-         */
-        'Assets'            => 'App\Support\Facades\Assets',
-        'Author'            => 'App\Support\Facades\Author',
-        'Block'             => 'App\Support\Facades\Block',
-        'Boxe'              => 'App\Support\Facades\Boxe',
-        'Groupe'            => 'App\Support\Facades\Groupe',
-        'Language'          => 'App\Support\Facades\Language',
-        'Metalang'          => 'App\Support\Facades\Metalang',
-        'MetaFunction'      => 'App\Support\Facades\MetaFunction',
-        'PageRef'           => 'App\Support\Facades\PageRef',
-        'Sform'             => 'App\Support\Facades\Sform',
-        'SuperCacheManager' => 'App\Support\Facades\SuperCacheManager',
-        'SuperCacheEmpty'   => 'App\Support\Facades\SuperCacheEmpty',
-        'Theme'             => 'App\Support\Facades\Theme',
-        'User'              => 'App\Support\Facades\User',
+        // Les classes de support.
+        'Arr'           => 'Two\Support\Arr',
+        'Str'           => 'Two\Support\Str',
+
+        // Le générateur de base de données.
+        'Seeder'        => 'Two\Database\Seeder',
+
+        // Les façades de soutien.
+        'App'           => 'Two\Support\Facades\App',
+        'Asset'         => 'Two\Support\Facades\Asset',
+        'Auth'          => 'Two\Support\Facades\Auth',
+        'Broadcast'     => 'Two\Support\Facades\Broadcast',
+        'Bus'           => 'Two\Support\Facades\Bus',
+        'Cache'         => 'Two\Support\Facades\Cache',
+        'Config'        => 'Two\Support\Facades\Config',
+        'Cookie'        => 'Two\Support\Facades\Cookie',
+        'Crypt'         => 'Two\Support\Facades\Crypt',
+        'DB'            => 'Two\Support\Facades\DB',
+        'Event'         => 'Two\Support\Facades\Event',
+        'File'          => 'Two\Support\Facades\File',
+        'Forge'         => 'Two\Support\Facades\Forge',
+        'Gate'          => 'Two\Support\Facades\Gate',
+        'Hash'          => 'Two\Support\Facades\Hash',
+        'Input'         => 'Two\Support\Facades\Input',
+        'Language'      => 'Two\Support\Facades\Language',
+        'Mailer'        => 'Two\Support\Facades\Mailer',
+        'Notification'  => 'Two\Support\Facades\Notification',
+        'Queue'         => 'Two\Support\Facades\Queue',
+        'Redirect'      => 'Two\Support\Facades\Redirect',
+        'Redis'         => 'Two\Support\Facades\Redis',
+        'Request'       => 'Two\Support\Facades\Request',
+        'Response'      => 'Two\Support\Facades\Response',
+        'Route'         => 'Two\Support\Facades\Route',
+        'Schedule'      => 'Two\Support\Facades\Schedule',
+        'Schema'        => 'Two\Support\Facades\Schema',
+        'Session'       => 'Two\Support\Facades\Session',
+        'Validator'     => 'Two\Support\Facades\Validator',
+        'Log'           => 'Two\Support\Facades\Log',
+        'Url'           => 'Two\Support\Facades\Url',
+        'Template'      => 'Two\Support\Facades\Template',
+        'View'          => 'Two\Support\Facades\View',
+        'Package'       => 'Two\Support\Facades\Package',
+
+        //'Theme'         => 'Modules\TwoThemes\Support\Facades\Theme',
+        //'Metatag'       => 'Modules\TwoCore\Support\Facades\Metatag',
     ),
+
 );
