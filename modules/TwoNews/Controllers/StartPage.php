@@ -64,6 +64,8 @@ class StartPage extends BaseController
                     $central = View::fetch('Themes/'.$theme.'::Partials/Central');
                 } else {
                     $central = false;
+                    $edito   = false;
+                    $news    = false;
                     
                     if (($op == 'edito') or ($op == 'edito-nonews')) {
                         $edito = Edito::aff_edito();
