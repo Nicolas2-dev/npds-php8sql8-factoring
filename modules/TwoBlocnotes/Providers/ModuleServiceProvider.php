@@ -34,11 +34,17 @@ class ModuleServiceProvider extends ServiceProvider
         // Bootstrap the Package.
         $path = $path .DS .'Bootstrap.php';
 
-        $this->bootstrapFrom($path);
+        $this->bootstrapFrom($bootstrap);
+
+        // Chargement du helper
+        $this->boot_helper($path);
+
+        // Chargement des block
+        $this->boot_box($path);
     }
 
     /**
-     * Register the TwoBlocnotes Module Service Provider.
+     * Register the TwoCore Module Service Provider.
      *
      * This service provider is a convenient place to register your modules
      * services in the IoC container. If you wish, you may make additional
@@ -50,7 +56,31 @@ class ModuleServiceProvider extends ServiceProvider
     {
         parent::register();
 
-        //
+    }
+
+    /** 
+     * Helpers the Package.
+     * 
+     * @return void
+     */
+    private function boot_helper($path)
+    {
+        // 
+        $path = $path .DS .'Support' .DS. 'helpers.php';
+
+        $this->bootstrapFrom($path);
+    }
+
+    /**
+     * Box the Package.
+     * 
+     * @return void
+     */
+    private function boot_box($path)
+    {
+        $path = $path .DS .'Support' .DS. 'boxe.php';
+
+        $this->bootstrapFrom($path); 
     }
 
 }

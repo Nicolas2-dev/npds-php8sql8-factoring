@@ -36,4 +36,41 @@ class Author extends BaseModel
      */
     protected $hidden = array('pwd', 'hashkey');
     
+
+
+    /**
+     * [deletedroits description]
+     *
+     * @param   string   $del_dr_aid  [$del_dr_aid description]
+     *
+     * @return  void
+     */
+    function deletedroits(string $del_dr_aid): void
+    {
+        DB::table('droits')->where('d_aut_aid', $del_dr_aid)->delete();
+    }
+
+    /**
+     * [updatedroits description]
+     *
+     * @param   string  $chng_aid  [$chng_aid description]
+     *
+     * @return  void
+     */
+    function updatedroits(string $chng_aid): void
+    {
+        foreach ($_POST as $y => $w) {
+            if (stristr("$y", 'ad_d_')) {
+                DB::table('droits')->insert(array(
+                    'd_aut_aid' => $chng_aid,
+                    'd_fon_fid' => $w,
+                    'd_droits'  => 11111,
+                ));
+            }
+        }
+    }
+
+
+
+
 }
