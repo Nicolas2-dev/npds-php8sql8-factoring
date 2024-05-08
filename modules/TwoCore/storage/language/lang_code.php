@@ -1,0 +1,1 @@
+<?php $languageslist="cs cz da de en es fa fr it ja nl pl ro ru zh"; ?>
