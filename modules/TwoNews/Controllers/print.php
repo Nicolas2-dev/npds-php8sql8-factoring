@@ -142,7 +142,7 @@ function PrintPage(string $oper, string $DB, string|int $nl, string|int $sid): v
                 $aff = false;
             }
         } else {
-            $remp = '<div class="alert alert-danger">' . translate("Merci d'entrer l'information en fonction des spécifications") . '</div>';
+            $remp = '<div class="alert alert-danger">' . __d('two_news', 'Merci d\'entrer l\'information en fonction des spécifications') . '</div>';
             $aff = false;
         }
     }
@@ -153,7 +153,7 @@ function PrintPage(string $oper, string $DB, string|int $nl, string|int $sid): v
             $datetime = date::formatTimestamp($time);
         }
 
-        Config::set('Titlesitename', 'NPDS - ' . translate("Page spéciale pour impression") . ' / ' . $title);
+        Config::set('Titlesitename', 'NPDS - ' . __d('two_news', 'Page spéciale pour impression') . ' / ' . $title);
         include("storage/meta/meta.php");
 
         echo '
@@ -182,7 +182,7 @@ function PrintPage(string $oper, string $DB, string|int $nl, string|int $sid): v
             echo '
                 <span class="float-end text-capitalize" style="font-size: .8rem;"> ' . $datetime . '</span><br />
                 <hr />
-                <h2 class="mb-3">' . translate("Sujet : ") . ' ' . language::aff_langue($rez_topic['topictext']) . '</h2>
+                <h2 class="mb-3">' . __d('two_news', 'Sujet : ') . ' ' . language::aff_langue($rez_topic['topictext']) . '</h2>
             </div>
             <div>' . $hometext . '<br /><br />';
 
@@ -198,15 +198,15 @@ function PrintPage(string $oper, string $DB, string|int $nl, string|int $sid): v
             if ($oper == 'news') {
                 echo '
                 <hr />
-                <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
-                ' . translate("L'url pour cet article est : ") . '
+                <p class="text-center">' . __d('two_news', 'Cet article provient de') . ' ' . $sitename . '<br />
+                ' . __d('two_news', 'L\'url pour cet article est : ') . '
                 <a href="'. site_url('article.php?sid=' . $sid) .'">'. site_url('article.php?sid=' . $sid) .'</a>
                 </p>';
             } else {
                 echo '
                 <hr />
-                <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
-                ' . translate("L'url pour cet article est : ") . '
+                <p class="text-center">' . __d('two_news', 'Cet article provient de') . ' ' . $sitename . '<br />
+                ' . __d('two_news', 'L}\'url pour cet article est : ') . '
                 <a href="'. site_url('article.php?sid=' . $sid . '&amp;archive=1') .'">'. site_url('article.php?sid=' . $sid . '&amp;archive=1') .'</a>
                 </p>';
             }
@@ -216,13 +216,13 @@ function PrintPage(string $oper, string $DB, string|int $nl, string|int $sid): v
             echo '<span class="float-end text-capitalize" style="font-size: .8rem;">' . $datetime . '</span><br /><hr />';
 
             if ($rez_link['url'] != '') {
-                echo '<h2 class="mb-3">' . translate("Liens") . ' : ' . $rez_link['url'] . '</h2>';
+                echo '<h2 class="mb-3">' . __d('two_news', 'Liens') . ' : ' . $rez_link['url'] . '</h2>';
             }
 
             echo '
             <div>' . language::aff_langue($description) . '</div>
             <hr />
-            <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
+            <p class="text-center">' . __d('two_news', 'Cet article provient de') . ' ' . $sitename . '<br />
             <a href="'. site_url('') .'">'. site_url('') .'</a></p>';
         }
 
@@ -232,7 +232,7 @@ function PrintPage(string $oper, string $DB, string|int $nl, string|int $sid): v
                 ' . $remp . '
             </div>
             <hr />
-            <p class="text-center">' . translate("Cet article provient de") . ' ' . $sitename . '<br />
+            <p class="text-center">' . __d('two_news', 'Cet article provient de') . ' ' . $sitename . '<br />
             <a href="'. site_url('static.php?op=' . $sid . '&npds=1') .'">'. site_url('static.php?op=' . $sid . '&npds=1') .'</a></p>';
         }
 

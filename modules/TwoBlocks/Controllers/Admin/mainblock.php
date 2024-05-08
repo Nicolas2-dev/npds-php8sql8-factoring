@@ -25,7 +25,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'mblock';
-$f_titre = adm_translate("Bloc Principal");
+$f_titre = __d('two_blocks', 'Bloc Principal');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -47,7 +47,7 @@ function mblock():  void
 
     echo '
     <hr />
-    <h3>'. adm_translate("Edition du Bloc Principal") .'</h3>';
+    <h3>'. __d('two_blocks', 'Edition du Bloc Principal') .'</h3>';
 
     $block = DB::table('block')->select('title', 'content')->find(1);
 
@@ -56,16 +56,16 @@ function mblock():  void
         echo '
         <form id="fad_mblock" action="'. site_url('admin.php') .'" method="post">
             <div class="form-floating mb-3">
-                <textarea class="form-control" type="text" id="title" name="title" maxlength="1000" placeholder="'. adm_translate("Titre :") .'" style="height:70px;">'. $block['title'] .'</textarea>
-                <label for="title">'. adm_translate("Titre") .'</label>
+                <textarea class="form-control" type="text" id="title" name="title" maxlength="1000" placeholder="'. __d('two_blocks', 'Titre :') .'" style="height:70px;">'. $block['title'] .'</textarea>
+                <label for="title">'. __d('two_blocks', 'Titre') .'</label>
                 <span class="help-block text-end"><span id="countcar_title"></span></span>
             </div>
             <div class="form-floating mb-3">
                 <textarea class="form-control" id="content" name="content" style="height:170px;">'. $block['content'] .'</textarea>
-                <label for="content">'. adm_translate("Contenu") .'</label>
+                <label for="content">'. __d('two_blocks', 'Contenu') .'</label>
             </div>
             <input type="hidden" name="op" value="changemblock" />
-            <button class="btn btn-primary btn-block" type="submit">'. adm_translate("Valider") .'</button>
+            <button class="btn btn-primary btn-block" type="submit">'. __d('two_blocks', 'Valider') .'</button>
         </form>
         <script type="text/javascript">
             //<![CDATA[

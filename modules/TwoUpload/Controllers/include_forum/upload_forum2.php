@@ -30,8 +30,8 @@ include_once("modules/upload/http/include_forum/upload.conf.forum.php");
 include_once("modules/upload/http/include_forum/upload.func.forum.php");
 include_once("library/file.php");
 
-$inline_list['1'] = upload_translate("Oui");
-$inline_list['0'] = upload_translate("Non");
+$inline_list['1'] = __d('two_upload', 'Oui');
+$inline_list['0'] = __d('two_upload', 'Non');
 
 // Security
 if (!$allow_upload_forum) Header("Location: die.php");
@@ -41,7 +41,7 @@ if (!forum::autorize()) Header("Location: die.php");
 /* Entete                                            */
 /*****************************************************/
 ob_start();
-$Titlesitename = upload_translate("Télécharg.");
+$Titlesitename = __d('two_upload', 'Télécharg.');
 include("storage/meta/meta.php");
 $userX = base64_decode($user);
 $userdata = explode(':', $userX);
@@ -164,7 +164,7 @@ function forum_upload()
             $pcfile_name = $names;
         }
         $pcfile_size = $att_size;
-        $thanks_msg .= '<div class="alert alert-success alert-dismissible fade show" role="alert"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' . str_replace('{NAME}', '<strong>' . $pcfile_name . '</strong>', str_replace('{SIZE}', $pcfile_size, upload_translate("Fichier {NAME} bien reçu ({SIZE} octets transférés)"))) . '</div>';
+        $thanks_msg .= '<div class="alert alert-success alert-dismissible fade show" role="alert"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' . str_replace('{NAME}', '<strong>' . $pcfile_name . '</strong>', str_replace('{SIZE}', $pcfile_size, __d('two_upload', 'Fichier {NAME} bien reçu ({SIZE} octets transférés)'))) . '</div>';
         $total_att_count += $att_count;
         $total_att_size += $att_size;
     }

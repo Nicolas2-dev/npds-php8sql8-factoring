@@ -50,7 +50,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newsubs . "',fretour_h='" . adm_translate("Articles en attente de validation !") . "' WHERE fid='38'");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newsubs . "',fretour_h='" . __d('two_core', 'Articles en attente de validation !') . "' WHERE fid='38'");
         else 
 
             //DB::table('')->where('', )->update(array(
@@ -79,7 +79,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newauto . "',fretour_h='" . adm_translate("Articles programmés pour la publication.") . "' WHERE fid=37");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newauto . "',fretour_h='" . __d('two_core', 'Articles programmés pour la publication.') . "' WHERE fid=37");
         else 
 
             //DB::table('')->where('', )->update(array(
@@ -133,7 +133,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newsuti . "',fretour_h='" . adm_translate("Utilisateur en attente de validation !") . "' WHERE fid='44'");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newsuti . "',fretour_h='" . __d('two_core', 'Utilisateur en attente de validation !') . "' WHERE fid='44'");
         else 
 
             //DB::table('')->where('', )->update(array(
@@ -192,7 +192,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $critsubs . "', fretour_h='" . adm_translate("Critique en attente de validation.") . "' WHERE fid='35'");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $critsubs . "', fretour_h='" . __d('two_core', 'Critique en attente de validation.') . "' WHERE fid='35'");
         else 
 
             //DB::table('')->where('', )->update(array(
@@ -221,7 +221,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newlink . "', fretour_h='" . adm_translate("Liens à valider.") . "' WHERE fid='41'");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newlink . "', fretour_h='" . __d('two_core', 'Liens à valider.') . "' WHERE fid='41'");
         else 
 
             //DB::table('')->where('', )->update(array(
@@ -250,7 +250,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $brokenlink . "', fretour_h='" . adm_translate("Liens rompus à valider.") . "' WHERE fid='42'");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $brokenlink . "', fretour_h='" . __d('two_core', 'Liens rompus à valider.') . "' WHERE fid='42'");
         else 
 
             //DB::table('')->where('', )->update(array(
@@ -285,7 +285,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newpubli . "', fretour_h='" . adm_translate("Publication(s) en attente de validation") . "' WHERE fid='50'");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $newpubli . "', fretour_h='" . __d('two_core', 'Publication(s) en attente de validation') . "' WHERE fid='50'");
         else 
 
             //DB::table('')->where('', )->update(array(
@@ -320,7 +320,7 @@ class AlertManager
             //    ''       => ,
             //));
 
-            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $j . "',fretour_h='" . adm_translate("Utilisateur en attente de groupe !") . "' WHERE fid='46'");
+            sql_query("UPDATE " . $NPDS_Prefix . "fonctions SET fetat='1',fretour='" . $j . "',fretour_h='" . __d('two_core', 'Utilisateur en attente de groupe !') . "' WHERE fid='46'");
         else
 
             //DB::table('')->where('', )->update(array(
@@ -519,14 +519,14 @@ class AlertManager
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" />' . adm_translate("Version") . ' NPDS</h5>
+                <h5 class="modal-title" id="versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" />' . __d('two_core', 'Version') . ' NPDS</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                 <p>Vous utilisez NPDS ' . Config::get('versioning.Version_Sub') . ' ' . Config::get('versioning.Version_Num') . '</p>';
             
         if (($versus_info[2] > Config::get('versioning.Version_Num'))) {          
-        $adm_ent .= '<p>' . adm_translate("Une nouvelle version de NPDS est disponible !") . '</p>
+        $adm_ent .= '<p>' . __d('two_core', 'Une nouvelle version de NPDS est disponible !') . '</p>
                 <p class="lead mt-3">' . $versus_info[1] . ' ' . $versus_info[2] . '</p>
                 <p class="my-3">
                     <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/' . $versus_info[2] . '.zip" target="_blank" title="" data-bs-toggle="tooltip" data-bs-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
@@ -561,7 +561,7 @@ class AlertManager
                 <p id="messageModalContent"></p>
                 <form class="mt-3" id="messageModalForm" action="" method="POST">
                     <input type="hidden" name="id" id="messageModalId" value="0" />
-                    <button type="submit" class="btn btn btn-primary btn-sm">' . adm_translate("Confirmer la lecture") . '</button>
+                    <button type="submit" class="btn btn btn-primary btn-sm">' . __d('two_core', 'Confirmer la lecture') . '</button>
                 </form>
                 </div>
                 <div class="modal-footer">

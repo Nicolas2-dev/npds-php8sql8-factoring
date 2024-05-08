@@ -283,9 +283,9 @@ if (Request::input('submitS')) {
         url::redirect_url('viewforum.php?forum='. $forum);
     } else {
         echo '
-        <h4 class="my-3">' . translate("Poster une réponse dans le sujet") . '</h4>
-        <p class="alert alert-danger">' . translate("Vous devez taper un message à poster.") . '</p>
-        <a class="btn btn-outline-primary" href="javascript:history.go(-1)" >' . translate("Retour en arrière") . '</a>';
+        <h4 class="my-3">' . __d('two_forum', 'Poster une réponse dans le sujet') . '</h4>
+        <p class="alert alert-danger">' . __d('two_forum', 'Vous devez taper un message à poster.') . '</p>
+        <a class="btn btn-outline-primary" href="javascript:history.go(-1)" >' . __d('two_forum', 'Retour en arrière') . '</a>';
     }
 
 } else {
@@ -327,12 +327,12 @@ if (Request::input('submitS')) {
 
     echo '
     <p class="lead">
-        <a href="'. site_url('forum.php') .'">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;
+        <a href="'. site_url('forum.php') .'">' . __d('two_forum', 'Index du forum') . '</a>&nbsp;&raquo;&raquo;&nbsp;
         <a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . stripslashes($forum_name) . '</a>&nbsp;&raquo;&raquo;&nbsp;' . $res_ftopic['topic_title'] . '
     </p>
     <div class="card">
         <div class="card-body p-1">
-                ' . translate("Modérateur(s)");
+                ' . __d('two_forum', 'Modérateur(s)');
 
     for ($i = 0; $i < count($moderator); $i++) {
         $modera = forum::get_userdata($moderator[$i]);
@@ -359,17 +359,17 @@ if (Request::input('submitS')) {
     echo '
         </div>
     </div>
-    <h4 class="d-none d-sm-block my-3"><img width="48" height="48" class=" rounded-circle me-3" src="' . $imgava . '" alt="" />' . translate("Poster une réponse dans le sujet") . '</h4>
+    <h4 class="d-none d-sm-block my-3"><img width="48" height="48" class=" rounded-circle me-3" src="' . $imgava . '" alt="" />' . __d('two_forum', 'Poster une réponse dans le sujet') . '</h4>
     <form action="'. site_url('reply.php') .'" method="post" name="coolsus">';
 
-    echo '<blockquote class="blockquote d-none d-sm-block"><p>' . translate("A propos des messages publiés :") . '<br />';
+    echo '<blockquote class="blockquote d-none d-sm-block"><p>' . __d('two_forum', 'A propos des messages publiés :') . '<br />';
 
     if ($forum_access == 0) {
-        echo translate("Les utilisateurs anonymes peuvent poster de nouveaux sujets et des réponses dans ce forum.");
+        echo __d('two_forum', 'Les utilisateurs anonymes peuvent poster de nouveaux sujets et des réponses dans ce forum.');
     } else if ($forum_access == 1) {
-        echo translate("Tous les utilisateurs enregistrés peuvent poster de nouveaux sujets et répondre dans ce forum.");
+        echo __d('two_forum', 'Tous les utilisateurs enregistrés peuvent poster de nouveaux sujets et répondre dans ce forum.');
     } else if ($forum_access == 2) {
-        echo translate("Seuls les modérateurs peuvent poster de nouveaux sujets et répondre dans ce forum.");
+        echo __d('two_forum', 'Seuls les modérateurs peuvent poster de nouveaux sujets et répondre dans ce forum.');
     }
 
     echo '</blockquote>';
@@ -408,7 +408,7 @@ if (Request::input('submitS')) {
 
             echo '
         <div class="d-none d-sm-block mb-3 row">
-            <label class="form-label">' . translate("Icone du message") . '</label>
+            <label class="form-label">' . __d('two_forum', 'Icone du message') . '</label>
             <div class="col-sm-12">
                 <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
                 ' . forum::emotion_add($image_subject) . '
@@ -419,7 +419,7 @@ if (Request::input('submitS')) {
 
         echo '
         <div class="mb-3 row">
-            <label class="form-label" for="message">' . translate("Message") . '</label>
+            <label class="form-label" for="message">' . __d('two_forum', 'Message') . '</label>
             <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">
@@ -431,9 +431,9 @@ if (Request::input('submitS')) {
                     </div>';
 
         if (Config::get('forum.config.allow_html') == 1) {
-            echo '<span class="text-success float-end mt-2" title="HTML ' . translate("Activé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
+            echo '<span class="text-success float-end mt-2" title="HTML ' . __d('two_forum', 'Activé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
         } else {
-            echo '<span class="text-danger float-end mt-2" title="HTML ' . translate("Désactivé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
+            echo '<span class="text-danger float-end mt-2" title="HTML ' . __d('two_forum', 'Désactivé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
         }
 
         echo '
@@ -464,11 +464,11 @@ if (Request::input('submitS')) {
                 $text = stripslashes($text);
 
                 $reply = ($m['post_time'] != '' && $m['uname'] != '') ?
-                    '<blockquote class="blockquote">' . translate("Citation") . ' : <strong>' . $m['uname'] . '</strong><br />' . $text . '</blockquote>' :
+                    '<blockquote class="blockquote">' . __d('two_forum', 'Citation') . ' : <strong>' . $m['uname'] . '</strong><br />' . $text . '</blockquote>' :
                     $text . "\n";
                 $reply = preg_replace("#\[hide\](.*?)\[\/hide\]#si", '', $reply);
             } else {
-                $reply = translate("Erreur de connexion à la base de données") . "\n";
+                $reply = __d('two_forum', 'Erreur de connexion à la base de données') . "\n";
             }
         }
 
@@ -485,14 +485,14 @@ if (Request::input('submitS')) {
                 </div>
                 <div class="card-footer p-0">
                     <span class="d-block">
-                        <button class="btn btn-link" type="submit" value="' . translate("Prévisualiser") . '" name="submitP" title="' . translate("Prévisualiser") . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
+                        <button class="btn btn-link" type="submit" value="' . __d('two_forum', 'Prévisualiser') . '" name="submitP" title="' . __d('two_forum', 'Prévisualiser') . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
                     </span>
                 </div>
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="form-label">' . translate("Options") . '</label>
+            <label class="form-label">' . __d('two_forum', 'Options') . '</label>
             <div class="col-sm-12">';
 
         if ((Config::get('forum.config.allow_html') == 1) and ($forum_type != '6') and ($forum_type != '5')) {
@@ -506,7 +506,7 @@ if (Request::input('submitS')) {
                 <div class="checkbox my-2">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="html" name="html" ' . $sethtml . ' />
-                    <label class="form-check-label" for="html">' . translate("Désactiver le html pour cet envoi") . '</label>
+                    <label class="form-check-label" for="html">' . __d('two_forum', 'Désactiver le html pour cet envoi') . '</label>
                 </div>
                 </div>';
         }
@@ -530,8 +530,8 @@ if (Request::input('submitS')) {
                 <div class="checkbox my-2">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="sig" name="sig" ' . $s . ' />
-                    <label class="form-check-label" for="sig">' . translate("Afficher la signature") . '</label>
-                    <small class="help-block">' . translate("Cela peut être retiré ou ajouté dans vos paramètres personnels") . '</small>
+                    <label class="form-check-label" for="sig">' . __d('two_forum', 'Afficher la signature') . '</label>
+                    <small class="help-block">' . __d('two_forum', 'Cela peut être retiré ou ajouté dans vos paramètres personnels') . '</small>
                 </div>
                 </div>';
                 }
@@ -546,7 +546,7 @@ if (Request::input('submitS')) {
                 <div class="checkbox my-2">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="upload" name="upload" ' . $up . ' />
-                    <label class="form-check-label" for="upload">' . translate("Charger un fichier une fois l'envoi accepté") . '</label>
+                    <label class="form-check-label" for="upload">' . __d('two_forum', 'Charger un fichier une fois l\'envoi accepté') . '</label>
                 </div>
                 </div>';
             }
@@ -560,13 +560,13 @@ if (Request::input('submitS')) {
             <div class="col-sm-12">
                 <input type="hidden" name="forum" value="' . $forum . '" />
                 <input type="hidden" name="topic" value="' . $topic . '" />
-                <button class="btn btn-primary" type="submit" value="' . translate("Valider") . '" name="submitS" accesskey="s" title="' . translate("Valider") . '" data-bs-toggle="tooltip" >' . translate("Valider") . '</button>&nbsp;
-                <button class="btn btn-danger" type="submit" value="' . translate("Annuler la contribution") . '" name="cancel" title="' . translate("Annuler la contribution") . '" data-bs-toggle="tooltip" >' . translate("Annuler la contribution") . '</button>
+                <button class="btn btn-primary" type="submit" value="' . __d('two_forum', 'Valider') . '" name="submitS" accesskey="s" title="' . __d('two_forum', 'Valider') . '" data-bs-toggle="tooltip" >' . __d('two_forum', 'Valider') . '</button>&nbsp;
+                <button class="btn btn-danger" type="submit" value="' . __d('two_forum', 'Annuler la contribution') . '" name="cancel" title="' . __d('two_forum', 'Annuler la contribution') . '" data-bs-toggle="tooltip" >' . __d('two_forum', 'Annuler la contribution') . '</button>
             </div>
         </div>';
     } else {
         echo '
-        <div class="alert alert-danger">' . translate("Vous n'êtes pas autorisé à participer à ce forum") . '</div>';
+        <div class="alert alert-danger">' . __d('two_forum', 'Vous n\'êtes pas autorisé à participer à ce forum') . '</div>';
     }
 
     echo '
@@ -574,7 +574,7 @@ if (Request::input('submitS')) {
 
     if ($allow_to_reply) {
         echo '
-        <h4 class="my-3">' . translate("Aperçu des sujets :") . '</h4>';
+        <h4 class="my-3">' . __d('two_forum', 'Aperçu des sujets :') . '</h4>';
 
         $query = DB::table('posts')
                     ->select('*')
@@ -667,30 +667,30 @@ if (Request::input('submitS')) {
 
                 if ($user or users::autorisation(-127)) {
                     if ($posterdata['uid'] != 1 and $posterdata['uid'] != '') {
-                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('user.php?op=userinfo&amp;uname=' . $posterdata['uname']) .'" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Profil") . '</span></a>';
+                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('user.php?op=userinfo&amp;uname=' . $posterdata['uname']) .'" target="_blank" title="' . __d('two_forum', 'Profil') . '" data-bs-toggle="tooltip"><i class="fa fa-user fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . __d('two_forum', 'Profil') . '</span></a>';
                     }
 
                     if ($posterdata['uid'] != 1) {
-                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"]) .'" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Message") . '</span></a>';
+                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid=' . $posterdata["uname"]) .'" title="' . __d('two_forum', 'Envoyer un message interne') . '" data-bs-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . __d('two_forum', 'Message') . '</span></a>';
                     }
 
                     if ($posterdata['femail'] != '') {
-                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="mailto:' . spam::anti_spam($posterdata['femail'], 1) . '" target="_blank" title="' . translate("Email") . '" data-bs-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Email") . '</span></a>';
+                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="mailto:' . spam::anti_spam($posterdata['femail'], 1) . '" target="_blank" title="' . __d('two_forum', 'Email') . '" data-bs-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . __d('two_forum', 'Email') . '</span></a>';
                     }
 
                     if ($myrow['poster_id'] != 1 and array_key_exists($ch_lat, $posterdata_extend)) {
                         if ($posterdata_extend[$ch_lat] != '') {
-                            $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&amp;op=u' . $posterdata['uid']) .'" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw">&nbsp;</i><span class="ms-3 d-none d-md-inline">' . translate("Localisation") . '</span></a>';
+                            $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&amp;op=u' . $posterdata['uid']) .'" title="' . __d('two_forum', 'Localisation') . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw">&nbsp;</i><span class="ms-3 d-none d-md-inline">' . __d('two_forum', 'Localisation') . '</span></a>';
                         }
                     }
                 }
 
                 if ($posterdata['url'] != '') {
-                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="' . $posterdata['url'] . '" target="_blank" title="' . translate("Visiter ce site web") . '" data-bs-toggle="tooltip"><i class="fas fa-external-link-alt fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visiter ce site web") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="' . $posterdata['url'] . '" target="_blank" title="' . __d('two_forum', 'Visiter ce site web') . '" data-bs-toggle="tooltip"><i class="fas fa-external-link-alt fa-2x align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . __d('two_forum', 'Visiter ce site web') . '</span></a>';
                 }
 
                 if ($posterdata['mns']) {
-                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('minisite.php?op=' . $posterdata['uname']) .'" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . translate("Visitez le minisite") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item text-primary text-center text-md-start" href="'. site_url('minisite.php?op=' . $posterdata['uname']) .'" target="_blank" target="_blank" title="' . __d('two_forum', 'Visitez le minisite') . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-3 d-none d-md-inline">' . __d('two_forum', 'Visitez le minisite') . '</span></a>';
                 }
             }
 
@@ -736,7 +736,7 @@ if (Request::input('submitS')) {
                     </span>
                 </div>
                 <div class="card-body">
-                    <span class="text-muted float-end small" style="margin-top:-1rem;">' . translate("Posté : ") . date::convertdate($myrow['post_time']) . '</span>
+                    <span class="text-muted float-end small" style="margin-top:-1rem;">' . __d('two_forum', 'Posté : ') . date::convertdate($myrow['post_time']) . '</span>
                     <div class="card-text pt-4">';
 
             $message = stripslashes($myrow['post_text']);

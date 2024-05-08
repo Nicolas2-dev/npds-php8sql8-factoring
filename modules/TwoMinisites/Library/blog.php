@@ -102,14 +102,14 @@ class blog
         for ($i = $startpage * $perpage; $i < $startpage * $perpage + $perpage && $i < $ubound; $i++) {
             $crtsplit = explode('!;!', $xnews[$i]);
 
-            $actionM = '<a class="" href="'. site_url('minisite.php?op=' . $op . '&amp;action=M' . $i) .'" title="' . translate("Modifier") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit fa-lg me-1"></i></a>';
-            $actionD = '<a class="" href="'. site_url('minisite.php?op=' . $op . '&amp;action=D' . $i) .'" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>';
+            $actionM = '<a class="" href="'. site_url('minisite.php?op=' . $op . '&amp;action=M' . $i) .'" title="' . __d('two_minisites', 'Modifier') . '" data-bs-toggle="tooltip" ><i class="fa fa-edit fa-lg me-1"></i></a>';
+            $actionD = '<a class="" href="'. site_url('minisite.php?op=' . $op . '&amp;action=D' . $i) .'" title="' . __d('two_minisites', 'Effacer') . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>';
             
             $content .= '
             <div class="card mb-3">
                 <div class="card-body">
                     <h2 class="card-title">' . language::aff_langue($crtsplit[1]) . '</h2>
-                    <h6 class="card-subtitle text-muted">' . translate("Posté le ") . ' ' . $crtsplit[0] . '</h6>
+                    <h6 class="card-subtitle text-muted">' . __d('two_minisites', 'Posté le ') . ' ' . $crtsplit[0] . '</h6>
                 </div>
                 <div class=" card-body">' . static::convert_ressources($op, $crtsplit[2]) . '</div>';
             
@@ -145,13 +145,13 @@ class blog
         return '
         <form name="adminForm" method="post" action="'. site_url('minisite.php') .'">
             <div class="mb-3 row">
-            <label class="form-label" for="title">' . translate("Titre") . '</label>
+            <label class="form-label" for="title">' . __d('two_minisites', 'Titre') . '</label>
             <div class="col-sm-12">
                 <input class="form-control" type="text" name="title" />
             </div>
             </div>
             <div class="mb-3 row">
-            <label class="form-label" for="story">' . translate("Texte complet") . '</label>
+            <label class="form-label" for="story">' . __d('two_minisites', 'Texte complet') . '</label>
             <div class="col-sm-12">
                 <textarea class="tin form-control" name="story" rows="25"></textarea>
                     &nbsp;!blog_editeur!
@@ -161,7 +161,7 @@ class blog
             <div class="col-sm-12">
                 <input type="hidden" name="op" value="'. $op .'" />
                 <input type="hidden" name="action" value="AOK" />
-                <input class="btn btn-primary" type="submit" name="submit" value="' . translate("Valider") . '" />
+                <input class="btn btn-primary" type="submit" name="submit" value="' . __d('two_minisites', 'Valider') . '" />
             </div>
             </div>
         </form>';
@@ -223,11 +223,11 @@ class blog
         return '
         <form name="adminForm" method="post" action="'. site_url('minisite.php') .'">
             <div class="mb-3">
-            <label class="form-label" for="title">' . translate("Titre") . '</label>
+            <label class="form-label" for="title">' . __d('two_minisites', 'Titre') . '</label>
             <input class="form-control" type="text" name="title" value="' . $crtsplit[1] . '" />
             </div>
             <div class="mb-3">
-            <label class="form-label" for="story" >' . translate("Texte complet") . '</label>
+            <label class="form-label" for="story" >' . __d('two_minisites', 'Texte complet') . '</label>
             <textarea class="tin form-control" name="story" rows="25">' . str_replace("\n", "", $crtsplit[2]) . '</textarea>
                 &nbsp;!blog_editeur!
             </div>
@@ -235,7 +235,7 @@ class blog
             <input type="hidden" name="op" value="'. $op .'" />
             <input type="hidden" name="action" value="MOK" />
             <input type="hidden" name="index" value="'. $index .'" />
-            <input class="btn btn-primary" type="submit" name="submit" value="' . translate("Valider") . '" />
+            <input class="btn btn-primary" type="submit" name="submit" value="' . __d('two_minisites', 'Valider') . '" />
             </div>
         </form>
         #v_yt#';

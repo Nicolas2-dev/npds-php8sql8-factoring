@@ -53,7 +53,7 @@ return array(
     * Complete URL for your site (Do not put / at end)
     *
     */
-    'nuke_url'  => 'http://www.two.local',
+    'nuke_url'  => 'http://www.npds.local',
 
     /**
     * Logo for Printer Friendly Page (It's good to have a Black/White graphic)

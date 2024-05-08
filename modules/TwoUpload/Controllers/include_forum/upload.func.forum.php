@@ -150,7 +150,7 @@ function display_upload($apli, $post_id, $Mmod)
         <div class="list-group">
             <div class="list-group-item d-flex justify-content-start align-items-center mt-2">
                 <img class="n-smil" src="assets/images/forum/subject/07.png" alt="icon_pieces jointes" />
-                <span class="text-muted p-2">' . upload_translate("Pièces jointes") . '</span><a data-bs-toggle="collapse" href="#lst_pj' . $post_id . '"><i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="toggle-icon fa fa-lg me-2 fa-caret-up"></i></a>
+                <span class="text-muted p-2">' . __d('two_upload', 'Pièces jointes') . '</span><a data-bs-toggle="collapse" href="#lst_pj' . $post_id . '"><i data-bs-toggle="tooltip" data-bs-placement="top" title="" class="toggle-icon fa fa-lg me-2 fa-caret-up"></i></a>
                 <span class="badge bg-secondary ms-auto">' . $att_count . '</span>
             </div>
             <div id="lst_pj' . $post_id . '" class="collapse show">';
@@ -263,7 +263,7 @@ function getAttachmentUrl($apli, $post_id, $att_id, $att_path, $att_type, $att_s
     $att_name = substr(strstr(basename($att_name), '.'), 1);
     $att_path = $DOCUMENTROOT . $att_path;
     if (!is_file($att_path)) {
-        return '&nbsp;<span class="text-danger" style="font-size: .65rem;">' . upload_translate("Fichier non trouvé") . ' : ' . $att_name . '</span>';
+        return '&nbsp;<span class="text-danger" style="font-size: .65rem;">' . __d('two_upload', 'Fichier non trouvé') . ' : ' . $att_name . '</span>';
     }
 
     if ($att_inline) {
@@ -285,7 +285,7 @@ function getAttachmentUrl($apli, $post_id, $att_id, $att_path, $att_type, $att_s
 
     settype($visible_wrn, 'string');
     if ($visible != 1) {
-        $visible_wrn = '&nbsp;<span class="text-danger" style="font-size: .65rem;">' . upload_translate("Fichier non visible") . '</span>';
+        $visible_wrn = '&nbsp;<span class="text-danger" style="font-size: .65rem;">' . __d('two_upload', 'Fichier non visible') . '</span>';
     }
 
     switch ($display_mode) {

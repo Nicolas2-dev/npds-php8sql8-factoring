@@ -132,7 +132,7 @@ if (! function_exists('adminblock'))
             ' . $bloc_foncts_A;
 
             if ($Q['radminsuper'] == 1) {
-                $content .= '<a class="btn btn-outline-primary btn-sm me-2 my-1" title="'. translate("Vider la table chatBox") .'" data-bs-toggle="tooltip" href="'. site_url('powerpack.php?op=admin_chatbox_write&amp;chatbox_clearDB=OK') .'" ><img src="assets/images/admin/chat.png" class="adm_img" />&nbsp;<span class="badge bg-danger ms-1">X</span></a>';
+                $content .= '<a class="btn btn-outline-primary btn-sm me-2 my-1" title="'. __d('two_authors', 'Vider la table chatBox') .'" data-bs-toggle="tooltip" href="'. site_url('powerpack.php?op=admin_chatbox_write&amp;chatbox_clearDB=OK') .'" ><img src="assets/images/admin/chat.png" class="adm_img" />&nbsp;<span class="badge bg-danger ms-1">X</span></a>';
             }
 
             $content .= '</div>
@@ -143,12 +143,12 @@ if (! function_exists('adminblock'))
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" loading="lazy" />'. translate("Version") .' NPDS^</h5>
+                    <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img me-2" src="assets/images/admin/message_npds.png" alt="icon_" loading="lazy" />'. __d('two_authors', 'Version') .' NPDS^</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                     <p>Vous utilisez NPDS^ '. Config::get('two_core::versioning.Version_Sub') .' '. Config::get('two_core::versioning.Version_Num') .'</p>
-                    <p>'. translate("Une nouvelle version de NPDS^ est disponible !") .'</p>
+                    <p>'. __d('two_authors', 'Une nouvelle version de NPDS^ est disponible !') .'</p>
                     <p class="lead mt-3">'. $versus_info[1] .' '. $versus_info[2] .'</p>
                     <p class="my-3">
                         <a class="me-3" href="https://github.com/npds/npds_dune/archive/refs/tags/'. $versus_info[2] .'.zip" target="_blank" title="" data-bs-toggle="tooltip" data-original-title="Charger maintenant"><i class="fa fa-download fa-2x me-1"></i>.zip</a>
@@ -171,7 +171,7 @@ if (! function_exists('adminblock'))
                    <p id="bl_messageModalContent"></p>
                    <form class="mt-3" id="bl_messageModalForm" action="" method="POST">
                       <input type="hidden" name="id" id="bl_messageModalId" value="0" />
-                      <button type="submit" class="btn btn btn-primary btn-sm">' . translate("Confirmer la lecture") .'</button>
+                      <button type="submit" class="btn btn btn-primary btn-sm">'. __d('two_authors', 'Confirmer la lecture') .'</button>
                    </form>
                 </div>
                 <div class="modal-footer">

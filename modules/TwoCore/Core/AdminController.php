@@ -77,7 +77,14 @@ abstract class AdminController extends BaseController
             $this->filemanager = $filemanager;
         }
 
+        //
+        $this->admindroits();
+
+        //
         $this->GraphicAdmin();
+
+        //
+        $this->adminHead()
     }
 
     /**
@@ -88,7 +95,8 @@ abstract class AdminController extends BaseController
      *
      * @return  [type]               [return description]
      */
-    function admindroits($aid)
+    //function admindroits($aid)
+    function admindroits()
     {
         global $radminsuper;
     

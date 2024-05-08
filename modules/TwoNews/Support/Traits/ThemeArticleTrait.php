@@ -63,8 +63,8 @@ trait ThemeArticleTrait
     
         if ($previous_sid) {
             $prevArt = '<a href="'. site_url('article.php?sid=' . $previous_sid . '&amp;archive=' . $archive) . '" >
-                    <i class="fa fa-chevron-left fa-lg me-2" title="' . translate("Précédent") . '" data-bs-toggle="tooltip"></i>
-                    <span class="d-none d-sm-inline">' . translate("Précédent") . '</span>
+                    <i class="fa fa-chevron-left fa-lg me-2" title="' . __d('two_news', 'Précédent') . '" data-bs-toggle="tooltip"></i>
+                    <span class="d-none d-sm-inline">' . __d('two_news', 'Précédent') . '</span>
                 </a>';
         } else {
             $prevArt = '';
@@ -72,18 +72,18 @@ trait ThemeArticleTrait
     
         if ($next_sid) {
             $nextArt = '<a href="'. site_url('article.php?sid=' . $next_sid . '&amp;archive=' . $archive) . '" >
-                    <span class="d-none d-sm-inline">' . translate("Suivant") . '</span>
-                    <i class="fa fa-chevron-right fa-lg ms-2" title="' . translate("Suivant") . '" data-bs-toggle="tooltip"></i>
+                    <span class="d-none d-sm-inline">' . __d('two_news', 'Suivant') . '</span>
+                    <i class="fa fa-chevron-right fa-lg ms-2" title="' . __d('two_news', 'Suivant') . '" data-bs-toggle="tooltip"></i>
                 </a>';
         } else {
             $nextArt = '';
         }
     
-        $printP = '<a href="'. site_url('print.php?sid=' . $id) . '" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip">
+        $printP = '<a href="'. site_url('print.php?sid=' . $id) . '" title="' . __d('two_news', 'Page spéciale pour impression') . '" data-bs-toggle="tooltip">
                     <i class="fa fa-2x fa-print"></i>
                 </a>';
 
-        $sendF = '<a href="'. site_url('friend.php?op=FriendSend&amp;sid=' . $id) . '" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip">
+        $sendF = '<a href="'. site_url('friend.php?op=FriendSend&amp;sid=' . $id) . '" title="' . __d('two_news', 'Envoyer cet article à un ami') . '" data-bs-toggle="tooltip">
                     <i class="fa fa-2x fa-at"></i>
                 </a>';
     
@@ -111,7 +111,7 @@ trait ThemeArticleTrait
             "'!N_id!'i"                 => $id,
             "'!N_previous_article!'i"   => $prevArt,
             "'!N_next_article!'i"       => $nextArt,
-            "'!N_sujet!'i"              => '<a href="'. site_url('search.php?query=&amp;topic=' . $topic) . '"><img class="img-fluid" src="' . $timage . '" alt="' . translate("Rechercher dans") . '&nbsp;' . $topictext . '" /></a>',
+            "'!N_sujet!'i"              => '<a href="'. site_url('search.php?query=&amp;topic=' . $topic) . '"><img class="img-fluid" src="' . $timage . '" alt="' . __d('two_news', 'Rechercher dans') . '&nbsp;' . $topictext . '" /></a>',
             "'!N_texte!'i"              => $thetext,
             "'!N_nb_lecture!'i"         => $counter
         );

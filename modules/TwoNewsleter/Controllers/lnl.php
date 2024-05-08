@@ -39,15 +39,15 @@ function SuserCheck(string $email): string
     $stop = '';
 
     if ((!$email) || ($email == '') || (!preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $email))) {
-        $stop = translate("Erreur : Email invalide");
+        $stop = __d('two_newsleter', 'Erreur : Email invalide');
     }
 
     if (strrpos($email, ' ') > 0) {
-        $stop = translate("Erreur : une adresse Email ne peut pas contenir d'espaces");
+        $stop = __d('two_newsleter', 'Erreur : une adresse Email ne peut pas contenir d\'espaces');
     }
 
     if (mailler::checkdnsmail($email) === false) {
-        $stop = translate("Erreur : DNS ou serveur de mail incorrect");
+        $stop = __d('two_newsleter', 'Erreur : DNS ou serveur de mail incorrect');
     }
 
     if (DB::table('users')
@@ -55,7 +55,7 @@ function SuserCheck(string $email): string
             ->where('email', $email)
             ->first() > 0) 
     {
-        $stop = translate("Erreur : adresse Email déjà utilisée");
+        $stop = __d('two_newsleter', 'Erreur : adresse Email déjà utilisée');
     }
 
     if (DB::table('lnl_outside_users')
@@ -73,7 +73,7 @@ function SuserCheck(string $email): string
                 ->where('email', $email)
                 ->delete();
         } else {
-            $stop = translate("Erreur : adresse Email déjà utilisée");
+            $stop = __d('two_newsleter', 'Erreur : adresse Email déjà utilisée');
         }
     }
 
@@ -90,11 +90,11 @@ function SuserCheck(string $email): string
 function error_handler(string $ibid): void 
 {
     echo '
-    <h2>' . translate("La lettre") . '</h2>
+    <h2>' . __d('two_newsleter', 'La lettre') . '</h2>
     <hr />
-    <p class="lead mb-2">' . translate("Merci d'entrer l'information en fonction des spécifications") . '</p>
+    <p class="lead mb-2">' . __d('two_newsleter', 'Merci d\'entrer l\'information en fonction des spécifications') . '</p>
     <div class="alert alert-danger">' . $ibid . '</div>
-    <a href="'. site_url('index.php') .'" class="btn btn-outline-secondary">' . translate("Retour en arrière") . '</a>';
+    <a href="'. site_url('index.php') .'" class="btn btn-outline-secondary">' . __d('two_newsleter', 'Retour en arrière') . '</a>';
 }
 
 /**
@@ -110,15 +110,15 @@ function subscribe(): void
         include("themes/default/header.php");
 
         echo '
-        <h2>' . translate("La lettre") . '</h2>
+        <h2>' . __d('two_newsleter', 'La lettre') . '</h2>
         <hr />
-        <p class="lead mb-2">' . translate("Gestion de vos abonnements") . ' : <strong>' . $xemail . '</strong></p>
+        <p class="lead mb-2">' . __d('two_newsleter', 'Gestion de vos abonnements') . ' : <strong>' . $xemail . '</strong></p>
         <form action="'. site_url('lnl.php') .'" method="POST">
             ' . spam::Q_spambot() . '
             <input type="hidden" name="email" value="' . $xemail . '" />
             <input type="hidden" name="op" value="subscribeOK" />
-            <input type="submit" class="btn btn-outline-primary me-2" value="' . translate("Valider") . '" />
-            <a href="'. site_url('index.php') .'" class="btn btn-outline-secondary">' . translate("Retour en arrière") . '</a>
+            <input type="submit" class="btn btn-outline-primary me-2" value="' . __d('two_newsleter', 'Valider') . '" />
+            <a href="'. site_url('index.php') .'" class="btn btn-outline-secondary">' . __d('two_newsleter', 'Retour en arrière') . '</a>
         </form>';
 
         include("themes/default/footer.php");
@@ -171,24 +171,24 @@ function subscribe_ok(): void
                 ));
 
                 // Email validation + url to unsubscribe
-                $subject = html_entity_decode(translate("La lettre"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' / ' . Config::get('npds.sitename');
-                $message = translate("Merci d'avoir consacré du temps pour vous enregistrer.") . '<br /><br />' . translate("Pour supprimer votre abonnement à notre lettre, merci d'utiliser") . ' : <br />'. site_url('lnl.php?op=unsubscribe&email=' . $xemail) .'<br /><br />';
+                $subject = html_entity_decode(__d('two_newsleter', 'La lettre'), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' / ' . Config::get('npds.sitename');
+                $message = __d('two_newsleter', 'Merci d\'avoir consacré du temps pour vous enregistrer.') . '<br /><br />' . __d('two_newsleter', 'Pour supprimer votre abonnement à notre lettre, merci d\'utiliser') . ' : <br />'. site_url('lnl.php?op=unsubscribe&email=' . $xemail) .'<br /><br />';
                 $message .= Config::get('signature.message');
 
                 mailler::send_email($xemail, $subject, $message, '', true, 'html', '');
 
                 echo '
-                <div class="alert alert-success">' . translate("Merci d'avoir consacré du temps pour vous enregistrer.") . '</div>
-                <a href="'. site_url('index.php') .'">' . translate("Retour en arrière") . '</a>';
+                <div class="alert alert-success">' . __d('two_newsleter', 'Merci d\'avoir consacré du temps pour vous enregistrer.') . '</div>
+                <a href="'. site_url('index.php') .'">' . __d('two_newsleter', 'Retour en arrière') . '</a>';
             } else {
-                $stop = translate("Compte ou adresse IP désactivée. Cet émetteur a participé plus de x fois dans les dernières heures, merci de contacter le webmaster pour déblocage.") . "<br />";
+                $stop = __d('two_newsleter', 'Compte ou adresse IP désactivée. Cet émetteur a participé plus de x fois dans les dernières heures, merci de contacter le webmaster pour déblocage.') . "<br />";
                 
                 error_handler($stop);
             }
         } else {
             error_handler($stop);}
     } else {
-        error_handler(translate("Cette donnée ne doit pas être vide.") . "<br />");
+        error_handler(__d('two_newsleter', 'Cette donnée ne doit pas être vide.') . "<br />");
     }
 
     include("themes/default/footer.php");
@@ -230,14 +230,14 @@ function unsubscribe(): void
                 include("themes/default/header.php");
 
                 echo '
-                <div class="alert alert-success">' . translate("Merci") . '</div>
-                <a href="'. site_url('index.php') .'">' . translate("Retour en arrière") . '</a>';
+                <div class="alert alert-success">' . __d('two_newsleter', 'Merci') . '</div>
+                <a href="'. site_url('index.php') .'">' . __d('two_newsleter', 'Retour en arrière') . '</a>';
 
                 include("themes/default/footer.php");
             } else {
                 include("themes/default/header.php");
 
-                $stop = translate("Compte ou adresse IP désactivée. Cet émetteur a participé plus de x fois dans les dernières heures, merci de contacter le webmaster pour déblocage.") . "<br />";
+                $stop = __d('two_newsleter', 'Compte ou adresse IP désactivée. Cet émetteur a participé plus de x fois dans les dernières heures, merci de contacter le webmaster pour déblocage.') . "<br />";
                 error_handler($stop);
 
                 include("themes/default/footer.php");

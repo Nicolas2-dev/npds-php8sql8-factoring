@@ -175,7 +175,7 @@ class ThemeOptions
             $user_avatar = $this->avatar($user);
 
             $avatar = '<a class="dropdown-item" href="' . route('dashboard') . '" >
-                    <img src="' . $user_avatar . '" class="n-ava-64" alt="avatar" title="' . __d('two_boost', 'Votre compte') . '" data-bs-toggle="tooltip" data-bs-placement="right" /></a>
+                    <img src="' . $user_avatar . '" class="n-ava-64" alt="avatar" title="' . __d('two_frontend', 'Votre compte') . '" data-bs-toggle="tooltip" data-bs-placement="right" /></a>
                     <li class="dropdown-divider">
                 </li>';
         }
@@ -195,12 +195,12 @@ class ThemeOptions
         if ($this->user->autorisation(-1)) {
             $btn_con = '<a class="dropdown-item" href="rsdfgsdqfqs">
                     <i class="fas fa-sign-in-alt fa-lg me-2 align-middle"></i>
-                    ' . __d('two_boost', 'Connexions') . '
+                    ' . __d('two_frontend', 'Connexions') . '
                 </a>';
         } elseif ($this->user->autorisation(1)) {
             $btn_con = '<a class="dropdown-item" href="dfgqdsdf">
                     <i class="fas fa-sign-out-alt fa-lg text-danger me-2">
-                    </i>' . __d('two_boost', 'Déconnexion') . '
+                    </i>' . __d('two_frontend', 'Déconnexion') . '
                 </a>';
         }
 
@@ -252,10 +252,10 @@ class ThemeOptions
             $adminMenu = '<li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="fa fa-server fa-lg"></i>
-                        ' . __d('two_boost', 'Administration') . '
+                        ' . __d('two_frontend', 'Administration') . '
                     </a>
                     <ul class="dropdown-menu">
-                        <a class="dropdown-item" href="' . site_url('logout/admin?op=logout') . '"><i class="fas fa-sign-out-alt fa-lg text-danger me-2"></i>' . __d('two_boost', 'Déconnexion') . '</a>
+                        <a class="dropdown-item" href="' . site_url('logout/admin?op=logout') . '"><i class="fas fa-sign-out-alt fa-lg text-danger me-2"></i>' . __d('two_frontend', 'Déconnexion') . '</a>
                     </ul>
                 </li>';
 
@@ -283,7 +283,7 @@ class ThemeOptions
             if ($nbmes > 0) {
                 $privmsgs = '<li class="nav-item">
                     <a class="nav-link" href="viewpmsg.php">
-                        <i class="fa fa-envelope fs-4 faa-shake animated" title="' . __d('two_boost', 'Message personnel') . ' <span class=\'badge rounded-pill bg-danger ms-2\'>' . $nbmes . '</span>" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right"></i>
+                        <i class="fa fa-envelope fs-4 faa-shake animated" title="' . __d('two_frontend', 'Message personnel') . ' <span class=\'badge rounded-pill bg-danger ms-2\'>' . $nbmes . '</span>" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right"></i>
                     </a>
                 </li>';
  

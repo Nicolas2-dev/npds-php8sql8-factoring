@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\TwoEdito\Library;
 
-use Two\Support\Str;
-use Two\Support\Facades\View;
 use Two\Foundation\Application;
 
 

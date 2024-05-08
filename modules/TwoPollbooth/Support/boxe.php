@@ -40,7 +40,7 @@ if (! function_exists('pollMain'))
                         ->first();
         
         global $block_title;
-        $boxTitle = $block_title == '' ? translate("Sondage") :  $block_title;
+        $boxTitle = $block_title == '' ? __d('two_polbooth', 'Sondage') :  $block_title;
 
         $boxContent .= '<legend>'. Language::aff_langue($poll_desc->pollTitle) .'</legend>';
 
@@ -78,15 +78,15 @@ if (! function_exists('pollMain'))
         settype($inputvote, 'string');
 
         if (!$pollClose) {
-            $inputvote = '<button class="btn btn-outline-primary btn-sm btn-block" type="submit" value="'. translate("Voter") .'" title="'. translate("Voter") .'" ><i class="fa fa-check fa-lg"></i> '. translate("Voter") .'</button>';
+            $inputvote = '<button class="btn btn-outline-primary btn-sm btn-block" type="submit" value="'. __d('two_polbooth', 'Voter') .'" title="'. __d('two_polbooth', 'Voter') .'" ><i class="fa fa-check fa-lg"></i> '. __d('two_polbooth', 'Voter') .'</button>';
         }
 
         $boxContent .= '
         <div class="mb-3">'. $inputvote .'</div>
         </form>
-        <a href="'. site_url('pollBooth.php?op=results&amp;pollID='. $pollID) .'" title="'. translate("Résultats") .'">'. translate("Résultats") .'</a>&nbsp;&nbsp;<a href="'. site_url('pollBooth.php') .'">'. translate("Anciens sondages") .'</a>
+        <a href="'. site_url('pollBooth.php?op=results&amp;pollID='. $pollID) .'" title="'. __d('two_polbooth', 'Résultats') .'">'. __d('two_polbooth', 'Résultats') .'</a>&nbsp;&nbsp;<a href="'. site_url('pollBooth.php') .'">'. __d('two_polbooth', 'Anciens sondages') .'</a>
         <ul class="list-group mt-3">
-        <li class="list-group-item">'. translate("Votes : ") .' <span class="badge rounded-pill bg-secondary float-end">'. $sum .'</span></li>';
+        <li class="list-group-item">'. __d('two_polbooth', 'Votes : ') .' <span class="badge rounded-pill bg-secondary float-end">'. $sum .'</span></li>';
 
         if (Config::get('two_core::config.pollcomm')) {
             if (file_exists("modules/comments/config/pollBoth.conf.php")) {
@@ -100,7 +100,7 @@ if (! function_exists('pollMain'))
                         ->where('post_aff', 1)
                         ->count();
 
-            $boxContent .= '<li class="list-group-item">'. translate("Commentaire(s) : ") .' <span class="badge rounded-pill bg-secondary float-end">'. $numcom .'</span></li>';
+            $boxContent .= '<li class="list-group-item">'. __d('two_polbooth', 'Commentaire(s) : ') .' <span class="badge rounded-pill bg-secondary float-end">'. $numcom .'</span></li>';
         }
 
         $boxContent .= '</ul>';

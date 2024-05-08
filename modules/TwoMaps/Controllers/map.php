@@ -82,7 +82,7 @@ function mapsections(): void
         echo '
             <h3>
             <a class="" data-bs-toggle="collapse" href="#collapseSections" aria-expanded="false" aria-controls="collapseSections">
-            <i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . translate("Rubriques") . '
+            <i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . __d('two_maps', 'Rubriques') . '
             <span class="badge bg-secondary float-end">' . count($result) . '</span>
             </h3>
         <div class="collapse" id="collapseSections">
@@ -106,7 +106,7 @@ function mapforum() :void
     if ($tmp != '') {
         echo '
         <h3>
-            <a data-bs-toggle="collapse" href="#collapseForums" aria-expanded="false" aria-controls="collapseForums"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . translate("Forums") . '
+            <a data-bs-toggle="collapse" href="#collapseForums" aria-expanded="false" aria-controls="collapseForums"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . __d('two_maps', 'Forums') . '
         </h3>
         <div class="collapse" id="collapseForums">
             <div class="card card-body">
@@ -143,7 +143,7 @@ function maptopics(): void
     if ($lis_top != '') {
         echo '
         <h3>
-            <a class="" data-bs-toggle="collapse" href="#collapseTopics" aria-expanded="false" aria-controls="collapseTopics"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . translate("Sujets") . '
+            <a class="" data-bs-toggle="collapse" href="#collapseTopics" aria-expanded="false" aria-controls="collapseTopics"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . __d('two_maps', 'Sujets') . '
             <span class="badge bg-secondary float-end">' . count($count) . '</span>
         </h3>
         <div class="collapse" id="collapseTopics">
@@ -180,7 +180,7 @@ function mapcategories(): void
     if ($lis_cat != '') {
         echo '
         <h3>
-            <a class="" data-bs-toggle="collapse" href="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . translate("Catégories") . '
+            <a class="" data-bs-toggle="collapse" href="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . __d('two_maps', 'Catégories') . '
             <span class="badge bg-secondary float-end">' . count($count) . '</span>
         </h3>
         <div class="collapse" id="collapseCategories">
@@ -213,7 +213,7 @@ function mapfaq(): void
     if ($lis_faq != '')
         echo '
         <h3>
-            <a class="" data-bs-toggle="collapse" href="#collapseFaq" aria-expanded="false" aria-controls="collapseFaq"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . translate("FAQ - Questions fréquentes") . '
+            <a class="" data-bs-toggle="collapse" href="#collapseFaq" aria-expanded="false" aria-controls="collapseFaq"><i class="toggle-icon fa fa-caret-down"></i></a>&nbsp;' . __d('two_maps', 'FAQ - Questions fréquentes') . '
             <span class="badge bg-secondary float-end">' . count($count) . '</span>
         </h3>
         <div class="collapse" id="collapseFaq">
@@ -229,7 +229,7 @@ include("themes/default/header.php");
 // start Caching page
 if (cache::cacheManagerStart2()) {
 
-    echo '<h2>' . translate("Plan du site") . '</h2>
+    echo '<h2>' . __d('two_maps', 'Plan du site') . '</h2>
     <hr />';
 
     mapsections();

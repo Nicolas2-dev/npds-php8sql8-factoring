@@ -146,7 +146,7 @@ if ($stage == 4) {
             write_parameters($new_dbhost, $new_dbuname, $new_dbpass, $new_dbname, $new_NPDS_Prefix, $new_mysql_p, $new_adminmail);
             if ($stage4_ok == 1) {
                 $msg = '
-                <div class="alert alert-success">' . ins_translate("Le fichier de configuration a été écrit avec succès !") . '</div>';
+                <div class="alert alert-success">' . __d('two_install', 'Le fichier de configuration a été écrit avec succès !') . '</div>';
                 $Xinst_log = date('d/m/y  H:j:s') . ' : Ecriture paramètres de config pour ' . $cms_name . "\n";
                 $file = fopen('storage/logs/install.log', 'a');
                 fwrite($file, $Xinst_log);
@@ -157,19 +157,19 @@ if ($stage == 4) {
                 };
             } elseif ($stage4_ok == 0) {
                 $msg = '
-                <div class="alert alert-danger">' . ins_translate("Le fichier de configuration n'a pas pu être modifié. Vérifiez les droits d'accès au fichier 'config/config.php', puis réessayez à nouveau.") . '</div>';
+                <div class="alert alert-danger">' . __d('two_install', 'Le fichier de configuration n\'a pas pu être modifié. Vérifiez les droits d\'accès au fichier \'config/config.php\', puis réessayez à nouveau.') . '</div>';
             }
             entete();
             menu();
             echo $menu;
             $out .= '
-                    <h3 class="mb-3">' . ins_translate('Paramètres de connexion') . '</h3>' . $msg;
+                    <h3 class="mb-3">' . __d('two_install', 'Paramètres de connexion') . '</h3>' . $msg;
             if ($stage4_ok == 1 and $qi != 1) {
                 $out .= '
                     <form name="submit" method="post" action="install.php">
                         <input type="hidden" name="langue" value="' . $langue . '" />
                         <input type="hidden" name="stage" value="5" />
-                        <button type="submit" class="btn btn-success">' . ins_translate("Etape suivante") . '</button>
+                        <button type="submit" class="btn btn-success">' . __d('two_install', 'Etape suivante') . '</button>
                     </form>';
             }
             $out .= '
@@ -208,27 +208,27 @@ if ($stage == 5) {
             write_others($new_nuke_url, $new_sitename, $new_Titlesitename, $new_slogan, $new_Default_Theme, $new_startdate);
             if ($stage5_ok == 1) {
                 $msg = '
-                <div class="alert alert-success">' . ins_translate('Le fichier de configuration a été écrit avec succès !') . '</div>';
+                <div class="alert alert-success">' . __d('two_install', 'Le fichier de configuration a été écrit avec succès !') . '</div>';
                 if ($qi == 1) {
                     Header('Location: install.php?stage=6&qi=1&langue=' . $langue);
                     exit;
                 };
             } elseif ($stage5_ok == 0) {
                 $msg = '
-                <div class="alert alert-danger">' . ins_translate("Le fichier de configuration n'a pas pu être modifié. Vérifiez les droits d'accès au fichier 'config/config.php', puis réessayez à nouveau.") . '</div>';
+                <div class="alert alert-danger">' . __d('two_install', 'Le fichier de configuration n\'a pas pu être modifié. Vérifiez les droits d\'accès au fichier \'config/config.php\', puis réessayez à nouveau.') . '</div>';
             }
             entete();
             menu();
             echo $menu;
             $out .= '
-                <h3 class="mb-3">' . ins_translate("Fichier de configuration") . '</h3>' . $msg;
+                <h3 class="mb-3">' . __d('two_install', 'Fichier de configuration') . '</h3>' . $msg;
             if ($stage5_ok == 1 and $qi != 1) {
                 $out .= '
                 <form name="next" method="post" action="install.php">
                     <div class="mb-3 ">
                         <input type="hidden" name="langue" value="' . $langue . '" />
                         <input type="hidden" name="stage" value="6" />
-                        <button type="submit" class="btn btn-success">' . ins_translate('Etape suivante') . '</button>
+                        <button type="submit" class="btn btn-success">' . __d('two_install', 'Etape suivante') . '</button>
                     </div>
                 </form>';
             }
@@ -276,7 +276,7 @@ if ($stage == 6) {
                 fclose($file);
                 $colorst7 = ' active';
                 $msg = '
-                    <div class="alert alert-success">' . ins_translate('La base de données a été mise à jour avec succès !') . '</div>';
+                    <div class="alert alert-success">' . __d('two_install', 'La base de données a été mise à jour avec succès !') . '</div>';
                 if ($qi == 1) {
                     Header('Location: install.php?stage=7&qi=1&langue=' . $langue);
                     exit;
@@ -284,19 +284,19 @@ if ($stage == 6) {
             } elseif ($stage6_ok == 0) {
                 $colorst7 = '-danger';
                 $msg = '
-                    <div class="alert alert-danger">' . ins_translate("La base de données n'a pas pu être modifiée. Vérifiez les paramètres ainsi que vos fichiers, puis réessayez à nouveau.") . '</div>';
+                    <div class="alert alert-danger">' . __d('two_install', 'La base de données n\'a pas pu être modifiée. Vérifiez les paramètres ainsi que vos fichiers, puis réessayez à nouveau.') . '</div>';
             }
             entete();
             menu();
             echo $menu;
             $out .= '
-                <h3 class="mb-3">' . ins_translate('Base de données') . '</h3>' . $msg;
+                <h3 class="mb-3">' . __d('two_install', 'Base de données') . '</h3>' . $msg;
             if ($stage6_ok == 1 and $qi != 1) {
                 $out .= '
                 <form name="next" method="post" action="install.php">
                     <input type="hidden" name="langue" value="' . $langue . '" />
                     <input type="hidden" name="stage" value="7" />
-                    <button type="submit" class="btn btn-success">' . ins_translate('Etape suivante') . '</button>
+                    <button type="submit" class="btn btn-success">' . __d('two_install', 'Etape suivante') . '</button>
                 </form>';
             }
             $out .= '
@@ -347,22 +347,22 @@ if ($stage == 7) {
                         };
 
                         $msg = '
-                <div class="alert alert-success">' . ins_translate("Le compte Admin a été modifié avec succès !") . '</div>';
+                <div class="alert alert-success">' . __d('two_install', 'Le compte Admin a été modifié avec succès !') . '</div>';
                     } elseif ($stage7_ok == 0) {
                         $msg = '
-                <div class="alert alert-danger">' . ins_translate("Le compte Admin n'a pas pu être modifié. Vérifiez les paramètres ainsi que vos fichiers, puis réessayez à nouveau.") . '</div>';
+                <div class="alert alert-danger">' . __d('two_install', 'Le compte Admin n\'a pas pu être modifié. Vérifiez les paramètres ainsi que vos fichiers, puis réessayez à nouveau.') . '</div>';
                     }
                     entete();
                     menu();
                     echo $menu;
                     $out .= '
-                <h3 class="mb-3">' . ins_translate('Compte Admin') . '</h3>' . $msg;
+                <h3 class="mb-3">' . __d('two_install', 'Compte Admin') . '</h3>' . $msg;
                     if ($stage7_ok == 1 and $qi != 1) {
                         $out .= '
                     <form name="next" method="post" action="install.php">
                     <input type="hidden" name="langue" value="' . $langue . '" />
                     <input type="hidden" name="stage" value="8" />
-                    <button type="submit" class="btn btn-success">' . ins_translate("Etape suivante") . '</button>
+                    <button type="submit" class="btn btn-success">' . __d('two_install', 'Etape suivante') . '</button>
                 </form>';
                     }
                     $out .= '
@@ -406,27 +406,27 @@ if ($stage == 8) {
             write_upload($new_max_size, $new_DOCUMENTROOT, $new_autorise_upload_p, $new_racine, $new_rep_upload, $new_rep_cache, $new_rep_log, $new_url_upload);
             if ($stage8_ok == 1) {
                 $msg = '
-                <div class="alert alert-success">' . ins_translate('Le fichier de configuration a été écrit avec succès !') . '</div>';
+                <div class="alert alert-success">' . __d('two_install', 'Le fichier de configuration a été écrit avec succès !') . '</div>';
                 if ($qi == 1) {
                     Header('Location: install.php?stage=9&qi=1&op=write_ok&langue=' . $langue);
                     exit;
                 };
             } elseif ($stage8_ok == 0) {
                 $msg = '
-                <div class="alert alert-danger">' . ins_translate("Le fichier de configuration n'a pas pu être modifié. Vérifiez les droits d'accès au fichier 'config/config.php', puis réessayez à nouveau.") . '</div>';
+                <div class="alert alert-danger">' . __d('two_install', 'Le fichier de configuration n\'a pas pu être modifié. Vérifiez les droits d\'accès au fichier \'config/config.php\', puis réessayez à nouveau.') . '</div>';
             }
             entete();
             menu();
             echo $menu;
 
             $out .=  '
-                <h3 class="mb-3">' . ins_translate("Configuration du module UPload") . '</h3>' . $msg;
+                <h3 class="mb-3">' . __d('two_install', 'Configuration du module UPload') . '</h3>' . $msg;
             if ($stage8_ok == 1 and $qi != 1) {
                 $out .= '
             <form name="next" method="post" action="install.php">
                 <input type="hidden" name="langue" value="' . $langue . '" />
                 <input type="hidden" name="stage" value="9" />
-                <button type="submit" class="btn btn-success">' . ins_translate("Etape suivante") . '</button>
+                <button type="submit" class="btn btn-success">' . __d('two_install', 'Etape suivante') . '</button>
             </form>';
             }
             $out .= '

@@ -100,8 +100,10 @@ class LanguageManager
     }
  
     /**
+     * Note :: a revoir translate dans le function !!!!!
+     * 
      * Analyse le contenu d'une chaine et converti la section correspondante ([langue] OU [!langue] ...[/langue])
-     * à la langue / [transl] ... [/transl] permet de simuler un appel translate("xxxx")
+     * à la langue / [transl] ... [/transl] permet de simuler un appel __('xxxx')
      *
      * @param   string  $ibid  [$ibid description]
      *
@@ -109,7 +111,7 @@ class LanguageManager
      */
     public function aff_langue(string $ibid): string
     {
-        // copie du tableau + rajout de transl pour gestion de l'appel à translate(...); - Theme Dynamic
+        // copie du tableau + rajout de transl pour gestion de l'appel à __(...); - Theme Dynamic
         $tab_llangue = $this->make_tab_langue();
         $tab_llangue[] = 'transl';
 
@@ -157,14 +159,14 @@ class LanguageManager
                         if ($lang != 'transl') {
                             $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", $fragment, $ibid);
                         } else {
-                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", translate($fragment), $ibid);
+                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", __($fragment), $ibid);
                         }
                         $ok_language = true;
                     } else {
                         if ($lang != 'transl') {
                             $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", "", $ibid);
                         } else {
-                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", translate($fragment), $ibid);
+                            $ibid = str_replace("[$lang]" . $fragment . "[/$lang]", __($fragment), $ibid);
                         }
                     }
                 } else {
@@ -209,19 +211,19 @@ class LanguageManager
         $M_langue = '
         <div class="mb-3">
         <select name="' . $ibid . '" class="form-select" onchange="this.form.submit()">
-            <option value="">' . translate("Choisir une langue") . '</option>';
+            <option value="">' . __d('two_core', 'Choisir une langue') . '</option>';
         
         foreach ($this->make_tab_langue() as $bidon => $langue) {
             $M_langue .= '
-                <option value="' . $langue . '">' . $flag[$langue] . ' ' . translate("$langue") . '</option>';
+                <option value="' . $langue . '">' . $flag[$langue] . ' ' . __d('two_core', $langue) . '</option>';
         }
 
         $M_langue .= '
-                <option value="">- ' . translate("Aucune langue") . '</option>
+                <option value="">- ' . __d('two_core', 'Aucune langue') . '</option>
             </select>
         </div>
         <noscript>
-            <input class="btn btn-primary" type="submit" name="local_sub" value="' . translate("Valider") . '" />
+            <input class="btn btn-primary" type="submit" name="local_sub" value="' . __d('two_core', 'Valider') . '" />
         </noscript>';
 
         return $M_langue;

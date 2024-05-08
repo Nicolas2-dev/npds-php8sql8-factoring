@@ -31,7 +31,7 @@ if (! function_exists('instant_members_message'))
 
         global $block_title;
         if ($block_title == '') {
-            $block_title = translate("M2M bloc");
+            $block_title = __d('two_messenger', 'M2M bloc');
         }
 
         $user = User::getUser();
@@ -47,9 +47,9 @@ if (! function_exists('instant_members_message'))
                 $timex = time() - $ibid[$i]['time'];
                 
                 if ($timex >= 60) {
-                    $timex = '<i class="fa fa-plug text-muted" title="'. $ibid[$i]['username'] .' '. translate("n'est pas connecté") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;';
+                    $timex = '<i class="fa fa-plug text-muted" title="'. $ibid[$i]['username'] .' '. __d('two_messenger', 'n\'est pas connecté') .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;';
                 } else {
-                    $timex = '<i class="fa fa-plug faa-flash animated text-primary" title="'. $ibid[$i]['username'] .' '. translate("est connecté") .'" data-bs-toggle="tooltip" data-bs-placement="right" ></i>&nbsp;';
+                    $timex = '<i class="fa fa-plug faa-flash animated text-primary" title="'. $ibid[$i]['username'] .' '. __d('two_messenger', 'est connecté') .'" data-bs-toggle="tooltip" data-bs-placement="right" ></i>&nbsp;';
                 }
 
                 $query = DB::table('users')->select('uid');
@@ -124,7 +124,7 @@ if (! function_exists('instant_members_message'))
                             $icon = "";
                         }
 
-                        $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="'. translate("Nouveau") .'<span class=\'rounded-pill bg-danger ms-2\'>'. $new_messages .'</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
+                        $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="'. __d('two_messenger', 'Nouveau') .'<span class=\'rounded-pill bg-danger ms-2\'>'. $new_messages .'</span>" data-bs-html="true" data-bs-toggle="tooltip"></i>';
                         
                         if ($ibid[$i]['username'] == User::cookieUser(1)) {
                             $icon .= '</a>';
@@ -147,7 +147,7 @@ if (! function_exists('instant_members_message'))
                                 $icon = '';
                             }
 
-                            $icon .= '<i class="far fa-envelope-open fa-lg " title="'. translate("Nouveau") .' : '. $new_messages .'" data-bs-toggle="tooltip"></i></a>';
+                            $icon .= '<i class="far fa-envelope-open fa-lg " title="'. __d('two_messenger', 'Nouveau') .' : '. $new_messages .'" data-bs-toggle="tooltip"></i></a>';
                         } else {
                             $icon = '&nbsp;';
                         }
@@ -161,7 +161,7 @@ if (! function_exists('instant_members_message'))
                         $M = $N;
                     }
 
-                    $boxstuff .= '<li class="">'. $timex .'&nbsp;<a href="'. site_url('powerpack.php?op=instant_message&amp;to_userid='. $N) .'" title="'. translate("Envoyer un message interne") .'" data-bs-toggle="tooltip">'. $M .'</a><span class="float-end">'. $icon .'</span></li>';
+                    $boxstuff .= '<li class="">'. $timex .'&nbsp;<a href="'. site_url('powerpack.php?op=instant_message&amp;to_userid='. $N) .'" title="'. __d('two_messenger', 'Envoyer un message interne') .'" data-bs-toggle="tooltip">'. $M .'</a><span class="float-end">'. $icon .'</span></li>';
                 } 
             }
 

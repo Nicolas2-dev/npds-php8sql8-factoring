@@ -40,7 +40,7 @@ if (!users::getUser()) {
 
     include("themes/$theme/theme.php");
 
-    config::get('npds.Titlesitename', translate("Carnet d'adresses"));
+    config::get('npds.Titlesitename', __d('two_carnet', 'Carnet d\'adresses'));
     include("storage/meta/meta.php");
 
     echo '<link id="bsth" rel="stylesheet" href="themes/_skins/default/bootstrap.min.css" />';
@@ -92,8 +92,8 @@ if (!users::getUser()) {
     } else {
         echo '
             <div class="alert alert-secondary text-break">
-                <span>' . translate("Vous pouvez charger un fichier carnet.txt dans votre miniSite") . '.</span><br />
-                <span>' . translate("La structure de chaque ligne de ce fichier : nom_du_membre; adresse Email; commentaires") . '</span>
+                <span>' . __d('two_carnet', 'Vous pouvez charger un fichier carnet.txt dans votre miniSite') . '.</span><br />
+                <span>' . __d('two_carnet', 'La structure de chaque ligne de ce fichier : nom_du_membre; adresse Email; commentaires') . '</span>
             </div>';
     }
     

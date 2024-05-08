@@ -83,11 +83,11 @@ function listsections($rubric)
         $aff = '';
 
         if ($rubric) {
-            $aff .= '<span class="lead"><a href="'. site_url('sections.php') .'" title="' . translate("Retour à l'index des rubriques") . '" data-bs-toggle="tooltip">Index</a></span><hr />';
+            $aff .= '<span class="lead"><a href="'. site_url('sections.php') .'" title="' . __d('two_news', 'Retour à l\'index des rubriques') . '" data-bs-toggle="tooltip">Index</a></span><hr />';
         }
 
         $aff .= '
-        <h2>' . translate("Rubriques") . '<span class="float-end badge bg-secondary">' . $nb_r . '</span></h2>';
+        <h2>' . __d('two_news', 'Rubriques') . '<span class="float-end badge bg-secondary">' . $nb_r . '</span></h2>';
 
         if (sql_num_rows($result) > 0) {
             while (list($rubid, $rubname, $intro) = sql_fetch_row($result)) {
@@ -108,7 +108,7 @@ function listsections($rubric)
                 }
 
                 $aff .= '
-                    <a class="ms-2" href="'. site_url('sections.php?rubric=' . $rubid) .'">' . language::aff_langue($rubname) . '</a><span class=" float-end">#NEW#<span class="badge bg-secondary" title="' . translate("Sous-rubrique") . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_section . '</span></span>
+                    <a class="ms-2" href="'. site_url('sections.php?rubric=' . $rubid) .'">' . language::aff_langue($rubname) . '</a><span class=" float-end">#NEW#<span class="badge bg-secondary" title="' . __d('two_news', 'Sous-rubrique') . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_section . '</span></span>
                 </h3>';
 
                 if ($intro != '') {
@@ -137,7 +137,7 @@ function listsections($rubric)
                             $aff .= '<a href="#" class="arrow-toggle text-primary" data-bs-toggle="collapse" data-bs-target="#sec' . $secid . '" aria-expanded="true" aria-controls="sec' . $secid . '"><i class="toggle-icon fa fa-caret-up"></i></a>&nbsp;';
                         }
 
-                        $aff1 = language::aff_langue($secname) . '<span class=" float-end">#NEW#<span class="badge bg-secondary" title="' . translate("Articles") . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_art . '</span></span>';
+                        $aff1 = language::aff_langue($secname) . '<span class=" float-end">#NEW#<span class="badge bg-secondary" title="' . __d('two_news', 'Articles') . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_art . '</span></span>';
                         
                         if ($image != '') {
                             if (file_exists("assets/images/sections/$image")) {
@@ -173,7 +173,7 @@ function listsections($rubric)
                                     $nouveau = '';
                                 }
 
-                                $aff2 .= '<a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . language::aff_langue($title) . '</a><span class="float-end"><small>' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</small>';
+                                $aff2 .= '<a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . language::aff_langue($title) . '</a><span class="float-end"><small>' . __d('two_news', 'lu : ') . ' ' . $counter . ' ' . __d('two_news', 'Fois') . '</small>';
                                 
                                 if ($nouveau == '') {
                                     $aff2 .= '<i class="far fa-star ms-3 text-success"></i>';
@@ -200,7 +200,7 @@ function listsections($rubric)
         echo $aff; //la sortie doit se faire en html !!!
 
         // if ($rubric) {
-        //     echo '<a class="btn btn-secondary" href="'. site_url('sections.php') .'">'.translate("Return to Sections Index").'</a>';
+        //     echo '<a class="btn btn-secondary" href="'. site_url('sections.php') .'">'.__d('two_news', 'Return to Sections Index').'</a>';
         // }
         
         sql_free_result($result);
@@ -228,7 +228,7 @@ function listarticles($secid)
     $config = Config::get('sections');
     
     if ($config['sections_chemin'] == 1) {
-        $chemin = '<span class="lead"><a href="'. site_url('sections.php') .'" title="' . translate("Retour à l'index des rubriques") . '" data-bs-toggle="tooltip">Index</a>&nbsp;/&nbsp;<a href="'. site_url('sections.php?rubric=' . $rubid) .'">' . language::aff_langue($rubname) . '</a></span>';
+        $chemin = '<span class="lead"><a href="'. site_url('sections.php') .'" title="' . __d('two_news', 'Retour à l\'index des rubriques') . '" data-bs-toggle="tooltip">Index</a>&nbsp;/&nbsp;<a href="'. site_url('sections.php?rubric=' . $rubid) .'">' . language::aff_langue($rubname) . '</a></span>';
     }
 
     $title =  language::aff_langue($secname);
@@ -253,7 +253,7 @@ function listarticles($secid)
             $nb_art = sql_num_rows($result);
 
             if ($prev == 1) {
-                echo '<input class="btn btn-primary" type="button" value="' . translate("Retour à l'administration") . '" onclick="javascript:history.back()" /><br /><br />';
+                echo '<input class="btn btn-primary" type="button" value="' . __d('two_news', 'Retour à l\'administration') . '" onclick="javascript:history.back()" /><br /><br />';
             }
 
             if (function_exists("themesection_title")) {
@@ -261,7 +261,7 @@ function listarticles($secid)
             } else {
                 echo $chemin . '
                 <hr />
-                <h3 class="mb-3">' . $title . '<span class="float-end"><span class="badge bg-secondary" title="' . translate("Articles") . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_art . '</span></h3>';
+                <h3 class="mb-3">' . $title . '<span class="float-end"><span class="badge bg-secondary" title="' . __d('two_news', 'Articles') . '" data-bs-toggle="tooltip" data-bs-placement="left">' . $nb_art . '</span></h3>';
             }
 
             if ($intro != '') {
@@ -281,7 +281,7 @@ function listarticles($secid)
             }
 
             echo '
-                <p>' . translate("Voici les articles publiés dans cette rubrique.") . '</p>
+                <p>' . __d('two_news', 'Voici les articles publiés dans cette rubrique.') . '</p>
             <div class="card card-body mb-3">';
 
             while (list($artid, $secid, $title, $content, $userlevel, $counter, $timestamp) = sql_fetch_row($result)) {
@@ -297,7 +297,7 @@ function listarticles($secid)
                     echo '
                     <div class="mb-1">
                     <a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . language::aff_langue($title) . '</a><small>
-                    ' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</small><span class="float-end"><a href="'. site_url('sections.php?op=printpage&amp;artid=' . $artid) .'" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg"></i></a></span>';
+                    ' . __d('two_news', 'lu : ') . ' ' . $counter . ' ' . __d('two_news', 'Fois') . '</small><span class="float-end"><a href="'. site_url('sections.php?op=printpage&amp;artid=' . $artid) .'" title="' . __d('two_news', 'Page spéciale pour impression') . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg"></i></a></span>';
                         
                     if ($nouveau == '') {
                         echo '&nbsp;<i class="fa fa-star-o text-success"></i>';
@@ -311,7 +311,7 @@ function listarticles($secid)
             </div>';
             /*
             echo '
-            <a class="btn btn-secondary" href="'. site_url('sections.php') .'">'.translate("Return to Sections Index").'</a>';
+            <a class="btn btn-secondary" href="'. site_url('sections.php') .'">'.__d('two_news', 'Return to Sections Index').'</a>';
             */
         } else {
             url::redirect_url("sections.php");
@@ -368,7 +368,7 @@ function viewarticle($artid, $page)
         $pindex = substr(substr($page, 5), 0, -1);
 
         if ($pindex != '') {
-            $pindex = translate("Page") . ' ' . $pindex;
+            $pindex = __d('two_news', 'Page') . ' ' . $pindex;
         }
 
         $config = Config::get('sections');
@@ -393,7 +393,7 @@ function viewarticle($artid, $page)
             $words = sizeof(explode(' ', $Xcontent));
 
             if ($prev == 1) {
-                echo '<input class="btn btn-secondary" type="button" value="' . translate("Retour à l'administration") . '" onclick="javascript:history.back()" /><br /><br />';
+                echo '<input class="btn btn-secondary" type="button" value="' . __d('two_news', 'Retour à l\'administration') . '" onclick="javascript:history.back()" /><br /><br />';
             }
 
             if (function_exists("themesection_title")) {
@@ -402,8 +402,8 @@ function viewarticle($artid, $page)
                 echo $chemin . '
                 <hr />
                 <h3 class="mb-2">' . $title . '<span class="small text-muted"> - ' . $pindex . '</span></h3>
-                <p><span class="text-muted small">(' . $words . ' ' . translate("mots dans ce texte )") . '&nbsp;-&nbsp;
-            ' . translate("lu : ") . ' ' . $counter . ' ' . translate("Fois") . '</span><span class="float-end"><a href="'. site_url('sections.php?op=printpage&amp;artid=' . $artid) .'" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg ms-3"></i></a></span></p><hr />';
+                <p><span class="text-muted small">(' . $words . ' ' . __d('two_news', 'mots dans ce texte )') . '&nbsp;-&nbsp;
+            ' . __d('two_news', 'lu : ') . ' ' . $counter . ' ' . __d('two_news', 'Fois') . '</span><span class="float-end"><a href="'. site_url('sections.php?op=printpage&amp;artid=' . $artid) .'" title="' . __d('two_news', 'Page spéciale pour impression') . '" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-print fa-lg ms-3"></i></a></span></p><hr />';
             }
 
             preg_match_all('#\[page.*\]#', $Xcontent, $rs);
@@ -430,19 +430,19 @@ function viewarticle($artid, $page)
 
                 if ($pageS !== '[page0]') {
                     $Xcontent .= '
-                    <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . translate("Début de l'article") . '</a></li>';
+                    <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">' . __d('two_news', 'Début de l\'article') . '</a></li>';
                 }
 
                 $Xcontent .= '
                     <li class="page-item active"><a class="page-link">' . preg_replace('#\[(page)(.*)(\])#', '\1 \2', $pageS) . '</a></li>
-                    <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=' . $pageS) .'" >' . translate("Page suivante") . '</a></li>
+                    <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=' . $pageS) .'" >' . __d('two_news', 'Page suivante') . '</a></li>
                 </ul>
                 </nav>';
             } elseif ($multipage) {
                 $Xcontent .= '
                 <nav class="d-flex mt-3">
                 <ul class="mx-auto pagination pagination-sm">
-                <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=[page0]') .'">' . translate("Début de l'article") . '</a></li>
+                <li class="page-item"><a class="page-link" href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid . '&amp;page=[page0]') .'">' . __d('two_news', 'Début de l\'article') . '</a></li>
                 </ul>
                 </nav>';
             }
@@ -454,8 +454,8 @@ function viewarticle($artid, $page)
 
             if ($rubname != 'Divers') {
 
-                // echo '<hr /><p><a class="btn btn-secondary" href="'. site_url(sections.php'') .'">'.translate("Return to Sections Index").'</a></p>'; 
-                // echo '<h4>***<strong>'.translate("Back to chapter:").'</strong></h4>';
+                // echo '<hr /><p><a class="btn btn-secondary" href="'. site_url(sections.php'') .'">'.__d('two_news', 'Return to Sections Index').'</a></p>'; 
+                // echo '<h4>***<strong>'.__d('two_news', 'Back to chapter:').'</strong></h4>';
                 // echo '<ul class="list-group"><li class="list-group-item"><a href="'. site_url('sections.php?op=listarticles&amp;secid='.$secid) .'">'.language::aff_langue($secname).'</a></li></ul>';
 
                 // = DB::table('')->select()->where('', )->orderBy('')->get();
@@ -465,7 +465,7 @@ function viewarticle($artid, $page)
 
                 if ($nb_article > 0) {
                     echo '
-                    <h4 class="my-3">' . translate("Autres publications de la sous-rubrique") . '<span class="badge bg-secondary float-end">' . $nb_article . '</span></h4>
+                    <h4 class="my-3">' . __d('two_news', 'Autres publications de la sous-rubrique') . '<span class="badge bg-secondary float-end">' . $nb_article . '</span></h4>
                     <ul class="list-group">';
 
                     while (list($artid, $secid, $title, $userlevel) = sql_fetch_row($result3)) {
@@ -487,7 +487,7 @@ function viewarticle($artid, $page)
 
             if (sql_num_rows($resultconnexe) > 0) {
                 echo '
-                <h4 class="my-3">' . translate("Cela pourrait vous intéresser") . '<span class="badge bg-secondary float-end">' . sql_num_rows($resultconnexe) . '</span></h4>
+                <h4 class="my-3">' . __d('two_news', 'Cela pourrait vous intéresser') . '<span class="badge bg-secondary float-end">' . sql_num_rows($resultconnexe) . '</span></h4>
                 <ul class="list-group">';
 
                 while (list($connexe) = sql_fetch_row($resultconnexe)) {
@@ -558,8 +558,8 @@ function PrintSecPage($artid)
     echo '
                 <hr />
                 <p class="text-center">
-                ' . translate("Cet article provient de") . ' ' . Config::get('npds.sitename') . '<br /><br />
-                ' . translate("L'url pour cet article est : ") . '
+                ' . __d('two_news', 'Cet article provient de') . ' ' . Config::get('npds.sitename') . '<br /><br />
+                ' . __d('two_news', 'L\'url pour cet article est : ') . '
                 <a href="'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'">'. site_url('sections.php?op=viewarticle&amp;artid=' . $artid) .'</a>
                 </p>
                 </div>

@@ -28,7 +28,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'sections';
-$f_titre = adm_translate("Rubriques");
+$f_titre = __d('two_news', 'Rubriques');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -161,14 +161,14 @@ function sections(): void
         echo '<li class="list-group-item list-group-item-action">
             <a href="'. site_url('admin.php?op=sections#ajouter publication') .'">
                 <i class="fa fa-plus-square fa-lg me-2"></i>
-                '. adm_translate("Ajouter une publication") .'
+                '. __d('two_news', 'Ajouter une publication') .'
             </a></li>';
     }
 
     echo '<li class="list-group-item list-group-item-action">
         <a href="'. site_url('admin.php?op=new_rub_section&amp;type=rub') .'">
             <i class="fa fa-plus-square fa-lg me-2"></i>
-            '. adm_translate("Ajouter une nouvelle Rubrique") .'
+            '. __d('two_news', 'Ajouter une nouvelle Rubrique') .'
             </a>
         </li>';
     
@@ -176,7 +176,7 @@ function sections(): void
         echo '<li class="list-group-item list-group-item-action">
             <a href="'. site_url('admin.php?op=new_rub_section&amp;type=sec') .'" >
                 <i class="fa fa-plus-square fa-lg me-2"></i>
-                '. adm_translate("Ajouter une nouvelle Sous-Rubrique") .'
+                '. __d('two_news', 'Ajouter une nouvelle Sous-Rubrique') .'
             </a>
         </li>';
     }
@@ -186,13 +186,13 @@ function sections(): void
         <li class="list-group-item list-group-item-action">
             <a href="'. site_url('admin.php?op=ordremodule') .'">
                 <i class="fa fa-sort-amount-up fa-lg me-2"></i>
-                '. adm_translate("Changer l'ordre des rubriques") .'
+                '. __d('two_news', 'Changer l\'ordre des rubriques') .'
             </a>
         </li>
         <li class="list-group-item list-group-item-action">
             <a href="#droits des auteurs">
                 <i class="fa fa-user-edit fa-lg me-2"></i>
-                '. adm_translate("Droits des auteurs") .'
+                '. __d('two_news', 'Droits des auteurs') .'
                 </a>
         </li>';
     }
@@ -200,7 +200,7 @@ function sections(): void
     echo '<li class="list-group-item list-group-item-action">
             <a href="#publications en attente">
                 <i class="fa fa-clock fa-lg me-2"></i>
-                '. adm_translate("Publication(s) en attente de validation") .'
+                '. __d('two_news', 'Publication(s) en attente de validation') .'
             </a>
         </li>
     </ul>';
@@ -210,15 +210,15 @@ function sections(): void
 
         echo '
         <hr />
-        <h3 class="my-3">'. adm_translate("Liste des rubriques") .'</h3>';
+        <h3 class="my-3">'. __d('two_news', 'Liste des rubriques') .'</h3>';
         
         foreach ($nb_rub as $rubrique) {    
             $i++;
 
             if ($radminsuper == 1) {
-                $href1 = '<a href="'. site_url('admin.php?op=rubriquedit&amp;rubid='. $rubrique['rubid']) .'" title="'. adm_translate("Editer la rubrique") .'" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-edit fa-lg me-2"></i>&nbsp;';
+                $href1 = '<a href="'. site_url('admin.php?op=rubriquedit&amp;rubid='. $rubrique['rubid']) .'" title="'. __d('two_news', 'Editer la rubrique') .'" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fa fa-edit fa-lg me-2"></i>&nbsp;';
                 $href2 = '</a>';
-                $href3 = '<a href="'. site_url('admin.php?op=rubriquedelete&amp;rubid='. $rubrique['rubid']) .'" class="text-danger" title="'. adm_translate("Supprimer la rubrique") .'" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fas fa-trash fa-lg"></i></a>';
+                $href3 = '<a href="'. site_url('admin.php?op=rubriquedelete&amp;rubid='. $rubrique['rubid']) .'" class="text-danger" title="'. __d('two_news', 'Supprimer la rubrique') .'" data-bs-toggle="tooltip" data-bs-placement="left"><i class="fas fa-trash fa-lg"></i></a>';
             } else {
                 $href1 = '';
                 $href2 = '';
@@ -228,13 +228,13 @@ function sections(): void
             $rubname = language::aff_langue($rubrique['rubname']);
 
             if ($rubname == '') {
-                $rubname = adm_translate("Sans nom");
+                $rubname = __d('two_news', 'Sans nom');
             }
 
             if ($rubrique['enligne'] == 0) {
-                $online = '<span class="badge bg-danger ms-1 p-2">'. adm_translate("Hors Ligne") .'</span>';
+                $online = '<span class="badge bg-danger ms-1 p-2">'. __d('two_news', 'Hors Ligne') .'</span>';
             } else if ($rubrique['enligne'] == 1) {
-                $online = '<span class="badge bg-success ms-1 p-2">'. adm_translate("En Ligne") .'</span>';
+                $online = '<span class="badge bg-success ms-1 p-2">'. __d('two_news', 'En Ligne') .'</span>';
             }
 
             echo '
@@ -268,11 +268,11 @@ function sections(): void
                 echo '
                 <div id="srub'. $i .'" class=" mb-3 collapse ">
                 <div class="list-group-item d-flex py-2">
-                    <span class="badge bg-secondary me-2 p-2">'. count($result2) .'</span><strong class="">'. adm_translate("Sous-rubriques") .'</strong>';
+                    <span class="badge bg-secondary me-2 p-2">'. count($result2) .'</span><strong class="">'. __d('two_news', 'Sous-rubriques') .'</strong>';
                 
                 if ($radminsuper == 1) {
                     echo '<span class="ms-auto">
-                        <a href="'. site_url('admin.php?op=ordrechapitre&amp;rubid='. $rubrique['rubid'] .'&amp;rubname='. $rubname) .'" title="'. adm_translate("Changer l'ordre des sous-rubriques") .'" data-bs-toggle="tooltip" data-bs-placement="left" >
+                        <a href="'. site_url('admin.php?op=ordrechapitre&amp;rubid='. $rubrique['rubid'] .'&amp;rubname='. $rubname) .'" title="'. __d('two_news', 'Changer l\'ordre des sous-rubriques') .'" data-bs-toggle="tooltip" data-bs-placement="left" >
                         <i class="fa fa-sort-amount-up fa-lg"></i></a></span>';
                 }
 
@@ -308,13 +308,13 @@ function sections(): void
                     
                     if ($droit_pub > 0 and $droit_pub != 4) {
                         // à revoir pas suffisant
-                        echo '<a href="'. site_url('admin.php?op=sectionedit&amp;secid='. $section['secid']) .'" title="'. adm_translate("Editer la sous-rubrique") .'" data-bs-toggle="tooltip" data-bs-placement="left">
+                        echo '<a href="'. site_url('admin.php?op=sectionedit&amp;secid='. $section['secid']) .'" title="'. __d('two_news', 'Editer la sous-rubrique') .'" data-bs-toggle="tooltip" data-bs-placement="left">
                             <i class="fa fa-edit fa-lg py-2 me-2"></i>
                         </a>';
                     }
 
                     if (($droit_pub == 7) or ($droit_pub == 4)) {
-                        echo '<a href="'. site_url('admin.php?op=sectiondelete&amp;secid='. $section['secid']) .'" title="'. adm_translate("Supprimer la sous-rubrique") .'" data-bs-toggle="tooltip" data-bs-placement="left">
+                        echo '<a href="'. site_url('admin.php?op=sectiondelete&amp;secid='. $section['secid']) .'" title="'. __d('two_news', 'Supprimer la sous-rubrique') .'" data-bs-toggle="tooltip" data-bs-placement="left">
                             <i class="fas fa-trash fa-lg text-danger py-2"></i>
                         </a>';
                     }
@@ -327,11 +327,11 @@ function sections(): void
                         echo '
                         <div id="lst_sect_'. $section['secid'] .'" class=" collapse">
                         <li class="list-group-item d-flex">
-                        <span class="badge bg-secondary ms-4 p-2">'. count($result3) .'</span>&nbsp;<strong class=" text-capitalize">'. adm_translate("publications") .'</strong>';
+                        <span class="badge bg-secondary ms-4 p-2">'. count($result3) .'</span>&nbsp;<strong class=" text-capitalize">'. __d('two_news', 'publications') .'</strong>';
                         
                         if ($radminsuper == 1) {
                             echo '<span class="ms-auto">
-                                <a href="'. site_url('admin.php?op=ordrecours&secid='. $section['secid'] .'&amp;secname='. $secname) .'" title="'. adm_translate("Changer l'ordre des publications") .'" data-bs-toggle="tooltip" data-bs-placement="left">
+                                <a href="'. site_url('admin.php?op=ordrecours&secid='. $section['secid'] .'&amp;secname='. $secname) .'" title="'. __d('two_news', 'Changer l\'ordre des publications') .'" data-bs-toggle="tooltip" data-bs-placement="left">
                                     &nbsp;<i class="fa fa-sort-amount-up fa-lg"></i>
                                 </a>
                             </span>';
@@ -342,7 +342,7 @@ function sections(): void
                         foreach ($result3 as $seccont) {
 
                             if ($seccont['title'] == '') { 
-                                $seccont['title'] = adm_translate("Sans titre");
+                                $seccont['title'] = __d('two_news', 'Sans titre');
                             }
 
                             echo '
@@ -359,7 +359,7 @@ function sections(): void
                             }
 
                             if (($droit_pub == 7) or ($droit_pub == 4)) {
-                                echo '<a href="'. site_url('admin.php?op=secartdelete&amp;artid='. $seccont['artid']) .'" class="text-danger" title="'. adm_translate("Supprimer") .'" data-bs-toggle="tooltip">
+                                echo '<a href="'. site_url('admin.php?op=secartdelete&amp;artid='. $seccont['artid']) .'" class="text-danger" title="'. __d('two_news', 'Supprimer') .'" data-bs-toggle="tooltip">
                                     <i class="far fa-trash fa-lg"></i>
                                 </a>';
                             }
@@ -379,7 +379,7 @@ function sections(): void
 
         echo '
         <hr />
-        <h3 class="my-3">'. adm_translate("Editer une publication") .'</h3>
+        <h3 class="my-3">'. __d('two_news', 'Editer une publication') .'</h3>
         <form action="'. site_url('admin.php') .'" method="post">
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="artid">ID</label>
@@ -396,22 +396,22 @@ function sections(): void
         if ($autorise_pub) {
             echo '
             <hr />
-            <h3 class="mb-3"><a name="ajouter publication">'. adm_translate("Ajouter une publication") .'</a></h3>
+            <h3 class="mb-3"><a name="ajouter publication">'. __d('two_news', 'Ajouter une publication') .'</a></h3>
             <form action="'. site_url('admin.php') .'" method="post" name="adminForm">
                 <div class="mb-3 row">
-                    <label class="col-form-label col-12" for="secid">'. adm_translate("Sous-rubrique") .'</label>
+                    <label class="col-form-label col-12" for="secid">'. __d('two_news', 'Sous-rubrique') .'</label>
                     <div class="col-12">
                     '. $autorise_pub .'
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label class="col-form-label col-12" for="title">'. adm_translate("Titre") .'</label>
+                    <label class="col-form-label col-12" for="title">'. __d('two_news', 'Titre') .'</label>
                     <div class=" col-12">
                         <textarea class="form-control" name="title" rows="2"></textarea>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label class="col-form-label col-12" for="content">'. adm_translate("Contenu") .'</label>
+                    <label class="col-form-label col-12" for="content">'. __d('two_news', 'Contenu') .'</label>
                     <div class=" col-12">
                         <textarea class="tin form-control" name="content" rows="30"></textarea>
                     </div>
@@ -424,14 +424,14 @@ function sections(): void
 
             echo '
                 <div class="mb-3">
-                    <input class="btn btn-primary" type="submit" value="'. adm_translate("Ajouter") .'" />
+                    <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Ajouter') .'" />
                 </div>
             </form>';
 
             // ca c'est pas bon incomplet
             if ($radminsuper != 1) {
                 echo '<p class="blockquote">
-                    '. adm_translate("Une fois que vous aurez validé cette publication, elle sera intégrée en base temporaire, et l'administrateur sera prévenu. Il visera cette publication et la mettra en ligne dans les meilleurs délais. Il est normal que pour l'instant, cette publication n'apparaisse pas dans l'arborescence.") .'
+                    '. __d('two_news', 'Une fois que vous aurez validé cette publication, elle sera intégrée en base temporaire, et l\'administrateur sera prévenu. Il visera cette publication et la mettra en ligne dans les meilleurs délais. Il est normal que pour l\'instant, cette publication n\'apparaisse pas dans l\'arborescence.') .'
                     </p>';
             }
         }
@@ -458,7 +458,7 @@ function sections(): void
                     </span>
                     <span class="text-center">
                         <a href="'. site_url('admin.php?op=secartupdate&amp;artid='. $$tempo['artid']) .'">
-                            '. adm_translate("Editer") .'<br /><i class="fa fa-edit fa-lg"></i>
+                            '. __d('two_news', 'Editer') .'<br /><i class="fa fa-edit fa-lg"></i>
                         </a>
                     </span>
                 </div>';
@@ -484,7 +484,7 @@ function sections(): void
                     </span>
                     <span class="text-center">
                         <a href="'. site_url('admin.php?op=secartupdate&amp;artid='. $seccont['artid']) .'">
-                            '. adm_translate("Editer") .'<br /><i class="fa fa-edit fa-lg"></i>
+                            '. __d('two_news', 'Editer') .'<br /><i class="fa fa-edit fa-lg"></i>
                         </a>
                     </span>
                 </div>';
@@ -495,7 +495,7 @@ function sections(): void
     <hr />
     <h3 class="mb-3">
         <a name="publications en attente">
-            <i class="far fa-clock fa-lg me-1"></i>'. adm_translate("Publication(s) en attente de validation") .'
+            <i class="far fa-clock fa-lg me-1"></i>'. __d('two_news', 'Publication(s) en attente de validation') .'
         </a><span class="badge bg-danger float-end">'. count($result) .'</span></h3>
     <ul class="list-group">
     '. $enattente .'
@@ -504,7 +504,7 @@ function sections(): void
     if ($radminsuper == 1) {
         echo  '
         <hr />
-        <h3 class="mb-3"><a name="droits des auteurs"><i class="fa fa-user-edit me-2"></i>'. adm_translate("Droits des auteurs") .'</a></h3>';
+        <h3 class="mb-3"><a name="droits des auteurs"><i class="fa fa-user-edit me-2"></i>'. __d('two_news', 'Droits des auteurs') .'</a></h3>';
         
         $authors = DB::table('authors')
             ->select('aid', 'name', 'radminsuper')
@@ -519,7 +519,7 @@ function sections(): void
                 <div class="card my-2 p-1">
                     <div class="card-body p-1">
                         <i class="fa fa-user fa-lg me-1"></i><br />'. $author['aid'] .'&nbsp;/&nbsp;'. $author['name'] .'<br />
-                        <a href="'. site_url('admin.php?op=droitauteurs&amp;author='. $author['aid']) .'">'. adm_translate("Modifier l'information") .'</a>
+                        <a href="'. site_url('admin.php?op=droitauteurs&amp;author='. $author['aid']) .'">'. __d('two_news', 'Modifier l\'information') .'</a>
                     </div>
                 </div>
                 </div>';
@@ -552,10 +552,10 @@ function new_rub_section(string $type): void
     if ($type == 'sec') {
         echo '
         <hr />
-        <h3 class="mb-3">'. adm_translate("Ajouter une nouvelle Sous-Rubrique") .'</h3>
+        <h3 class="mb-3">'. __d('two_news', 'Ajouter une nouvelle Sous-Rubrique') .'</h3>
         <form action="'. site_url('admin.php') .'" method="post" id="newsection" name="adminForm">
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="rubref">'. adm_translate("Rubriques") .'</label>
+                <label class="col-form-label col-sm-4" for="rubref">'. __d('two_news', 'Rubriques') .'</label>
                 <div class="col-sm-8">
                 <select class="form-select" id="rubref" name="rubref">';
 
@@ -581,18 +581,18 @@ function new_rub_section(string $type): void
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4 col-md-4" for="image">'. adm_translate("Image pour la Sous-Rubrique") .'</label>
+                <label class="col-form-label col-sm-4 col-md-4" for="image">'. __d('two_news', 'Image pour la Sous-Rubrique') .'</label>
                 <div class="col-sm-8">
                 <input type="text" class="form-control" name="image" />
                 </div>
             </div>
             <div class="mb-3">
-                <label class="col-form-label" for="secname">'. adm_translate("Titre") .'</label>
+                <label class="col-form-label" for="secname">'. __d('two_news', 'Titre') .'</label>
                 <textarea  class="form-control" id="secname" name="secname" maxlength="255" rows="2" required="required"></textarea>
                 <span class="help-block text-end"><span id="countcar_secname"></span></span>
             </div>
             <div class="mb-3">
-                <label class="col-form-label" for="introd">'. adm_translate("Texte d'introduction") .'</label>
+                <label class="col-form-label" for="introd">'. __d('two_news', 'Texte d''introduction') .'</label>
                 <textarea class="tin form-control" name="introd" rows="30"></textarea>';
 
         echo editeur::aff_editeur("introd", '');
@@ -605,8 +605,8 @@ function new_rub_section(string $type): void
         echo '
         <div class="mb-3">
             <input type="hidden" name="op" value="sectionmake" />
-            <button class="btn btn-primary col-sm-6 col-12 col-md-4" type="submit" /><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. adm_translate("Ajouter") .'</button>
-            <button class="btn btn-secondary col-sm-6 col-12 col-md-4" type="button" onclick="javascript:history.back()">'. adm_translate("Retour en arrière") .'</button>
+            <button class="btn btn-primary col-sm-6 col-12 col-md-4" type="submit" /><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. __d('two_news', 'Ajouter') .'</button>
+            <button class="btn btn-secondary col-sm-6 col-12 col-md-4" type="button" onclick="javascript:history.back()">'. __d('two_news', 'Retour en arrière') .'</button>
         </div>
         </form>';
 
@@ -617,15 +617,15 @@ function new_rub_section(string $type): void
     } else if ($type == "rub") {
         echo '
             <hr />
-            <h3 class="mb-3">'. adm_translate("Ajouter une nouvelle Rubrique") .'</h3>
+            <h3 class="mb-3">'. __d('two_news', 'Ajouter une nouvelle Rubrique') .'</h3>
             <form action="'. site_url('admin.php') .'" method="post" id="newrub" name="adminForm">
                 <div class="mb-3">
-                <label class="col-form-label" for="rubname">'. adm_translate("Nom de la Rubrique") .'</label>
+                <label class="col-form-label" for="rubname">'. __d('two_news', 'Nom de la Rubrique') .'</label>
                 <textarea class="form-control" id="rubname" name="rubname" rows="2" maxlength="255" required="required"></textarea>
                 <span class="help-block text-end" id="countcar_rubname"></span>
                 </div>
                 <div class="mb-3">
-                <label class="col-form-label" for="introc">'. adm_translate("Texte d'introduction") .'</label>
+                <label class="col-form-label" for="introc">'. __d('two_news', 'Texte d\'introduction') .'</label>
                 <textarea class="tin form-control" id="introc" name="introc" rows="30" ></textarea>
                 </div>';
 
@@ -634,8 +634,8 @@ function new_rub_section(string $type): void
         echo '
                 <div class="mb-3">
                 <input type="hidden" name="op" value="rubriquemake" />
-                <button class="btn btn-primary" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. adm_translate("Ajouter") .'</button>
-                <button class="btn btn-secondary" type="button" onclick="javascript:history.back()">'. adm_translate("Retour en arrière") .'</button>
+                <button class="btn btn-primary" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. __d('two_news', 'Ajouter') .'</button>
+                <button class="btn btn-secondary" type="button" onclick="javascript:history.back()">'. __d('two_news', 'Retour en arrière') .'</button>
                 </div>
             </form>';
 
@@ -672,7 +672,7 @@ function publishcompat(int $article): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Publications connexes") .' : <span class="text-muted">'. language::aff_langue($seccont['titre']) .'</span></h3>
+    <h3 class="mb-3">'. __d('two_news', 'Publications connexes') .' : <span class="text-muted">'. language::aff_langue($seccont['titre']) .'</span></h3>
     <form action="'. site_url('admin.php') .'" method="post">';
 
     $result = DB::table('rubriques')
@@ -683,10 +683,10 @@ function publishcompat(int $article): void
     $i = 0;
     foreach ($result as $rubrique) {    
         if ($rubrique['enligne'] == 0) {
-            $online = adm_translate("Hors Ligne");
+            $online = __d('two_news', 'Hors Ligne');
             $cla = "danger";
         } else if ($rubrique['enligne'] == 1) {
-            $online = adm_translate("En Ligne");
+            $online = __d('two_news', 'En Ligne');
             $cla = "success";
         }
 
@@ -720,7 +720,7 @@ function publishcompat(int $article): void
             echo '<ul id="lst_'. $rubrique['rubid'] .'" class="list-group mb-1 collapse">';
             
             while (list($secid, $secname) = sql_fetch_row($result2)) {
-                echo '<li class="list-group-item"><strong class="ms-3" title="'. adm_translate("sous-rubrique") .'" data-bs-toggle="tooltip">'. language::aff_langue($secname) .'</strong></li>';
+                echo '<li class="list-group-item"><strong class="ms-3" title="'. __d('two_news', 'sous-rubrique') .'" data-bs-toggle="tooltip">'. language::aff_langue($secname) .'</strong></li>';
                 
                 $result3 = DB::table('seccont')
                                 ->select('artid', 'title')
@@ -759,7 +759,7 @@ function publishcompat(int $article): void
         <input type="hidden" name="op" value="updatecompat" />
         <input type="hidden" name="idx" value="'. $i .'" />
         <div class="mb-3 mt-3">
-            <button class="btn btn-primary" type="submit">'. adm_translate("Valider") .'</button>&nbsp;<input class="btn btn-secondary" type="button" onclick="javascript:history.back()" value="'. adm_translate("Retour en arrière") .'" />
+            <button class="btn btn-primary" type="submit">'. __d('two_news', 'Valider') .'</button>&nbsp;<input class="btn btn-secondary" type="button" onclick="javascript:history.back()" value="'. __d('two_news', 'Retour en arrière') .'" />
         </div>
     </form>';
 
@@ -837,30 +837,30 @@ function rubriquedit(int $rubid): void
     
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Editer une Rubrique : ") .' <span class="text-muted">'. language::aff_langue($rubname) .' #'. $rubrique['rubid'] .'</span></h3>';
+    <h3 class="mb-3">'. __d('two_news', 'Editer une Rubrique : ') .' <span class="text-muted">'. language::aff_langue($rubname) .' #'. $rubrique['rubid'] .'</span></h3>';
     
     if ($section) {
-        echo '<span class="badge bg-secondary">'. count($section) .'</span>&nbsp;'. adm_translate("sous-rubrique(s) attachée(s)");
+        echo '<span class="badge bg-secondary">'. count($section) .'</span>&nbsp;'. __d('two_news', 'sous-rubrique(s) attachée(s)');
     }
     
     echo '
             <form id="rubriquedit" action="'. site_url('admin.php') .'" method="post" name="adminForm">
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="rubname">'. adm_translate("Titre") .'</label>
+                <label class="col-form-label col-sm-12" for="rubname">'. __d('two_news', 'Titre') .'</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" id="rubname" name="rubname" maxlength ="255" rows="2" required="required">'. $rubname .'</textarea>
                 <span class="help-block text-end"><span id="countcar_rubname"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="introc">'. adm_translate("Texte d'introduction") .'</label>
+                <label class="col-form-label col-sm-12" for="introc">'. __d('two_news', 'Texte d\'introduction') .'</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" id="introc" name="introc" rows="30" >'. $intro .'</textarea>
                 </div>
             </div>
             '. editeur::aff_editeur('introc', '') .'
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3 pt-0" for="enligne">'. adm_translate("En Ligne") .'</label>';
+                <label class="col-form-label col-sm-3 pt-0" for="enligne">'. __d('two_news', 'En Ligne') .'</label>';
 
     if ($radminsuper == 1) {
         if ($enligne == 1) {
@@ -876,11 +876,11 @@ function rubriquedit(int $rubid): void
                 <div class="col-sm-9">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="enligne_n" name="enligne" value="0" '. $sel2 .' />
-                    <label class="form-check-label" for="enligne_n">'. adm_translate("Non") .'</label>
+                    <label class="form-check-label" for="enligne_n">'. __d('two_news', 'Non') .'</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="enligne_y" name="enligne" value="1" '. $sel1 .' />
-                    <label class="form-check-label" for="enligne_y">'. adm_translate("Oui") .'</label>
+                    <label class="form-check-label" for="enligne_y">'. __d('two_news', 'Oui') .'</label>
                 </div>
                 </div>
             </div>
@@ -888,8 +888,8 @@ function rubriquedit(int $rubid): void
                 <div class="col-sm-12">
                 <input type="hidden" name="rubid" value="'. $rubrique['rubid'] .'" />
                 <input type="hidden" name="op" value="rubriquechange" />
-                <button class="btn btn-primary" type="submit">'. adm_translate("Enregistrer") .'</button>&nbsp;
-                <input class="btn btn-secondary" type="button" value="'. adm_translate("Retour en arrière") .'" onclick="javascript:history.back()" />
+                <button class="btn btn-primary" type="submit">'. __d('two_news', 'Enregistrer') .'</button>&nbsp;
+                <input class="btn btn-secondary" type="button" value="'. __d('two_news', 'Retour en arrière') .'" onclick="javascript:history.back()" />
                 </div>
             </div>
         </form>';
@@ -1016,7 +1016,7 @@ function sectionedit(int $secid): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Sous-rubrique") .' : <span class="text-muted">'. language::aff_langue($secname) .'</span></h3>';
+    <h3 class="mb-3">'. __d('two_news', 'Sous-rubrique') .' : <span class="text-muted">'. language::aff_langue($secname) .'</span></h3>';
 
     $seccont = DB::table('seccont')
         ->select('artid')
@@ -1024,13 +1024,13 @@ function sectionedit(int $secid): void
         ->count();
 
     if ($number)    {
-        echo '<span class="badge bg-secondary p-2 me-2">'. $number .' </span>'. adm_translate("publication(s) attachée(s)");
+        echo '<span class="badge bg-secondary p-2 me-2">'. $number .' </span>'. __d('two_news', 'publication(s) attachée(s)');
     }
 
     echo '
             <form id="sectionsedit" action="'. site_url('admin.php') .'" method="post" name="adminForm">
             <div class="mb-3">
-                <label class="col-form-label" for="rubref">'. adm_translate("Rubriques") .'</label>';
+                <label class="col-form-label" for="rubref">'. __d('two_news', 'Rubriques') .'</label>';
 
 
     if ($radminsuper == 1) {
@@ -1096,17 +1096,17 @@ function sectionedit(int $secid): void
     //ici
     echo '
     <div class="mb-3">
-        <label class="col-form-label" for="secname">'. adm_translate("Sous-rubrique") .'</label>
+        <label class="col-form-label" for="secname">'. __d('two_news', 'Sous-rubrique') .'</label>
         <textarea class="form-control" id="secname" name="secname" rows="4" maxlength="255" required="required">'. $secname .'</textarea>
         <span class="help-block text-end"><span id="countcar_secname"></span></span>
     </div>
     <div class="mb-3">
-        <label class="col-form-label" for="image">'. adm_translate("Image") .'</label>
+        <label class="col-form-label" for="image">'. __d('two_news', 'Image') .'</label>
         <input type="text" class="form-control" id="image" name="image" maxlength="255" value="'. $section['image'] .'" />
         <span class="help-block text-end"><span id="countcar_image"></span></span>
     </div>
     <div class="mb-3">
-        <label class="col-form-label" for="introd">'. adm_translate("Texte d'introduction") .'</label>
+        <label class="col-form-label" for="introd">'. __d('two_news', 'Texte d\'introduction') .'</label>
         <textarea class="tin form-control" id="introd" name="introd" rows="20">'. $intro .'</textarea>
     </div>';
 
@@ -1119,11 +1119,11 @@ function sectionedit(int $secid): void
     if ($droit_pub == 3 or $droit_pub == 7) {
         echo '<input type="hidden" name="secid" value="'. $secid .'" />
                 <input type="hidden" name="op" value="sectionchange" />
-                <button class="btn btn-primary" type="submit">'. adm_translate("Enregistrer") .'</button>';
+                <button class="btn btn-primary" type="submit">'. __d('two_news', 'Enregistrer') .'</button>';
     }
 
     echo '
-    <input class="btn btn-secondary" type="button" value="'. adm_translate("Retour en arrière") .'" onclick="javascript:history.back()" />
+    <input class="btn btn-secondary" type="button" value="'. __d('two_news', 'Retour en arrière') .'" onclick="javascript:history.back()" />
     </form>';
 
     $arg1 = '
@@ -1261,12 +1261,12 @@ function secartedit(int $artid): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Editer une publication") .'</h3>
+    <h3 class="mb-3">'. __d('two_news', 'Editer une publication') .'</h3>
         <form action="'. site_url('admin.php') .'" method="post" id="secartedit" name="adminForm">
             <input type="hidden" name="artid" value="'. $seccont['artid'] .'" />
             <input type="hidden" name="op" value="secartchange" />
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="secid">'. adm_translate("Sous-rubriques") .'</label>
+                <label class="col-form-label col-sm-4" for="secid">'. __d('two_news', 'Sous-rubriques') .'</label>
                 <div class="col-sm-8">';
 
     // la on déraille ???
@@ -1289,18 +1289,18 @@ function secartedit(int $artid): void
             </div>';
 
     if ($tmp_autorise) {
-        echo '<a href="'. site_url('admin.php?op=publishcompat&amp;article='. $seccont['artid']) .'">'. adm_translate("Publications connexes") .'</a>';
+        echo '<a href="'. site_url('admin.php?op=publishcompat&amp;article='. $seccont['artid']) .'">'. __d('two_news', 'Publications connexes') .'</a>';
     }
 
     echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="title">'. adm_translate("Titre") .'</label>
+                <label class="col-form-label col-sm-12" for="title">'. __d('two_news', 'Titre') .'</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" id="title" name="title" rows="2">'. $title .'</textarea>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="content">'. adm_translate("Contenu") .'</label>
+                <label class="col-form-label col-sm-12" for="content">'. __d('two_news', 'Contenu') .'</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" id="content" name="content" rows="30" >'. $content .'</textarea>
                 </div>
@@ -1317,11 +1317,11 @@ function secartedit(int $artid): void
     $droits_pub = droits_publication($seccont['secid']);
 
     if ($droits_pub == 3 or $droits_pub == 7) {
-        echo '<input class="btn btn-primary" type="submit" value="'. adm_translate("Enregistrer") .'" />&nbsp;';
+        echo '<input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Enregistrer') .'" />&nbsp;';
     }
 
     echo '
-                <input class="btn btn-secondary" type="button" value="'. adm_translate("Retour en arrière") .'" onclick="javascript:history.back()" />
+                <input class="btn btn-secondary" type="button" value="'. __d('two_news', 'Retour en arrière') .'" onclick="javascript:history.back()" />
             </div>
         </div>
     </form>';
@@ -1353,18 +1353,18 @@ function secartupdate($artid): void
         ->first();
 
     if ($publisujet['type'] == 1) {
-        $debut = '<div class="alert alert-info">'. adm_translate("Vos droits de publications vous permettent de mettre à jour ou de supprimer ce contenu mais pas de la mettre en ligne sur le site.") .'</div>';
+        $debut = '<div class="alert alert-info">'. __d('two_news', 'Vos droits de publications vous permettent de mettre à jour ou de supprimer ce contenu mais pas de la mettre en ligne sur le site.') .'</div>';
         
         $fin = '
         <div class="mb-3 row">
             <div class="col-12">
                 <select class="form-select" name="op">
-                <option value="secartchangeup" selected="selected">'. adm_translate("Mettre à jour") .'</option>
-                <option value="secartdelete2">'. adm_translate("Supprimer") .'</option>
+                <option value="secartchangeup" selected="selected">'. __d('two_news', 'Mettre à jour') .'</option>
+                <option value="secartdelete2">'. __d('two_news', 'Supprimer') .'</option>
                 </select>
             </div>
         </div>
-        <input type="submit" class="btn btn-primary" name="submit" value="'. adm_translate("Ok") .'" />';
+        <input type="submit" class="btn btn-primary" name="submit" value="'. __d('two_news', 'Ok') .'" />';
     }
 
     $publisujet = DB::table('publisujet')
@@ -1376,22 +1376,22 @@ function secartupdate($artid): void
 
     if (($publisujet['type'] == 2) or ($radminsuper == 1)) {
         $debut = '
-        <div class="alert alert-success">'. adm_translate("Vos droits de publications vous permettent de mettre à jour, de supprimer ou de le mettre en ligne sur le site ce contenu.") .'<br /></div>';
+        <div class="alert alert-success">'. __d('two_news', 'Vos droits de publications vous permettent de mettre à jour, de supprimer ou de le mettre en ligne sur le site ce contenu.') .'<br /></div>';
         
         $fin = '
         <div class="mb-3 row">
             <div class="col-12">
                 <select class="form-select" name="op">
-                <option value="secartchangeup" selected="selected">'. adm_translate("Mettre à jour") .'</option>
-                <option value="secartdelete2">'. adm_translate("Supprimer") .'</option>
-                <option value="secartpublish">'. adm_translate("Publier") .'</option>
+                <option value="secartchangeup" selected="selected">'. __d('two_news', 'Mettre à jour') .'</option>
+                <option value="secartdelete2">'. __d('two_news', 'Supprimer') .'</option>
+                <option value="secartpublish">'. __d('two_news', 'Publier') .'</option>
                 </select>
             </div>
         </div>
-        <input type="submit" class="btn btn-primary" name="submit" value="'. adm_translate("Ok") .'" />';
+        <input type="submit" class="btn btn-primary" name="submit" value="'. __d('two_news', 'Ok') .'" />';
     }
 
-    $fin .= '&nbsp;<input class="btn btn-secondary" type="button" value="'. adm_translate("Retour en arrière") .'" onclick="javascript:history.back()" />';
+    $fin .= '&nbsp;<input class="btn btn-secondary" type="button" value="'. __d('two_news', 'Retour en arrière') .'" onclick="javascript:history.back()" />';
     
     include("themes/default/header.php");
     
@@ -1400,7 +1400,7 @@ function secartupdate($artid): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Editer une publication") .'</h3>';
+    <h3 class="mb-3">'. __d('two_news', 'Editer une publication') .'</h3>';
 
     echo $debut;
 
@@ -1411,10 +1411,11 @@ function secartupdate($artid): void
     <form id="secartupdate" action="'. site_url('admin.php') .'" method="post" name="adminForm">
         <input type="hidden" name="artid" value="'. $artid .'" />
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="secid">'. adm_translate("Sous-rubrique") .'</label>
+            <label class="col-form-label col-sm-4" for="secid">'. __d('two_news', 'Sous-rubrique') .'</label>
             <div class="col-sm-8">';
 
-    $tmp_autorise = sousrub_select($seccont_tempo['secid']); /// a affiner pas bon car dans certain cas on peut donc publier dans une sous rubrique sur laquelle on n'a pas les droits
+    /// a affiner pas bon car dans certain cas on peut donc publier dans une sous rubrique sur laquelle on n'a pas les droits
+    $tmp_autorise = sousrub_select($seccont_tempo['secid']); 
     
     if ($tmp_autorise) {
         echo $tmp_autorise;
@@ -1430,13 +1431,13 @@ function secartupdate($artid): void
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="title">'. adm_translate("Titre") .'</label>
+            <label class="col-form-label col-12" for="title">'. __d('two_news', 'Titre') .'</label>
             <div class=" col-12">
                 <textarea class="form-control" id="title" name="title" rows="2">'. $title .'</textarea>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="content">'. adm_translate("Contenu") .'</label>
+            <label class="col-form-label col-12" for="content">'. __d('two_news', 'Contenu') .'</label>
             <div class=" col-12">
                 <textarea class="tin form-control" id="content" name="content" rows="30">'. $content .'</textarea>
             </div>
@@ -1631,8 +1632,8 @@ function secartpublish(int $artid, int $secid, string $title, string $content, $
 
         $author = DB::table('authors')->select('email')->where('aid', $author)->first();
 
-        $sujet = html_entity_decode(adm_translate("Validation de votre publication"), ENT_COMPAT | ENT_HTML401, 'utf-8');
-        $message = adm_translate("La publication que vous aviez en attente vient d'être validée");
+        $sujet = html_entity_decode(__d('two_news', 'Validation de votre publication'), ENT_COMPAT | ENT_HTML401, 'utf-8');
+        $message = __d('two_news', 'La publication que vous aviez en attente vient d\'être validée');
 
         global $notify_from;
         mailler::send_email($author['email'], $sujet, $message, $notify_from, true, "html", '');
@@ -1697,10 +1698,10 @@ function rubriquedelete(int $rubid, int $ok = 0): void
 
         echo '
         <hr />
-        <h3 class="mb-3 text-danger">'. adm_translate("Effacer la Rubrique : ") .'<span class="text-muted">'. language::aff_langue($rubrique['rubname']) .'</span></h3>
+        <h3 class="mb-3 text-danger">'. __d('two_news', 'Effacer la Rubrique : ') .'<span class="text-muted">'. language::aff_langue($rubrique['rubname']) .'</span></h3>
         <div class="alert alert-danger">
-            <strong>'. adm_translate("Etes-vous sûr de vouloir effacer cette Rubrique ?") .'</strong><br /><br />
-            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=rubriquedelete&amp;rubid='. $rubrique['rubid'] .'&amp;ok=1') .'" role="button">'. adm_translate("Oui") .'</a>&nbsp;<a class="btn btn-secondary btn-sm" href="'. site_url('admin.php?op=sections') .'" role="button">'. adm_translate("Non") .'</a>
+            <strong>'. __d('two_news', 'Etes-vous sûr de vouloir effacer cette Rubrique ?') .'</strong><br /><br />
+            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=rubriquedelete&amp;rubid='. $rubrique['rubid'] .'&amp;ok=1') .'" role="button">'. __d('two_news', 'Oui') .'</a>&nbsp;<a class="btn btn-secondary btn-sm" href="'. site_url('admin.php?op=sections') .'" role="button">'. __d('two_news', 'Non') .'</a>
         </div>';
 
         css::adminfoot('', '', '', '');
@@ -1752,10 +1753,10 @@ function sectiondelete(int $secid, int $ok = 0): void
 
         echo '
         <hr />
-        <h3 class="mb-3 text-danger">'. adm_translate("Effacer la sous-rubrique : ") .'<span class="text-muted">'. language::aff_langue($section['secname']) .'</span></h3>
+        <h3 class="mb-3 text-danger">'. __d('two_news', 'Effacer la sous-rubrique : ') .'<span class="text-muted">'. language::aff_langue($section['secname']) .'</span></h3>
         <div class="alert alert-danger">
-            <strong>'. adm_translate("Etes-vous sûr de vouloir effacer cette sous-rubrique ?") .'</strong><br /><br />
-            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=sectiondelete&amp;secid='. $secid .'&amp;ok=1') .'" role="button">'. adm_translate("Oui") .'</a>&nbsp;<a class="btn btn-secondary btn-sm" role="button" href="'. site_url('admin.php?op=sections') .'" >'. adm_translate("Non") .'</a>
+            <strong>'. __d('two_news', 'Etes-vous sûr de vouloir effacer cette sous-rubrique ?') .'</strong><br /><br />
+            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=sectiondelete&amp;secid='. $secid .'&amp;ok=1') .'" role="button">'. __d('two_news', 'Oui') .'</a>&nbsp;<a class="btn btn-secondary btn-sm" role="button" href="'. site_url('admin.php?op=sections') .'" >'. __d('two_news', 'Non') .'</a>
         </div>';
 
         css::adminfoot('', '', '', '');
@@ -1810,10 +1811,10 @@ function secartdelete(int $artid, int $ok = 0): void
 
         echo '
         <hr />
-        <h3 class="mb-3 text-danger">'. adm_translate("Effacer la publication :") .' <span class="text-muted">'. language::aff_langue($seccont['title']) .'</span></h3>
+        <h3 class="mb-3 text-danger">'. __d('two_news', 'Effacer la publication :') .' <span class="text-muted">'. language::aff_langue($seccont['title']) .'</span></h3>
         <p class="alert alert-danger">
-            <strong>'. adm_translate("Etes-vous certain de vouloir effacer cette publication ?") .'</strong><br /><br />
-            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=secartdelete&amp;artid='. $artid .'&amp;ok=1') .'" role="button">'. adm_translate("Oui") .'</a>&nbsp;<a class="btn btn-secondary btn-sm" role="button" href="'. site_url('admin.php?op=sections') .'" >'. adm_translate("Non") .'</a>
+            <strong>'. __d('two_news', 'Etes-vous certain de vouloir effacer cette publication ?') .'</strong><br /><br />
+            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=secartdelete&amp;artid='. $artid .'&amp;ok=1') .'" role="button">'. __d('two_news', 'Oui') .'</a>&nbsp;<a class="btn btn-secondary btn-sm" role="button" href="'. site_url('admin.php?op=sections') .'" >'. __d('two_news', 'Non') .'</a>
         </p>';
 
         include("themes/default/footer.php");
@@ -1849,10 +1850,10 @@ function secartdelete2(int $artid, int $ok = 0): void
 
         echo '
         <hr />
-        <h3 class="mb-3 text-danger">'. adm_translate("Effacer la publication :") .' <span class="text-muted">'. language::aff_langue($seccont_tempo['title']) .'</span></h3>
+        <h3 class="mb-3 text-danger">'. __d('two_news', 'Effacer la publication :') .' <span class="text-muted">'. language::aff_langue($seccont_tempo['title']) .'</span></h3>
         <p class="alert alert-danger">
-            <strong>'. adm_translate("Etes-vous certain de vouloir effacer cette publication ?") .'</strong><br /><br />
-            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=secartdelete2&amp;artid='. $artid .'&amp;ok=1') .'" role="button">'. adm_translate("Oui") .'</a>&nbsp;<a class="btn btn-secondary btn-sm" role="button" href="'. site_url('admin.php?op=sections') .'" >'. adm_translate("Non") .'</a>
+            <strong>'. __d('two_news', 'Etes-vous certain de vouloir effacer cette publication ?') .'</strong><br /><br />
+            <a class="btn btn-danger btn-sm" href="'. site_url('admin.php?op=secartdelete2&amp;artid='. $artid .'&amp;ok=1') .'" role="button">'. __d('two_news', 'Oui') .'</a>&nbsp;<a class="btn btn-secondary btn-sm" role="button" href="'. site_url('admin.php?op=sections') .'" >'. __d('two_news', 'Non') .'</a>
         </p>';
 
         include("themes/default/footer.php");
@@ -1883,13 +1884,13 @@ function ordremodule(): void
     
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Changer l'ordre des rubriques") .'</h3>
+    <h3 class="mb-3">'. __d('two_news', 'Changer l\'ordre des rubriques') .'</h3>
     <form action="'. site_url('admin.php') .'" method="post" id="ordremodule" name="adminForm">
         <table class="table table-borderless table-sm table-hover table-striped">
             <thead>
                 <tr>
-                <th data-sortable="true" class="n-t-col-xs-2">'. adm_translate("Index") .'</th>
-                <th data-sortable="true" class="n-t-col-xs-10">'. adm_translate("Rubriques") .'</th>
+                <th data-sortable="true" class="n-t-col-xs-2">'. __d('two_news', 'Index') .'</th>
+                <th data-sortable="true" class="n-t-col-xs-10">'. __d('two_news', 'Rubriques') .'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -1932,8 +1933,8 @@ function ordremodule(): void
         <div class="mb-3 mt-3">
             <input type="hidden" name="i" value="'. $i .'" />
             <input type="hidden" name="op" value="majmodule" />
-            <button type="submit" class="btn btn-primary" >'. adm_translate("Valider") .'</button>
-            <button class="btn btn-secondary" onclick="javascript:history.back()" >'. adm_translate("Retour en arrière") .'</button>
+            <button type="submit" class="btn btn-primary" >'. __d('two_news', 'Valider') .'</button>
+            <button class="btn btn-secondary" onclick="javascript:history.back()" >'. __d('two_news', 'Retour en arrière') .'</button>
         </div>
     </form>';
 
@@ -1962,13 +1963,13 @@ function ordrechapitre(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Changer l'ordre des sous-rubriques") .' '. adm_translate("dans") .' / <span class="text-muted">'. $rubname .'</span></h3>
+    <h3 class="mb-3">'. __d('two_news', 'Changer l\'ordre des sous-rubriques') .' '. __d('two_news', 'dans') .' / <span class="text-muted">'. $rubname .'</span></h3>
     <form action="'. site_url('admin.php') .'" method="post" id="ordrechapitre" name="adminForm">
         <table class="table table-borderless table-sm table-hover table-striped">
             <thead>
                 <tr>
-                <th data-sortable="true" class="n-t-col-xs-2">'. adm_translate("Index") .'</th>
-                <th data-sortable="true" class="n-t-col-xs-10">'. adm_translate("Sous-rubriques") .'</th>
+                <th data-sortable="true" class="n-t-col-xs-2">'. __d('two_news', 'Index') .'</th>
+                <th data-sortable="true" class="n-t-col-xs-10">'. __d('two_news', 'Sous-rubriques') .'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -2012,8 +2013,8 @@ function ordrechapitre(): void
         </table>
         <div class="mb-3 mt-3">
             <input type="hidden" name="op" value="majchapitre" />
-            <input type="submit" class="btn btn-primary" value="'. adm_translate("Valider") .'" />
-            <button class="btn btn-secondary" onclick="javascript:history.back()" >'. adm_translate("Retour en arrière") .' </button>
+            <input type="submit" class="btn btn-primary" value="'. __d('two_news', 'Valider') .'" />
+            <button class="btn btn-secondary" onclick="javascript:history.back()" >'. __d('two_news', 'Retour en arrière') .' </button>
         </div>
     </form>';
 
@@ -2045,13 +2046,13 @@ function ordrecours(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Changer l'ordre") .' '. adm_translate("des") .' '. adm_translate("publications") .' / '. language::aff_langue($section['secname']) .'</h3>
+    <h3 class="mb-3">'. __d('two_news', 'Changer l\'ordre') .' '. __d('two_news', 'des') .' '. __d('two_news', 'publications') .' / '. language::aff_langue($section['secname']) .'</h3>
     <form id="ordrecours" action="'. site_url('admin.php') .'" method="post" name="adminForm">
         <table class="table table-borderless table-sm table-hover table-striped">
             <thead>
                 <tr>
-                <th data-sortable="true" class="n-t-col-xs-2">'. adm_translate("Index") .'</th>
-                <th data-sortable="true" class="n-t-col-xs-10">'. adm_translate("Publications") .'</th>
+                <th data-sortable="true" class="n-t-col-xs-2">'. __d('two_news', 'Index') .'</th>
+                <th data-sortable="true" class="n-t-col-xs-10">'. __d('two_news', 'Publications') .'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -2094,8 +2095,8 @@ function ordrecours(): void
         </table>
         <div class="mb-3 mt-3">
             <input type="hidden" name="op" value="majcours" />
-            <input type="submit" class="btn btn-primary" value="'. adm_translate("Valider") .'" />
-            <input type="button" class="btn btn-secondary" value="'. adm_translate("Retour en arrière") .'" onclick="javascript:history.back()" />
+            <input type="submit" class="btn btn-primary" value="'. __d('two_news', 'Valider') .'" />
+            <input type="button" class="btn btn-secondary" value="'. __d('two_news', 'Retour en arrière') .'" onclick="javascript:history.back()" />
         </div>
     </form>';
 
@@ -2188,7 +2189,7 @@ function publishrights(string $author): void
 
     echo '
     <hr />
-    <h3 class="mb-3"><i class="fa fa-user-edit me-2"></i>'. adm_translate("Droits des auteurs") .' : <span class="text-muted">'. $author .'</span></h3>
+    <h3 class="mb-3"><i class="fa fa-user-edit me-2"></i>'. __d('two_news', 'Droits des auteurs') .' : <span class="text-muted">'. $author .'</span></h3>
     <form action="'. site_url('admin.php') .'" method="post">';
 
     $rubriques = DB::table('rubriques')
@@ -2206,11 +2207,11 @@ function publishrights(string $author): void
                 <thead class="thead-light">
                 <tr class="table-secondary"><th colspan="5"><span class="form-check"><input class="form-check-input" id="ckbrall_'. $rubrique['rubid'] .'" type="checkbox" /><label class="form-check-label lead" for="ckbrall_'. $rubrique['rubid'] .'">'. language::aff_langue($rubrique['rubname']) .'</label></span></th></tr>
                 <tr class="">
-                    <th class="colspan="2" n-t-col-xs-3" data-sortable="true">'. adm_translate("Sous-rubriques") .'</th>
-                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. adm_translate("Créer") .'</th>
-                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. adm_translate("Publier") .'</th>
-                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. adm_translate("Modifier") .'</th>
-                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. adm_translate("Supprimer") .'</th>
+                    <th class="colspan="2" n-t-col-xs-3" data-sortable="true">'. __d('two_news', 'Sous-rubriques') .'</th>
+                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. __d('two_news', 'Créer') .'</th>
+                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. __d('two_news', 'Publier') .'</th>
+                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. __d('two_news', 'Modifier') .'</th>
+                    <th class="n-t-col-xs-2 text-center" data-halign="center" data-align="center">'. __d('two_news', 'Supprimer') .'</th>
                 </tr>
                 </thead>
                 <tbody>';
@@ -2279,8 +2280,8 @@ function publishrights(string $author): void
     echo '<input type="hidden" name="chng_aid" value="'. $author .'" />
             <input type="hidden" name="op" value="updatedroitauteurs" />
             <input type="hidden" name="maxindex" value="'. $i .'" />
-            <input class="btn btn-primary me-3" type="submit" value="'. adm_translate("Valider") .'" />
-            <input class="btn btn-secondary" type="button" onclick="javascript:history.back()" value="'. adm_translate("Retour en arrière") .'" />
+            <input class="btn btn-primary me-3" type="submit" value="'. __d('two_news', 'Valider') .'" />
+            <input class="btn btn-secondary" type="button" onclick="javascript:history.back()" value="'. __d('two_news', 'Retour en arrière') .'" />
     </form>';
 
     echo '

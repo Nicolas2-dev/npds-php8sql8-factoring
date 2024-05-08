@@ -4,7 +4,7 @@
 
 <?php if (isset($aff_ul_o)) { ?>
     <h4 class="text-muted">
-        <a class="tog" id="hide_<?= $fcategorie_nom_tog; ?>" title="<?= adm_translate("Replier la liste"); ?>" style="clear:left;">
+        <a class="tog" id="hide_<?= $fcategorie_nom_tog; ?>" title="<?= __d('two_core', 'Replier la liste'); ?>" style="clear:left;">
             <i id="i_<?= $fcategorie_nom_tog; ?>'" class="fa fa-caret-up fa-lg text-primary" ></i>
         </a>&nbsp;<?= $fcategorie_nom; ?>
     </h4>

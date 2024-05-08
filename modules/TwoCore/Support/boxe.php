@@ -18,7 +18,7 @@ if (! function_exists('bloc_langue'))
         global $block_title;
 
         if (Config::get('npds.multi_langue')) {
-            $title = $block_title == '' ? translate("Choisir une langue") : $block_title;
+            $title = $block_title == '' ? __d('two_core', 'Choisir une langue') : $block_title;
             Theme::themesidebox($title, Language::aff_local_langue(site_url('index.php'), "choice_user_language", ''));
         }
     }

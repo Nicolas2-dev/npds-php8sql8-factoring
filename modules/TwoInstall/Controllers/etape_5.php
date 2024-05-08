@@ -35,27 +35,27 @@ function etape_5()
     $nuke_url = Config::get('npds.nuke_url');
     
     echo '
-                <h3 class="mb-3">' . ins_translate('Autres paramètres') . '</h3>
+                <h3 class="mb-3">' . __d('two_install', 'Autres paramètres') . '</h3>
                 <div class="col-sm-12">
                     <form id="others_parameters" name="others_parameters" method="post" action="install.php">
                     <div class="form-floating mb-3">
                         <input class="form-control" type="url" name="new_nuke_url" id="new_nuke_url" maxlength="80" value="' . $nuke_url . '" required="required" data-fv-uri___allow-local="true" />
-                        <label class="col-form-label" for="new_nuke_url">' . ins_translate('Adresse (URL) de votre site') . '</label>
-                        <div class="d-flex justify-content-start w-100 small text-help py-1"><div>' . ins_translate('Exemples :') . ' http://www.monsite.com | http://www.monsite.com/npds | http://127.0.0.1/</div><div class="ms-auto" id="countcar_new_nuke_url"></div></div>
+                        <label class="col-form-label" for="new_nuke_url">' . __d('two_install', 'Adresse (URL) de votre site') . '</label>
+                        <div class="d-flex justify-content-start w-100 small text-help py-1"><div>' . __d('two_install', 'Exemples :') . ' http://www.monsite.com | http://www.monsite.com/npds | http://127.0.0.1/</div><div class="ms-auto" id="countcar_new_nuke_url"></div></div>
                     </div>
                     <div class="form-floating mb-3">
                         <input class="form-control" type="text" name="new_sitename" id="new_sitename" maxlength="80" value="' . Config::get('npds.sitename') . '" />
-                        <label for="new_sitename">' . ins_translate('Nom de votre site') . '</label>
+                        <label for="new_sitename">' . __d('two_install', 'Nom de votre site') . '</label>
                         <div class="d-flex justify-content-end w-100 small text-help py-1" id="countcar_new_sitename"></div>
                     </div>
                     <div class="form-floating mb-3">
                         <input class="form-control" type="text" name="new_Titlesitename" id="new_Titlesitename" maxlength="80" value="' . $Titlesitename . '" />
-                        <label for="new_Titlesitename">' . ins_translate('Intitulé de votre site') . '</label>
+                        <label for="new_Titlesitename">' . __d('two_install', 'Intitulé de votre site') . '</label>
                         <div class="d-flex justify-content-end w-100 small text-help py-1" id="countcar_new_Titlesitename"></div>
                     </div>
                     <div class="form-floating mb-3">
                         <input class="form-control" type="text" name="new_slogan" id="new_slogan" maxlength="80" value="' . $slogan . '" />
-                        <label for="new_slogan">' . ins_translate('Slogan de votre site') . '</label>
+                        <label for="new_slogan">' . __d('two_install', 'Slogan de votre site') . '</label>
                         <div class="d-flex justify-content-end w-100 small text-help py-1" id="countcar_new_slogan"></div>
                     </div>
                     <div class="form-floating mb-3">
@@ -75,7 +75,7 @@ function etape_5()
     }
     echo '
                         </select>
-                        <label for="new_Default_Theme">' . ins_translate('Thème graphique') . '</label>
+                        <label for="new_Default_Theme">' . __d('two_install', 'Thème graphique') . '</label>
                     </div>';
     $today = getdate();
     $tday = $today['mday'];
@@ -92,7 +92,7 @@ function etape_5()
                         <input type="hidden" name="new_startdate" value="' . $startdate . '" />
                         <input type="hidden" name="op" value="write_others" />
                         <input type="hidden" name="qi" value="' . $qi . '" />
-                        <button type="submit" class="btn btn-success">' . ins_translate('Modifier') . '</button>
+                        <button type="submit" class="btn btn-success">' . __d('two_install', 'Modifier') . '</button>
                     </div>
                 </form>
                 </div>

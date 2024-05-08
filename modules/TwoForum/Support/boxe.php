@@ -35,7 +35,7 @@ if (!function_exists('RecentForumPosts')) {
         global $block_title;
 
         if ($title == '') {
-            $title = $block_title == '' ? translate("Forums infos") : $block_title;
+            $title = $block_title == '' ? __d('two_forum', 'Forums infos') : $block_title;
         }
 
         Theme::themesidebox($title, $boxstuff);
@@ -118,7 +118,7 @@ if (!function_exists('RecentForumPosts_fab')) {
                           <a href="' . site_url('viewforum.php?forum=' . $forumid) . '" title="' . strip_tags($forum_desc) . '" data-bs-toggle="tooltip">
                               ' . $forumname . '
                           </a>
-                          <span class="float-end badge bg-secondary" title="' . translate("Sujets") . '" data-bs-toggle="tooltip">
+                          <span class="float-end badge bg-secondary" title="' . __d('two_forum', 'Sujets') . '" data-bs-toggle="tooltip">
                               ' . count($res_forumtopics) . '
                           </span>
                       </h6>
@@ -168,7 +168,7 @@ if (!function_exists('RecentForumPosts_fab')) {
 
                         $boxstuff .= '<li class="list-group-item p-1 border-right-0 border-left-0 list-group-item-action">
                               <div class="n-ellipses">
-                                  <span class="badge bg-secondary mx-2" title="' . translate("Réponses") . '" data-bs-toggle="tooltip" data-bs-placement="top">
+                                  <span class="badge bg-secondary mx-2" title="' . __d('two_forum', 'Réponses') . '" data-bs-toggle="tooltip" data-bs-placement="top">
                                       ' . $replies . '
                                   </span>
                                   <a href="' . site_url('viewtopic.php?topic=' . $topicrow->topic_id . '&amp;forum=' . $forumid) . '" >

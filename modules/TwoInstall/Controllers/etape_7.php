@@ -27,17 +27,17 @@ function etape_7()
     global $langue, $stage, $NPDS_Prefix, $qi;
     $stage = 7;
     echo '
-                <h3 class="mb-3">' . ins_translate('Compte Admin') . '</h3>
+                <h3 class="mb-3">' . __d('two_install', 'Compte Admin') . '</h3>
                 <div class="col-sm-12">
                     <form id="admin_password" name="admin_password" method="post" action="install.php">
                         <div class="form-floating mb-3">
                             <input class="form-control" type="text" name="adminlogin" id="adminlogin" maxlength="40" value="Root" required="required" />
-                            <label for="adminlogin">' . ins_translate('Identifiant') . '</label>
+                            <label for="adminlogin">' . __d('two_install', 'Identifiant') . '</label>
                             <div class="d-flex justify-content-end w-100 small text-help py-1" id="countcar_adminlogin"></div>
                         </div>
                         <div class="form-floating mb-3">
                             <input class="form-control" type="password" name="adminpass1" id="adminpass1" minlength="' . Config::get('npds.minpass') . '" maxlength="20" required="required" />
-                            <label for="adminpass1">' . ins_translate('Mot de passe') . '</label>
+                            <label for="adminpass1">' . __d('two_install', 'Mot de passe') . '</label>
                             <div class="progress mt-2" style="height: 10px;">
                                 <div id="passwordMeter_cont" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                             </div>
@@ -45,14 +45,14 @@ function etape_7()
                         </div>
                         <div class="form-floating mb-3">
                             <input class="form-control" type="password" name="adminpass2" id="adminpass2" minlength="' . Config::get('npds.minpass') . '" maxlength="20" required="required" />
-                            <label for="adminpass2">' . ins_translate('Mot de passe') . '... ' . ins_translate("Une seconde fois") . '</label>
+                            <label for="adminpass2">' . __d('two_install', 'Mot de passe') . '... ' . __d('two_install', 'Une seconde fois') . '</label>
                             <div class="d-flex justify-content-start w-100 small text-help py-1"><div class="ms-auto" id="countcar_adminpass2"></div></div>
                         </div>
                         <input type="hidden" name="langue" value="' . $langue . '" />
                         <input type="hidden" name="stage" value="' . $stage . '" />
                         <input type="hidden" name="op" value="write_users" />
                         <input type="hidden" name="qi" value="' . $qi . '" />
-                        <button type="submit" class="btn btn-success my-3">' . ins_translate('Créer') . '</button>
+                        <button type="submit" class="btn btn-success my-3">' . __d('two_install', 'Créer') . '</button>
                     </form>
                 </div>';
     $parametres = '
@@ -65,7 +65,7 @@ function etape_7()
                     compare: function() {
                         return admin_password.querySelector(\'[name="adminpass1"]\').value;
                     },
-                message: "' . ins_translate("Les deux mots de passe ne sont pas identiques.") . '"
+                message: "' . __d('two_install', 'Les deux mots de passe ne sont pas identiques.') . '"
                 }
                 }
             }

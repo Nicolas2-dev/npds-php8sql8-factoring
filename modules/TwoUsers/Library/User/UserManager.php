@@ -144,7 +144,7 @@ class UserManager
             if ($result) {
                 $userinfo = $result;
             } else {
-                echo '<strong>'. translate("Un problème est survenu") .'.</strong>';
+                echo '<strong>'. __d('two_users', 'Un problème est survenu') .'.</strong>';
             }
         }
 
@@ -300,28 +300,28 @@ class UserManager
         echo '
         <ul class="nav nav-tabs d-flex flex-wrap"> 
             <li class="nav-item">
-                <a class="nav-link '. ($_SERVER['REQUEST_URI'] == '/user.php' ? 'active' : '') .'" href="'. site_url('user.php') .'" title="'. translate("Votre compte") .'" data-bs-toggle="tooltip" >
+                <a class="nav-link '. ($_SERVER['REQUEST_URI'] == '/user.php' ? 'active' : '') .'" href="'. site_url('user.php') .'" title="'. __d('two_users', 'Votre compte') .'" data-bs-toggle="tooltip" >
                     <i class="fas fa-user fa-2x d-xl-none"></i><span class="d-none d-xl-inline"><i class="fas fa-user fa-lg"></i></span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link '. ($op == 'edituser' ? 'active' : '') .'" href="'. site_url('user.php?op=edituser') .'" title="'. translate("Vous") .'" data-bs-toggle="tooltip" >
-                    <i class="fas fa-user-edit fa-2x d-xl-none"></i><span class="d-none d-xl-inline">&nbsp;'. translate("Vous") .'</span>
+                <a class="nav-link '. ($op == 'edituser' ? 'active' : '') .'" href="'. site_url('user.php?op=edituser') .'" title="'. __d('two_users', 'Vous') .'" data-bs-toggle="tooltip" >
+                    <i class="fas fa-user-edit fa-2x d-xl-none"></i><span class="d-none d-xl-inline">&nbsp;'. __d('two_users', 'Vous') .'</span>
                 </a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle tooltipbyclass '. (($op == 'editjournal' or $op == 'edithome') ? 'active' : '') .'" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" data-bs-html="true" title="'. translate("Editer votre journal") .'<br />'. translate("Editer votre page principale") .'">
+                <a class="nav-link dropdown-toggle tooltipbyclass '. (($op == 'editjournal' or $op == 'edithome') ? 'active' : '') .'" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" data-bs-html="true" title="'. __d('two_users', 'Editer votre journal') .'<br />'. __d('two_users', 'Editer votre page principale') .'">
                     <i class="fas fa-edit fa-2x d-xl-none me-2"></i><span class="d-none d-xl-inline">Editer</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item ' . ($op == 'editjournal' ? 'active' : '') . '" href="'. site_url('user.php?op=editjournal') .'" title="'. translate("Editer votre journal") .'" data-bs-toggle="tooltip">
-                            '. translate("Journal") .'
+                        <a class="dropdown-item ' . ($op == 'editjournal' ? 'active' : '') . '" href="'. site_url('user.php?op=editjournal') .'" title="'. __d('two_users', 'Editer votre journal') .'" data-bs-toggle="tooltip">
+                            '. __d('two_users', 'Journal') .'
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item ' . ($op == 'edithome' ? 'active' : '') . '" href="'. site_url('user.php?op=edithome') .'" title="'. translate("Editer votre page principale") .'" data-bs-toggle="tooltip">
-                            '. translate("Page") .'
+                        <a class="dropdown-item ' . ($op == 'edithome' ? 'active' : '') . '" href="'. site_url('user.php?op=edithome') .'" title="'. __d('two_users', 'Editer votre page principale') .'" data-bs-toggle="tooltip">
+                            '. __d('two_users', 'Page') .'
                         </a>
                     </li>
                 </ul>
@@ -336,18 +336,18 @@ class UserManager
 
             echo '
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle tooltipbyclass" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" title="'. translate("Gérer votre miniSite") .'">
-                    <i class="fas fa-desktop fa-2x d-xl-none me-2"></i><span class="d-none d-xl-inline">'. translate("MiniSite") .'</span>
+                <a class="nav-link dropdown-toggle tooltipbyclass" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" title="'. __d('two_users', 'Gérer votre miniSite') .'">
+                    <i class="fas fa-desktop fa-2x d-xl-none me-2"></i><span class="d-none d-xl-inline">'. __d('two_users', 'MiniSite') .'</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
                         <a class="dropdown-item" href="'. site_url('minisite.php?op='. $qui) .'" target="_blank">
-                            '. translate("MiniSite") .'
+                            '. __d('two_users', 'MiniSite') .'
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="javascript:void(0);" onclick="window.open('. $PopUp .')" >
-                            '. translate("Gérer votre miniSite") .'
+                            '. __d('two_users', 'Gérer votre miniSite') .'
                         </a>
                     </li>
                 </ul>
@@ -361,23 +361,23 @@ class UserManager
         
         echo '
             <li class="nav-item">
-                <a class="nav-link '. ($op == 'chgtheme' ? 'active' : '') .'" href="'. site_url('user.php?op=chgtheme') .'" title="'. translate("Changer le thème") .'"  data-bs-toggle="tooltip" >
-                    <i class="fas fa-paint-brush fa-2x d-xl-none"></i><span class="d-none d-xl-inline">&nbsp;'. translate("Thème") .'</span>
+                <a class="nav-link '. ($op == 'chgtheme' ? 'active' : '') .'" href="'. site_url('user.php?op=chgtheme') .'" title="'. __d('two_users', 'Changer le thème') .'"  data-bs-toggle="tooltip" >
+                    <i class="fas fa-paint-brush fa-2x d-xl-none"></i><span class="d-none d-xl-inline">&nbsp;'. __d('two_users', 'Thème') .'</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link '. $cl_rs .'" href="'. site_url('modules.php?ModPath=reseaux-sociaux&amp;ModStart=reseaux-sociaux') .'" title="'. translate("Réseaux sociaux") .'"  data-bs-toggle="tooltip" >
-                    <i class="fas fa-share-alt-square fa-2x d-xl-none"></i><span class="d-none d-xl-inline">&nbsp;'. translate("Réseaux sociaux") .'</span>
+                <a class="nav-link '. $cl_rs .'" href="'. site_url('modules.php?ModPath=reseaux-sociaux&amp;ModStart=reseaux-sociaux') .'" title="'. __d('two_users', 'Réseaux sociaux') .'"  data-bs-toggle="tooltip" >
+                    <i class="fas fa-share-alt-square fa-2x d-xl-none"></i><span class="d-none d-xl-inline">&nbsp;'. __d('two_users', 'Réseaux sociaux') .'</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link '. (strstr($_SERVER['REQUEST_URI'], '/viewpmsg.php') ? 'active' : '') .' " href="'. site_url('viewpmsg.php') .'" title="'. translate("Message personnel") .'"  data-bs-toggle="tooltip" ><i class="far fa-envelope fa-2x d-xl-none"></i>
-                    <span class="d-none d-xl-inline">&nbsp;' . translate("Message") . '</span>
+                <a class="nav-link '. (strstr($_SERVER['REQUEST_URI'], '/viewpmsg.php') ? 'active' : '') .' " href="'. site_url('viewpmsg.php') .'" title="'. __d('two_users', 'Message personnel') .'"  data-bs-toggle="tooltip" ><i class="far fa-envelope fa-2x d-xl-none"></i>
+                    <span class="d-none d-xl-inline">&nbsp;' . __d('two_users', 'Message') . '</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " href="'. site_url('user.php?op=logout') .'" title="'. translate("Déconnexion") .'" data-bs-toggle="tooltip" >
-                    <i class="fas fa-sign-out-alt fa-2x text-danger d-xl-none"></i><span class="d-none d-xl-inline text-danger">&nbsp;'. translate("Déconnexion") .'</span>
+                <a class="nav-link " href="'. site_url('user.php?op=logout') .'" title="'. __d('two_users', 'Déconnexion') .'" data-bs-toggle="tooltip" >
+                    <i class="fas fa-sign-out-alt fa-2x text-danger d-xl-none"></i><span class="d-none d-xl-inline text-danger">&nbsp;'. __d('two_users', 'Déconnexion') .'</span>
                 </a>
             </li>
         </ul>

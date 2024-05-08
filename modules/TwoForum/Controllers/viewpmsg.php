@@ -50,12 +50,12 @@ if (!$user) {
 
     echo '
     <div class="card card-body mt-3">
-        <h2><a href="'. site_url('replypmsg.php?send=1') .'" title="' . translate("Ecrire un nouveau message privé") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . translate("Message personnel") . " - </span>" . translate("Boîte de réception") . '</h2>
+        <h2><a href="'. site_url('replypmsg.php?send=1') .'" title="' . __d('two_forum', 'Ecrire un nouveau message privé') . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . __d('two_forum', 'Message personnel') . " - </span>" . __d('two_forum', 'Boîte de réception') . '</h2>
         <form id="viewpmsg-dossier" action="'. site_url('viewpmsg.php') .'" method="post">
             <div class="mb-3">
-                <label class="sr-only" for="dossier" >' . translate("Sujet") . '</label>
+                <label class="sr-only" for="dossier" >' . __d('two_forum', 'Sujet') . '</label>
                 <select class="form-select" name="dossier" onchange="document.forms[\'viewpmsg-dossier\'].submit()">
-                <option value="...">' . translate("Choisir un dossier/sujet") . '...</option>';
+                <option value="...">' . __d('two_forum', 'Choisir un dossier/sujet') . '...</option>';
 
     $tempo["..."] = 0;
 
@@ -77,7 +77,7 @@ if (!$user) {
     $sel = (isset($dossier) and $dossier == 'All') ? 'selected="selected"' : '';
 
     echo '
-                <option ' . $sel . ' value="All">' . translate("Tous les sujets") . '</option>
+                <option ' . $sel . ' value="All">' . __d('two_forum', 'Tous les sujets') . '</option>
                 </select>
             </div>
         </form>';
@@ -102,7 +102,7 @@ if (!$user) {
     if (!$total_messages = count($resultID)) {
         echo '
         <div class="alert alert-danger lead">
-            ' . translate("Vous n'avez aucun message.") . '
+            ' . __d('two_forum', 'Vous n\'avez aucun message.') . '
         </div>';
         $display = 0;
     } else {
@@ -128,9 +128,9 @@ if (!$user) {
         }
 
         echo '
-                    <th data-halign="center" data-sortable="true" data-align="left">' . translate("de ") . '</th>
-                    <th data-halign="center" data-sortable="true" >' . translate("Sujet") . '</th>
-                    <th data-halign="center" data-sortable="true" data-align="right">' . translate("Date") . '</th>
+                    <th data-halign="center" data-sortable="true" data-align="left">' . __d('two_forum', 'de ') . '</th>
+                    <th data-halign="center" data-sortable="true" >' . __d('two_forum', 'Sujet') . '</th>
+                    <th data-halign="center" data-sortable="true" data-align="right">' . __d('two_forum', 'Date') . '</th>
                 </tr>
                 </thead>
                 <tbody>';
@@ -161,9 +161,9 @@ if (!$user) {
                     </td>';
 
             if ($myrow['read_msg'] == "1") {
-                echo '<td><a href="'. site_url('readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier'])) .'" title="' . translate("Lu") . '" data-bs-toggle="tooltip"><i class="far fa-envelope-open fa-lg "></i></a></td>';
+                echo '<td><a href="'. site_url('readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier'])) .'" title="' . __d('two_forum', 'Lu') . '" data-bs-toggle="tooltip"><i class="far fa-envelope-open fa-lg "></i></a></td>';
             } else {
-                echo '<td><a href="'. site_url('readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier'])) .'" title="' . translate("Non lu") . '" data-bs-toggle="tooltip"><i class="fa fa-envelope fa-lg faa-shake animated"></i></a></td>';
+                echo '<td><a href="'. site_url('readpmsg.php?start=' . $tempo[$myrow['dossier']] . '&amp;total_messages=' . $total_messages . '&amp;dossier=' . urlencode($myrow['dossier'])) .'" title="' . __d('two_forum', 'Non lu') . '" data-bs-toggle="tooltip"><i class="fa fa-envelope fa-lg faa-shake animated"></i></a></td>';
             }
 
             if (Config::get('npds.smilies')) {
@@ -203,7 +203,7 @@ if (!$user) {
         if ($display) {
             echo '
             <div class="mb-3 mt-3">
-                <button class="btn btn-outline-danger btn-sm" type="submit" name="delete_messages" value="delete_messages" >' . translate("Effacer") . '</button>
+                <button class="btn btn-outline-danger btn-sm" type="submit" name="delete_messages" value="delete_messages" >' . __d('two_forum', 'Effacer') . '</button>
                 <input type="hidden" name="total_messages" value="' . $total_messages . '" />
                 <input type="hidden" name="type" value="inbox" />
             </div>';
@@ -226,7 +226,7 @@ if (!$user) {
 
     echo '
         <div class="card card-body mt-3">
-        <h2><a href="'. site_url('replypmsg.php?send=1') .'" title="' . translate("Ecrire un nouveau message privé") . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . translate("Message personnel") . " - </span>" . translate("Boîte d'émission") . '<span class="badge bg-secondary float-end">' . $total_messages . '</span></h2>
+        <h2><a href="'. site_url('replypmsg.php?send=1') .'" title="' . __d('two_forum', 'Ecrire un nouveau message privé') . '" data-bs-toggle="tooltip" ><i class="fa fa-edit me-2"></i></a><span class="d-none d-xl-inline">&nbsp;' . __d('two_forum', 'Message personnel') . " - </span>" . __d('two_forum', 'Boîte d\'émission') . '<span class="badge bg-secondary float-end">' . $total_messages . '</span></h2>
         <form id="" name="prvmsgB" method="get" action="'. site_url('replypmsg.php') .'">
             <table class="mb-3" data-toggle="table" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa">
                 <thead class="thead-default">
@@ -243,9 +243,9 @@ if (!$user) {
     }
 
     echo '
-                    <th data-halign="center" data-sortable="true" data-align="center">' . translate("Envoyé à") . '</th>
-                    <th data-halign="center" data-sortable="true" align="center">' . translate("Sujet") . '</th>
-                    <th data-halign="center" data-align="right" data-sortable="true" align="center">' . translate("Date") . '</th>
+                    <th data-halign="center" data-sortable="true" data-align="center">' . __d('two_forum', 'Envoyé à') . '</th>
+                    <th data-halign="center" data-sortable="true" align="center">' . __d('two_forum', 'Sujet') . '</th>
+                    <th data-halign="center" data-align="right" data-sortable="true" align="center">' . __d('two_forum', 'Date') . '</th>
                 </tr>
             </thead>
             <tbody>';
@@ -254,7 +254,7 @@ if (!$user) {
         $display = 0;
         echo '
                 <tr>
-                <td colspan="6" align="center">' . translate("Vous n'avez aucun message.") . '</td>
+                <td colspan="6" align="center">' . __d('two_forum', 'Vous n\'avez aucun message.') . '</td>
                 </tr>';
     } else {
         $display = 1;
@@ -302,7 +302,7 @@ if (!$user) {
     if ($display) {
         echo '
             <div class="mb-3 mt-3">
-                <button class="btn btn-outline-danger btn-sm" type="submit" name="delete_messages" value="delete_messages" >' . translate("Effacer") . '</button>
+                <button class="btn btn-outline-danger btn-sm" type="submit" name="delete_messages" value="delete_messages" >' . __d('two_forum', 'Effacer') . '</button>
                 <input type="hidden" name="total_messages" value="' . $total_messages . '" />
                 <input type="hidden" name="type" value="outbox" />
             </div>';

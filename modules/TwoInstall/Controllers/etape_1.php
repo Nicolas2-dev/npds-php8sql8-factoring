@@ -27,8 +27,8 @@ function etape_1()
     echo '
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="mb-2">' . ins_translate('Nouvelle installation') . '&nbsp;' . $cms_name . '</h3>
-        ' . ins_translate('Bienvenue') . ',<br />';
+                        <h3 class="mb-2">' . __d('two_install', 'Nouvelle installation') . '&nbsp;' . $cms_name . '</h3>
+        ' . __d('two_install', 'Bienvenue') . ',<br />';
     $id_fr = fopen($accueil, 'r');
     fpassthru($id_fr);
     echo '
@@ -38,13 +38,13 @@ function etape_1()
                     <div class="mb-3">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="qi" name="qi" value="1" />
-                            <label class="form-check-label" for="qi">' . ins_translate("Installation rapide") . '</label>
-                            <span class="help-block small">' . ins_translate("Cette option valide l'acceptation de la licence GNU/GPL V3 et supprime l'affichage des résultats de certaines opérations d'installation.") . '</span>
+                            <label class="form-check-label" for="qi">' . __d('two_install', 'Installation rapide') . '</label>
+                            <span class="help-block small">' . __d('two_install', 'Cette option valide l\'acceptation de la licence GNU/GPL V3 et supprime l\'affichage des résultats de certaines opérations d\'installation.') . '</span>
                         </div>
                     </div>
                     <input type="hidden" name="stage" value="2" />
                     <input type="hidden" name="langue" value="' . $langue . '" />
-                    <button type="submit" class="btn btn-success">' . ins_translate('Etape suivante') . '</button>
+                    <button type="submit" class="btn btn-success">' . __d('two_install', 'Etape suivante') . '</button>
                 </form>
                 </div>';
 }

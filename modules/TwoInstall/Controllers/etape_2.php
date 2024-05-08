@@ -31,21 +31,21 @@ function etape_2()
         fclose($myfile);
         $nohalt = true;
     } else {
-        $licence_text = ins_translate('Fichier de licence indisponible !');
+        $licence_text = __d('two_install', 'Fichier de licence indisponible !');
         $nohalt = false;
     }
     echo '
-                <h3 class="mb-2">' . ins_translate('Licence') . '</h3>
+                <h3 class="mb-2">' . __d('two_install', 'Licence') . '</h3>
                 <form name="gpl" method="post" action="install.php">
                     <fieldset class="mb-3">
-                        <label for="licence">' . ins_translate("L'utilisation de NPDS est soumise à l'acceptation des termes de la licence GNU GPL ") . ' :</label>
+                        <label for="licence">' . __d('two_install', 'L\'utilisation de NPDS est soumise à l\'acceptation des termes de la licence GNU GPL ') . ' :</label>
                         <textarea name="licence" class="form-control" id="licence" rows="15" readonly="readonly">' . $licence_text . '</textarea>
                     </fieldset>
                     <input type="hidden" name="langue" value="' . $langue . '" />
                     <input type="hidden" name="stage" value="3" />';
     if ($nohalt)
         echo '
-                    <button type="submit" class="btn btn-success">' . ins_translate("J'accepte") . '</button>';
+                    <button type="submit" class="btn btn-success">' . __d('two_install', 'J\'accepte') . '</button>';
     else
         echo '
                     <div class="alert alert-danger">stop !</div>';

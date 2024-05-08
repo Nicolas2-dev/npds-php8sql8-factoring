@@ -135,7 +135,7 @@ if (($op == "solved") and ($topic_id) and ($forum) and ($sec_clef)) {
             //    ''       => ,
             //));
 
-            $sqlS = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status='2', topic_title='[" . translate("Résolu") . "] - " . hack::removehack($topic_title) . "' WHERE topic_id='$topic_id'";
+            $sqlS = "UPDATE " . $NPDS_Prefix . "forumtopics SET topic_status='2', topic_title='[" . __d('two_forum', 'Résolu') . "] - " . hack::removehack($topic_title) . "' WHERE topic_id='$topic_id'";
             
             if (!$r = sql_query($sqlS)) {
                 forum::forumerror('0011');
@@ -175,7 +175,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     echo '
     <h3 class="mb-3">' . stripslashes($forum_name) . '</h3>
-        <p class="lead">' . translate("Modéré par : ") . '';
+        <p class="lead">' . __d('two_forum', 'Modéré par : ') . '';
 
     $moderator_data = explode(' ', $moderator);
     for ($i = 0; $i < count($moderator_data); $i++) {
@@ -198,21 +198,21 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     echo '</p>';
     echo '
         <p class="lead">
-            <a href="'. site_url('forum.php') .'">' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
+            <a href="'. site_url('forum.php') .'">' . __d('two_forum', 'Index du forum') . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
         </p>
         <div class="card p-3">
             <form id="privforumentry" action="'. site_url('viewforum.php') .'" method="post">
                 <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="forum_pass">' . translate("Ceci est un forum privé. Vous devez entrer le mot de passe pour y accéder") . '</label>
+                <label class="col-form-label col-sm-12" for="forum_pass">' . __d('two_forum', 'Ceci est un forum privé. Vous devez entrer le mot de passe pour y accéder') . '</label>
                 <div class="col-sm-12">
-                    <input class="form-control" type="password" id="forum_pass" name="Forum_passwd"  placeholder="' . translate("Mot de passe") . '" required="required"/>
+                    <input class="form-control" type="password" id="forum_pass" name="Forum_passwd"  placeholder="' . __d('two_forum', 'Mot de passe') . '" required="required"/>
                     <span class="help-block text-end" id="countcar_forum_pass"></span>
                 </div>
                 </div>
                 <input type="hidden" name="forum" value="' . $forum . '" />
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary me-2" name="submitpass" title="' . translate("Valider") . '"><i class="fa fa-check me-1"></i>' . translate("Valider") . '</button>
-                    <button type="reset" class="btn btn-secondary" name="reset" title="' . translate("Annuler") . '"><i class="fas fa-sync me-1"></i>' . translate("Annuler") . '</button>
+                    <button type="submit" class="btn btn-primary me-2" name="submitpass" title="' . __d('two_forum', 'Valider') . '"><i class="fa fa-check me-1"></i>' . __d('two_forum', 'Valider') . '</button>
+                    <button type="reset" class="btn btn-secondary" name="reset" title="' . __d('two_forum', 'Annuler') . '"><i class="fas fa-sync me-1"></i>' . __d('two_forum', 'Annuler') . '</button>
                 </div>
             </form>
         </div>';
@@ -239,10 +239,10 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
     if (Config::get('forum.config.solved')) {
         if (isset($closoled)) {
             $closol = "and topic_status='2'";
-            $mess_closoled = '<a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . translate("Sans") . ' ' . translate("Résolu") . '</a>';
+            $mess_closoled = '<a href="'. site_url('viewforum.php?forum=' . $forum) .'">' . __d('two_forum', 'Sans') . ' ' . __d('two_forum', 'Résolu') . '</a>';
         } else {
             $closol = "and topic_status!='2'";
-            $mess_closoled = '<a href="'. site_url('viewforum.php?forum=' . $forum . '&amp;closoled=on') .'">' . translate("Seulement") . ' ' . translate("Résolu") . '</a>';
+            $mess_closoled = '<a href="'. site_url('viewforum.php?forum=' . $forum . '&amp;closoled=on') .'">' . __d('two_forum', 'Seulement') . ' ' . __d('two_forum', 'Résolu') . '</a>';
         }
 
     } else {
@@ -252,7 +252,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     echo '
     <p class="lead">
-        <a href="'. site_url('forum.php') .'" >' . translate("Index du forum") . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
+        <a href="'. site_url('forum.php') .'" >' . __d('two_forum', 'Index du forum') . '</a>&nbsp;&raquo;&raquo;&nbsp;' . stripslashes($forum_name) . '
     </p>
     <h3 class="mb-3">';
 
@@ -266,7 +266,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         }
 
         if ($allow_to_post){
-            echo '<a href="'. site_url('newtopic.php?forum=' . $forum) .'" title="' . translate("Nouveau") . '"><i class="fa fa-plus-square me-2"></i><span class="d-none d-sm-inline">' . translate("Nouveau sujet") . '<br /></span></a>';
+            echo '<a href="'. site_url('newtopic.php?forum=' . $forum) .'" title="' . __d('two_forum', 'Nouveau') . '"><i class="fa fa-plus-square me-2"></i><span class="d-none d-sm-inline">' . __d('two_forum', 'Nouveau sujet') . '<br /></span></a>';
         }
     }
 
@@ -280,7 +280,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         <div class="card mb-3">
             <div class="card-body p-2">
                 <div class="d-flex ">
-                <div class="badge bg-secondary align-self-center mx-2 col-2 col-md-3 col-xl-2 bg-white text-muted py-2 px-1"><span class="me-1 lead">' . $ibidcountmod . '<i class="fa fa-balance-scale fa-fw ms-1 d-inline d-md-none" title="' . translate("Modérateur(s)") . '" data-bs-toggle="tooltip"></i></span><span class=" d-none d-md-inline">' . translate("Modérateur(s)") . '</span></div>
+                <div class="badge bg-secondary align-self-center mx-2 col-2 col-md-3 col-xl-2 bg-white text-muted py-2 px-1"><span class="me-1 lead">' . $ibidcountmod . '<i class="fa fa-balance-scale fa-fw ms-1 d-inline d-md-none" title="' . __d('two_forum', 'Modérateur(s)') . '" data-bs-toggle="tooltip"></i></span><span class=" d-none d-md-inline">' . __d('two_forum', 'Modérateur(s)') . '</span></div>
                 <div class=" align-self-center me-auto">';
 
     $Mmod = false;
@@ -306,7 +306,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
             }
         }
 
-        echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator_data[$i]) .'"><img class=" img-thumbnail img-fluid n-ava-small me-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . translate("Modéré par : ") . ' ' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
+        echo '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $moderator_data[$i]) .'"><img class=" img-thumbnail img-fluid n-ava-small me-1" src="' . $imgtmp . '" alt="' . $modera['uname'] . '" title="' . __d('two_forum', 'Modéré par : ') . ' ' . $modera['uname'] . '" data-bs-toggle="tooltip" /></a>';
     }
 
     echo '
@@ -339,17 +339,17 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     if ($myrow = sql_fetch_assoc($result)) {
         echo '
-        <h4 class="my-2">' . translate("Sujets") . ' <span class="text-muted">' . $mess_closoled . '</span></h4>
+        <h4 class="my-2">' . __d('two_forum', 'Sujets') . ' <span class="text-muted">' . $mess_closoled . '</span></h4>
         <table id ="lst_forum" data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons-prefix="fa" data-icons="icons">
             <thead>
                 <tr>
                 <th class="n-t-col-xs-1" data-align="center"></th>
                 <th class="n-t-col-xs-1" data-align="center"></th>
-                <th class="" data-sortable="true" data-sorter="htmlSorter">' . translate("Sujet") . '&nbsp;&nbsp;</th>
-                <th class="n-t-col-xs-1" class="text-center" data-sortable="true" data-align="right" ><i class="fa fa-reply fa-lg text-muted" title="' . translate("Réponses") . '" data-bs-toggle="tooltip" ></i></th>
-                <th data-sortable="true" data-halign="center" data-align="left" ><i class="fa fa-user fa-lg text-muted" title="' . translate("Emetteur") . '" data-bs-toggle="tooltip"></i></th>
-                <th class="n-t-col-xs-1" class="text-center" data-sortable="true" data-align="right" ><i class="fa fa-eye fa-lg text-muted" title="' . translate("Lectures") . '" data-bs-toggle="tooltip" ></i></th>
-                <th data-align="right" >' . translate("Dernières contributions") . '</th>
+                <th class="" data-sortable="true" data-sorter="htmlSorter">' . __d('two_forum', 'Sujet') . '&nbsp;&nbsp;</th>
+                <th class="n-t-col-xs-1" class="text-center" data-sortable="true" data-align="right" ><i class="fa fa-reply fa-lg text-muted" title="' . __d('two_forum', 'Réponses') . '" data-bs-toggle="tooltip" ></i></th>
+                <th data-sortable="true" data-halign="center" data-align="left" ><i class="fa fa-user fa-lg text-muted" title="' . __d('two_forum', 'Emetteur') . '" data-bs-toggle="tooltip"></i></th>
+                <th class="n-t-col-xs-1" class="text-center" data-sortable="true" data-align="right" ><i class="fa fa-eye fa-lg text-muted" title="' . __d('two_forum', 'Lectures') . '" data-bs-toggle="tooltip" ></i></th>
+                <th data-align="right" >' . __d('two_forum', 'Dernières contributions') . '</th>
                 </tr>
             </thead>
             <tbody>';
@@ -391,17 +391,17 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                     
                     if ($replys >= Config::get('forum.config.hot_threshold')) {
                         $image = sql_num_rows(sql_query($sqlR)) == 0 ?
-                            '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt faa-shake animated"></i></a>' :
-                            '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>';
+                            '<a href="' . $last_post_url . '#lastpost" title="' . __d('two_forum', 'Dernières contributions') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt faa-shake animated"></i></a>' :
+                            '<a href="' . $last_post_url . '#lastpost" title="' . __d('two_forum', 'Dernières contributions') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>';
                     } else {
                         $image = sql_num_rows(sql_query($sqlR)) == 0 ?
-                            '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt faa-shake animated"></i></a>' :
-                            '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
+                            '<a href="' . $last_post_url . '#lastpost" title="' . __d('two_forum', 'Dernières contributions') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt faa-shake animated"></i></a>' :
+                            '<a href="' . $last_post_url . '#lastpost" title="' . __d('two_forum', 'Dernières contributions') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
                     }
                 } else {
                     $image = ($replys >= Config::get('forum.config.hot_threshold')) ?
-                        '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>' :
-                        '<a href="' . $last_post_url . '#lastpost" title="' . translate("Dernières contributions") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
+                        '<a href="' . $last_post_url . '#lastpost" title="' . __d('two_forum', 'Dernières contributions') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>' :
+                        '<a href="' . $last_post_url . '#lastpost" title="' . __d('two_forum', 'Dernières contributions') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
                 }
 
                 if ($myrow['topic_status'] != 0) {
@@ -444,7 +444,7 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
                     if (!$Mmod) {
                         echo '<td>&nbsp;</td>';
                     } else {
-                        echo "<td>[ <a href=\"$hrefX?topic=" . $myrow['topic_id'] . "&amp;forum=$forum\">" . translate("Editer") . "</a> ]</td>";
+                        echo "<td>[ <a href=\"$hrefX?topic=" . $myrow['topic_id'] . "&amp;forum=$forum\">" . __d('two_forum', 'Editer') . "</a> ]</td>";
                     }
 
                     echo '<td>&nbsp;</td>';
@@ -486,11 +486,11 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         </table>';
 
         if ($user){
-            echo '<p class="mt-1"><a href="'. site_url('viewforum.php?op=mark&amp;forum=' . $forum) .'"><i class="far fa-check-square fa-lg"></i></a>&nbsp;' . translate("Marquer tous les messages comme lus") . '</p>';
+            echo '<p class="mt-1"><a href="'. site_url('viewforum.php?op=mark&amp;forum=' . $forum) .'"><i class="far fa-check-square fa-lg"></i></a>&nbsp;' . __d('two_forum', 'Marquer tous les messages comme lus') . '</p>';
         }
     } else {
         if ($forum_access != 9) {
-            echo '<div class="alert alert-danger my-3">' . translate("Il n'y a aucun sujet pour ce forum. ") . '<br /><a href="'. site_url('newtopic.php?forum=' . $forum) .'" >' . translate("Vous pouvez en poster un ici.") . '</a></div>';
+            echo '<div class="alert alert-danger my-3">' . __d('two_forum', 'Il n\'y a aucun sujet pour ce forum. ') . '<br /><a href="'. site_url('newtopic.php?forum=' . $forum) .'" >' . __d('two_forum', 'Vous pouvez en poster un ici.') . '</a></div>';
         }
     }
 
@@ -531,18 +531,18 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
 
     if ($user) {
         echo '
-        <i class="far fa-file-alt fa-lg faa-shake animated text-primary"></i> = ' . translate("Les nouvelles contributions depuis votre dernière visite.") . '<br />
-        <i class="fas fa-file-alt fa-lg faa-shake animated text-primary"></i> = ' . translate("Plus de") . ' ' . Config::get('forum.config.hot_threshold') . ' ' . translate("Contributions") . '<br />
-        <i class="far fa-file-alt fa-lg text-primary"></i> = ' . translate("Aucune nouvelle contribution depuis votre dernière visite.") . '<br />
-        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . translate("Plus de") . ' ' . Config::get('forum.config.hot_threshold') . ' ' . translate("Contributions") . '<br />';
+        <i class="far fa-file-alt fa-lg faa-shake animated text-primary"></i> = ' . __d('two_forum', 'Les nouvelles contributions depuis votre dernière visite.') . '<br />
+        <i class="fas fa-file-alt fa-lg faa-shake animated text-primary"></i> = ' . __d('two_forum', 'Plus de') . ' ' . Config::get('forum.config.hot_threshold') . ' ' . __d('two_forum', 'Contributions') . '<br />
+        <i class="far fa-file-alt fa-lg text-primary"></i> = ' . __d('two_forum', 'Aucune nouvelle contribution depuis votre dernière visite.') . '<br />
+        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . __d('two_forum', 'Plus de') . ' ' . Config::get('forum.config.hot_threshold') . ' ' . __d('two_forum', 'Contributions') . '<br />';
     } else {
         echo '
-        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . translate("Plus de") . ' ' . Config::get('forum.config.hot_threshold') . ' ' . translate("Contributions") . '<br />
-        <i class="far fa-file-alt fa-lg text-primary"></i> = ' . translate("Contributions") . '.<br />';
+        <i class="fas fa-file-alt fa-lg text-primary"></i> = ' . __d('two_forum', 'Plus de') . ' ' . Config::get('forum.config.hot_threshold') . ' ' . __d('two_forum', 'Contributions') . '<br />
+        <i class="far fa-file-alt fa-lg text-primary"></i> = ' . __d('two_forum', 'Contributions') . '.<br />';
     }
 
     echo '
-        <i class="fa fa-lock fa-lg text-danger"></i> = ' . translate("Ce sujet est verrouillé : il ne peut accueillir aucune nouvelle contribution.") . '<br />
+        <i class="fa fa-lock fa-lg text-danger"></i> = ' . __d('two_forum', 'Ce sujet est verrouillé : il ne peut accueillir aucune nouvelle contribution.') . '<br />
     </blockquote>';
 
     // if ($SuperCache) {
@@ -557,10 +557,10 @@ if (($myrow['forum_type'] == 1) and (($myrow['forum_name'] != $forum_name) or ($
         <form class="my-3" action="'. site_url('viewforum.php') .'" method="post">
             <div class="mb-3 row">
                 <div class="col-12">
-                    <label class="visually-hidden" for="forum">' . translate("Sauter à : ") . '</label>
+                    <label class="visually-hidden" for="forum">' . __d('two_forum', 'Sauter à : ') . '</label>
                     <select class="form-select" name="forum" onchange="submit();">
-                    <option value="index">' . translate("Sauter à : ") . '</option>
-                    <option value="index">' . translate("Index du forum") . '</option>';
+                    <option value="index">' . __d('two_forum', 'Sauter à : ') . '</option>
+                    <option value="index">' . __d('two_forum', 'Index du forum') . '</option>';
 
         // = DB::table('')->select()->where('', )->orderBy('')->get();
 

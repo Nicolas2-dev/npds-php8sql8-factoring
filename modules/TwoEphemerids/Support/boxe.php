@@ -27,7 +27,7 @@ if (! function_exists('ephemblock'))
                     ->orderBy('yid', 'asc')
                     ->get();
         
-        $boxstuff = '<div>' . translate("En ce jour...") . '</div>';
+        $boxstuff = '<div>' . __d('two_ephemerids', 'En ce jour...') . '</div>';
 
         foreach ($result as $ephem) {
             if ($cnt == 1) {
@@ -42,7 +42,7 @@ if (! function_exists('ephemblock'))
         $boxstuff .= "<br />\n";
 
         global $block_title;
-        $title = $block_title == '' ? translate("Ephémérides") : $block_title;
+        $title = $block_title == '' ? __d('two_ephemerids', 'Ephémérides') : $block_title;
 
         Theme::themesidebox($title, $boxstuff);
     }

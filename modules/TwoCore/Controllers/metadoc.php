@@ -35,9 +35,9 @@ echo '
     <table class="table table-striped table-responsive table-hover table-sm table-bordered" >
         <thead class="thead-default">
             <tr>
-                <th>'. translate("META") .'</th>
-                <th>'. translate("Type") .'</th>
-                <th>'. translate("Description") .'</th>
+                <th>'. __d('two_core', 'META') .'</th>
+                <th>'. __d('two_core', 'Type') .'</th>
+                <th>'. __d('two_core', 'Description') .'</th>
             </tr>
         </thead>';
 
@@ -66,7 +66,7 @@ foreach (DB::table('metalang ')
 
     if (isset($_SERVER['HTTP_REFERER']) and strstr($_SERVER['HTTP_REFERER'], 'submit.php')) {
         $def_modifier = '<a class="tooltipbyclass" href="#" onclick="javascript:parent.tinymce.activeEditor.selection.setContent('. $meta['def'] .');top.tinymce.activeEditor.windowManager.close();
-    " title="'. translate("Cliquer pour utiliser ce méta-mot dans votre texte.") .'">'. $meta['def'] .'</a>';
+    " title="'. __d('two_core', 'Cliquer pour utiliser ce méta-mot dans votre texte.') .'">'. $meta['def'] .'</a>';
     } else {
         $def_modifier = $meta['def'];
     }
@@ -93,7 +93,7 @@ foreach (DB::table('metalang ')
 }
 
 echo '
-            <tr><td colspan="3" >'. sprintf(translate('Meta-lang pour %s : %d => %s'), '<a href="http://www.npds.org">NPDS</a>', $ibid, ($ibid > 2 ? 'Metas' : 'Meta')) .' 
+            <tr><td colspan="3" >'. sprintf(__d('two_core', 'Meta-lang pour %s : %d => %s'), '<a href="http://www.npds.org">NPDS</a>', $ibid, ($ibid > 2 ? 'Metas' : 'Meta')) .' 
                 </td>
             </tr>
         </tbody>

@@ -106,7 +106,7 @@ function show_imm(): void
             echo '
                 <div class="card mb-3">
                 <div class="card-body">
-                <h3>' . translate("Message personnel") . ' ' . translate("de");
+                <h3>' . __d('two_messenger', 'Message personnel') . ' ' . __d('two_messenger', 'de');
 
             if ($posterdata['uid'] == 1) {
                 
@@ -148,7 +148,7 @@ function show_imm(): void
                 }
             }
 
-            echo translate("Envoyé") . ' : ' . $myrow['msg_time'] . '&nbsp;&nbsp;&nbsp';
+            echo __d('two_messenger', 'Envoyé') . ' : ' . $myrow['msg_time'] . '&nbsp;&nbsp;&nbsp';
             echo '<h4>' . language::aff_langue($myrow['subject']) . '</h4>';
 
             $message = stripslashes($myrow['msg_text']);
@@ -173,12 +173,12 @@ function show_imm(): void
 
             if ($posterdata['uid'] <> 1) {
                 echo '
-                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=reply') .'" title="' . translate("Répondre") . '" data-bs-toggle="tooltip"><i class="fa fa-reply fa-lg me-1"></i>' . translate("Répondre") . '</a>';
+                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=reply') .'" title="' . __d('two_messenger', 'Répondre') . '" data-bs-toggle="tooltip"><i class="fa fa-reply fa-lg me-1"></i>' . __d('two_messenger', 'Répondre') . '</a>';
             }
             
             echo '
-                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=read') .'" title="' . translate("Lu") . '" data-bs-toggle="tooltip"><i class="far fa-check-square fa-lg"></i></a>
-                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=delete&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op) .'" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>
+                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=read_msg&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op . '&amp;sub_op=read') .'" title="' . __d('two_messenger', 'Lu') . '" data-bs-toggle="tooltip"><i class="far fa-check-square fa-lg"></i></a>
+                <a class="me-3" href="'. site_url('readpmsg_imm.php?op=delete&amp;msg_id=' . $myrow['msg_id'] . '&amp;op_orig=' . $op) .'" title="' . __d('two_messenger', 'Effacer') . '" data-bs-toggle="tooltip"><i class="fas fa-trash fa-lg text-danger"></i></a>
             </div>
             </div>';
         }

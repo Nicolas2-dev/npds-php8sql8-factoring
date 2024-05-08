@@ -75,15 +75,15 @@ function verif_chmod()
     foreach ($file_to_check as $v) {
         if (file_exists($v)) {
             if (is_writeable($v))
-                $listfich .= '<li class="list-group-item">' . ins_translate("Droits d'accès du fichier ") . '<code class="code">' . $v . '</code> :<span class="ms-1 text-success">' . ins_translate("corrects") . ' !</span></li>';
+                $listfich .= '<li class="list-group-item">' . __d('two_install', 'Droits d\'accès du fichier ') . '<code class="code">' . $v . '</code> :<span class="ms-1 text-success">' . __d('two_install', 'corrects') . ' !</span></li>';
             else {
-                $listfich .=  '<li class="list-group-item list-group-item-danger">' . ins_translate("Droits d'accès du fichier ") . '<code class="code">' . $v . '</code> :<span class="ms-1">' . ins_translate("incorrects") . ' !</span><br />
-                <span class="">' . ins_translate("Vous devez modifier les droits d'accès (lecture/écriture) du fichier ") . $v . ' (chmod 666)</li>';
+                $listfich .=  '<li class="list-group-item list-group-item-danger">' . __d('two_install', 'Droits d\'accès du fichier ') . '<code class="code">' . $v . '</code> :<span class="ms-1">' . __d('two_install', 'incorrects') . ' !</span><br />
+                <span class="">' . __d('two_install', 'Vous devez modifier les droits d\'accès (lecture/écriture) du fichier ') . $v . ' (chmod 666)</li>';
                 $stopngo = 1;
             }
         } else {
             $listfich .=  '
-            <li class="list-group-item list-group-item-danger">' . ins_translate("Le fichier") . ' ' . $v . ' ' . ins_translate("est introuvable !") . '</li>';
+            <li class="list-group-item list-group-item-danger">' . __d('two_install', 'Le fichier') . ' ' . $v . ' ' . __d('two_install', 'est introuvable !') . '</li>';
             $stopngo = 1;
         }
         $i++;
@@ -152,7 +152,7 @@ function msg_erreur($message)
     echo '<html>
     <body bgcolor="white"><br />
         <div style="text-align: center; font-weight: bold">
-            <div style="font-face: arial; font-size: 22px; color: #ff0000">' . ins_translate($message) . '</div>
+            <div style="font-face: arial; font-size: 22px; color: #ff0000">' . $message . '</div>
         </div>
         </body>
     </html>';
@@ -282,35 +282,35 @@ function formval($fv, $fv_parametres, $arg1, $foo)
                 if (value === value.toLowerCase()) {
                     return {
                         valid: false,
-                        message: "' . ins_translate("Le mot de passe doit contenir au moins un caractère en majuscule.") . '",
+                        message: "' . __d('two_install', 'Le mot de passe doit contenir au moins un caractère en majuscule.') . '",
                         meta:{score: score-1},
                     };
                 }
                 if (value === value.toUpperCase()) {
                     return {
                         valid: false,
-                        message: "' . ins_translate("Le mot de passe doit contenir au moins un caractère en minuscule.") . '",
+                        message: "' . __d('two_install', 'Le mot de passe doit contenir au moins un caractère en minuscule.') . '",
                         meta:{score: score-2},
                     };
                 }
                 if (value.search(/[0-9]/) < 0) {
                     return {
                         valid: false,
-                        message: "' . ins_translate("Le mot de passe doit contenir au moins un chiffre.") . '",
+                        message: "' . __d('two_install', 'Le mot de passe doit contenir au moins un chiffre.') . '",
                         meta:{score: score-3},
                     };
                 }
                 if (value.search(/[@\+\-!#$%&^~*_]/) < 0) {
                     return {
                         valid: false,
-                        message: "' . ins_translate("Le mot de passe doit contenir au moins un caractère non alphanumérique.") . '",
+                        message: "' . __d('two_install', 'Le mot de passe doit contenir au moins un caractère non alphanumérique.') . '",
                         meta:{score: score-4},
                     };
                 }
                 if (value.length < 8) {
                     return {
                         valid: false,
-                        message: "' . ins_translate("Le mot de passe doit contenir") . ' ' . Config::get('npds.minpass') . ' ' . ins_translate("caractères au minimum") . '",
+                        message: "' . __d('two_install', 'Le mot de passe doit contenir') . ' ' . Config::get('npds.minpass') . ' ' . __d('two_install', 'caractères au minimum') . '",
                         meta:{score: score-5},
                     };
                 }

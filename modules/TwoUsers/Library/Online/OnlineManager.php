@@ -61,12 +61,12 @@ class OnlineManager
     {
         list($member_online_num, $guest_online_num) = $this->site_load();
 
-        $content1 = $guest_online_num .' '. translate("visiteur(s) et").' '. $member_online_num.' '.translate("membre(s) en ligne.");
+        $content1 = $guest_online_num .' '. __d('two_users', 'visiteur(s) et').' '. $member_online_num.' '.__d('two_users', 'membre(s) en ligne.');
         
         if ($this->user->getUser()) {
-            $content2 = translate("Vous êtes connecté en tant que") .' <b>'. $this->user->cookieUser(1) .'</b>';
+            $content2 = __d('two_users', 'Vous êtes connecté en tant que') .' <b>'. $this->user->cookieUser(1) .'</b>';
         } else {
-            $content2 = translate("Devenez membre privilégié en cliquant") .' <a href="'. site_url('user.php?op=only_newuser') .'">'. translate("ici") .'</a>';
+            $content2 = __d('two_users', 'Devenez membre privilégié en cliquant') .' <a href="'. site_url('user.php?op=only_newuser') .'">'. __d('two_users', 'ici') .'</a>';
         }
 
         return array($content1, $content2);

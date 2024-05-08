@@ -92,10 +92,6 @@ if (($op != '') and ($op)) {
             if (is_dir($dir)) {
                 $affich = true;
                 $avatar_mns = 'storage/users_private/' . $op . '/groupe.png';
-                
-                function adm_translate()
-                {
-                }
 
                 $gX = groupe::liste_group();
 

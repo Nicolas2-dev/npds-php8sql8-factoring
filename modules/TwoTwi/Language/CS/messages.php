@@ -1,4 +1,27 @@
 <?php
 
 return array (
+  '' => '',
+  'Activation de la publication auto des articles' => '',
+  'Classe de style sous-titre' => '',
+  'Classe de style titre' => '',
+  'Configuration du module npds_twi' => '',
+  'Enregistrez' => '',
+  'Hauteur de la tweet box' => '',
+  'Ici' => '',
+  'Interface bloc' => '',
+  'Jeton d\'accès pour Open Authentification (oauth_token)' => '',
+  'Jeton d\'accès secret pour Open Authentification (oauth_token_secret)' => '',
+  'La publication de vos news sur twitter est autorisée. Vous pouvez révoquer cette autorisation' => '',
+  'La publication de vos news sur twitter n\'est pas autorisée vous devez l\'activer' => '',
+  'Largeur de la tweet box' => '',
+  'Méthode pour le raccourciceur d\'URL' => '',
+  'Non' => '',
+  'Oui' => '',
+  'Réécriture d\'url avec ForceType' => '',
+  'Réécriture d\'url avec contrôleur Npds' => '',
+  'Réécriture d\'url avec mod_rewrite' => '',
+  'Votre clef de consommateur' => '',
+  'Votre clef secrète de consommateur' => '',
+  'requis' => '',
 );

@@ -22,7 +22,7 @@ if (strstr($ModPath, '..') || strstr($ModStart, '..') || stristr($ModPath, 'scri
     die();
 // For More security
 $f_meta_nom = 'upConfigure';
-$f_titre = adm_translate("Configuration Upload");
+$f_titre = __d('two_upload', 'Configuration Upload');
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
@@ -42,10 +42,10 @@ function upConfigure($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
     <div class="alert alert-danger lead"><strong>!!! EN TRAVAUX NE PAS UTILISER !!!</strong></div>
     <form id="settingsupload" action="admin.php" method="post">
     <fieldset>
-        <legend>' . adm_translate("Parametres") . '</legend>
+        <legend>' . __d('two_upload', 'Parametres') . '</legend>
         <div id="info_gene" class="adminsidefield card card-body mb-3">
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xmax_size">' . adm_translate("Taille maxi des fichiers") . '</label>
+                <label class="col-form-label col-sm-4" for="xmax_size">' . __d('two_upload', 'Taille maxi des fichiers') . '</label>
                 <div class="col-sm-8">
                 <div class="input-group mb-2">
                     <div id="humread_size" class="input-group-text">' . $max_size . '</div>
@@ -55,7 +55,7 @@ function upConfigure($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xdocumentroot">' . adm_translate("Chemin physique") . '</label>
+                <label class="col-form-label col-sm-4" for="xdocumentroot">' . __d('two_upload', 'Chemin physique') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xdocumentroot" type="text" name="xdocumentroot" value="' . $DOCUMENTROOT . '" />
                 <span class="help-block">Si votre variable $DOCUMENT_ROOT n\'est pas bonne (notamment en cas de redirection) vous pouvez en spécifier une ici (c\'est le chemin physique d\'accès à la racine de votre site en partant de / ou C:\) par exemple /data/web/mon_site OU c:\web\mon_site SINON LAISSER cette variable VIDE<span class="float-end ms-1" id="countcar_xdocumentroot"></span></span>
@@ -76,52 +76,52 @@ function upConfigure($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
     echo '
                 <div class="form-check form-check-inline">
                     <input type="radio" class="form-check-input" id="xautorise_upload_p_y" name="xautorise_upload_p" value="true" ' . $cky . ' />
-                    <label class="form-check-label" for="xautorise_upload_p_y">' . adm_translate("Oui") . '</label>
+                    <label class="form-check-label" for="xautorise_upload_p_y">' . __d('two_upload', 'Oui') . '</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input type="radio" class="form-check-input" id="xautorise_upload_p_n" name="xautorise_upload_p" value="false" ' . $ckn . ' />
-                    <label class="form-check-label" for="xautorise_upload_p_n">' . adm_translate("Non") . '</label>
+                    <label class="form-check-label" for="xautorise_upload_p_n">' . __d('two_upload', 'Non') . '</label>
                 </div>
                 <span class="help-block">Autorise l\'upload DANS le répertoire personnel du membre (true ou false)</span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xracine">' . adm_translate("Racine du site") . '</label>
+                <label class="col-form-label col-sm-4" for="xracine">' . __d('two_upload', 'Racine du site') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xracine" type="text" name="xracine" value="' . $racine . '" />
                 <span class="help-block">Sous répertoire : n\'utiliser QUE SI votre NPDS n\'est pas directement dans la racine de votre site par exemple si : www.mon_site/npds/.... ALORS /npds (avec le / DEVANT) sinon RIEN;<span class="float-end ms-1" id="countcar_xracine"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xrep_upload">' . adm_translate("Répertoire de téléchargement") . '</label>
+                <label class="col-form-label col-sm-4" for="xrep_upload">' . __d('two_upload', 'Répertoire de téléchargement') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xrep_upload" type="text" name="xrep_upload" value="' . $rep_upload . '" />
                 <span class="help-block">Répertoire de téléchargement (avec le / terminal)<span class="float-end ms-1" id="countcar_xrep_upload"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xrep_cache">' . adm_translate("Répertoire de cache") . '</label>
+                <label class="col-form-label col-sm-4" for="xrep_cache">' . __d('two_upload', 'Répertoire de cache') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xrep_cache" type="text" name="xrep_cache" value="' . $rep_cache . '" />
                 <span class="help-block">Répertoire de stockage des fichiers temporaires (avec le / terminal)<span class="float-end ms-1" id="countcar_xrep_cache"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xrep_log">' . adm_translate("Répertoire des log") . '</label>
+                <label class="col-form-label col-sm-4" for="xrep_log">' . __d('two_upload', 'Répertoire des log') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xrep_log" type="text" name="xrep_log" value="' . $rep_log . '" />
                 <span class="help-block">Répertoire/fichier de stockage de la log de téléchargement (par défaut /storage/logs/security.log)<span class="float-end ms-1" id="countcar_xrep_log"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xurl_upload">' . adm_translate("Url site") . '</label>
+                <label class="col-form-label col-sm-4" for="xurl_upload">' . __d('two_upload', 'Url site') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xurl_upload" type="text" name="xurl_upload" value="' . $url_upload . '" />
                 <span class="help-block">URL HTTP(S) de votre site (exemple : http(s)://www.monsite.org)<span class="float-end ms-1" id="countcar_xurl_upload"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xurl_upload_css">' . adm_translate("Url css") . '</label>
+                <label class="col-form-label col-sm-4" for="xurl_upload_css">' . __d('two_upload', 'Url css') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control" id="xurl_upload_css" type="text" name="xurl_upload_css" value="' . $url_upload_css . '" />
                 </div>
@@ -167,26 +167,26 @@ function upConfigure($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xed_nb_images">' . adm_translate("Nombre d'images") . '</label>
+                <label class="col-form-label col-sm-4" for="xed_nb_images">' . __d('two_upload', 'Nombre d\'images') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xed_nb_images" type="text" name="xed_nb_images" min="1" maxlength="3" value="' . $ed_nb_images . '" />
                 <span class="help-block">Nombre d\'image par ligne dans l\'afficheur d\'image de l\'editeur HTML</span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xwidth_max">' . adm_translate("Largeur maxi") . '</label>
+                <label class="col-form-label col-sm-4" for="xwidth_max">' . __d('two_upload', 'Largeur maxi') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xwidth_max" type="text" name="xwidth_max" value="' . $width_max . '" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xheight_max">' . adm_translate("Hauteur maxi") . '</label>
+                <label class="col-form-label col-sm-4" for="xheight_max">' . __d('two_upload', 'Hauteur maxi') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control " id="xheight_max" type="text" name="xheight_max" value="' . $height_max . '" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="xquota">' . adm_translate("Espace disque") . '</label>
+                <label class="col-form-label col-sm-4" for="xquota">' . __d('two_upload', 'Espace disque') . '</label>
                 <div class="col-sm-8">
                 <div class="input-group mb-2">
                     <div id="humread_quota" class="input-group-text">' . $quota . '</div>
@@ -203,7 +203,7 @@ function upConfigure($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg)
     <input type="hidden" name="subop" value="uploadSave" />
     <input type="hidden" name="adm_img_mod" value="1" />
     <div class="mb-3">
-        <button class="btn btn-primary" type="submit">' . adm_translate("Sauver les modifications") . '</button>
+        <button class="btn btn-primary" type="submit">' . __d('two_upload', 'Sauver les modifications') . '</button>
     </div>
     </form>';
     echo '

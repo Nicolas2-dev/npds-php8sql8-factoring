@@ -200,7 +200,7 @@ class MetaFunctionManager
     public function  MM_date() 
     {
         return ucfirst(
-            htmlentities(\PHP81_BC\strftime(translate("daydate"), 
+            htmlentities(\PHP81_BC\strftime(__d('two_core', 'daydate'), 
             time(), Config::get('two_core::config.locale')), 
             ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 
             'utf-8')
@@ -249,9 +249,9 @@ class MetaFunctionManager
         // }
     
         // return '<form action="'. site_url('search.php') .'" method="post">
-        //         <label class="col-form-label">' . translate("Sujets") . ' </label>
+        //         <label class="col-form-label">' . __d('two_core', 'Sujets') . ' </label>
         //         <select class="form-select" name="topic"onChange="submit()">
-        //             <option value="">' . translate("Tous les sujets") . '</option>
+        //             <option value="">' . __d('two_core', 'Tous les sujets') . '</option>
         //                 '. $options_topics .'
         //             </select>
         //         </form>';
@@ -264,7 +264,7 @@ class MetaFunctionManager
      */
     public function  MM_search()
     {
-        return '<form action="'. site_url('search.php') .'" method="post"><label>' . translate("Recherche") . '</label>
+        return '<form action="'. site_url('search.php') .'" method="post"><label>' . __d('two_core', 'Recherche') . '</label>
         <input class="form-control" type="text" name="query" size="10"></form>';
     }
     
@@ -765,11 +765,11 @@ class MetaFunctionManager
         $ibid = "";
     
         if (!$user) {
-            $ibid = translate("Devenez membre et vous disposerez de fonctions spécifiques : abonnements, forums spéciaux (cachés, membres, ..), statut de lecture, ...");
+            $ibid = __d('two_core', 'Devenez membre et vous disposerez de fonctions spécifiques : abonnements, forums spéciaux (cachés, membres, ..), statut de lecture, ...');
         }
     
         if ((Config::get('two_core::config.subscribe')) and ($user)) {
-            $ibid = translate("Cochez un forum et cliquez sur le bouton pour recevoir un Email lors d'une nouvelle soumission dans celui-ci.");
+            $ibid = __d('two_core', 'Cochez un forum et cliquez sur le bouton pour recevoir un Email lors d\'une nouvelle soumission dans celui-ci.');
         }
     
         return $ibid;
@@ -792,9 +792,9 @@ class MetaFunctionManager
      */
     public function  MM_forum_icones()
     {
-        return '<img src="'. $this->theme->theme_image_row('forum/icons/red_folder.gif', 'assets/images/forum/icons/red_folder.gif') .'" border="" alt="" /> = ' . translate("Les nouvelles contributions depuis votre dernière visite.") . '
+        return '<img src="'. $this->theme->theme_image_row('forum/icons/red_folder.gif', 'assets/images/forum/icons/red_folder.gif') .'" border="" alt="" /> = ' . __d('two_core', 'Les nouvelles contributions depuis votre dernière visite.') . '
                 <br />
-                <img src="'. $this->theme->theme_image_row('forum/icons/folder.gif', 'assets/images/forum/icons/folder.gif') .'" border="" alt="" /> = ' . translate("Aucune nouvelle contribution depuis votre dernière visite.");
+                <img src="'. $this->theme->theme_image_row('forum/icons/folder.gif', 'assets/images/forum/icons/folder.gif') .'" border="" alt="" /> = ' . __d('two_core', 'Aucune nouvelle contribution depuis votre dernière visite.');
     }
     
     /**
@@ -826,7 +826,7 @@ class MetaFunctionManager
         if ((Config::get('two_core::config.subscribe')) and (User::getUser())) {
             
             if (Mailer::isbadmailuser(User::cookieUser(0)) === false) {
-                return '<input class="btn btn-secondary" type="submit" name="Xsub" value="' . translate("OK") . '" />';
+                return '<input class="btn btn-secondary" type="submit" name="Xsub" value="' . __d('two_core', 'OK') . '" />';
             }
         } else {
             return '';
@@ -912,30 +912,30 @@ class MetaFunctionManager
     {
         $boxstuff = '
         <div class="card card-body m-3">
-           <h5><a href="'. site_url('user.php?op=only_newuser') .'" role="button" title="' . translate("Nouveau membre") . '"><i class="fa fa-user-plus"></i>&nbsp;' . translate("Nouveau membre") . '</a></h5>
+           <h5><a href="'. site_url('user.php?op=only_newuser') .'" role="button" title="' . __d('two_core', 'Nouveau membre') . '"><i class="fa fa-user-plus"></i>&nbsp;' . __d('two_core', 'Nouveau membre') . '</a></h5>
         </div>
         <div class="card card-body m-3">
-           <h5 class="mb-3"><i class="fas fa-sign-in-alt fa-lg"></i>&nbsp;' . translate("Connexion") . '</h5>
+           <h5 class="mb-3"><i class="fas fa-sign-in-alt fa-lg"></i>&nbsp;' . __d('two_core', 'Connexion') . '</h5>
            <form action="'. site_url('user.php') .'" method="post" name="userlogin_b">
               <div class="row g-2">
                  <div class="col-12">
                     <div class="mb-3 form-floating">
-                       <input type="text" class="form-control" name="uname" id="inputuser_b" placeholder="' . translate("Identifiant") . '" required="required" />            
-                       <label for="inputuser_b" >' . translate("Identifiant") . '</label>
+                       <input type="text" class="form-control" name="uname" id="inputuser_b" placeholder="' . __d('two_core', 'Identifiant') . '" required="required" />            
+                       <label for="inputuser_b" >' . __d('two_core', 'Identifiant') . '</label>
                    </div>
                 </div>
                 <div class="col-12">
                    <div class="mb-0 form-floating">
-                      <input type="password" class="form-control" name="pass" id="inputPassuser_b" placeholder="' . translate("Mot de passe") . '" required="required" />
-                      <label for="inputPassuser_b">' . translate("Mot de passe") . '</label>
-                      <span class="help-block small"><a href="'. site_url('user.php?op=forgetpassword') .'" role="button" title="' . translate("Vous avez perdu votre mot de passe ?") . '">' . translate("Vous avez perdu votre mot de passe ?") . '</a></span>
+                      <input type="password" class="form-control" name="pass" id="inputPassuser_b" placeholder="' . __d('two_core', 'Mot de passe') . '" required="required" />
+                      <label for="inputPassuser_b">' . __d('two_core', 'Mot de passe') . '</label>
+                      <span class="help-block small"><a href="'. site_url('user.php?op=forgetpassword') .'" role="button" title="' . __d('two_core', 'Vous avez perdu votre mot de passe ?') . '">' . __d('two_core', 'Vous avez perdu votre mot de passe ?') . '</a></span>
                     </div>
                  </div>
               </div>
               <input type="hidden" name="op" value="login" />
               <div class="mb-3 row">
                  <div class="ms-sm-auto">
-                    <button class="btn btn-primary" type="submit" title="' . translate("Valider") . '">' . translate("Valider") . '</button>
+                    <button class="btn btn-primary" type="submit" title="' . __d('two_core', 'Valider') . '">' . __d('two_core', 'Valider') . '</button>
                  </div>
               </div>
            </form>
@@ -944,7 +944,7 @@ class MetaFunctionManager
         $user   = User::getUser();
 
         if (isset($user)) {
-            $boxstuff = '<h5><a class="text-danger" href="'. site_url('user.php?op=logout') .'"><i class="fas fa-sign-out-alt fa-lg align-middle text-danger me-2"></i>' . translate("Déconnexion") . '</a></h5>';
+            $boxstuff = '<h5><a class="text-danger" href="'. site_url('user.php?op=logout') .'"><i class="fas fa-sign-out-alt fa-lg align-middle text-danger me-2"></i>' . __d('two_core', 'Déconnexion') . '</a></h5>';
         }
     
         return $boxstuff;
@@ -958,7 +958,7 @@ class MetaFunctionManager
     public function  MM_administration() 
     {
         if (Author::getAdmin()) {
-            return '<a href="'. site_url('admin.php').'">' . translate("Outils administrateur") . '</a>';
+            return '<a href="'. site_url('admin.php').'">' . __d('two_core', 'Outils administrateur') . '</a>';
         } else {
             return '';
         }
@@ -1083,7 +1083,7 @@ class MetaFunctionManager
         //             <a href="'. site_url('article.php?sid=' . $sid) .'" >
         //                 '. Language::aff_langue($title) .'
         //             </a>
-        //             &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($counter) .' '. translate("Fois") .'</span>
+        //             &nbsp;<span class="badge bg-secondary float-end">'. str::wrh($counter) .' '. __d('two_core', 'Fois') .'</span>
         //         </li>';
         //     }
 
@@ -1216,7 +1216,7 @@ class MetaFunctionManager
         //         <a href="'. site_url('sections.php?op=viewarticle&amp;artid='. $seccont['artid']) .'" >
         //             '. Language::aff_langue($seccont['title']) .'
         //         </a>
-        //         &nbsp;<span class="badge bg-secondary float-end">'. Str::wrh($seccont['counter']) .' '. translate("Fois") .'</span></li>';
+        //         &nbsp;<span class="badge bg-secondary float-end">'. Str::wrh($seccont['counter']) .' '. __d('two_core', 'Fois') .'</span></li>';
         // }
 
         // return $content;
@@ -1245,7 +1245,7 @@ class MetaFunctionManager
         //             <a href="'. site_url('reviews.php?op=showcontent&amp;id=' . $review['id']) .'" >
         //                 '. $review['title'] .'
         //             </a>
-        //             &nbsp;<span class="badge bg-secondary float-end">'. Str::wrh($review['hits']) .' '. translate("Fois") .'</span></li>';
+        //             &nbsp;<span class="badge bg-secondary float-end">'. Str::wrh($review['hits']) .' '. __d('two_core', 'Fois') .'</span></li>';
         //     }
         // }
 
@@ -1380,7 +1380,7 @@ class MetaFunctionManager
     
         //     $aff .= '<p class="card-text">'. Language::aff_langue($topic['topictext']) .'</p>
         //                 <p class="card-text text-end">
-        //                     <span class="small">' . translate("Nb. d'articles") . '</span> <span class="badge bg-secondary">'. $total_news['total'] .'</span>
+        //                     <span class="small">' . __d('two_core', 'Nb. d'articles') . '</span> <span class="badge bg-secondary">'. $total_news['total'] .'</span>
         //                 </p>
         //              </div>
         //           </div>
@@ -1401,7 +1401,7 @@ class MetaFunctionManager
     {
         return '<div class="mb-3 row">
                     <input type="hidden" name="op" value="maj_subscribe" />
-                    <button class="btn btn-primary ms-3" type="submit" name="ok">' . translate("Valider") . '</button>
+                    <button class="btn btn-primary ms-3" type="submit" name="ok">' . __d('two_core', 'Valider') . '</button>
                 </div>
             </fieldset>
             </form>';

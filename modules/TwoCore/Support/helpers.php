@@ -163,7 +163,7 @@ if (! function_exists('Admin_alert'))
             </head>
             <body>
                 <br /><br /><br />
-                <p style="font-size: 24px; font-family: Tahoma, Arial; color: red; text-align:center;"><strong>.: ' . translate("Votre adresse Ip est enregistrée") . ' :.</strong></p>
+                <p style="font-size: 24px; font-family: Tahoma, Arial; color: red; text-align:center;"><strong>.: ' . __d('two_core', 'Votre adresse Ip est enregistrée') . ' :.</strong></p>
             </body>
         </html>';
         die();
@@ -397,35 +397,35 @@ if (! function_exists('adminfoot'))
                 if (value === value.toLowerCase()) {
                    return {
                       valid: false,
-                      message: "'. translate("Le mot de passe doit contenir au moins un caractère en majuscule.") .'",
+                      message: "'. __d('two_core', 'Le mot de passe doit contenir au moins un caractère en majuscule.') .'",
                       meta:{score: score-1},
                     };
                 }
                 if (value === value.toUpperCase()) {
                    return {
                       valid: false,
-                      message: "'. translate("Le mot de passe doit contenir au moins un caractère en minuscule.") .'",
+                      message: "'. __d('two_core', 'Le mot de passe doit contenir au moins un caractère en minuscule.') .'",
                       meta:{score: score-2},
                    };
                 }
                 if (value.search(/[0-9]/) < 0) {
                    return {
                       valid: false,
-                      message: "'. translate("Le mot de passe doit contenir au moins un chiffre.") .'",
+                      message: "'. __d('two_core', 'Le mot de passe doit contenir au moins un chiffre.') .'",
                       meta:{score: score-3},
                    };
                 }
                 if (value.search(/[@\+\-!#$%&^~*_]/) < 0) {
                    return {
                       valid: false,
-                      message: "'. translate("Le mot de passe doit contenir au moins un caractère non alphanumérique.") .'",
+                      message: "'. __d('two_core', 'Le mot de passe doit contenir au moins un caractère non alphanumérique.') .'",
                       meta:{score: score-4},
                    };
                 }
                 if (value.length < 8) {
                    return {
                       valid: false,
-                      message: "'. translate("Le mot de passe doit contenir") .' '. Config::get('two_core::config.minpass') .' '. translate("caractères au minimum") .'",
+                      message: "'. __d('two_core', 'Le mot de passe doit contenir') .' '. Config::get('two_core::config.minpass') .' '. __d('two_core', 'caractères au minimum') .'",
                       meta:{score: score-5},
                    };
                 }
@@ -767,7 +767,7 @@ if (! function_exists('formatTimestamp'))
 
         $locale = config::get('two_core::config.locale');
 
-        return $datetime = ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring"), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
+        return $datetime = ucfirst(htmlentities(\PHP81_BC\strftime(__d('two_core', 'datestring'), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
     }
 }
 
@@ -811,7 +811,7 @@ if (! function_exists('post_convertdate'))
      */
     function post_convertdate(int $tmst): string 
     {
-        $val = $tmst > 0 ? date(translate("dateinternal"), $tmst) : '';
+        $val = $tmst > 0 ? date(__d('two_core', 'dateinternal'), $tmst) : '';
     
         return $val;
     }

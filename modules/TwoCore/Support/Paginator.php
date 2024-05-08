@@ -23,10 +23,10 @@ class Paginator
 
             if ($current == 2) {
                 $pagination .= '
-                <li class="page-item"><a class="page-link" href="'. $url . $urlmore .'" title="'. translate("Page précédente") .'" data-bs-toggle="tooltip">◄</a></li>';
+                <li class="page-item"><a class="page-link" href="'. $url . $urlmore .'" title="'. __d('two_core', 'Page précédente') .'" data-bs-toggle="tooltip">◄</a></li>';
             } elseif ($current > 2) {
                 $pagination .= '
-                <li class="page-item"><a class="page-link" href="'. $url . $prev . $urlmore .'" title="'. translate("Page précédente") .'" data-bs-toggle="tooltip">◄</a></li>';
+                <li class="page-item"><a class="page-link" href="'. $url . $prev . $urlmore .'" title="'. __d('two_core', 'Page précédente') .'" data-bs-toggle="tooltip">◄</a></li>';
             } else {
                 $pagination .= '
                 <li class="page-item disabled"><a class="page-link" href="#">◄</a></li>';
@@ -107,7 +107,7 @@ class Paginator
 
             $pagination .= (($current == $total) 
                 ? '<li class="page-item disabled"><a class="page-link" href="#">►</a></li>' 
-                : '<li class="page-item"><a class="page-link" href="'. $url . $next . $urlmore .'" title="'. translate("Page suivante") .'" data-bs-toggle="tooltip">►</a></li>'
+                : '<li class="page-item"><a class="page-link" href="'. $url . $next . $urlmore .'" title="'. __d('two_core', 'Page suivante') .'" data-bs-toggle="tooltip">►</a></li>'
             );
 
             $pagination .= '
@@ -132,9 +132,9 @@ class Paginator
             <ul class="pagination pagination-sm d-flex flex-wrap">';
 
             if ($current == 1) {
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $url . '0' . $urlmore .'" title="'. translate("Page précédente") .'" data-bs-toggle="tooltip">◄</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $url . '0' . $urlmore .'" title="'. __d('two_core', 'Page précédente') .'" data-bs-toggle="tooltip">◄</a></li>';
             } elseif ($current > 1) {
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $url . $prev . $urlmore .'" title="'. translate("Page précédente") .'" data-bs-toggle="tooltip">◄</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="'. $url . $prev . $urlmore .'" title="'. __d('two_core', 'Page précédente') .'" data-bs-toggle="tooltip">◄</a></li>';
             } else {
                 $pagination .= '<li class="page-item disabled"><a class="page-link" href="#">◄</a></li>';
             }
@@ -215,7 +215,7 @@ class Paginator
 
             $pagination .= (($current + 1 == $total) 
                 ? '<li class="page-item disabled"><a class="page-link" href="#">►</a></li>' 
-                : '<li class="page-item"><a class="page-link" href="'. $url . $next . $urlmore .'" title="'. translate("Page suivante") .'" data-bs-toggle="tooltip">►</a></li>'
+                : '<li class="page-item"><a class="page-link" href="'. $url . $next . $urlmore .'" title="'. __d('two_core', 'Page suivante') .'" data-bs-toggle="tooltip">►</a></li>'
             );
 
             $pagination .= '

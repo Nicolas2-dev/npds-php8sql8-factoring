@@ -112,18 +112,18 @@ class Post
         echo '
         <hr />
         <p class="small text-end">
-        ' . translate(date("l")) . date(" " . translate("dateinternal"), time() + ((int) Config::get('two_core::config.gmt') * 3600)) . '
+        ' . __d('two_news', date("l")) . date(" " . __d('two_news', 'dateinternal'), time() + ((int) Config::get('two_core::config.gmt') * 3600)) . '
         </p>';
     
         if ($dd_pub != -1 and $dh_pub != -1) {
             echo '
             <div class="row mb-3">
                 <div class="col-sm-5 mb-2">
-                    <label class="form-label" for="dd_pub">' . translate("Date de publication") . '</label>
+                    <label class="form-label" for="dd_pub">' . __d('two_news', 'Date de publication') . '</label>
                     <input type="text" class="form-control flatpi" id="dd_pub" name="dd_pub" value="' . $dd_pub . '" />
                 </div>
                 <div class="col-sm-3 mb-2">
-                    <label class="form-label" for="dh_pub">' . translate("Heure") . '</label>
+                    <label class="form-label" for="dh_pub">' . __d('two_news', 'Heure') . '</label>
                     <div class="input-group clockpicker">
                         <span class="input-group-text"><i class="far fa-clock fa-lg"></i></span>
                         <input type="text" class="form-control" placeholder="Heure" id="dh_pub" name="dh_pub" value="' . $dh_pub . '" />
@@ -135,11 +135,11 @@ class Post
         echo '
         <div class="row mb-3">
             <div class="col-sm-5 mb-2">
-                <label class="form-label" for="fd_pub">' . translate("Date de fin de publication") . '</label>
+                <label class="form-label" for="fd_pub">' . __d('two_news', 'Date de fin de publication') . '</label>
                 <input type="text" class="form-control flatpi" id="fd_pub" name="fd_pub" value="' . $fd_pub . '" />
             </div>
             <div class="col-sm-3 mb-2">
-                <label class="form-label" for="fh_pub">' . translate("Heure") . '</label>
+                <label class="form-label" for="fh_pub">' . __d('two_news', 'Heure') . '</label>
                 <div class="input-group clockpicker">
                     <span class="input-group-text"><i class="far fa-clock fa-lg"></i></span>
                     <input type="text" class="form-control" placeholder="Heure" id="fh_pub" name="fh_pub" value="' . $fh_pub . '" />
@@ -171,7 +171,7 @@ class Post
         </script>
     
         <div class="mb-3 row">
-            <label class="col-form-label">' . translate("Epuration de la new à la fin de sa date de validité") . '</label>';
+            <label class="col-form-label">' . __d('two_news', 'Epuration de la new à la fin de sa date de validité') . '</label>';
     
         $sel1 = '';
         $sel2 = '';
@@ -186,11 +186,11 @@ class Post
             <div class="col-sm-8 my-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="epur_y" name="epur" value="1" ' . $sel1 . ' />
-                    <label class="form-check-label" for="epur_y">' . translate("Oui") . '</label>
+                    <label class="form-check-label" for="epur_y">' . __d('two_news', 'Oui') . '</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="epur_n" name="epur" value="0" ' . $sel2 . ' />
-                    <label class="form-check-label" for="epur_n">' . translate("Non") . '</label>
+                    <label class="form-check-label" for="epur_n">' . __d('two_news', 'Non') . '</label>
                 </div>
             </div>
         </div>

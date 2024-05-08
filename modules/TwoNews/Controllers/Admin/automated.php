@@ -31,7 +31,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'autoStory';
-$f_titre = adm_translate("Articles programmés");
+$f_titre = __d('two_news', 'Articles programmés');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -50,23 +50,23 @@ $hlpfile = "manuels/$language/automated.html";
 function puthome(int $ihome): void
 {
     echo '<div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="ihome">'. adm_translate("Publier dans la racine ?") .'</label>
+            <label class="col-sm-4 col-form-label" for="ihome">'. __d('two_news', 'Publier dans la racine ?') .'</label>
             <div class="col-sm-8 my-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="ihome" name="ihome" value="0" '. (($ihome == 0) ? 'checked="checked"' : '') .' />
-                    <label class="form-check-label" for="ihome">'. adm_translate("Oui") .'</label>
+                    <label class="form-check-label" for="ihome">'. __d('two_news', 'Oui') .'</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="ihome1" name="ihome" value="1" '. (($ihome == 1) ? 'checked="checked"' : '') .' />
-                    <label class="form-check-label" for="ihome1">'. adm_translate("Non") .'</label>
+                    <label class="form-check-label" for="ihome1">'. __d('two_news', 'Non') .'</label>
                 </div>
                 <p class="help-block">
-                    '. adm_translate("Ne s'applique que si la catégorie : 'Articles' n'est pas sélectionnée.") .'
+                    '. __d('two_news', 'Ne s\'applique que si la catégorie : \'Articles\' n\'est pas sélectionnée.') .'
                 </p>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="members">'. adm_translate("Seulement aux membres") .', '. adm_translate("Groupe") .'.</label>
+            <label class="col-sm-4 col-form-label" for="members">'. __d('two_news', 'Seulement aux membres') .', '. __d('two_news', 'Groupe') .'.</label>
             <div class="col-sm-8 my-2">
                 <div class="form-check form-check-inline">';
 
@@ -85,11 +85,11 @@ function puthome(int $ihome): void
 
     echo '
                 <input class="form-check-input" type="radio" id="members" name="members" value="1" '. $sel1 .' />
-                <label class="form-check-label" for="members">'. adm_translate("Oui") .'</label>
+                <label class="form-check-label" for="members">'. __d('two_news', 'Oui') .'</label>
                 </div>
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="members1" name="members" value="0" '. $sel2 .' />
-                <label class="form-check-label" for="members1">'. adm_translate("Non") .'</label>
+                <label class="form-check-label" for="members1">'. __d('two_news', 'Non') .'</label>
                 </div>
             </div>
         </div>';
@@ -108,7 +108,7 @@ function puthome(int $ihome): void
 
     echo '
         <div class="mb-3 row" id="choixgroupe">
-            <label class="col-sm-4 col-form-label" for="Mmembers">'. adm_translate("Groupe") .'</label>
+            <label class="col-sm-4 col-form-label" for="Mmembers">'. __d('two_news', 'Groupe') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="Mmembers" name="Mmembers">'. $tmp_groupe .'</select>
             </div>
@@ -126,10 +126,10 @@ function SelectCategory(int $cat): void
 {
     echo ' 
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="catid">'. adm_translate("Catégorie") .'</label>
+            <label class="col-sm-4 col-form-label" for="catid">'. __d('two_news', 'Catégorie') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="catid" name="catid">
-                    <option name="catid" value="0" '. (($cat == 0) ? 'selected="selected"' : '') .'>'. adm_translate("Articles") .'</option>';
+                    <option name="catid" value="0" '. (($cat == 0) ? 'selected="selected"' : '') .'>'. __d('two_news', 'Articles') .'</option>';
     
     $storie_categorie = DB::table('stories_cat')->select('catid', 'title')->get();
 
@@ -141,12 +141,12 @@ function SelectCategory(int $cat): void
     echo '
                 </select>
                 <p class="help-block text-end">
-                    <a href="'. site_url('admin.php?op=AddCategory') .'" class="btn btn-outline-primary btn-sm" title="'. adm_translate("Ajouter") .'" data-bs-toggle="tooltip" >
+                    <a href="'. site_url('admin.php?op=AddCategory') .'" class="btn btn-outline-primary btn-sm" title="'. __d('two_news', 'Ajouter') .'" data-bs-toggle="tooltip" >
                         <i class="fa fa-plus-square fa-lg"></i>
                     </a>&nbsp;
-                    <a class="btn btn-outline-primary btn-sm" href="'. site_url('admin.php?op=EditCategory') .'" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" >
+                    <a class="btn btn-outline-primary btn-sm" href="'. site_url('admin.php?op=EditCategory') .'" title="'. __d('two_news', 'Editer') .'" data-bs-toggle="tooltip" >
                         <i class="fa fa-edit fa-lg"></i>
-                    </a>&nbsp;<a class="btn btn-outline-danger btn-sm" href="'. site_url('admin.php?op=DelCategory') .'" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip">
+                    </a>&nbsp;<a class="btn btn-outline-danger btn-sm" href="'. site_url('admin.php?op=DelCategory') .'" title="'. __d('two_news', 'Effacer') .'" data-bs-toggle="tooltip">
                         <i class="fas fa-trash fa-lg"></i>
                     </a>
                 </p>
@@ -170,18 +170,18 @@ function autoStory(): void
 
     echo '
     <hr />
-    <h3>'. adm_translate("Liste des articles") .'</h3>
+    <h3>'. __d('two_news', 'Liste des articles') .'</h3>
     <table id="tab_adm" data-toggle="table" data-striped="true" data-show-toggle="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
                 <th class="n-t-col-xs-6" data-sortable="true" data-halign="center">
-                    '. adm_translate('Titre') .'
+                    '. __d('two_news', 'Titre') .'
                 </th>
                 <th class="n-t-col-xs-4 small" data-sortable="true" data-align="center" data-align="right">
-                    '. adm_translate('Date prévue de publication') .'
+                    '. __d('two_news', 'Date prévue de publication') .'
                 </th>
                 <th class="n-t-col-xs-2" data-align="center">
-                    '. adm_translate('Fonctions') .'
+                    '. __d('two_news', 'Fonctions') .'
                 </th>
             </tr>
         </thead>
@@ -208,7 +208,7 @@ function autoStory(): void
             }
 
             if ($new['title'] == '') {
-                $new['title'] = adm_translate("Aucun Sujet");
+                $new['title'] = __d('two_news', 'Aucun Sujet');
             }
 
             if ($affiche) {
@@ -222,10 +222,10 @@ function autoStory(): void
                     </td>
                     <td>
                         <a href="'. site_url('admin.php?op=autoEdit&amp;anid=' . $news['anid']) .'">
-                            <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Afficher l'article") .'" data-bs-toggle="tooltip"></i>
+                            <i class="fa fa-edit fa-lg me-2" title="'. __d('two_news', 'Afficher l\'article') .'" data-bs-toggle="tooltip"></i>
                         </a>
                         <a href="'. site_url('admin.php?op=autoDelete&amp;anid=' . $news['anid']) .'">&nbsp;
-                            <i class="fas fa-trash fa-lg text-danger" title="'. adm_translate("Effacer l'Article") .'" data-bs-toggle="tooltip" ></i>
+                            <i class="fas fa-trash fa-lg text-danger" title="'. __d('two_news', 'Effacer l\'Article') .'" data-bs-toggle="tooltip" ></i>
                         </a>
                     </td>
                 </tr>';
@@ -279,7 +279,7 @@ function autoEdit(int $anid): void
     global $aid, $radminsuper;
 
     $f_meta_nom = 'autoStory';
-    $f_titre = adm_translate("Editer un Article");
+    $f_titre = __d('two_news', 'Editer un Article');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -332,8 +332,8 @@ function autoEdit(int $anid): void
 
     echo '
     <hr />
-    <h3>'. adm_translate("Editer l'Article Automatique") .'</h3>
-    '. language::aff_local_langue('', 'local_user_language', adm_translate("Langue de Prévisualisation")) .'
+    <h3>'. __d('two_news', 'Editer l\'Article Automatique') .'</h3>
+    '. language::aff_local_langue('', 'local_user_language', __d('two_news', 'Langue de Prévisualisation')) .'
     <div class="card card-body mb-3">';
     
     if ($topics['topicimage'] !== '') {
@@ -356,23 +356,23 @@ function autoEdit(int $anid): void
     </div>', '<div class="text-muted">'. $autonews['hometext'] .'</div>', $autonews['bodytext'], $autonews['notes']);
 
     echo '<hr />
-    <b>'. adm_translate("Utilisateur") .'</b>'. $autonews['informant'] .'
+    <b>'. __d('two_news', 'Utilisateur') .'</b>'. $autonews['informant'] .'
     <br />
     </div>
     <form action="'. site_url('admin.php') .'" method="post" name="adminForm" id="autoedit">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="title">'. adm_translate("Titre") .'</label>
+            <label class="col-form-label col-sm-4" for="title">'. __d('two_news', 'Titre') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="title" name="title" size="50" value="'. $autonews['titre'] .'" required="required" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topic">'. adm_translate("Sujet") .'</label>
+            <label class="col-form-label col-sm-4" for="topic">'. __d('two_news', 'Sujet') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
     if ($radminsuper) {
-        echo '<option value="">'. adm_translate("Tous les Sujets") .'</option>';
+        echo '<option value="">'. __d('two_news', 'Tous les Sujets') .'</option>';
     }
 
     $toplist = DB::table('topics')
@@ -411,14 +411,14 @@ function autoEdit(int $anid): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="hometext">'. adm_translate("Texte d'introduction") .'</label>
+            <label class="col-form-label col-sm-12" for="hometext">'. __d('two_news', 'Texte d\'introduction') .'</label>
             <div class="col-sm-12">
                 <textarea class="tin form-control" rows="25" id="hometext" name="hometext" >'. $autonews['hometext'] .'</textarea>
             </div>
         </div>
         '. editeur::aff_editeur('hometext', '') . '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="bodytext">'. adm_translate("Texte étendu") . '</label>
+            <label class="col-form-label col-sm-12" for="bodytext">'. __d('two_news', 'Texte étendu') . '</label>
             <div class="col-sm-12">
                 <textarea class="tin form-control" rows="25" id="bodytext" name="bodytext" >'. $autonews['bodytext'] .'</textarea>
             </div>
@@ -428,7 +428,7 @@ function autoEdit(int $anid): void
     if ($aid != $autonews['informant']) {
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="notes">'. adm_translate("Notes") .'</label>
+            <label class="col-form-label col-sm-12" for="notes">'. __d('two_news', 'Notes') .'</label>
             <div class="col-sm-12">
                 <textarea class="tin form-control" rows="7" id="notes" name="notes">'. $autonews['notes'] .'</textarea>
             </div>
@@ -449,7 +449,7 @@ function autoEdit(int $anid): void
                 <input type="hidden" name="anid" value="'. $autonews['anid'] .'" />
                 <input type="hidden" name="informant" value="'. $autonews['informant'] .'" />
                 <input type="hidden" name="op" value="autoSaveEdit" />
-                <input class="btn btn-primary" type="submit" value="'. adm_translate("Sauver les modifications") .'" />
+                <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Sauver les modifications') .'" />
             </div>
         </div>
     </form>';

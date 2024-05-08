@@ -24,13 +24,13 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'OptimySQL';
-$f_titre = adm_translate("Optimisation de la base de données") .' : '. Config::get('database.default.database');
+$f_titre = __d('two_core', 'Optimisation de la base de données') .' : '. Config::get('database.default.database');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-$date_opt = date(adm_translate("dateforop"));
+$date_opt = date(__d('two_core', 'dateforop'));
 $heure_opt = date("h:i a");
 
 include("themes/default/header.php");
@@ -58,7 +58,7 @@ $optimy = DB::table('optimy')->select('optdate', 'opthour')->where('optid', 1)->
 
 if (!$optimy['optdate'] or ($optimy['optdate'] == '') or !$optimy['opthour'] or ($optimy['opthour'] == '')) {
 } else {
-    $last_opti = adm_translate("Dernière optimisation effectuée le") . " : " . $optimy['optdate'] . " " . adm_translate(" à ") . " " . $optimy['opthour'] . "<br />\n";
+    $last_opti = __d('two_core', 'Dernière optimisation effectuée le') . " : " . $optimy['optdate'] . " " . __d('two_core', ' à ') . " " . $optimy['opthour'] . "<br />\n";
 }
 
 $tot_data = 0;
@@ -89,7 +89,7 @@ if ($tables = DB::select('SHOW TABLE STATUS')) {
             <tr class="table-success">
                 <td align="right">' . $table['Name'] .'</td>
                 <td align="right">' . $total .' Ko</td>
-                <td align="center">' . adm_translate("optimisée") .'</td>
+                <td align="center">' . __d('two_core', 'optimisée') .'</td>
                 <td align="center"> -- </td>
             </tr>';
         } else {
@@ -97,7 +97,7 @@ if ($tables = DB::select('SHOW TABLE STATUS')) {
             <tr class="table-danger">
                 <td align="right">' . $table['Name'] .'</td>
                 <td align="right">' . $total .' Ko</td>
-                <td class="text-danger" align="center">' . adm_translate("non optimisée") .'</td>
+                <td class="text-danger" align="center">' . __d('two_core', 'non optimisée') .'</td>
                 <td align="right">' . $gain .' Ko</td>
             </tr>';
         }
@@ -124,24 +124,24 @@ DB::table('optimy')->where('optid', 1)->update(array(
 // Lecture des gains précédents et addition
 $optimy = DB::table('optimy')->select('optgain', 'optcount')->where('optid', 1)->first();
 
-echo '<hr /><p class="lead">' . adm_translate("Optimisation effectuée") .' : ' . adm_translate("Gain total réalisé") .' ' . $total_gain .' Ko</br>';
+echo '<hr /><p class="lead">' . __d('two_core', 'Optimisation effectuée') .' : ' . __d('two_core', 'Gain total réalisé') .' ' . $total_gain .' Ko</br>';
 echo $last_opti;
 echo '
-    ' . adm_translate("A ce jour, vous avez effectué ") .' ' . $optimy['optcount'] .' optimisation(s) ' . adm_translate(" et réalisé un gain global de ") .' ' . $optimys['optgain'] .' Ko.</p>
+    ' . __d('two_core', 'A ce jour, vous avez effectué ') .' ' . $optimy['optcount'] .' optimisation(s) ' . __d('two_core', ' et réalisé un gain global de ') .' ' . $optimys['optgain'] .' Ko.</p>
     <table id="tad_opti" data-toggle="table" data-striped="true" data-show-toggle="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
     <thead>
         <tr>
-            <th data-sortable="true" data-halign="center" data-align="center">' . adm_translate('Table') .'</th>
-            <th data-halign="center" data-align="center">' . adm_translate('Taille actuelle') .'</th>
-            <th data-sortable="true" data-halign="center" data-align="center">' . adm_translate('Etat') .'</th>
-            <th data-halign="center" date-align="center">' . adm_translate('Gain réalisable') .'</th>
+            <th data-sortable="true" data-halign="center" data-align="center">' . __d('two_core', 'Table') .'</th>
+            <th data-halign="center" data-align="center">' . __d('two_core', 'Taille actuelle') .'</th>
+            <th data-sortable="true" data-halign="center" data-align="center">' . __d('two_core', 'Etat') .'</th>
+            <th data-halign="center" date-align="center">' . __d('two_core', 'Gain réalisable') .'</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
             <td></td>
             <td></td>
-            <td>' . adm_translate("Gain total réalisé") .' : </td>
+            <td>' . __d('two_core', 'Gain total réalisé') .' : </td>
             <td>' . $optimy['optgain'] .' Ko</td>
         </tr>
     </tfoot>

@@ -62,18 +62,18 @@ function write_review()
     include("themes/default/header.php");;
 
     echo '
-    <h2>' . translate("Ecrire une critique") . '</h2>
+    <h2>' . __d('two_reviews', 'Ecrire une critique') . '</h2>
     <hr />
     <form id="writereview" method="post" action="'. site_url('reviews.php') .'">
         <div class="form-floating mb-3">
             <textarea class="form-control" id="title_rev" name="title" required="required" maxlength="150" style="height:70px"></textarea>
-            <label for="title_rev">' . translate("Objet") . '</label>
+            <label for="title_rev">' . __d('two_reviews', 'Objet') . '</label>
             <span class="help-block text-end" id="countcar_title_rev"></span>
         </div>
         <div class="form-floating mb-3">
             <textarea class="form-control" id="text_rev" name="text" required="required" style="height:120px"></textarea>
-            <label for="text_rev">' . translate("Texte") . '</label>
-            <span class="help-block">' . translate("Attention à votre expression écrite. Vous pouvez utiliser du code html si vous savez le faire") . '</span>
+            <label for="text_rev">' . __d('two_reviews', 'Texte') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Attention à votre expression écrite. Vous pouvez utiliser du code html si vous savez le faire') . '</span>
         </div>';
 
     if ($user) {
@@ -86,22 +86,22 @@ function write_review()
         echo '
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="reviewer_rev" name="reviewer" value="' . $uname . '" maxlength="25" required="required" />
-            <label for="reviewer_rev">' . translate("Votre nom") . '</label>
+            <label for="reviewer_rev">' . __d('two_reviews', 'Votre nom') . '</label>
         </div>
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="email_rev" name="email" value="' . $email . '" maxlength="254" required="required" />
-            <label for="email_rev">' . translate("Votre adresse Email") . '</label>
+            <label for="email_rev">' . __d('two_reviews', 'Votre adresse Email') . '</label>
             <span class="help-block text-end" id="countcar_email_rev"></span>
         </div>';
     } else
         echo '
         <div class="form-floating mb-3">
             <input class="form-control" type="text" id="reviewer_rev" name="reviewer" required="required" />
-            <label for="reviewer_rev">' . translate("Votre nom") . '</label>
+            <label for="reviewer_rev">' . __d('two_reviews', 'Votre nom') . '</label>
         </div>
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="email_rev" name="email" maxlength="254" required="required" />
-            <label for="email_rev">' . translate("Votre adresse Email") . '</label>
+            <label for="email_rev">' . __d('two_reviews', 'Votre adresse Email') . '</label>
             <span class="help-block text-end" id="countcar_email_rev"></span>
         </div>';
 
@@ -119,38 +119,38 @@ function write_review()
                 <option value="2">2</option>
                 <option value="1">1</option>
             </select>
-            <label for="score_rev">' . translate("Evaluation") . '</label>
-            <span class="help-block">' . translate("Choisir entre 1 et 10 (1=nul 10=excellent)") . '</span>
+            <label for="score_rev">' . __d('two_reviews', 'Evaluation') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Choisir entre 1 et 10 (1=nul 10=excellent)') . '</span>
         </div>';
 
     if (!$short_review) {
         echo '
         <div class="form-floating mb-3">
             <input type="url" class="form-control" id="url_rev" name="url" maxlength="320" />
-            <label for="url_rev">' . translate("Lien relatif") . '</label>
-            <span class="help-block">' . translate("Site web officiel. Veillez à ce que votre url commence bien par") . ' http(s)://<span class="float-end" id="countcar_url_rev"></span></span>
+            <label for="url_rev">' . __d('two_reviews', 'Lien relatif') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Site web officiel. Veillez à ce que votre url commence bien par') . ' http(s)://<span class="float-end" id="countcar_url_rev"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="url_title_rev" name="url_title" maxlength="50" />
-            <label for="url_title_rev">' . translate("Titre du lien") . '</label>
-            <span class="help-block">' . translate("Obligatoire seulement si vous soumettez un lien relatif") . '<span class="float-end" id="countcar_url_title_rev"></span></span>
+            <label for="url_title_rev">' . __d('two_reviews', 'Titre du lien') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Obligatoire seulement si vous soumettez un lien relatif') . '<span class="float-end" id="countcar_url_title_rev"></span></span>
         </div>';
 
         if ($admin) {
             echo '
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="cover_rev" name="cover" maxlength="50" />
-            <label for="cover_rev">' . translate("Nom de fichier de l'image") . '</label>
-            <span class="help-block">' . translate("Nom de l'image principale non obligatoire, la mettre dans images/reviews/") . '<span class="float-end" id="countcar_cover_rev"></span></span>
+            <label for="cover_rev">' . __d('two_reviews', 'Nom de fichier de l\'image') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Nom de l\'image principale non obligatoire, la mettre dans images/reviews/') . '<span class="float-end" id="countcar_cover_rev"></span></span>
         </div>';
         }
     }
 
     echo '
         <input type="hidden" name="op" value="preview_review" />
-        <button type="submit" class="btn btn-primary my-3 me-2" >' . translate("Prévisualiser") . '</button>
-        <button onclick="history.go(-1)" class="btn btn-secondary my-3">' . translate("Retour en arrière") . '</button>
-        <p class="help-block">' . translate("Assurez-vous de l'exactitude de votre information avant de la communiquer. N'écrivez pas en majuscules, votre texte serait automatiquement rejeté") . '</p>
+        <button type="submit" class="btn btn-primary my-3 me-2" >' . __d('two_reviews', 'Prévisualiser') . '</button>
+        <button onclick="history.go(-1)" class="btn btn-secondary my-3">' . __d('two_reviews', 'Retour en arrière') . '</button>
+        <p class="help-block">' . __d('two_reviews', 'Assurez-vous de l\'exactitude de votre information avant de la communiquer. N\'écrivez pas en majuscules, votre texte serait automatiquement rejeté') . '</p>
     </form>';
 
     $arg1 = '
@@ -177,64 +177,64 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
     include("themes/default/header.php");;
 
     echo '<h2 class="mb-4">';
-    echo $id != 0 ? translate("Modification d'une critique") : translate("Ecrire une critique");
+    echo $id != 0 ? __d('two_reviews', 'Modification d\'une critique') : __d('two_reviews', 'Ecrire une critique');
     echo '
     </h2>
     <form id="prevreview" method="post" action="'. site_url('reviews.php') .'">';
 
     if ($title == '') {
         $error = 1;
-        echo '<div class="alert alert-danger">' . translate("Titre non valide... Il ne peut pas être vide") . '</div>';
+        echo '<div class="alert alert-danger">' . __d('two_reviews', 'Titre non valide... Il ne peut pas être vide') . '</div>';
     }
 
     if ($text == '') {
         $error = 1;
-        echo '<div class="alert alert-danger">' . translate("Texte de critique non valide... Il ne peut pas être vide") . '</div>';
+        echo '<div class="alert alert-danger">' . __d('two_reviews', 'Texte de critique non valide... Il ne peut pas être vide') . '</div>';
     }
 
     if (($score < 1) || ($score > 10)) {
         $error = 1;
-        echo '<div class="alert alert-danger">' . translate("Note non valide... Elle doit se situer entre 1 et 10") . '</div>';
+        echo '<div class="alert alert-danger">' . __d('two_reviews', 'Note non valide... Elle doit se situer entre 1 et 10') . '</div>';
     }
 
     if (($hits < 0) && ($id != 0)) {
         $error = 1;
-        echo '<div class="alert alert-danger">' . translate("Le nombre de hits doit être un entier positif") . '</div>';
+        echo '<div class="alert alert-danger">' . __d('two_reviews', 'Le nombre de hits doit être un entier positif') . '</div>';
     }
 
     if ($reviewer == '' || $email == '') {
         $error = 1;
-        echo '<div class="alert alert-danger">' . translate("Vous devez entrer votre nom et votre adresse Email") . '</div>';
+        echo '<div class="alert alert-danger">' . __d('two_reviews', 'Vous devez entrer votre nom et votre adresse Email') . '</div>';
     } else if ($reviewer != '' && $email != '') {
         if (!preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i', $email)) {
             $error = 1;
-            echo '<div class="alert alert-danger">' . translate("Email non valide (ex.: prenom.nom@hotmail.com)") . '</div>';
+            echo '<div class="alert alert-danger">' . __d('two_reviews', 'Email non valide (ex.: prenom.nom@hotmail.com)') . '</div>';
         }
 
         if (mailler::checkdnsmail($email) === false) {
             $error = 1;
-            echo '<div class="alert alert-danger">' . translate("Erreur : DNS ou serveur de mail incorrect") . '</div>';
+            echo '<div class="alert alert-danger">' . __d('two_reviews', 'Erreur : DNS ou serveur de mail incorrect') . '</div>';
         }
     }
 
     if ((($url_title != '' && $url == '') || ($url_title == "" && $url != "")) and (!$short_reviews)) {
         $error = 1;
-        echo '<div class="alert alert-danger">' . translate("Vous devez entrer un titre de lien et une adresse relative, ou laisser les deux zones vides") . '</div>';
+        echo '<div class="alert alert-danger">' . __d('two_reviews', 'Vous devez entrer un titre de lien et une adresse relative, ou laisser les deux zones vides') . '</div>';
     } else if (($url != "") && (!preg_match('#^http(s)?://#i', $url))) {
         $error = 1;
-        echo '<div class="alert alert-danger">' . translate("Site web officiel. Veillez à ce que votre url commence bien par") . ' http(s)://</div>';
+        echo '<div class="alert alert-danger">' . __d('two_reviews', 'Site web officiel. Veillez à ce que votre url commence bien par') . ' http(s)://</div>';
     }
 
     if ($error == 1)
         echo '<button class="btn btn-secondary" type="button" onclick="history.go(-1)"><i class="fa fa-lg fa-undo"></i></button>';
     else {
         global $gmt;
-        $fdate = date(str_replace('%', '', translate("linksdatestring")), time() + ((int)$gmt * 3600));
+        $fdate = date(str_replace('%', '', __d('two_reviews', 'linksdatestring')), time() + ((int)$gmt * 3600));
 
-        echo translate("Critique");
+        echo __d('two_reviews', 'Critique');
 
         echo '
-        <br />' . translate("Ajouté :") . ' ' . $fdate . '
+        <br />' . __d('two_reviews', 'Ajouté :') . ' ' . $fdate . '
         <hr />
         <h3>' . stripslashes($title) . '</h3>';
 
@@ -245,19 +245,19 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
         echo $text;
         echo '
         <hr />
-        <strong>' . translate("Le critique") . ' :</strong> <a href="mailto:' . $email . '" target="_blank">' . $reviewer . '</a><br />
-        <strong>' . translate("Note") . '</strong>
+        <strong>' . __d('two_reviews', 'Le critique') . ' :</strong> <a href="mailto:' . $email . '" target="_blank">' . $reviewer . '</a><br />
+        <strong>' . __d('two_reviews', 'Note') . '</strong>
         <span class="text-success">';
 
         display_score($score);
         echo '</span>';
 
         if ($url != '')
-            echo '<br /><strong>' . translate("Lien relatif") . ' :</strong> <a href="' . $url . '" target="_blank">' . $url_title . '</a>';
+            echo '<br /><strong>' . __d('two_reviews', 'Lien relatif') . ' :</strong> <a href="' . $url . '" target="_blank">' . $url_title . '</a>';
 
         if ($id != 0) {
-            echo '<br /><strong>' . translate("ID de la critique") . ' :</strong> ' . $id . '<br />
-            <strong>' . translate("Hits") . ' :</strong> ' . $hits . '<br />';
+            echo '<br /><strong>' . __d('two_reviews', 'ID de la critique') . ' :</strong> ' . $id . '<br />
+            <strong>' . __d('two_reviews', 'Hits') . ' :</strong> ' . $hits . '<br />';
         }
 
         $text = urlencode($text);
@@ -274,15 +274,15 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
                 <input type="hidden" name="url_title" value="' . $url_title . '" />
                 <input type="hidden" name="cover" value="' . $cover . '" />
                 <input type="hidden" name="op" value="add_reviews" />
-                <p class="my-3">' . translate("Cela semble-t-il correct ?") . '</p>';
+                <p class="my-3">' . __d('two_reviews', 'Cela semble-t-il correct ?') . '</p>';
 
         if (!$admin) {
             echo spam::Q_spambot();
         }
 
         // nimporte quoi ça !!!!
-        $consent = '[fr]Pour conna&icirc;tre et exercer vos droits notamment de retrait de votre consentement &agrave; l\'utilisation des donn&eacute;es collect&eacute;es veuillez consulter notre <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">politique de confidentialit&eacute;</a>.[/fr][en]To know and exercise your rights, in particular to withdraw your consent to the use of the data collected, please consult our <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">privacy policy</a>.[/en][es]Para conocer y ejercer sus derechos, en particular para retirar su consentimiento para el uso de los datos recopilados, consulte nuestra <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">pol&iacute;tica de privacidad</a>.[/es][de]Um Ihre Rechte zu kennen und auszu&uuml;ben, insbesondere um Ihre Einwilligung zur Nutzung der erhobenen Daten zu widerrufen, konsultieren Sie bitte unsere <a href="'. site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1') .'">Datenschutzerkl&auml;rung</a>.[/de][zh]&#x8981;&#x4E86;&#x89E3;&#x5E76;&#x884C;&#x4F7F;&#x60A8;&#x7684;&#x6743;&#x5229;&#xFF0C;&#x5C24;&#x5176;&#x662F;&#x8981;&#x64A4;&#x56DE;&#x60A8;&#x5BF9;&#x6240;&#x6536;&#x96C6;&#x6570;&#x636E;&#x7684;&#x4F7F;&#x7528;&#x7684;&#x540C;&#x610F;&#xFF0C;&#x8BF7;&#x67E5;&#x9605;&#x6211;&#x4EEC;<a href="'. site_url('static.php?op=politiqueconf.html&#x26;npds=1&#x26;metalang=1') .'">&#x7684;&#x9690;&#x79C1;&#x653F;&#x7B56;</a>&#x3002;[/zh]';
-        $accept = "[fr]En soumettant ce formulaire j'accepte que les informations saisies soient exploit&#xE9;es dans le cadre de l'utilisation et du fonctionnement de ce site.[/fr][en]By submitting this form, I accept that the information entered will be used in the context of the use and operation of this website.[/en][es]Al enviar este formulario, acepto que la informaci&oacute;n ingresada se utilizar&aacute; en el contexto del uso y funcionamiento de este sitio web.[/es][de]Mit dem Absenden dieses Formulars erkl&auml;re ich mich damit einverstanden, dass die eingegebenen Informationen im Rahmen der Nutzung und des Betriebs dieser Website verwendet werden.[/de][zh]&#x63D0;&#x4EA4;&#x6B64;&#x8868;&#x683C;&#x5373;&#x8868;&#x793A;&#x6211;&#x63A5;&#x53D7;&#x6240;&#x8F93;&#x5165;&#x7684;&#x4FE1;&#x606F;&#x5C06;&#x5728;&#x672C;&#x7F51;&#x7AD9;&#x7684;&#x4F7F;&#x7528;&#x548C;&#x64CD;&#x4F5C;&#x8303;&#x56F4;&#x5185;&#x4F7F;&#x7528;&#x3002;[/zh]";
+        $consent = __d('two_reviews', 'Pour conna&icirc;tre et exercer vos droits notamment de retrait de votre consentement &agrave; l\'utilisation des donn&eacute;es collect&eacute;es veuillez consulter notre <a href=" {0} ">politique de confidentialit&eacute;</a>.', site_url('static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1'));
+        $accept = __d('two_reviews', 'En soumettant ce formulaire j\'accepte que les informations saisies soient exploit&#xE9;es dans le cadre de l\'utilisation et du fonctionnement de ce site.');
         
         echo '
         <div class="mb-3 row">
@@ -298,8 +298,8 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
         </div>
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <input class="btn btn-primary" type="submit" value="' . translate("Oui") . '" />&nbsp;
-                <input class="btn btn-secondary" type="button" onclick="history.go(-1)" value="' . translate("Non") . '" />
+                <input class="btn btn-primary" type="submit" value="' . __d('two_reviews', 'Oui') . '" />&nbsp;
+                <input class="btn btn-secondary" type="button" onclick="history.go(-1)" value="' . __d('two_reviews', 'Non') . '" />
             </div>
         </div>
         <div class="mb-3 row">
@@ -308,13 +308,13 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
         </div>';
 
         if ($id != 0) {
-            $word = translate("modifié");
+            $word = __d('two_reviews', 'modifié');
         } else {
-            $word = translate("ajouté");
+            $word = __d('two_reviews', 'ajouté');
         }
 
         if ($admin) {
-            echo '<div class="alert alert-success"><strong>' . translate("Note :") . '</strong> ' . translate("Actuellement connecté en administrateur... Cette critique sera") . ' ' . $word . ' ' . translate("immédiatement") . '.</div>';
+            echo '<div class="alert alert-success"><strong>' . __d('two_reviews', 'Note :') . '</strong> ' . __d('two_reviews', 'Actuellement connecté en administrateur... Cette critique sera') . ' ' . $word . ' ' . __d('two_reviews', 'immédiatement') . '.</div>';
         }
     }
 
@@ -362,9 +362,9 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
     }
 
     if ($id != 0) {
-        echo '<h2>' . translate("Modification d'une critique") . '</h2>';
+        echo '<h2>' . __d('two_reviews', 'Modification d\'une critique') . '</h2>';
     } else {
-        echo '<h2>' . translate("Ecrire une critique") . '</h2>';
+        echo '<h2>' . __d('two_reviews', 'Ecrire une critique') . '</h2>';
     }
 
     echo '
@@ -372,9 +372,9 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
     <div class="alert alert-success">';
 
     if ($id != 0) {
-        echo translate("Merci d'avoir modifié cette critique") . '.';
+        echo __d('two_reviews', 'Merci d\'avoir modifié cette critique') . '.';
     } else {
-        echo translate("Merci d'avoir posté cette critique") . ', ' . $reviewer;
+        echo __d('two_reviews', 'Merci d\'avoir posté cette critique') . ', ' . $reviewer;
         }
 
     echo '<br />';
@@ -385,7 +385,7 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
 
     if (($admin) && ($id == 0)) {
         sql_query("INSERT INTO " . $NPDS_Prefix . "reviews VALUES (NULL, '$date', '$title', '$text', '$reviewer', '$email', '$score', '$cover', '$url', '$url_title', '1')");
-        echo translate("Dès maintenant disponible dans la base de données des critiques.");
+        echo __d('two_reviews', 'Dès maintenant disponible dans la base de données des critiques.');
 
     } else if (($admin) && ($id != 0)) {
 
@@ -394,7 +394,7 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
         //));
 
         sql_query("UPDATE " . $NPDS_Prefix . "reviews SET date='$date', title='$title', text='$text', reviewer='$reviewer', email='$email', score='$score', cover='$cover', url='$url', url_title='$url_title', hits='$hits' WHERE id='$id'");
-        echo translate("Dès maintenant disponible dans la base de données des critiques.");
+        echo __d('two_reviews', 'Dès maintenant disponible dans la base de données des critiques.');
 
     } else {
 
@@ -403,12 +403,12 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
         //));
 
         sql_query("INSERT INTO " . $NPDS_Prefix . "reviews_add VALUES (NULL, '$date', '$title', '$text', '$reviewer', '$email', '$score', '$url', '$url_title')");
-        echo translate("Nous allons vérifier votre contribution. Elle devrait bientôt être disponible !");
+        echo __d('two_reviews', 'Nous allons vérifier votre contribution. Elle devrait bientôt être disponible !');
     }
 
     echo '
     </div>
-    <a class="btn btn-secondary" href="'. site_url('reviews.php') .'" title="' . translate("Retour à l'index des critiques") . '"><i class="fa fa-lg fa-undo"></i>  ' . translate("Retour à l'index des critiques") . '</a>';
+    <a class="btn btn-secondary" href="'. site_url('reviews.php') .'" title="' . __d('two_reviews', 'Retour à l\'index des critiques') . '"><i class="fa fa-lg fa-undo"></i>  ' . __d('two_reviews', 'Retour à l\'index des critiques') . '</a>';
     
     include("themes/default/footer.php");;
 }
@@ -466,29 +466,29 @@ function reviews($field, $order)
     $numresults = sql_num_rows($result);
 
     echo '
-    <h2>' . translate("Critiques") . '<span class="badge bg-secondary float-end" title="' . $numresults . ' ' . translate("Critique(s) trouvée(s).") . '" data-bs-toggle="tooltip">' . $numresults . '</span></h2>
+    <h2>' . __d('two_reviews', 'Critiques') . '<span class="badge bg-secondary float-end" title="' . $numresults . ' ' . __d('two_reviews', 'Critique(s) trouvée(s).') . '" data-bs-toggle="tooltip">' . $numresults . '</span></h2>
     <hr />
     <h3>' . language::aff_langue($r_title) . '</h3>
     <p class="lead">' . language::aff_langue($r_description) . '</p>
-    <h4><a href="'. site_url('reviews.php?op=write_review') .'"><i class="fa fa-edit"></i></a>&nbsp;' . translate("Ecrire une critique") . '</h4><br />
+    <h4><a href="'. site_url('reviews.php?op=write_review') .'"><i class="fa fa-edit"></i></a>&nbsp;' . __d('two_reviews', 'Ecrire une critique') . '</h4><br />
     ';
 
     echo '
     <div class="dropdown">
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-sort-amount-down me-2"></i>' . translate("Critiques") . '
+            <i class="fa fa-sort-amount-down me-2"></i>' . __d('two_reviews', 'Critiques') . '
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Date") . '</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Date") . '</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Titre") . '</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Titre") . '</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . translate("Posté par") . '</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . translate("Posté par") . '</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>Score</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>Score</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i>Hits</a>
-            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i>Hits</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . __d('two_reviews', 'Date') . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . __d('two_reviews', 'Date') . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . __d('two_reviews', 'Titre') . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . __d('two_reviews', 'Titre') . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . __d('two_reviews', 'Posté par') . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . __d('two_reviews', 'Posté par') . '</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=ASC') .'"><i class="fa fa-sort-amount-down me-2"></i>' . __d('two_reviews', 'Score') .'</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=DESC') .'"><i class="fa fa-sort-amount-up me-2"></i>' . __d('two_reviews', 'Score') .'</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i>' . __d('two_reviews', 'Hits') .'</a>
+            <a class="dropdown-item" href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i>' . __d('two_reviews', 'Hits') .'</a>
         </div>
     </div>';
 
@@ -498,19 +498,19 @@ function reviews($field, $order)
             <thead>
                 <tr>
                 <th data-align="center">
-                    <a href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Date") . ' <a href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . __d('two_reviews', 'Date') . ' <a href="'. site_url('reviews.php?op=sort&amp;field=date&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th data-align="left" data-halign="center" data-sortable="true" data-sorter="htmlSorter">
-                    <a href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Titre") . ' <a href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . __d('two_reviews', 'Titre') . ' <a href="'. site_url('reviews.php?op=sort&amp;field=title&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th data-align="center" data-sortable="true">
-                    <a href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . translate("Posté par") . ' <a href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . __d('two_reviews', 'Posté par') . ' <a href="'. site_url('reviews.php?op=sort&amp;field=reviewer&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th class="n-t-col-xs-2" data-align="center" data-sortable="true">
-                    <a href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> Score <a href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . __d('two_reviews', 'Score') .' <a href="'. site_url('reviews.php?op=sort&amp;field=score&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 <th class="n-t-col-xs-2" data-align="right" data-sortable="true">
-                    <a href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> Hits <a href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
+                    <a href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=ASC') .'"><i class="fa fa-sort-amount-down"></i></a> ' . __d('two_reviews', 'Hits') .' <a href="'. site_url('reviews.php?op=sort&amp;field=hits&amp;order=DESC') .'"><i class="fa fa-sort-amount-up"></i></a>
                 </th>
                 </tr>
         </thead>
@@ -559,7 +559,7 @@ function f_date($xdate)
     $month = substr($xdate, 5, 2);
     $day = substr($xdate, 8, 2);
 
-    $fdate = date(str_replace("%", '', translate("linksdatestring")), mktime(0, 0, 0, (int)$month, (int)$day, (int)$year));
+    $fdate = date(str_replace("%", '', __d('two_reviews', 'linksdatestring')), mktime(0, 0, 0, (int)$month, (int)$day, (int)$year));
 
     return $fdate;
 }
@@ -593,12 +593,12 @@ function showcontent($id)
     $score = $myrow['score'];
 
     echo '
-    <h2>' . translate("Critiques") . '</h2>
+    <h2>' . __d('two_reviews', 'Critiques') . '</h2>
     <hr />
-    <a href="'. site_url('reviews.php') .'">' . translate("Retour à l'index des critiques") . '</a>
+    <a href="'. site_url('reviews.php') .'">' . __d('two_reviews', 'Retour à l\'index des critiques') . '</a>
     <div class="card card-body my-3">
         <div class="card-text text-muted text-end small">
-    ' . translate("Ajouté :") . ' ' . $fdate . '<br />
+    ' . __d('two_reviews', 'Ajouté :') . ' ' . $fdate . '<br />
         </div>
     <hr />
     <h3 class="mb-3">' . $title . '</h3><br />';
@@ -614,11 +614,11 @@ function showcontent($id)
         <div class="card card-body mb-3">';
 
     if ($reviewer != '') {
-        echo '<div class="mb-2"><strong>' . translate("Le critique") . ' :</strong> <a href="mailto:' . spam::anti_spam($email, 1) . '" >' . $reviewer . '</a></div>';
+        echo '<div class="mb-2"><strong>' . __d('two_reviews', 'Le critique') . ' :</strong> <a href="mailto:' . spam::anti_spam($email, 1) . '" >' . $reviewer . '</a></div>';
     }
 
     if ($score != '') {
-        echo '<div class="mb-2"><strong>' . translate("Note") . ' : </strong>';
+        echo '<div class="mb-2"><strong>' . __d('two_reviews', 'Note') . ' : </strong>';
     }
 
     echo '<span class="text-success">';
@@ -629,9 +629,9 @@ function showcontent($id)
     </div>';
 
     if ($url != '')
-        echo '<div class="mb-2"><strong>' . translate("Lien relatif") . ' : </strong> <a href="' . $url . '" target="_blank">' . $url_title . '</a></div>';
+        echo '<div class="mb-2"><strong>' . __d('two_reviews', 'Lien relatif') . ' : </strong> <a href="' . $url . '" target="_blank">' . $url_title . '</a></div>';
 
-    echo '<div><strong>' . translate("Hits : ") . '</strong><span class="badge bg-secondary">' . $hits . '</span></div>
+    echo '<div><strong>' . __d('two_reviews', 'Hits : ') . '</strong><span class="badge bg-secondary">' . $hits . '</span></div>
         </div>';
 
     if ($admin)
@@ -639,13 +639,13 @@ function showcontent($id)
         <nav class="d-flex justify-content-center">
             <ul class="pagination pagination-sm">
                 <li class="page-item disabled">
-                <a class="page-link" href="#"><i class="fa fa-cogs fa-lg"></i><span class="ms-2 d-none d-lg-inline">' . translate("Outils administrateur") . '</span></a>
+                <a class="page-link" href="#"><i class="fa fa-cogs fa-lg"></i><span class="ms-2 d-none d-lg-inline">' . __d('two_reviews', 'Outils administrateur') . '</span></a>
                 </li>
                 <li class="page-item">
-                <a class="page-link" role="button" href="'. site_url('reviews.php?op=mod_review&amp;id='. $id) .'" title="' . translate("Editer") . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-edit" ></i></a>
+                <a class="page-link" role="button" href="'. site_url('reviews.php?op=mod_review&amp;id='. $id) .'" title="' . __d('two_reviews', 'Editer') . '" data-bs-toggle="tooltip" ><i class="fa fa-lg fa-edit" ></i></a>
                 </li>
                 <li class="page-item">
-                <a class="page-link text-danger" role="button" href="'. site_url('reviews.php?op=del_review&amp;id_del='. $id) .'" title="' . translate("Effacer") . '" data-bs-toggle="tooltip" ><i class="fas fa-trash fa-lg" ></i></a>
+                <a class="page-link text-danger" role="button" href="'. site_url('reviews.php?op=del_review&amp;id_del='. $id) .'" title="' . __d('two_reviews', 'Effacer') . '" data-bs-toggle="tooltip" ><i class="fas fa-trash fa-lg" ></i></a>
                 </li>
             </ul>
         </nav>';
@@ -692,31 +692,31 @@ function mod_review($id)
         $score = $myrow['score'];
 
         echo '
-    <h2 class="mb-4">' . translate("Modification d'une critique") . '</h2>
+    <h2 class="mb-4">' . __d('two_reviews', 'Modification d\'une critique') . '</h2>
     <hr />
     <form id="modreview" method="post" action="'. site_url('reviews.php?op=preview_review') .'">
         <input type="hidden" name="id" value="' . $id . '">
         <div class="form-floating mb-3">
             <input type="text" class="form-control w-100" id="date_modrev" name="date" value="' . $date . '" />
-            <label for="date_modrev">' . translate("Date") . '</label>
+            <label for="date_modrev">' . __d('two_reviews', 'Date') . '</label>
         </div>
         <div class="form-floating mb-3">
             <textarea class="form-control" id="title_modrev" name="title" required="required" maxlength="150" style="height:70px;">' . $title . '</textarea>
-            <label for="title_modrev">' . translate("Titre") . '</label>
+            <label for="title_modrev">' . __d('two_reviews', 'Titre') . '</label>
             <span class="help-block text-end" id="countcar_title_modrev"></span>
         </div>
         <div class="form-floating mb-3">
             <textarea class="form-control" id="text_modrev" name="text" required="required" style="height:70px;">' . $text . '</textarea>
-            <label for="text_modrev">' . translate("Texte") . '</label>
+            <label for="text_modrev">' . __d('two_reviews', 'Texte') . '</label>
         </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="reviewer_modrev" name="reviewer" value="' . $reviewer . '" required="required" maxlength="25"/>
-            <label for="reviewer_modrev">' . translate("Le critique") . '</label>
+            <label for="reviewer_modrev">' . __d('two_reviews', 'Le critique') . '</label>
             <span class="help-block text-end" id="countcar_reviewer_modrev"></span>
         </div>
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="email_modrev" name="email" value="' . $email . '" maxlength="254" required="required"/>
-            <label for="email_modrev">' . translate("Email") . '</label>
+            <label for="email_modrev">' . __d('two_reviews', 'Email') . '</label>
             <span class="help-block text-end" id="countcar_email_modrev"></span>
         </div>
         <div class="form-floating mb-3">
@@ -739,31 +739,31 @@ function mod_review($id)
 
         echo '
             </select>
-            <label for="score_modrev">' . translate("Evaluation") . '</label>
-            <span class="help-block">' . translate("Choisir entre 1 et 10 (1=nul 10=excellent)") . '</span>
+            <label for="score_modrev">' . __d('two_reviews', 'Evaluation') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Choisir entre 1 et 10 (1=nul 10=excellent)') . '</span>
         </div>
         <div class="form-floating mb-3">
             <input type="url" class="form-control" id="url_modrev" name="url" maxlength="320" value="' . $url . '" />
-            <label for="url_modrev">' . translate("Lien") . '</label>
-            <span class="help-block">' . translate("Site web officiel. Veillez à ce que votre url commence bien par") . ' http(s)://<span class="float-end" id="countcar_url_modrev"></span></span>
+            <label for="url_modrev">' . __d('two_reviews', 'Lien') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Site web officiel. Veillez à ce que votre url commence bien par') . ' http(s)://<span class="float-end" id="countcar_url_modrev"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="url_title_modrev" name="url_title" value="' . $url_title . '"  maxlength="50" />
-            <label for="url_title_modrev">' . translate("Titre du lien") . '</label>
-            <span class="help-block">' . translate("Obligatoire seulement si vous soumettez un lien relatif") . '<span class="float-end" id="countcar_url_title_modrev"></span></span>
+            <label for="url_title_modrev">' . __d('two_reviews', 'Titre du lien') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Obligatoire seulement si vous soumettez un lien relatif') . '<span class="float-end" id="countcar_url_title_modrev"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="cover_modrev" name="cover" value="' . $cover . '" maxlength="100"/>
-            <label for="cover_modrev">' . translate("Image de garde") . '</label>
-            <span class="help-block">' . translate("Nom de l'image principale non obligatoire, la mettre dans images/reviews/") . '<span class="float-end" id="countcar_cover_modrev"></span></span>
+            <label for="cover_modrev">' . __d('two_reviews', 'Image de garde') . '</label>
+            <span class="help-block">' . __d('two_reviews', 'Nom de l\'image principale non obligatoire, la mettre dans images/reviews/') . '<span class="float-end" id="countcar_cover_modrev"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="hits_modrev" name="hits" value="' . $hits . '" maxlength="9" />
-            <label for="hits_modrev">' . translate("Hits") . '</label>
+            <label for="hits_modrev">' . __d('two_reviews', 'Hits') . '</label>
         </div>
         <input type="hidden" name="op" value="preview_review" />
-        <input class="btn btn-primary my-3 me-2" type="submit" value="' . translate("Prévisualiser les modifications") . '" />
-        <input class="btn btn-secondary my-3" type="button" onclick="history.go(-1)" value="' . translate("Annuler") . '" />
+        <input class="btn btn-primary my-3 me-2" type="submit" value="' . __d('two_reviews', 'Prévisualiser les modifications') . '" />
+        <input class="btn btn-secondary my-3" type="button" onclick="history.go(-1)" value="' . __d('two_reviews', 'Annuler') . '" />
         </form>
         <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
         <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/' . language::language_iso(1, '', '') . '.js"></script>

@@ -49,7 +49,7 @@ if (! function_exists('writeDB_private_message'))
         if ($to_userid == '') {
             Forum::forumerror('0016');
         } else {
-            $time = date(translate("dateinternal"), time() + ((int) Config::get('two_core::config.gmt') * 3600));
+            $time = date(__d('two_messenger', 'dateinternal'), time() + ((int) Config::get('two_core::config.gmt') * 3600));
 
             include_once("language/multilangue.php");
 
@@ -111,17 +111,17 @@ if (! function_exists('write_short_private_message'))
     function write_short_private_message(string $to_userid): void
     {
         echo '
-        <h2>'. translate("Message à un membre") .'</h2>
+        <h2>'. __d('two_messenger', 'Message à un membre') .'</h2>
         <h3><i class="fa fa-at me-1"></i>'. $to_userid .'</h3>
         <form id="sh_priv_mess" action="'. site_url('powerpack.php') .'" method="post">
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="subject" >'. translate("Sujet") .'</label>
+                <label class="col-form-label col-sm-12" for="subject" >'. __d('two_messenger', 'Sujet') .'</label>
                 <div class="col-sm-12">
                     <input class="form-control" type="text" id="subject" name="subject" maxlength="100" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="message" >'. translate("Message") .'</label>
+                <label class="col-form-label col-sm-12" for="message" >'. __d('two_messenger', 'Message') .'</label>
                 <div class="col-sm-12">
                     <textarea class="form-control"  id="message" name="message" rows="10"></textarea>
                 </div>
@@ -130,7 +130,7 @@ if (! function_exists('write_short_private_message'))
                 <div class="col-sm-12">
                     <div class="form-check" >
                     <input class="form-check-input" type="checkbox" id="copie" name="copie" />
-                    <label class="form-check-label" for="copie">'. translate("Conserver une copie") .'</label>
+                    <label class="form-check-label" for="copie">'. __d('two_messenger', 'Conserver une copie') .'</label>
                     </div>
                 </div>
             </div>
@@ -138,8 +138,8 @@ if (! function_exists('write_short_private_message'))
                 <input type="hidden" name="to_userid" value="'. $to_userid .'" />
                 <input type="hidden" name="op" value="write_instant_message" />
                 <div class="col-sm-12">
-                    <input class="btn btn-primary" type="submit" name="submit" value="'. translate("Valider") .'" accesskey="s" />&nbsp;
-                    <button class="btn btn-secondary" type="reset">'. translate("Annuler") .'</button>
+                    <input class="btn btn-primary" type="submit" name="submit" value="'. __d('two_messenger', 'Valider') .'" accesskey="s" />&nbsp;
+                    <button class="btn btn-secondary" type="reset">'. __d('two_messenger', 'Annuler') .'</button>
                 </div>
             </div>
         </form>';

@@ -51,7 +51,7 @@ class Download
                 }
                 
                 if ($ordre == 'ddate') {
-                    $dd = translate("dateinternal");
+                    $dd = __d('two_download', 'dateinternal');
 
                     $day = substr($download->ddate, 8, 2);
                     $month = substr($download->ddate, 5, 2);
@@ -83,7 +83,7 @@ class Download
                         $ibid .= '<li class="ms-4 my-1">
                             <a href="'. site_url('download.php?op=mydown&amp;did='. $download->did) .'" >
                                 '. $download->dfilename .'
-                            </a> ('. translate("Catégorie") .' :'. Language::aff_langue(stripslashes($download->dcategory)) .')&nbsp;
+                            </a> ('. __d('two_download', 'Catégorie') .' :'. Language::aff_langue(stripslashes($download->dcategory)) .')&nbsp;
                             <span class="badge bg-secondary float-end align-self-center">'. Sanitize::wrh($download->dcounter) .'</span>
                         </li>';
                     }

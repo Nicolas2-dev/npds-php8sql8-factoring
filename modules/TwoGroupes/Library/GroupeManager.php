@@ -94,7 +94,7 @@ class GroupeManager
     {  
         $groupes = DB::table('groupes')->select('groupe_id', 'groupe_name')->orderBy('groupe_id', 'asc')->get();
         
-        $tmp_groupe[0] = '-> ' . adm_translate("Supprimer") . '/' . adm_translate("Choisir un groupe") . ' <-';
+        $tmp_groupe[0] = '-> ' . __d('two_groupes', 'Supprimer') . '/' . __d('two_groupes', 'Choisir un groupe') . ' <-';
         
         foreach ($groupes as $groupe) {
             $tmp_groupe[$groupe['groupe_id']] = Language::aff_langue($groupe['groupe_name']);
@@ -190,7 +190,7 @@ class GroupeManager
         $content .= '<p>' . Language::aff_langue($rsql['groupe_description']) . '</p>' . "\n";
         
         if (file_exists('storage/users_private/groupe/' . $gr . '/groupe.png') and ($i_gr == 1)){
-            $content .= '<img src="storage/users_private/groupe/' . $gr . '/groupe.png" class="img-fluid mx-auto d-block rounded" alt="' . translate("Groupe") . '" loading="lazy" />';
+            $content .= '<img src="storage/users_private/groupe/' . $gr . '/groupe.png" class="img-fluid mx-auto d-block rounded" alt="' . __d('two_groupes', 'Groupe') . '" loading="lazy" />';
         }
         
         //=> liste des membres
@@ -204,7 +204,7 @@ class GroupeManager
 
         $li_mb .= '
            <div class="my-4">
-              <a data-bs-toggle="collapse" data-bs-target="#lst_mb_ws_' . $gr . '" class="text-primary" id="show_lst_mb_ws_' . $gr . '" title="' . translate("Déplier la liste") . '"><i id="i_lst_mb_ws_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a><i class="fa fa-users fa-2x text-muted ms-3 align-middle" title="' . translate("Liste des membres du groupe.") . '" data-bs-toggle="tooltip"></i>&nbsp;<a href="memberslist.php?gr_from_ws=' . $gr . '" class="text-uppercase">' . translate("Membres") . '</a><span class="badge bg-secondary float-end">' . $nb_mb . '</span>';
+              <a data-bs-toggle="collapse" data-bs-target="#lst_mb_ws_' . $gr . '" class="text-primary" id="show_lst_mb_ws_' . $gr . '" title="' . __d('two_groupes', 'Déplier la liste') . '"><i id="i_lst_mb_ws_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a><i class="fa fa-users fa-2x text-muted ms-3 align-middle" title="' . __d('two_groupes', 'Liste des membres du groupe.') . '" data-bs-toggle="tooltip"></i>&nbsp;<a href="memberslist.php?gr_from_ws=' . $gr . '" class="text-uppercase">' . __d('two_groupes', 'Membres') . '</a><span class="badge bg-secondary float-end">' . $nb_mb . '</span>';
         
         $tab = Online::online_members();
 
@@ -270,32 +270,32 @@ class GroupeManager
             $useroutils = '';
             
             if ($uid != 1 and $uid != '') {
-                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('user.php?op=userinfo&amp;uname='. $user['uname']) .'" target="_blank" title="' . translate("Profil") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Profil") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('user.php?op=userinfo&amp;uname='. $user['uname']) .'" target="_blank" title="' . __d('two_groupes', 'Profil') . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-user align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . __d('two_groupes', 'Profil') . '</span></a>';
             }
 
             if ($uid != 1) {
-                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid='. $user['uname']) .'" title="' . translate("Envoyer un message interne") . '" data-bs-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Message") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('powerpack.php?op=instant_message&amp;to_userid='. $user['uname']) .'" title="' . __d('two_groupes', 'Envoyer un message interne') . '" data-bs-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . __d('two_groupes', 'Message') . '</span></a>';
             }
 
             if ($user['femail'] != '') {
-                $useroutils .= '<a class="list-group-item text-primary" href="mailto:' . Spam::anti_spam($user['femail'], 1) . '" target="_blank" title="' . translate("Email") . '" data-bs-toggle="tooltip"><i class="fas fa-at fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Email") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="mailto:' . Spam::anti_spam($user['femail'], 1) . '" target="_blank" title="' . __d('two_groupes', 'Email') . '" data-bs-toggle="tooltip"><i class="fas fa-at fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . __d('two_groupes', 'Email') . '</span></a>';
             }
 
             if ($user['url'] != '') {
-                $useroutils .= '<a class="list-group-item text-primary" href="' . $user['url'] . '" target="_blank" title="' . translate("Visiter ce site web") . '" data-bs-toggle="tooltip"><i class="fas fa-2x fa-external-link-alt align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visiter ce site web") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="' . $user['url'] . '" target="_blank" title="' . __d('two_groupes', 'Visiter ce site web') . '" data-bs-toggle="tooltip"><i class="fas fa-2x fa-external-link-alt align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . __d('two_groupes', 'Visiter ce site web') . '</span></a>';
             }
 
             if ($user['mns']) {
-                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('minisite.php?op='. $user['uname']) .'" target="_blank" target="_blank" title="' . translate("Visitez le minisite") . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Visitez le minisite") . '</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('minisite.php?op='. $user['uname']) .'" target="_blank" target="_blank" title="' . __d('two_groupes', 'Visitez le minisite') . '" data-bs-toggle="tooltip"><i class="fa fa-2x fa-desktop align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . __d('two_groupes', 'Visitez le minisite') . '</span></a>';
             }
 
             if (!Config::get('two_core::config.short_user')) {
                 if ($posterdata_extend[$ch_lat] != '') {
-                    $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u'. $uid) .'" title="' . translate("Localisation") . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . translate("Localisation") . '</span></a>';
+                    $useroutils .= '<a class="list-group-item text-primary" href="'. site_url('modules.php?ModPath=geoloc&amp;ModStart=geoloc&op=u'. $uid) .'" title="' . __d('two_groupes', 'Localisation') . '" ><i class="fas fa-map-marker-alt fa-2x align-middle fa-fw"></i><span class="ms-2 d-none d-sm-inline">' . __d('two_groupes', 'Localisation') . '</span></a>';
                 }
             }
 
-            $conn = '<i class="fa fa-plug text-muted" title="' . $user['uname'] . ' ' . translate("n'est pas connecté") . '" data-bs-toggle="tooltip" ></i>';
+            $conn = '<i class="fa fa-plug text-muted" title="' . $user['uname'] . ' ' . __d('two_groupes', 'n\'est pas connecté') . '" data-bs-toggle="tooltip" ></i>';
             
             if (!$user['user_avatar']) {
                 $imgtmp = "assets/images/forum/avatar/blank.gif";
@@ -321,7 +321,7 @@ class GroupeManager
             }
             
             if (($timex !== false) and ($timex < 60)) {
-                $conn = '<i class="fa fa-plug faa-flash animated text-primary" title="' . $user['uname'] . ' ' . translate("est connecté") . '" data-bs-toggle="tooltip" ></i>';
+                $conn = '<i class="fa fa-plug faa-flash animated text-primary" title="' . $user['uname'] . ' ' . __d('two_groupes', 'est connecté') . '" data-bs-toggle="tooltip" ></i>';
             }
             
             $li_ic .= '<img class="n-smil" src="' . $imgtmp . '" alt="avatar" loading="lazy" />';
@@ -365,7 +365,7 @@ class GroupeManager
             $nb_foru = count($res_forum);
 
             if ($nb_foru >= 1) {
-                $lst_for_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_for_gr_' . $gr . '" class="text-primary" id="show_lst_for_' . $gr . '" title="' . translate("Déplier la liste") . '" ><i id="i_lst_for_gr_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a>';
+                $lst_for_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_for_gr_' . $gr . '" class="text-primary" id="show_lst_for_' . $gr . '" title="' . __d('two_groupes', 'Déplier la liste') . '" ><i id="i_lst_for_gr_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a>';
                 $lst_for .= '<ul id="lst_for_gr_' . $gr . '" class="list-group ul_bloc_ws collapse" style ="list-style-type:none;">';
                 $nb_for_gr = '  <span class="badge bg-secondary float-end">' . $nb_foru . '</span>';
                 
@@ -377,7 +377,7 @@ class GroupeManager
             }
 
             $content .= '
-           <hr /><div class="">' . $lst_for_tog . '<i class="fa fa-list-alt fa-2x text-muted ms-3 align-middle" title="' . translate("Groupe") . '(' . $gr . '): ' . translate("forum") . '." data-bs-toggle="tooltip" ></i>&nbsp;<a class="text-uppercase" href="forum.php">' . translate("Forum") . '</a>' . $nb_for_gr . $lst_for . '</div>' . "\n";
+           <hr /><div class="">' . $lst_for_tog . '<i class="fa fa-list-alt fa-2x text-muted ms-3 align-middle" title="' . __d('two_groupes', 'Groupe') . '(' . $gr . '): ' . __d('two_groupes', 'forum') . '." data-bs-toggle="tooltip" ></i>&nbsp;<a class="text-uppercase" href="forum.php">' . __d('two_groupes', 'Forum') . '</a>' . $nb_for_gr . $lst_for . '</div>' . "\n";
         }
 
         //=> wspad
@@ -398,7 +398,7 @@ class GroupeManager
             $nb_doc = count($wspad);
 
             if ($nb_doc >= 1) {
-                $lst_doc_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_doc_gr_' . $gr . '" class="text-primary" id="show_lst_doc_' . $gr . '" title="' . translate("Déplier la liste") . '"><i id="i_lst_doc_gr_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a>';
+                $lst_doc_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_doc_gr_' . $gr . '" class="text-primary" id="show_lst_doc_' . $gr . '" title="' . __d('two_groupes', 'Déplier la liste') . '"><i id="i_lst_doc_gr_' . $gr . '" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a>';
                 
                 $lst_doc .= '<ul id="lst_doc_gr_' . $gr . '" class="list-group ul_bloc_ws mt-3 collapse">';
                 $nb_doc_gr = '  <span class="badge bg-secondary float-end">' . $nb_doc . '</span>';
@@ -406,7 +406,7 @@ class GroupeManager
                 foreach($wspad as $pad) {
                     $surlignage = $couleur[Sanitize::hexfromchr($pad['e'])];
                     $lst_doc .= '<li class="list-group-item list-group-item-action px-1 py-3" style="line-height:14px;">
-                    <div id="last_editor_' . $pad['p'] . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . translate("Dernier éditeur") . ' : ' . $pad['e'] . ' ' . date(translate("dateinternal"), $pad['m']) . '" style="float:left; width:1rem; height:1rem; background-color:' . $surlignage . '"></div><i class="fa fa-edit text-muted mx-1" data-bs-toggle="tooltip" title="' . translate("Document co-rédigé") . '." ></i><a href="'. site_url('modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page='. $pad['p'] .'&amp;member='. $gr .'&amp;ranq='. $pad['r']) .'">' . $pad['p'] . '</a></li>';
+                    <div id="last_editor_' . $pad['p'] . '" data-bs-toggle="tooltip" data-bs-placement="right" title="' . __d('two_groupes', 'Dernier éditeur') . ' : ' . $pad['e'] . ' ' . date(__d('two_groupes', 'dateinternal'), $pad['m']) . '" style="float:left; width:1rem; height:1rem; background-color:' . $surlignage . '"></div><i class="fa fa-edit text-muted mx-1" data-bs-toggle="tooltip" title="' . __d('two_groupes', 'Document co-rédigé') . '." ></i><a href="'. site_url('modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page='. $pad['p'] .'&amp;member='. $gr .'&amp;ranq='. $pad['r']) .'">' . $pad['p'] . '</a></li>';
                 }
 
                 $lst_doc .= '
@@ -414,7 +414,7 @@ class GroupeManager
             }
 
             $content .= '
-           <hr /><div class="">' . $lst_doc_tog . '<i class="fa fa-edit fa-2x text-muted ms-3 align-middle" title="' . translate("Co-rédaction") . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<a class="text-uppercase" href="'. site_url('modules.php?ModPath=wspad&ModStart=wspad&member='. $gr) .'" >' . translate("Co-rédaction") . '</a>' . $nb_doc_gr . $lst_doc . '</div>' . "\n";
+           <hr /><div class="">' . $lst_doc_tog . '<i class="fa fa-edit fa-2x text-muted ms-3 align-middle" title="' . __d('two_groupes', 'Co-rédaction') . '" data-bs-toggle="tooltip" data-bs-placement="right"></i>&nbsp;<a class="text-uppercase" href="'. site_url('modules.php?ModPath=wspad&ModStart=wspad&member='. $gr) .'" >' . __d('two_groupes', 'Co-rédaction') . '</a>' . $nb_doc_gr . $lst_doc . '</div>' . "\n";
         }
         //<= wspad
 
@@ -425,7 +425,7 @@ class GroupeManager
             
             include_once("modules/BlocNotes/http/bloc-notes.php");
             
-            $lst_blocnote_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_blocnote_' . $gr . '" class="text-primary" id="show_lst_blocnote" title="' . translate("Déplier la liste") . '"><i id="i_lst_blocnote" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a><i class="far fa-sticky-note fa-2x text-muted ms-3 align-middle"></i>&nbsp;<span class="text-uppercase">Bloc note</span>';
+            $lst_blocnote_tog = '<a data-bs-toggle="collapse" data-bs-target="#lst_blocnote_' . $gr . '" class="text-primary" id="show_lst_blocnote" title="' . __d('two_groupes', 'Déplier la liste') . '"><i id="i_lst_blocnote" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a><i class="far fa-sticky-note fa-2x text-muted ms-3 align-middle"></i>&nbsp;<span class="text-uppercase">Bloc note</span>';
             $lst_blocnote = '
            <div id="lst_blocnote_' . $gr . '" class="mt-3 collapse">
            ' . blocnotes("shared", 'WS-BN' . $gr, '', '7', 'bg-dark text-light', false) . '
@@ -440,12 +440,12 @@ class GroupeManager
         
         //=> Filemanager
         if (file_exists('modules/f-manager/config/groupe_' . $gr . '.conf.php')) {
-            $content .= '<a class="mx-2" href="'. site_url('modules.php?ModPath=f-manager&amp;ModStart=f-manager&amp;FmaRep=groupe_'. $gr .'') .'" title="' . translate("Gestionnaire fichiers") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-folder fa-2x"></i></a>' . "\n";
+            $content .= '<a class="mx-2" href="'. site_url('modules.php?ModPath=f-manager&amp;ModStart=f-manager&amp;FmaRep=groupe_'. $gr .'') .'" title="' . __d('two_groupes', 'Gestionnaire fichiers') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-folder fa-2x"></i></a>' . "\n";
         }
 
         //=> Minisite
         if ($rsql['groupe_mns'] == 1) {
-            $content .= '<a class="mx-2" href="'. site_url('minisite.php?op=groupe/'. $gr) .'" target="_blank" title= "' . translate("MiniSite") . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-desktop fa-2x"></i></a>';
+            $content .= '<a class="mx-2" href="'. site_url('minisite.php?op=groupe/'. $gr) .'" target="_blank" title= "' . __d('two_groupes', 'MiniSite') . '" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-desktop fa-2x"></i></a>';
         }
 
         //=> Chat
@@ -460,12 +460,12 @@ class GroupeManager
                 }
             }
             
-            $content .= '<a class="mx-2" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . translate("Ouvrir un salon de chat pour le groupe.") . '" data-bs-toggle="tooltip" data-bs-placement="right" ><i class="fa fa-comments fa-2x ' . $chat_img . '"></i></a>';
+            $content .= '<a class="mx-2" href="javascript:void(0);" onclick="window.open(' . $PopUp . ');" title="' . __d('two_groupes', 'Ouvrir un salon de chat pour le groupe.') . '" data-bs-toggle="tooltip" data-bs-placement="right" ><i class="fa fa-comments fa-2x ' . $chat_img . '"></i></a>';
         }
         //=> admin
 
         if ($this->user->autorisation(-127)) {
-            $content .= '<a class="mx-2" href="'. site_url('admin.php?op=groupes') .'" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" class="fa fa-cogs fa-2x"></i></a>';
+            $content .= '<a class="mx-2" href="'. site_url('admin.php?op=groupes') .'" ><i title="' . __d('two_groupes', 'Gestion des groupes.') . '" data-bs-toggle="tooltip" class="fa fa-cogs fa-2x"></i></a>';
         }
 
         $content .= '</div>
@@ -523,8 +523,8 @@ class GroupeManager
               <ul id="lst_groupes" class="list-group list-group-flush mb-3">
                  <li class="list-group-item d-flex justify-content-between align-items-start px-0">
                     <div class="me-auto">
-                       <div class="fw-bold"><i class="fa fa-users fa-2x text-muted me-2"></i>' . translate('Groupes') . '</div>';
-        $content .= $nb_groupes > 0 ? translate('Groupe ouvert') : translate('Pas de groupe ouvert');
+                       <div class="fw-bold"><i class="fa fa-users fa-2x text-muted me-2"></i>' . __d('two_groupes', 'Groupes') . '</div>';
+        $content .= $nb_groupes > 0 ? __d('two_groupes', 'Groupe ouvert') : __d('two_groupes', 'Pas de groupe ouvert');
         $content .= '
                     </div>
                     <span class="badge bg-primary rounded-pill">' . $nb_groupes . '</span>
@@ -537,7 +537,7 @@ class GroupeManager
             
             if (!file_exists('storage/users_private/groupe/ask4group_' . $userdata[0] . '_' . $groupe['groupe_id'] . '_.txt') and !$this->user->autorisation($groupe['groupe_id'])) {
                 if (!$this->user->autorisation(-1)) {
-                    $content .= '<div class="text-end small"><a href="'. site_url('user.php?op=askforgroupe&amp;askedgroup='. $groupe['groupe_id']) .'" title="' . translate('Envoi une demande aux administrateurs pour rejoindre ce groupe. Un message privé vous informera du résultat de votre demande.') . '" data-bs-toggle="tooltip">' . translate('Rejoindre ce groupe') . '</a></div>';
+                    $content .= '<div class="text-end small"><a href="'. site_url('user.php?op=askforgroupe&amp;askedgroup='. $groupe['groupe_id']) .'" title="' . __d('two_groupes', 'Envoi une demande aux administrateurs pour rejoindre ce groupe. Un message privé vous informera du résultat de votre demande.') . '" data-bs-toggle="tooltip">' . __d('two_groupes', 'Rejoindre ce groupe') . '</a></div>';
                 }
             }
 
@@ -549,7 +549,7 @@ class GroupeManager
         
         if ($this->user->autorisation(-127)) {
             $content .= '
-              <div class="text-end"><a class="mx-2" href="'. site_url('admin.php?op=groupes') .'" ><i title="' . translate("Gestion des groupes.") . '" data-bs-toggle="tooltip" data-bs-placement="left" class="fa fa-cogs fa-lg"></i></a></div>';
+              <div class="text-end"><a class="mx-2" href="'. site_url('admin.php?op=groupes') .'" ><i title="' . __d('two_groupes', 'Gestion des groupes.') . '" data-bs-toggle="tooltip" data-bs-placement="left" class="fa fa-cogs fa-lg"></i></a></div>';
         }
 
         $content .= '
@@ -615,7 +615,7 @@ class GroupeManager
     {
         echo '
         <fieldset>
-        <legend>' . adm_translate("Droits") . '</legend>
+        <legend>' . __d('two_groupes', 'Droits') . '</legend>
         <div class="mb-3">
             <div class="form-check form-check-inline">';
     
@@ -627,7 +627,7 @@ class GroupeManager
     
         echo '
                 <input class="form-check-input" type="radio" id="adm" name="members" value="-127" ' . $checked . ' />
-                <label class="form-check-label" for="adm">' . adm_translate("Administrateurs") . '</label>
+                <label class="form-check-label" for="adm">' . __d('two_groupes', 'Administrateurs') . '</label>
             </div>
             <div class="form-check form-check-inline">';
     
@@ -639,22 +639,22 @@ class GroupeManager
     
         echo '
                 <input class="form-check-input" type="radio" id="ano" name="members" value="-1" ' . $checked . ' />
-                <label class="form-check-label" for="ano">' . adm_translate("Anonymes") . '</label>
+                <label class="form-check-label" for="ano">' . __d('two_groupes', 'Anonymes') . '</label>
             </div>
             <div class="form-check form-check-inline">';
         
         if ($member > 0) {
             echo '
                     <input class="form-check-input" type="radio" id="mem" name="members" value="1" checked="checked" />
-                    <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+                    <label class="form-check-label" for="mem">' . __d('two_groupes', 'Membres') . '</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="tous" name="members" value="0" />
-                    <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
+                    <label class="form-check-label" for="tous">' . __d('two_groupes', 'Tous') . '</label>
                 </div>
             </div>
             <div class="mb-3">
-                <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
+                <label class="col-form-label" for="Mmember[]">' . __d('two_groupes', 'Groupes') . '</label>';
            
             echo $this->groupe($member) . '</div>';
         } else {
@@ -666,15 +666,15 @@ class GroupeManager
     
             echo '
                     <input class="form-check-input" type="radio" id="mem" name="members" value="1" />
-                    <label class="form-check-label" for="mem">' . adm_translate("Membres") . '</label>
+                    <label class="form-check-label" for="mem">' . __d('two_groupes', 'Membres') . '</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="tous" name="members" value="0"' . $checked . ' />
-                    <label class="form-check-label" for="tous">' . adm_translate("Tous") . '</label>
+                    <label class="form-check-label" for="tous">' . __d('two_groupes', 'Tous') . '</label>
                 </div>
             </div>
             <div class="mb-3">
-                <label class="col-form-label" for="Mmember[]">' . adm_translate("Groupes") . '</label>';
+                <label class="col-form-label" for="Mmember[]">' . __d('two_groupes', 'Groupes') . '</label>';
                 
                 echo $this->groupe($member) . '
                 </div>

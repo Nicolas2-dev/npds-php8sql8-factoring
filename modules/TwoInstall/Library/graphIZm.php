@@ -95,16 +95,16 @@ function menu()
             <div class="row">
                 <div class="col-md-3">
                 <ul class="list-group mb-3">
-                    <li class="list-group-item list-group-item' . $colorst1 . '">' . ins_translate('Langue') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst2 . '">' . ins_translate('Bienvenue') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst3 . '">' . ins_translate('Licence') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst4 . '">' . ins_translate('Vérification des fichiers') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst5 . '">' . ins_translate('Paramètres de connexion') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst6 . '">' . ins_translate('Autres paramètres') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst7 . '">' . ins_translate('Base de données') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst8 . '">' . ins_translate('Compte Admin') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst9 . '">' . ins_translate('Module UPload') . '</li>
-                    <li class="list-group-item list-group-item' . $colorst10 . '">' . ins_translate('Fin') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst1 . '">' . __d('two_install', 'Langue') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst2 . '">' . __d('two_install', 'Bienvenue') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst3 . '">' . __d('two_install', 'Licence') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst4 . '">' . __d('two_install', 'Vérification des fichiers') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst5 . '">' . __d('two_install', 'Paramètres de connexion') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst6 . '">' . __d('two_install', 'Autres paramètres') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst7 . '">' . __d('two_install', 'Base de données') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst8 . '">' . __d('two_install', 'Compte Admin') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst9 . '">' . __d('two_install', 'Module UPload') . '</li>
+                    <li class="list-group-item list-group-item' . $colorst10 . '">' . __d('two_install', 'Fin') . '</li>
                     <li class="list-group-item list-group-item-light"><code class="small">Version Php ' . $phpver . '</code></li>
                 </ul>
                 </div>

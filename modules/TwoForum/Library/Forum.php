@@ -150,7 +150,7 @@ class forum
     
         if ($cmd == 'infos') {
             if (!$myrow = $sql1) { 
-                $val = translate("Rien");
+                $val = __d('two_forum', 'Rien');
             } else {
                 $rowQ1 = Cache::Q_Select3(
                     DB::table('users')
@@ -559,7 +559,7 @@ class forum
             $theme = $theme;
         }
     
-        echo '<p align="center">' . translate("Cliquez pour insérer des émoticons dans votre message") . '</p>';
+        echo '<p align="center">' . __d('two_forum', 'Cliquez pour insérer des émoticons dans votre message') . '</p>';
     
         if (Theme::theme_image("forum/smilies/more/smilies.php")) {
             $imgtmp = "themes/$theme/images/forum/smilies/more/";
@@ -600,7 +600,7 @@ class forum
     public static function putitems(string $targetarea): void
     {
         echo '
-        <div title="'. translate("Cliquez pour insérer des emoji dans votre message") .'" data-bs-toggle="tooltip">
+        <div title="'. __d('two_forum', 'Cliquez pour insérer des emoji dans votre message') .'" data-bs-toggle="tooltip">
             <button class="btn btn-link ps-0" type="button" id="button-textOne" data-bs-toggle="emojiPopper" data-bs-target="#'. $targetarea .'">
                 <i class="far fa-smile fa-lg" aria-hidden="true"></i>
             </button>
@@ -628,17 +628,17 @@ class forum
     {
         $affich = '
                         <div class="mt-2">
-                            <a href="javascript: addText(\'&lt;b&gt;\',\'&lt;/b&gt;\');" title="'. translate("Gras") .'" data-bs-toggle="tooltip" ><i class="fa fa-bold fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;i&gt;\',\'&lt;/i&gt;\');" title="'. translate("Italique") .'" data-bs-toggle="tooltip" ><i class="fa fa-italic fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;u&gt;\',\'&lt;/u&gt;\');" title="'. translate("Souligné") .'" data-bs-toggle="tooltip" ><i class="fa fa-underline fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;b&gt;\',\'&lt;/b&gt;\');" title="'. __d('two_forum', 'Gras') .'" data-bs-toggle="tooltip" ><i class="fa fa-bold fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;i&gt;\',\'&lt;/i&gt;\');" title="'. __d('two_forum', 'Italique') .'" data-bs-toggle="tooltip" ><i class="fa fa-italic fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;u&gt;\',\'&lt;/u&gt;\');" title="'. __d('two_forum', 'Souligné') .'" data-bs-toggle="tooltip" ><i class="fa fa-underline fa-lg me-2 mb-3"></i></a>
                             <a href="javascript: addText(\'&lt;span style=\\\'text-decoration:line-through;\\\'&gt;\',\'&lt;/span&gt;\');" title="" data-bs-toggle="tooltip" ><i class="fa fa-strikethrough fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p class=\\\'text-start\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte aligné à gauche") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-left fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p class=\\\'text-center\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte centré") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-center fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p class=\\\'text-end\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte aligné à droite") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-right fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;p align=\\\'justify\\\'&gt;\',\'&lt;/p&gt;\');" title="'. translate("Texte justifié") .'" data-bs-toggle="tooltip" ><i class="fa fa-align-justify fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;ul&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ul&gt;\');" title="'. translate("Liste non ordonnnée") .'" data-bs-toggle="tooltip" ><i class="fa fa-list-ul fa-lg me-2 mb-3"></i></a>
-                            <a href="javascript: addText(\'&lt;ol&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ol&gt;\');" title="'. translate("Liste ordonnnée") .'" data-bs-toggle="tooltip" ><i class="fa fa-list-ol fa-lg me-2 mb-3"></i></a>
-                            <div class="dropdown d-inline me-2 mb-3" title="'. translate("Lien web") .'" data-bs-toggle="tooltip" data-bs-placement="left">
+                            <a href="javascript: addText(\'&lt;p class=\\\'text-start\\\'&gt;\',\'&lt;/p&gt;\');" title="'. __d('two_forum', 'Texte aligné à gauche') .'" data-bs-toggle="tooltip" ><i class="fa fa-align-left fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;p class=\\\'text-center\\\'&gt;\',\'&lt;/p&gt;\');" title="'. __d('two_forum', 'Texte centré') .'" data-bs-toggle="tooltip" ><i class="fa fa-align-center fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;p class=\\\'text-end\\\'&gt;\',\'&lt;/p&gt;\');" title="'. __d('two_forum', 'Texte aligné à droite') .'" data-bs-toggle="tooltip" ><i class="fa fa-align-right fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;p align=\\\'justify\\\'&gt;\',\'&lt;/p&gt;\');" title="'. __d('two_forum', 'Texte justifié') .'" data-bs-toggle="tooltip" ><i class="fa fa-align-justify fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;ul&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ul&gt;\');" title="'. __d('two_forum', 'Liste non ordonnnée') .'" data-bs-toggle="tooltip" ><i class="fa fa-list-ul fa-lg me-2 mb-3"></i></a>
+                            <a href="javascript: addText(\'&lt;ol&gt;&lt;li&gt;\',\'&lt;/li&gt;&lt;/ol&gt;\');" title="'. __d('two_forum', 'Liste ordonnnée') .'" data-bs-toggle="tooltip" ><i class="fa fa-list-ol fa-lg me-2 mb-3"></i></a>
+                            <div class="dropdown d-inline me-2 mb-3" title="'. __d('two_forum', 'Lien web') .'" data-bs-toggle="tooltip" data-bs-placement="left">
                                 <a class=" dropdown-toggle" href="#" role="button" id="protocoletype" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-link fa-lg"></i></a>
                                 <div class="dropdown-menu" aria-labelledby="protocoletype">
                                 <a class="dropdown-item" href="javascript: addText(\' http://\',\'\');">http</a>
@@ -647,8 +647,8 @@ class forum
                                 <a class="dropdown-item" href="javascript: addText(\' sftp://\',\'\');">sftp</a>
                                 </div>
                             </div>
-                            <a href="javascript: addText(\'&lt;table class=\\\'table table-bordered table-striped table-sm\\\'&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;\',\'\'); " title="' . translate("Tableau") . '" data-bs-toggle="tooltip"><i class="fa fa-table fa-lg me-2 mb-3"></i></a>
-                            <div class="dropdown d-inline me-2 mb-3" title="'. translate("Code") .'" data-bs-toggle="tooltip" data-bs-placement="left">
+                            <a href="javascript: addText(\'&lt;table class=\\\'table table-bordered table-striped table-sm\\\'&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;\',\'\'); " title="' . __d('two_forum', 'Tableau') . '" data-bs-toggle="tooltip"><i class="fa fa-table fa-lg me-2 mb-3"></i></a>
+                            <div class="dropdown d-inline me-2 mb-3" title="'. __d('two_forum', 'Code') .'" data-bs-toggle="tooltip" data-bs-placement="left">
                                 <a class=" dropdown-toggle" href="#" role="button" id="codeclasslanguage" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-code fa-lg"></i></a>
                                 <div class="dropdown-menu" aria-labelledby="codeclasslanguage">
                                 <h6 class="dropdown-header">Languages</h6>
@@ -660,10 +660,10 @@ class forum
                                 <a class="dropdown-item" href="javascript: addText(\'&lt;pre&gt;[code sql]\',\'[/code]&lt;/pre&gt;\');">SQL</a>
                                 </div>
                             </div>
-                            <div class="dropdown d-inline me-2 mb-3" title="'. translate("Vidéos") .'" data-bs-toggle="tooltip" data-bs-placement="left">
+                            <div class="dropdown d-inline me-2 mb-3" title="'. __d('two_forum', 'Vidéos') .'" data-bs-toggle="tooltip" data-bs-placement="left">
                                 <a class=" dropdown-toggle" href="#" role="button" id="typevideo" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-film fa-lg"></i></a>
                                 <div class="dropdown-menu" aria-labelledby="typevideo">
-                                <p class="dropdown-header">'. translate("Coller l'ID de votre vidéo entre les deux balises") .' : <br />[video_yt]xxxx[/video_yt]<br />[video_vm]xxxx[/video_vm]<br />[video_dm]xxxx[/video_dm]</p>
+                                <p class="dropdown-header">'. __d('two_forum', 'Coller l\'ID de votre vidéo entre les deux balises') .' : <br />[video_yt]xxxx[/video_yt]<br />[video_vm]xxxx[/video_vm]<br />[video_dm]xxxx[/video_dm]</p>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="javascript: addText(\'[video_yt]\',\'[/video_yt]\');"><i class="fab fa-youtube fa-lg fa-fw me-1"></i>Youtube</a>
                                 <a class="dropdown-item" href="javascript: addText(\'[video_vm]\',\'[/video_vm]\');"><i class="fab fa-vimeo fa-lg fa-fw me-1"></i>Vimeo</a>
@@ -763,8 +763,8 @@ class forum
                     <input type="hidden" name="sortby" value="0" />
                     <div class="col">
                     <div class="form-floating">
-                        <input type="text" class="form-control" name="term" id="term" placeholder="'. translate('Recherche') .'" required="required" />
-                        <label for="term"><i class="fa fa-search fa-lg me-2"></i>'. translate('Recherche') .'</label>
+                        <input type="text" class="form-control" name="term" id="term" placeholder="'. __d('two_forum', 'Recherche') .'" required="required" />
+                        <label for="term"><i class="fa fa-search fa-lg me-2"></i>'. __d('two_forum', 'Recherche') .'</label>
                     </div>
                     </div>
                 </form>';
@@ -969,7 +969,7 @@ class forum
             if ($time90['total'] > ($paramAFX * 2)) {
                 Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
                 
-                TwoError::code(translate("Vous n'êtes pas autorisé à participer à ce forum"));
+                TwoError::code(__d('two_forum', 'Vous n\'êtes pas autorisé à participer à ce forum'));
             } else {
                 $timebase = date("Y-m-d H:i", time() + ($gmtX * 3600) - 1800);
                 
@@ -978,7 +978,7 @@ class forum
                 if ($time30['total'] > $paramAFX) {
                     Ecr_Log("security", "Forum Anti-Flood : " . $compte, '');
                     
-                    TwoError::code(translate("Vous n'êtes pas autorisé à participer à ce forum"));
+                    TwoError::code(__d('two_forum', 'Vous n\'êtes pas autorisé à participer à ce forum'));
                 }
             }
         }
@@ -1151,10 +1151,10 @@ class forum
                                     //if (($tab_folder[$myrow['forum_id']][0] - $tab_folder[$myrow['forum_id']][1]) > 0) {
                                 if (!empty($tab_folder[0][$myrow['forum_id']]) && !empty($tab_folder[1][$myrow['forum_id']])) {           
                                     if (($tab_folder[0][$myrow['forum_id']] - $tab_folder[1][$myrow['forum_id']]) > 0) {
-                                        $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Les nouvelles contributions depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                        $ibid .= '<i class="fa fa-folder text-primary fa-lg me-2 mt-1" title="'. __d('two_forum', 'Les nouvelles contributions depuis votre dernière visite.') .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                     }
                                 } else {
-                                    $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. translate("Aucune nouvelle contribution depuis votre dernière visite.") .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
+                                    $ibid .= '<i class="far fa-folder text-primary fa-lg me-2 mt-1" title="'. __d('two_forum', 'Aucune nouvelle contribution depuis votre dernière visite.') .'" data-bs-toggle="tooltip" data-bs-placement="right"></i>';
                                 }                          
 
                                 $name = stripslashes($myrow['forum_name']);
@@ -1171,15 +1171,15 @@ class forum
                                         <span class="ms-auto">';
                                 
                                     if (!empty($tab_total_post[$myrow['forum_id']])) {          
-                                            $ibid .= '<span class="badge bg-secondary ms-1" title="'. translate("Contributions") .'" data-bs-toggle="tooltip">'. $tab_total_post[$myrow['forum_id']] .'</span>';
+                                            $ibid .= '<span class="badge bg-secondary ms-1" title="'. __d('two_forum', 'Contributions') .'" data-bs-toggle="tooltip">'. $tab_total_post[$myrow['forum_id']] .'</span>';
                                     }            
                                         
                                     // if (!empty($tab_folder[$myrow['forum_id']][0])) {          
-                                    //     $ibid .= '<span class="badge bg-secondary ms-1" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">'. $tab_folder[$myrow['forum_id']][0] .'</span>';
+                                    //     $ibid .= '<span class="badge bg-secondary ms-1" title="'. __d('two_forum', 'Sujets') .'" data-bs-toggle="tooltip">'. $tab_folder[$myrow['forum_id']][0] .'</span>';
                                     // }  
 
                                     if (!empty($tab_folder[0][$myrow['forum_id']])) {          
-                                        $ibid .= '<span class="badge bg-secondary ms-1" title="'. translate("Sujets") .'" data-bs-toggle="tooltip">'. $tab_folder[0][$myrow['forum_id']] .'</span>';
+                                        $ibid .= '<span class="badge bg-secondary ms-1" title="'. __d('two_forum', 'Sujets') .'" data-bs-toggle="tooltip">'. $tab_folder[0][$myrow['forum_id']] .'</span>';
                                     } 
 
                                     $ibid .= '</span>
@@ -1196,15 +1196,15 @@ class forum
                                     $ibid .= '<span class="d-flex w-100 mt-1"> [ ';
     
                                     if ($myrow['forum_access'] == "0" && $myrow['forum_type'] == "0") {
-                                        $ibid .= translate("Accessible à tous");
+                                        $ibid .= __d('two_forum', 'Accessible à tous');
                                     }
     
                                     if ($myrow['forum_type'] == "1") {
-                                        $ibid .= translate("Privé");
+                                        $ibid .= __d('two_forum', 'Privé');
                                     }
     
                                     if ($myrow['forum_type'] == "5") {
-                                        $ibid .= "PHP Script + ". translate("Groupe");
+                                        $ibid .= "PHP Script + ". __d('two_forum', 'Groupe');
                                     }
     
                                     if ($myrow['forum_type'] == "6") {
@@ -1212,26 +1212,26 @@ class forum
                                     }
     
                                     if ($myrow['forum_type'] == "7") {
-                                        $ibid .= translate("Groupe");
+                                        $ibid .= __d('two_forum', 'Groupe');
                                     }
     
                                     if ($myrow['forum_type'] == "8") {
-                                        $ibid .= translate("Texte étendu");
+                                        $ibid .= __d('two_forum', 'Texte étendu');
                                     }
     
                                     if ($myrow['forum_type'] == "9") {
-                                        $ibid .= translate("Caché");
+                                        $ibid .= __d('two_forum', 'Caché');
                                     }
     
                                     if ($myrow['forum_access'] == "1" && $myrow['forum_type'] == "0") {
-                                        $ibid .= translate("Utilisateur enregistré");}
+                                        $ibid .= __d('two_forum', 'Utilisateur enregistré');}
     
                                     if ($myrow['forum_access'] == "2" && $myrow['forum_type'] == "0") {
-                                        $ibid .= translate("Modérateur");
+                                        $ibid .= __d('two_forum', 'Modérateur');
                                     }
     
                                     if ($myrow['forum_access'] == "9") {
-                                        $ibid .= '<span class="text-danger mx-2"><i class="fa fa-lock me-2"></i>'. translate("Fermé") .'</span>';
+                                        $ibid .= '<span class="text-danger mx-2"><i class="fa fa-lock me-2"></i>'. __d('two_forum', 'Fermé') .'</span>';
                                     }
     
                                     $ibid .= ' ] </span>';
@@ -1252,7 +1252,7 @@ class forum
                                                     $ibid .= '<input class="form-check-input n-ckbf" type="checkbox" id="subforumid'. $myrow['forum_id'] .'" name="Subforumid['. $myrow['forum_id'] .']" />';
                                                 }
     
-                                                $ibid .= '<label class="form-check-label" for="subforumid'. $myrow['forum_id'] .'" title="'. translate("Cochez et cliquez sur le bouton OK pour recevoir un Email lors d'une nouvelle soumission dans ce forum.") . '" data-bs-toggle="tooltip" data-bs-placement="right">&nbsp;&nbsp;</label>
+                                                $ibid .= '<label class="form-check-label" for="subforumid'. $myrow['forum_id'] .'" title="'. __d('two_forum', 'Cochez et cliquez sur le bouton OK pour recevoir un Email lors d\'une nouvelle soumission dans ce forum.') . '" data-bs-toggle="tooltip" data-bs-placement="right">&nbsp;&nbsp;</label>
                                                     </span>
                                                 </span>';
 
@@ -1260,7 +1260,7 @@ class forum
                                         }
                                     }
 
-                                    $ibid .= '<span class="d-flex w-100 justify-content-end"><span class="small">'. translate("Dernière contribution") .' : '. $last_post .'</span></span>';
+                                    $ibid .= '<span class="d-flex w-100 justify-content-end"><span class="small">'. __d('two_forum', 'Dernière contribution') .' : '. $last_post .'</span></span>';
                                 } else {
                                     $ibid .= '';
                                 }
@@ -1283,7 +1283,7 @@ class forum
                 $ibid .= '
                 <div class="form-check mt-1">
                     <input class="form-check-input" type="checkbox" id="ckball_f" />
-                    <label class="form-check-label text-muted" for="ckball_f" id="ckb_status_f">'. translate("Tout cocher") .'</label>
+                    <label class="form-check-label text-muted" for="ckball_f" id="ckb_status_f">'. __d('two_forum', 'Tout cocher') .'</label>
                 </div>';
             }
         }

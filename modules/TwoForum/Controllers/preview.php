@@ -147,13 +147,13 @@ switch ($acc) {
         if (($forum_type != 6) and ($forum_type != 5)) {
             $messageP = code::af_cod($messageP);
             $messageP = str_replace("\n", '<br />', hack::removeHack($messageP));
-            $messageP .= '<br /><div class=" text-muted text-end small"><i class="fa fa-edit"></i> ' . translate("Message édité par") . ' : ' . $userdata['uname'] . '</div';
+            $messageP .= '<br /><div class=" text-muted text-end small"><i class="fa fa-edit"></i> ' . __d('two_forum', 'Message édité par') . ' : ' . $userdata['uname'] . '</div';
 
             if (Config::get('forum.config.allow_bbcode')) {
                 $messageP = forum::aff_video_yt($messageP);
             }
         } else{
-            $messageP .= "\n\n" . translate("Message édité par") . ' : ' . $userdata['uname'];
+            $messageP .= "\n\n" . __d('two_forum', 'Message édité par') . ' : ' . $userdata['uname'];
         }
 
         $messageP = addslashes($messageP);
@@ -161,7 +161,7 @@ switch ($acc) {
 }
 
 echo '<div class="mb-3">
-        <h4 class="mb-3">' . translate("Prévisualiser") . '</h4>
+        <h4 class="mb-3">' . __d('two_forum', 'Prévisualiser') . '</h4>
         <div class="row mb-3">
             <div class="col-12">
                 <div class="card">
@@ -206,12 +206,12 @@ if (isset($image_subject)) {
     echo '<img class="n-smil" src="' . $imgtmpP . '" alt="icone du post" />';
 }
 
-$time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
+$time = date(__d('two_forum', 'dateinternal'), time() + ((int) Config::get('npds.gmt') * 3600));
 
 echo '</span>
                     </div>
                     <div class="card-body">
-                        <span class="text-muted float-end small" style="margin-top:-1rem;">' . translate("Commentaires postés : ") . $time . '</span>
+                        <span class="text-muted float-end small" style="margin-top:-1rem;">' . __d('two_forum', 'Commentaires postés : ') . $time . '</span>
                         <div id="post_preview" class="card-text pt-3">';
 
 $messageP = stripslashes($messageP);

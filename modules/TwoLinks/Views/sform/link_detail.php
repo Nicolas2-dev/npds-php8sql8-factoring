@@ -43,7 +43,7 @@ switch ($link_fiche_detail) {
     case 'fiche_detail':
         if ($m->sform_read_mysql($browse_key)) {
             $m->add_extra("<tr><td colspan=\"2\" align=\"center\">");
-            $m->add_extra('<a href="javascript: history.go(-1)" class="btn btn-primary">' . translate("Retour en arrière") . '</a>');
+            $m->add_extra('<a href="javascript: history.go(-1)" class="btn btn-primary">' . __d('two_links', 'Retour en arrière') . '</a>');
             $m->add_extra("</td></tr>");
             $m->key_lock("close");
             echo language::aff_langue($m->print_form("class=\"ligna\""));
@@ -53,6 +53,6 @@ switch ($link_fiche_detail) {
 
     default:
         if ($m->sform_read_mysql($browse_key))
-            echo '<a class="me-3" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=fiche_detail&amp;lid=' . $browse_key . '" ><i class="fa fa-info fa-lg" title="' . translate("Détails supplémentaires") . '" data-bs-toggle="tooltip"></i></a>';
+            echo '<a class="me-3" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=fiche_detail&amp;lid=' . $browse_key . '" ><i class="fa fa-info fa-lg" title="' . __d('two_links', 'Détails supplémentaires') . '" data-bs-toggle="tooltip"></i></a>';
         break;
 }

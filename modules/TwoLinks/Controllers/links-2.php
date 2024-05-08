@@ -78,12 +78,12 @@ function NewLinks($newlinkshowdays)
     echo '
     
     <div class="card card-body mb-3">
-    <h3>' . translate("Nouveaux liens") . '</h3>
-    ' . translate("Total des nouveaux liens pour la semaine dernière") . ' : ' . $allweeklinks . ' -/- ' . translate("Pour les 30 derniers jours") . ' : ' . $allmonthlinks;
+    <h3>' . __d('two_links', 'Nouveaux liens') . '</h3>
+    ' . __d('two_links', 'Total des nouveaux liens pour la semaine dernière') . ' : ' . $allweeklinks . ' -/- ' . __d('two_links', 'Pour les 30 derniers jours') . ' : ' . $allmonthlinks;
 
     echo "<br />\n";
 
-    echo "<blockquote>" . translate("Montrer :") . " [<a href=\"modules.php?ModStart=$ModStart&ModPath=$ModPath&op=NewLinks&newlinkshowdays=7\" class=\"noir\">" . translate("semaine") . "</a>, <a href=\"modules.php?ModStart=$ModStart&ModPath=$ModPath&op=NewLinks&newlinkshowdays=14\" class=\"noir\">2 " . translate("semaines") . "</a>, <a href=\"modules.php?ModStart=$ModStart&ModPath=$ModPath&op=NewLinks&newlinkshowdays=30\" class=\"noir\">30 " . translate("jours") . "</a>]</<blockquote>";
+    echo "<blockquote>" . __d('two_links', 'Montrer :') . " [<a href=\"modules.php?ModStart=$ModStart&ModPath=$ModPath&op=NewLinks&newlinkshowdays=7\" class=\"noir\">" . __d('two_links', 'semaine') . "</a>, <a href=\"modules.php?ModStart=$ModStart&ModPath=$ModPath&op=NewLinks&newlinkshowdays=14\" class=\"noir\">2 " . __d('two_links', 'semaines') . "</a>, <a href=\"modules.php?ModStart=$ModStart&ModPath=$ModPath&op=NewLinks&newlinkshowdays=30\" class=\"noir\">30 " . __d('two_links', 'jours') . "</a>]</<blockquote>";
     $counter = 0;
     $allweeklinks = 0;
     echo '
@@ -92,7 +92,7 @@ function NewLinks($newlinkshowdays)
     while ($counter <= $newlinkshowdays - 1) {
         $newlinkdayRaw = (time() - (86400 * $counter));
         $newlinkday = date("d-M-Y", $newlinkdayRaw);
-        $newlinkView = date(str_replace("%", "", translate("linksdatestring")), $newlinkdayRaw);
+        $newlinkView = date(str_replace("%", "", __d('two_links', 'linksdatestring')), $newlinkdayRaw);
         $newlinkDB = Date("Y-m-d", $newlinkdayRaw);
 
         // = DB::table('')->select()->where('', )->orderBy('')->get();

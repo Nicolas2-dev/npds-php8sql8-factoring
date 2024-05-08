@@ -258,15 +258,15 @@ class MailerManager
         
         if ($username == Config::get('two_core::config.anonymous')) {
             if ($imgtmp) {
-                echo '<img alt="" src="'. $imgtmp .'" align="center" />'. $username .' - <a href="'. site_url('user.php') .'" '. $class .'>' . translate("Votre compte") . '</a>';
+                echo '<img alt="" src="'. $imgtmp .'" align="center" />'. $username .' - <a href="'. site_url('user.php') .'" '. $class .'>' . __d('two_core', 'Votre compte') . '</a>';
             } else {
-                echo '['. $username .' - <a href="'. site_url('user.php') .'" '. $class .'>' . translate("Votre compte") . '</a>]';
+                echo '['. $username .' - <a href="'. site_url('user.php') .'" '. $class .'>' . __d('two_core', 'Votre compte') . '</a>]';
             }
         } else {
             if ($imgtmp) {
-                echo '<a href="'. site_url('user.php') .'" '. $class .'><img alt="" src="'. $imgtmp .'" align="center" />'. translate("Votre compte") .'</a>&nbsp;'. $this->Mess_Check_Mail_Sub($username, $class);
+                echo '<a href="'. site_url('user.php') .'" '. $class .'><img alt="" src="'. $imgtmp .'" align="center" />'. __d('two_core', 'Votre compte') .'</a>&nbsp;'. $this->Mess_Check_Mail_Sub($username, $class);
             } else {
-                echo '[<a href="'. site_url('user.php') .'" $class>'. translate("Votre compte") .'</a>&nbsp;&middot;&nbsp;'. $this->Mess_Check_Mail_Sub($username, $class) .']';
+                echo '[<a href="'. site_url('user.php') .'" $class>'. __d('two_core', 'Votre compte') .'</a>&nbsp;&middot;&nbsp;'. $this->Mess_Check_Mail_Sub($username, $class) .']';
             }
         }
     }

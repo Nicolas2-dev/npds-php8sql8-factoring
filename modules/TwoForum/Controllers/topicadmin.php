@@ -149,8 +149,8 @@ if ((isset($submit)) and ($mode == 'move')) {
 
     echo '
         <div class="alert alert-success">
-        <h4 class="alert-heading">' . translate("Le sujet a été déplacé.") . '</h4>
-        <hr /><a href="' . $url_ret . '?topic=' . $topic . '&amp;forum=' . $newforum . '" class="alert-link">' . translate("Cliquez ici pour voir le nouveau sujet.") . '</a><br /><a href="'. site_url('forum.php') .'" class="alert-link">' . translate("Cliquez ici pour revenir à l'index des Forums.") . '</a>
+        <h4 class="alert-heading">' . __d('two_forum', 'Le sujet a été déplacé.') . '</h4>
+        <hr /><a href="' . $url_ret . '?topic=' . $topic . '&amp;forum=' . $newforum . '" class="alert-link">' . __d('two_forum', 'Cliquez ici pour voir le nouveau sujet.') . '</a><br /><a href="'. site_url('forum.php') .'" class="alert-link">' . __d('two_forum', 'Cliquez ici pour revenir à l\'index des Forums.') . '</a>
         </div>';
 
     cache::Q_Clean();
@@ -165,10 +165,10 @@ if ((isset($submit)) and ($mode == 'move')) {
                 include("themes/default/header.php");
 
                 echo '
-        <h2>' . translate("Forum") . '</h2>
+        <h2>' . __d('two_forum', 'Forum') . '</h2>
         <form action="'. site_url('topicadmin.php') .'" method="post">
             <div class="mb-3 row">
-                <label class="form-label" for="newforum">' . translate("Déplacer le sujet vers : ") . '</label>
+                <label class="form-label" for="newforum">' . __d('two_forum', 'Déplacer le sujet vers : ') . '</label>
                 <div class="col-sm-12">
                 <select class="form-select" name="newforum">';
 
@@ -185,7 +185,7 @@ if ((isset($submit)) and ($mode == 'move')) {
 
                     } else {
                         echo '
-                        <option value="-1">' . translate("Plus de forum") . '</option>';
+                        <option value="-1">' . __d('two_forum', 'Plus de forum') . '</option>';
                     }
                 } else {
                     echo '
@@ -202,7 +202,7 @@ if ((isset($submit)) and ($mode == 'move')) {
                 <input type="hidden" name="topic" value="' . $topic . '" />
                 <input type="hidden" name="forum" value="' . $forum . '" />
                 <input type="hidden" name="arbre" value="' . $arbre . '" />
-                <input class="btn btn-primary" type="submit" name="submit" value="' . translate("Déplacer le sujet") . '" />
+                <input class="btn btn-primary" type="submit" name="submit" value="' . __d('two_forum', 'Déplacer le sujet') . '" />
                 </div>
             </div>
         </form>';
@@ -253,7 +253,7 @@ if ((isset($submit)) and ($mode == 'move')) {
                 $sql = "SELECT topic_title FROM " . $NPDS_Prefix . "forumtopics WHERE topic_id = '$topic'";
                 $r = sql_fetch_assoc(sql_query($sql));
 
-                $topic_title = str_replace("[" . translate("Résolu") . "] - ", "", $r['topic_title']);
+                $topic_title = str_replace("[" . __d('two_forum', 'Résolu') . "] - ", "", $r['topic_title']);
 
                 //DB::table('')->where('', )->update(array(
                 //    ''       => ,
@@ -298,14 +298,14 @@ if ((isset($submit)) and ($mode == 'move')) {
                 }
 
                 echo '
-        <h2 class="mb-3">' . translate("Forum") . '</h2>
+        <h2 class="mb-3">' . __d('two_forum', 'Forum') . '</h2>
         <div class="card card-body mb-3">
-            <h3 class="card-title mb-3" >' . translate("Adresses IP et informations sur les utilisateurs") . '</h3>
+            <h3 class="card-title mb-3" >' . __d('two_forum', 'Adresses IP et informations sur les utilisateurs') . '</h3>
             <div class="row">
                 <div class="col mb-3">
-                <span class="text-muted">' . translate("Identifiant : ") . '</span><span class="">' . $m['uname'] . '</span><br />
-                <span class="text-muted">' . translate("Adresse IP de l'utilisateur : ") . '</span><span class="">' . $m['poster_ip'] . ' => <a class="text-danger" href="'. site_url('topicadmin.php?mode=banip&topic=' . $topic . '&post=' . $post . '&forum=' . $forum . '&arbre=' . $arbre) .'" >' . translate("Bannir cette @Ip") . '</a></span><br />
-                <span class="text-muted">' . translate("Adresse DNS de l'utilisateur : ") . '</span><span class="">' . $m['poster_dns'] . '</span><br />
+                <span class="text-muted">' . __d('two_forum', 'Identifiant : ') . '</span><span class="">' . $m['uname'] . '</span><br />
+                <span class="text-muted">' . __d('two_forum', 'Adresse IP de l\'utilisateur : ') . '</span><span class="">' . $m['poster_ip'] . ' => <a class="text-danger" href="'. site_url('topicadmin.php?mode=banip&topic=' . $topic . '&post=' . $post . '&forum=' . $forum . '&arbre=' . $arbre) .'" >' . __d('two_forum', 'Bannir cette @Ip') . '</a></span><br />
+                <span class="text-muted">' . __d('two_forum', 'Adresse DNS de l\'utilisateur : ') . '</span><span class="">' . $m['poster_dns'] . '</span><br />
                 <span class="text-muted">GeoTool : </span><span class=""><a href="http://www.ip-tracker.org/?ip=' . $m['poster_ip'] . '" target="_blank" >IP tracker</a><br />
                 </div>';
 
@@ -314,7 +314,7 @@ if ((isset($submit)) and ($mode == 'move')) {
                 echo '
             </div>
         </div>
-        <a href="' . $url_ret . '?topic=' . $topic . '&amp;forum=' . $forum . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
+        <a href="' . $url_ret . '?topic=' . $topic . '&amp;forum=' . $forum . '" class="btn btn-secondary">' . __d('two_forum', 'Retour en arrière') . '</a>';
 
                 include("themes/default/footer.php");
                 break;
@@ -354,8 +354,8 @@ if ((isset($submit)) and ($mode == 'move')) {
         include("themes/default/header.php");
 
         echo '
-            <div class="alert alert-danger">' . translate("Vous n'êtes pas identifié comme modérateur de ce forum. Opération interdite.") . '<br />
-                <a class="btn btn-secondary" href="javascript:history.go(-1)" >' . translate("Go Back") . '</a>
+            <div class="alert alert-danger">' . __d('two_forum', 'Vous n\'êtes pas identifié comme modérateur de ce forum. Opération interdite.') . '<br />
+                <a class="btn btn-secondary" href="javascript:history.go(-1)" >' . __d('two_forum', 'Go Back') . '</a>
             </div>';
             
         include("themes/default/footer.php");

@@ -78,7 +78,7 @@ if (cache::cacheManagerStart2()) {
     $notes      = code::aff_code(language::aff_langue(stripslashes($notes)));
 
     if ($notes != '') {
-        $notes = '<div class="note blockquote">' . translate("Note") . ' : ' . $notes . '</div>';
+        $notes = '<div class="note blockquote">' . __d('two_news', 'Note') . ' : ' . $notes . '</div>';
     }
 
     $bodytext = $bodytext == '' 
@@ -104,7 +104,7 @@ if (cache::cacheManagerStart2()) {
             
     }
 
-    $boxtitle = translate("Liens relatifs");
+    $boxtitle = __d('two_news', 'Liens relatifs');
     $boxstuff = '<ul>';
 
     $related = DB::table('related')
@@ -125,7 +125,7 @@ if (cache::cacheManagerStart2()) {
         <ul>
             <li>
                 <a href="'. site_url('search.php?topic=' . $topic) . '" >
-                    ' . translate("En savoir plus à propos de") . ' : 
+                    ' . __d('two_news', 'En savoir plus à propos de') . ' : 
                 </a>
                 <span class="h5">
                     <span class="badge bg-secondary" title="' . $topicname . '
@@ -137,14 +137,14 @@ if (cache::cacheManagerStart2()) {
             </li>
             <li>
                 <a href="'. site_url('search.php?member=' . $informant) . '" >
-                    ' . translate("Article de") . ' ' . $informant . '
+                    ' . __d('two_news', 'Article de') . ' ' . $informant . '
                 </a> 
                 ' . userpopover($informant, 36, '') . '
             </li>
         </ul>
         <div>
             <span class="fw-semibold">
-                ' . translate("L'article le plus lu à propos de") . ' : 
+                ' . __d('two_news', 'L\'article le plus lu à propos de') . ' : 
             </span>
             <span class="h5">
                 <span class="badge bg-secondary" title="' . $topicname . '
@@ -172,7 +172,7 @@ if (cache::cacheManagerStart2()) {
             </li>
         </ul>
         <div>
-            <span class="fw-semibold">' . translate("Les dernières nouvelles à propos de") . ' : </span>
+            <span class="fw-semibold">' . __d('two_news', 'Les dernières nouvelles à propos de') . ' : </span>
             <span class="h5">
                 <span class="badge bg-secondary" title="' . $topicname . '
                     <hr />' . language::aff_langue($topictext) . '" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right">
@@ -228,10 +228,10 @@ if (cache::cacheManagerStart2()) {
         </ul>
         <p align="center">
             <a href="'. site_url('print.php?sid=' . $sid . '&amp;archive=' . $archive) .'" >
-                <i class="fa fa-print fa-2x me-3" title="' . translate("Page spéciale pour impression") . '" data-bs-toggle="tooltip"></i>
+                <i class="fa fa-print fa-2x me-3" title="' . __d('two_news', 'Page spéciale pour impression') . '" data-bs-toggle="tooltip"></i>
             </a>
             <a href="'. site_url('friend.php?op=FriendSend&amp;sid=' . $sid . '&amp;archive=' . $archive) .'">
-                <i class="fa fa-2x fa-at" title="' . translate("Envoyer cet article à un ami") . '" data-bs-toggle="tooltip"></i>
+                <i class="fa fa-2x fa-at" title="' . __d('two_news', 'Envoyer cet article à un ami') . '" data-bs-toggle="tooltip"></i>
             </a>
         </p>';
 

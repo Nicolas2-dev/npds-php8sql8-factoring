@@ -108,9 +108,9 @@ if ($cluster_activate) {
                     $Zibid .= "<input type=\"hidden\" name=\"Xepur\" value=\"" . L_encrypt($epur) . "\" />";
                 }
                 $Zibid .= "<input type=\"hidden\" name=\"Xurl_back\" value=\"cluster$cpt\" />";
-                $Zibid .= "<br /><p align=\"center\"><span class=\"noir\" style=\"font-size: 12px;\"><b>" . translate("Mise à jour") . " : " . $key[$cpt]["WWW"] . "</b></span><br /><br />";
-                $Zibid .= "<input type=\"submit\" class=\"bouton_standard\" value=\"" . translate("Valider") . "\" />&nbsp;&nbsp;";
-                $Zibid .= "<input type=\"button\" class=\"bouton_standard\" value=\"" . translate("Annuler") . "\" onclick=\"window.close()\" /><br />";
+                $Zibid .= "<br /><p align=\"center\"><span class=\"noir\" style=\"font-size: 12px;\"><b>" . __d('two_cluster_paradise', 'Mise à jour') . " : " . $key[$cpt]["WWW"] . "</b></span><br /><br />";
+                $Zibid .= "<input type=\"submit\" class=\"bouton_standard\" value=\"" . __d('two_cluster_paradise', 'Valider') . "\" />&nbsp;&nbsp;";
+                $Zibid .= "<input type=\"button\" class=\"bouton_standard\" value=\"" . __d('two_cluster_paradise', 'Annuler') . "\" onclick=\"window.close()\" /><br />";
 
                 $Zibid .= "</p></form></body></html>";
                 echo "<script type=\"text/javascript\">

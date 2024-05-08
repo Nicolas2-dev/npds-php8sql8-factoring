@@ -161,7 +161,7 @@ if ($pos) {
 echo '
     <div class="row mt-4">
         <div class="col-md-2 text-sm-center">
-            <strong>' . translate("Auteur") . '</strong><br />';
+            <strong>' . __d('two_forum', 'Auteur') . '</strong><br />';
 
 if (Config::get('npds.smilies')) {
     if ($myrow['poster_id'] != 0) {
@@ -186,10 +186,10 @@ echo '
         </div>
         <div class="col-md-10">
         <hr />
-            <p class="">' . translate("Forum") . '&nbsp;&raquo;&nbsp;&raquo;&nbsp;' . stripslashes($forum_name) . '&nbsp;&raquo;&nbsp;&raquo;&nbsp;<strong>' . $topic_subject . '</strong></p>
+            <p class="">' . __d('two_forum', 'Forum') . '&nbsp;&raquo;&nbsp;&raquo;&nbsp;' . stripslashes($forum_name) . '&nbsp;&raquo;&nbsp;&raquo;&nbsp;<strong>' . $topic_subject . '</strong></p>
             <hr />
             <p class="text-end">
-            <small>' . translate("Posté : ") . date::convertdate($myrow['post_time']) . '</small> ';
+            <small>' . __d('two_forum', 'Posté : ') . date::convertdate($myrow['post_time']) . '</small> ';
 
 if ($myrow['image'] != '') {
     $imgtmp = theme::theme_image_row('forum/subject/' . $myrow['image'], 'assets/images/forum/subject/' . $myrow['image']);
@@ -234,7 +234,7 @@ if (Config::get('forum.config.allow_upload_forum') and ($att > 0)) {
 
 echo '
                 <hr />
-                <p class="text-center">' . translate("Cet article provient de") . ' ' . Config::get('npds.sitename') . '<br />
+                <p class="text-center">' . __d('two_forum', 'Cet article provient de') . ' ' . Config::get('npds.sitename') . '<br />
                 <a href="'. site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum . '&amp;post_id=' . $post_id) .'">'. site_url('viewtopic.php?topic=' . $topic . '&amp;forum=' . $forum) .'</a></p>
             </div>
         </div>

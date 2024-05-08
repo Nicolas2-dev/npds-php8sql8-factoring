@@ -74,29 +74,29 @@ function defaultDisplay()
     }
 
     echo '
-    <h2>' . translate("Proposer un article") . '</h2>
+    <h2>' . __d('two_news', 'Proposer un article') . '</h2>
     <hr />
     <form action="'. site_url('submit.php') .'" method="post" name="adminForm">';
-    echo '<p class="lead"><strong>' . translate("Votre nom") . '</strong> : ';
+    echo '<p class="lead"><strong>' . __d('two_news', 'Votre nom') . '</strong> : ';
 
     if ($user) {
-        echo '<a href="'. site_url('user.php') .'">' . $userinfo['uname'] . '</a> [ <a href="'. site_url('user.php?op=logout') .'">' . translate("Déconnexion") . '</a> ]</p>
+        echo '<a href="'. site_url('user.php') .'">' . $userinfo['uname'] . '</a> [ <a href="'. site_url('user.php?op=logout') .'">' . __d('two_news', 'Déconnexion') . '</a> ]</p>
         <input type="hidden" name="name" value="' . $userinfo['name'] . '" />';
     } else {
-        echo Config::get('npds.anonymous') . '[ <a href="'. site_url('user.php') .'">' . translate("Nouveau membre") . '</a> ]</p>
+        echo Config::get('npds.anonymous') . '[ <a href="'. site_url('user.php') .'">' . __d('two_news', 'Nouveau membre') . '</a> ]</p>
         <input type="hidden" name="name" value="' . Config::get('npds.anonymous') . '" />';
     }
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="subject">' . translate("Titre") . '</label>
+            <label class="col-form-label col-sm-3" for="subject">' . __d('two_news', 'Titre') . '</label>
             <div class="col-sm-9">
                 <input type="text" id="subject" name="subject" class="form-control" autofocus="autofocus">
-                <p class="help-block">' . translate("Faites simple") . '! ' . translate("Mais ne titrez pas -un article-, ou -à lire-,...") . '</p>
+                <p class="help-block">' . __d('two_news', 'Faites simple') . '! ' . __d('two_news', 'Mais ne titrez pas -un article-, ou -à lire-,...') . '</p>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="topic">' . translate("Sujet") . '</label>
+            <label class="col-form-label col-sm-3" for="topic">' . __d('two_news', 'Sujet') . '</label>
             <div class="col-sm-9">
                 <select class="form-select" name="topic">';
 
@@ -104,7 +104,7 @@ function defaultDisplay()
 
     $toplist = sql_query("SELECT topicid, topicname, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
 
-    echo '<option value="">' . translate("Sélectionner un sujet") . '</option>';
+    echo '<option value="">' . __d('two_news', 'Sélectionner un sujet') . '</option>';
 
     settype($topic, 'string');
     settype($sel, 'string');
@@ -131,7 +131,7 @@ function defaultDisplay()
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="story" >' . translate("Texte d'introduction") . '</label>
+            <label class="col-form-label col-sm-12" for="story" >' . __d('two_news', 'Texte d\'introduction') . '</label>
             <div class="col-sm-12">
                 <textarea class=" form-control tin" rows="25" id="story" name="story"></textarea>
             </div>
@@ -141,7 +141,7 @@ function defaultDisplay()
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="bodytext">' . translate("Texte complet") . '</label>
+            <label class="col-form-label col-sm-12" for="bodytext">' . __d('two_news', 'Texte complet') . '</label>
             <div class="col-sm-12">
                 <textarea class="form-control tin " rows="25" id="bodytext" name="bodytext"></textarea>
             </div>
@@ -154,8 +154,8 @@ function defaultDisplay()
     echo '
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <span class="help-block">' . translate("Vous devez prévisualiser avant de pouvoir envoyer") . '</span>
-                <input class="btn btn-outline-primary" type="submit" name="op" value="' . translate("Prévisualiser") . '" />
+                <span class="help-block">' . __d('two_news', 'Vous devez prévisualiser avant de pouvoir envoyer') . '</span>
+                <input class="btn btn-outline-primary" type="submit" name="op" value="' . __d('two_news', 'Prévisualiser') . '" />
             </div>
         </div>
     </form>';
@@ -178,16 +178,16 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
     $subject = stripslashes(str_replace('"', '&quot;', (strip_tags($subject))));
 
     echo '
-    <h2>' . translate("Proposer un article") . '</h2>
+    <h2>' . __d('two_news', 'Proposer un article') . '</h2>
     <hr />
     <form action="'. site_url('submit.php') .'" method="post" name="adminForm">
-        <p class="lead"><strong>' . translate("Votre nom") . '</strong> : ' . $name . '</p>
+        <p class="lead"><strong>' . __d('two_news', 'Votre nom') . '</strong> : ' . $name . '</p>
         <input type="hidden" name="name" value="' . $name . '" />
         <div class="card card-body mb-4">';
 
     if ($topic == '') {
         $topicimage = 'all-topics.gif';
-        $warning = '<div class="alert alert-danger"><strong>' . translate("Sélectionner un sujet") . '</strong></div>';
+        $warning = '<div class="alert alert-danger"><strong>' . __d('two_news', 'Sélectionner un sujet') . '</strong></div>';
     } else {
         $warning = '';
 
@@ -225,13 +225,13 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
     echo '
     </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="subject">' . translate("Titre") . '</label>
+            <label class="col-form-label col-sm-3" for="subject">' . __d('two_news', 'Titre') . '</label>
             <div class="col-sm-9">
                 <input type="text" name="subject" class="form-control" value="' . $subject . '" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="topic">' . translate("Sujet") . '</label>
+            <label class="col-form-label col-sm-3" for="topic">' . __d('two_news', 'Sujet') . '</label>
             <div class="col-sm-9">
                 <select class="form-select" name="topic">';
 
@@ -239,7 +239,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
 
     $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
 
-    echo '<option value="">' . translate("Sélectionner un sujet") . '</option>';
+    echo '<option value="">' . __d('two_news', 'Sélectionner un sujet') . '</option>';
 
     while (list($topicid, $topics) = sql_fetch_row($toplist)) {
         if ($topicid == $topic) {
@@ -256,9 +256,9 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="story">' . translate("Texte d'introduction") . '</label>
+            <label class="col-form-label col-sm-12" for="story">' . __d('two_news', 'Texte d\'introduction') . '</label>
             <div class="col-sm-12">
-                <span class="help-block">' . translate("Les spécialistes peuvent utiliser du HTML, mais attention aux erreurs") . '</span>
+                <span class="help-block">' . __d('two_news', 'Les spécialistes peuvent utiliser du HTML, mais attention aux erreurs') . '</span>
                 <textarea class="tin form-control" rows="25" name="story">' . $story . '</textarea>';
 
     echo editeur::aff_editeur('story', '');
@@ -266,7 +266,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
     echo '</div>
         </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12">' . translate("Texte complet") . '</label>
+                <label class="col-form-label col-sm-12">' . __d('two_news', 'Texte complet') . '</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" rows="25" name="bodytext">' . $bodytext . '</textarea>
                 </div>
@@ -281,7 +281,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
     echo '
             <div class="mb-3 row">
                 <div class="col-sm-12">
-                <input class="btn btn-secondary" type="submit" name="op" value="' . translate("Prévisualiser") . '" />&nbsp;
+                <input class="btn btn-secondary" type="submit" name="op" value="' . __d('two_news', 'Prévisualiser') . '" />&nbsp;
                 <input class="btn btn-primary" type="submit" name="op" value="Ok" />
                 </div>
             </div>
@@ -330,9 +330,9 @@ function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_fi
         include("themes/default/header.php");
 
         echo '
-        <h2>' . translate("Proposer un article") . '</h2>
+        <h2>' . __d('two_news', 'Proposer un article') . '</h2>
         <hr />
-        <div class="alert alert-success lead">' . translate("Merci pour votre contribution.") . '</div>';
+        <div class="alert alert-success lead">' . __d('two_news', 'Merci pour votre contribution.') . '</div>';
 
         include("themes/default/footer.php");
     } else {
@@ -346,7 +346,7 @@ settype($op, 'string');
 
 switch ($op) {
     case 'Prévisualiser':
-    case translate("Prévisualiser"):
+    case __d('two_news', 'Prévisualiser'):
         if ($user) {
             $userinfo = users::getusrinfo($user);
             $name = $userinfo['uname'];

@@ -61,7 +61,7 @@ $wspad = explode("#wspad#", $wspad);
 $row = sql_fetch_assoc(sql_query("SELECT content, modtime, editedby, ranq  FROM " . $NPDS_Prefix . "wspad WHERE page='" . $wspad[0] . "' AND member='" . $wspad[1] . "' AND ranq='" . $wspad[2] . "'"));
 echo '
         <h2>' . $wspad[0] . '</h2>
-        <span class="">[ ' . wspad_trans("révision") . ' : ' . $row['ranq'] . ' - ' . $row['editedby'] . " / " . date(translate("dateinternal"), $row['modtime'] + ((int)$gmt * 3600)) . ' ]</span>
+        <span class="">[ ' . __d('two_wspad', 'révision') . ' : ' . $row['ranq'] . ' - ' . $row['editedby'] . " / " . date(__d('two_wspad', 'dateinternal'), $row['modtime'] + ((int)$gmt * 3600)) . ' ]</span>
         <hr />
         ' . language::aff_langue($row['content']) . '
     </body>

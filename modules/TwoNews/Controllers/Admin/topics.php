@@ -27,7 +27,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'topicsmanager';
-$f_titre = adm_translate("Gestion des sujets");
+$f_titre = __d('two_news', 'Gestion des sujets');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -54,7 +54,7 @@ function topicsmanager(): void
     if ($result > 0) {
         echo '
         <hr />
-        <h3 class="my-3">'. adm_translate("Sujets actifs") .'<span class="badge bg-secondary float-end">'. sql_num_rows($result) .'</span></h3>';
+        <h3 class="my-3">'. __d('two_news', 'Sujets actifs') .'<span class="badge bg-secondary float-end">'. sql_num_rows($result) .'</span></h3>';
         
         foreach($result as $topic) {
             echo '
@@ -90,31 +90,31 @@ function topicsmanager(): void
     }
 
     echo '
-    <h3 class="my-4">'. adm_translate("Ajouter un nouveau Sujet") .'</h3>
+    <h3 class="my-4">'. __d('two_news', 'Ajouter un nouveau Sujet') .'</h3>
     <form action="'. site_url('admin.php') .'" method="post" id="topicmake">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topicname">'. adm_translate("Intitulé") .'</label>
+            <label class="col-form-label col-sm-4" for="topicname">'. __d('two_news', 'Intitulé') .'</label>
             <div class="col-sm-8">
-                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="'. $topic['topicname'] .'" placeholder="'. adm_translate("cesiteestgénial") .'" required="required" />
-                <span class="help-block">'. adm_translate("(un simple nom sans espaces)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topicname"></span></span>
+                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="'. $topic['topicname'] .'" placeholder="'. __d('two_news', 'cesiteestgénial') .'" required="required" />
+                <span class="help-block">'. __d('two_news', '(un simple nom sans espaces)') .' - '. __d('two_news', 'max caractères') .' : <span id="countcar_topicname"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topictext">'. adm_translate("Texte") .'</label>
+            <label class="col-form-label col-sm-4" for="topictext">'. __d('two_news', 'Texte') .'</label>
             <div class="col-sm-8">
-                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="'. adm_translate("ce site est génial") .'" required="required" >'. $topictext .'</textarea>
-                <span class="help-block">'. adm_translate("(description ou nom complet du sujet)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topictext"></span></span>
+                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="'. __d('two_news', 'ce site est génial') .'" required="required" >'. $topictext .'</textarea>
+                <span class="help-block">'. __d('two_news', '(description ou nom complet du sujet)') .' - '. __d('two_news', 'max caractères') .' : <span id="countcar_topictext"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topicimage">'. adm_translate("Image") .'</label>
+            <label class="col-form-label col-sm-4" for="topicimage">'. __d('two_news', 'Image') .'</label>
             <div class="col-sm-8">
                 <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="'. $topic['topicimage'] .'" placeholder="genial.png" />
-                <span class="help-block">'. adm_translate("(nom de l'image + extension)") .' ('. Config::get('npds.tipath') .'). - '. adm_translate("max caractères") .' : <span id="countcar_topicimage"></span></span>
+                <span class="help-block">'. __d('two_news', '(nom de l\'image + extension)') .' ('. Config::get('npds.tipath') .'). - '. __d('two_news', 'max caractères') .' : <span id="countcar_topicimage"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topicadmin">'. adm_translate("Administrateur(s)") .'</label>
+            <label class="col-form-label col-sm-4" for="topicadmin">'. __d('two_news', 'Administrateur(s)') .'</label>
             <div class="col-sm-8">
                 <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user-cog fa-lg"></i></span>
@@ -125,7 +125,7 @@ function topicsmanager(): void
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
                 <input type="hidden" name="op" value="topicmake" />
-                <button class="btn btn-primary" type="submit" ><i class="fa fa-plus-square fa-lg me-2"></i>'. adm_translate("Ajouter un Sujet") .'</button>
+                <button class="btn btn-primary" type="submit" ><i class="fa fa-plus-square fa-lg me-2"></i>'. __d('two_news', 'Ajouter un Sujet') .'</button>
             </div>
         </div>
     </form>';
@@ -173,7 +173,7 @@ function topicsmanager(): void
         validators: {
             regexp: {
                 regexp: /^\w+$/i,
-                message: "'. adm_translate("Doit être un mot sans espace.") .'"
+                message: "'. __d('two_news', 'Doit être un mot sans espace.') .'"
             }
         }
     },
@@ -182,7 +182,7 @@ function topicsmanager(): void
         validators: {
             regexp: {
                 regexp: /^[\w]+\\.(jpg|jpeg|png|gif)$/,
-                message: "'. adm_translate("Doit être un nom de fichier valide avec une de ces extensions : jpg, jpeg, png, gif.") .'"
+                message: "'. __d('two_news', 'Doit être un nom de fichier valide avec une de ces extensions : jpg, jpeg, png, gif.') .'"
             }
         }
     },';
@@ -219,7 +219,7 @@ function topicedit(int $topicid): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Editer le Sujet :") .' <span class="text-muted">'. language::aff_langue($topic['topicname']) .'</span></h3>';
+    <h3 class="mb-3">'. __d('two_news', 'Editer le Sujet :') .' <span class="text-muted">'. language::aff_langue($topic['topicname']) .'</span></h3>';
 
     if ($topic['topicimage'] != '') {
         echo '
@@ -230,28 +230,28 @@ function topicedit(int $topicid): void
     <form action="'. site_url('admin.php') .'" method="post" id="topicchange">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topicname">'. adm_translate("Intitulé") .'</label>
+                <label class="col-form-label col-sm-4" for="topicname">'. __d('two_news', 'Intitulé') .'</label>
                 <div class="col-sm-8">
-                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="'. $topic['topicname'] .'" placeholder="'. adm_translate("cesiteestgénial") .'" required="required" />
-                <span class="help-block">'. adm_translate("(un simple nom sans espaces)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topicname"></span></span>
+                <input id="topicname" class="form-control" type="text" name="topicname" maxlength="20" value="'. $topic['topicname'] .'" placeholder="'. __d('two_news', 'cesiteestgénial') .'" required="required" />
+                <span class="help-block">'. __d('two_news', '(un simple nom sans espaces)') .' - '. __d('two_news', 'max caractères') .' : <span id="countcar_topicname"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topictext">'. adm_translate("Texte") .'</label>
+                <label class="col-form-label col-sm-4" for="topictext">'. __d('two_news', 'Texte') .'</label>
                 <div class="col-sm-8">
-                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="'. adm_translate("ce site est génial") .'" required="required">'. $topic['topictext'] .'</textarea>
-                <span class="help-block">'. adm_translate("(description ou nom complet du sujet)") .' - '. adm_translate("max caractères") .' : <span id="countcar_topictext"></span></span>
+                <textarea id="topictext" class="form-control" rows="3" name="topictext" maxlength="250" placeholder="'. __d('two_news', 'ce site est génial') .'" required="required">'. $topic['topictext'] .'</textarea>
+                <span class="help-block">'. __d('two_news', '(description ou nom complet du sujet)') .' - '. __d('two_news', 'max caractères') .' : <span id="countcar_topictext"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topicimage">'. adm_translate("Image") .'</label>
+                <label class="col-form-label col-sm-4" for="topicimage">'. __d('two_news', 'Image') .'</label>
                 <div class="col-sm-8">
                 <input id="topicimage" class="form-control" type="text" name="topicimage" maxlength="20" value="'. $topic['topicimage'] .'" placeholder="genial.png" />
-                <span class="help-block">'. adm_translate("(nom de l'image + extension)") .' ('. Config::get('npds.tipath') .'). - '. adm_translate("max caractères") .' : <span id="countcar_topicimage"></span></span>
+                <span class="help-block">'. __d('two_news', '(nom de l\'image + extension)') .' ('. Config::get('npds.tipath') .'). - '. __d('two_news', 'max caractères') .' : <span id="countcar_topicimage"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topicadmin">'. adm_translate("Administrateur(s) du sujet") .'</label>
+                <label class="col-form-label col-sm-4" for="topicadmin">'. __d('two_news', 'Administrateur(s) du sujet') .'</label>
                 <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-user-cog fa-lg"></i></span>
@@ -262,19 +262,19 @@ function topicedit(int $topicid): void
         </fieldset>
         <fieldset>
         <hr />
-        <h4 class="my-3">'. adm_translate("Ajouter des Liens relatifs au Sujet") .'</h4>
+        <h4 class="my-3">'. __d('two_news', 'Ajouter des Liens relatifs au Sujet') .'</h4>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="name">'. adm_translate("Nom du site") .'</label>
+            <label class="col-form-label col-sm-4" for="name">'. __d('two_news', 'Nom du site') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="name" id="name" maxlength="30" />
-                <span class="help-block">'. adm_translate("max caractères") .' : <span id="countcar_name"></span></span>
+                <span class="help-block">'. __d('two_news', 'max caractères') .' : <span id="countcar_name"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="url">'. adm_translate("URL") .'</label>
+            <label class="col-form-label col-sm-4" for="url">'. __d('two_news', 'URL') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="url" name="url" id="url" maxlength="320" placeholder="http://www.valideurl.org" />
-                <span class="help-block">'. adm_translate("max caractères") .' : <span id="countcar_url"></span></span>
+                <span class="help-block">'. __d('two_news', 'max caractères') .' : <span id="countcar_url"></span></span>
             </div>
         </div>
         </fieldset>
@@ -282,8 +282,8 @@ function topicedit(int $topicid): void
             <input type="hidden" name="'.$topic['topicid'].'" value="'. $topic['topicid'] .'" />
             <input type="hidden" name="op" value="topicchange" />
             <div class="col-sm-8 ms-sm-auto">
-                <button class="btn btn-primary" type="submit">'. adm_translate("Sauver les modifications") .'</button>
-                <button class="btn btn-secondary" onclick="javascript:document.location.href=\''. site_url('admin.php?op=topicsmanager') .'\'">'. adm_translate("Retour en arrière") .'</button>
+                <button class="btn btn-primary" type="submit">'. __d('two_news', 'Sauver les modifications') .'</button>
+                <button class="btn btn-secondary" onclick="javascript:document.location.href=\''. site_url('admin.php?op=topicsmanager') .'\'">'. __d('two_news', 'Retour en arrière') .'</button>
             </div>
         </div>
     </form>';
@@ -292,21 +292,21 @@ function topicedit(int $topicid): void
         <input type="hidden" name="topic['topicid']" value="'.$topic['topicid'].'" />
         <input type="hidden" name="op" value="topicdelete" />
     </form>
-    <button class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;&nbsp;'.adm_translate("Effacer le Sujet !").'</button>
+    <button class="btn btn-danger"><i class="fas fa-trash fa-lg"></i>&nbsp;&nbsp;'.__d('two_news', 'Effacer le Sujet !').'</button>
     */
 
     echo '
         <hr />
-        <h3 class="my-2">'. adm_translate("Gérer les Liens Relatifs : ") .' <span class="text-muted">'. language::aff_langue($topic['topicname']) .'</span></h3>';
+        <h3 class="my-2">'. __d('two_news', 'Gérer les Liens Relatifs : ') .' <span class="text-muted">'. language::aff_langue($topic['topicname']) .'</span></h3>';
 
     $r_related = DB::table('related')->select('rid', 'name', 'url')->where('tid', $topic['topicid'])->first();
 
     echo '
     <table id="tad_linkrel" data-toggle="table" data-striped="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
-            <th data-sortable="true" data-halign="center">'. adm_translate('Nom') .'</th>
-            <th data-sortable="true" data-halign="center">'. adm_translate('Url') .'</th>
-            <th class="n-t-col-xs-2" data-halign="center" data-align="right">'. adm_translate('Fonctions') .'</th>
+            <th data-sortable="true" data-halign="center">'. __d('two_news', 'Nom') .'</th>
+            <th data-sortable="true" data-halign="center">'. __d('two_news', 'Url') .'</th>
+            <th class="n-t-col-xs-2" data-halign="center" data-align="right">'. __d('two_news', 'Fonctions') .'</th>
         </thead>
         <tbody>';
 
@@ -317,9 +317,9 @@ function topicedit(int $topicid): void
                     <td>'. $related['name'] .'</td>
                     <td><a href="'. $related['url'] .'" target="_blank">'. $related['url'] .'</a></td>
                     <td>
-                    <a href="'. site_url('admin.php?op=relatededit&amp;tid='. $topic['topicid'] .'&amp;rid='. $related['rid']) .'" ><i class="fas fa-edit fa-lg" data-bs-toggle="tooltip" title="'. adm_translate("Editer") .'"></i></a>&nbsp;
+                    <a href="'. site_url('admin.php?op=relatededit&amp;tid='. $topic['topicid'] .'&amp;rid='. $related['rid']) .'" ><i class="fas fa-edit fa-lg" data-bs-toggle="tooltip" title="'. __d('two_news', 'Editer') .'"></i></a>&nbsp;
                     <a href="'. $related['url'] .'" target="_blank"><i class="fas fa-external-link-alt fa-lg"></i></a>&nbsp;
-                    <a href="'. site_url('admin.php?op=relateddelete&amp;tid='. $topic['topicid'] .'&amp;rid='. $related['rid']) .'" ><i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="'. adm_translate("Effacer") .'"></i></a>
+                    <a href="'. site_url('admin.php?op=relateddelete&amp;tid='. $topic['topicid'] .'&amp;rid='. $related['rid']) .'" ><i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="'. __d('two_news', 'Effacer') .'"></i></a>
                     </td>
                 </tr>';
     }
@@ -402,8 +402,8 @@ function relatededit(int $tid, int $rid): void
 
     echo '
     <hr />
-    <h3>'. adm_translate("Sujet : ") .' '. $topic['topictext'] .'</h3>
-    <h4>'. adm_translate("Editer les Liens Relatifs") .'</h4>';
+    <h3>'. __d('two_news', 'Sujet : ') .' '. $topic['topictext'] .'</h3>
+    <h4>'. __d('two_news', 'Editer les Liens Relatifs') .'</h4>';
 
     if ($topic['topicimage'] != "") {  
         echo '
@@ -416,14 +416,14 @@ function relatededit(int $tid, int $rid): void
     <form class="form-horizontal" action="'. site_url('admin.php') .'" method="post" id="editrelatedlink">
         <fieldset>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="name">'. adm_translate("Nom du site") .'</label>
+            <label class="col-form-label col-sm-4" for="name">'. __d('two_news', 'Nom du site') .'</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" name="name" id="name" value="'. $related['name'] .'" maxlength="30" required="required" />
                 <span class="help-block text-end"><span id="countcar_name"></span></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="url">'. adm_translate("URL") .'</label>
+            <label class="col-form-label col-sm-4" for="url">'. __d('two_news', 'URL') .'</label>
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-text">
@@ -439,7 +439,7 @@ function relatededit(int $tid, int $rid): void
             </fieldset>
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
-                <button class="btn btn-primary col-12" type="submit">'. adm_translate("Sauver les modifications") .'</button>
+                <button class="btn btn-primary col-12" type="submit">'. __d('two_news', 'Sauver les modifications') .'</button>
             </div>
         </div>
     </form>';
@@ -671,7 +671,7 @@ function topicdelete(int $topicid, int $ok = 0): void
 
         $topic = DB::table('topics')->select('topicimage', 'topicname', 'topictext')->where('topicid', $topicid)->first();
 
-        echo '<h3 class=""><span class="text-danger">'. adm_translate("Effacer le Sujet") .' : </span>'. language::aff_langue($topicname) .'</h3>';
+        echo '<h3 class=""><span class="text-danger">'. __d('two_news', 'Effacer le Sujet') .' : </span>'. language::aff_langue($topicname) .'</h3>';
         echo '<div class="alert alert-danger lead" role="alert">';
 
         if ($topic['topicimage'] != "") {
@@ -682,9 +682,9 @@ function topicdelete(int $topicid, int $ok = 0): void
         }
 
         echo '
-            <p>'. adm_translate("Etes-vous sûr de vouloir effacer ce sujet ?") .' : '. $topic['topicname'] .'</p>
-            <p>'. adm_translate("Ceci effacera tous ses articles et ses commentaires !") .'</p>
-            <p><a class="btn btn-danger" href="'. site_url('admin.php?op=topicdelete&amp;topicid='. $topicid .'&amp;ok=1') .'">'. adm_translate("Oui") .'</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">'. adm_translate("Non") .'</a></p>
+            <p>'. __d('two_news', 'Etes-vous sûr de vouloir effacer ce sujet ?') .' : '. $topic['topicname'] .'</p>
+            <p>'. __d('two_news', 'Ceci effacera tous ses articles et ses commentaires !') .'</p>
+            <p><a class="btn btn-danger" href="'. site_url('admin.php?op=topicdelete&amp;topicid='. $topicid .'&amp;ok=1') .'">'. __d('two_news', 'Oui') .'</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">'. __d('two_news', 'Non') .'</a></p>
         </div>';
 
         css::adminfoot('', '', '', '');

@@ -95,15 +95,15 @@ if ($Mmod) {
             if (!$m = sql_fetch_assoc($r))
                 forum::forumerror('0014');
             echo '
-        <h2 class="mb-3">' . translate("Commentaire") . '</h2>
+        <h2 class="mb-3">' . __d('two_comments', 'Commentaire') . '</h2>
         <div class="card mb-3">
             <div class="card-body">
-                <h3 class="card-title mb-3">' . translate("Adresses IP et informations sur les utilisateurs") . '</h3>
+                <h3 class="card-title mb-3">' . __d('two_comments', 'Adresses IP et informations sur les utilisateurs') . '</h3>
                 <div class="row">
                 <div class="col mb-3">
-                    <span class="text-muted">' . translate("Identifiant : ") . '</span> ' . $m['uname'] . '<br />
-                    <span class="text-muted">' . translate("Adresse IP de l'utilisateur : ") . '</span> ' . $m['poster_ip'] . '<br />
-                    <span class="text-muted">' . translate("Adresse DNS de l'utilisateur : ") . '</span> ' . $m['poster_dns'] . '<br />
+                    <span class="text-muted">' . __d('two_comments', 'Identifiant : ') . '</span> ' . $m['uname'] . '<br />
+                    <span class="text-muted">' . __d('two_comments', 'Adresse IP de l\'utilisateur : ') . '</span> ' . $m['poster_ip'] . '<br />
+                    <span class="text-muted">' . __d('two_comments', 'Adresse DNS de l\'utilisateur : ') . '</span> ' . $m['poster_dns'] . '<br />
                 </div>';
             echo localiser_ip($iptoshow = $m['poster_ip']);
             echo '
@@ -117,7 +117,7 @@ if ($Mmod) {
             </div>';
             echo '
         </div>
-        <p><a href="' . rawurldecode($url_ret) . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a></p>';
+        <p><a href="' . rawurldecode($url_ret) . '" class="btn btn-secondary">' . __d('two_comments', 'Retour en arrière') . '</a></p>';
             include("themes/default/footer.php");
             break;
         case 'aff':
@@ -153,7 +153,7 @@ if ($Mmod) {
 } else {
     include("themes/default/header.php");
     echo '
-        <p class="text-center">' . translate("Vous n'êtes pas identifié comme modérateur de ce forum. Opération interdite.") . '<br /><br />
-        <a href="javascript:history.go(-1)" class="btn btn-secondary">' . translate("Retour en arrière") . '</a></p>';
+        <p class="text-center">' . __d('two_comments', 'Vous n\'êtes pas identifié comme modérateur de ce forum. Opération interdite.') . '<br /><br />
+        <a href="javascript:history.go(-1)" class="btn btn-secondary">' . __d('two_comments', 'Retour en arrière') . '</a></p>';
     include("themes/default/footer.php");
 }

@@ -21,7 +21,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'MetaTagAdmin';
-$f_titre = adm_translate("Administration des MétaTags");
+$f_titre = __d('two_core', 'Administration des MétaTags');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -54,7 +54,7 @@ function MetaTagAdmin(bool $meta_saved = false): void
     if ($meta_saved) {
         echo '
         <div class="alert alert-success">
-            '. adm_translate("Vos MétaTags ont été modifiés avec succès !") .'
+            '. __d('two_core', 'Vos MétaTags ont été modifiés avec succès !') .'
             <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>';
     }
@@ -63,74 +63,74 @@ function MetaTagAdmin(bool $meta_saved = false): void
     <form id="metatagsadm" action="'. site_url('admin.php') .'" method="post">
         <div class="form-floating mb-3">
             <input class="form-control" id="newtagauthor" type="text" name="newtag[author]" value="'. $tags['author'] .'" maxlength="100">
-            <label for="newtagauthor">'. adm_translate("Auteur(s)") .'</label>
-            <span class="help-block">'. adm_translate("(Ex. : nom du webmaster)") .'<span class="float-end ms-1" id="countcar_newtagauthor"></span></span>
+            <label for="newtagauthor">'. __d('two_core', 'Auteur(s)') .'</label>
+            <span class="help-block">'. __d('two_core', '(Ex. : nom du webmaster)') .'<span class="float-end ms-1" id="countcar_newtagauthor"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input class="form-control" id="newtagowner" type="text" name="newtag[owner]" value="'. $tags['owner'] .'" maxlength="100" />
-            <label for="newtagowner">'. adm_translate("Propriétaire") .'</label>
-            <span class="help-block">'. adm_translate("(Ex. : nom de votre compagnie/service)") .'<span class="float-end ms-1" id="countcar_newtagowner"></span></span>
+            <label for="newtagowner">'. __d('two_core', 'Propriétaire') .'</label>
+            <span class="help-block">'. __d('two_core', '(Ex. : nom de votre compagnie/service)') .'<span class="float-end ms-1" id="countcar_newtagowner"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input class="form-control" id="newtagreplyto" type="email" name="newtag[reply-to]" value="'. $tags['reply-to'] .'" maxlength="100" />
-            <label for="newtagreplyto">'. adm_translate("Adresse e-mail principale") .'</label>
-            <span class="help-block">'. adm_translate("(Ex. : l'adresse e-mail du webmaster)") .'<span class="float-end ms-1" id="countcar_newtagreplyto"></span></span>
+            <label for="newtagreplyto">'. __d('two_core', 'Adresse e-mail principale') .'</label>
+            <span class="help-block">'. __d('two_core', '(Ex. : l\'adresse e-mail du webmaster)') .'<span class="float-end ms-1" id="countcar_newtagreplyto"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input class="form-control" id="newtagdescription" type="text" name="newtag[description]" value="'. $tags['description'] .'" maxlength="200" />
-            <label for="newtagdescription">'. adm_translate("Description") .'</label>
-            <span class="help-block">'. adm_translate("(Brève description des centres d'intérêt du site. 200 caractères maxi.)") .'<span class="float-end ms-1" id="countcar_newtagdescription"></span></span>
+            <label for="newtagdescription">'. __d('two_core', 'Description') .'</label>
+            <span class="help-block">'. __d('two_core', '(Brève description des centres d\'intérêt du site. 200 caractères maxi.)') .'<span class="float-end ms-1" id="countcar_newtagdescription"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input class="form-control" id="newtagkeywords" type="text" name="newtag[keywords]" value="'. $tags['keywords'] .'" maxlength="1000" />
-            <label for="newtagkeywords">'. adm_translate("Mot(s) clé(s)") .'</label>
-            <span class="help-block">'. adm_translate("(Définissez un ou plusieurs mot(s) clé(s). 1000 caractères maxi. Remarques : une lettre accentuée équivaut le plus souvent à 8 caractères. La majorité des moteurs de recherche font la distinction minuscule/majuscule. Séparez vos mots par une virgule)") .'<span class="float-end ms-1" id="countcar_newtagkeywords"></span></span>
+            <label for="newtagkeywords">'. __d('two_core', 'Mot(s) clé(s)') .'</label>
+            <span class="help-block">'. __d('two_core', '(Définissez un ou plusieurs mot(s) clé(s). 1000 caractères maxi. Remarques : une lettre accentuée équivaut le plus souvent à 8 caractères. La majorité des moteurs de recherche font la distinction minuscule/majuscule. Séparez vos mots par une virgule)') .'<span class="float-end ms-1" id="countcar_newtagkeywords"></span></span>
         </div>
         <div class="form-floating mb-3">
             <select class="form-select" id="newtagrating" name="newtag[rating]">
-                <option value="general"'. (!strcasecmp($tags['rating'], 'general') ? $sel : '') .'>'. adm_translate("Tout public") .'</option>
-                <option value="mature"'. (!strcasecmp($tags['rating'], 'mature') ? $sel : '') .'>'. adm_translate("Adulte") .'</option>
-                <option value="restricted"'. (!strcasecmp($tags['rating'], 'restricted') ? $sel : '') .'>'. adm_translate("Accés restreint") .'</option>
-                <option value="14 years"'. (!strcasecmp($tags['rating'], '14 years') ? $sel : '') .'>'. adm_translate("14 ans") .'</option>
+                <option value="general"'. (!strcasecmp($tags['rating'], 'general') ? $sel : '') .'>'. __d('two_core', 'Tout public') .'</option>
+                <option value="mature"'. (!strcasecmp($tags['rating'], 'mature') ? $sel : '') .'>'. __d('two_core', 'Adulte') .'</option>
+                <option value="restricted"'. (!strcasecmp($tags['rating'], 'restricted') ? $sel : '') .'>'. __d('two_core', 'Accés restreint') .'</option>
+                <option value="14 years"'. (!strcasecmp($tags['rating'], '14 years') ? $sel : '') .'>'. __d('two_core', '14 ans') .'</option>
             </select>
-            <label for="newtagrating">'. adm_translate("Audience") .'</label>
-            <span class="help-block">'. adm_translate("(Définissez le public intéressé par votre site)") .'</span>
+            <label for="newtagrating">'. __d('two_core', 'Audience') .'</label>
+            <span class="help-block">'. __d('two_core', '(Définissez le public intéressé par votre site)') .'</span>
         </div>
         <div class="form-floating mb-3">
             <select class="form-select" id="newtagdistribution" name="newtag[distribution]">
-                <option value="global"'. (!strcasecmp($tags['distribution'], 'global') ? $sel : '') .'>'. adm_translate("Large") .'</option>
-                <option value="local"'. (!strcasecmp($tags['distribution'], 'local') ? $sel : '') .'>'. adm_translate("Restreinte") .'</option>
+                <option value="global"'. (!strcasecmp($tags['distribution'], 'global') ? $sel : '') .'>'. __d('two_core', 'Large') .'</option>
+                <option value="local"'. (!strcasecmp($tags['distribution'], 'local') ? $sel : '') .'>'. __d('two_core', 'Restreinte') .'</option>
             </select>
-            <label for="newtagdistribution">'. adm_translate("Distribution") .'</label>
+            <label for="newtagdistribution">'. __d('two_core', 'Distribution') .'</label>
         </div>
         <div class="form-floating mb-3">
             <input class="form-control" id="newtagcopyright" type="text" name="newtag[copyright]" value="'. $tags['copyright'] .'" maxlength="100" />
-            <label for="newtagcopyright">'. adm_translate("Copyright") .'</label>
-            <span class="help-block">'. adm_translate("(Informations légales)") .'<span class="float-end ms-1" id="countcar_newtagcopyright"></span></span>
+            <label for="newtagcopyright">'. __d('two_core', 'Copyright') .'</label>
+            <span class="help-block">'. __d('two_core', '(Informations légales)') .'<span class="float-end ms-1" id="countcar_newtagcopyright"></span></span>
         </div>
         <div class="form-floating mb-3">
             <select class="form-select" id="newtagrobots" name="newtag[robots]">
-                <option value="all"'. (!strcasecmp($tags['robots'], 'all') ? $sel : '') .'>'. adm_translate("Tout contenu (page/liens/etc)") .'</option>
-                <option value="none"'. (!strcasecmp($tags['robots'], 'none') ? $sel : '') .'>'. adm_translate("Aucune indexation") .'</option>
-                <option value="index,nofollow"'. (!strcasecmp($tags['robots'], 'index,nofollow') ? $sel : '') .'>'. adm_translate("Page courante sans liens locaux") .'</option>
-                <option value="noindex,follow"'. (!strcasecmp($tags['robots'], 'noindex,follow') ? $sel : '') .'>'. adm_translate("Liens locaux sauf page courante") .'</option>
-                <option value="noarchive"'. (!strcasecmp($tags['robots'], 'noarchive') ? $sel : '') .'>'. adm_translate("Pas d'affichage du cache") .'</option>
-                <option value="noodp,noydir"'. (!strcasecmp($tags['robots'], 'noodp,noydir') ? $sel : '') .'>'. adm_translate("Pas d'utilisation des descriptions ODP ou YDIR") .'</option>
+                <option value="all"'. (!strcasecmp($tags['robots'], 'all') ? $sel : '') .'>'. __d('two_core', 'Tout contenu (page/liens/etc)') .'</option>
+                <option value="none"'. (!strcasecmp($tags['robots'], 'none') ? $sel : '') .'>'. __d('two_core', 'Aucune indexation') .'</option>
+                <option value="index,nofollow"'. (!strcasecmp($tags['robots'], 'index,nofollow') ? $sel : '') .'>'. __d('two_core', 'Page courante sans liens locaux') .'</option>
+                <option value="noindex,follow"'. (!strcasecmp($tags['robots'], 'noindex,follow') ? $sel : '') .'>'. __d('two_core', 'Liens locaux sauf page courante') .'</option>
+                <option value="noarchive"'. (!strcasecmp($tags['robots'], 'noarchive') ? $sel : '') .'>'. __d('two_core', 'Pas d\'affichage du cache') .'</option>
+                <option value="noodp,noydir"'. (!strcasecmp($tags['robots'], 'noodp,noydir') ? $sel : '') .'>'. __d('two_core', 'Pas d\'utilisation des descriptions ODP ou YDIR') .'</option>
             </select>
-            <label for="newtagrobots">'. adm_translate("Robots/Spiders") .'</label>
-            <span class="help-block">'. adm_translate("(Définissez la méthode d'analyse que doivent adopter les robots des moteurs de recherche)") .'</span>
+            <label for="newtagrobots">'. __d('two_core', 'Robots/Spiders') .'</label>
+            <span class="help-block">'. __d('two_core', '(Définissez la méthode d\'analyse que doivent adopter les robots des moteurs de recherche)') .'</span>
         </div>
         <div class="form-floating mb-3">
             <input class="form-control" id="newtagrevisitafter" type="text" name="newtag[revisit-after]" value="'. $tags['revisit-after'] .'" maxlength="30" />
-            <label for="newtagrevisitafter">'. adm_translate("Fréquence de visite des Robots/Spiders") .'</label>
-            <span class="help-block">'. adm_translate("(Ex. : 16 days. Remarque : ne définissez pas de fréquence inférieure à 14 jours !)") .'<span class="float-end ms-1" id="countcar_newtagrevisitafter"></span></span>
+            <label for="newtagrevisitafter">'. __d('two_core', 'Fréquence de visite des Robots/Spiders') .'</label>
+            <span class="help-block">'. __d('two_core', '(Ex. : 16 days. Remarque : ne définissez pas de fréquence inférieure à 14 jours !)') .'<span class="float-end ms-1" id="countcar_newtagrevisitafter"></span></span>
         </div>
         <div class="row g-3">
             <div class="col-md-6">
                 <div class="form-floating mb-3">
                 <select class="form-select" id="newtagdoctype" name="newtag[doctype]">
-                    <option value="XHTML 1.0 Transitional"'. (!strcasecmp(doctype, 'XHTML 1.0 Transitional') ? $sel : '') .'>XHTML 1.0 '. adm_translate("Transitional") .'</option>
-                    <option value="XHTML 1.0 Strict"'. (!strcasecmp(doctype, 'XHTML 1.0 Strict') ? $sel : '') .'>XHTML 1.0 '. adm_translate("Strict") .'</option>
+                    <option value="XHTML 1.0 Transitional"'. (!strcasecmp(doctype, 'XHTML 1.0 Transitional') ? $sel : '') .'>XHTML 1.0 '. __d('two_core', 'Transitional') .'</option>
+                    <option value="XHTML 1.0 Strict"'. (!strcasecmp(doctype, 'XHTML 1.0 Strict') ? $sel : '') .'>XHTML 1.0 '. __d('two_core', 'Strict') .'</option>
                     <option value="HTML 5.1"'. (!strcasecmp(doctype, 'HTML 5.1') ? $sel : '') .'>HTML 5.1</option>
                 </select>
                 <label for="newtagdoctype">DOCTYPE</label>
@@ -138,7 +138,7 @@ function MetaTagAdmin(bool $meta_saved = false): void
             </div>
         </div>
         <input type="hidden" name="op" value="MetaTagSave" />
-        <button class="btn btn-primary my-3" type="submit">'. adm_translate("Enregistrer") .'</button>
+        <button class="btn btn-primary my-3" type="submit">'. __d('two_core', 'Enregistrer') .'</button>
     </form>';
 
     $arg1 = '

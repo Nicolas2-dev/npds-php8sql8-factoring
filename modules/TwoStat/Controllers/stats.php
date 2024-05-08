@@ -90,17 +90,17 @@ while (list($type, $var, $count) = sql_fetch_row($dkn)) {
 }
 
 echo '
-    <h2>' . translate("Statistiques") . '</h2>
+    <h2>' . __d('two_stat', 'Statistiques') . '</h2>
     <div class="card card-body lead">
         <div>
-        ' . translate("Nos visiteurs ont visualisé") . ' <span class="badge bg-secondary">' . str::wrh($total) . '</span> ' . translate("pages depuis le") . ' ' . Config::get('npds.startdate') . '
+        ' . __d('two_stat', 'Nos visiteurs ont visualisé') . ' <span class="badge bg-secondary">' . str::wrh($total) . '</span> ' . __d('two_stat', 'pages depuis le') . ' ' . Config::get('npds.startdate') . '
         </div>
     </div>
-    <h3 class="my-4">' . translate("Navigateurs web") . '</h3>
+    <h3 class="my-4">' . __d('two_stat', 'Navigateurs web') . '</h3>
     <table data-toggle="table" data-mobile-responsive="true">
         <thead>
             <tr>
-                <th data-sortable="true" >' . translate("Navigateurs web") . '</th>
+                <th data-sortable="true" >' . __d('two_stat', 'Navigateurs web') . '</th>
                 <th data-sortable="true" data-halign="center" data-align="right" >%</th>
                 <th data-align="right" ></th>
             </tr>
@@ -223,7 +223,7 @@ $imgtmp = $ibid = theme::theme_image('stats/altavista.gif') ? $ibid : 'assets/im
 
 echo '
             <tr>
-                <td><img src="' . $imgtmp . '" alt="' . translate("Moteurs de recherche") . '_ico" /> ' . translate("Moteurs de recherche") . ' </td>
+                <td><img src="' . $imgtmp . '" alt="' . __d('two_stat', 'Moteurs de recherche') . '_ico" /> ' . __d('two_stat', 'Moteurs de recherche') . ' </td>
                 <td>
                 <div class="text-center small">' . $bot[1] . ' %</div>
                 <div class="progress bg-light">
@@ -233,7 +233,7 @@ echo '
                 <td>' . $bot[0] . '</td>
             </tr>
             <tr>
-                <td><i class="fa fa-question fa-3x align-middle"></i> ' . translate("Inconnu") . ' </td>
+                <td><i class="fa fa-question fa-3x align-middle"></i> ' . __d('two_stat', 'Inconnu') . ' </td>
                 <td>
                 <div class="text-center small">' . $b_other[1] . ' %</div>
                 <div class="progress bg-light">
@@ -245,11 +245,11 @@ echo '
         </tbody>
     </table>
     <br />
-    <h3 class="my-4">' . translate("Systèmes d'exploitation") . '</h3>
+    <h3 class="my-4">' . __d('two_stat', 'Systèmes d\'exploitation') . '</h3>
     <table data-toggle="table" data-mobile-responsive="true" >
         <thead>
             <tr>
-                <th data-sortable="true" >' . translate("Systèmes d'exploitation") . '</th>
+                <th data-sortable="true" >' . __d('two_stat', 'Systèmes d\'exploitation') . '</th>
                 <th data-sortable="true" data-halign="center" data-align="right">%</th>
                 <th data-align="right"></th>
             </tr>
@@ -410,7 +410,7 @@ echo '
                 <td>' . $ios[0] . '</td>
             </tr>
             <tr>
-                <td><i class="fa fa-question fa-3x align-middle"></i>&nbsp;' . translate("Inconnu") . '</td>
+                <td><i class="fa fa-question fa-3x align-middle"></i>&nbsp;' . __d('two_stat', 'Inconnu') . '</td>
                 <td>
                 <div class="text-center small">' . $os_other[1] . ' %</div>
                 <div class="progress bg-light">
@@ -421,13 +421,13 @@ echo '
             </tr>
         </tbody>
     </table>
-    <h3 class="my-4">' . translate("Thème(s)") . '</h3>
+    <h3 class="my-4">' . __d('two_stat', 'Thème(s)') . '</h3>
     <table data-toggle="table" data-striped="true">
         <thead>
             <tr>
-                <th data-sortable="true" data-halign="center">' . translate("Thème(s)") . '</th>
-                <th data-halign="center" data-align="right">' . translate("Nombre d'utilisateurs par thème") . '</th>
-                <th data-halign="center">' . translate("Status") . '</th>
+                <th data-sortable="true" data-halign="center">' . __d('two_stat', 'Thème(s)') . '</th>
+                <th data-halign="center" data-align="right">' . __d('two_stat', 'Nombre d\'utilisateurs par thème') . '</th>
+                <th data-halign="center">' . __d('two_stat', 'Status') . '</th>
             </tr>
         </thead>
         <tbody>';
@@ -440,7 +440,7 @@ $resultX = sql_query("SELECT DISTINCT(theme) FROM " . $NPDS_Prefix . "users");
 while (list($themelist) = sql_fetch_row($resultX)) {
     if ($themelist != '') {
         $ibix = explode('+', $themelist);
-        $T_exist = is_dir("themes/$ibix[0]") ? '' : '<span class="text-danger">' . translate("Ce fichier n'existe pas ...") . '</span>';
+        $T_exist = is_dir("themes/$ibix[0]") ? '' : '<span class="text-danger">' . __d('two_stat', 'Ce fichier n\'existe pas ...') . '</span>';
 
         if ($themelist == Config::get('npds.Default_Theme')) {
 
@@ -457,7 +457,7 @@ while (list($themelist) = sql_fetch_row($resultX)) {
 
             echo '
                 <tr>
-                <td>' . $themelist . ' <b>(' . translate("par défaut") . ')</b></td>
+                <td>' . $themelist . ' <b>(' . __d('two_stat', 'par défaut') . ')</b></td>
                 <td><b>' . str::wrh(($themeD1 + $themeD2)) . '</b></td>
                 <td>' . $T_exist . '</td>
                 </tr>';
@@ -544,40 +544,40 @@ $cat2 = $result ? sql_num_rows($result) : 0;
 $cat = $cat1 + $cat2;
 
 echo '
-    <h3 class="my-4">' . translate("Statistiques diverses") . '</h3>
+    <h3 class="my-4">' . __d('two_stat', 'Statistiques diverses') . '</h3>
     <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-user fa-2x text-muted me-1"></i>' . translate("Utilisateurs enregistrés") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($unum) . ' </span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-users fa-2x text-muted me-1"></i>' . translate("Groupe") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($gnum) . ' </span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-user-edit fa-2x text-muted me-1"></i>' . translate("Auteurs actifs") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($anum) . ' </span></li>';
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-user fa-2x text-muted me-1"></i>' . __d('two_stat', 'Utilisateurs enregistrés') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($unum) . ' </span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-users fa-2x text-muted me-1"></i>' . __d('two_stat', 'Groupe') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($gnum) . ' </span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-user-edit fa-2x text-muted me-1"></i>' . __d('two_stat', 'Auteurs actifs') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($anum) . ' </span></li>';
 
 $imgtmp = $ibid = theme::theme_image('stats/postnew.png') ? $ibid : 'assets/images/admin/postnew.png';
 
 echo '
-        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . translate("Articles publiés") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($snum) . ' </span></li>';
+        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . __d('two_stat', 'Articles publiés') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($snum) . ' </span></li>';
 
 $imgtmp = $ibid = theme::theme_image('stats/topicsman.png') ? $ibid : 'assets/images/admin/topicsman.png';
 
 echo '
-        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . translate("Sujets actifs") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($tnum) . ' </span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-comments fa-2x text-muted me-1"></i>' . translate("Commentaires") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($cnum) . ' </span></li>';
+        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . __d('two_stat', 'Sujets actifs') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($tnum) . ' </span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-comments fa-2x text-muted me-1"></i>' . __d('two_stat', 'Commentaires') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($cnum) . ' </span></li>';
 
 $imgtmp = $ibid = theme::theme_image('stats/sections.png') ? $ibid : 'assets/images/admin/sections.png';
 
 echo '
-        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . translate("Rubriques spéciales") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($secnum) . ' </span></li>';
+        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . __d('two_stat', 'Rubriques spéciales') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($secnum) . ' </span></li>';
 
 $imgtmp = $ibid = theme::theme_image('stats/sections.png') ? $ibid : 'assets/images/admin/sections.png';
 
 echo '
-        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . translate("Articles présents dans les rubriques") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($secanum) . ' </span></li>';
+        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '" alt="" loading="lazy"/>' . __d('two_stat', 'Articles présents dans les rubriques') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($secanum) . ' </span></li>';
 echo '
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted me-1"></i>' . translate("Liens présents dans la rubrique des liens web") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($links) . ' </span></li>
-        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted me-1"></i>' . translate("Catégories dans la rubrique des liens web") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($cat) . ' </span></li>';
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted me-1"></i>' . __d('two_stat', 'Liens présents dans la rubrique des liens web') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($links) . ' </span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted me-1"></i>' . __d('two_stat', 'Catégories dans la rubrique des liens web') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($cat) . ' </span></li>';
 
 $imgtmp = $ibid = theme::theme_image('stats/submissions.png') ? $ibid : 'assets/images/admin/submissions.png';
 
 echo '
-        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '"  alt="" />' . translate("Article en attente d'édition") . ' <span class="badge bg-secondary ms-auto">' . str::wrh($subnum) . ' </span></li>
+        <li class="list-group-item d-flex justify-content-start align-items-center"><img class="me-1" src="' . $imgtmp . '"  alt="" />' . __d('two_stat', 'Article en attente d\'édition') . ' <span class="badge bg-secondary ms-auto">' . str::wrh($subnum) . ' </span></li>
         <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Num <span class="badge bg-danger ms-auto">' . Config::get('versioning.Version_Num') . '</span></li>
         <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Id <span class="badge bg-danger ms-auto">' . Config::get('versioning.Version_ID') . '</span></li>
         <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted me-1"></i>Version Sub <span class="badge bg-danger ms-auto">' . Config::get('versioning.Version_Sub') . '</span></li>

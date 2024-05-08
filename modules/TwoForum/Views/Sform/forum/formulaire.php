@@ -127,7 +127,7 @@ Sform::add_extra('
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto" >');
 
-Sform::add_field('Reset', '', translate("Annuler"), 'reset', false);
+Sform::add_field('Reset', '', __d('two_forum', 'Annuler'), 'reset', false);
 Sform::add_extra("&nbsp;&nbsp;&nbsp;");
 
 // Submit bouton

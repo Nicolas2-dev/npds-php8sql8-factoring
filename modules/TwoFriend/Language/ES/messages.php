@@ -1,4 +1,27 @@
 <?php
 
 return array (
+  'Article intéressant sur' => '',
+  'Bonjour' => '',
+  'Date :' => '',
+  'Email du destinataire' => '',
+  'Envoi de l\'article à un ami' => '',
+  'Envoyer' => '',
+  'Erreur : Email invalide' => '',
+  'L\'article' => '',
+  'Merci' => '',
+  'Merci de nous avoir recommandé' => '',
+  'Nom du destinataire' => '',
+  'Nos références ont été envoyées à ' => '',
+  'Recommander ce site à un ami' => '',
+  'Site à découvrir : ' => '',
+  'Sujet : ' => '',
+  'Votre Email' => '',
+  'Votre ami' => '',
+  'Votre nom' => '',
+  'Vous allez envoyer cet article' => '',
+  'a trouvé cet article intéressant et a souhaité vous l\'envoyer.' => '',
+  'a trouvé notre site' => '',
+  'a été envoyé à' => '',
+  'intéressant et a voulu vous le faire connaître.' => '',
 );

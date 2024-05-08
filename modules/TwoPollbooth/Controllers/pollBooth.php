@@ -125,7 +125,7 @@ function pollCollector(int $pollID, int $voteID, string $forwarder): void
 function pollList(): void
 {
     echo '
-    <h2 class="mb-3">' . translate("Sondage") . '</h2>
+    <h2 class="mb-3">' . __d('two_polbooth', 'Sondage') . '</h2>
     <hr />
     <div class="row">';
 
@@ -144,7 +144,7 @@ function pollList(): void
 
         echo '
         <div class="col-sm-8">' . language::aff_langue($pollTitle) . '</div>
-        <div class="col-sm-4 text-end">(<a href="'. site_url('pollBooth.php?op=results&amp;pollID=' . $id) .'">' . translate("Résultats") . '</a> - ' . $sum['count'] . ' ' . translate("votes") . ')</div>';
+        <div class="col-sm-4 text-end">(<a href="'. site_url('pollBooth.php?op=results&amp;pollID=' . $id) .'">' . __d('two_polbooth', 'Résultats') . '</a> - ' . $sum['count'] . ' ' . __d('two_polbooth', 'votes') . ')</div>';
     }
 
     echo '
@@ -176,7 +176,7 @@ function pollResults(int $pollID): void
             ->where('pollID', $pollID)
             ->first();
 
-    echo '<h4><span class="badge bg-secondary">' . $sum['count'] . '</span>&nbsp;' . translate("Résultats") . '</h4>';
+    echo '<h4><span class="badge bg-secondary">' . $sum['count'] . '</span>&nbsp;' . __d('two_polbooth', 'Résultats') . '</h4>';
 
     for ($i = 1; $i <= Config::get('npds.maxOptions'); $i++) {
 
@@ -216,10 +216,10 @@ function pollResults(int $pollID): void
     }
 
     echo '<br />';
-    echo '<p class="text-center"><b>' . translate("Nombre total de votes: ") . ' ' . $sum['count'] . '</b></p><br />';
+    echo '<p class="text-center"><b>' . __d('two_polbooth', 'Nombre total de votes: ') . ' ' . $sum['count'] . '</b></p><br />';
 
     if (Config::get('npds.setCookies') > 0) {
-        echo '<p class="text-danger">' . translate("Un seul vote par sondage.") . '</p>';
+        echo '<p class="text-danger">' . __d('two_polbooth', 'Un seul vote par sondage.') . '</p>';
     }
 }
 
@@ -253,7 +253,7 @@ function pollboxbooth(int $pollID, int $pollClose): void
             ->where('pollID', $pollID)
             ->first();
 
-    $boxTitle = $block_title == '' ? translate("Sondage") : $block_title;
+    $boxTitle = $block_title == '' ? __d('two_polbooth', 'Sondage') : $block_title;
 
     $boxContent .= '<h4>' . language::aff_langue($res_pooldesc['pollTitle']) . '</h4>';
 
@@ -292,14 +292,14 @@ function pollboxbooth(int $pollID, int $pollClose): void
 
     if (!$pollClose) {
         $inputvote = '
-            <button class="btn btn-primary btn-sm my-2" type="submit" value="' . translate("Voter") . '" title="' . translate("Voter") . '" />' . translate("Voter") . '</button>';
+            <button class="btn btn-primary btn-sm my-2" type="submit" value="' . __d('two_polbooth', 'Voter') . '" title="' . __d('two_polbooth', 'Voter') . '" />' . __d('two_polbooth', 'Voter') . '</button>';
     }
 
     $boxContent .= '
             <div class="mb-3">' . $inputvote . '</div>
     </form>';
 
-    $boxContent .= '<div><ul><li><a href="'. site_url('pollBooth.php') .'">' . translate("Anciens sondages") . '</a></li>';
+    $boxContent .= '<div><ul><li><a href="'. site_url('pollBooth.php') .'">' . __d('two_polbooth', 'Anciens sondages') . '</a></li>';
 
     if (Config::get('npds.pollcomm')) {
         if (file_exists('modules/comments/config/pollBoth.conf.php')) {
@@ -313,9 +313,9 @@ function pollboxbooth(int $pollID, int $pollClose): void
                 ->where('post_aff', 1)
                 ->count();
         
-        $boxContent .= '<li>' . translate("Votes : ") . ' ' . $sum . '</li><li>' . translate("Commentaire(s) : ") . ' ' . $numcom . '</li>';
+        $boxContent .= '<li>' . __d('two_polbooth', 'Votes : ') . ' ' . $sum . '</li><li>' . __d('two_polbooth', 'Commentaire(s) : ') . ' ' . $numcom . '</li>';
     } else {
-        $boxContent .= '<li>' . translate("Votes : ") . ' ' . $sum . '</li>';
+        $boxContent .= '<li>' . __d('two_polbooth', 'Votes : ') . ' ' . $sum . '</li>';
     }
 
     $boxContent .= '</ul></div>';
@@ -330,7 +330,7 @@ function pollboxbooth(int $pollID, int $pollClose): void
  */
 function PollMain_aff(): void 
 {
-    echo '<p><strong><a href="'. site_url('pollBooth.php') .'">' . translate("Anciens sondages") . '</a></strong></p>';
+    echo '<p><strong><a href="'. site_url('pollBooth.php') .'">' . __d('two_polbooth', 'Anciens sondages') . '</a></strong></p>';
 }
 
 
@@ -359,12 +359,12 @@ if (isset($forwarder)) {
             include('themes/default/header.php');
         }
 
-        echo '<h2>' . translate("Sondage") . '</h2><hr />';
+        echo '<h2>' . __d('two_polbooth', 'Sondage') . '</h2><hr />';
         
         pollResults($pollID);
 
         if (!$pollClose) {
-            $block_title = '<h3>' . translate("Voter") . '</h3>';
+            $block_title = '<h3>' . __d('two_polbooth', 'Voter') . '</h3>';
             echo $block_title;
 
             pollboxbooth($pollID, $pollClose);

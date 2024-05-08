@@ -27,7 +27,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'FaqAdmin';
-$f_titre = adm_translate("Faq");
+$f_titre = __d('two_faqs', 'Faq');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -49,12 +49,12 @@ function FaqAdmin(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Liste des catégories") .'</h3>
+    <h3 class="mb-3">'. __d('two_faqs', 'Liste des catégories') .'</h3>
     <table id="tad_faq" data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-icons-prefix="fa" data-icons="icons" data-buttons-class="outline-secondary">
         <thead class="thead-infos">
             <tr>
-                <th data-sortable="true" data-halign="center" class="n-t-col-xs-10">'. adm_translate("Catégories") .'</th>
-                <th data-halign="center" data-align="center" class="n-t-col-xs-2">'. adm_translate("Fonctions") .'</th>
+                <th data-sortable="true" data-halign="center" class="n-t-col-xs-10">'. __d('two_faqs', 'Catégories') .'</th>
+                <th data-halign="center" data-align="center" class="n-t-col-xs-2">'. __d('two_faqs', 'Fonctions') .'</th>
             </tr>
         </thead>
         <tbody>';
@@ -70,15 +70,15 @@ function FaqAdmin(): void
                     </span>
                     <br />
                     <a href="'. site_url('admin.php?op=FaqCatGo&amp;id_cat='. $categorie['id']) .'" class="noir">
-                        <i class="fa fa-level-up-alt fa-lg fa-rotate-90 " title="'. adm_translate("Voir") .'" data-bs-toggle="tooltip"></i>&nbsp;&nbsp;'. adm_translate("Questions & Réponses") .'&nbsp;
+                        <i class="fa fa-level-up-alt fa-lg fa-rotate-90 " title="'. __d('two_faqs', 'Voir') .'" data-bs-toggle="tooltip"></i>&nbsp;&nbsp;'. __d('two_faqs', 'Questions & Réponses') .'&nbsp;
                     </a>
                 </td>
                 <td>
                     <a href="'. site_url('admin.php?op=FaqCatEdit&amp;id_cat='. $categorie['id']) .'">
-                        <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip"></i>
+                        <i class="fa fa-edit fa-lg me-2" title="'. __d('two_faqs', 'Editer') .'" data-bs-toggle="tooltip"></i>
                     </a>
                     <a href="'. site_url('admin.php?op=FaqCatDel&amp;id_cat='. $categorie['id']) .'&amp;ok=0">
-                        <i class="fas fa-trash fa-lg text-danger" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip">
+                        <i class="fas fa-trash fa-lg text-danger" title="'. __d('two_faqs', 'Effacer') .'" data-bs-toggle="tooltip">
                     </a>
                 </td>
             </tr>';
@@ -88,19 +88,19 @@ function FaqAdmin(): void
         </tbody>
     </table>
     <hr />
-    <h3 class="mb-3">'. adm_translate("Ajouter une catégorie") .'</h3>
+    <h3 class="mb-3">'. __d('two_faqs', 'Ajouter une catégorie') .'</h3>
     <form id="adminfaqcatad" action="'. site_url('admin.php') .'" method="post">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="categories">'. adm_translate("Nom") .'</label>
+                <label class="col-form-label col-sm-12" for="categories">'. __d('two_faqs', 'Nom') .'</label>
                 <div class="col-sm-12">
-                <textarea class="form-control" type="text" name="categories" id="categories" maxlength="255" placeholder="'. adm_translate("Catégories") .'" rows="3" required="required" ></textarea>
+                <textarea class="form-control" type="text" name="categories" id="categories" maxlength="255" placeholder="'. __d('two_faqs', 'Catégories') .'" rows="3" required="required" ></textarea>
                 <span class="help-block text-end"><span id="countcar_categories"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
                 <div class="col-sm-12">
-                <button class="btn btn-outline-primary col-12" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. adm_translate("Ajouter une catégorie") .'</button>
+                <button class="btn btn-outline-primary col-12" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. __d('two_faqs', 'Ajouter une catégorie') .'</button>
                 <input type="hidden" name="op" value="FaqCatAdd" />
                 </div>
             </div>
@@ -148,14 +148,14 @@ function FaqCatGo(int $id_cat): void
             <li id="qr_'. $faq['id'] .'" class="list-group-item">
                 <div class="topi">
                     <h5 id="q_'. $faq['id'] .'" class="list-group-item-heading">
-                        <a class="" href="'. site_url('admin.php?op=FaqCatGoEdit&amp;id='. $faq['id']) .'" title="'. adm_translate("Editer la question réponse") .'" data-bs-toggle="tooltip">
+                        <a class="" href="'. site_url('admin.php?op=FaqCatGoEdit&amp;id='. $faq['id']) .'" title="'. __d('two_faqs', 'Editer la question réponse') .'" data-bs-toggle="tooltip">
                             '. language::aff_langue($faq['question']) .'
                         </a>
                     </h5>
                     <p class="list-group-item-text">'. metalang::meta_lang($answer) .'</p>
                     <div id="shortcut-tools_'. $faq['id'] .'" class="n-shortcut-tools" style="display:none;">
                         <a class="text-danger btn" href="'. site_url('admin.php?op=FaqCatGoDel&amp;id='. $faq['id']) .'&amp;ok=0" >
-                            <i class="fas fa-trash fa-2x" title="'. adm_translate("Supprimer la question réponse") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                            <i class="fas fa-trash fa-2x" title="'. __d('two_faqs', 'Supprimer la question réponse') .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                         </a>
                     </div>
                 </div>
@@ -166,18 +166,18 @@ function FaqCatGo(int $id_cat): void
     echo '
     <hr />
     <h3 class="mb-3">'. $faq_cat .'</h3>
-    <h4>'. adm_translate("Ajouter une question réponse") .'</h4>
+    <h4>'. __d('two_faqs', 'Ajouter une question réponse') .'</h4>
     <form id="adminfaqquest" action="'. site_url('admin.php') .'" method="post" name="adminForm">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="question">'. adm_translate("Question") .'</label>
+                <label class="col-form-label col-sm-12" for="question">'. __d('two_faqs', 'Question') .'</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" type="text" name="question" id="question" maxlength="255"></textarea>
                 <span class="help-block text-end"><span id="countcar_question"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="answer">'. adm_translate("Réponse") .'</label>
+                <label class="col-form-label col-sm-12" for="answer">'. __d('two_faqs', 'Réponse') .'</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" id="answer" name="answer" rows="15"></textarea>
                 </div>
@@ -190,13 +190,13 @@ function FaqCatGo(int $id_cat): void
                 <div class="col-sm-12 d-flex flex-row justify-content-start flex-wrap">
                 <input type="hidden" name="id_cat" value="' . $id_cat . '" />
                 <input type="hidden" name="op" value="FaqCatGoAdd" />
-                <button class="btn btn-primary mb-2 " type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. adm_translate("Ajouter") .'</button>&nbsp;
-                <button class="btn btn-secondary mb-2 " href="'. site_url('admin.php?op=FaqAdmin') .'">'. adm_translate("Retour en arrière") .'</button>
+                <button class="btn btn-primary mb-2 " type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. __d('two_faqs', 'Ajouter') .'</button>&nbsp;
+                <button class="btn btn-secondary mb-2 " href="'. site_url('admin.php?op=FaqAdmin') .'">'. __d('two_faqs', 'Retour en arrière') .'</button>
                 </div>
             </div>
         </fieldset>
     </form>
-    <h4>'. adm_translate("Liste des questions réponses") .'</h4>
+    <h4>'. __d('two_faqs', 'Liste des questions réponses') .'</h4>
     <ul class="list-group">
         '. $lst_qr .'
     </ul>
@@ -244,12 +244,12 @@ function FaqCatEdit(int $id_cat): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Editer la catégorie") .'</h3>
+    <h3 class="mb-3">'. __d('two_faqs', 'Editer la catégorie') .'</h3>
     <h4><a href="'. site_url('admin.php?op=FaqCatGo&amp;id_cat='. $id_cat) .'">'. $faq_categorie['categories'] .'</a></h4>
     <form id="adminfaqcated" action="'. site_url('admin.php') .'" method="post">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="categories">'. adm_translate("Nom") .'</label>
+                <label class="col-form-label col-sm-12" for="categories">'. __d('two_faqs', 'Nom') .'</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" type="text" name="categories" id="categories" maxlength="255" rows="3" required="required" >'. $faq_categorie['categories'] .'</textarea>
                 <span class="help-block text-end"><span id="countcar_categories"></span></span>
@@ -260,7 +260,7 @@ function FaqCatEdit(int $id_cat): void
                 <input type="hidden" name="op" value="FaqCatSave" />
                 <input type="hidden" name="old_id_cat" value="'. $id_cat .'" />
                 <input type="hidden" name="id_cat" value="'. $id_cat .'" />
-                <button class="btn btn-outline-primary col-12" type="submit"><i class="fa fa-check-square fa-lg"></i>&nbsp;'. adm_translate("Sauver les modifications") .'</button>
+                <button class="btn btn-outline-primary col-12" type="submit"><i class="fa fa-check-square fa-lg"></i>&nbsp;'. __d('two_faqs', 'Sauver les modifications') .'</button>
                 </div>
             </div>
         </fieldset>
@@ -299,10 +299,10 @@ function FaqCatGoEdit(int $id): void
     <hr />
     <h3 class="mb-3">'. $faq['categories'] .'</h3>
     <h4>'. $faq['question'] .'</h4>
-    <h4>'. adm_translate("Prévisualiser") .'</h4>';
+    <h4>'. __d('two_faqs', 'Prévisualiser') .'</h4>';
     echo '
     <label class="col-form-label" for="">
-        '. language::aff_local_langue('', 'local_user_language', adm_translate("Langue de Prévisualisation")) .'
+        '. language::aff_local_langue('', 'local_user_language', __d('two_faqs', 'Langue de Prévisualisation')) .'
     </label>
     <div class="card card-body mb-3">
     <p>'. language::preview_local_langue($local_user_language, $faq['question']) .'</p>';
@@ -313,18 +313,18 @@ function FaqCatGoEdit(int $id): void
     </div>';
 
     echo '
-    <h4>'. adm_translate("Editer Question & Réponse") .'</h4>
+    <h4>'. __d('two_faqs', 'Editer Question & Réponse') .'</h4>
     <form id="adminfaqquested" action="'. site_url('admin.php') .'" method="post" name="adminForm">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-12" for="question">'. adm_translate("Question") .'</label>
+                <label class="col-form-label col-12" for="question">'. __d('two_faqs', 'Question') .'</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" type="text" name="question" id="question" maxlength="255">'. $faq['question'] .'</textarea>
                 <span class="help-block text-end"><span id="countcar_question"></span></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-12" for="answer">'. adm_translate("Réponse") .'</label>
+                <label class="col-form-label col-12" for="answer">'. __d('two_faqs', 'Réponse') .'</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" name="answer" rows="15">'. $answer .'</textarea>
                 </div>
@@ -334,8 +334,8 @@ function FaqCatGoEdit(int $id): void
                 <div class="col-sm-12 d-flex flex-row justify-content-center flex-wrap">
                 <input type="hidden" name="id" value="'. $id .'" />
                 <input type="hidden" name="op" value="FaqCatGoSave" />
-                <button class="btn btn-outline-primary col-sm-6 mb-2 " type="submit">'. adm_translate("Sauver les modifications") .'</button>
-                <button class="btn btn-outline-secondary col-sm-6 mb-2 " href="'. site_url('admin.php?op=FaqCatGo&amp;id_cat='. $faq['id_categorie']) .'" >'. adm_translate("Retour en arrière") .'</a>
+                <button class="btn btn-outline-primary col-sm-6 mb-2 " type="submit">'. __d('two_faqs', 'Sauver les modifications') .'</button>
+                <button class="btn btn-outline-secondary col-sm-6 mb-2 " href="'. site_url('admin.php?op=FaqCatGo&amp;id_cat='. $faq['id_categorie']) .'" >'. __d('two_faqs', 'Retour en arrière') .'</a>
                 </div>
             </div>
         </fieldset>
@@ -455,13 +455,13 @@ function FaqCatDel(int $id_cat, int $ok = 0): void
         echo '
         <hr />
         <div class="alert alert-danger">
-            <p><strong>' . adm_translate("ATTENTION : êtes-vous sûr de vouloir effacer cette FAQ et toutes ses questions ?") . '</strong></p>
+            <p><strong>' . __d('two_faqs', 'ATTENTION : êtes-vous sûr de vouloir effacer cette FAQ et toutes ses questions ?') . '</strong></p>
             <a href="'. site_url('admin.php?op=FaqCatDel&amp;id_cat='. $id_cat .'&amp;ok=1') .'" class="btn btn-danger btn-sm">
-                '. adm_translate("Oui") .'
+                '. __d('two_faqs', 'Oui') .'
             </a>
             &nbsp;
             <a href="'. site_url('admin.php?op=FaqAdmin') .'" class="btn btn-secondary btn-sm">
-                '. adm_translate("Non") .'
+                '. __d('two_faqs', 'Non') .'
             </a>
         </div>';
 
@@ -494,13 +494,13 @@ function FaqCatGoDel(int $id, int $ok = 0): void
         echo '
         <hr />
         <div class="alert alert-danger">
-            <p><strong>'. adm_translate("ATTENTION : êtes-vous sûr de vouloir effacer cette question ?") .'</strong></p>
+            <p><strong>'. __d('two_faqs', 'ATTENTION : êtes-vous sûr de vouloir effacer cette question ?') .'</strong></p>
             <a href="'. site_url('admin.php?op=FaqCatGoDel&amp;id='. $id .'&amp;ok=1') .'" class="btn btn-danger btn-sm">
-                '. adm_translate("Oui") .'
+                '. __d('two_faqs', 'Oui') .'
             </a>
             &nbsp;
             <a href="'. site_url('admin.php?op=FaqAdmin') .'" class="btn btn-secondary btn-sm">
-                '. adm_translate("Non") .'
+                '. __d('two_faqs', 'Non') .'
             </a>
         </div>';
 

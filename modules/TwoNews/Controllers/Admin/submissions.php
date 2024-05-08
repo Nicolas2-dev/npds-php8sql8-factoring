@@ -24,7 +24,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'submissions';
-$f_titre = adm_translate('Article en attente de validation');
+$f_titre = __d('two_news', 'Article en attente de validation');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -51,19 +51,19 @@ function submissions(): void
     if ($queues == 0) {
         echo '
     <hr />
-    <h3>'. adm_translate("Pas de nouveaux Articles postés") .'</h3>';
+    <h3>'. __d('two_news', 'Pas de nouveaux Articles postés') .'</h3>';
     } else {
         echo '
     <hr />
-    <h3>'. adm_translate("Nouveaux Articles postés") .'<span class="badge bg-danger float-end">'. sql_num_rows($result) .'</span></h3>
+    <h3>'. __d('two_news', 'Nouveaux Articles postés') .'<span class="badge bg-danger float-end">'. sql_num_rows($result) .'</span></h3>
     <table id="tad_subm" data-toggle="table" data-striped="true" data-show-toggle="true" data-search="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
                 <th data-halign="center"><i class="fa fa-user fa-lg"></i></th>
-                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">'. adm_translate("Sujet") .'</th>
-                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">'. adm_translate("Titre") .'</th>
-                <th data-halign="center" data-align="right">'. adm_translate("Date") .'</th>
-                <th class="n-t-col-xs-2" data-halign="center" data-align="center">'. adm_translate("Fonctions") .'</th>
+                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">'. __d('two_news', 'Sujet') .'</th>
+                <th data-sortable="true" data-sorter="htmlSorter" data-halign="center">'. __d('two_news', 'Titre') .'</th>
+                <th data-halign="center" data-align="right">'. __d('two_news', 'Date') .'</th>
+                <th class="n-t-col-xs-2" data-halign="center" data-align="center">'. __d('two_news', 'Fonctions') .'</th>
             </tr>
         </thead>
         <tbody>';
@@ -95,7 +95,7 @@ function submissions(): void
                 <td>';
 
             if ($queue['subject'] == '') {
-                $queue['subject'] = adm_translate("Aucun Sujet");
+                $queue['subject'] = __d('two_news', 'Aucun Sujet');
             }
 
             $subject = language::aff_langue($queue['subject']);
@@ -115,10 +115,10 @@ function submissions(): void
             if ($affiche) {
                 echo '
                 <td><a class="" href="'. site_url('admin.php?op=DisplayStory&amp;qid='. $queue['qid']) .'">
-                        <i class="fa fa-edit fa-lg" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" ></i>
+                        <i class="fa fa-edit fa-lg" title="'. __d('two_news', 'Editer') .'" data-bs-toggle="tooltip" ></i>
                     </a>
                     <a class="text-danger" href="'. site_url('admin.php?op=DeleteStory&amp;qid='. $queue['qid']) .'">
-                        <i class="fas fa-trash fa-lg ms-3" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" ></i>
+                        <i class="fas fa-trash fa-lg ms-3" title="'. __d('two_news', 'Effacer') .'" data-bs-toggle="tooltip" ></i>
                     </a>
                 </td>
             </tr>';
@@ -132,7 +132,7 @@ function submissions(): void
         }
 
         if ($dummy < 1) {
-            echo '<h3>'. adm_translate("Pas de nouveaux Articles postés") .'</h3>';
+            echo '<h3>'. __d('two_news', 'Pas de nouveaux Articles postés') .'</h3>';
         } else {
             echo '
             </tbody>

@@ -64,11 +64,11 @@ function fma_filter($type, $filename, $Extension)
             if (fma_autorise($type, $filename))
                 $autorise = true;
             else
-                $error = fma_translate("Fichier interdit");
+                $error = __d('two_fmanager', 'Fichier interdit');
         } else
-            $error = fma_translate("Type de fichier interdit");
+            $error = __d('two_fmanager', 'Type de fichier interdit');
     } else
-        $error = fma_translate("Fichier interdit");
+        $error = __d('two_fmanager', 'Fichier interdit');
     $tab[] = $autorise;
     $tab[] = $error;
     $tab[] = $filename;
@@ -328,7 +328,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists($auto[3] . '/' . $auto[2])) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-folder fs-1 me-2 align-middle text-muted"></i>' . fma_translate("Renommer un répertoire");
+                    $cmd = '<i class="bi bi-folder fs-1 me-2 align-middle text-muted"></i>' . __d('two_fmanager', 'Renommer un répertoire');
                     $rename_dir = '
                 <form method="post" action="modules.php">
                     <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -342,7 +342,7 @@ switch ($op) {
                         <input class="form-control" type="text" name="renamefile" value="' . extend_ascii($auto[2]) . '" />
                     </div>
                     <div class="mb-3">
-                        <button class="btn btn-primary" type="submit" name="ok">' . fma_translate("Ok") . '</button>
+                        <button class="btn btn-primary" type="submit" name="ok">' . __d('two_fmanager', 'Ok') . '</button>
                     </div>
                 </form>';
                 }
@@ -377,7 +377,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists($auto[3] . '/' . $auto[2])) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-folder fs-1 me-2 text-danger align-middle"></i><span class="text-danger">' . fma_translate("Supprimer un répertoire") . '</span>';
+                    $cmd = '<i class="bi bi-folder fs-1 me-2 text-danger align-middle"></i><span class="text-danger">' . __d('two_fmanager', 'Supprimer un répertoire') . '</span>';
                     $remove_dir = '
                 <form method="post" action="modules.php">
                     <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -387,10 +387,10 @@ switch ($op) {
                     <input type="hidden" name="att_name" value="' . $att_name . '" />
                     <input type="hidden" name="op" value="removedir-save" />
                     <div class="mb-3">
-                        ' . fma_translate("Confirmez-vous la suppression de") . ' <code>' . extend_ascii($auto[2]) . '</code>
+                        ' . __d('two_fmanager', 'Confirmez-vous la suppression de') . ' <code>' . extend_ascii($auto[2]) . '</code>
                     </div>
                     <div class="mb-3">
-                        <button class="btn btn-danger" type="submit" name="ok">' . fma_translate("Ok") . '</button>
+                        <button class="btn btn-danger" type="submit" name="ok">' . __d('two_fmanager', 'Ok') . '</button>
                     </div>
                 </form>';
                 }
@@ -421,7 +421,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists($auto[3] . '/' . $auto[2])) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-folder fs-1 me-2 align-middle text-muted"></i>' . fma_translate("Changer les droits d'un répertoire");
+                    $cmd = '<i class="bi bi-folder fs-1 me-2 align-middle text-muted"></i>' . __d('two_fmanager', 'Changer les droits d\'un répertoire');
                     $chmod_dir = '
                 <form method="post" action="modules.php">
                     <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -436,7 +436,7 @@ switch ($op) {
                             ' . chmod_pres($obj->GetPerms($auto[3] . '/' . $auto[2]), 'chmoddir') . '
                     </div>
                     <div class="mb-3">
-                        <input class="btn btn-primary" type="submit" name="ok" value="' . fma_translate("Ok") . '" />
+                        <input class="btn btn-primary" type="submit" name="ok" value="' . __d('two_fmanager', 'Ok') . '" />
                     </div>
                 </form>';
                 }
@@ -481,7 +481,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists($auto[3] . '/' . $auto[2])) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . fma_translate("Renommer un fichier");
+                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . __d('two_fmanager', 'Renommer un fichier');
                     $rename_file = '
                 <form method="post" action="modules.php">
                     <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -495,7 +495,7 @@ switch ($op) {
                         <input class="form-control" type="text" size="60" id="renamefile" name="renamefile" value="' . extend_ascii($auto[2]) . '" />
                     </div>
                     <div class="mb-3">
-                        <input class="btn btn-primary" type="submit" name="ok" value="' . fma_translate("Ok") . '" />
+                        <input class="btn btn-primary" type="submit" name="ok" value="' . __d('two_fmanager', 'Ok') . '" />
                     </div>
                 </form>';
                 }
@@ -529,7 +529,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists($auto[3] . '/' . $auto[2])) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . fma_translate("Déplacer / Copier un fichier");
+                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . __d('two_fmanager', 'Déplacer / Copier un fichier');
                     $move_file = '
                 <form method="post" action="modules.php">
                     <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -539,8 +539,8 @@ switch ($op) {
                     <input type="hidden" name="att_name" value="' . $att_name . '" />
                     <div class="mb-3">
                         <select class="form-select me-2" name="op">
-                            <option value="movefile-save" selected="selected"> ' . fma_translate("Déplacer") . '</option>
-                            <option value="copyfile-save">' . fma_translate("Copier") . '</option>
+                            <option value="movefile-save" selected="selected"> ' . __d('two_fmanager', 'Déplacer') . '</option>
+                            <option value="copyfile-save">' . __d('two_fmanager', 'Copier') . '</option>
                         </select>
                         <code>' . extend_ascii($auto[2]) . '</code>
                     </div>
@@ -561,7 +561,7 @@ switch ($op) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <button class="btn btn-primary" type="submit" name="ok">' . fma_translate("Ok") . '</button>
+                        <button class="btn btn-primary" type="submit" name="ok">' . __d('two_fmanager', 'Ok') . '</button>
                     </div>
                 </form>';
                 }
@@ -606,7 +606,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists("$auto[3]/$auto[2]")) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 text-danger align-middle"></i><span class="text-danger">' . fma_translate("Supprimer un fichier") . '</span>';
+                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 text-danger align-middle"></i><span class="text-danger">' . __d('two_fmanager', 'Supprimer un fichier') . '</span>';
                     $remove_file = '
                 <form method="post" action="modules.php">
                     <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -616,7 +616,7 @@ switch ($op) {
                     <input type="hidden" name="att_name" value="' . $att_name . '" />
                     <input type="hidden" name="op" value="removefile-save" />
                     <div class="mb-3 lead">
-                        ' . fma_translate("Confirmez-vous la suppression de") . ' <code>' . extend_ascii($auto[2]) . '</code>
+                        ' . __d('two_fmanager', 'Confirmez-vous la suppression de') . ' <code>' . extend_ascii($auto[2]) . '</code>
                     </div>
                     <div class="mb-3">
                         <button class="btn btn-danger" type="submit" name="ok">Ok</button>
@@ -647,7 +647,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists($auto[3] . '/' . $auto[2])) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . fma_translate("Changer les droits d'un fichier") . '</span>';
+                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . __d('two_fmanager', 'Changer les droits d\'un fichier') . '</span>';
                     $chmod_file = '
                 <form method="post" action="modules.php">
                     <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -662,7 +662,7 @@ switch ($op) {
                             ' . chmod_pres($obj->GetPerms($auto[3] . '/' . $auto[2]), "chmodfile") . '
                     </div>
                     <div class="mb-3">
-                        <button class="btn btn-primary" type="submit" name="ok">' . fma_translate("Ok") . '</button>
+                        <button class="btn btn-primary" type="submit" name="ok">' . __d('two_fmanager', 'Ok') . '</button>
                     </div>
                 </form>';
                 }
@@ -694,7 +694,7 @@ switch ($op) {
                 $auto[3] = crypt::decrypt($browse);
                 if (file_exists($auto[3] . '/' . $auto[2])) {
                     $theme_fma = $themeC_fma;
-                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . fma_translate("Editer un fichier") . '</span>';
+                    $cmd = '<i class="bi bi-file-earmark fs-2 me-2 align-middle text-muted"></i>' . __d('two_fmanager', 'Editer un fichier') . '</span>';
                     $fp = fopen($auto[3] . '/' . $auto[2], 'r');
                     if (filesize($auto[3] . '/' . $auto[2]) > 0)
                         $Fcontent = fread($fp, filesize($auto[3] . '/' . $auto[2]));
@@ -720,7 +720,7 @@ switch ($op) {
                     if (in_array($suffix, $tabW))
                         $edit_file .= editeur::aff_editeur('editfile', 'true');
                     $edit_file .= '
-                    <button class="btn btn-primary" type="submit" name="ok">' . fma_translate("Ok") . '</button>
+                    <button class="btn btn-primary" type="submit" name="ok">' . __d('two_fmanager', 'Ok') . '</button>
                 </form>';
                 }
             } else
@@ -754,7 +754,7 @@ switch ($op) {
             $auto[3] = crypt::decrypt($browse);
             if (file_exists($auto[3] . '/' . $auto[2])) {
                 $theme_fma = $themeC_fma;
-                $cmd = '<span class="text-muted"><i class="fa fa-image fa-2x me-2 align-middle"></i></span>' . fma_translate("Autoriser Pic-Manager") . ' >> ' . $auto[2];
+                $cmd = '<span class="text-muted"><i class="fa fa-image fa-2x me-2 align-middle"></i></span>' . __d('two_fmanager', 'Autoriser Pic-Manager') . ' >> ' . $auto[2];
                 $pict_dir = '
                 <form method="post" action="modules.php">
                 <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -764,7 +764,7 @@ switch ($op) {
                 <input type="hidden" name="att_name" value="' . $att_name . '" />
                 <input type="hidden" name="op" value="pict-save" />
                 <div class="mb-3">
-                    <label class="form-label" for="maxthumb">' . fma_translate("Taille maximum (pixel) de l'imagette") . '</label>';
+                    <label class="form-label" for="maxthumb">' . __d('two_fmanager', 'Taille maximum (pixel) de l\'imagette') . '</label>';
                 $fp = @file($auto[3] . '/' . $auto[2] . '/pic-manager.txt');
                 // La première ligne du tableau est un commentaire
                 settype($fp[1], 'integer');
@@ -779,11 +779,11 @@ switch ($op) {
                     <input class="form-control" type="number" id="maxthumb" name="maxthumb" size="4" value="' . $Max_thumb . '" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="refresh">' . fma_translate("Temps de cache (en seconde) des imagettes") . '</label> 
+                    <label class="form-label" for="refresh">' . __d('two_fmanager', 'Temps de cache (en seconde) des imagettes') . '</label> 
                     <input class="form-control" type="number" id="refresh" name="refresh" size="6" value="' . $refresh . '" />
                 </div>
                 <div class="mb-3">
-                    <button class="btn btn-primary" type="submit" name="ok">' . fma_translate("Ok") . '</button>
+                    <button class="btn btn-primary" type="submit" name="ok">' . __d('two_fmanager', 'Ok') . '</button>
                 </div>
                 </form>';
             }
@@ -880,12 +880,13 @@ $att_icon_multiple = "<img src=\"assets/images/upload/file_types/multiple.gif\" 
 $att_icon_dir = '<i class="bi bi-folder fs-3"></i>';
 $att_icon_search = '<i class="bi bi-search fs-4"></i>';
 
-$suppM = fma_translate("Supprimer");
-$renaM = fma_translate("Renommer");
-$chmoM = fma_translate("Chmoder");
-$editM = fma_translate("Editer");
-$moveM = fma_translate("Déplacer / Copier");
-$pictM = fma_translate("Autoriser Pic-Manager");
+$suppM = __d('two_fmanager', 'Supprimer');
+$renaM = __d('two_fmanager', 'Renommer');
+$chmoM = __d('two_fmanager', 'Chmoder');
+$editM = __d('two_fmanager', 'Editer');
+$moveM = __d('two_fmanager', 'Déplacer / Copier');
+$pictM = __d('two_fmanager', 'Autoriser Pic-Manager');
+
 // Répertoires
 $subdirs = '';
 $sizeofDir = 0;
@@ -1065,7 +1066,7 @@ $upload_file = '
         <input type="hidden" name="browse" value="' . $browse . '" />
         <input type="hidden" name="op" value="upload" />
         <div class="mb-3">
-            <div class="help-block mb-2">' . fma_translate("Extensions autorisées : ") . '<span class="text-success">' . $extension_fma . '</span></div>
+            <div class="help-block mb-2">' . __d('two_fmanager', 'Extensions autorisées : ') . '<span class="text-success">' . $extension_fma . '</span></div>
             <div class="input-group mb-3 me-sm-2">
                 <button class="btn btn-secondary" type="button" onclick="reset2($(\'#userfile\'),\'\');"><i class="bi bi-arrow-clockwise"></i></button>
                 <label class="input-group-text n-ci" id="lab" for="userfile"></label>
@@ -1094,7 +1095,7 @@ $create_dir = '
         <div class="mb-3">
             <input class="form-control" name="userdir" type="text" value="" />
         </div>
-        <input class="btn btn-primary" type="submit" name="ok" value="' . fma_translate("Ok") . '" />
+        <input class="btn btn-primary" type="submit" name="ok" value="' . __d('two_fmanager', 'Ok') . '" />
     </form>';
 
 $create_file = '
@@ -1107,7 +1108,7 @@ $create_file = '
         <div class="mb-3">
             <input class="form-control" name="userfile" type="text" value="" />
         </div>
-        <input class="btn btn-primary" type="submit" name="ok" value="' . fma_translate("Ok") . '" />
+        <input class="btn btn-primary" type="submit" name="ok" value="' . __d('two_fmanager', 'Ok') . '" />
     </form>';
 
 $search_file = '
@@ -1120,7 +1121,7 @@ $search_file = '
         <div class="mb-3">
             <input class="form-control" name="filesearch" type="text" size="50" value="">
         </div>
-        <input class="btn btn-primary" type="submit" name="ok" value="' . fma_translate("Ok") . '">
+        <input class="btn btn-primary" type="submit" name="ok" value="' . __d('two_fmanager', 'Ok') . '">
     </form>';
 
 chdir("$racine_fma/");
@@ -1144,8 +1145,8 @@ if ($inclusion) {
         $Xcontent = str_replace('_home', '<a class="nav-link" href="index.php" target="_blank"><span class="bi bi-house-fill fs-1 align-middle"></a>', $Xcontent);
 
     $Xcontent = str_replace('_back', extend_ascii($cur_nav_href_back), $Xcontent);
-    $Xcontent = str_replace('_refresh', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=' . $ModStart . '&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . $urlext_fma . '"><i class="bi bi-arrow-clockwise fs-1 d-sm-none" title="' . fma_translate("Rafraîchir") . '" data-bs-toggle="tooltip">
-    </i><span class="d-none d-sm-block mt-2">' . fma_translate("Rafraîchir") . '</span></a>', $Xcontent);
+    $Xcontent = str_replace('_refresh', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=' . $ModStart . '&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . $urlext_fma . '"><i class="bi bi-arrow-clockwise fs-1 d-sm-none" title="' . __d('two_fmanager', 'Rafraîchir') . '" data-bs-toggle="tooltip">
+    </i><span class="d-none d-sm-block mt-2">' . __d('two_fmanager', 'Rafraîchir') . '</span></a>', $Xcontent);
     //   if ($dirsize_fma)
     $Xcontent = str_replace('_size', $obj->ConvertSize($obj->GetDirSize($cur_nav)), $Xcontent);
     //   else $Xcontent=str_replace("_size",'-',$Xcontent);
@@ -1205,13 +1206,13 @@ if ($inclusion) {
         $Xcontent = str_replace('_infos', '', $Xcontent);
     if ($dirpres_fma[5]) {
         if ($uniq_fma)
-            $Xcontent = str_replace('_picM', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=pic-manager&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '"><span class="d-sm-none"><i class="bi bi-image fs-1" title="' . fma_translate("Images manager") . '" data-bs-toggle="tooltip" data-bs-placement="bottom"></i></span><span class="d-none d-sm-block mt-2">' . fma_translate("Images manager") . '</span></a>', $Xcontent);
+            $Xcontent = str_replace('_picM', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=pic-manager&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '"><span class="d-sm-none"><i class="bi bi-image fs-1" title="' . __d('two_fmanager', 'Images manager') . '" data-bs-toggle="tooltip" data-bs-placement="bottom"></i></span><span class="d-none d-sm-block mt-2">' . __d('two_fmanager', 'Images manager') . '</span></a>', $Xcontent);
         else
-            $Xcontent = str_replace('_picM', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=pic-manager&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '" target="_blank"><span class="d-sm-none"><i class="fa fa-image fa-lg"></i></span><span class="d-none d-sm-block mt-2">' . fma_translate("Images manager") . '</span></a>', $Xcontent);
+            $Xcontent = str_replace('_picM', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=pic-manager&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '" target="_blank"><span class="d-sm-none"><i class="fa fa-image fa-lg"></i></span><span class="d-none d-sm-block mt-2">' . __d('two_fmanager', 'Images manager') . '</span></a>', $Xcontent);
     } else
         $Xcontent = str_replace('_picM', '', $Xcontent);
 
-    $Xcontent = str_replace('_quota', $obj->ConvertSize($sizeofDir + $sizeofFic) . ' || ' . fma_translate("Taille maximum d'un fichier : ") . $obj->ConvertSize($max_size), $Xcontent);
+    $Xcontent = str_replace('_quota', $obj->ConvertSize($sizeofDir + $sizeofFic) . ' || ' . __d('two_fmanager', 'Taille maximum d\'un fichier : ') . $obj->ConvertSize($max_size), $Xcontent);
 
     if (!$NPDS_fma) {
         // utilisation de routes/pages.php

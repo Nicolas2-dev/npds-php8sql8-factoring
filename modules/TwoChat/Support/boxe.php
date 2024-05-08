@@ -99,15 +99,15 @@ if (! function_exists('makeChatBox'))
 
             $thing .= (($numofchatters > 0) 
                 ? '<div class="d-flex">
-                    <a id="'. $pour .'_encours" class="fs-4" href="javascript:void(0);" onclick="window.open('. $PopUp .');" title="'. translate("Cliquez ici pour entrer") .' '. $pour .'" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <a id="'. $pour .'_encours" class="fs-4" href="javascript:void(0);" onclick="window.open('. $PopUp .');" title="'. __d('two_chat', 'Cliquez ici pour entrer') .' '. $pour .'" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa fa-comments fa-2x nav-link faa-pulse animated faa-slow"></i>
                     </a>
-                    <span class="badge rounded-pill bg-primary ms-auto align-self-center" title="' . translate("personne connectée.") . '" data-bs-toggle="tooltip">
+                    <span class="badge rounded-pill bg-primary ms-auto align-self-center" title="' . __d('two_chat', 'personne connectée.') . '" data-bs-toggle="tooltip">
                         ' . $numofchatters . '</span>
                     </div>'
                  
                 : '<div>
-                    <a id="'. $pour .'" href="javascript:void(0);" onclick="window.open('. $PopUp .');" title="'. translate("Cliquez ici pour entrer") .'" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <a id="'. $pour .'" href="javascript:void(0);" onclick="window.open('. $PopUp .');" title="'. __d('two_chat', 'Cliquez ici pour entrer') .'" data-bs-toggle="tooltip" data-bs-placement="right">
                         <i class="fa fa-comments fa-2x "></i>
                     </a>
                 </div>
@@ -149,7 +149,7 @@ if (! function_exists('makeChatBox'))
 
         global $block_title;
         if ($block_title == '') {
-            $block_title = translate("Bloc Chat");
+            $block_title = __d('two_chat', 'Bloc Chat');
         }
 
         Theme::themesidebox($block_title, $thing);

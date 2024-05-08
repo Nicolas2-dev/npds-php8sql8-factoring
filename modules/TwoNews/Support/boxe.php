@@ -71,14 +71,14 @@ if (! function_exists('ldNews'))
             $comments   = $xtab[$story_limit]->comments; 
             $counter    = $xtab[$story_limit]->counter;
 
-            $datetime2 = ucfirst(htmlentities(\PHP81_BC\strftime(translate("datestring2"), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
+            $datetime2 = ucfirst(htmlentities(\PHP81_BC\strftime(__d('two_news', 'datestring2'), $time, $locale), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'utf-8'));
 
             if (Config::get('two_core::config.language') != 'chinese') {
                 $datetime2 = ucfirst($datetime2);
             }
 
             $comments = (($typ_aff == 'lecture') 
-                ? '<span class="badge rounded-pill bg-secondary ms-1" title="'. translate("Lu") .'" data-bs-toggle="tooltip">'. $counter .'</span>' 
+                ? '<span class="badge rounded-pill bg-secondary ms-1" title="'. __d('two_news', 'Lu') .'" data-bs-toggle="tooltip">'. $counter .'</span>' 
                 : ''
             );
 
@@ -117,7 +117,7 @@ if (! function_exists('ldNews'))
                 
                 $boxstuff .= '<li class="text-center mt-3" >
                     <a href="'. site_url('search.php?min='. $min .'&amp;type=stories&amp;category='. $cat) .'">
-                        <strong>'. translate("Articles plus anciens") .'</strong>
+                        <strong>'. __d('two_news', 'Articles plus anciens') .'</strong>
                     </a>
                 </li>';
             }
@@ -132,7 +132,7 @@ if (! function_exists('ldNews'))
         }
 
         global $block_title;
-        $boxTitle = $block_title == '' ? translate("Anciens articles") : $block_title;
+        $boxTitle = $block_title == '' ? __d('two_news', 'Anciens articles') : $block_title;
 
         Theme::themesidebox($boxTitle, $boxstuff);
     }
@@ -193,11 +193,11 @@ if (! function_exists('bigstory'))
         }
 
         $content .= ($fsid == '' and $ftitle == '') ?
-            '<span class="fw-semibold">'. translate("Il n'y a pas encore d'article du jour.") .'</span>' :
-            '<span class="fw-semibold">'. translate("L'article le plus consulté aujourd'hui est :") .'</span><br /><br /><a href="'. site_url('article.php?sid='. $fsid) .'">'. Language::aff_langue($ftitle) .'</a>';
+            '<span class="fw-semibold">'. __d('two_news', 'Il n\'y a pas encore d\'article du jour.') .'</span>' :
+            '<span class="fw-semibold">'. __d('two_news', 'L\'article le plus consulté aujourd\'hui est :') .'</span><br /><br /><a href="'. site_url('article.php?sid='. $fsid) .'">'. Language::aff_langue($ftitle) .'</a>';
 
         global $block_title;
-        $boxtitle = $block_title == '' ? translate("Article du Jour") : $block_title;
+        $boxtitle = $block_title == '' ? __d('two_news', 'Article du Jour') : $block_title;
 
         theme::themesidebox($boxtitle, $content);
     }
@@ -247,7 +247,7 @@ if (! function_exists('category'))
                     $boxstuff .= (($cat == $storie->catid)
                         ? '<li><strong>'. Language::aff_langue($storie->title) .'</strong></li>'
                         : '<li class="list-group-item list-group-item-action hyphenate">
-                                <a href="'. site_url('index.php?op=newcategory&amp;catid='. $storie->catid) .'" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right" title="'. translate("Dernière contribution") .' <br />'. formatTimestamp($res->time) .' ">
+                                <a href="'. site_url('index.php?op=newcategory&amp;catid='. $storie->catid) .'" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="right" title="'. __d('two_news', 'Dernière contribution') .' <br />'. formatTimestamp($res->time) .' ">
                                     '. Language::aff_langue($storie->title) .'
                                 </a>
                             </li>'
@@ -258,7 +258,7 @@ if (! function_exists('category'))
             $boxstuff .= '</ul>';
 
             global $block_title;
-            $title = $block_title == '' ? translate("Catégories") : $block_title;
+            $title = $block_title == '' ? __d('two_news', 'Catégories') : $block_title;
 
             Theme::themesidebox($title, $boxstuff);
         }
@@ -324,7 +324,7 @@ if (! function_exists('bloc_rubrique'))
         $boxstuff .= '</ul>';
 
         global $block_title;
-        $title = $block_title == '' ? translate("Rubriques") : $block_title;
+        $title = $block_title == '' ? __d('two_news', 'Rubriques') : $block_title;
 
         Theme::themesidebox($title, $boxstuff);
     }

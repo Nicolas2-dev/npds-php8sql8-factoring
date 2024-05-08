@@ -17,7 +17,7 @@ if (! function_exists('topdownload'))
     {
         global $block_title;
 
-        $title = $block_title == '' ? translate("Les plus téléchargés") : $block_title;
+        $title = $block_title == '' ? __d('two_download', 'Les plus téléchargés') : $block_title;
 
         $boxstuff = '<ul>';
         $boxstuff .= Download::topdownload_data('short', 'dcounter');
@@ -43,7 +43,7 @@ if (! function_exists('lastdownload'))
     {
         global $block_title;
 
-        $title = $block_title == '' ? translate("Fichiers les + récents") : $block_title;
+        $title = $block_title == '' ? __d('two_download', 'Fichiers les + récents') : $block_title;
 
         $boxstuff = '<ul>';
         $boxstuff .= Download::topdownload_data('short', 'ddate');

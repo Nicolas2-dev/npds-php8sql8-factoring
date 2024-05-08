@@ -51,7 +51,7 @@ function puthome(int $ihome): void
 {
     echo '
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="ihome">'. adm_translate("Publier dans la racine ?") .'</label>';
+            <label class="col-sm-4 col-form-label" for="ihome">'. __d('two_news', 'Publier dans la racine ?') .'</label>';
 
     $sel1 = 'checked="checked"';
     $sel2 = '';
@@ -64,13 +64,13 @@ function puthome(int $ihome): void
             <div class="col-sm-8 my-2">
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="ihome_y" name="ihome" value="0" '. $sel1 .' />
-                <label class="form-check-label" for="ihome_y">'. adm_translate("Oui") .'</label>
+                <label class="form-check-label" for="ihome_y">'. __d('two_news', 'Oui') .'</label>
                 </div>
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" id="ihome_n" name="ihome" value="1" '. $sel2 .' />
-                <label class="form-check-label" for="ihome_n">'. adm_translate("Non") .'</label>
+                <label class="form-check-label" for="ihome_n">'. __d('two_news', 'Non') .'</label>
                 </div>
-                <p class="help-block">'. adm_translate("Ne s'applique que si la catégorie : 'Articles' n'est pas sélectionnée.") .'</p>
+                <p class="help-block">'. __d('two_news', 'Ne s\'applique que si la catégorie : \'Articles\' n\'est pas sélectionnée.') .'</p>
             </div>
         </div>';
 
@@ -79,7 +79,7 @@ function puthome(int $ihome): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" >'. adm_translate("Seulement aux membres") .', '. adm_translate("Groupe") .'.</label>
+            <label class="col-sm-4 col-form-label" >'. __d('two_news', 'Seulement aux membres') .', '. __d('two_news', 'Groupe') .'.</label>
             <div class="col-sm-8 my-2">
                 <div class="form-check form-check-inline">';
 
@@ -97,11 +97,11 @@ function puthome(int $ihome): void
 
     echo '
                 <input class="form-check-input" type="radio" id="mem_y" name="members" value="1" '. $sel1 .' />
-                <label class="form-check-label" for="mem_y">'. adm_translate("Oui") .'</label>
+                <label class="form-check-label" for="mem_y">'. __d('two_news', 'Oui') .'</label>
                 </div>
                 <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio"  id="mem_n" name="members" value="0" '. $sel2 .' />
-                <label class="form-check-label" for="mem_n">'. adm_translate("Non") .'</label>
+                <label class="form-check-label" for="mem_n">'. __d('two_news', 'Non') .'</label>
                 </div>
             </div>
         </div>';
@@ -128,7 +128,7 @@ function puthome(int $ihome): void
 
     echo '
         <div class="mb-3 row" id="choixgroupe">
-            <label class="col-sm-4 col-form-label" for="Mmembers">'. adm_translate("Groupe") .'</label>
+            <label class="col-sm-4 col-form-label" for="Mmembers">'. __d('two_news', 'Groupe') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="Mmembers" name="Mmembers">'. $tmp_groupe .'</select>
             </div>
@@ -148,7 +148,7 @@ function SelectCategory(int $cat): void
 
     echo ' 
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="catid">'. adm_translate("Catégorie") .'</label>
+            <label class="col-sm-4 col-form-label" for="catid">'. __d('two_news', 'Catégorie') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="catid" name="catid">';
 
@@ -158,7 +158,7 @@ function SelectCategory(int $cat): void
         $sel = '';
     }
 
-    echo '<option name="catid" value="0" '. $sel .'>'. adm_translate("Articles") .'</option>';
+    echo '<option name="catid" value="0" '. $sel .'>'. __d('two_news', 'Articles') .'</option>';
     
     foreach ($stories_cat as $categorie) {
         if ($categorie['catid'] == $cat) { 
@@ -173,13 +173,13 @@ function SelectCategory(int $cat): void
     echo '
                 </select>
                 <p class="help-block text-end">
-                    <a href="'. site_url('admin.php?op=AddCategory') .'" class="btn btn-outline-primary btn-sm" title="'. adm_translate("Ajouter") .'" data-bs-toggle="tooltip" >
+                    <a href="'. site_url('admin.php?op=AddCategory') .'" class="btn btn-outline-primary btn-sm" title="'. __d('two_news', 'Ajouter') .'" data-bs-toggle="tooltip" >
                         <i class="fa fa-plus-square fa-lg"></i>
                     </a>&nbsp;
-                    <a class="btn btn-outline-primary btn-sm" href="'. site_url('admin.php?op=EditCategory') .'" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" >
+                    <a class="btn btn-outline-primary btn-sm" href="'. site_url('admin.php?op=EditCategory') .'" title="'. __d('two_news', 'Editer') .'" data-bs-toggle="tooltip" >
                         <i class="fa fa-edit fa-lg"></i>
                     </a>&nbsp;
-                    <a class="btn btn-outline-danger btn-sm" href="'. site_url('admin.php?op=DelCategory') .'" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip">
+                    <a class="btn btn-outline-danger btn-sm" href="'. site_url('admin.php?op=DelCategory') .'" title="'. __d('two_news', 'Effacer') .'" data-bs-toggle="tooltip">
                         <i class="fas fa-trash fa-lg"></i>
                     </a>
                 </p>
@@ -199,7 +199,7 @@ function AddCategory(): void
     global $aid;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -212,10 +212,10 @@ function AddCategory(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Ajouter une nouvelle Catégorie") .'</h3>
+    <h3 class="mb-3">'. __d('two_news', 'Ajouter une nouvelle Catégorie') .'</h3>
     <form id="storiesaddcat" action="'. site_url('admin.php') .'" method="post">
         <div class="mb-3 row">
-            <label class="col-sm-12 col-form-label" for="title">'. adm_translate("Nom") .'</label>
+            <label class="col-sm-12 col-form-label" for="title">'. __d('two_news', 'Nom') .'</label>
             <div class="col-sm-12">
                 <input class="form-control" type="text" id="title" name="title" maxlength="255" required="required" />
                 <span class="help-block text-end" id="countcar_title"></span>
@@ -224,7 +224,7 @@ function AddCategory(): void
         <input type="hidden" name="op" value="SaveCategory" />
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <input class="btn btn-primary" type="submit" value="'. adm_translate("Sauver les modifications") .'" />
+                <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Sauver les modifications') .'" />
             </div>
         </div>
     </form>';
@@ -248,7 +248,7 @@ function SaveCategory(string $title): void
     global $aid, $f_meta_nom;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -259,9 +259,9 @@ function SaveCategory(string $title): void
     $check = DB::table('stories_cat')->select('catid')->where('title', $title)->first();
 
     if ($check['catid']) {
-        $what1 = '<div class="alert alert-danger lead" role="alert">'. adm_translate("Cette Catégorie existe déjà !") .'<br /><a href="javascript:history.go(-1)" class="btn btn-secondary  mt-2">'. adm_translate("Retour en arrière, pour changer le Nom") .'</a></div>';
+        $what1 = '<div class="alert alert-danger lead" role="alert">'. __d('two_news', 'Cette Catégorie existe déjà !') .'<br /><a href="javascript:history.go(-1)" class="btn btn-secondary  mt-2">'. __d('two_news', 'Retour en arrière, pour changer le Nom') .'</a></div>';
     } else {
-        $what1 = '<div class="alert alert-success lead" role="alert">'. adm_translate("Nouvelle Catégorie ajoutée") .'</div>';
+        $what1 = '<div class="alert alert-success lead" role="alert">'. __d('two_news', 'Nouvelle Catégorie ajoutée') .'</div>';
         DB::table('stories_cat')->insert(array(
             'title'       => $title,
             'counter'     => 0,
@@ -275,7 +275,7 @@ function SaveCategory(string $title): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Ajouter une nouvelle Catégorie") .'</h3>
+    <h3 class="mb-3">'. __d('two_news', 'Ajouter une nouvelle Catégorie') .'</h3>
     '. $what1;
 
     css::adminfoot('', '', '', '');
@@ -293,7 +293,7 @@ function EditCategory(int $catid): void
     global $aid;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -306,7 +306,7 @@ function EditCategory(int $catid): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Edition des Catégories") .'</h3>';
+    <h3 class="mb-3">'. __d('two_news', 'Edition des Catégories') .'</h3>';
 
     if (!$catid) {
         $selcat = sql_query("SELECT  FROM " . $NPDS_Prefix . "");
@@ -316,10 +316,10 @@ function EditCategory(int $catid): void
         echo '
         <form action="'. site_url('admin.php') .'" method="post">
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="catid">'. adm_translate("Sélectionner une Catégorie") .'</label>
+                <label class="col-form-label col-sm-12" for="catid">'. __d('two_news', 'Sélectionner une Catégorie') .'</label>
                 <div class="col-sm-12">
                     <select class="form-select" id="catid" name="catid">
-                        <option name="catid" value="0">'. adm_translate("Articles") .'</option>';
+                        <option name="catid" value="0">'. __d('two_news', 'Articles') .'</option>';
         
         foreach ($stories_cat as $categ) {
             echo '
@@ -333,7 +333,7 @@ function EditCategory(int $catid): void
             <div class="mb-3 row">
                 <div class="col-sm-12">
                     <input type="hidden" name="op" value="EditCategory" />
-                    <input class="btn btn-primary" type="submit" value="'. adm_translate("Editer") .'" />
+                    <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Editer') .'" />
                 </div>
             </div>
         </form>';
@@ -346,7 +346,7 @@ function EditCategory(int $catid): void
         echo '
         <form id="storieseditcat" action="'. site_url('admin.php') .'" method="post">
             <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="title">'. adm_translate("Nom") .'</label>
+            <label class="col-form-label col-sm-12" for="title">'. __d('two_news', 'Nom') .'</label>
                 <div class="col-sm-12">
                     <input class="form-control" type="text" id="title" name="title" maxlength="255" value="'. $categorie_cat['title'] .'" required="required"/>
                     <span class="help-block text-end" id="countcar_title"></span>
@@ -356,7 +356,7 @@ function EditCategory(int $catid): void
                 <div class="col-sm-12">
                     <input type="hidden" name="catid" value="'. $catid .'" />
                     <input type="hidden" name="op" value="SaveEditCategory" />
-                    <input class="btn btn-primary" type="submit" value="'. adm_translate("Sauver les modifications") .'" />
+                    <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Sauver les modifications') .'" />
                 </div>
             </div>
         </form>';
@@ -381,15 +381,15 @@ function SaveEditCategory(int $catid, string $title): void
 {
     global $aid, $f_meta_nom;
 
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
     $title = preg_replace('#"#', '', $title);
 
     $check = DB::table('stories_cat')->select('catid')->where('title', $title)->first();
 
     if ($check) {
-        $what1 = '<div class="alert alert-danger lead" role="alert">'. adm_translate("Cette Catégorie existe déjà !") .'<br /><a href="javascript:history.go(-2)" class="btn btn-secondary  mt-2">'. adm_translate("Retour en arrière, pour changer le Nom") .'</a></div>';
+        $what1 = '<div class="alert alert-danger lead" role="alert">'. __d('two_news', 'Cette Catégorie existe déjà !') .'<br /><a href="javascript:history.go(-2)" class="btn btn-secondary  mt-2">'. __d('two_news', 'Retour en arrière, pour changer le Nom') .'</a></div>';
     } else {
-        $what1 = '<div class="alert alert-success lead" role="alert">'. adm_translate("Catégorie sauvegardée") .'</div>';
+        $what1 = '<div class="alert alert-success lead" role="alert">'. __d('two_news', 'Catégorie sauvegardée') .'</div>';
         DB::table('stories_cat')->where('catid', $catid)->update(array(
             'title'       => $title,
         ));
@@ -405,7 +405,7 @@ function SaveEditCategory(int $catid, string $title): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Edition des Catégories") .'</h3>
+    <h3 class="mb-3">'. __d('two_news', 'Edition des Catégories') .'</h3>
     '. $what1;
 
     css::adminfoot('', '', '', '');
@@ -423,7 +423,7 @@ function DelCategory(int $cat): void
     global $aid;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -436,7 +436,7 @@ function DelCategory(int $cat): void
 
     echo '
     <hr />
-    <h3 class="mb-3 text-danger">'. adm_translate("Supprimer une Catégorie") .'</h3>';
+    <h3 class="mb-3 text-danger">'. __d('two_news', 'Supprimer une Catégorie') .'</h3>';
 
     if (!$cat) {
         $stories_cat = DB::table('stories_cat')->select('catid', 'title')->get();
@@ -444,7 +444,7 @@ function DelCategory(int $cat): void
         echo '
     <form action="'. site_url('admin.php') .'" method="post">
         <div class="mb-3 row">
-        <label class="col-form-label col-sm-12" for="cat">'. adm_translate("Sélectionner une Catégorie à supprimer") .'</label>
+        <label class="col-form-label col-sm-12" for="cat">'. __d('two_news', 'Sélectionner une Catégorie à supprimer') .'</label>
             <div class="col-sm-12">
                 <select class="form-select" id="cat" name="cat">';
 
@@ -459,7 +459,7 @@ function DelCategory(int $cat): void
         <div class="mb-3 row">
             <div class="col-sm-12">
                 <input type="hidden" name="op" value="DelCategory" />
-                <button class="btn btn-danger" type="submit">'. adm_translate("Effacer") .'</button>
+                <button class="btn btn-danger" type="submit">'. __d('two_news', 'Effacer') .'</button>
             </div>
         </div>
     </form>';
@@ -474,20 +474,20 @@ function DelCategory(int $cat): void
             logs::Ecr_Log('security', "DelCategory($cat) by AID : $aid", '');
 
             echo '
-            <div class="alert alert-success" role="alert">'. adm_translate("Suppression effectuée") .'</div>';
+            <div class="alert alert-success" role="alert">'. __d('two_news', 'Suppression effectuée') .'</div>';
         } else {
 
             $stories_cat = DB::table('stories_cat')->select('title')->where('catid', $cat)->first();
         
             echo '
             <div class="alert alert-danger lead" role="alert">
-                <p class="noir"><strong>'. adm_translate("Attention : ") .'</strong> '. adm_translate("la Catégorie") .' <strong>'. $stories_cat['title'] .'</strong> '. adm_translate("a") .' <strong>'. $numrows .'</strong> '. adm_translate("Articles !") .'<br />';
-            echo adm_translate("Vous pouvez supprimer la Catégorie, les Articles et Commentaires") .' ';
-            echo adm_translate("ou les affecter à une autre Catégorie.") .'<br /></p>
-                <p align="text-center"><strong>'. adm_translate("Que voulez-vous faire ?") .'</strong></p>
+                <p class="noir"><strong>'. __d('two_news', 'Attention : ') .'</strong> '. __d('two_news', 'la Catégorie') .' <strong>'. $stories_cat['title'] .'</strong> '. __d('two_news', 'a') .' <strong>'. $numrows .'</strong> '. __d('two_news', 'Articles !') .'<br />';
+            echo __d('two_news', 'Vous pouvez supprimer la Catégorie, les Articles et Commentaires') .' ';
+            echo __d('two_news', 'ou les affecter à une autre Catégorie.') .'<br /></p>
+                <p align="text-center"><strong>'. __d('two_news', 'Que voulez-vous faire ?') .'</strong></p>
             </div>
-            <a href="'. site_url('admin.php?op=YesDelCategory&amp;catid='. $cat) .'" class="btn btn-outline-danger">'. adm_translate("Tout supprimer") .'</a>
-            <a href="'. site_url('admin.php?op=NoMoveCategory&amp;catid='. $cat) .'" class="btn btn-outline-primary">'. adm_translate("Affecter à une autre Catégorie") .'</a></p>';
+            <a href="'. site_url('admin.php?op=YesDelCategory&amp;catid='. $cat) .'" class="btn btn-outline-danger">'. __d('two_news', 'Tout supprimer') .'</a>
+            <a href="'. site_url('admin.php?op=NoMoveCategory&amp;catid='. $cat) .'" class="btn btn-outline-primary">'. __d('two_news', 'Affecter à une autre Catégorie') .'</a></p>';
         }
     }
 
@@ -540,7 +540,7 @@ function NoMoveCategory(int $catid, int $newcat): void
     global $f_meta_nom, $f_titre, $aid;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -555,10 +555,10 @@ function NoMoveCategory(int $catid, int $newcat): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Affectation d'Articles vers une nouvelle Catégorie") .'</h3>';
+    <h3 class="mb-3">'. __d('two_news', 'Affectation d\'Articles vers une nouvelle Catégorie') .'</h3>';
 
     if (!$newcat) {
-        echo '<label>'. adm_translate("Tous les Articles dans") .' <strong>'. language::aff_langue($stories_cat['title']) .'</strong> '. adm_translate("seront affectés à") .'</label>';
+        echo '<label>'. __d('two_news', 'Tous les Articles dans') .' <strong>'. language::aff_langue($stories_cat['title']) .'</strong> '. __d('two_news', 'seront affectés à') .'</label>';
         
         $selcat = sql_query("SELECT  FROM " . $NPDS_Prefix . "");
         
@@ -567,10 +567,10 @@ function NoMoveCategory(int $catid, int $newcat): void
         echo '
         <form action="'. site_url('admin.php') .'" method="post">
             <div class="mb-3 row">
-                <label class="col-form-label visually-hidden" for="newcat">'. adm_translate("Sélectionner la nouvelle Catégorie : ") .'</label>
+                <label class="col-form-label visually-hidden" for="newcat">'. __d('two_news', 'Sélectionner la nouvelle Catégorie : ') .'</label>
                 <div class="col-sm-12">
                     <select class="form-select" id="newcat" name="newcat">
-                    <option name="newcat" value="0">'. adm_translate("Articles") .'</option>';
+                    <option name="newcat" value="0">'. __d('two_news', 'Articles') .'</option>';
 
         foreach ($stories_cat as $cat) {
             echo '<option name="newcat" value="'. $cat['newcat'] .'">'. language::aff_langue($cat['title']) .'</option>';
@@ -584,7 +584,7 @@ function NoMoveCategory(int $catid, int $newcat): void
                 <div class="col-sm-12">
                     <input type="hidden" name="catid" value="'. $catid .'" />
                     <input type="hidden" name="op" value="NoMoveCategory" />
-                    <input class="btn btn-primary" type="submit" value="'. adm_translate("Affectation") .'" />
+                    <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Affectation') .'" />
                 </div>
             </div>
         </form>';
@@ -603,7 +603,7 @@ function NoMoveCategory(int $catid, int $newcat): void
         global $aid;
         logs::Ecr_Log("security", "NoMoveCategory($catid, $newcat) by AID : $aid", "");
 
-        echo '<div class="alert alert-success"><strong>'. adm_translate("La ré-affectation est terminée !") .'</strong></div>';
+        echo '<div class="alert alert-success"><strong>'. __d('two_news', 'La ré-affectation est terminée !') .'</strong></div>';
     }
 
     css::adminfoot('', '', '', '');
@@ -623,7 +623,7 @@ function displayStory(int $qid): void
     global $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
 
     $queue = DB::table('queue')->select('qid', 'uid', 'uname', 'subject', 'story', 'bodytext', 'topic', 'date_debval', 'date_finval',' auto_epur')->where('qid', $qid)->get();
 
@@ -657,9 +657,9 @@ function displayStory(int $qid): void
 
     echo '
     <hr />
-    <h3>'. adm_translate("Prévisualiser l'Article") .'</h3>
+    <h3>'. __d('two_news', 'Prévisualiser l\'Article') .'</h3>
     <form action="'. site_url('admin.php') .'" method="post" name="adminForm" id="adminForm">
-        <label class="col-form-label">'. adm_translate("Langue de Prévisualisation") .'</label>
+        <label class="col-form-label">'. __d('two_news', 'Langue de Prévisualisation') .'</label>
         '. language::aff_localzone_langue("local_user_language") .'
         <div class="card card-body mb-3">';
 
@@ -681,25 +681,25 @@ function displayStory(int $qid): void
     echo '
             </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="author">'. userpopover($queue['uname'], 40, '') . adm_translate("Utilisateur") .'</label>
+            <label class="col-sm-4 col-form-label" for="author">'. userpopover($queue['uname'], 40, '') . __d('two_news', 'Utilisateur') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="author" name="author" value="'. $queue['uname'] .'" />
-                <a href="'. site_url('replypmsg.php?send='. urlencode($queue['uname'])) .'" target="_blank" title="'. adm_translate("Diffusion d'un Message Interne") .'" data-bs-toggle="tooltip"><i class="far fa-envelope fa-lg"></i></a>
+                <a href="'. site_url('replypmsg.php?send='. urlencode($queue['uname'])) .'" target="_blank" title="'. __d('two_news', 'Diffusion d\'un Message Interne') .'" data-bs-toggle="tooltip"><i class="far fa-envelope fa-lg"></i></a>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="subject">'. adm_translate("Titre") .'</label>
+            <label class="col-sm-4 col-form-label" for="subject">'. __d('two_news', 'Titre') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="subject" name="subject" value="'. $subject .'" required="required" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="topic">'. adm_translate("Sujet") .'</label>
+            <label class="col-sm-4 col-form-label" for="topic">'. __d('two_news', 'Sujet') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
     if ($radminsuper) {
-        echo '<option value="">'. adm_translate("Tous les Sujets") .'</option>';
+        echo '<option value="">'. __d('two_news', 'Tous les Sujets') .'</option>';
     }
 
     $toplis = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
@@ -746,7 +746,7 @@ function displayStory(int $qid): void
 
     echo '
     <div class="mb-3 row">
-        <label class="col-form-label col-12" for="hometext">'. adm_translate("Texte d'introduction") .'</label>
+        <label class="col-form-label col-12" for="hometext">'. __d('two_news', 'Texte d\'introduction') .'</label>
         <div class="col-12">
             <textarea class="tin form-control" rows="25" id="hometext" name="hometext">'. $story .'</textarea>
         </div>
@@ -756,7 +756,7 @@ function displayStory(int $qid): void
 
     echo '
     <div class="mb-3 row">
-        <label class="col-form-label col-12" for="bodytext">'. adm_translate("Texte étendu") .'</label>
+        <label class="col-form-label col-12" for="bodytext">'. __d('two_news', 'Texte étendu') .'</label>
         <div class="col-12">
             <textarea class="tin form-control" rows="25" id="bodytext" name="bodytext" >'. $bodytext .'</textarea>
         </div>
@@ -766,7 +766,7 @@ function displayStory(int $qid): void
 
     echo '
     <div class="mb-3 row">
-        <label class="col-form-label col-12" for="notes">'. adm_translate("Notes") .'</label>
+        <label class="col-form-label col-12" for="notes">'. __d('two_news', 'Notes') .'</label>
         <div class="col-12">
             <textarea class="tin form-control" rows="7" id="notes" name="notes"></textarea>
         </div>
@@ -786,12 +786,12 @@ function displayStory(int $qid): void
         <input type="hidden" name="uid" value="'. $queue['uid'] .'" />
         <div class="mb-3">
             <select class="form-select" name="op">
-                <option value="DeleteStory">'. adm_translate("Effacer l'Article") .'</option>
-                <option value="PreviewAgain" selected="selected">'. adm_translate("Re-prévisualiser") .'</option>
-                <option value="PostStory">'. adm_translate("Poster un Article ") .'</option>
+                <option value="DeleteStory">'. __d('two_news', 'Effacer l\'Article') .'</option>
+                <option value="PreviewAgain" selected="selected">'. __d('two_news', 'Re-prévisualiser') .'</option>
+                <option value="PostStory">'. __d('two_news', 'Poster un Article ') .'</option>
             </select>
         </div>
-        <input class="btn btn-primary" type="submit" value="'. adm_translate("Ok") .'" />
+        <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Ok') .'" />
     </form>';
 
     $arg1 = '
@@ -828,7 +828,7 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
     global $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Articles");
+    $f_titre = __d('two_news', 'Articles');
 
     $subject = stripslashes(str_replace('"', '&quot;', $subject));
     $hometext = stripslashes(image::dataimagetofileurl($hometext, 'storage/cache/ai'));
@@ -867,10 +867,10 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
 
     echo '
     <hr />
-    <h3>'. adm_translate("Prévisualiser l'Article") .'</h3>
+    <h3>'. __d('two_news', 'Prévisualiser l\'Article') .'</h3>
     <form action="'. site_url('admin.php') .'" method="post" name="adminForm">
-        <label class="col-form-label">'. adm_translate("Langue de Prévisualisation") .'</label>
-        '. language::aff_localzone_langue("local_user_language") .'
+        <label class="col-form-label">'. __d('two_news', 'Langue de Prévisualisation') .'</label>
+        '. language::aff_localzone_langue('local_user_language') .'
         <div class="card card-body mb-3">';
 
     if ($topic['topicimage'] !== '') {
@@ -890,26 +890,26 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
     echo '
             </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="author">'. adm_translate("Utilisateur") .'</label>
+            <label class="col-sm-4 col-form-label" for="author">'. __d('two_news', 'Utilisateur') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="author" name="author" value="'. $author .'" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="subject">'. adm_translate("Titre") .'</label>
+            <label class="col-sm-4 col-form-label" for="subject">'. __d('two_news', 'Titre') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="subject" name="subject" value="'. $subject .'" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="topic">'. adm_translate("Sujet") .'</label>
+            <label class="col-form-label col-sm-4" for="topic">'. __d('two_news', 'Sujet') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
     $toplist = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
 
     if ($radminsuper) {
-        echo '<option value="">'. adm_translate("Tous les Sujets") .'</option>';
+        echo '<option value="">'. __d('two_news', 'Tous les Sujets') .'</option>';
     }
 
     foreach ($toplist as $list) {
@@ -955,7 +955,7 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
 
     echo '
         <div class="mb-3 row">
-        <label class="col-form-label col-12" for="hometext">'. adm_translate("Texte d'introduction") .'</label>
+        <label class="col-form-label col-12" for="hometext">'. __d('two_news', 'Texte d\'introduction') .'</label>
         <div class="col-12">
             <textarea class="tin form-control" cols="70" rows="25" id="hometext" name="hometext" >'. $hometext .'</textarea>
         </div>
@@ -965,7 +965,7 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
 
     echo '
     <div class="mb-3 row">
-        <label class="col-form-label col-12" for="bodytext">'. adm_translate("Texte étendu") .'</label>
+        <label class="col-form-label col-12" for="bodytext">'. __d('two_news', 'Texte étendu') .'</label>
         <div class="col-12">
             <textarea class="tin form-control" cols="70" rows="25" id="bodytext" name="bodytext" >'. $bodytext .'</textarea>
         </div>
@@ -975,7 +975,7 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
 
     echo '
     <div class="mb-3 row">
-        <label class="col-form-label col-12" for="notes">'. adm_translate("Notes") .'</label>
+        <label class="col-form-label col-12" for="notes">'. __d('two_news', 'Notes') .'</label>
         <div class="col-12">
             <textarea class="tin form-control" cols="70" rows="7" id="notes" name="notes" >'. $notes .'</textarea>
         </div>
@@ -989,11 +989,11 @@ function previewStory(int $qid, int $uid, string $author, string $subject, strin
         <input type="hidden" name="qid" value="'. $qid .'" />
         <input type="hidden" name="uid" value="'. $uid .'" />
         <select class="form-select" name="op">
-            <option value="DeleteStory">'. adm_translate("Effacer l'Article") .'</option>
-            <option value="PreviewAgain" selected="selected">'. adm_translate("Re-prévisualiser") .'</option>
-            <option value="PostStory">'. adm_translate("Poster un Article ") .'</option>
+            <option value="DeleteStory">'. __d('two_news', 'Effacer l\'Article') .'</option>
+            <option value="PreviewAgain" selected="selected">'. __d('two_news', 'Re-prévisualiser') .'</option>
+            <option value="PostStory">'. __d('two_news', 'Poster un Article ') .'</option>
         </select>
-        <input class="btn btn-primary my-2" type="submit" value="'. adm_translate("Ok") .'" />
+        <input class="btn btn-primary my-2" type="submit" value="'. __d('two_news', 'Ok') .'" />
     </form>';
 
     css::adminfoot('', '', '', '');
@@ -1160,7 +1160,7 @@ function editStory(int $sid): void
     global $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Editer un Article");
+    $f_titre = __d('two_news', 'Editer un Article');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -1206,7 +1206,7 @@ function editStory(int $sid): void
 
     $topic = DB::table('topics')->select('topictext', 'topicimage')->where('topicid', $topic)->first();
 
-    echo '<hr />'. language::aff_local_langue('', 'local_user_language', '<label class="col-form-label">'. adm_translate("Langue de Prévisualisation") .'</label>');
+    echo '<hr />'. language::aff_local_langue('', 'local_user_language', '<label class="col-form-label">'. __d('two_news', 'Langue de Prévisualisation') .'</label>');
     
     if ($topic['topicimage'] !== '') {
         if (!$imgtmp = theme::theme_image('topics/'. $topic['topicimage'])) {
@@ -1228,19 +1228,19 @@ function editStory(int $sid): void
     echo '
     <form id="editstory" action="'. site_url('admin.php') .'" method="post" name="adminForm">
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="subject">'. adm_translate("Titre") .'</label>
+            <label class="col-sm-4 col-form-label" for="subject">'. __d('two_news', 'Titre') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="subject" name="subject" value="'. $subject .'" maxlength="255" required="required" />
                 <span class="help-block text-end" id="countcar_subject"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="topic">'. adm_translate("Sujet") .'</label>
+            <label class="col-sm-4 col-form-label" for="topic">'. __d('two_news', 'Sujet') .'</label>
             <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
     if ($radminsuper) {
-        echo '<option value="">'. adm_translate("Tous les Sujets") .'</option>';
+        echo '<option value="">'. __d('two_news', 'Tous les Sujets') .'</option>';
     }
 
     $toplist = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
@@ -1277,7 +1277,7 @@ function editStory(int $sid): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="hometext">'. adm_translate("Texte d'introduction") .'</label>
+            <label class="col-form-label col-12" for="hometext">'. __d('two_news', 'Texte d\'introduction') .'</label>
             <div class="col-12">
                 <textarea class="tin form-control" rows="25" id="hometext" name="hometext" >'. $hometext .'</textarea>
             </div>
@@ -1287,7 +1287,7 @@ function editStory(int $sid): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="bodytext">'. adm_translate("Texte complet") .'</label>
+            <label class="col-form-label col-12" for="bodytext">'. __d('two_news', 'Texte complet') .'</label>
             <div class="col-12">
                 <textarea class="tin form-control" rows="25" id="bodytext" name="bodytext" >'. $bodytext .'</textarea>
             </div>
@@ -1297,7 +1297,7 @@ function editStory(int $sid): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="notes">'. adm_translate("Notes") .'</label>
+            <label class="col-form-label col-12" for="notes">'. __d('two_news', 'Notes') .'</label>
             <div class="col-12">
                 <textarea class="tin form-control" rows="7" id="notes" name="notes" >'. $notes .'</textarea>
             </div>
@@ -1307,21 +1307,21 @@ function editStory(int $sid): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-6" for="Cdate">'. adm_translate("Changer la date") .'?</label>
+            <label class="col-form-label col-sm-6" for="Cdate">'. __d('two_news', 'Changer la date') .'?</label>
             <div class="col-sm-6 my-2">
                 <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="Cdate" name="Cdate" value="true" />
-                <label class="form-check-label" for="Cdate">'. adm_translate("Oui") .'</label>
+                <label class="form-check-label" for="Cdate">'. __d('two_news', 'Oui') .'</label>
                 </div>
-                <span class="small help-block">'. translate(date("l")) . date(" " . translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600)) .'</span>
+                <span class="small help-block">'. __d('two_news', date("l")) . date(" " . __d('two_news', 'dateinternal'), time() + ((int) Config::get('npds.gmt') * 3600)) .'</span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-6" for="Csid">'. adm_translate("Remettre cet article en première position ? : ") .'</label>
+            <label class="col-form-label col-sm-6" for="Csid">'. __d('two_news', 'Remettre cet article en première position ? : ') .'</label>
             <div class="col-sm-6 my-2">
                 <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="Csid" name="Csid" value="true" />
-                <label class="form-check-label" for="Csid">'. adm_translate("Oui") .'</label>
+                <label class="form-check-label" for="Csid">'. __d('two_news', 'Oui') .'</label>
                 </div>
             </div>
         </div>';
@@ -1343,7 +1343,7 @@ function editStory(int $sid): void
         <input type="hidden" name="theme" value="'. $theme .'" />
         <div class="mb-3 row">
             <div class="col-12">
-                <input class="btn btn-primary" type="submit" value="'. adm_translate("Modifier l'Article") .'" />
+                <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Modifier l\'Article') .'" />
             </div>
         </div>
     </form>';
@@ -1475,13 +1475,13 @@ function removeStory(int $sid, int $ok = 0): void
         GraphicAdmin(manuel('newarticle'));
 
         echo '
-        <div class="alert alert-danger">'. adm_translate("Etes-vous sûr de vouloir effacer l'Article N°") .' '. $sid .' '. adm_translate("et tous ses Commentaires ?") .'</div>
+        <div class="alert alert-danger">'. __d('two_news', 'Etes-vous sûr de vouloir effacer l\'Article N°') .' '. $sid .' '. __d('two_news', 'et tous ses Commentaires ?') .'</div>
         <p class="">
             <a href="'. site_url('admin.php?op=RemoveStory&amp;sid='. $sid .'&amp;ok=1') .'" class="btn btn-danger" >
-                '. adm_translate("Oui") .'
+                '. __d('two_news', 'Oui') .'
             </a>&nbsp;
             <a href="'. site_url('admin.php') .'" class="btn btn-secondary" >
-                '. adm_translate("Non") .'
+                '. __d('two_news', 'Non') .'
             </a>
         </p>';
         
@@ -1623,7 +1623,7 @@ function adminStory(): void
     global $aid, $radminsuper;
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Nouvel Article");
+    $f_titre = __d('two_news', 'Nouvel Article');
 
     //==> controle droit
     admindroits($aid, $f_meta_nom);
@@ -1649,20 +1649,20 @@ function adminStory(): void
     <hr />
     <form id="storiesnewart" action="'. site_url('admin.php') .'" method="post" name="adminForm">
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="subject">'. adm_translate("Titre") .'</label>
+            <label class="col-sm-4 col-form-label" for="subject">'. __d('two_news', 'Titre') .'</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="subject" id="subject" value="" maxlength="255" required="required" />
                 <span class="help-block text-end" id="countcar_subject"></span>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-sm-4 col-form-label" for="topic">'. adm_translate("Sujet") .'</label>
+            <label class="col-sm-4 col-form-label" for="topic">'. __d('two_news', 'Sujet') .'</label>
             <div class="col-sm-8">
             <select class="form-select" id="topic" name="topic">';
 
     //probablement ici aussi mettre les droits pour les gestionnaires de topics ??
     if ($radminsuper) {
-        echo '<option value="">'. adm_translate("Sélectionner un Sujet") .'</option>';
+        echo '<option value="">'. __d('two_news', 'Sélectionner un Sujet') .'</option>';
     }
 
     $topics = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
@@ -1703,7 +1703,7 @@ function adminStory(): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="hometext">'. adm_translate("Texte d'introduction") .'</label>
+            <label class="col-form-label col-12" for="hometext">'. __d('two_news', 'Texte d\'introduction') .'</label>
             <div class="col-12">
                 <textarea class="tin form-control" rows="25" id="hometext" name="hometext">'. $hometext .'</textarea>
             </div>
@@ -1713,7 +1713,7 @@ function adminStory(): void
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="bodytext">'. adm_translate("Texte étendu") .'</label>
+            <label class="col-form-label col-12" for="bodytext">'. __d('two_news', 'Texte étendu') .'</label>
             <div class="col-12">
                 <textarea class="tin form-control" rows="25" id="bodytext" name="bodytext" >'. $bodytext .'</textarea>
             </div>
@@ -1728,7 +1728,7 @@ function adminStory(): void
         <input type="hidden" name="op" value="PreviewAdminStory" />
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <input class="btn btn-primary" type="submit" name="preview" value="'. adm_translate("Prévisualiser") .'" />
+                <input class="btn btn-primary" type="submit" name="preview" value="'. __d('two_news', 'Prévisualiser') .'" />
             </div>
         </div>
     </form>';
@@ -1814,7 +1814,7 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
     }
 
     $f_meta_nom = 'adminStory';
-    $f_titre = adm_translate("Nouvel Article");
+    $f_titre = __d('two_news', 'Nouvel Article');
 
     //==> controle droit
     //   admindroits($aid,$f_meta_nom); // à voir l'intégration avec les droits sur les topics ...
@@ -1829,9 +1829,9 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
 
     echo '
     <hr />
-    <h3>'. adm_translate("Prévisualiser l'Article") .'</h3>
+    <h3>'. __d('two_news', 'Prévisualiser l\'Article') .'</h3>
     <form id="storiespreviswart" action="'. site_url('admin.php') .'" method="post" name="adminForm">
-        <label class="col-form-label">'. adm_translate("Langue de Prévisualisation") .'</label> 
+        <label class="col-form-label">'. __d('two_news', 'Langue de Prévisualisation') .'</label> 
         '. language::aff_localzone_langue("local_user_language") .'
         <div class="card card-body mb-3">';
 
@@ -1852,19 +1852,19 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
     echo '
         </div>
             <div class="mb-3 row">
-                <label class="col-sm-4 col-form-label" for="subject">'. adm_translate("Titre") .'</label>
+                <label class="col-sm-4 col-form-label" for="subject">'. __d('two_news', 'Titre') .'</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="text" name="subject" id="subject" value="'. $subject .'" maxlength="255" required="required" />
                 <span class="help-block text-end" id="countcar_subject"></span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-sm-4 col-form-label" for="topic">'. adm_translate("Sujet") .'</label>
+                <label class="col-sm-4 col-form-label" for="topic">'. __d('two_news', 'Sujet') .'</label>
                 <div class="col-sm-8">
                 <select class="form-select" id="topic" name="topic">';
 
     if ($radminsuper) {
-        echo '<option value="">'. adm_translate("Tous les Sujets") .'</option>';
+        echo '<option value="">'. __d('two_news', 'Tous les Sujets') .'</option>';
     }
 
     $topics = DB::table('topics')->select('topicid', 'topictext', 'topicadmin')->orderBy('topictext')->get();
@@ -1914,7 +1914,7 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
 
     echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-12" for="hometext">'. adm_translate("Texte d'introduction") .'</label>
+                <label class="col-form-label col-12" for="hometext">'. __d('two_news', 'Texte d\'introduction') .'</label>
                 <div class="col-12">
                 <textarea class="tin form-control" rows="25" id="hometext" name="hometext">'. $hometext .'</textarea>
                 </div>
@@ -1924,7 +1924,7 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
 
     echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-12" for="bodytext">'. adm_translate("Texte étendu") .'</label>
+                <label class="col-form-label col-12" for="bodytext">'. __d('two_news', 'Texte étendu') .'</label>
                 <div class="col-12">
                 <textarea class="tin form-control" rows="25" id="bodytext" name="bodytext" >'. $bodytext .'</textarea>
                 </div>
@@ -1939,12 +1939,12 @@ function previewAdminStory(string $subject, string $hometext, string $bodytext, 
             <input type="hidden" name="author" value="'. $aid .'" />
             <div class="col-7">
                 <select class="form-select" name="op">
-                <option value="PreviewAdminStory" selected>'. adm_translate("Prévisualiser") .'</option>
-                <option value="PostStory">'. adm_translate("Poster un Article Admin") .'</option>
+                <option value="PreviewAdminStory" selected>'. __d('two_news', 'Prévisualiser') .'</option>
+                <option value="PostStory">'. __d('two_news', 'Poster un Article Admin') .'</option>
                 </select>
             </div>
             <div class="col-5">
-                <input class="btn btn-primary" type="submit" value="'. adm_translate("Ok") .'" />
+                <input class="btn btn-primary" type="submit" value="'. __d('two_news', 'Ok') .'" />
             </div>
         </div>
     </form>';

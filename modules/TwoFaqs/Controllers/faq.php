@@ -39,11 +39,11 @@ function ShowFaq(): void
     $categories = Request::query('categories');
 
     echo '
-    <h2 class="mb-4">' . translate("FAQ - Questions fréquentes") . '</h2>
+    <h2 class="mb-4">' . __d('two_faqs', 'FAQ - Questions fréquentes') . '</h2>
     <hr />
-    <h3 class="mb-3">' . translate("Catégorie") . ' <span class="text-muted"># ' . StripSlashes($categories) . '</span></h3>
+    <h3 class="mb-3">' . __d('two_faqs', 'Catégorie') . ' <span class="text-muted"># ' . StripSlashes($categories) . '</span></h3>
     <p class="lead">
-        <a href="'. site_url('faq.php') .'" title="' . translate("Retour à l'index FAQ") . '" data-bs-toggle="tooltip">Index</a>&nbsp;&raquo;&raquo;&nbsp;' . StripSlashes($categories) . '
+        <a href="'. site_url('faq.php') .'" title="' . __d('two_faqs', 'Retour à l\'index FAQ') . '" data-bs-toggle="tooltip">Index</a>&nbsp;&raquo;&raquo;&nbsp;' . StripSlashes($categories) . '
     </p>';
 
     //cette requette ne sert a rien !!!
@@ -98,9 +98,9 @@ if (!Request::query('myfaq')) {
             ->get();
 
         echo '
-        <h2 class="mb-4">' . translate("FAQ - Questions fréquentes") . '</h2>
+        <h2 class="mb-4">' . __d('two_faqs', 'FAQ - Questions fréquentes') . '</h2>
         <hr />
-        <h3 class="mb-3">' . translate("Catégories") . '<span class="badge bg-secondary float-end">' . count($result) . '</span></h3>
+        <h3 class="mb-3">' . __d('two_faqs', 'Catégories') . '<span class="badge bg-secondary float-end">' . count($result) . '</span></h3>
         <div class="list-group">';
     
         foreach ($result as $categ) 

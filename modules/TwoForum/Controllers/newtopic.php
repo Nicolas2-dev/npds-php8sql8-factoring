@@ -242,7 +242,7 @@ if (Request::input('submitS')) {
         echo '
         <div class="alert alert-danger lead" role="alert">
             <i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp;
-            ' . translate("Vous devez choisir un titre et un message pour poster votre sujet.") . '
+            ' . __d('two_forum', 'Vous devez choisir un titre et un message pour poster votre sujet.') . '
         </div>';
     }
 } else {
@@ -273,7 +273,7 @@ if (Request::input('submitS')) {
     echo '
     <p class="lead">
         <a href="'. site_url('forum.php') .'" >
-            ' . translate("Index du forum") . '
+            ' . __d('two_forum', 'Index du forum') . '
         </a>
         &nbsp;&raquo;&raquo;&nbsp;
         <a href="'. site_url('viewforum.php?forum=' . $forum) .'">
@@ -282,7 +282,7 @@ if (Request::input('submitS')) {
     </p>
         <div class="card">
             <div class="card-block-small">
-            ' . translate("Modéré par : ");
+            ' . __d('two_forum', 'Modéré par : ');
 
     $moderator_data = explode(' ', $moderatorX);
 
@@ -307,16 +307,16 @@ if (Request::input('submitS')) {
         </div>
         <h4 class="my-3">
             <img width="48" height="48" class=" rounded-circle me-3" src="' . $imgava . '" alt="" />
-                ' . translate("Poster un nouveau sujet dans :") . ' ' . stripslashes($forum_name) . '<span class="text-muted">&nbsp;#' . $forum . '</span>
+                ' . __d('two_forum', 'Poster un nouveau sujet dans :') . ' ' . stripslashes($forum_name) . '<span class="text-muted">&nbsp;#' . $forum . '</span>
         </h4>
-            <blockquote class="blockquote">' . translate("A propos des messages publiés :") . '<br />';
+            <blockquote class="blockquote">' . __d('two_forum', 'A propos des messages publiés :') . '<br />';
     
     if ($forum_access == 0) {
-        echo translate("Les utilisateurs anonymes peuvent poster de nouveaux sujets et des réponses dans ce forum.");
+        echo __d('two_forum', 'Les utilisateurs anonymes peuvent poster de nouveaux sujets et des réponses dans ce forum.');
     } elseif ($forum_access == 1) {
-        echo translate("Tous les utilisateurs enregistrés peuvent poster de nouveaux sujets et répondre dans ce forum.");
+        echo __d('two_forum', 'Tous les utilisateurs enregistrés peuvent poster de nouveaux sujets et répondre dans ce forum.');
     } elseif ($forum_access == 2) {
-        echo translate("Seuls les modérateurs peuvent poster de nouveaux sujets et répondre dans ce forum.");
+        echo __d('two_forum', 'Seuls les modérateurs peuvent poster de nouveaux sujets et répondre dans ce forum.');
     }
 
     echo '
@@ -330,15 +330,15 @@ if (Request::input('submitS')) {
             echo '
             <fieldset>
                 <div class="mb-3 row">
-                <label class="control-label col-sm-2" for="username">' . translate("Identifiant : ") . '</label>
+                <label class="control-label col-sm-2" for="username">' . __d('two_forum', 'Identifiant : ') . '</label>
                 <div class="col-sm-8 col-md-4">
-                    <input class="form-control" type="text" id="username" name="username" placeholder="' . translate("Identifiant") . '" required="required" />
+                    <input class="form-control" type="text" id="username" name="username" placeholder="' . __d('two_forum', 'Identifiant') . '" required="required" />
                 </div>
                 </div>
                 <div class="mb-3 row">
-                <label class="control-label col-sm-2" for="password">' . translate("Mot de passe : ") . '</label>
+                <label class="control-label col-sm-2" for="password">' . __d('two_forum', 'Mot de passe : ') . '</label>
                 <div class="col-sm-8">
-                    <input class="form-control" type="password" id="password" name="password" placeholder="' . translate("Mot de passe") . '" required="required" />
+                    <input class="form-control" type="password" id="password" name="password" placeholder="' . __d('two_forum', 'Mot de passe') . '" required="required" />
                 </div>
                 </div>
             </fieldset>';
@@ -350,7 +350,7 @@ if (Request::input('submitS')) {
     } elseif ($forum_access == 2) {
         if (forum::user_is_moderator($userdata[0],$userdata[2], $forum_access)) {
             
-            echo '<strong>' . translate("Auteur") . ' :</strong>';
+            echo '<strong>' . __d('two_forum', 'Auteur') . ' :</strong>';
             echo $userdata[1];
             
             $allow_to_post = 1;
@@ -379,9 +379,9 @@ if (Request::input('submitS')) {
         } else {
             echo ' 
             <div class="mb-3 row">
-                <label class="form-label" for="subject">' . translate("Sujet") . '</label>
+                <label class="form-label" for="subject">' . __d('two_forum', 'Sujet') . '</label>
                 <div class="col-sm-12">
-                    <input class="form-control" type="text" id="subject" name="subject" placeholder="' . translate("Sujet") . '" required="required" value="' . $subject . '" />
+                    <input class="form-control" type="text" id="subject" name="subject" placeholder="' . __d('two_forum', 'Sujet') . '" required="required" value="' . $subject . '" />
                 </div>
             </div>';
 
@@ -390,7 +390,7 @@ if (Request::input('submitS')) {
 
                 echo '
                 <div class="d-none d-sm-block mb-3 row">
-                    <label class="form-label">' . translate("Icone du message") . '</label>
+                    <label class="form-label">' . __d('two_forum', 'Icone du message') . '</label>
                     <div class="col-sm-12">
                         <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
                         ' . forum::emotion_add($image_subject) . '
@@ -401,7 +401,7 @@ if (Request::input('submitS')) {
 
             echo ' 
             <div class="mb-3 row">
-                <label class="form-label" for="message">' . translate("Message") . '</label>';
+                <label class="form-label" for="message">' . __d('two_forum', 'Message') . '</label>';
 
             if (Config::get('forum.config.allow_bbcode')) {
                 $xJava = 'name="message" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
@@ -418,9 +418,9 @@ if (Request::input('submitS')) {
             echo '</div>';
 
             if (Config::get('forum.config.allow_html') == 1) {
-                echo '<span class="text-success float-end mt-2" title="HTML ' . translate("On") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
+                echo '<span class="text-success float-end mt-2" title="HTML ' . __d('two_forum', 'On') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
             } else {
-                echo '<span class="text-danger float-end mt-2" title="HTML ' . translate("Off") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
+                echo '<span class="text-danger float-end mt-2" title="HTML ' . __d('two_forum', 'Off') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
             }
 
             echo '
@@ -430,14 +430,14 @@ if (Request::input('submitS')) {
                 </div>
                 <div class="card-footer p-0">
                     <span class="d-block">
-                        <button class="btn btn-link" type="submit" value="' . translate("Prévisualiser") . '" name="submitP" title="' . translate("Prévisualiser") . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
+                        <button class="btn btn-link" type="submit" value="' . __d('two_forum', 'Prévisualiser') . '" name="submitP" title="' . __d('two_forum', 'Prévisualiser') . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
                     </span>
                 </div>
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="form-label">' . translate("Options") . '</label>
+            <label class="form-label">' . __d('two_forum', 'Options') . '</label>
             <div class="col-sm-12">
                 <div class="custom-controls-stacked">';
 
@@ -452,7 +452,7 @@ if (Request::input('submitS')) {
                 echo '
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="html" name="html" ' . $sethtml . ' />
-                    <label class="form-check-label" for="html">' . translate("Désactiver le html pour cet envoi") . '</label>
+                    <label class="form-check-label" for="html">' . __d('two_forum', 'Désactiver le html pour cet envoi') . '</label>
                 </div>';
             }
 
@@ -475,7 +475,7 @@ if (Request::input('submitS')) {
                         echo '
                         <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="sig" name="sig" ' . $s . ' />
-                        <label class="form-check-label" for="sig">' . translate("Afficher la signature") . '</label>
+                        <label class="form-check-label" for="sig">' . __d('two_forum', 'Afficher la signature') . '</label>
                         </div>';
                     }
                 }
@@ -488,7 +488,7 @@ if (Request::input('submitS')) {
                     echo '
                     <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="upload" name="upload" ' . $up . ' />
-                    <label class="form-check-label" for="upload">' . translate("Charger un fichier une fois l'envoi accepté") . '</label>
+                    <label class="form-check-label" for="upload">' . __d('two_forum', 'Charger un fichier une fois l\'envoi accepté') . '</label>
                     </div>';
                 }
 
@@ -501,7 +501,7 @@ if (Request::input('submitS')) {
                 echo '
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="notify2" name="notify2" ' . $selnot . ' />
-                    <label class="form-check-label" for="notify2">' . translate("Prévenir par Email quand de nouvelles réponses sont postées") . '</label>
+                    <label class="form-check-label" for="notify2">' . __d('two_forum', 'Prévenir par Email quand de nouvelles réponses sont postées') . '</label>
                 </div>';
             }
 
@@ -513,8 +513,8 @@ if (Request::input('submitS')) {
         <div class="mb-3 row">
             <div class="col-sm-12">
                 <input type="hidden" name="forum" value="' . $forum . '" />
-                <input class="btn btn-primary" type="submit" name="submitS" value="' . translate("Valider") . '" accesskey="s" />
-                <input class="btn btn-danger" type="submit" name="cancel" value="' . translate("Annuler la contribution") . '" />
+                <input class="btn btn-primary" type="submit" name="submitS" value="' . __d('two_forum', 'Valider') . '" accesskey="s" />
+                <input class="btn btn-danger" type="submit" name="cancel" value="' . __d('two_forum', 'Annuler la contribution') . '" />
             </div>
         </div>';
         }

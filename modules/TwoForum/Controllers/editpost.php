@@ -102,9 +102,9 @@ if (Request::input('submitS')) {
         $message = forum::make_clickable($message);
         $message = code::af_cod($message);
         $message = str_replace("\n", "<br />", hack::removeHack($message));
-        $message .= "<div class='text-muted text-end small'><i class='fa fa-edit'></i>&nbsp;" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
+        $message .= "<div class='text-muted text-end small'><i class='fa fa-edit'></i>&nbsp;" . __d('two_forum', 'Message édité par') . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600)) . '</div>';             
     } else {
-        $message .= "\n\n" . translate("Message édité par") . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
+        $message .= "\n\n" . __d('two_forum', 'Message édité par') . " : " . $userdata['uname'] . " / " . date::post_convertdate(time() + ((int) Config::get('npds.gmt') * 3600));
     }
 
     $message = addslashes($message);
@@ -112,7 +112,7 @@ if (Request::input('submitS')) {
     $subject = Request::input('subject');
 
     if (!$subject) {
-        $subject = translate("Sans titre");
+        $subject = __d('two_forum', 'Sans titre');
     }
 
     // Forum ARBRE
@@ -203,7 +203,7 @@ if (Request::input('submitS')) {
 
             url::redirect_url($hrefX .'?topic=' . $result_post['topic_id'] . '&forum='. $forum);
         } else {
-            echo '<div class="alert alert-danger">' . translate("Votre contribution n'a pas été supprimée car au moins un post est encore rattaché (forum arbre).") . '</div>';
+            echo '<div class="alert alert-danger">' . __d('two_forum', 'Votre contribution n\'a pas été supprimée car au moins un post est encore rattaché (forum arbre).') . '</div>';
         }
     }
 } else {
@@ -267,20 +267,20 @@ if (Request::input('submitS')) {
 
         echo '
         <div>
-        <h3>' . translate("Edition de la soumission") . ' de <span class="text-muted">' . $qui . '</span></h3>
+        <h3>' . __d('two_forum', 'Edition de la soumission') . ' de <span class="text-muted">' . $qui . '</span></h3>
         <hr />
         <form action="'. site_url('editpost.php') .'" method="post" name="coolsus">';
         
         if ($Mmod) {
             echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="subject">' . translate("Titre") . '</label>
+                <label class="col-form-label col-sm-12" for="subject">' . __d('two_forum', 'Titre') . '</label>
                 <div class="col-sm-12">
                 <input class="form-control" type="text" id="subject" name="subject" maxlength="100" value="' . htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'utf-8') . '" />
                 </div>
             </div>';
         } else {
-            echo '<strong>' . translate("Edition de la soumission") . '</strong> : ' . $title;
+            echo '<strong>' . __d('two_forum', 'Edition de la soumission') . '</strong> : ' . $title;
             echo '<input type="hidden" name="subject" value="' . htmlspecialchars($title, ENT_COMPAT | ENT_HTML401, 'utf-8') . '" />';
         }
     } else {
@@ -290,7 +290,7 @@ if (Request::input('submitS')) {
     if (Config::get('npds.smilies')) {
         echo '
         <div class="d-none d-sm-block mb-3 row">
-            <label class="col-form-label col-sm-12">' . translate("Icone du message") . '</label>
+            <label class="col-form-label col-sm-12">' . __d('two_forum', 'Icone du message') . '</label>
             <div class="col-sm-12">
                 <div class="border rounded pt-2 px-2 n-fond_subject">
                 ' . forum::emotion_add($image_subject) . '
@@ -301,7 +301,7 @@ if (Request::input('submitS')) {
 
     echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="message">' . translate("Message") . '</label>';
+            <label class="col-form-label col-sm-12" for="message">' . __d('two_forum', 'Message') . '</label>';
 
     if (Config::get('forum.config.allow_bbcode')) {
         $xJava = ' onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="storeForm(this)"';
@@ -318,9 +318,9 @@ if (Request::input('submitS')) {
     echo '          </div>';
 
     if (Config::get('forum.config.allow_html') == 1) {
-        echo '<span class="text-success float-end mt-2" title="HTML ' . translate("Activé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
+        echo '<span class="text-success float-end mt-2" title="HTML ' . __d('two_forum', 'Activé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
     } else {
-        echo '<span class="text-danger float-end mt-2" title="HTML ' . translate("Désactivé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
+        echo '<span class="text-danger float-end mt-2" title="HTML ' . __d('two_forum', 'Désactivé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
     }
 
     echo '
@@ -330,7 +330,7 @@ if (Request::input('submitS')) {
                 </div>
                 <div class="card-footer p-0">
                     <span class="d-block">
-                        <button class="btn btn-link" type="submit" value="' . translate("Prévisualiser") . '" name="submitP" title="' . translate("Prévisualiser") . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
+                        <button class="btn btn-link" type="submit" value="' . __d('two_forum', 'Prévisualiser') . '" name="submitP" title="' . __d('two_forum', 'Prévisualiser') . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
                     </span>
                 </div>
                 </div>
@@ -340,18 +340,18 @@ if (Request::input('submitS')) {
     if ((Config::get('forum.config.allow_html') == 1) and ($forum_type != 6)) {
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12">' . translate("Options") . '</label>
+            <label class="col-form-label col-sm-12">' . __d('two_forum', 'Options') . '</label>
             <div class="col-sm-12">
                 <div class="checkbox">
                     <div class="form-check text-danger">
                     <input class="form-check-input" type="checkbox" id="delete_p" name="delete" />
-                    <label class="form-check-label" for="delete_p">' . translate("Supprimer ce message") . '</label>
+                    <label class="form-check-label" for="delete_p">' . __d('two_forum', 'Supprimer ce message') . '</label>
                     </div>
                 </div>
                 <div class="checkbox">
                     <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="html" name="html" ' . (isset($html) ? 'checked="checked"' : '') . ' />
-                    <label class="form-check-label" for="html">' . translate("Désactiver le html pour cet envoi") . '</label>
+                    <label class="form-check-label" for="html">' . __d('two_forum', 'Désactiver le html pour cet envoi') . '</label>
                     </div>
                 </div>
             </div>
@@ -366,7 +366,7 @@ if (Request::input('submitS')) {
         <input type="hidden" name="arbre" value="' . $arbre . '" />
         <div class="mb-3 row">
             <div class="col-sm-12 ms-sm-auto ">
-                <button class="btn btn-primary" type="submit" name="submitS" value="' . translate("Valider") . '" >' . translate("Valider") . '</button>&nbsp;
+                <button class="btn btn-primary" type="submit" name="submitS" value="' . __d('two_forum', 'Valider') . '" >' . __d('two_forum', 'Valider') . '</button>&nbsp;
             </div>
         </div>
     </form>

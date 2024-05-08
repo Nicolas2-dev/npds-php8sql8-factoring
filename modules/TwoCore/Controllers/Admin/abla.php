@@ -32,7 +32,7 @@ if (!function_exists("Mysql_Connexion")) {
 include("auth.php");
 
 $f_meta_nom = 'abla';
-$f_titre = translate("Tableau de bord");
+$f_titre = __d('two_core', 'Tableau de bord');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -51,18 +51,18 @@ if (authors::getAdmin()) {
     $timex = time() - $xdate;
 
     if ($timex >= 86400) {
-        $timex = round($timex / 86400) . ' ' . translate("Jour(s)");
+        $timex = round($timex / 86400) . ' ' . __d('two_core', 'Jour(s)');
     } elseif ($timex >= 3600) {
-        $timex = round($timex / 3600) . ' ' . translate("Heure(s)");
+        $timex = round($timex / 3600) . ' ' . __d('two_core', 'Heure(s)');
     } elseif ($timex >= 60) {
-        $timex = round($timex / 60) . ' ' . translate("Minute(s)");
+        $timex = round($timex / 60) . ' ' . __d('two_core', 'Minute(s)');
     } else {
-        $timex = $timex . ' ' . translate("Seconde(s)");
+        $timex = $timex . ' ' . __d('two_core', 'Seconde(s)');
     }
 
     echo '
     <hr />
-    <p class="lead mb-3">' . translate("Statistiques générales") . ' - ' . translate("Dernières stats") . ' : ' . $timex . ' </p>
+    <p class="lead mb-3">' . __d('two_core', 'Statistiques générales') . ' - ' . __d('two_core', 'Dernières stats') . ' : ' . $timex . ' </p>
     <table class="mb-2" data-toggle="table" data-classes="table mb-2">
         <thead class="collapse thead-default">
             <tr>
@@ -72,7 +72,7 @@ if (authors::getAdmin()) {
         </thead>
         <tbody>
             <tr>
-                <td>' . translate("Nb. pages vues") . ' : </td>
+                <td>' . __d('two_core', 'Nb. pages vues') . ' : </td>
                 <td>' . str::wrh($totalz) . ' (';
 
     if ($totalz > $xtotalz) {
@@ -86,7 +86,7 @@ if (authors::getAdmin()) {
     echo str::wrh($totalz - $xtotalz) . '</span>)</td>
             </tr>
             <tr>
-                <td>' . translate("Nb. de membres") . ' : </td>
+                <td>' . __d('two_core', 'Nb. de membres') . ' : </td>
                 <td>' . str::wrh($membres) . ' (';
 
     if ($membres > $xmembres) {
@@ -100,7 +100,7 @@ if (authors::getAdmin()) {
     echo str::wrh($membres - $xmembres) . '</span>)</td>
             </tr>
             <tr>
-                <td>' . translate("Nb. d'articles") . ' : </td>
+                <td>' . __d('two_core', 'Nb. d\'articles') . ' : </td>
                 <td>' . str::wrh($totala) . ' (';
 
     if ($totala > $xtotala) {
@@ -114,7 +114,7 @@ if (authors::getAdmin()) {
     echo str::wrh($totala - $xtotala) . '</span>)</td>
             </tr>
             <tr>
-                <td>' . translate("Nb. de forums") . ' : </td>
+                <td>' . __d('two_core', 'Nb. de forums') . ' : </td>
                 <td>' . str::wrh($totalc) . ' (';
 
     if ($totalc > $xtotalc) {
@@ -128,7 +128,7 @@ if (authors::getAdmin()) {
     echo str::wrh($totalc - $xtotalc) . '</span>)</td>
             </tr>
             <tr>
-                <td>' . translate("Nb. de sujets") . ' : </td>
+                <td>' . __d('two_core', 'Nb. de sujets') . ' : </td>
                 <td>' . str::wrh($totald) . ' (';
 
     if ($totald > $xtotald) {
@@ -142,7 +142,7 @@ if (authors::getAdmin()) {
     echo str::wrh($totald - $xtotald) . '</span>)</td>
             </tr>
             <tr>
-                <td>' . translate("Nb. de critiques") . ' : </td>
+                <td>' . __d('two_core', 'Nb. de critiques') . ' : </td>
                 <td>' . str::wrh($totalb) . ' (';
 
     if ($totalb > $xtotalb) {
@@ -163,7 +163,7 @@ if (authors::getAdmin()) {
     echo str::wrh($totalb - $xtotalb) . '</span>)</td>
             </tr>
             <tr>
-                <td>' . translate("Nb abonnés à lettre infos") . ' : </td>
+                <td>' . __d('two_core', 'Nb abonnés à lettre infos') . ' : </td>
                 <td>' . str::wrh($totalnl) . ' (';
 
     if ($totalnl > $xtotalnl) {
@@ -190,7 +190,7 @@ if (authors::getAdmin()) {
     echo '
         </tbody>
     </table>
-    <p class="lead my-3">' . translate("Statistiques des chargements") . '</p>
+    <p class="lead my-3">' . __d('two_core', 'Statistiques des chargements') . '</p>
     <table data-toggle="table" data-classes="table">
         <thead class=" thead-default">
             <tr>
@@ -236,10 +236,10 @@ if (authors::getAdmin()) {
     <table class="table table-bordered table-sm" data-classes="table">
         <thead class="">
             <tr>
-                <th>' . translate("Forum") . '</th>
-                <th class="n-t-col-xs-2 text-center">' . translate("Sujets") . '</th>
-                <th class="n-t-col-xs-2 text-center">' . translate("Contributions") . '</th>
-                <th class="n-t-col-xs-3 text-end">' . translate("Dernières contributions") . '</th>
+                <th>' . __d('two_core', 'Forum') . '</th>
+                <th class="n-t-col-xs-2 text-center">' . __d('two_core', 'Sujets') . '</th>
+                <th class="n-t-col-xs-2 text-center">' . __d('two_core', 'Contributions') . '</th>
+                <th class="n-t-col-xs-3 text-end">' . __d('two_core', 'Dernières contributions') . '</th>
             </tr>
         </thead>';
 

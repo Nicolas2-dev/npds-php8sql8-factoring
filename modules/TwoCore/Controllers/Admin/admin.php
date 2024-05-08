@@ -44,7 +44,7 @@ function adminMain($deja_affiches)
 
     echo '
     <div id="adm_men_art" class="adm_workarea">
-    <h2><img src="assets/images/admin/submissions.' . Config::get('npds.admf_ext') . '" class="adm_img" title="' . adm_translate("Articles") . '" alt="icon_' . adm_translate("Articles") . '" />&nbsp;' . adm_translate("Derniers") . ' ' . Config::get('npds.admart') . ' ' . adm_translate("Articles") . '</h2>';
+    <h2><img src="assets/images/admin/submissions.' . Config::get('npds.admf_ext') . '" class="adm_img" title="' . __d('two_core', 'Articles') . '" alt="icon_' . __d('two_core', 'Articles') . '" />&nbsp;' . __d('two_core', 'Derniers') . ' ' . Config::get('npds.admart') . ' ' . __d('two_core', 'Articles') . '</h2>';
 
     // = DB::table('')->select()->where('', )->orderBy('')->get();
 
@@ -76,9 +76,9 @@ function adminMain($deja_affiches)
             <thead>
                 <tr>
                 <th data-sortable="true" data-halign="center" data-align="right" class="n-t-col-xs-1">ID</th>
-                <th data-halign="center" data-sortable="true" data-sorter="htmlSorter" class="n-t-col-xs-5">' . adm_translate("Titre") . '</th>
-                <th data-sortable="true" data-halign="center" class="n-t-col-xs-4">' . adm_translate("Sujet") . '</th>
-                <th data-halign="center" data-align="center" class="n-t-col-xs-2">' . adm_translate("Fonctions") . '</th>
+                <th data-halign="center" data-sortable="true" data-sorter="htmlSorter" class="n-t-col-xs-5">' . __d('two_core', 'Titre') . '</th>
+                <th data-sortable="true" data-halign="center" class="n-t-col-xs-4">' . __d('two_core', 'Sujet') . '</th>
+                <th data-halign="center" data-align="center" class="n-t-col-xs-2">' . __d('two_core', 'Fonctions') . '</th>
                 </tr>
             </thead>
             <tbody>';
@@ -129,10 +129,10 @@ function adminMain($deja_affiches)
                 if ($affiche) {
                     echo '<a data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover" href="article.php?sid=' . $sid . '" data-bs-content=\'   <div class="thumbnail"><img class="img-rounded" src="assets/images/topics/' . $topicimage . '" height="80" width="80" alt="topic_logo" /><div class="caption">' . htmlentities($hometext, ENT_QUOTES) . '</div></div>\' title="' . $sid . '" data-bs-html="true">' . ucfirst($title) . '</a>';
                     if ($ihome == 1) {
-                        echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip">' . language::aff_langue($cat_title) . '</span> <span class="text-danger">non publié en index</span></small>';
+                        echo '<br /><small><span class="badge bg-secondary" title="' . __d('two_core', 'Catégorie') . '" data-bs-toggle="tooltip">' . language::aff_langue($cat_title) . '</span> <span class="text-danger">non publié en index</span></small>';
                     } else {
                         if ($catid > 0) {
-                            echo '<br /><small><span class="badge bg-secondary" title="' . adm_translate("Catégorie") . '" data-bs-toggle="tooltip"> ' . language::aff_langue($cat_title) . '</span> <span class="text-success"> publié en index</span></small>';
+                            echo '<br /><small><span class="badge bg-secondary" title="' . __d('two_core', 'Catégorie') . '" data-bs-toggle="tooltip"> ' . language::aff_langue($cat_title) . '</span> <span class="text-success"> publié en index</span></small>';
                         }
                     }
                 } else {
@@ -151,8 +151,8 @@ function adminMain($deja_affiches)
             if ($affiche) {
                 echo '</td>
                 <td>
-                <a href="admin.php?op=EditStory&amp;sid=' . $sid . '" ><i class="fas fa-edit fa-lg me-2" title="' . adm_translate("Editer") . '" data-bs-toggle="tooltip"></i></a>
-                <a href="admin.php?op=RemoveStory&amp;sid=' . $sid . '" ><i class="fas fa-trash fa-lg text-danger" title="' . adm_translate("Effacer") . '" data-bs-toggle="tooltip"></i></a>';
+                <a href="admin.php?op=EditStory&amp;sid=' . $sid . '" ><i class="fas fa-edit fa-lg me-2" title="' . __d('two_core', 'Editer') . '" data-bs-toggle="tooltip"></i></a>
+                <a href="admin.php?op=RemoveStory&amp;sid=' . $sid . '" ><i class="fas fa-trash fa-lg text-danger" title="' . __d('two_core', 'Effacer') . '" data-bs-toggle="tooltip"></i></a>';
            } else {
                 echo '</td>
                 <td>';
@@ -168,8 +168,8 @@ function adminMain($deja_affiches)
         </table>
         <div class="d-flex my-2 justify-content-between flex-wrap">
         <ul class="pagination pagination-sm">
-            <li class="page-item disabled"><a class="page-link" href="#">' . $nbre_articles . ' ' . adm_translate("Articles") . '</a></li>
-            <li class="page-item disabled"><a class="page-link" href="#">' . $nbPages . ' ' . adm_translate("Page(s)") . '</a></li>
+            <li class="page-item disabled"><a class="page-link" href="#">' . $nbre_articles . ' ' . __d('two_core', 'Articles') . '</a></li>
+            <li class="page-item disabled"><a class="page-link" href="#">' . $nbPages . ' ' . __d('two_core', 'Page(s)') . '</a></li>
         </ul>';
 
         echo paginator::paginate('admin.php?op=suite_articles&amp;deja_affiches=', '', $nbPages, $current, 1, Config::get('npds.admart'), $start);
@@ -179,13 +179,13 @@ function adminMain($deja_affiches)
 
         echo '
         <form id="fad_articles" class="form-inline" action="admin.php" method="post">
-            <label class="me-2 mt-sm-1">' . adm_translate("ID Article:") . '</label>
+            <label class="me-2 mt-sm-1">' . __d('two_core', 'ID Article:') . '</label>
             <input class="form-control  me-2 mt-sm-3 mb-2" type="number" name="sid" />
             <select class="form-select me-2 mt-sm-3 mb-2" name="op">
-                <option value="EditStory" selected="selected">' . adm_translate("Editer un Article") . '</option>
-                <option value="RemoveStory">' . adm_translate("Effacer l'Article") . '</option>
+                <option value="EditStory" selected="selected">' . __d('two_core', 'Editer un Article') . '</option>
+                <option value="RemoveStory">' . __d('two_core', 'Effacer l\'Article') . '</option>
             </select>
-            <button class="btn btn-primary ms-sm-2 mt-sm-3 mb-2" type="submit">' . adm_translate("Ok") . ' </button>
+            <button class="btn btn-primary ms-sm-2 mt-sm-3 mb-2" type="submit">' . __d('two_core', 'Ok') . ' </button>
         </form>';
     }
 

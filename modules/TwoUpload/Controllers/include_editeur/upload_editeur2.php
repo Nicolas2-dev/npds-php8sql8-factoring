@@ -22,7 +22,7 @@ include_once("modules/upload/http/include_editeur/upload.conf.editeur.php");
 /*****************************************************/
 /* Entete                                            */
 /*****************************************************/
-$Titlesitename = upload_translate("Télécharg.");
+$Titlesitename = __d('two_upload', 'Télécharg.');
 include("storage/meta/meta.php");
 if ($url_upload_css) {
     $url_upload_cssX = str_replace('style.css', "$language-style.css", $url_upload_css);
@@ -69,11 +69,11 @@ if (isset($groupe)) {
 echo '
                 <div class="mb-3 row">
                 <input type="hidden" name="actiontype" value="upload" />
-                <label class="form-label">' . upload_translate("Fichier") . '</label>
+                <label class="form-label">' . __d('two_upload', 'Fichier') . '</label>
                 <input class="form-control" name="pcfile" type="file" id="pcfile" value="" />
                 </div>
                 <div class="mb-3 row">
-                <input type="submit" class="btn btn-primary btn-sm" name="insert" value="' . upload_translate("Joindre") . '" />
+                <input type="submit" class="btn btn-primary btn-sm" name="insert" value="' . __d('two_upload', 'Joindre') . '" />
                 </div>
             </form>
         </div>

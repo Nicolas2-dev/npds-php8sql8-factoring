@@ -84,9 +84,9 @@ function links()
     $result = sql_query("SELECT * FROM " . $links_DB . "links_links");
     $numrows = sql_num_rows($result);
     echo '
-    <h2>' . translate("Liens") . '<span class="badge bg-secondary mx-2 float-end" title="DB : ' . $links_DB . translate("Il y a") . ' ' . $numrows . ' ' . translate("Liens") . '" data-bs-toggle="tooltip">' . $numrows . '</span></h2>
+    <h2>' . __d('two_links', 'Liens') . '<span class="badge bg-secondary mx-2 float-end" title="DB : ' . $links_DB . __d('two_links', 'Il y a') . ' ' . $numrows . ' ' . __d('two_links', 'Liens') . '" data-bs-toggle="tooltip">' . $numrows . '</span></h2>
     <hr class="mb-0" />
-    <div class="text-end mt-1 mb-2"><a href="javascript:openwindow();">' . translate("Manuel en ligne") . '</a><i class="fa fa-cogs ms-3 fa-lg text-muted"></i></div>';
+    <div class="text-end mt-1 mb-2"><a href="javascript:openwindow();">' . __d('two_links', 'Manuel en ligne') . '</a><i class="fa fa-cogs ms-3 fa-lg text-muted"></i></div>';
     echo '
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">';
@@ -102,10 +102,10 @@ function links()
     $totalmodrequests = sql_num_rows($result2);
     if ($totalbrokenlinks > 0)
         echo '
-            <li class="breadcrumb-item"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksListBrokenLinks">' . translate("Soumission de liens brisés") . '</a><span class="badge bg-danger ms-1"> ' . $totalbrokenlinks . '</span></li>';
+            <li class="breadcrumb-item"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksListBrokenLinks">' . __d('two_links', 'Soumission de liens brisés') . '</a><span class="badge bg-danger ms-1"> ' . $totalbrokenlinks . '</span></li>';
     if ($totalmodrequests > 0)
         echo '
-            <li class="breadcrumb-item"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksListModRequests">' . translate("Proposition de modifications de liens") . '</a><span class="badge bg-danger ms-1">' . $totalmodrequests . '</span></li>';
+            <li class="breadcrumb-item"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksListModRequests">' . __d('two_links', 'Proposition de modifications de liens') . '</a><span class="badge bg-danger ms-1">' . $totalmodrequests . '</span></li>';
 
     // = DB::table('')->select()->where('', )->orderBy('')->get();
 
@@ -114,7 +114,7 @@ function links()
     $adminform = '';
     if ($numrows > 0) {
         echo '
-            <li class="breadcrumb-item">' . translate("Lien(s) en attente de validation") . '<span class="badge bg-danger ms-1">' . $numrows . '</span></li>
+            <li class="breadcrumb-item">' . __d('two_links', 'Lien(s) en attente de validation') . '<span class="badge bg-danger ms-1">' . $numrows . '</span></li>
         </ol>
     </nav>';
         $adminform = 'adminForm';
@@ -127,17 +127,17 @@ function links()
         $numrowsAE = sql_num_rows($resultAE);
         echo '
     <div class="card card-body mb-3">
-    <h3 class="mb-3">' . translate("Lien") . ' <span class="text-muted">#' . $lid . '</span> ' . translate("en attente de validation") . '</h3>
-    <div class="lead">' . translate("Auteur") . ' : ' . $submitter . ' </div>
+    <h3 class="mb-3">' . __d('two_links', 'Lien') . ' <span class="text-muted">#' . $lid . '</span> ' . __d('two_links', 'en attente de validation') . '</h3>
+    <div class="lead">' . __d('two_links', 'Auteur') . ' : ' . $submitter . ' </div>
     <hr />
     <form action="modules.php" method="post" name="' . $adminform . '">
         <input type="hidden" name="ModPath" value="' . $ModPath . '" />
         <input type="hidden" name="ModStart" value="' . $ModStart . '" />';
         if ($numrowsAE > 0)
-            echo "&nbsp;&nbsp;<span class=\"rouge\">" . translate("Erreur : cette url est déjà présente dans la base de données") . "</span>";
+            echo "&nbsp;&nbsp;<span class=\"rouge\">" . __d('two_links', 'Erreur : cette url est déjà présente dans la base de données') . "</span>";
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="titlelinkvalid">' . translate("Titre") . '</label>
+            <label class="col-form-label col-sm-3" for="titlelinkvalid">' . __d('two_links', 'Titre') . '</label>
             <div class="col-sm-9">
                 <input class="form-control" type="text" id="titlelinkvalid" name="title" value="' . $title . '" maxlength="100" />
             </div>
@@ -148,7 +148,7 @@ function links()
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-3" for="urllinkvalid">URL</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="url" id="urllinkvalid" name="url" value="' . $url . '" maxlength="255" /> <a href="' . $url . '" target="_blank" >' . translate("Visite") . '</a>
+                    <input class="form-control" type="url" id="urllinkvalid" name="url" value="' . $url . '" maxlength="255" /> <a href="' . $url . '" target="_blank" >' . __d('two_links', 'Visite') . '</a>
                 </div>
             </div>';
 
@@ -157,7 +157,7 @@ function links()
         $result2 = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="catlinkvalid">' . translate("Catégorie") . '</label>
+                <label class="col-form-label col-sm-3" for="catlinkvalid">' . __d('two_links', 'Catégorie') . '</label>
                 <div class="col-sm-9">
                 <select class="form-select" id="catlinkvalid" name="cat">';
         while (list($ccid, $ctitle) = sql_fetch_row($result2)) {
@@ -186,7 +186,7 @@ function links()
         if ($links_topic) {
             echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="topicL">' . translate("Sujets") . '</label>
+                <label class="col-form-label col-sm-3" for="topicL">' . __d('two_links', 'Sujets') . '</label>
                 <div class="col-sm-9">
                     <select class="form-select" id="topicL" name="topicL">';
 
@@ -194,7 +194,7 @@ function links()
 
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
-                    <option value="">' . translate("Tous les sujets") . '</option>';
+                    <option value="">' . __d('two_links', 'Tous les sujets') . '</option>';
             while (list($topicid, $topics) = sql_fetch_row($toplist)) {
                 if ($topicid == $topicid_card) $sel = 'selected="selected" ';
                 echo '
@@ -208,7 +208,7 @@ function links()
         }
         echo ' 
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="xtext">' . translate("Description") . '</label>
+                <label class="col-form-label col-sm-12" for="xtext">' . __d('two_links', 'Description') . '</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" name="xtext" rows="10" style="width: 100%;">' . $description . '</textarea>
                 </div>
@@ -216,13 +216,13 @@ function links()
         echo editeur::aff_editeur('xtext', '');
         echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="name">' . translate("Nom") . '</label>
+                <label class="col-form-label col-sm-3" for="name">' . __d('two_links', 'Nom') . '</label>
                 <div class="col-sm-9">
                 <input class="form-control" type="text" name="name" maxlength="100" value="' . $name . '" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="email">' . translate("Email") . '</label>
+                <label class="col-form-label col-sm-3" for="email">' . __d('two_links', 'Email') . '</label>
                 <div class="col-sm-9">
                 <input class="form-control" type="email" name="email" maxlength="100" value="' . $email . '" />
                 </div>
@@ -233,8 +233,8 @@ function links()
                 <input type="hidden" name="lid" value="' . $lid . '" />
                 <input type="hidden" name="submitter" value="' . $submitter . '" />
                 <input type="hidden" name="op" value="LinksAddLink" />
-                <input class="btn btn-primary" type="submit" value="' . translate("Ajouter") . '" />
-                <a class="btn btn-danger ms-2" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksDelNew&amp;lid=' . $lid . '">' . translate("Effacer") . '</a>
+                <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Ajouter') . '" />
+                <a class="btn btn-danger ms-2" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksDelNew&amp;lid=' . $lid . '">' . __d('two_links', 'Effacer') . '</a>
                 </div>
             </div>
         </form>
@@ -254,7 +254,7 @@ function links()
     if ($numrows > 0) {
         echo '
     <div class="card card-body mb-3">
-        <h3 class="mb-3">' . translate("Ajouter un nouveau lien") . '</h3>';
+        <h3 class="mb-3">' . __d('two_links', 'Ajouter un nouveau lien') . '</h3>';
         if ($adminform == '')
             echo '
         <form method="post" action="modules.php" name="adminForm">';
@@ -265,7 +265,7 @@ function links()
             <input type="hidden" name="ModPath" value="' . $ModPath . '" />
             <input type="hidden" name="ModStart" value="' . $ModStart . '" />
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="titlelinkadd">' . translate("Titre") . '</label>
+                <label class="col-form-label col-sm-3" for="titlelinkadd">' . __d('two_links', 'Titre') . '</label>
                 <div class="col-sm-9">
                 <input class="form-control" type="text" id="titlelinkadd" name="title" maxlength="100" required="required"/>
                 </div>
@@ -285,7 +285,7 @@ function links()
         $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="catlinkadd">' . translate("Catégorie") . '</label>
+                <label class="col-form-label col-sm-3" for="catlinkadd">' . __d('two_links', 'Catégorie') . '</label>
                 <div class="col-sm-9">
                 <select class="form-select" id="catlinkadd" name="cat">';
         while (list($cid, $title) = sql_fetch_row($result)) {
@@ -308,7 +308,7 @@ function links()
         if ($links_topic) {
             echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="topiclinkadd">' . translate("Sujets") . '</label>
+                <label class="col-form-label col-sm-3" for="topiclinkadd">' . __d('two_links', 'Sujets') . '</label>
                 <div class="col-sm-9">
                 <select class="form-select" id="topiclinkadd" name="topicL">';
 
@@ -316,7 +316,7 @@ function links()
 
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
-                    <option value="">' . translate("Tous les sujets") . '</option>';
+                    <option value="">' . __d('two_links', 'Tous les sujets') . '</option>';
             while (list($topicid, $topics) = sql_fetch_row($toplist)) {
                 echo '
                     <option value="' . $topicid . '">' . language::aff_langue($topics) . '</option>';
@@ -328,7 +328,7 @@ function links()
         }
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-12" for="xtextlinkadd">' . translate("Description : (255 caractères max)") . '</label>
+            <label class="col-form-label col-12" for="xtextlinkadd">' . __d('two_links', 'Description : (255 caractères max)') . '</label>
             <div class="col-12">
                 <textarea class="tin form-control" id="xtextlinkadd" name="xtext" rows="10"></textarea>
             </div>
@@ -337,13 +337,13 @@ function links()
             echo editeur::aff_editeur("xtext", "false");
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="namelinkadd">' . translate("Nom") . '</label>
+            <label class="col-form-label col-sm-3" for="namelinkadd">' . __d('two_links', 'Nom') . '</label>
             <div class="col-sm-9">
                 <input class="form-control" type="text" id="namelinkadd" name="name" maxlength="60" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="emaillinkadd">' . translate("Email") . '</label>
+            <label class="col-form-label col-sm-3" for="emaillinkadd">' . __d('two_links', 'Email') . '</label>
                 <div class="col-sm-9">
                 <input class="form-control" type="email" id="emaillinkadd" name="email" maxlength="60" />
             </div>
@@ -353,7 +353,7 @@ function links()
                 <input type="hidden" name="op" value="LinksAddLink" />
                 <input type="hidden" name="new" value="0" />
                 <input type="hidden" name="lid" value="0" />
-                <input class="btn btn-primary" type="submit" value="' . translate("Ajouter une url") . '" />
+                <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Ajouter une url') . '" />
             </div>
         </div>
     </form>
@@ -362,16 +362,16 @@ function links()
     // Add a New Main Category
     echo '
     <div class="card card-body mb-3">
-    <h3 class="mb-3">' . translate("Ajouter une catégorie principale") . '</h3>
+    <h3 class="mb-3">' . __d('two_links', 'Ajouter une catégorie principale') . '</h3>
     <form method="post" action="modules.php">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="titlecatadd">' . translate("Nom") . '</label>
+            <label class="col-form-label col-sm-3" for="titlecatadd">' . __d('two_links', 'Nom') . '</label>
             <div class="col-sm-9">
                 <input class="form-control" type="text" id="titlecatadd" name="title" size="30" maxlength="100" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="descricatadd">' . translate("Description") . '</label>
+            <label class="col-form-label col-sm-12" for="descricatadd">' . __d('two_links', 'Description') . '</label>
             <div class="col-sm-12">
                 <textarea class="form-control" id="descricatadd" name="cdescription" rows="10" ></textarea>
             </div>
@@ -381,7 +381,7 @@ function links()
                 <input type="hidden" name="ModPath" value="' . $ModPath . '" />
                 <input type="hidden" name="ModStart" value="' . $ModStart . '" />
                 <input type="hidden" name="op" value="LinksAddCat" />
-                <input class="btn btn-primary" type="submit" value="' . translate("Ajouter") . '" />
+                <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Ajouter') . '" />
             </div>
         </div>
     </form>
@@ -396,7 +396,7 @@ function links()
     if ($numrows > 0) {
         echo '
     <div class="card card-body mb-3">
-    <h3 class="mb-3">' . translate("Modifier la catégorie") . '</h3>
+    <h3 class="mb-3">' . __d('two_links', 'Modifier la catégorie') . '</h3>
     <form method="post" action="modules.php">
         <input type="hidden" name="ModPath" value="' . $ModPath . '" />
         <input type="hidden" name="ModStart" value="' . $ModStart . '" />';
@@ -406,7 +406,7 @@ function links()
         $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="modcat">' . translate("Catégorie") . '</label>
+            <label class="col-form-label col-sm-3" for="modcat">' . __d('two_links', 'Catégorie') . '</label>
             <div class="col-sm-9">
                 <select class="form-select" id="modcat" name="cat">';
         while (list($cid, $title) = sql_fetch_row($result)) {
@@ -428,7 +428,7 @@ function links()
         <div class="mb-3 row">
             <div class="col-sm-9 ms-sm-auto">
                 <input type="hidden" name="op" value="LinksModCat" />
-                <input class="btn btn-primary" type="submit" value="' . translate("Modifier") . '" />
+                <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Modifier') . '" />
             </div>
         </div>
     </form>
@@ -444,12 +444,12 @@ function links()
     if ($numrows > 0) {
         echo '
     <div class="card card-body mb-3">
-    <h3 class="mb-3">' . translate("Ajouter une sous-catégorie") . '</h3>
+    <h3 class="mb-3">' . __d('two_links', 'Ajouter une sous-catégorie') . '</h3>
     <form method="post" action="modules.php">
         <input type="hidden" name="ModPath" value="' . $ModPath . '" />
         <input type="hidden" name="ModStart" value="' . $ModStart . '" />
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="titlesubcatadd">' . translate("Nom") . '</label>
+            <label class="col-form-label col-sm-3" for="titlesubcatadd">' . __d('two_links', 'Nom') . '</label>
             <div class="col-sm-9">
                 <input class="form-control" type="text" id="titlesubcatadd" name="title" maxlength="100" />
             </div>
@@ -460,7 +460,7 @@ function links()
         $result = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" for="cidsubcatadd">' . translate("dans") . '</label>
+            <label class="col-form-label col-sm-3" for="cidsubcatadd">' . __d('two_links', 'dans') . '</label>
             <div class="col-sm-9">
                 <select class="form-select" id="cidsubcatadd" name="cid">';
         while (list($ccid, $ctitle) = sql_fetch_row($result)) {
@@ -474,7 +474,7 @@ function links()
         <div class="mb-3 row">
             <div class="col-sm-9 ms-sm-auto">
                 <input type="hidden" name="op" value="LinksAddSubCat" />
-                <input class="btn btn-primary " type="submit" value="' . translate("Ajouter") . '" />
+                <input class="btn btn-primary " type="submit" value="' . __d('two_links', 'Ajouter') . '" />
             </div>
         </div>
     </form>
@@ -491,8 +491,8 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
     if ($title == '') {
         include("themes/default/header.php");
         echo '
-        <div class="alert alert-danger">' . translate("Erreur : vous devez saisir un titre pour votre lien") . '</div>
-        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
+        <div class="alert alert-danger">' . __d('two_links', 'Erreur : vous devez saisir un titre pour votre lien') . '</div>
+        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . __d('two_links', 'Retour en arrière') . '</a>';
         include("themes/default/footer.php");
         exit();
     }
@@ -500,8 +500,8 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
     global $links_url;
     if (($url == '') and ($links_url == 1)) {
         include("themes/default/header.php");
-        echo "<br /><span class=\"rouge\">" . translate("Erreur : vous devez saisir une url pour votre lien") . "</span><br /><br />";
-        echo "[ <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath\" class=\"noir\">" . translate("Retour en arrière") . "</a> ]<br />";
+        echo "<br /><span class=\"rouge\">" . __d('two_links', 'Erreur : vous devez saisir une url pour votre lien') . "</span><br /><br />";
+        echo "[ <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath\" class=\"noir\">" . __d('two_links', 'Retour en arrière') . "</a> ]<br />";
         include("themes/default/footer.php");
         exit();
     }
@@ -509,8 +509,8 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
     if ($description == '') {
         include("themes/default/header.php");
         echo '
-        <div class="alert alert-danger">' . translate("Erreur : vous devez saisir une description pour votre lien") . '</div>
-        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
+        <div class="alert alert-danger">' . __d('two_links', 'Erreur : vous devez saisir une description pour votre lien') . '</div>
+        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . __d('two_links', 'Retour en arrière') . '</a>';
         include("themes/default/footer.php");
         exit();
     }
@@ -530,8 +530,8 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
     sql_query("INSERT INTO " . $links_DB . "links_links VALUES (NULL, '$cat[0]', '$cat[1]', '$title', '$url', '$description', now(), '$name', '$email', '0','$submitter',0,0,0,'$topicL')");
     include("themes/default/header.php");
     echo '
-        <div class="alert alert-success">' . translate("Nouveau lien ajouté dans la base de données") . '</div>
-        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
+        <div class="alert alert-success">' . __d('two_links', 'Nouveau lien ajouté dans la base de données') . '</div>
+        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . __d('two_links', 'Retour en arrière') . '</a>';
     if ($new == 1) {
 
         // DB::table('')->where('', )->delete();
@@ -539,8 +539,8 @@ function LinksAddLink($new, $lid, $title, $url, $cat, $description, $name, $emai
         sql_query("DELETE FROM " . $links_DB . "links_newlink WHERE lid='$lid'");
         if ($email != '') {
             $nuke_url = Config::get('npds.nuke_url');
-            $subject = html_entity_decode(translate("Votre lien"), ENT_COMPAT | ENT_HTML401, 'utf-8') . " : " . Config::get('npds.sitename');
-            $message = translate("Bonjour") . " $name :\n\n" . translate("Nous avons approuvé votre contribution à notre moteur de recherche.") . "\n\n" . translate("Titre de la page : ") . "$title\n" . translate("Url de la page : ") . "<a href=\"$url\">$url</a>\n" . translate("Description : ") . "$description\n" . translate("Vous pouvez utiliser notre moteur de recherche sur : ") . " <a href=\"$nuke_url/modules.php?ModPath=links&ModStart=links\">$nuke_url/modules.php?ModPath=links&ModStart=links</a>\n\n" . translate("Merci pour votre contribution") . "\n";
+            $subject = html_entity_decode(__d('two_links', 'Votre lien'), ENT_COMPAT | ENT_HTML401, 'utf-8') . " : " . Config::get('npds.sitename');
+            $message = __d('two_links', 'Bonjour') . " $name :\n\n" . __d('two_links', 'Nous avons approuvé votre contribution à notre moteur de recherche.') . "\n\n" . __d('two_links', 'Titre de la page : ') . "$title\n" . __d('two_links', 'Url de la page : ') . "<a href=\"$url\">$url</a>\n" . __d('two_links', 'Description : ') . "$description\n" . __d('two_links', 'Vous pouvez utiliser notre moteur de recherche sur : ') . " <a href=\"$nuke_url/modules.php?ModPath=links&ModStart=links\">$nuke_url/modules.php?ModPath=links&ModStart=links</a>\n\n" . __d('two_links', 'Merci pour votre contribution') . "\n";
             $message .= Config::get('signature.message');
             
             mailler::send_email($email, $subject, $message, '', false, 'html', '');
@@ -560,10 +560,10 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
     $result = sql_query("SELECT cid, sid, title, url, description, name, email, hits, topicid_card FROM " . $links_DB . "links_links WHERE lid='$lid'");
 
     echo '
-        <h2>' . translate("Modifier les liens") . '</h2>
-        <h3>' . translate("Lien web") . '&nbsp;<span class="text-muted">#' . $lid . '</span></h3>
+        <h2>' . __d('two_links', 'Modifier les liens') . '</h2>
+        <h3>' . __d('two_links', 'Lien web') . '&nbsp;<span class="text-muted">#' . $lid . '</span></h3>
         ';
-    echo "[ <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModStart\" class=\"box\">" . translate("Index") . "</a> ][ <a href=\"javascript:openwindow();\" class=\"box\">" . translate("Manuel en ligne") . "</a> ]";
+    echo "[ <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModStart\" class=\"box\">" . __d('two_links', 'Index') . "</a> ][ <a href=\"javascript:openwindow();\" class=\"box\">" . __d('two_links', 'Manuel en ligne') . "</a> ]";
 
     while (list($cid, $sid, $title, $url, $description, $name, $email, $hits, $topicid_card) = sql_fetch_row($result)) {
         $title = stripslashes($title);
@@ -574,10 +574,10 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
             <input type="hidden" name="ModPath" value="' . $ModPath . '" />
             <input type="hidden" name="ModStart" value="' . $ModStart . '" />';
 
-        //       echo translate("Link ID: ")."<b>$lid</b><br />";
+        //       echo __d('two_links', 'Link ID: ')."<b>$lid</b><br />";
         echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="title">' . translate("Titre") . '</label>
+                <label class="col-form-label col-sm-4" for="title">' . __d('two_links', 'Titre') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="text" name="title" value="' . $title . '" maxlength="100" />
                 </div>
@@ -588,7 +588,7 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
             <div class="mb-3 row">
                 <label class="col-form-label col-sm-4" for="url">URL</label>
                 <div class="col-sm-8">
-                <input class="form-control" type="text" name="url" value="' . $url . '" maxlength="255" /><a href="' . $url . '" target="_blank" >' . translate("Visite") . '</a>
+                <input class="form-control" type="text" name="url" value="' . $url . '" maxlength="255" /><a href="' . $url . '" target="_blank" >' . __d('two_links', 'Visite') . '</a>
                 </div>
             </div>';
 
@@ -597,7 +597,7 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
         $result2 = sql_query("SELECT cid, title FROM " . $links_DB . "links_categories ORDER BY title");
         echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="cat">' . translate("Catégorie") . '</label>
+                <label class="col-form-label col-sm-4" for="cat">' . __d('two_links', 'Catégorie') . '</label>
                 <div class="col-sm-8">
                 <select class="form-select" name="cat">';
         while (list($ccid, $ctitle) = sql_fetch_row($result2)) {
@@ -628,7 +628,7 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
         if ($links_topic) {
             echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="topicL">' . translate("Sujets") . '</label>
+                <label class="col-form-label col-sm-4" for="topicL">' . __d('two_links', 'Sujets') . '</label>
                 <div class="col-sm-8">
                 <select class="form-select" name="topicL">';
 
@@ -636,7 +636,7 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
 
             $toplist = sql_query("SELECT topicid, topictext FROM " . $NPDS_Prefix . "topics ORDER BY topictext");
             echo '
-                    <option value="0">' . translate("Tous les sujets") . '</option>';
+                    <option value="0">' . __d('two_links', 'Tous les sujets') . '</option>';
             while (list($topicid, $topics) = sql_fetch_row($toplist)) {
                 if ($topicid == $topicid_card) $sel = 'selected="selected"';
                 echo '
@@ -650,13 +650,13 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
         }
         echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="hits">' . translate("Hits") . '</label>
+                <label class="col-form-label col-sm-4" for="hits">' . __d('two_links', 'Hits') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="number" name="hits" value="' . $hits . '" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="xtext">' . translate("Description") . '</label>
+                <label class="col-form-label col-sm-12" for="xtext">' . __d('two_links', 'Description') . '</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" name="xtext" rows="10">' . $description . '</textarea>
                 </div>
@@ -664,13 +664,13 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
         echo editeur::aff_editeur('xtext', '');
         echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="name">' . translate("Nom") . '</label>
+                <label class="col-form-label col-sm-4" for="name">' . __d('two_links', 'Nom') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="text" name="name" maxlength="100" value="' . $name . '" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="email">' . translate("Email") . '</label>
+                <label class="col-form-label col-sm-4" for="email">' . __d('two_links', 'Email') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="text" name="email" maxlength="100" value="' . $email . '" />
                 </div>
@@ -679,8 +679,8 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
                 <div class="col-sm-8 ms-sm-auto">
                 <input type="hidden" name="lid" value="' . $lid . '" />
                 <input type="hidden" name="op" value="LinksModLinkS" />
-                <input class="btn btn-primary" type="submit" value="' . translate("Modifier") . '" />&nbsp;
-                <a class="btn btn-danger" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&op=LinksDelLink&lid=' . $lid . '" >' . translate("Effacer") . '</a>
+                <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Modifier') . '" />&nbsp;
+                <a class="btn btn-danger" href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&op=LinksDelLink&lid=' . $lid . '" >' . __d('two_links', 'Effacer') . '</a>
                 </div>
             </div>
         </form>';
@@ -692,50 +692,50 @@ function LinksModLink($lid, $modifylinkrequest_adv_infos)
         if ($recordexist == 0) {
             echo '
         <hr />
-        <h4>' . translate("Ajouter un édito") . '</h4>
+        <h4>' . __d('two_links', 'Ajouter un édito') . '</h4>
         <form action="modules.php" method="post">
             <input type="hidden" name="ModPath" value="' . $ModPath . '" />
             <input type="hidden" name="ModStart" value="' . $ModStart . '" />
             <input type="hidden" name="linkid" value="' . $lid . '" />
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="editorialtitle">' . translate("Titre") . '</label>
+                <label class="col-form-label col-sm-4" for="editorialtitle">' . __d('two_links', 'Titre') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="text" name="editorialtitle" value="" maxlength="100" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="editorialtext">' . translate("Texte complet") . '</label>
+                <label class="col-form-label col-sm-12" for="editorialtext">' . __d('two_links', 'Texte complet') . '</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" name="editorialtext" rows="10"></textarea>
                 </div>
             </div>
             <input type="hidden" name="op" value="LinksAddEditorial" />
-            <input class="btn btn-primary" type="submit" value="' . translate("Ajouter") . '" />
+            <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Ajouter') . '" />
         </form>';
         } else {
             list($adminid, $editorialtimestamp, $editorialtext, $editorialtitle) = sql_fetch_row($resulted2);
             $formatted_date = date::formatTimestamp($editorialtimestamp);
-            echo translate("Modifier l'édito") . " : " . translate("Auteur") . " : $adminid / $formatted_date<br /><br />";
+            echo __d('two_links', 'Modifier l\'édito') . " : " . __d('two_links', 'Auteur') . " : $adminid / $formatted_date<br /><br />";
             echo '
         <form action="modules.php" method="post">
             <input type="hidden" name="ModPath" value="' . $ModPath . '" />
             <input type="hidden" name="ModStart" value="' . $ModStart . '" />
             <input type="hidden" name="linkid" value="' . $lid . '" />
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="editorialtitle">' . translate("Titre") . '</label>
+                <label class="col-form-label col-sm-4" for="editorialtitle">' . __d('two_links', 'Titre') . '</label>
                 <div class="col-sm-8">
                 <input class="form-control" type="text" name="editorialtitle" value="' . $editorialtitle . '" maxlength="100" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="editorialtext">' . translate("Texte complet") . '</label>
+                <label class="col-form-label col-sm-12" for="editorialtext">' . __d('two_links', 'Texte complet') . '</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" name="editorialtext" rows="10">' . $editorialtext . '</textarea>
                 </div>
             </div>
             <input type="hidden" name="op" value="LinksModEditorial" />
-            <input class="btn btn-primary" type="submit" value="' . translate("Modifier") . '" />
-            <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&op=LinksDelEditorial&linkid=' . $lid . '" >' . translate("Effacer") . '</a>
+            <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Modifier') . '" />
+            <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&op=LinksDelEditorial&linkid=' . $lid . '" >' . __d('two_links', 'Effacer') . '</a>
             </form>';
         }
         echo '<hr />';
@@ -839,10 +839,10 @@ function LinksAddSubCat($cid, $title)
     if ($numrows > 0) {
         include("themes/default/header.php");
         echo '
-        <h2>' . translate("Liens") . '</h2>
+        <h2>' . __d('two_links', 'Liens') . '</h2>
         <hr />
-        <div class="alert alert-danger">' . translate("Erreur : la sous-catégorie") . ' <span class="lead">' . $title . '</span> ' . translate("existe déjà") . '</div>
-        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
+        <div class="alert alert-danger">' . __d('two_links', 'Erreur : la sous-catégorie') . ' <span class="lead">' . $title . '</span> ' . __d('two_links', 'existe déjà') . '</div>
+        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . __d('two_links', 'Retour en arrière') . '</a>';
         include("themes/default/footer.php");
     } else {
 
@@ -863,10 +863,10 @@ function LinksModCat($cat)
     if (!array_key_exists(1, $cat))
         $cat[1] = 0;
     echo '
-    <h2>' . translate("Liens") . '</h2>
+    <h2>' . __d('two_links', 'Liens') . '</h2>
     <hr class="mb-0" />
     <div class="text-end"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '"><i class="fa fa-cogs fa-lg me-2"></i></a></div>
-    <h3 class="my-3">' . translate("Modifier la catégorie") . '</h3>';
+    <h3 class="my-3">' . __d('two_links', 'Modifier la catégorie') . '</h3>';
     if ($cat[1] == 0) {
 
         // = DB::table('')->select()->where('', )->orderBy('')->get();
@@ -879,13 +879,13 @@ function LinksModCat($cat)
             <input type="hidden" name="ModPath" value="' . $ModPath . '" />
             <input type="hidden" name="ModStart" value="' . $ModStart . '" />
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="title">' . translate("Nom") . '</label>
+                <label class="col-form-label col-sm-3" for="title">' . __d('two_links', 'Nom') . '</label>
                 <div class="col-sm-9">
                 <input class="form-control" type="text" name="title" value="' . $title . '" maxlength="50" />
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="cdescription">' . translate("Description") . '</label>
+                <label class="col-form-label col-sm-12" for="cdescription">' . __d('two_links', 'Description') . '</label>
                 <div class="col-sm-12">
                 <textarea class="form-control" id="cdescription" name="cdescription" rows="10">' . $cdescription . '</textarea>
                 </div>
@@ -893,7 +893,7 @@ function LinksModCat($cat)
             <input type="hidden" name="sub" value="0" />
             <input type="hidden" name="cid" value="' . $cat[0] . '" />
             <input type="hidden" name="op" value="LinksModCatS" />
-            <input class="btn btn-primary" type="submit" value="' . translate("Sauver les modifications") . '" />
+            <input class="btn btn-primary" type="submit" value="' . __d('two_links', 'Sauver les modifications') . '" />
         </form>
         <form method="post" action="modules.php">
             <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -901,7 +901,7 @@ function LinksModCat($cat)
             <input type="hidden" name="sub" value="0" />
             <input type="hidden" name="cid" value="' . $cat[0] . '" />
             <input type="hidden" name="op" value="LinksDelCat" />
-            <input type="submit" class="btn btn-danger" value="' . translate("Effacer") . '" />
+            <input type="submit" class="btn btn-danger" value="' . __d('two_links', 'Effacer') . '" />
         </form>';
     } else {
 
@@ -919,14 +919,14 @@ function LinksModCat($cat)
         <input type="hidden" name="ModPath" value="' . $ModPath . '" />
         <input type="hidden" name="ModStart" value="' . $ModStart . '" />
 
-        ' . translate("Nom de la catégorie : ") . language::aff_langue($ctitle) . '<br /><br />
-        ' . translate("Nom de la sous-catégorie : ") . '
+        ' . __d('two_links', 'Nom de la catégorie : ') . language::aff_langue($ctitle) . '<br /><br />
+        ' . __d('two_links', 'Nom de la sous-catégorie : ') . '
         <input class="form-control" type="text" name="title" value="' . $stitle . '" maxlength="250" /></span>
         <input type="hidden" name="sub" value="1" />
         <input type="hidden" name="cid" value="' . $cat[0] . '" />
         <input type="hidden" name="sid" value="' . $cat[1] . '" />
         <input type="hidden" name="op" value="LinksModCatS" />
-        <input type="submit" class="btn btn-primary" value="' . translate("Sauver les modifications") . '">
+        <input type="submit" class="btn btn-primary" value="' . __d('two_links', 'Sauver les modifications') . '">
         </form>
         <form method="post" action="modules.php">
         <input type="hidden" name="ModPath" value="' . $ModPath . '" />
@@ -935,7 +935,7 @@ function LinksModCat($cat)
         <input type="hidden" name="cid" value="' . $cat[0] . '" />
         <input type="hidden" name="sid" value="' . $cat[1] . '" />
         <input type="hidden" name="op" value="LinksDelCat" />
-        <input type="submit" class="btn btn-danger my-4" value="' . translate("Effacer") . '" />
+        <input type="submit" class="btn btn-danger my-4" value="' . __d('two_links', 'Effacer') . '" />
         </form>';
     }
     include("themes/default/footer.php");
@@ -952,10 +952,10 @@ function LinksAddCat($title, $cdescription)
     if ($numrows > 0) {
         include("themes/default/header.php");
         echo '
-        <h3>' . translate("Liens") . '</h3>
+        <h3>' . __d('two_links', 'Liens') . '</h3>
         <hr />
-        <div class="alert alert-danger">' . translate("Erreur : la catégorie") . ' ' . $title . ' ' . translate("existe déjà") . '</div>
-        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Retour en arrière") . '</a>';
+        <div class="alert alert-danger">' . __d('two_links', 'Erreur : la catégorie') . ' ' . $title . ' ' . __d('two_links', 'existe déjà') . '</div>
+        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . __d('two_links', 'Retour en arrière') . '</a>';
         include("themes/default/footer.php");
     } else {
 
@@ -1032,10 +1032,10 @@ function LinksDelCat($cid, $sid, $sub, $ok = 0)
     } else {
         include("themes/default/header.php");
         echo '
-        <h3>' . translate("Liens") . '</h3>
+        <h3>' . __d('two_links', 'Liens') . '</h3>
         <hr />
-        <div class="alert alert-danger">' . translate("ATTENTION : Etes-vous certain de vouloir effacer cette catégorie et tous ses Liens ?") . '</div>
-        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksDelCat&amp;cid=' . $cid . '&amp;sid=' . $sid . '&amp;sub=' . $sub . '&amp;ok=1" class="btn btn-danger me-2">' . translate("Oui") . '</a><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . translate("Non") . '</a>';
+        <div class="alert alert-danger">' . __d('two_links', 'ATTENTION : Etes-vous certain de vouloir effacer cette catégorie et tous ses Liens ?') . '</div>
+        <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksDelCat&amp;cid=' . $cid . '&amp;sid=' . $sid . '&amp;sub=' . $sub . '&amp;ok=1" class="btn btn-danger me-2">' . __d('two_links', 'Oui') . '</a><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '" class="btn btn-secondary">' . __d('two_links', 'Non') . '</a>';
         include("themes/default/footer.php");
     }
 }
@@ -1060,7 +1060,7 @@ function LinksListModRequests()
     }
 
     echo '
-    <h3 class="mb-3">' . translate("Requête de modification d'un lien utilisateur") . ' <span class="badge bg-danger float-end">' . $totalmodrequests . '</span></h3>
+    <h3 class="mb-3">' . __d('two_links', 'Requête de modification d\'un lien utilisateur') . ' <span class="badge bg-danger float-end">' . $totalmodrequests . '</span></h3>
     <hr class="mb-0" />
     <div class="text-end"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '"><i class="fa fa-cogs me-2 fa-lg"></i></a></div>';
     while (list($requestid, $lid, $cid, $sid, $title, $url, $description, $modifysubmitter, $topicid_card) = sql_fetch_row($resultX)) {
@@ -1122,60 +1122,60 @@ function LinksListModRequests()
     <div class="card-deck-wrapper mt-3">
         <div class="card-deck">
         <div class="card card-body">
-            <h4 class="card-title">' . translate("Original") . '</h4>
+            <h4 class="card-title">' . __d('two_links', 'Original') . '</h4>
             <div class="card-text">
-                <strong>' . translate("Description:") . '</strong> <div>' . $origdescription . '</div>
-                <strong>' . translate("Titre:") . '</strong> ' . $origtitle . '<br />
-                <strong>' . translate("Url : ") . '</strong> <a href="' . $origurl . '" target="_blank" >' . $origurl . '</a><br />';
+                <strong>' . __d('two_links', 'Description:') . '</strong> <div>' . $origdescription . '</div>
+                <strong>' . __d('two_links', 'Titre:') . '</strong> ' . $origtitle . '<br />
+                <strong>' . __d('two_links', 'Url : ') . '</strong> <a href="' . $origurl . '" target="_blank" >' . $origurl . '</a><br />';
         global $links_topic;
         if ($links_topic)
             echo '
-                <strong>' . translate("Sujet") . ' :</strong> ' . $oritopic . '<br />';
+                <strong>' . __d('two_links', 'Sujet') . ' :</strong> ' . $oritopic . '<br />';
         echo '
-                <strong>' . translate("Catégorie :") . '</strong> ' . $origcidtitle . '<br />
-                <strong>' . translate("Sous-catégorie :") . '</strong> ' . $origsidtitle . '<br />';
+                <strong>' . __d('two_links', 'Catégorie :') . '</strong> ' . $origcidtitle . '<br />
+                <strong>' . __d('two_links', 'Sous-catégorie :') . '</strong> ' . $origsidtitle . '<br />';
         if ($owneremail == '')
             echo '
-                <strong>' . translate("Propriétaire") . ':</strong> <span' . clformodif($origsidtitle, $sidtitle) . '>' . $owner . '</span><br/>';
+                <strong>' . __d('two_links', 'Propriétaire') . ':</strong> <span' . clformodif($origsidtitle, $sidtitle) . '>' . $owner . '</span><br/>';
         else
             echo '
-                <strong>' . translate("Propriétaire") . ':</strong> <a href="mailto:' . $owneremail . '">' . $owner . '</a></span><br/>';
+                <strong>' . __d('two_links', 'Propriétaire') . ':</strong> <a href="mailto:' . $owneremail . '">' . $owner . '</a></span><br/>';
         echo '
             </div>
         </div>
         <div class="card card-body border-danger">
-            <h4 class="card-title">' . translate("Proposé") . '</h4>
+            <h4 class="card-title">' . __d('two_links', 'Proposé') . '</h4>
             <div class="card-text">
-                <strong>' . translate("Description:") . '</strong><div' . clformodif($origdescription, $description) . '>' . $description . '</div>
-                <strong>' . translate("Titre:") . '</strong> <span' . clformodif($origtitle, $title) . '>' . $title . '</span><br />
-                <strong>' . translate("Url : ") . '</strong> <span' . clformodif($origurl, $url) . '><a href="' . $url . '" target="_blank" >' . $url . '</a></span><br />';
+                <strong>' . __d('two_links', 'Description:') . '</strong><div' . clformodif($origdescription, $description) . '>' . $description . '</div>
+                <strong>' . __d('two_links', 'Titre:') . '</strong> <span' . clformodif($origtitle, $title) . '>' . $title . '</span><br />
+                <strong>' . __d('two_links', 'Url : ') . '</strong> <span' . clformodif($origurl, $url) . '><a href="' . $url . '" target="_blank" >' . $url . '</a></span><br />';
         global $links_topic;
         if ($links_topic)
             echo '
-                <strong>' . translate("Sujet") . ' :</strong> <span' . clformodif($oritopic, $topic) . '>' . $topic . '</span><br />';
+                <strong>' . __d('two_links', 'Sujet') . ' :</strong> <span' . clformodif($oritopic, $topic) . '>' . $topic . '</span><br />';
         echo '
-                <strong>' . translate("Catégorie :") . '</strong> <span' . clformodif($origcidtitle, $cidtitle) . '>' . $cidtitle . '</span><br />
-                <strong>' . translate("Sous-catégorie :") . '</strong> <span' . clformodif($origsidtitle, $sidtitle) . '>' . $sidtitle . '</span><br />';
+                <strong>' . __d('two_links', 'Catégorie :') . '</strong> <span' . clformodif($origcidtitle, $cidtitle) . '>' . $cidtitle . '</span><br />
+                <strong>' . __d('two_links', 'Sous-catégorie :') . '</strong> <span' . clformodif($origsidtitle, $sidtitle) . '>' . $sidtitle . '</span><br />';
 
         if ($owneremail == '')
             echo '
-                <strong>' . translate("Propriétaire") . ': </strong> <span>' . $owner . '</span><br />';
+                <strong>' . __d('two_links', 'Propriétaire') . ': </strong> <span>' . $owner . '</span><br />';
         else
-            echo '<strong>' . translate("Propriétaire") . ' : </strong><a href="mailto:' . $owneremail . '" >' . $owner . '</span><br />';
+            echo '<strong>' . __d('two_links', 'Propriétaire') . ' : </strong><a href="mailto:' . $owneremail . '" >' . $owner . '</span><br />';
 
         echo '
             </div>
         </div>
     </div>';
         if ($modifysubmitteremail == '')
-            echo translate("Auteur") . ' : ' . $modifysubmitter;
+            echo __d('two_links', 'Auteur') . ' : ' . $modifysubmitter;
         else
-            echo translate("Auteur") . ' :  <a href="mailto:' . $modifysubmitteremail . '">' . $modifysubmitter . '</a>';
+            echo __d('two_links', 'Auteur') . ' :  <a href="mailto:' . $modifysubmitteremail . '">' . $modifysubmitter . '</a>';
 
         echo '
         <div class="mb-3">
-            <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksChangeModRequests&amp;requestid=' . $requestid . '" class="btn btn-primary btn-sm">' . translate("Accepter") . '</a>
-            <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksChangeIgnoreRequests&amp;requestid=' . $requestid . '" class="btn btn-secondary btn-sm">' . translate("Ignorer") . '</a>
+            <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksChangeModRequests&amp;requestid=' . $requestid . '" class="btn btn-primary btn-sm">' . __d('two_links', 'Accepter') . '</a>
+            <a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksChangeIgnoreRequests&amp;requestid=' . $requestid . '" class="btn btn-secondary btn-sm">' . __d('two_links', 'Ignorer') . '</a>
         </div>
     </div>';
     }
@@ -1197,21 +1197,21 @@ function LinksListBrokenLinks()
     else {
         include("themes/default/header.php");
         echo '
-    <h3 class="mb-3">' . translate("Liens cassés rapportés par un ou plusieurs utilisateurs") . ' <span class="badge bg-danger float-end"> ' . $totalbrokenlinks . '</span></h3>
+    <h3 class="mb-3">' . __d('two_links', 'Liens cassés rapportés par un ou plusieurs utilisateurs') . ' <span class="badge bg-danger float-end"> ' . $totalbrokenlinks . '</span></h3>
     <hr class="mb-0"/>
     <div class="text-end"><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '"><i class="fa fa-cogs fa-lg"></i></a></div>
     <div class="blockquote">
-        <i class="fas fa-trash fa-lg text-primary me-2"></i>' . translate("Ignorer (Efface toutes les demandes pour un lien donné)") . '<br />
-        <i class="fas fa-trash fa-lg text-danger me-2"></i>' . translate("Effacer (Efface les liens cassés et les avis pour un lien donné)") . '
+        <i class="fas fa-trash fa-lg text-primary me-2"></i>' . __d('two_links', 'Ignorer (Efface toutes les demandes pour un lien donné)') . '<br />
+        <i class="fas fa-trash fa-lg text-danger me-2"></i>' . __d('two_links', 'Effacer (Efface les liens cassés et les avis pour un lien donné)') . '
     </div>
     <table id="tad_linkbrok" data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
-                <th class="n-t-col-xs-4" data-sortable="true" data-halign="center">' . translate("Liens") . '</th>
-                <th data-sortable="true" data-halign="center">' . translate("Auteur") . '</th>
-                <th data-sortable="true" data-halign="center">' . translate("Propriétaire") . '</th>
-                <th class="n-t-col-xs-1" data-halign="center" data-align="center">' . translate("Ignorer") . '</th>
-                <th class="n-t-col-xs-1" data-halign="center" data-align="center">' . translate("Effacer") . '</th>
+                <th class="n-t-col-xs-4" data-sortable="true" data-halign="center">' . __d('two_links', 'Liens') . '</th>
+                <th data-sortable="true" data-halign="center">' . __d('two_links', 'Auteur') . '</th>
+                <th data-sortable="true" data-halign="center">' . __d('two_links', 'Propriétaire') . '</th>
+                <th class="n-t-col-xs-1" data-halign="center" data-align="center">' . __d('two_links', 'Ignorer') . '</th>
+                <th class="n-t-col-xs-1" data-halign="center" data-align="center">' . __d('two_links', 'Effacer') . '</th>
             </tr>
         </thead>
         <tbody>';
@@ -1250,8 +1250,8 @@ function LinksListBrokenLinks()
                 echo '
                 <td><a href="mailto:' . $owneremail . '" >' . $owner . '</a>';
             echo '</td>
-                <td><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksIgnoreBrokenLinks&amp;lid=' . $lid . '" ><i class="fas fa-trash fa-lg" title="' . translate("Ignorer") . '" data-bs-toggle="tooltip"></i></a></td>
-                <td><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksDelBrokenLinks&amp;lid=' . $lid . '" ><i class="fas fa-trash text-danger fa-lg" title="' . translate("Effacer") . '" data-bs-toggle="tooltip"></i></a></td>
+                <td><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksIgnoreBrokenLinks&amp;lid=' . $lid . '" ><i class="fas fa-trash fa-lg" title="' . __d('two_links', 'Ignorer') . '" data-bs-toggle="tooltip"></i></a></td>
+                <td><a href="modules.php?ModStart=' . $ModStart . '&amp;ModPath=' . $ModPath . '&amp;op=LinksDelBrokenLinks&amp;lid=' . $lid . '" ><i class="fas fa-trash text-danger fa-lg" title="' . __d('two_links', 'Effacer') . '" data-bs-toggle="tooltip"></i></a></td>
             </tr>';
         }
         echo '

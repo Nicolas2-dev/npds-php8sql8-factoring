@@ -56,13 +56,13 @@ if (! function_exists('online'))
 
         $member_online_num = DB::table('session')->select('username')->where('guest', 0)->count();
 
-        $who_online = '<p class="text-center">'. translate("Il y a actuellement") .' <span class="badge bg-secondary">'. $guest_online_num .'</span> '. translate("visiteur(s) et") .' <span class="badge bg-secondary"> '. $member_online_num .' </span> '. translate("membre(s) en ligne.") .'<br />';
+        $who_online = '<p class="text-center">'. __d('two_users', 'Il y a actuellement') .' <span class="badge bg-secondary">'. $guest_online_num .'</span> '. __d('two_users', 'visiteur(s) et') .' <span class="badge bg-secondary"> '. $member_online_num .' </span> '. __d('two_users', 'membre(s) en ligne.') .'<br />';
         $content = $who_online;
 
         $user = User::getUser();
 
         if ($user) {
-            $content .= '<br />'. translate("Vous êtes connecté en tant que") .' <strong>'. $username .'</strong>.<br />';
+            $content .= '<br />'. __d('two_users', 'Vous êtes connecté en tant que') .' <strong>'. $username .'</strong>.<br />';
             
             $result = Cache::remember('onlineblock', Config::get('two_users::config.cache.onlineblock'), function () use ($username) {
                     return DB::table('users')
@@ -76,13 +76,13 @@ if (! function_exists('online'))
                         ->where('to_userid', $result->uid)
                         ->where('type_msg', 0)->count();
 
-            $content .= translate("Vous avez") .' <a href="'. site_url('viewpmsg.php') .'"><span class="badge bg-primary">'. $numrow .'</span></a> '. translate("message(s) personnel(s).") .'</p>';
+            $content .= __d('two_users', 'Vous avez') .' <a href="'. site_url('viewpmsg.php') .'"><span class="badge bg-primary">'. $numrow .'</span></a> '. __d('two_users', 'message(s) personnel(s).') .'</p>';
         } else {
-            $content .= '<br />'. translate("Devenez membre privilégié en cliquant") .' <a href="'. site_url('user.php?op=only_newuser') .'">'. translate("ici") .'</a></p>';
+            $content .= '<br />'. __d('two_users', 'Devenez membre privilégié en cliquant') .' <a href="'. site_url('user.php?op=only_newuser') .'">'. __d('two_users', 'ici') .'</a></p>';
         }
 
         global $block_title;
-        $title = $block_title == '' ? translate("Qui est en ligne ?") : $block_title;
+        $title = $block_title == '' ? __d('two_users', 'Qui est en ligne ?') : $block_title;
 
         Theme::themesidebox($title, $content);
     }
@@ -104,24 +104,24 @@ if (! function_exists('loginbox'))
             $boxstuff = '
             <form action="'. site_url('user.php') .'" method="post">
                 <div class="mb-3">
-                    <label for="uname">'. translate("Identifiant") .'</label>
+                    <label for="uname">'. __d('two_users', 'Identifiant') .'</label>
                     <input class="form-control" type="text" name="uname" maxlength="25" />
                 </div>
                 <div class="mb-3">
-                    <label for="pass">'. translate("Mot de passe") .'</label>
+                    <label for="pass">'. __d('two_users', 'Mot de passe') .'</label>
                     <input class="form-control" type="password" name="pass" maxlength="20" />
                 </div>
                 <div class="mb-3">
                     <input type="hidden" name="op" value="login" />
-                    <button class="btn btn-primary" type="submit">'. translate("Valider") .'</button>
+                    <button class="btn btn-primary" type="submit">'. __d('two_users', 'Valider') .'</button>
                 </div>
                 <div class="help-block">
-                '. translate("Vous n'avez pas encore de compte personnel ? Vous devriez") .' <a href="'. site_url('user.php') .'">'. translate("en créer un") .'</a>. '. translate("Une fois enregistré") .' '. translate("vous aurez certains avantages, comme pouvoir modifier l'aspect du site,") .' '. translate("ou poster des commentaires signés...") .'
+                '. __d('two_users', 'Vous n\'avez pas encore de compte personnel ? Vous devriez') .' <a href="'. site_url('user.php') .'">'. __d('two_users', 'en créer un') .'</a>. '. __d('two_users', 'Une fois enregistré') .' '. __d('two_users', 'vous aurez certains avantages, comme pouvoir modifier l\'aspect du site,') .' '. __d('two_users', 'ou poster des commentaires signés...') .'
                 </div>
             </form>';
 
             global $block_title;
-            $title = $block_title == '' ? translate("Se connecter") : $block_title;
+            $title = $block_title == '' ? __d('two_users', 'Se connecter') : $block_title;
 
             Theme::themesidebox($title, $boxstuff);
         }
@@ -150,7 +150,7 @@ if (! function_exists('userblock'))
             $ublock = $getblock->ublock;
 
             global $block_title;
-            $title = $block_title == '' ? translate("Menu de") . ' ' . User::cookieUser(1) : $block_title;
+            $title = $block_title == '' ? __d('two_users', 'Menu de') . ' ' . User::cookieUser(1) : $block_title;
 
             Theme::themesidebox($title, $ublock);
         }

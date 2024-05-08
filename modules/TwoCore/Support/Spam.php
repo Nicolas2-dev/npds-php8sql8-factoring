@@ -133,9 +133,9 @@ class Spam
         $al1 = mt_rand(0, count($tab) - 1);
 
         if (function_exists("imagepng")) {
-            $aff = str_replace($tab[$al1], html_entity_decode(translate($tab[$al1]), ENT_QUOTES | ENT_HTML401, 'UTF-8'), $aff);
+            $aff = str_replace($tab[$al1], html_entity_decode($tab[$al1], ENT_QUOTES | ENT_HTML401, 'UTF-8'), $aff);
         } else {
-            $aff = str_replace($tab[$al1], translate($tab[$al1]), $aff);
+            $aff = str_replace($tab[$al1], $tab[$al1], $aff);
         }
 
         // mis en majuscule
@@ -157,7 +157,7 @@ class Spam
             $tmp = '
             <div class="mb-3 row">
                 <div class="col-sm-9 text-end">
-                    <label class="form-label text-danger" for="asb_reponse">' . translate("Anti-Spam / Merci de répondre à la question suivante : ") . '&nbsp;' . $aff . '</label>
+                    <label class="form-label text-danger" for="asb_reponse">' . __d('two_core', 'Anti-Spam / Merci de répondre à la question suivante : ') . '&nbsp;' . $aff . '</label>
                 </div>
                 <div class="col-sm-3 text-end">
                     <input class="form-control" type="text" id="asb_reponse" name="asb_reponse" maxlength="2" onclick="this.value" />

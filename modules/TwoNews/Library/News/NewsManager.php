@@ -474,8 +474,8 @@ class NewsManager
             $story_limit++;
         }
 
-        $transl1 = translate("Page suivante");
-        $transl2 = translate("Home");
+        $transl1 = __d('two_news', 'Page suivante');
+        $transl2 = __d('two_news', 'Home');
 
         $cookie = User::cookieUser();
 
@@ -674,11 +674,11 @@ class NewsManager
             $informant  = $xtab[$story_limit]['informant'];
             $notes      = $xtab[$story_limit]['notes'];
 
-            $printP = '<a href="'. site_url('print.php?sid='. $sid) .'" class="me-3" title="'. translate("Page spéciale pour impression") .'" data-bs-toggle="tooltip" >
+            $printP = '<a href="'. site_url('print.php?sid='. $sid) .'" class="me-3" title="'. __d('two_news', 'Page spéciale pour impression') .'" data-bs-toggle="tooltip" >
                     <i class="fa fa-lg fa-print"></i>
                 </a>&nbsp;';
             
-            $sendF = '<a href="'. site_url('friend.php?op=FriendSend&amp;sid='. $sid) .'" class="me-3" title="'. translate("Envoyer cet article à un ami") .'" data-bs-toggle="tooltip" >
+            $sendF = '<a href="'. site_url('friend.php?op=FriendSend&amp;sid='. $sid) .'" class="me-3" title="'. __d('two_news', 'Envoyer cet article à un ami') .'" data-bs-toggle="tooltip" >
                     <i class="fa fa-lg fa-at"></i>
                 </a>';
             
@@ -693,12 +693,12 @@ class NewsManager
                 $bodycount = strlen(strip_tags(Language::aff_langue($bodytext)));
                 
                 if ($bodycount > 0) {
-                    $morelink[0] = Sanitize::wrh($bodycount) .' '. translate("caractères de plus");
+                    $morelink[0] = Sanitize::wrh($bodycount) .' '. __d('two_news', 'caractères de plus');
                 } else {
                     $morelink[0] = ' ';
                 }
 
-                $morelink[1] = ' <a href="'. site_url('article.php?sid='. $sid) .'" >'. translate("Lire la suite...") .'</a>';
+                $morelink[1] = ' <a href="'. site_url('article.php?sid='. $sid) .'" >'. __d('two_news', 'Lire la suite...') .'</a>';
             } else {
                 $morelink[0] = '';
                 $morelink[1] = '';
@@ -707,19 +707,19 @@ class NewsManager
             if ($comments == 0) {
                 $morelink[2] = 0;
                 $morelink[3] = '<a href="'. site_url('article.php?sid='. $sid) .'" class="me-3">
-                        <i class="far fa-comment fa-lg" title="'. translate("Commentaires ?") .'" data-bs-toggle="tooltip"></i>
+                        <i class="far fa-comment fa-lg" title="'. __d('two_news', 'Commentaires ?') .'" data-bs-toggle="tooltip"></i>
                     </a>';
 
             } elseif ($comments == 1) {
                 $morelink[2] = $comments;
                 $morelink[3] = '<a href="'. site_url('article.php?sid='. $sid) .'" class="me-3">
-                        <i class="far fa-comment fa-lg" title="'. translate("Commentaire") .'" data-bs-toggle="tooltip"></i>
+                        <i class="far fa-comment fa-lg" title="'. __d('two_news', 'Commentaire') .'" data-bs-toggle="tooltip"></i>
                     </a>';
 
             } else {
                 $morelink[2] = $comments;
                 $morelink[3] = '<a href="'. site_url('article.php?sid='. $sid) .'" class="me-3" >
-                        <i class="far fa-comment fa-lg" title="'. translate("Commentaires") .'" data-bs-toggle="tooltip"></i>
+                        <i class="far fa-comment fa-lg" title="'. __d('two_news', 'Commentaires') .'" data-bs-toggle="tooltip"></i>
                     </a>';
             }
 

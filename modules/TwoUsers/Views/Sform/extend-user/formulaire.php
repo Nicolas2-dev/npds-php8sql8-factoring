@@ -20,15 +20,15 @@ use npds\support\language\language;
 use Npds\Support\Facades\Sform;
 
 
-Sform::add_title(translate("Inscription"));
-Sform::add_mess(translate("* Désigne un champ obligatoire"));
+Sform::add_title(__d('two_users', 'Inscription'));
+Sform::add_mess(__d('two_users', '* Désigne un champ obligatoire'));
 
-Sform::add_field('uname', translate("ID utilisateur (pseudo)"), $uname, 'text', true, 25, '', '');
-Sform::add_field('name', translate("Votre véritable identité"), $name, 'text', false, 60, '', '');
+Sform::add_field('uname', __d('two_users', 'ID utilisateur (pseudo)'), $uname, 'text', true, 25, '', '');
+Sform::add_field('name', __d('two_users', 'Votre véritable identité'), $name, 'text', false, 60, '', '');
 Sform::add_extender('name', '', '<span class="help-block"><span class="float-end" id="countcar_name"></span></span>');
-Sform::add_field('email', translate("Véritable adresse Email"), $email, 'email', true, 60, '', '');
-Sform::add_extender('email', '', '<span class="help-block">' . translate("(Cette adresse Email ne sera pas divulguée, mais elle nous servira à vous envoyer votre Mot de Passe si vous le perdez)") . '<span class="float-end" id="countcar_email"></span></span>');
-Sform::add_checkbox('user_viewemail', translate("Autoriser les autres utilisateurs à voir mon Email"), "1", false, false);
+Sform::add_field('email', __d('two_users', 'Véritable adresse Email'), $email, 'email', true, 60, '', '');
+Sform::add_extender('email', '', '<span class="help-block">' . __d('two_users', '(Cette adresse Email ne sera pas divulguée, mais elle nous servira à vous envoyer votre Mot de Passe si vous le perdez)') . '<span class="float-end" id="countcar_email"></span></span>');
+Sform::add_checkbox('user_viewemail', __d('two_users', 'Autoriser les autres utilisateurs à voir mon Email'), "1", false, false);
 
 // ---- AVATAR
 if (Config::get('npds.smilies')) {
@@ -60,34 +60,34 @@ if (Config::get('npds.smilies')) {
         }
     }
 
-    Sform::add_select('user_avatar', translate("Votre Avatar"), $tmp_tempo, false, '', false);
+    Sform::add_select('user_avatar', __d('two_users', 'Votre Avatar'), $tmp_tempo, false, '', false);
     Sform::add_extender('user_avatar', 'onkeyup="showimage();" onchange="showimage();"', '<img class="img-thumbnail n-ava mt-3" src="' . $direktori . '/blank.gif" name="avatar" alt="avatar" />');
     Sform::add_field('B1', 'B1', '', 'hidden', false);
 }
 // ---- AVATAR
 
-Sform::add_field('user_from', translate("Votre situation géographique"), StripSlashes($user_from), 'text', false, 100, '', '');
+Sform::add_field('user_from', __d('two_users', 'Votre situation géographique'), StripSlashes($user_from), 'text', false, 100, '', '');
 Sform::add_extender('user_from', '', '<span class="help-block"><span class="float-end" id="countcar_user_from"></span></span>');
 
-Sform::add_field('user_occ', translate("Votre activité"), StripSlashes($user_occ), 'text', false, 100, '', '');
+Sform::add_field('user_occ', __d('two_users', 'Votre activité'), StripSlashes($user_occ), 'text', false, 100, '', '');
 Sform::add_extender('user_occ', '', '<span class="help-block"><span class="float-end" id="countcar_user_occ"></span></span>');
 
-Sform::add_field('user_intrest', translate("Vos centres d'intérêt"), StripSlashes($user_intrest), 'text', false, 150, '', '');
+Sform::add_field('user_intrest', __d('two_users', 'Vos centres d\'intérêt'), StripSlashes($user_intrest), 'text', false, 150, '', '');
 Sform::add_extender('user_intrest', '', '<span class="help-block"><span class="float-end" id="countcar_user_intrest"></span></span>');
 
-Sform::add_field('user_sig', translate("Signature"), StripSlashes($user_sig), 'textarea', false, 255, '7', '');
-Sform::add_extender('user_sig', '', '<span class="help-block">' . translate("(255 characters max. Type your signature with HTML coding)") . '<span class="float-end" id="countcar_user_sig"></span></span>');
+Sform::add_field('user_sig', __d('two_users', 'Signature'), StripSlashes($user_sig), 'textarea', false, 255, '7', '');
+Sform::add_extender('user_sig', '', '<span class="help-block">' . __d('two_users', '(255 characters max. Type your signature with HTML coding)') . '<span class="float-end" id="countcar_user_sig"></span></span>');
 
 // --- MEMBER-PASS
 if ($memberpass) {
-    Sform::add_field('pass', translate("Mot de passe"), '', 'password', true, 40, '', '');
+    Sform::add_field('pass', __d('two_users', 'Mot de passe'), '', 'password', true, 40, '', '');
     Sform::add_extra('<div class="mb-3 row"><div class="col-sm-8 ms-sm-auto" ><div class="progress" style="height: 0.2rem;"><div id="passwordMeter_cont" class="progress-bar bg-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div></div></div></div>');
-    Sform::add_field('vpass', translate("Entrez à nouveau votre mot de Passe"), '', 'password', true, 40, '', '');
+    Sform::add_field('vpass', __d('two_users', 'Entrez à nouveau votre mot de Passe'), '', 'password', true, 40, '', '');
 }
 
 // --- MEMBER-PASS
 
-Sform::add_checkbox('user_lnl', translate("S'inscrire à la liste de diffusion du site"), "1", false, true);
+Sform::add_checkbox('user_lnl', __d('two_users', 'S\'inscrire à la liste de diffusion du site'), "1", false, true);
 
 // --- EXTENDER
 if (file_exists("modules/sform/extend-user/extender/formulaire.php")) {
@@ -101,7 +101,7 @@ if (file_exists("modules/sform/extend-user/extender/formulaire.php")) {
 Sform::add_field('op', '', 'new user', 'hidden', false);
 
 // --- CHARTE du SITE
-Sform::add_checkbox('charte', '<a href="' . site_url('static.php?op=charte.html') .'" target="_blank">' . translate("Vous devez accepter la charte d'utilisation du site") . '</a>', "1", true, false);
+Sform::add_checkbox('charte', '<a href="' . site_url('static.php?op=charte.html') .'" target="_blank">' . __d('two_users', 'Vous devez accepter la charte d\'utilisation du site') . '</a>', "1", true, false);
 // --- CHARTE du SITE
 
 // --- CONSENTEMENT
@@ -111,7 +111,7 @@ Sform::add_checkbox('consent', language::aff_langue('[fr]En soumettant ce formul
 Sform::add_extra('
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto" >
-                <button class="btn btn-primary" type="submit">' . translate("Valider") . '</button>
+                <button class="btn btn-primary" type="submit">' . __d('two_users', 'Valider') . '</button>
             </div>
         </div>');
 

@@ -66,13 +66,13 @@ function fma_filter($type, $filename, $Extension)
             if (fma_autorise($type, $filename)) {
                 $autorise = true;
             } else {
-                $error = fma_translate("Fichier interdit");
+                $error = __d('two_fmanager', 'Fichier interdit');
             }
         } else {
-            $error = fma_translate("Type de fichier interdit");
+            $error = __d('two_fmanager', 'Type de fichier interdit');
         }
     } else
-        $error = fma_translate("Fichier interdit");
+        $error = __d('two_fmanager', 'Fichier interdit');
     $tab[] = $autorise;
     $tab[] = $error;
     $tab[] = $filename;
@@ -392,7 +392,7 @@ if ($Max_thumb > 0) {
                             $files .= "<div class=\"imagethumb\">";
                             $uniqid = uniqid("mp3");
                             $files .= "<a href=\"javascript:void(0);\" onclick=\"document.$uniqid.SetVariable('player:jsUrl', '$PopUp'); document.$uniqid.SetVariable('player:jsPlay', '');\">";
-                            $files .= "<div class=\"mp3\"><p align=\"center\">" . fma_translate("Cliquer ici pour charger le fichier dans le player") . "</p><br />" . str::split_string_without_space($obj->FieldName, 24) . "</div>";
+                            $files .= "<div class=\"mp3\"><p align=\"center\">" . __d('two_fmanager', 'Cliquer ici pour charger le fichier dans le player') . "</p><br />" . str::split_string_without_space($obj->FieldName, 24) . "</div>";
                             $files .= "<div style=\"margin-top: 10px;\">";
                             $files .= "<object id=\"" . $uniqid . "\" type=\"application/x-shockwave-flash\" data=\"modules/$ModPath/plugins/player_mp3_maxi.swf\" width=\"$Max_thumb\" height=\"15\">
                         <param name=\"movie\" value=\"modules/$ModPath/plugins/player_mp3_maxi.swf\" />
@@ -423,13 +423,13 @@ else
 if ($inclusion) {
     $Xcontent = join('', file($inclusion));
     $Xcontent = str_replace('_back', extend_ascii($cur_nav_href_back), $Xcontent);
-    $Xcontent = str_replace('_refresh', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=' . $ModStart . '&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '"><i class="bi bi-arrow-clockwise fs-1 d-sm-none" title="' . fma_translate("Rafraîchir") . '" data-bs-toggle="tooltip"></i><span class="d-none d-sm-block mt-2">' . fma_translate("Rafraîchir") . '</span></a>', $Xcontent);
+    $Xcontent = str_replace('_refresh', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=' . $ModStart . '&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '"><i class="bi bi-arrow-clockwise fs-1 d-sm-none" title="' . __d('two_fmanager', 'Rafraîchir') . '" data-bs-toggle="tooltip"></i><span class="d-none d-sm-block mt-2">' . __d('two_fmanager', 'Rafraîchir') . '</span></a>', $Xcontent);
     $Xcontent = str_replace('_nb_subdir', ($obj->Count('d') - $dir_minuscptr), $Xcontent);
     if (($obj->Count('d') - $dir_minuscptr) == 0)
         $Xcontent = str_replace('_classempty', 'collapse', $Xcontent);
     $Xcontent = str_replace('_subdirs', $subdirs, $Xcontent);
     if ($uniq_fma)
-        $Xcontent = str_replace('_fileM', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=f-manager&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '"><i class="bi bi-folder fs-1 d-sm-none" data-bs-toggle="tooltip" title="' . fma_translate("Gestionnaire de fichiers") . '"></i><span class="d-none d-sm-block mt-2">' . fma_translate("Gestionnaire de fichiers") . '</span></a>', $Xcontent);
+        $Xcontent = str_replace('_fileM', '<a class="nav-link" href="modules.php?ModPath=' . $ModPath . '&amp;ModStart=f-manager&amp;FmaRep=' . $FmaRep . '&amp;browse=' . rawurlencode($browse) . '"><i class="bi bi-folder fs-1 d-sm-none" data-bs-toggle="tooltip" title="' . __d('two_fmanager', 'Gestionnaire de fichiers') . '"></i><span class="d-none d-sm-block mt-2">' . __d('two_fmanager', 'Gestionnaire de fichiers') . '</span></a>', $Xcontent);
     else
         $Xcontent = str_replace('_fileM', '', $Xcontent);
 

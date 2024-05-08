@@ -67,44 +67,44 @@ settype($term, 'string');
 $term = hack::removeHack(stripslashes(htmlspecialchars(urldecode($term), ENT_QUOTES, 'utf-8'))); // electrobug
 
 echo '
-    <h2>' . translate("Rechercher dans") . ' : Forums</h2>
+    <h2>' . __d('two_forum', 'Rechercher dans') . ' : Forums</h2>
     <hr />
     <form name="search" action="' . $_SERVER['PHP_SELF'] . '" method="post" class="mt-3">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="term">' . translate("Mot-clé") . '</label>
+            <label class="col-form-label col-sm-4" for="term">' . __d('two_forum', 'Mot-clé') . '</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="term" name="term" value="' . $term . '" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="only_solved">' . translate("Etat du topic") . '</label>
+            <label class="col-form-label col-sm-4" for="only_solved">' . __d('two_forum', 'Etat du topic') . '</label>
             <div class="col-sm-8 pt-1">
                 <div class="form-check">
                 <input type="checkbox" id="only_solved" name="only_solved" class="form-check-input" value="ON" />
-                <label class="form-check-label" for="only_solved">' . translate("Résolu") . '</label>
+                <label class="form-check-label" for="only_solved">' . __d('two_forum', 'Résolu') . '</label>
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="addterms">' . translate("Classé par") . '</label>
+            <label class="col-form-label col-sm-4" for="addterms">' . __d('two_forum', 'Classé par') . '</label>
             <div class="col-sm-8">
                 <div class="custom-controls-stacked">
                 <div class="form-check mb-2">
                     <input type="radio" id="any" name="addterms" class="form-check-input" value="any" checked="checked" />
-                    <label class="form-check-label" for="any">' . translate("Chercher n'importe quel terme (par défaut)") . '</label>
+                    <label class="form-check-label" for="any">' . __d('two_forum', 'Chercher n\'importe quel terme (par défaut)') . '</label>
                 </div>
                 <div class="form-check mb-2">
                     <input type="radio" id="all" name="addterms" class="form-check-input" value="all" />
-                    <label class="form-check-label" for="all">' . translate("Chercher tous les mots") . '</label>
+                    <label class="form-check-label" for="all">' . __d('two_forum', 'Chercher tous les mots') . '</label>
                 </div>
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="forum">' . translate("Forum") . '</label>
+            <label class="col-form-label col-sm-4" for="forum">' . __d('two_forum', 'Forum') . '</label>
             <div class="col-sm-8">
                 <select class="form-select" name="forum" id="forum">
-                <option value="all">' . translate("Rechercher dans tous les forums") . '</option>';
+                <option value="all">' . __d('two_forum', 'Rechercher dans tous les forums') . '</option>';
 
 // = DB::table('')->select()->where('', )->orderBy('')->get();
 
@@ -122,13 +122,13 @@ echo '
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="username">' . translate("Nom d'auteur") . '</label>
+            <label class="col-form-label col-sm-4" for="username">' . __d('two_forum', 'Nom d\'auteur') . '</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" id="username" name="username" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-4" for="sortby">' . translate("Classé par") . '</label>
+            <label class="col-form-label col-sm-4" for="sortby">' . __d('two_forum', 'Classé par') . '</label>
             <div class="col-sm-8">
                 ';
 
@@ -143,7 +143,7 @@ if ($sortby == "0") {
 }
 
 echo '/>
-                <label class="form-check-label" for="sbpt">' . translate("Heure de la soumission") . '</label>
+                <label class="form-check-label" for="sbpt">' . __d('two_forum', 'Heure de la soumission') . '</label>
                 </div>
                 <div class="form-check form-check-inline  mt-2">
                 <input type="radio" name="sortby" id="sbto" class="form-check-input" value="1" ';
@@ -153,7 +153,7 @@ if ($sortby == "1") {
 }
 
 echo '/>
-                <label class="form-check-label" for="sbto">' . translate("Sujets") . '</label>
+                <label class="form-check-label" for="sbto">' . __d('two_forum', 'Sujets') . '</label>
                 </div>
                 <div class="form-check form-check-inline  mt-2">
                 <input type="radio" name="sortby" id="sbfo" class="form-check-input" value="2" ';
@@ -163,7 +163,7 @@ if ($sortby == "2") {
 }
 
 echo '/>
-                <label class="form-check-label" for="sbfo">' . translate("Forum") . '</label>
+                <label class="form-check-label" for="sbfo">' . __d('two_forum', 'Forum') . '</label>
                 </div>
                 <div class="form-check form-check-inline  mt-2">
                 <input type="radio" name="sortby" id="sbau" class="form-check-input" value="3" ';
@@ -173,14 +173,14 @@ if ($sortby == "3") {
 }
 
 echo '/>
-                <label class="form-check-label" for="sbau">' . translate("Auteur") . '</label>
+                <label class="form-check-label" for="sbau">' . __d('two_forum', 'Auteur') . '</label>
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
-                <button class="btn btn-primary" type="submit" name="submit">&nbsp;' . translate("Recherche") . '</button>&nbsp;&nbsp;
-                <button class="btn btn-secondary" type="reset" name="reset">' . translate("Annuler") . '</button>
+                <button class="btn btn-primary" type="submit" name="submit">&nbsp;' . __d('two_forum', 'Recherche') . '</button>&nbsp;&nbsp;
+                <button class="btn btn-secondary" type="reset" name="reset">' . __d('two_forum', 'Annuler') . '</button>
             </div>
         </div>
     </form>';
@@ -272,7 +272,7 @@ $result = sql_query($query);
 $affiche = true;
 if (!$row = sql_fetch_assoc($result)) {
     echo '<div class="alert alert-danger lead alert-dismissible fade show" role="alert">
-                ' . translate("Aucune réponse pour les mots que vous cherchez. Elargissez votre recherche.") . '
+                ' . __d('two_forum', 'Aucune réponse pour les mots que vous cherchez. Elargissez votre recherche.') . '
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';
 
@@ -298,10 +298,10 @@ if ($affiche) {
                 <thead>
                     <tr>
                     <th class="n-t-col-xs-1" data-halign="center" data-align="right">&nbsp;</th>
-                    <th data-halign="center" data-sortable="true" data-sorter="htmlSorter">' . translate("Forum") . '</th>
-                    <th data-halign="center" data-sortable="true" data-sorter="htmlSorter">' . translate("Sujet") . '</th>
-                    <th data-halign="center" data-sortable="true">' . translate("Auteur") . '</th>
-                    <th class="n-t-col-xs-2" data-halign="center" data-align="right">' . translate("Posté") . '</th>
+                    <th data-halign="center" data-sortable="true" data-sorter="htmlSorter">' . __d('two_forum', 'Forum') . '</th>
+                    <th data-halign="center" data-sortable="true" data-sorter="htmlSorter">' . __d('two_forum', 'Sujet') . '</th>
+                    <th data-halign="center" data-sortable="true">' . __d('two_forum', 'Auteur') . '</th>
+                    <th class="n-t-col-xs-2" data-halign="center" data-align="right">' . __d('two_forum', 'Posté') . '</th>
                     </tr>
                 </thead>
                 <tbody>';

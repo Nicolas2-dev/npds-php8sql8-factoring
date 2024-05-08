@@ -27,7 +27,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'lnl';
-$f_titre = adm_translate("Petite Lettre D'information");
+$f_titre = __d('two_newsleter', 'Petite Lettre D\'information');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -42,8 +42,8 @@ admindroits($aid, $f_meta_nom);
  */
 function error_handler(string $ibid): void
 {
-    echo '<p align="center"><span class="rouge">'. adm_translate("Merci d'entrer l'information en fonction des spécifications") .'<br /><br />';
-    echo $ibid .'</span><br /><a href="' . site_url('index.php') .'" class="noir">'. adm_translate("Retour en arrière") .'</a></p>';
+    echo '<p align="center"><span class="rouge">'. __d('two_newsleter', 'Merci d\'entrer l\'information en fonction des spécifications') .'<br /><br />';
+    echo $ibid .'</span><br /><a href="' . site_url('index.php') .'" class="noir">'. __d('two_newsleter', 'Retour en arrière') .'</a></p>';
 }
 
 /**
@@ -61,13 +61,13 @@ function ShowHeader(): void
                     ID
                 </th>
                 <th class="n-t-col-xs-8" data-align="">
-                    '. adm_translate("Entête") .'
+                    '. __d('two_newsleter', 'Entête') .'
                 </th>
                 <th class="n-t-col-xs-1" data-align="">
                     Type
                 </th>
                 <th class="n-t-col-xs-2" data-align="right">
-                    '. adm_translate("Fonctions") .'
+                    '. __d('two_newsleter', 'Fonctions') .'
                 </th>
             </tr>
         </thead>
@@ -102,10 +102,10 @@ function ShowHeader(): void
                 </td>
                 <td>
                     <a href="' . site_url('admin.php?op=lnl_Shw_Header&amp;Headerid='. $head_foot['ref']) .'" >
-                        <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                        <i class="fa fa-edit fa-lg me-2" title="'. __d('two_newsleter', 'Editer') .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                     <a href="' . site_url('admin.php?op=lnl_Sup_Header&amp;Headerid='. $head_foot['ref']) .'" class="text-danger">
-                        <i class="fas fa-trash fa-lg" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                        <i class="fas fa-trash fa-lg" title="'. __d('two_newsleter', 'Effacer') .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                 </td>
             </tr>';
@@ -140,18 +140,18 @@ function Detail_Header_Footer(string $ibid, string $type): void
     <h3 class="mb-2">';
 
     if ($type == "HED") {
-        echo adm_translate("Message d'entête");
+        echo __d('two_newsleter', 'Message d\'entête');
     } else {
-        echo adm_translate("Message de pied de page");
+        echo __d('two_newsleter', 'Message de pied de page');
     }
 
-    echo ' - '. adm_translate("Prévisualiser");
+    echo ' - '. __d('two_newsleter', 'Prévisualiser');
 
     if ($head_foot['html'] == 1) {
         echo '<code> HTML</code></h3>
         <div class="card card-body">'. $head_foot['text'] .'</div>';
     } else {
-        echo '<code>'. adm_translate("TEXTE") .'</code></h3>
+        echo '<code>'. __d('two_newsleter', 'TEXTE') .'</code></h3>
         <div class="card card-body">'. nl2br($head_foot['text']) .'</div>';
     }
 
@@ -159,7 +159,7 @@ function Detail_Header_Footer(string $ibid, string $type): void
     <hr />
     <form action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="xtext">'. adm_translate("Texte") .'</label>
+            <label class="col-form-label col-sm-12" for="xtext">'. __d('two_newsleter', 'Texte') .'</label>
             <div class="col-sm-12">
                 <textarea class="tin form-control" cols="70" rows="20" name="xtext" >'. htmlspecialchars($head_foot['text'], ENT_COMPAT | ENT_HTML401, 'utf-8') .'</textarea>
             </div>
@@ -181,8 +181,8 @@ function Detail_Header_Footer(string $ibid, string $type): void
         <input type="hidden" name="ref" value="'. $ibid .'" />
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <button class="btn btn-primary me-1" type="submit">'. adm_translate("Valider") .'</button>
-                <a class="btn btn-secondary" href="' . site_url('admin.php?op=lnl') .'" >'. adm_translate("Retour en arrière") .'</a>
+                <button class="btn btn-primary me-1" type="submit">'. __d('two_newsleter', 'Valider') .'</button>
+                <a class="btn btn-secondary" href="' . site_url('admin.php?op=lnl') .'" >'. __d('two_newsleter', 'Retour en arrière') .'</a>
             </div>
         </div>
     </form>';
@@ -205,13 +205,13 @@ function ShowBody(): void
                     ID
                 </th>
                 <th class="n-t-col-xs-8" data-align="">
-                    '. adm_translate("Corps de message") .'
+                    '. __d('two_newsleter', 'Corps de message') .'
                 </th>
                 <th class="n-t-col-xs-1" data-align="">
                     Type
                 </th>
                 <th class="n-t-col-xs-2" data-align="right">
-                    '. adm_translate("Fonctions") .'
+                    '. __d('two_newsleter', 'Fonctions') .'
                 </th>
             </tr>
         </thead>
@@ -245,10 +245,10 @@ function ShowBody(): void
             </td>
             <td>
                 <a href="' . site_url('admin.php?op=lnl_Shw_Body&amp;Bodyid='. $body['ref']) .'">
-                    <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                    <i class="fa fa-edit fa-lg me-2" title="'. __d('two_newsleter', 'Editer') .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                 </a>
                 <a href="' . site_url('admin.php?op=lnl_Sup_Body&amp;Bodyid='. $body['ref']) .'" class="text-danger">
-                    <i class="fas fa-trash fa-lg" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                    <i class="fas fa-trash fa-lg" title="'. __d('two_newsleter', 'Effacer') .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                 </a>
             </td>
         </tr>';
@@ -277,22 +277,22 @@ function Detail_Body(string $ibid): void
 
     echo '
     <hr />
-    <h3 class="mb-2">'. adm_translate("Corps de message") .' - ';
+    <h3 class="mb-2">'. __d('two_newsleter', 'Corps de message') .' - ';
 
     $body = DB::table('lnl_body')->select('text', 'html')->where('ref', $ibid)->first();
 
     if ($body['html'] == 1) {
-        echo adm_translate("Prévisualiser") .' <code>HTML</code></h3>
+        echo __d('two_newsleter', 'Prévisualiser') .' <code>HTML</code></h3>
         <div class="card card-body">'. $body['text'] .'</div>';
     } else {
-        echo adm_translate("Prévisualiser") .' <code>'. adm_translate("TEXTE") .'</code></h3>
+        echo __d('two_newsleter', 'Prévisualiser') .' <code>'. __d('two_newsleter', 'TEXTE') .'</code></h3>
         <div class="card card-body">'. nl2br($body['text']) .'</div>';
     }
 
     echo '
     <form action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="xtext">'. adm_translate("Corps de message") .'</label>
+            <label class="col-form-label col-sm-12" for="xtext">'. __d('two_newsleter', 'Corps de message') .'</label>
             <div class="col-sm-12">
                 <textarea class="tin form-control" rows="30" name="xtext" >'. htmlspecialchars($body['text'], ENT_COMPAT | ENT_HTML401, 'utf-8') .'</textarea>
             </div>
@@ -309,8 +309,8 @@ function Detail_Body(string $ibid): void
         <input type="hidden" name="ref" value="'. $ibid .'" />
         <div class="mb-3 row">
             <div class="col-sm-12">
-                <button class="btn btn-primary" type="submit">'. adm_translate("Valider") .'</button>&nbsp;
-                <button href="javascript:history.go(-1)" class="btn btn-secondary">'. adm_translate("Retour en arrière") .'</button>
+                <button class="btn btn-primary" type="submit">'. __d('two_newsleter', 'Valider') .'</button>&nbsp;
+                <button href="javascript:history.go(-1)" class="btn btn-secondary">'. __d('two_newsleter', 'Retour en arrière') .'</button>
             </div>
         </div>
     </form>';
@@ -334,18 +334,18 @@ function Add_Body(): void
 
     echo '
     <hr />
-    <h3 class="mb-2">'. adm_translate("Corps de message") .'</h3>
+    <h3 class="mb-2">'. __d('two_newsleter', 'Corps de message') .'</h3>
     <form id="lnlbody" action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <fieldset>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-4" for="html">'. adm_translate("Format de données") .'</label>
+                <label class="col-form-label col-sm-4" for="html">'. __d('two_newsleter', 'Format de données') .'</label>
                 <div class="col-sm-8">
                 <input class="form-control" id="html" type="number" min="0" max="1" step="1" value="1" name="html" required="required" />
                 <span class="help-block"> <code>html</code> ==&#x3E; [1] / <code>text</code> ==&#x3E; [0]</span>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="xtext">'. adm_translate("Texte") .'</label>
+                <label class="col-form-label col-sm-12" for="xtext">'. __d('two_newsleter', 'Texte') .'</label>
                 <div class="col-sm-12">
                 <textarea class="tin form-control" id="xtext" rows="30" name="xtext" ></textarea>
                 </div>
@@ -358,8 +358,8 @@ function Add_Body(): void
     echo '
             <div class="mb-3 row">
                 <input type="hidden" name="op" value="lnl_Add_Body_Submit" />
-                <button class="btn btn-primary col-sm-12 col-md-6" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. adm_translate("Ajouter") .' '. adm_translate("corps de message") .'</button>
-                <a href="' . site_url('admin.php?op=lnl') .'" class="btn btn-secondary col-sm-12 col-md-6">'. adm_translate("Retour en arrière") .'</a>
+                <button class="btn btn-primary col-sm-12 col-md-6" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. __d('two_newsleter', 'Ajouter') .' '. __d('two_newsleter', 'corps de message') .'</button>
+                <a href="' . site_url('admin.php?op=lnl') .'" class="btn btn-secondary col-sm-12 col-md-6">'. __d('two_newsleter', 'Retour en arrière') .'</a>
             </div>
         </fieldset>
     </form>';
@@ -413,13 +413,13 @@ function ShowFooter(): void
                     ID
                 </th>
                 <th class="n-t-col-xs-8" data-align="">
-                    '. adm_translate("Pied") .'
+                    '. __d('two_newsleter', 'Pied') .'
                 </th>
                 <th class="n-t-col-xs-1" data-align="">
                     Type
                 </th>
                 <th class="n-t-col-xs-2" data-align="right">
-                    '. adm_translate("Fonctions") .'
+                    '. __d('two_newsleter', 'Fonctions') .'
                 </th>
             </tr>
         </thead>
@@ -450,10 +450,10 @@ function ShowFooter(): void
                     <code>'. $head_foot['html'] .'</code></td>
                 <td>
                     <a href="' . site_url('admin.php?op=lnl_Shw_Footer&amp;Footerid='. $head_foot['ref']) .'" >
-                        <i class="fa fa-edit fa-lg me-2" title="'. adm_translate("Editer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                        <i class="fa fa-edit fa-lg me-2" title="'. __d('two_newsleter', 'Editer') .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                     <a href="' . site_url('admin.php?op=lnl_Sup_Footer&amp;Footerid='. $head_foot['ref']) .'" class="text-danger">
-                        <i class="fas fa-trash fa-lg" title="'. adm_translate("Effacer") .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
+                        <i class="fas fa-trash fa-lg" title="'. __d('two_newsleter', 'Effacer') .'" data-bs-toggle="tooltip" data-bs-placement="left"></i>
                     </a>
                 </td>
             </tr>';
@@ -490,18 +490,18 @@ function Add_Header_Footer(string $ibid): void
 
     echo '
         <hr />
-        <h3 class="mb-2">'. ucfirst(adm_translate("$ti")) .'</h3>
+        <h3 class="mb-2">'. ucfirst(__d('two_newsleter', $ti)) .'</h3>
         <form id="lnlheadfooter" action="' . site_url('admin.php') .'" method="post" name="adminForm">
         <fieldset>
             <div class="mb-3">
-                <label class="col-form-label" for="html">'. adm_translate("Format de données") .'</label>
+                <label class="col-form-label" for="html">'. __d('two_newsleter', 'Format de données') .'</label>
                 <div>
                     <input class="form-control" id="html" type="number" min="0" max="1" value="1" name="html" required="required" />
                     <span class="help-block"> <code>html</code> ==&#x3E; [1] / <code>text</code> ==&#x3E; [0]</span>
                 </div>
                 </div>
             <div class="mb-3">
-                <label class="col-form-label" for="xtext">'. adm_translate("Texte") .'</label>
+                <label class="col-form-label" for="xtext">'. __d('two_newsleter', 'Texte') .'</label>
                 <div>
                 <textarea class="form-control" id="xtext" rows="20" name="xtext" ></textarea>
                 </div>
@@ -514,7 +514,7 @@ function Add_Header_Footer(string $ibid): void
 
     echo '
                 <input type="hidden" name="op" value="'. $va .'" />
-                <button class="btn btn-primary col-sm-12 col-md-6" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. adm_translate("Ajouter") .' '. adm_translate("$ti") .'</button>
+                <button class="btn btn-primary col-sm-12 col-md-6" type="submit"><i class="fa fa-plus-square fa-lg"></i>&nbsp;'. __d('two_newsleter', 'Ajouter') .' '. __d('two_newsleter', $ti) .'</button>
             </div>
         </fieldset>
     </form>';
@@ -582,84 +582,84 @@ function main(): void
 
     echo '
     <hr />
-    <h3 class="mb-2">'. adm_translate("Petite Lettre D'information") .'</h3>
+    <h3 class="mb-2">'. __d('two_newsleter', 'Petite Lettre D\'information') .'</h3>
     <ul class="nav flex-md-row flex-column">
         <li class="nav-item">
-            <a class="nav-link active" href="' . site_url('admin.php?op=lnl_List') .'">'. adm_translate("Liste des LNL envoyées") .'</a>
+            <a class="nav-link active" href="' . site_url('admin.php?op=lnl_List') .'">'. __d('two_newsleter', 'Liste des LNL envoyées') .'</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="' . site_url('admin.php?op=lnl_User_List') .'">'. adm_translate("Afficher la liste des prospects") .'</a>
+            <a class="nav-link active" href="' . site_url('admin.php?op=lnl_User_List') .'">'. __d('two_newsleter', 'Afficher la liste des prospects') .'</a>
         </li>
     </ul>
-    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Header') .'" ><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Message d'entête") .'</h4>';
+    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Header') .'" ><i class="fa fa-plus-square me-2"></i></a>'. __d('two_newsleter', 'Message d\'entête') .'</h4>';
     
     ShowHeader();
 
     echo '
-    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Body') .'" ><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Corps de message") .'</h4>';
+    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Body') .'" ><i class="fa fa-plus-square me-2"></i></a>'. __d('two_newsleter', 'Corps de message') .'</h4>';
     
     ShowBody();
 
     echo '
-    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Footer') .'"><i class="fa fa-plus-square me-2"></i></a>'. adm_translate("Message de pied de page") .'</h4>';
+    <h4 class="my-3"><a href="' . site_url('admin.php?op=lnl_Add_Footer') .'"><i class="fa fa-plus-square me-2"></i></a>'. __d('two_newsleter', 'Message de pied de page') .'</h4>';
     
     ShowFooter();
 
     echo '
     <hr />
-    <h4>'. adm_translate("Assembler une lettre et la tester") .'</h4>
+    <h4>'. __d('two_newsleter', 'Assembler une lettre et la tester') .'</h4>
     <form id="ltesto" action="' . site_url('admin.php') .'" method="post">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
                 <input class="form-control" type="number" name="Xheader" id="testXheader"min="0" />
-                <label for="testXheader">'. adm_translate("Entête") .'</label>
+                <label for="testXheader">'. __d('two_newsleter', 'Entête') .'</label>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
                 <input class="form-control" type="number" name="Xbody" id="testXbody" maxlength="11" />
-                <label for="testXbody">'. adm_translate("Corps") .'</label>
+                <label for="testXbody">'. __d('two_newsleter', 'Corps') .'</label>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
                 <input class="form-control" type="number" name="Xfooter" id="testXfooter" min="0" />
-                <label for="testXfooter">'. adm_translate("Pied") .'</label>
+                <label for="testXfooter">'. __d('two_newsleter', 'Pied') .'</label>
                 </div>
             </div>
             <div class="mb-3 col-sm-12">
                 <input type="hidden" name="op" value="lnl_Test" />
-                <button class="btn btn-primary" type="submit">'. adm_translate("Valider") .'</button>
+                <button class="btn btn-primary" type="submit">'. __d('two_newsleter', 'Valider') .'</button>
             </div>
         </div>
     </form>
     <hr />
-    <h4>'. adm_translate("Envoyer La Lettre") .'</h4>
+    <h4>'. __d('two_newsleter', 'Envoyer La Lettre') .'</h4>
     <form id="lsendo" action="' . site_url('admin.php') .'" method="post">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
                 <input class="form-control" type="number" name="Xheader" id="Xheader" />
-                <label for="Xheader">'. adm_translate("Entête") .'</label>
+                <label for="Xheader">'. __d('two_newsleter', 'Entête') .'</label>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
                 <input class="form-control" type="number" name="Xbody" id="Xbody" min="0" />
-                <label for="Xbody">'. adm_translate("Corps") .'</label>
+                <label for="Xbody">'. __d('two_newsleter', 'Corps') .'</label>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-floating mb-3">
                 <input class="form-control" type="number" name="Xfooter" id="Xfooter" />
-                <label for="Xfooter">'. adm_translate("Pied") .'</label>
+                <label for="Xfooter">'. __d('two_newsleter', 'Pied') .'</label>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="form-floating mb-3">
                 <input class="form-control" type="text" maxlength="255" id="Xsubject" name="Xsubject" />
-                <label for="Xsubject">'. adm_translate("Sujet") .'</label>
+                <label for="Xsubject">'. __d('two_newsleter', 'Sujet') .'</label>
                 <span class="help-block text-end"><span id="countcar_Xsubject"></span></span>
                 </div>
             </div>
@@ -667,15 +667,15 @@ function main(): void
             <div class="mb-3 col-sm-12">
                 <div class="form-check form-check-inline">
                 <input type="radio" class="form-check-input" value="All" checked="checked" id="tous" name="Xtype" />
-                <label class="form-check-label" for="tous">'. adm_translate("Tous les Utilisateurs") .'</label>
+                <label class="form-check-label" for="tous">'. __d('two_newsleter', 'Tous les Utilisateurs') .'</label>
                 </div>
                 <div class="form-check form-check-inline">
                 <input type="radio" class="form-check-input" value="Mbr" id="mem" name="Xtype" />
-                <label class="form-check-label" for="mem">'. adm_translate("Seulement aux membres") .'</label>
+                <label class="form-check-label" for="mem">'. __d('two_newsleter', 'Seulement aux membres') .'</label>
                 </div>
                 <div class="form-check form-check-inline">
                 <input type="radio" class="form-check-input" value="Out" id="prosp" name="Xtype" />
-                <label class="form-check-label" for="prosp">'. adm_translate("Seulement aux prospects") .'</label>
+                <label class="form-check-label" for="prosp">'. __d('two_newsleter', 'Seulement aux prospects') .'</label>
                 </div>
             </div>';
 
@@ -694,7 +694,7 @@ function main(): void
             </div>
             <input type="hidden" name="op" value="lnl_Send" />
             <div class="mb-3 col-sm-12">
-                <button class="btn btn-primary" type="submit">'. adm_translate("Valider") .'</button>
+                <button class="btn btn-primary" type="submit">'. __d('two_newsleter', 'Valider') .'</button>
             </div>
         </div>
         </form>';
@@ -735,9 +735,9 @@ function Del_Question(string $retour, string $param): void
 
     echo '
     <hr />
-    <div class="alert alert-danger">'. adm_translate("Etes-vous sûr de vouloir effacer cet Article ?") .'</div>
-    <a href="' . site_url('admin.php?op='. $retour .'&amp;'. $param) .'" class="btn btn-danger btn-sm">'. adm_translate("Oui") .'</a>
-    <a href="javascript:history.go(-1)" class="btn btn-secondary btn-sm">'. adm_translate("Non") .'</a>';
+    <div class="alert alert-danger">'. __d('two_newsleter', 'Etes-vous sûr de vouloir effacer cet Article ?') .'</div>
+    <a href="' . site_url('admin.php?op='. $retour .'&amp;'. $param) .'" class="btn btn-danger btn-sm">'. __d('two_newsleter', 'Oui') .'</a>
+    <a href="javascript:history.go(-1)" class="btn btn-secondary btn-sm">'. __d('two_newsleter', 'Non') .'</a>';
 
     css::adminfoot('', '', '', '');
 }
@@ -785,14 +785,14 @@ function Test(string $Yheader, string $Ybody, string $Yfooter): void
     if ($Xheader[1] == 1) {
         echo '
         <hr />
-        <h3 class="mb-3">'. adm_translate("Prévisualiser") .' HTML</h3>';
+        <h3 class="mb-3">'. __d('two_newsleter', 'Prévisualiser') .' HTML</h3>';
         
         $Xmime = 'html-nobr';
         $message = metalang::meta_lang($lnl_head_foot['text'] . $$lnl_body['text'] . $head_foot['text']);
     } else {
         echo '
         <hr />
-        <h3 class="mb-3">'. adm_translate("Prévisualiser") .' '. adm_translate("TEXTE") .'</h3>';
+        <h3 class="mb-3">'. __d('two_newsleter', 'Prévisualiser') .' '. __d('two_newsleter', 'TEXTE') .'</h3>';
         
         $Xmime = 'text';
         $message = metalang::meta_lang(nl2br($lnl_head_foot['text']) . nl2br($$lnl_body['text']) . nl2br($head_foot['text']));
@@ -802,7 +802,7 @@ function Test(string $Yheader, string $Ybody, string $Yfooter): void
     <div class="card card-body">
     '. $message .'
     </div>
-    <a class="btn btn-secondary my-3" href="javascript:history.go(-1)" >'. adm_translate("Retour en arrière") .'</a>';
+    <a class="btn btn-secondary my-3" href="javascript:history.go(-1)" >'. __d('two_newsleter', 'Retour en arrière') .'</a>';
 
     mailler::send_email($adminmail, 'LNL TEST', $message, Config::get('npds.adminmail'), true, $Xmime, '');
 
@@ -825,7 +825,7 @@ function lnl_list():  void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Liste des LNL envoyées") .'</h3>
+    <h3 class="mb-3">'. __d('two_newsleter', 'Liste des LNL envoyées') .'</h3>
     <table data-toggle="table" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
@@ -833,25 +833,25 @@ function lnl_list():  void
                     ID
                 </th>
                 <th class="n-t-col-xs-1" data-halign="center" data-align="right">
-                    '. adm_translate("Entête") .'
+                    '. __d('two_newsleter', 'Entête') .'
                 </th>
                 <th class="n-t-col-xs-1" data-halign="center" data-align="right">
-                    '. adm_translate("Corps") .'
+                    '. __d('two_newsleter', 'Corps') .'
                 </th>
                 <th class="n-t-col-xs-1" data-halign="center" data-align="right">
-                    '. adm_translate("Pied") .'
+                    '. __d('two_newsleter', 'Pied') .'
                 </th>
                 <th data-halign="center" data-align="right">
-                    '. adm_translate("Nbre d'envois effectués") .'
+                    '. __d('two_newsleter', 'Nbre d\'envois effectués') .'
                 </th>
                 <th data-halign="center" data-align="center">
-                    '. adm_translate("Type") .'
+                    '. __d('two_newsleter', 'Type') .'
                 </th>
                 <th data-halign="center" data-align="right">
-                    '. adm_translate("Date") .'
+                    '. __d('two_newsleter', 'Date') .'
                 </th>
                 <th data-halign="center" data-align="center">
-                    '. adm_translate("Etat") .'
+                    '. __d('two_newsleter', 'Etat') .'
                 </th>
             </tr>
         </thead>
@@ -917,21 +917,21 @@ function lnl_user_list(): void
 
     echo '
     <hr />
-    <h3 class="mb-2">'. adm_translate("Liste des prospects") .'</h3>
+    <h3 class="mb-2">'. __d('two_newsleter', 'Liste des prospects') .'</h3>
     <table id="tad_prospect" data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-icons="icons" data-icons-prefix="fa">
         <thead>
             <tr>
                 <th class="n-t-col-xs-5" data-halign="center" data-sortable="true">
-                    '. adm_translate("E-mail") .'
+                    '. __d('two_newsleter', 'E-mail') .'
                 </th>
                 <th class="n-t-col-xs-3" data-halign="center" data-align="right" data-sortable="true">
-                    '. adm_translate("Date") .'
+                    '. __d('two_newsleter', 'Date') .'
                 </th>
                 <th class="n-t-col-xs-2" data-halign="center" data-align="center" data-sortable="true">
-                    '. adm_translate("Etat") .'
+                    '. __d('two_newsleter', 'Etat') .'
                 </th>
                 <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">
-                    '. adm_translate("Fonctions") .'
+                    '. __d('two_newsleter', 'Fonctions') .'
                 </th>
             </tr>
         </thead>
@@ -958,7 +958,7 @@ function lnl_user_list(): void
 
         echo '<td>
                 <a href="' . site_url('admin.php?op=lnl_Sup_User&amp;lnl_user_email='. $outside_users['email']) .'" class="text-danger">
-                    <i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="'. adm_translate("Effacer") .'"></i>
+                    <i class="fas fa-trash fa-lg text-danger" data-bs-toggle="tooltip" title="'. __d('two_newsleter', 'Effacer') .'"></i>
                 </a>
             </td>
         </tr>';
@@ -967,7 +967,7 @@ function lnl_user_list(): void
     echo '
         </tbody>
     </table>
-    <br /><a href="javascript:history.go(-1)" class="btn btn-secondary">'. adm_translate("Retour en arrière") .'</a>';
+    <br /><a href="javascript:history.go(-1)" class="btn btn-secondary">'. __d('two_newsleter', 'Retour en arrière') .'</a>';
 
     css::adminfoot('', '', '', '');
 }
@@ -1149,10 +1149,10 @@ switch ($op) {
                             
                             if ($Xmime == "html-nobr") {
                                 $Xmessage = $message ."<br /><br /><hr noshade>";
-                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") ." : <a href=\"". site_url('lnl.php?op=unsubscribe&email='. $outside_users['email']) ."\">". adm_translate("Modifier") ."</a>";
+                                $Xmessage .= __d('two_newsleter', 'Pour supprimer votre abonnement à notre Lettre, suivez ce lien') ." : <a href=\"". site_url('lnl.php?op=unsubscribe&email='. $outside_users['email']) ."\">". __d('two_newsleter', 'Modifier') ."</a>";
                             } else {
                                 $Xmessage = $message ."\n\n------------------------------------------------------------------\n";
-                                $Xmessage .= adm_translate("Pour supprimer votre abonnement à notre Lettre, suivez ce lien") ." : ".  site_url('lnl.php?op=unsubscribe&email='. $outside_users['email']) ."";
+                                $Xmessage .= __d('two_newsleter', 'Pour supprimer votre abonnement à notre Lettre, suivez ce lien') ." : ".  site_url('lnl.php?op=unsubscribe&email='. $outside_users['email']) ."";
                             }
 
                             mailler::send_email($$outside_users['email'], $subject, metalang::meta_lang($Xmessage), "", true, $Xmime, '');
@@ -1322,7 +1322,7 @@ switch ($op) {
                 </div>
                 <div class="d-flex justify-content-center mt-4">
                     <div class="text-center mt-4">
-                    '. adm_translate("Transmission LNL en cours") .' => '. $chartmp .'<br /><br />NPDS - Portal System
+                    '. __d('two_newsleter', 'Transmission LNL en cours') .' => '. $chartmp .'<br /><br />NPDS - Portal System
                     </div>
                 </div>
                 </body>

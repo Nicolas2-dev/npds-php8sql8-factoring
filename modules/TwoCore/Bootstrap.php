@@ -29,11 +29,6 @@ if (file_exists(module_path('TwoCore', 'Doctype.php'))) {
 // initialisation du schek spam boot
 // Spam::spam_logs();
 
-// provisoire !!!
-function translate($msg) { return $msg; }
-function adm_translate($msg) { return $msg; }
-
-
 // // Get values, slash, filter
 if (!empty($_GET)) {
     array_walk_recursive($_GET, [Sanitize::class, 'addslashes_GPC']);

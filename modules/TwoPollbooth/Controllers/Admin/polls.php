@@ -24,7 +24,7 @@ if (!function_exists('admindroits')) {
 }
 
 $f_meta_nom = 'create';
-$f_titre = adm_translate("Les sondages");
+$f_titre = __d('two_polbooth', 'Les sondages');
 
 //==> controle droit
 admindroits($aid, $f_meta_nom);
@@ -46,14 +46,14 @@ function poll_createPoll(): void
 
     echo '
         <hr />
-            <h3 class="mb-3">'. adm_translate("Liste des sondages") .'</h3>
+            <h3 class="mb-3">'. __d('two_polbooth', 'Liste des sondages') .'</h3>
             <table id="tad_pool" data-toggle="table" data-striped="true" data-show-toggle="true" data-search="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa">
             <thead>
                 <tr>
                 <th class="n-t-col-xs-1" data-sortable="true" data-halign="center" data-align="right">ID</th>
-                <th data-sortable="true" data-halign="center">'. adm_translate("Intitulé du Sondage") .'</th>
-                <th class="n-t-col-xs-2" data-sortable="true" data-halign="center" data-align="right">'. adm_translate("Vote") .'</th>
-                <th class="n-t-col-xs-2" data-halign="center" data-align="center">'. adm_translate("Fonctions") .'</th>
+                <th data-sortable="true" data-halign="center">'. __d('two_polbooth', 'Intitulé du Sondage') .'</th>
+                <th class="n-t-col-xs-2" data-sortable="true" data-halign="center" data-align="right">'. __d('two_polbooth', 'Vote') .'</th>
+                <th class="n-t-col-xs-2" data-halign="center" data-align="center">'. __d('two_polbooth', 'Fonctions') .'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -67,8 +67,8 @@ function poll_createPoll(): void
                 <td>'. language::aff_langue($poll['pollTitle']) .'</td>
                 <td>'. $poll['voters'] .'</td>
                 <td>
-                    <a href="'. site_url('admin.php?op=editpollPosted&amp;id='. $poll['pollID']) .'"><i class="fa fa-edit fa-lg" title="'. adm_translate("Editer ce sondage") .'" data-bs-toggle="tooltip"></i></a>
-                    <a href="'. site_url('admin.php?op=removePosted&amp;id='. $poll['pollID']) .'"><i class="fas fa-trash fa-lg text-danger ms-2" title="'. adm_translate("Effacer ce sondage") .'" data-bs-toggle="tooltip"></i></a>
+                    <a href="'. site_url('admin.php?op=editpollPosted&amp;id='. $poll['pollID']) .'"><i class="fa fa-edit fa-lg" title="'. __d('two_polbooth', 'Editer ce sondage') .'" data-bs-toggle="tooltip"></i></a>
+                    <a href="'. site_url('admin.php?op=removePosted&amp;id='. $poll['pollID']) .'"><i class="fas fa-trash fa-lg text-danger ms-2" title="'. __d('two_polbooth', 'Effacer ce sondage') .'" data-bs-toggle="tooltip"></i></a>
                 </td>
                 </tr>';
 
@@ -80,13 +80,13 @@ function poll_createPoll(): void
             </tbody>
         </table>
         <hr />
-        <h3 class="mb-3">'. adm_translate("Créer un nouveau Sondage") .'</h3>
+        <h3 class="mb-3">'. __d('two_polbooth', 'Créer un nouveau Sondage') .'</h3>
         <form id="pollssondagenew" action="'. site_url('admin.php') .'" method="post">
             <input type="hidden" name="op" value="createPosted" />
             <div class="form-floating mb-3">
                 <input class="form-control" type="text" id="pollTitle" name="pollTitle" id="pollTitle" maxlength="100" required="required" />
-                <label for="pollTitle">'. adm_translate("Intitulé du Sondage") .'</label>
-                <span class="help-block">'. adm_translate("S.V.P. entrez chaque option disponible dans un seul champ") .'</span>
+                <label for="pollTitle">'. __d('two_polbooth', 'Intitulé du Sondage') .'</label>
+                <span class="help-block">'. __d('two_polbooth', 'S.V.P. entrez chaque option disponible dans un seul champ') .'</span>
                 <span class="help-block text-end"><span id="countcar_pollTitle"></span></span>
             </div>';
 
@@ -97,7 +97,7 @@ function poll_createPoll(): void
         echo '
             <div class="form-floating mb-3">
                 <input class="form-control" type="text" id="optionText'. $i .'" name="optionText['. $i .']" maxlength="255" '. $requi .' />
-                <label for="optionText'. $i .'">'. adm_translate("Option") .' '. $i .'</label>
+                <label for="optionText'. $i .'">'. __d('two_polbooth', 'Option') .' '. $i .'</label>
                 <span class="help-block text-end"><span id="countcar_optionText'. $i .'"></span></span>
             </div>';
     }
@@ -105,10 +105,10 @@ function poll_createPoll(): void
     echo '
             <div class="form-check form-check-inline mb-3">
                 <input class="form-check-input" type="checkbox" id="poll_type" name="poll_type" value="1" />
-                <label class="form-check-label" for="poll_type">'. adm_translate("Seulement aux membres") .'</label>
+                <label class="form-check-label" for="poll_type">'. __d('two_polbooth', 'Seulement aux membres') .'</label>
             </div>
             <div>
-                <button type="submit" class="btn btn-primary">'. adm_translate("Créer") .'</button>
+                <button type="submit" class="btn btn-primary">'. __d('two_polbooth', 'Créer') .'</button>
             </div>
         </form>';
 
@@ -178,9 +178,9 @@ function poll_removePoll(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Retirer un Sondage existant") .'</h3>
-    <span class="help-block">'. adm_translate("S.V.P. Choisissez un sondage dans la liste suivante.") .'</span>
-    <p align="center"><span class="text-danger">'. adm_translate("ATTENTION : Le Sondage choisi va être supprimé IMMEDIATEMENT de la base de données !") .'</span></p>
+    <h3 class="mb-3">'. __d('two_polbooth', 'Retirer un Sondage existant') .'</h3>
+    <span class="help-block">'. __d('two_polbooth', 'S.V.P. Choisissez un sondage dans la liste suivante.') .'</span>
+    <p align="center"><span class="text-danger">'. __d('two_polbooth', 'ATTENTION : Le Sondage choisi va être supprimé IMMEDIATEMENT de la base de données !') .'</span></p>
     ';
 
     echo '
@@ -190,7 +190,7 @@ function poll_removePoll(): void
             <thead>
                 <tr>
                 <th></th>
-                <th data-sortable="true">'. adm_translate("Intitulé du Sondage") .'</th>
+                <th data-sortable="true">'. __d('two_polbooth', 'Intitulé du Sondage') .'</th>
                 <th data-sortable="true">ID</th>
                 </tr>
             </thead>
@@ -213,7 +213,7 @@ function poll_removePoll(): void
         </table>
         <br />
         <div class="mb-3">
-            <button class="btn btn-danger" type="submit">'. adm_translate("Retirer") .'</button>
+            <button class="btn btn-danger" type="submit">'. __d('two_polbooth', 'Retirer') .'</button>
         </div>
     </form>';
 
@@ -265,15 +265,15 @@ function poll_editPoll(): void
 
     echo '
     <hr />
-    <h3 class="mb-3">'. adm_translate("Edition des sondages") .'</h3>
-    <span class="help-block">'. adm_translate("S.V.P. Choisissez un sondage dans la liste suivante.") .'</span>
+    <h3 class="mb-3">'. __d('two_polbooth', 'Edition des sondages') .'</h3>
+    <span class="help-block">'. __d('two_polbooth', 'S.V.P. Choisissez un sondage dans la liste suivante.') .'</span>
     <form id="fad_editpool" action="'. site_url('admin.php') .'" method="post">
         <input type="hidden" name="op" value="editpollPosted" />
         <table id="tad_editpool" data-toggle="table" data-striped="true" data-show-toggle="true" data-search="true" data-mobile-responsive="true" data-icons="icons" data-icons-prefix="fa">
             <thead>
                 <tr>
                 <th></th>
-                <th data-sortable="true">'. adm_translate("Intitulé du Sondage") .'</th>
+                <th data-sortable="true">'. __d('two_polbooth', 'Intitulé du Sondage') .'</th>
                 <th data-sortable="true">ID</th>
                 </tr>
             </thead>
@@ -295,7 +295,7 @@ function poll_editPoll(): void
         </table>
         <br />
         <div class="mb-3">
-            <button type="submit" class="btn btn-primary">'. adm_translate("Editer") .'</button>
+            <button type="submit" class="btn btn-primary">'. __d('two_polbooth', 'Editer') .'</button>
         </div>
     </form>';
 
@@ -323,14 +323,14 @@ function poll_editPollPosted(): void
 
         echo '
         <hr />
-        <h3 class="mb-3">'. adm_translate("Edition des sondages") .'</h3>
+        <h3 class="mb-3">'. __d('two_polbooth', 'Edition des sondages') .'</h3>
         <form id="pollssondageed" method="post" action="'. site_url('admin.php') .'">
             <input type="hidden" name="op" value="SendEditPoll">
             <input type="hidden" name="pollID" value="'. $id .'" />
             <div class="form-floating mb-3">
                 <input class="form-control" type="text" id="pollTitle" name="pollTitle" value="'. $holdtitle['pollTitle'] .'" maxlength="100" required="required" />
-                <label for="pollTitle">'. adm_translate("Intitulé du Sondage") .'</label>
-                <span class="help-block">'. adm_translate("S.V.P. entrez chaque option disponible dans un seul champ") .'</span>
+                <label for="pollTitle">'. __d('two_polbooth', 'Intitulé du Sondage') .'</label>
+                <span class="help-block">'. __d('two_polbooth', 'S.V.P. entrez chaque option disponible dans un seul champ') .'</span>
                 <span class="help-block text-end"><span id="countcar_pollTitle"></span></span>
             </div>';
 
@@ -347,7 +347,7 @@ function poll_editPollPosted(): void
             echo '
             <div class="form-floating mb-3">
                 <input class="form-control" type="text" id="optionText'. $i .'" name="optionText['. $poll_data['voteID'] .']" maxlength="255" value="'. $poll_data['optionText'] .'" '. $requi .' />
-                <label for="optionText'. $i .'">'. adm_translate("Option") .' '. $i .'</label>
+                <label for="optionText'. $i .'">'. __d('two_polbooth', 'Option') .' '. $i .'</label>
                 <span class="help-block text-end"><span id="countcar_optionText'. $i .'"></span></span>
             </div>';
 
@@ -366,7 +366,7 @@ function poll_editPollPosted(): void
         }
 
         echo ' />
-                <label class="form-check-label" for="poll_type">'. adm_translate("Seulement aux membres") .'</label>
+                <label class="form-check-label" for="poll_type">'. __d('two_polbooth', 'Seulement aux membres') .'</label>
             </div>
         </div>
         <div class="mb-3">
@@ -378,7 +378,7 @@ function poll_editPollPosted(): void
         }
 
         echo ' />
-                    <label class="form-check-label" for="poll_close">'. adm_translate("Vote fermé") .'</label>
+                    <label class="form-check-label" for="poll_close">'. __d('two_polbooth', 'Vote fermé') .'</label>
                 </div>
             </div>
             <div class="mb-3">

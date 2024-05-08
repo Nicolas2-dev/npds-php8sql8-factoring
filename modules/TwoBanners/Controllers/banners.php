@@ -177,20 +177,20 @@ function clientlogin(): void
     
     echo '
         <div class="card card-body mb-3">
-            <h3 class="mb-4"><i class="fas fa-sign-in-alt fa-lg me-3 align-middle"></i>' . translate("Connexion") . '</h3>
+            <h3 class="mb-4"><i class="fas fa-sign-in-alt fa-lg me-3 align-middle"></i>' . __d('two_banners', 'Connexion') . '</h3>
             <form id="loginbanner" action="' . site_url('banners.php') .'" method="post">
                 <fieldset>
                 <div class="form-floating mb-3">
                     <input class="form-control" type="text" id="login" name="login" maxlength="25" required="required" />
-                    <label for="login">' . translate("Identifiant ") . '</label>
+                    <label for="login">' . __d('two_banners', 'Identifiant ') . '</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input class="form-control" type="password" id="pass" name="pass" maxlength="25" required="required" />
-                    <label for="pass">' . translate("Mot de passe") . '</label>
-                    <span class="help-block">' . translate("Merci de saisir vos informations") . '</span>
+                    <label for="pass">' . __d('two_banners', 'Mot de passe') . '</label>
+                    <span class="help-block">' . __d('two_banners', 'Merci de saisir vos informations') . '</span>
                 </div>
                 <input type="hidden" name="client" value="Ok" />
-                <button class="btn btn-primary my-3" type="submit">' . translate("Valider") . '</button>
+                <button class="btn btn-primary my-3" type="submit">' . __d('two_banners', 'Valider') . '</button>
                 </div>
                 </fieldset>
             </form>
@@ -212,7 +212,7 @@ function IncorrectLogin(): void
 {
     header_page();
 
-    echo '<div class="alert alert-danger lead">' . translate("Identifiant incorrect !") . '<br /><button class="btn btn-secondary mt-2" onclick="javascript:history.go(-1)" >' . translate("Retour en arrière") . '</button></div>';
+    echo '<div class="alert alert-danger lead">' . __d('two_banners', 'Identifiant incorrect !') . '<br /><button class="btn btn-secondary mt-2" onclick="javascript:history.go(-1)" >' . __d('two_banners', 'Retour en arrière') . '</button></div>';
     
     footer_page();
 }
@@ -258,10 +258,10 @@ function header_page(): void
         <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-primary">
             <div class="container-fluid">
             <a class="navbar-brand" href="' . site_url('index.php') .'"><i class="fa fa-home fa-lg me-2"></i></a>
-            <span class="navbar-text">' . translate("Bannières - Publicité") . '</span>
+            <span class="navbar-text">' . __d('two_banners', 'Bannières - Publicité') . '</span>
             </div>
         </nav>
-        <h2 class="mt-4">' . translate("Bannières - Publicité") . ' @ ' . Config::get('npds.Titlesitename') . '</h2>
+        <h2 class="mt-4">' . __d('two_banners', 'Bannières - Publicité') . ' @ ' . Config::get('npds.Titlesitename') . '</h2>
         <p align="center">';
 }
 
@@ -306,17 +306,17 @@ function bannerstats(): void
             header_page();
 
             echo '
-            <h3>' . translate("Bannières actives pour") . ' ' . $bannerclient['name'] . '</h3>
+            <h3>' . __d('two_banners', 'Bannières actives pour') . ' ' . $bannerclient['name'] . '</h3>
             <table data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-show-columns="true" data-icons="icons" data-icons-prefix="fa">
                 <thead>
                 <tr>
                     <th class="n-t-col-xs-1" data-halign="center" data-align="right" data-sortable="true">ID</th>
-                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . translate("Réalisé") . '</th>
-                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . translate("Impressions") . '</th>
-                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . translate("Imp. restantes") . '</th>
-                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . translate("Clics") . '</th>
-                    <th class="n-t-col-xs-1" data-halign="center" data-align="right" data-sortable="true">% ' . translate("Clics") . '</th>
-                    <th class="n-t-col-xs-1" data-halign="center" data-align="right">' . translate("Fonctions") . '</th>
+                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Réalisé') . '</th>
+                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Impressions') . '</th>
+                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Imp. restantes') . '</th>
+                    <th class="n-t-col-xs-2" data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Clics') . '</th>
+                    <th class="n-t-col-xs-1" data-halign="center" data-align="right" data-sortable="true">% ' . __d('two_banners', 'Clics') . '</th>
+                    <th class="n-t-col-xs-1" data-halign="center" data-align="right">' . __d('two_banners', 'Fonctions') . '</th>
                 </tr>
                 </thead>
                 <tbody>';
@@ -329,7 +329,7 @@ function bannerstats(): void
                 $float = (100 * $banner['clicks'] / $banner['impmade']);
 
                 $percent = $banner['impmade'] == 0 ? '0' : substr( (string) $float, 0, 5);
-                $left = $banner['imptotal'] == 0 ? translate("Illimité") : $banner['imptotal'] - $banner['impmade'];
+                $left = $banner['imptotal'] == 0 ? __d('two_banners', 'Illimité') : $banner['imptotal'] - $banner['impmade'];
                 
                 echo '
                 <tr>
@@ -367,7 +367,7 @@ function bannerstats(): void
                 echo '<h4 class="mb-2">Banner ID : ' . $banner['id'] . '</h4>';
 
                 if ($banner['imageurl'] != '') {
-                    echo '<p>' . translate("Cette bannière est affichée sur l'url") . ' : <a href="' . Language::aff_langue($banner['clickurl']) . '" target="_Blank" >[ URL ]</a></p>';
+                    echo '<p>' . __d('two_banners', 'Cette bannière est affichée sur l\'url') . ' : <a href="' . Language::aff_langue($banner['clickurl']) . '" target="_Blank" >[ URL ]</a></p>';
                 }
 
                 echo '<form action="' . site_url('banners.php') .'" method="get">';
@@ -375,7 +375,7 @@ function bannerstats(): void
                 if ($banner['imageurl'] != '') {
                     echo '
                     <div class="mb-3 row">
-                        <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
+                        <label class="control-label col-sm-12" for="url">' . __d('two_banners', 'Changer') . ' URL</label>
                         <div class="col-sm-12">
                             <input class="form-control" type="text" name="url" maxlength="200" value="' . $banner['clickurl'] . '" />
                         </div>
@@ -383,7 +383,7 @@ function bannerstats(): void
                 } else {
                     echo '
                     <div class="mb-3 row">
-                        <label class="control-label col-sm-12" for="url">' . translate("Changer") . ' URL</label>
+                        <label class="control-label col-sm-12" for="url">' . __d('two_banners', 'Changer') . ' URL</label>
                         <div class="col-sm-12">
                             <input class="form-control" type="text" name="url" maxlength="200" value="' . htmlentities($banner['clickurl'], ENT_QUOTES, 'utf-8') . '" />
                         </div>
@@ -395,7 +395,7 @@ function bannerstats(): void
                 <input type="hidden" name="bid" value="' . $banner['id'] . '" />
                 <input type="hidden" name="pass" value="' . $pass . '" />
                 <input type="hidden" name="cid" value="' . $bannerclient['id'] . '" />
-                <input class="btn btn-primary" type="submit" name="client" value="' . translate("Changer") . '" />
+                <input class="btn btn-primary" type="submit" name="client" value="' . __d('two_banners', 'Changer') . '" />
                 </form>
                 </p>
                 </div>';
@@ -404,16 +404,16 @@ function bannerstats(): void
             // Finnished Banners
             echo "<br />";
             echo '
-            <h3>' . translate("Bannières terminées pour") . ' ' . $bannerclient['name'] . '</h3>
+            <h3>' . __d('two_banners', 'Bannières terminées pour') . ' ' . $bannerclient['name'] . '</h3>
             <table data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-show-columns="true" data-icons="icons" data-icons-prefix="fa">
                 <thead>
                 <tr>
                     <th class="n-t-col-xs-1" data-halign="center" data-align="right" data-sortable="true">ID</td>
-                    <th data-halign="center" data-align="right" data-sortable="true">' . translate("Impressions") . '</th>
-                    <th data-halign="center" data-align="right" data-sortable="true">' . translate("Clics") . '</th>
-                    <th class="n-t-col-xs-1" data-halign="center" data-align="right" data-sortable="true">% ' . translate("Clics") . '</th>
-                    <th data-halign="center" data-align="right" data-sortable="true">' . translate("Date de début") . '</th>
-                    <th data-halign="center" data-align="right" data-sortable="true">' . translate("Date de fin") . '</th>
+                    <th data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Impressions') . '</th>
+                    <th data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Clics') . '</th>
+                    <th class="n-t-col-xs-1" data-halign="center" data-align="right" data-sortable="true">% ' . __d('two_banners', 'Clics') . '</th>
+                    <th data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Date de début') . '</th>
+                    <th data-halign="center" data-align="right" data-sortable="true">' . __d('two_banners', 'Date de fin') . '</th>
                 </tr>
                 </thead>
                 <tbody>';
@@ -479,8 +479,8 @@ function EmailStats(): void
         if ($bannerclient['email'] == '') {
             header_page();
 
-            echo "<p align=\"center\"><br />" . translate("Les statistiques pour la bannières ID") . " : $bid " . translate("ne peuvent pas être envoyées.") . "<br /><br />
-                " . translate("Email non rempli pour : ") . $bannerclient['name'] ."<br /><br /><a href=\"javascript:history.go(-1)\" >" . translate("Retour en arrière") . "</a></p>";
+            echo "<p align=\"center\"><br />" . __d('two_banners', 'Les statistiques pour la bannières ID') . " : $bid " . __d('two_banners', 'ne peuvent pas être envoyées.') . "<br /><br />
+                " . __d('two_banners', 'Email non rempli pour : ') . $bannerclient['name'] ."<br /><br /><a href=\"javascript:history.go(-1)\" >" . __d('two_banners', 'Retour en arrière') . "</a></p>";
             
             footer_page();
         } else {
@@ -496,19 +496,19 @@ function EmailStats(): void
             $percent = $banner['impmade'] == 0 ? '0' : substr( (string) $float , 0, 5);
             
             if ($banner['imptotal'] == 0) {
-                $left = translate("Illimité");
-                $banner['imptotal'] = translate("Illimité");
+                $left = __d('two_banners', 'Illimité');
+                $banner['imptotal'] = __d('two_banners', 'Illimité');
             } else {
                 $left = $banner['imptotal'] - $banner['impmade'];
             }
 
-            $fecha = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
+            $fecha = date(__d('two_banners', 'dateinternal'), time() + ((int) Config::get('npds.gmt') * 3600));
             
-            $subject = html_entity_decode(translate("Bannières - Publicité"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . Config::get('npds.sitename');
+            $subject = html_entity_decode(__d('two_banners', 'Bannières - Publicité'), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' : ' . Config::get('npds.sitename');
             
-            $message  = "Client : ". $bannerclient['name'] ."\n" . translate("Bannière") . " ID : ". $banner['id'] ."\n" . translate("Bannière") . " Image : ". $banner['imageurl'] ."\n" . translate("Bannière") . " URL : ". $banner['clickurl'] ."\n\n";
-            $message .= "Impressions " . translate("Réservées") . " : ". $banner['imptotal'] ."\nImpressions " . translate("Réalisées") . " : " .$banner['impmade'] ."\nImpressions " . translate("Restantes") . " : $left\nClicks " . translate("Reçus") . " : ". $banner['clicks'] ."\nClicks " . translate("Pourcentage") . " : $percent%\n\n";
-            $message .= translate("Rapport généré le") . ' : ' . "$fecha\n\n";
+            $message  = "Client : ". $bannerclient['name'] ."\n" . __d('two_banners', 'Bannière') . " ID : ". $banner['id'] ."\n" . __d('two_banners', 'Bannière') . " Image : ". $banner['imageurl'] ."\n" . __d('two_banners', 'Bannière') . " URL : ". $banner['clickurl'] ."\n\n";
+            $message .= "Impressions " . __d('two_banners', 'Réservées') . " : ". $banner['imptotal'] ."\nImpressions " . __d('two_banners', 'Réalisées') . " : " .$banner['impmade'] ."\nImpressions " . __d('two_banners', 'Restantes') . " : $left\nClicks " . __d('two_banners', 'Reçus') . " : ". $banner['clicks'] ."\nClicks " . __d('two_banners', 'Pourcentage') . " : $percent%\n\n";
+            $message .= __d('two_banners', 'Rapport généré le') . ' : ' . "$fecha\n\n";
             $message .= Config::get('signature.message');
 
             Mailler::send_email($bannerclient['email'], $subject, $message, '', true, 'html', '');
@@ -518,15 +518,15 @@ function EmailStats(): void
             <div class="card bg-light">
                 <div class="card-body"
                 <p>' . $fecha . '</p>
-                <p>' . translate("Les statistiques pour la bannières ID") . ' : ' . $banner['id'] . ' ' . translate("ont été envoyées.") . '</p>
+                <p>' . __d('two_banners', 'Les statistiques pour la bannières ID') . ' : ' . $banner['id'] . ' ' . __d('two_banners', 'ont été envoyées.') . '</p>
                 <p>' . $bannerclient['email'] . ' : Client : ' . $bannerclient['name'] . '</p>
-                <p><a href="javascript:history.go(-1)" class="btn btn-primary">' . translate("Retour en arrière") . '</a></p>
+                <p><a href="javascript:history.go(-1)" class="btn btn-primary">' . __d('two_banners', 'Retour en arrière') . '</a></p>
                 </div>
             </div>';
         }
     } else {
         header_page();
-        echo "<p align=\"center\"><br />" . translate("Identifiant incorrect !") . "<br /><br />" . translate("Merci de") . " <a href=\"" . site_url('banners.php?op=login') ."\" class=\"noir\">" . translate("vous reconnecter.") . "</a></p>";
+        echo "<p align=\"center\"><br />" . __d('two_banners', 'Identifiant incorrect !') . "<br /><br />" . __d('two_banners', 'Merci de') . " <a href=\"" . site_url('banners.php?op=login') ."\" class=\"noir\">" . __d('two_banners', 'vous reconnecter.') . "</a></p>";
     }
 
     footer_page();
@@ -563,19 +563,19 @@ function change_banner_url_by_client(): void
 
         echo '
             <div class="alert alert-success">
-                ' . translate("Vous avez changé l'url de la bannière") . '
+                ' . __d('two_banners', 'Vous avez changé l\'url de la bannière') . '
                 <br />
                 <a href="javascript:history.go(-1)" class="alert-link">
-                    ' . translate("Retour en arrière") . '
+                    ' . __d('two_banners', 'Retour en arrière') . '
                 </a>
             </div>';
     } else
         echo '
             <div class="alert alert-danger">
-                ' . translate("Identifiant incorrect !") . '
-                <br />' . translate("Merci de") . ' 
+                ' . __d('two_banners', 'Identifiant incorrect !') . '
+                <br />' . __d('two_banners', 'Merci de') . ' 
                 <a href="' . site_url('banners.php?client=login') .'" class="alert-link">
-                    ' . translate("vous reconnecter.") . '
+                    ' . __d('two_banners', 'vous reconnecter.') . '
                 </a>
             </div>';
     
@@ -595,7 +595,7 @@ switch (Request::input('client')) {
         bannerstats();
         break;
 
-    case translate('Changer'):
+    case __d('two_banners', 'Changer'):
         change_banner_url_by_client();
         break;
 

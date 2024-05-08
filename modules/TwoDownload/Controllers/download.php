@@ -68,13 +68,13 @@ function geninfo(int $did, int $out_template): void
             include('themes/default/header.php');
 
             echo '
-            <h2 class="mb-3">' . translate("Chargement de fichiers") . '</h2>
+            <h2 class="mb-3">' . __d('two_download', 'Chargement de fichiers') . '</h2>
             <div class="card">
                 <div class="card-header"><h4>' . $res_download['filename'] . '<span class="ms-3 text-muted small">@' . $res_download['durl'] . '</h4></div>
                 <div class="card-body">';
         }
 
-        echo '<p><strong>' . translate("Taille du fichier") . ' : </strong>';
+        echo '<p><strong>' . __d('two_download', 'Taille du fichier') . ' : </strong>';
 
         $objZF = new FileManagement;
 
@@ -85,17 +85,17 @@ function geninfo(int $did, int $out_template): void
         }
 
         echo '</p>
-                <p><strong>' . translate("Version") . '&nbsp;:</strong>&nbsp;' . $res_download['dver'] . '</p>
-                <p><strong>' . translate("Date de chargement sur le serveur") . '&nbsp;:</strong>&nbsp;' . date::convertdate($res_download['ddate']) . '</p>
-                <p><strong>' . translate("Chargements") . '&nbsp;:</strong>&nbsp;' . str::wrh($res_download['dcounter']) . '</p>
-                <p><strong>' . translate("Catégorie") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($res_download['dcategory'])) . '</p>
-                <p><strong>' . translate("Description") . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($res_download['ddescription'])) . '</p>
-                <p><strong>' . translate("Auteur") . '&nbsp;:</strong>&nbsp;' . $res_download['duser'] . '</p>
-                <p><strong>' . translate("Page d'accueil") . '&nbsp;:</strong>&nbsp;<a href="http://' . $res_download['dweb'] . '" target="_blank">' . $res_download['dweb'] . '</a></p>';
+                <p><strong>' . __d('two_download', 'Version') . '&nbsp;:</strong>&nbsp;' . $res_download['dver'] . '</p>
+                <p><strong>' . __d('two_download', 'Date de chargement sur le serveur') . '&nbsp;:</strong>&nbsp;' . date::convertdate($res_download['ddate']) . '</p>
+                <p><strong>' . __d('two_download', 'Chargements') . '&nbsp;:</strong>&nbsp;' . str::wrh($res_download['dcounter']) . '</p>
+                <p><strong>' . __d('two_download', 'Catégorie') . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($res_download['dcategory'])) . '</p>
+                <p><strong>' . __d('two_download', 'Description') . '&nbsp;:</strong>&nbsp;' . language::aff_langue(stripslashes($res_download['ddescription'])) . '</p>
+                <p><strong>' . __d('two_download', 'Auteur') . '&nbsp;:</strong>&nbsp;' . $res_download['duser'] . '</p>
+                <p><strong>' . __d('two_download', 'Page d\'accueil') . '&nbsp;:</strong>&nbsp;<a href="http://' . $res_download['dweb'] . '" target="_blank">' . $res_download['dweb'] . '</a></p>';
         
         if ($out_template == 1) {
             echo '
-                <a class="btn btn-primary" href="'. site_url('download.php?op=mydown&amp;did='. $did) .'" target="_blank" title="'. translate("Charger maintenant") .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-lg fa-download"></i></a>
+                <a class="btn btn-primary" href="'. site_url('download.php?op=mydown&amp;did='. $did) .'" target="_blank" title="'. __d('two_download', 'Charger maintenant') .'" data-bs-toggle="tooltip" data-bs-placement="right"><i class="fa fa-lg fa-download"></i></a>
                 </div>
             </div>';
 
@@ -123,7 +123,7 @@ function tlist(): void
     $cate = stripslashes($dcategory);
 
     echo '
-    <p class="lead">' . translate("Sélectionner une catégorie") . '</p>
+    <p class="lead">' . __d('two_download', 'Sélectionner une catégorie') . '</p>
     <div class="d-flex flex-column flex-sm-row flex-wrap justify-content-between my-3 border rounded">
         <p class="p-2 mb-0 ">';
 
@@ -131,11 +131,11 @@ function tlist(): void
                 ->select(DB::raw('COUNT(*)'))
                 ->count();
 
-    if (($cate == translate("Tous")) or ($cate == '')) {
-        echo '<i class="fa fa-folder-open fa-2x text-muted align-middle me-2"></i><strong><span class="align-middle">' . translate("Tous") . '</span>
+    if (($cate == __d('two_download', 'Tous')) or ($cate == '')) {
+        echo '<i class="fa fa-folder-open fa-2x text-muted align-middle me-2"></i><strong><span class="align-middle">' . __d('two_download', 'Tous') . '</span>
     <span class="badge bg-secondary ms-2 float-end my-2">' . $acount . '</span></strong>';
     } else {
-        echo '<a href="' . site_url('download.php?dcategory=' . translate("Tous") . '&amp;sortby=' . $sortby) .'"><i class="fa fa-folder fa-2x align-middle me-2"></i><span class="align-middle">' . translate("Tous") . '</span></a><span class="badge bg-secondary ms-2 float-end my-2">' . $acount . '</span>';
+        echo '<a href="' . site_url('download.php?dcategory=' . __d('two_download', 'Tous') . '&amp;sortby=' . $sortby) .'"><i class="fa fa-folder fa-2x align-middle me-2"></i><span class="align-middle">' . __d('two_download', 'Tous') . '</span></a><span class="badge bg-secondary ms-2 float-end my-2">' . $acount . '</span>';
     }
 
     echo '</p>';
@@ -175,9 +175,9 @@ function tlist(): void
 function act_dl_tableheader(string $dcategory, string $fieldname, string $englishname): void
 {
     echo '
-    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname) .'" title="' . translate("Croissant") . '" data-bs-toggle="tooltip" ><i class="fa fa-sort-amount-down"></i></a>&nbsp;
-    ' . translate("$englishname") . '&nbsp;
-    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname . '&amp;sortorder=DESC') .'" title="' . translate("Décroissant") . '" data-bs-toggle="tooltip" ><i class="fa fa-sort-amount-up"></i></a>';
+    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname) .'" title="' . __d('two_download', 'Croissant') . '" data-bs-toggle="tooltip" ><i class="fa fa-sort-amount-down"></i></a>&nbsp;
+    ' . __d('two_download', '$englishname') . '&nbsp;
+    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname . '&amp;sortorder=DESC') .'" title="' . __d('two_download', 'Décroissant') . '" data-bs-toggle="tooltip" ><i class="fa fa-sort-amount-up"></i></a>';
 }
 
 /**
@@ -192,9 +192,9 @@ function act_dl_tableheader(string $dcategory, string $fieldname, string $englis
 function inact_dl_tableheader(string $dcategory, string $fieldname, string $englishname): void
 {
     echo '
-    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname) .'" title="' . translate("Croissant") . '" data-bs-toggle="tooltip"><i class="fa fa-sort-amount-down" ></i></a>&nbsp;
-    ' . translate("$englishname") . '&nbsp;
-    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname . '&amp;sortorder=DESC') .'" title="' . translate("Décroissant") . '" data-bs-toggle="tooltip"><i class="fa fa-sort-amount-up" ></i></a>';
+    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname) .'" title="' . __d('two_download', 'Croissant') . '" data-bs-toggle="tooltip"><i class="fa fa-sort-amount-down" ></i></a>&nbsp;
+    ' . __d('two_download', '$englishname') . '&nbsp;
+    <a class="d-none d-sm-inline" href="' . site_url('download.php?dcategory=' . $dcategory . '&amp;sortby=' . $fieldname . '&amp;sortorder=DESC') .'" title="' . __d('two_download', 'Décroissant') . '" data-bs-toggle="tooltip"><i class="fa fa-sort-amount-up" ></i></a>';
 }
 
 /**
@@ -223,13 +223,13 @@ function popuploader(int $did, string $dfilename, bool $aff)
 
     if ($aff) {
         echo '
-            <a class="me-3" href="#" data-bs-toggle="modal" data-bs-target="#mo' . $did . '" title="' . translate("Information sur le fichier") . '" data-bs-toggle="tooltip"><i class="fa fa-info-circle fa-2x"></i></a>
-            <a href="' . site_url('download.php?op=mydown&amp;did=' . $did) .'" target="_blank" title="' . translate("Charger maintenant") . '" data-bs-toggle="tooltip"><i class="fa fa-download fa-2x"></i></a>
+            <a class="me-3" href="#" data-bs-toggle="modal" data-bs-target="#mo' . $did . '" title="' . __d('two_download', 'Information sur le fichier') . '" data-bs-toggle="tooltip"><i class="fa fa-info-circle fa-2x"></i></a>
+            <a href="' . site_url('download.php?op=mydown&amp;did=' . $did) .'" target="_blank" title="' . __d('two_download', 'Charger maintenant') . '" data-bs-toggle="tooltip"><i class="fa fa-download fa-2x"></i></a>
             <div class="modal fade" id="mo' . $did . '" tabindex="-1" role="dialog" aria-labelledby="my' . $did . '" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h4 class="modal-title text-start" id="my' . $did . '">' . translate("Information sur le fichier") . ' - ' . $dfilename . '</h4>
+                    <h4 class="modal-title text-start" id="my' . $did . '">' . __d('two_download', 'Information sur le fichier') . ' - ' . $dfilename . '</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title=""></button>
                     </div>
                     <div class="modal-body text-start">';
@@ -239,7 +239,7 @@ function popuploader(int $did, string $dfilename, bool $aff)
         echo '
                     </div>
                     <div class="modal-footer">
-                        <a class="" href="' . site_url('download.php?op=mydown&amp;did=' . $did) .'" title="' . translate("Charger maintenant") . '"><i class="fa fa-2x fa-download"></i></a>
+                        <a class="" href="' . site_url('download.php?op=mydown&amp;did=' . $did) .'" title="' . __d('two_download', 'Charger maintenant') . '"><i class="fa fa-2x fa-download"></i></a>
                     </div>
                 </div>
                 </div>
@@ -262,8 +262,8 @@ function SortLinks(string $dcategory, string $sortby): void
     echo '
         <thead>
             <tr>
-                <th class="text-center">' . translate("Fonctions") . '</th>
-                <th class="text-center n-t-col-xs-1" data-sortable="true" data-sorter="htmlSorter">' . translate("Type") . '</th>
+                <th class="text-center">' . __d('two_download', 'Fonctions') . '</th>
+                <th class="text-center n-t-col-xs-1" data-sortable="true" data-sorter="htmlSorter">' . __d('two_download', 'Type') . '</th>
                 <th class="text-center">';
 
     if ($sortby == 'dfilename' or !$sortby) {
@@ -353,41 +353,41 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
 
     echo '<p class="lead">';
 
-    echo translate("Affichage filtré pour") . "&nbsp;<i>";
+    echo __d('two_download', 'Affichage filtré pour') . "&nbsp;<i>";
 
-    if ($dcategory == translate("Tous")) {
-        echo '<b>' . translate("Tous") . '</b>';
+    if ($dcategory == __d('two_download', 'Tous')) {
+        echo '<b>' . __d('two_download', 'Tous') . '</b>';
     } else {
         echo '<b>' . language::aff_langue(stripslashes($dcategory)) . '</b>';
     }
 
-    echo '</i>&nbsp;' . translate("trié par ordre") . '&nbsp;';
+    echo '</i>&nbsp;' . __d('two_download', 'trié par ordre') . '&nbsp;';
 
     // Shiney SQL Injection 11/2011
     $sortby2 = '';
 
     if ($sortby == 'dfilename') {
-        $sortby2 = translate("Nom") . "";
+        $sortby2 = __d('two_download', 'Nom') . "";
     }
 
     if ($sortby == 'dfilesize') {
-        $sortby2 = translate("Taille du fichier") . "";
+        $sortby2 = __d('two_download', 'Taille du fichier') . "";
     }
 
     if ($sortby == 'dcategory') {
-        $sortby2 = translate("Catégorie") . "";
+        $sortby2 = __d('two_download', 'Catégorie') . "";
     }
 
     if ($sortby == 'ddate') {
-        $sortby2 = translate("Date de création") . "";
+        $sortby2 = __d('two_download', 'Date de création') . "";
     }
 
     if ($sortby == 'dver') {
-        $sortby2 = translate("Version") . "";}
+        $sortby2 = __d('two_download', 'Version') . "";}
 
 
     if ($sortby == 'dcounter')  {
-        $sortby2 = translate("Chargements") . "";
+        $sortby2 = __d('two_download', 'Chargements') . "";
     }
 
     // Shiney SQL Injection 11/2011
@@ -395,7 +395,7 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
         $sortby = 'dfilename';
     }
 
-    echo translate("de") . '&nbsp;<i><b>' . $sortby2 . '</b></i>
+    echo __d('two_download', 'de') . '&nbsp;<i><b>' . $sortby2 . '</b></i>
     </p>';
 
     echo '
@@ -406,7 +406,7 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
 
     echo '<tbody>';
 
-    if ($dcategory == translate("Tous")) {
+    if ($dcategory == __d('two_download', 'Tous')) {
         $total = DB::table('downloads')->select(DB::raw('COUNT(*) as count'))->count();
     } else {
         $total = DB::table('downloads')->select(DB::raw('COUNT(*) as count'))->where('dcategory', addslashes($dcategory))->count();
@@ -450,7 +450,7 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
         $current = $nbPages;
     }
 
-    if ($dcategory == translate("Tous")) {
+    if ($dcategory == __d('two_download', 'Tous')) {
         $result  = DB::table('downloads')
                     ->select('*')
                     ->orderBy($sortby, $sortorder)
@@ -494,7 +494,7 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
             echo popuploader((int) $download['did'], $download['dfilename'], true);
         } else {
             echo popuploader((int) $download['did'], $download['dfilename'], false);
-            echo '<span class="text-danger"><i class="fa fa-ban fa-lg me-1"></i>' . translate("Privé") . '</span>';
+            echo '<span class="text-danger"><i class="fa fa-ban fa-lg me-1"></i>' . __d('two_download', 'Privé') . '</span>';
         }
 
         echo '</td>
@@ -526,7 +526,7 @@ function listdownloads(string $dcategory, string $sortby, string $sortorder): vo
             echo '<td>';
 
             if (($okfile == true and users::getUser() != '') or users::autorisation(-127)) {
-                echo '<a href="' . site_url('download.php?op=broken&amp;did=' . $download['did']) .'" title="' . translate("Rapporter un lien rompu") . '" data-bs-toggle="tooltip"><i class="fas fa-lg fa-unlink"></i></a>';
+                echo '<a href="' . site_url('download.php?op=broken&amp;did=' . $download['did']) .'" title="' . __d('two_download', 'Rapporter un lien rompu') . '" data-bs-toggle="tooltip"><i class="fas fa-lg fa-unlink"></i></a>';
             }
 
             echo '</td>';
@@ -575,12 +575,12 @@ function main(): void
     include("themes/default/header.php");
 
     echo '
-    <h2>' . translate("Chargement de fichiers") . '</h2>
+    <h2>' . __d('two_download', 'Chargement de fichiers') . '</h2>
     <hr />';
 
     tlist();
 
-    if ($dcategory != translate("Aucune catégorie")) {
+    if ($dcategory != __d('two_download', 'Aucune catégorie')) {
         listdownloads($dcategory, $sortby, $sortorder);
     }
 
@@ -613,9 +613,9 @@ function transferfile(): void
         include("themes/default/header.php");
 
         echo '
-        <h2>' . translate("Chargement de fichiers") . '</h2>
+        <h2>' . __d('two_download', 'Chargement de fichiers') . '</h2>
         <hr />
-        <div class="lead alert alert-danger">' . translate("Ce fichier n'existe pas ...") . '</div>';
+        <div class="lead alert alert-danger">' . __d('two_download', 'Ce fichier n\'existe pas ...') . '</div>';
 
         include("themes/default/footer.php");
     } else {
@@ -667,16 +667,16 @@ function broken(): void
     if (users::getUser()) {
         if ($did = Request::query('did')) {
             
-            $message = Config::get('npds.nuke_url') . "\n" . translate("Téléchargements") . " ID : $did\n" . translate("Auteur") . users::cookieUser(1) ." / IP : " . getip() . "\n\n";
+            $message = Config::get('npds.nuke_url') . "\n" . __d('two_download', 'Téléchargements') . " ID : $did\n" . __d('two_download', 'Auteur') . users::cookieUser(1) ." / IP : " . getip() . "\n\n";
             $message .= Config::get('signature.message');
             
-            mailler::send_email(Config::get('npds.notify_email'), html_entity_decode(translate("Rapporter un lien rompu"), ENT_COMPAT | ENT_HTML401, 'utf-8'), nl2br($message), Config::get('npds.notify_from'), false, "html", '');
+            mailler::send_email(Config::get('npds.notify_email'), html_entity_decode(__d('two_download', 'Rapporter un lien rompu'), ENT_COMPAT | ENT_HTML401, 'utf-8'), nl2br($message), Config::get('npds.notify_from'), false, "html", '');
             
             include("themes/default/header.php");
             
             echo '
             <div class="alert alert-success">
-            <p class="lead">' . translate("Pour des raisons de sécurité, votre nom d'utilisateur et votre adresse IP vont être momentanément conservés.") . '<br />' . translate("Merci pour cette information. Nous allons l'examiner dès que possible.") . '</p>
+            <p class="lead">' . __d('two_download', 'Pour des raisons de sécurité, votre nom d\'utilisateur et votre adresse IP vont être momentanément conservés.') . '<br />' . __d('two_download', 'Merci pour cette information. Nous allons l\'examiner dès que possible.') . '</p>
             </div>';
 
             include("themes/default/footer.php");

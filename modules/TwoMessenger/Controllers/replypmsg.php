@@ -87,7 +87,7 @@ if (isset($user)) {
 
         $message = forum::make_clickable($message);
         $message = hack::removeHack(addslashes($message));
-        $time = date(translate("dateinternal"), time() + ((int) Config::get('npds.gmt') * 3600));
+        $time = date(__d('two_messenger', 'dateinternal'), time() + ((int) Config::get('npds.gmt') * 3600));
 
         include_once("language/multilangue.php");
 
@@ -360,17 +360,17 @@ if (isset($user)) {
         }
 
         echo '
-        <h2><a href="'. site_url('viewpmsg.php') .'"><i class="me-2 fa fa-inbox"></i></a>' . translate("Message personnel") . '</h2>
+        <h2><a href="'. site_url('viewpmsg.php') .'"><i class="me-2 fa fa-inbox"></i></a>' . __d('two_messenger', 'Message personnel') . '</h2>
         <hr />
-        <blockquote class="blockquote">' . translate("A propos des messages publiés :") . '<br />' .
-            translate("Tous les utilisateurs enregistrés peuvent poster des messages privés.") . '</blockquote>';
+        <blockquote class="blockquote">' . __d('two_messenger', 'A propos des messages publiés :') . '<br />' .
+            __d('two_messenger', 'Tous les utilisateurs enregistrés peuvent poster des messages privés.') . '</blockquote>';
 
         $submitP = Request::input('submitP');
 
         if ($submitP) {
             echo '
             <hr />
-            <h3>' . translate("Prévisualiser") . '</h3>
+            <h3>' . __d('two_messenger', 'Prévisualiser') . '</h3>
             <p class="lead">' . StripSlashes($subject) . '</p>';
 
             $Xmessage = $message = StripSlashes($message);
@@ -401,7 +401,7 @@ if (isset($user)) {
         echo '
             <form id="pmessage" action="'. site_url('replypmsg.php') .'" method="post" name="coolsus">
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-3" for="to_user">' . translate("Destinataire") . '</label>
+                <label class="col-form-label col-sm-3" for="to_user">' . __d('two_messenger', 'Destinataire') . '</label>
                 <div class="col-sm-9">';
 
         if ($reply) {
@@ -424,7 +424,7 @@ if (isset($user)) {
             $carnet = java::JavaPopUp(site_url('carnet.php'), "CARNET", 300, 350);
             $carnet = '<a href="javascript:void(0);" onclick="window.open(' . $carnet . '); ">';
 
-            echo $carnet . '<span class="small">' . translate("Carnet d'adresses") . '</span></a>';
+            echo $carnet . '<span class="small">' . __d('two_messenger', 'Carnet d\'adresses') . '</span></a>';
         }
 
         echo '
@@ -444,12 +444,12 @@ if (isset($user)) {
                 <div class="col-sm-9 ms-auto">
                 <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="copie" name="copie" ' . $checked . ' />
-                <label class="form-check-label" for="copie"> ' . translate("Conserver une copie") . '</label>
+                <label class="form-check-label" for="copie"> ' . __d('two_messenger', 'Conserver une copie') . '</label>
                 </div>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12" for="subject">' . translate("Sujet") . '</label>
+                <label class="col-form-label col-sm-12" for="subject">' . __d('two_messenger', 'Sujet') . '</label>
                 <div class="col-sm-12">';
 
         $subject = Request::input('subject');
@@ -476,7 +476,7 @@ if (isset($user)) {
 
             echo '
             <div class="mb-3 row">
-                <label class="col-form-label col-sm-12">' . translate("Icone du message") . '</label>
+                <label class="col-form-label col-sm-12">' . __d('two_messenger', 'Icone du message') . '</label>
                 <div class="col-sm-12">
                 <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
                 ' . forum::emotion_add($image_subject) . '
@@ -487,15 +487,15 @@ if (isset($user)) {
 
         echo '
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-12" for="message">' . translate("Message") . '</label>
+            <label class="col-form-label col-sm-12" for="message">' . __d('two_messenger', 'Message') . '</label>
             <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">';
 
         if (Config::get('forum.config.allow_html') == 1) { 
-            echo '<span class="text-success float-end" title="HTML ' . translate("Activé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
+            echo '<span class="text-success float-end" title="HTML ' . __d('two_messenger', 'Activé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add();
         } else {
-            echo '<span class="text-danger float-end" title="HTML ' . translate("Désactivé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
+            echo '<span class="text-danger float-end" title="HTML ' . __d('two_messenger', 'Désactivé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
         }
 
         echo '
@@ -522,7 +522,7 @@ if (isset($user)) {
                 $text = stripslashes($text);
 
                 if ($row['msg_time'] != '' && $row['uname'] != '') {
-                    $Xreply = $row['msg_time'] . ', ' . $row['uname'] . ' ' . translate("a écrit :") . "\n$text\n";
+                    $Xreply = $row['msg_time'] . ', ' . $row['uname'] . ' ' . __d('two_messenger', 'a écrit :') . "\n$text\n";
                 } else {
                     $Xreply = $text;
                 }
@@ -532,7 +532,7 @@ if (isset($user)) {
                 ' . $Xreply . '
                 </div>';
             } else {
-                $Xreply = translate("Pas de connexion à la base forums.") . "\n";
+                $Xreply = __d('two_messenger', 'Pas de connexion à la base forums.') . "\n";
             }
 
         } elseif ($message != '') {
@@ -552,8 +552,8 @@ if (isset($user)) {
         echo '
             </textarea>
             <span class="help-block text-end">
-                <button class="btn btn-outline-danger btn-sm" type="reset" value="' . translate("Annuler") . '" title="' . translate("Annuler") . '" data-bs-toggle="tooltip" ><i class="fas fa-times " ></i></button>
-                <button class="btn btn-outline-primary btn-sm" type="submit" value="' . translate("Prévisualiser") . '" name="submitP" title="' . translate("Prévisualiser") . '" data-bs-toggle="tooltip" ><i class="fa fa-eye "></i></button>
+                <button class="btn btn-outline-danger btn-sm" type="reset" value="' . __d('two_messenger', 'Annuler') . '" title="' . __d('two_messenger', 'Annuler') . '" data-bs-toggle="tooltip" ><i class="fas fa-times " ></i></button>
+                <button class="btn btn-outline-primary btn-sm" type="submit" value="' . __d('two_messenger', 'Prévisualiser') . '" name="submitP" title="' . __d('two_messenger', 'Prévisualiser') . '" data-bs-toggle="tooltip" ><i class="fa fa-eye "></i></button>
             </span>
                 </div>
                 <div class="card-footer text-muted">';
@@ -568,7 +568,7 @@ if (isset($user)) {
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-3">' . translate("Options") . '</label>';
+            <label class="col-form-label col-sm-3">' . __d('two_messenger', 'Options') . '</label>';
 
         if (Config::get('forum.config.allow_html') == 1) {
 
@@ -584,7 +584,7 @@ if (isset($user)) {
             <div class="col-sm-9 my-2">
                 <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="html" name="html" ' . $checked . ' />
-                <label class="form-check-label" for="html">' . translate("Désactiver le html pour cet envoi") . '</label>
+                <label class="form-check-label" for="html">' . __d('two_messenger', 'Désactiver le html pour cet envoi') . '</label>
                 </div>';
         }
 
@@ -601,9 +601,9 @@ if (isset($user)) {
             echo '
                 <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="sig" name="sig" ' . $checked . ' />
-                <label class="form-check-label" for="sig">' . translate("Afficher la signature") . '</label>
+                <label class="form-check-label" for="sig">' . __d('two_messenger', 'Afficher la signature') . '</label>
                 </div>
-                <small class="help-block">' . translate("Cela peut être retiré ou ajouté dans vos paramètres personnels") . '</small>';
+                <small class="help-block">' . __d('two_messenger', 'Cela peut être retiré ou ajouté dans vos paramètres personnels') . '</small>';
         }
 
         echo '
@@ -624,14 +624,14 @@ if (isset($user)) {
             echo '<input type="hidden" name="reply" value="1" />';
         }
 
-        echo '<input class="btn btn-primary" type="submit" name="submitS" value="' . translate("Valider") . '" />&nbsp;';
+        echo '<input class="btn btn-primary" type="submit" name="submitS" value="' . __d('two_messenger', 'Valider') . '" />&nbsp;';
 
         if ($reply) {
             echo '
-                <input class="btn btn-danger ms-2" type="submit" name="cancel" value="' . translate("Annuler la réponse") . '" />';
+                <input class="btn btn-danger ms-2" type="submit" name="cancel" value="' . __d('two_messenger', 'Annuler la réponse') . '" />';
         } else {
             echo '
-                <input class="btn btn-danger ms-2" type="submit" name="cancel" value="' . translate("Annuler l'envoi") . '" />';
+                <input class="btn btn-danger ms-2" type="submit" name="cancel" value="' . __d('two_messenger', 'Annuler l\'envoi') . '" />';
 
             echo js::auto_complete('membre', 'uname', 'users', 'to_user', 86400);
         }

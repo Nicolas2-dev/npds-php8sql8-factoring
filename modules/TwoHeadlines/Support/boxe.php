@@ -164,7 +164,7 @@ if (! function_exists('headlines'))
                 ob_end_clean();
             }
 
-            $boxstuff .= '<div class="text-end"><a href="'. $headlines['url'] .'" target="_blank">'. translate("Lire la suite...") .'</a></div>';
+            $boxstuff .= '<div class="text-end"><a href="'. $headlines['url'] .'" target="_blank">'. __d('two_headlines', '("Lire la suite..."') .'</a></div>';
 
             if ($block) {
                 Theme::themesidebox($boxtitle, $boxstuff);

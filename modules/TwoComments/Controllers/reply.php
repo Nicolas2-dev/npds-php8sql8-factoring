@@ -161,24 +161,24 @@ if (isset($submitS)) {
             
             $nuke_url = Config::get('npds.nuke_url');
 
-            $csubject = html_entity_decode(translate("Nouveau commentaire"), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' ==> ' . $nuke_url;
-            $cmessage = '🔔 ' . translate("Nouveau commentaire") . ' ==> <a href="' . $nuke_url . '/' . $url_ret . '">' . $nuke_url . '/' . $url_ret . '</a>';
+            $csubject = html_entity_decode(__d('two_comments', 'Nouveau commentaire'), ENT_COMPAT | ENT_HTML401, 'utf-8') . ' ==> ' . $nuke_url;
+            $cmessage = '🔔 ' . __d('two_comments', 'Nouveau commentaire') . ' ==> <a href="' . $nuke_url . '/' . $url_ret . '">' . $nuke_url . '/' . $url_ret . '</a>';
             mailler::send_email($notify_email, $csubject, $cmessage, $notify_from, false, "html", '');
         }
         url::redirect_url("$url_ret");
     } else {
         echo '
-    <h2><i class="far fa-comment text-muted fa-lg me-2"></i>' . translate("Commentaire") . '</h2>
+    <h2><i class="far fa-comment text-muted fa-lg me-2"></i>' . __d('two_comments', 'Commentaire') . '</h2>
     <hr />
-    <div class="alert alert-danger" >' . translate("Vous devez taper un message à poster.") . '</div>
-    <p><a href="javascript:history.go(-1)" class="btn btn-primary">' . translate("Retour en arrière") . '</a></p>';
+    <div class="alert alert-danger" >' . __d('two_comments', 'Vous devez taper un message à poster.') . '</div>
+    <p><a href="javascript:history.go(-1)" class="btn btn-primary">' . __d('two_comments', 'Retour en arrière') . '</a></p>';
     }
 } else {
     include('themes/default/header.php');
     if ($allow_bbcode == 1)
         include("assets/formhelp.java.php");
     echo '
-    <h2><i class="far fa-comment text-muted fa-lg me-2"></i>' . translate("Commentaire") . '</h2>
+    <h2><i class="far fa-comment text-muted fa-lg me-2"></i>' . __d('two_comments', 'Commentaire') . '</h2>
     <hr />';
     if ($formulaire == '')
         echo '
@@ -192,7 +192,7 @@ if (isset($submitS)) {
         $allow_to_reply = true;
     if ($allow_to_reply) {
         if (isset($submitP)) {
-            $time = date(translate("dateinternal"), time() + ((int)$gmt * 3600));
+            $time = date(__d('two_comments', 'dateinternal'), time() + ((int)$gmt * 3600));
             if (isset($user)) {
                 $userY = base64_decode($user);
                 $userdata = explode(':', $userY);
@@ -205,7 +205,7 @@ if (isset($submitS)) {
             $messageP = $message;
             $messageP = code::af_cod($messageP);
             echo '
-        <h4>' . translate("Prévisualiser") . '</h4>
+        <h4>' . __d('two_comments', 'Prévisualiser') . '</h4>
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -226,7 +226,7 @@ if (isset($submitS)) {
                     &nbsp;<span style="position:absolute; left:6rem;" class="text-muted"><strong>' . $theposterdata['uname'] . '</strong></span>
         </div>
         <div class="card-body">
-            <span class="text-muted float-end small" style="margin-top:-1rem;">' . translate("Commentaires postés : ") . $time . '</span>
+            <span class="text-muted float-end small" style="margin-top:-1rem;">' . __d('two_comments', 'Commentaires postés : ') . $time . '</span>
             <div id="post_preview" class="card-text pt-3">';
             $messageP = stripslashes($messageP);
             if (($forum_type == '6') or ($forum_type == '5'))
@@ -266,17 +266,17 @@ if (isset($submitS)) {
                     $text = stripslashes($text);
                     $text = code::desaf_cod($text);
                     $reply = ($m['post_time'] != '' && $m['uname'] != '') ?
-                        '<div class="blockquote">' . translate("Citation") . ' : <strong>' . $m['uname'] . '</strong>' . "\n" . $text . '</div>' :
+                        '<div class="blockquote">' . __d('two_comments', 'Citation') . ' : <strong>' . $m['uname'] . '</strong>' . "\n" . $text . '</div>' :
                         $text . "\n";
                 } else
-                    $reply = translate("Erreur de connexion à la base de données") . "\n";
+                    $reply = __d('two_comments', 'Erreur de connexion à la base de données') . "\n";
             }
             if (!isset($reply)) $reply = $message;
 
             echo '
         </div>
         <div class="mb-3 row">
-            <label class="form-label" for="message">' . translate("Message") . '</label>
+            <label class="form-label" for="message">' . __d('two_comments', 'Message') . '</label>
             <div class="col-sm-12">
                 <div class="card">
                 <div class="card-header">
@@ -286,9 +286,9 @@ if (isset($submitS)) {
                     </div>';
             echo ($allow_html == 1) ?
                 '
-                    <span class="text-success float-end mt-2" title="HTML ' . translate("Activé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add() :
+                    <span class="text-success float-end mt-2" title="HTML ' . __d('two_comments', 'Activé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>' . forum::HTML_Add() :
                 '
-                    <span class="text-danger float-end mt-2" title="HTML ' . translate("Désactivé") . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
+                    <span class="text-danger float-end mt-2" title="HTML ' . __d('two_comments', 'Désactivé') . '" data-bs-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>';
             echo '
                 </div>
                 <div class="card-body">
@@ -296,14 +296,14 @@ if (isset($submitS)) {
                 </div>
                 <div class="card-footer p-0">
                     <span class="d-block">
-                        <button class="btn btn-link" type="submit" value="' . translate("Prévisualiser") . '" name="submitP" title="' . translate("Prévisualiser") . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
+                        <button class="btn btn-link" type="submit" value="' . __d('two_comments', 'Prévisualiser') . '" name="submitP" title="' . __d('two_comments', 'Prévisualiser') . '" data-bs-toggle="tooltip" ><i class="fa fa-eye fa-lg"></i></button>
                     </span>
                 </div>
                 </div>
             </div>
         </div>
         <div class="mb-3 row">
-            <label class="form-label">' . translate("Options") . '</label>';
+            <label class="form-label">' . __d('two_comments', 'Options') . '</label>';
             if ($allow_html == 1) {
                 if (isset($html)) $sethtml = 'checked="checked"';
                 else $sethtml = '';
@@ -312,7 +312,7 @@ if (isset($submitS)) {
                 <div class="checkbox">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="html" name="html" ' . $sethtml . ' />
-                    <label class="form-check-label" for="html">' . translate("Désactiver le html pour cet envoi") . '</label>
+                    <label class="form-check-label" for="html">' . __d('two_comments', 'Désactiver le html pour cet envoi') . '</label>
                 </div>
                 </div>';
             }
@@ -329,9 +329,9 @@ if (isset($submitS)) {
                 <div class="checkbox my-2">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="sig" name="sig" ' . $s . ' />
-                    <label class="form-check-label" for="sig"> ' . translate("Afficher la signature") . '</label>
+                    <label class="form-check-label" for="sig"> ' . __d('two_comments', 'Afficher la signature') . '</label>
                 </div>
-                <span class="help-block"><small>' . translate("Cela peut être retiré ou ajouté dans vos paramètres personnels") . '</small></span>
+                <span class="help-block"><small>' . __d('two_comments', 'Cela peut être retiré ou ajouté dans vos paramètres personnels') . '</small></span>
                 </div>';
                 }
             }
@@ -347,14 +347,14 @@ if (isset($submitS)) {
                 <input type="hidden" name="topic" value="' . $topic . '" />
                 <input type="hidden" name="file_name" value="' . $file_name . '" />
                 <input type="hidden" name="archive" value="' . $archive . '" />
-                <input class="btn btn-primary" type="submit" name="submitS" value="' . translate("Valider") . '" />
-                <input class="btn btn-danger" type="submit" name="cancel" value="' . translate("Annuler la contribution") . '" />
+                <input class="btn btn-primary" type="submit" name="submitS" value="' . __d('two_comments', 'Valider') . '" />
+                <input class="btn btn-danger" type="submit" name="cancel" value="' . __d('two_comments', 'Annuler la contribution') . '" />
             </div>
         </div>';
         }
     } else
         echo '
-        <div class="alert alert-danger">' . translate("Vous n'êtes pas autorisé à participer à ce forum") . '</div>';
+        <div class="alert alert-danger">' . __d('two_comments', 'Vous n\'êtes pas autorisé à participer à ce forum') . '</div>';
 
     if ($formulaire == '')
         echo '
@@ -367,7 +367,7 @@ if (isset($submitS)) {
         $sql = "SELECT * FROM " . $NPDS_Prefix . "posts WHERE topic_id='$topic'" . $post_aff . " AND forum_id='$forum' ORDER BY post_id DESC LIMIT 0,10";
         $result = sql_query($sql);
         if (sql_num_rows($result)) {
-            echo translate("Aperçu des sujets :");
+            echo __d('two_comments', 'Aperçu des sujets :');
             while ($myrow = sql_fetch_assoc($result)) {
                 $posterdata = forum::get_userdata_from_id($myrow['poster_id']);
                 echo '
@@ -375,7 +375,7 @@ if (isset($submitS)) {
                 <div class="card-header">';
                 if ($smilies) echo userpopover($posterdata['uname'], '48', 2);
                 echo $posterdata['uname'];
-                echo '<span class="float-end text-muted small">' . translate("Posté : ") . date::convertdate($myrow['post_time']) . '</span>
+                echo '<span class="float-end text-muted small">' . __d('two_comments', 'Posté : ') . date::convertdate($myrow['post_time']) . '</span>
                 </div>
                 <div class="card-body">';
                 $posts = $posterdata['posts'];

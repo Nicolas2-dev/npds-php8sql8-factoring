@@ -37,7 +37,7 @@ trait ThemeIndexTrait
         $theme = $this->getName();
     
         if ($notes != '') {
-            $notes = '<div class="note">' . translate("Note") . ' : ' . $notes . '</div>';
+            $notes = '<div class="note">' . __d('two_news', 'Note') . ' : ' . $notes . '</div>';
         }
 
         if (!$view) {
@@ -92,11 +92,11 @@ trait ThemeIndexTrait
             }
     
             $Xsujet = '<a href="'. site_url('search.php?query=&amp;topic=' . $topic) . '">
-                    <img class="img-fluid" src="' . $this->asset_theme($imgtmp) . '" alt="' . translate("Rechercher dans") . ' : ' . $topicname . '" title="' . translate("Rechercher dans") . ' : ' . $topicname . '<hr />' . $topictext . '" data-bs-toggle="tooltip" data-bs-html="true" />
+                    <img class="img-fluid" src="' . $this->asset_theme($imgtmp) . '" alt="' . __d('two_news', 'Rechercher dans') . ' : ' . $topicname . '" title="' . __d('two_news', 'Rechercher dans') . ' : ' . $topicname . '<hr />' . $topictext . '" data-bs-toggle="tooltip" data-bs-html="true" />
                 </a>';
         } else {
             $Xsujet = '<a href="'. site_url('search.php?query=&amp;topic=' . $topic) . '">
-                    <span class="badge bg-secondary h1" title="' . translate("Rechercher dans") . ' : ' . $topicname . '<hr />' . $topictext . '" data-bs-toggle="tooltip" data-bs-html="true">' . $topicname . '</span>
+                    <span class="badge bg-secondary h1" title="' . __d('two_news', 'Rechercher dans') . ' : ' . $topicname . '<hr />' . $topictext . '" data-bs-toggle="tooltip" data-bs-html="true">' . $topicname . '</span>
                 </a>';
         }
     
@@ -104,7 +104,7 @@ trait ThemeIndexTrait
             "'!N_publicateur!'i"        => $aid,
             "'!N_emetteur!'i"           => $this->userpopover($informant, 40, 2) . '<a href="'. site_url('user.php?op=userinfo&amp;uname=' . $informant) . '">' . $informant . '</a>',
             "'!N_date!'i"               => formatTimestamp($time),
-            //"'!N_date!'i"             => ucfirst(htmlentities(str_ftime(translate("datestring"), $time, getLocale()), ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401, 'utf-8')),
+            //"'!N_date!'i"             => ucfirst(htmlentities(str_ftime(__d('two_news', 'datestring'), $time, getLocale()), ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401, 'utf-8')),
             "'!N_date_y!'i"             => substr($time, 0, 4),
             //"'!N_date_m!'i"           => strftime("%B", mktime(0,0,0, substr($time,5,2),1,2000)),
             "'!N_date_m!'i"             => \PHP81_BC\strftime("%B", $time, Language::getLocale()),

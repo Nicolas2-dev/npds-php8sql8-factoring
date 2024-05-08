@@ -46,27 +46,27 @@ if (!isset($open_user)) $open_user = '';
 if (!isset($referer)) $referer = '';
 if (!isset($groupe)) $groupe = '';
 
-Sform::add_title(adm_translate("Utilisateur"));
-Sform::add_mess(adm_translate("* Désigne un champ obligatoire"));
+Sform::add_title(__d('two_users', 'Utilisateur'));
+Sform::add_mess(__d('two_users', '* Désigne un champ obligatoire'));
 Sform::add_form_field_size(60);
 
 // return to the memberslist.php if necessary
 Sform::add_field('referer', '', basename($referer), 'hidden', false);
 
-Sform::add_field('add_uname', adm_translate("Surnom"), $chng_uname, 'text', true, 25, '', '');
+Sform::add_field('add_uname', __d('two_users', 'Surnom'), $chng_uname, 'text', true, 25, '', '');
 Sform::add_extender('add_uname', '', '<span class="help-block"><span class="float-end" id="countcar_add_uname"></span></span>');
 
-Sform::add_field('add_name', adm_translate("Nom"), $chng_name, 'text', false, 60, '', '');
+Sform::add_field('add_name', __d('two_users', 'Nom'), $chng_name, 'text', false, 60, '', '');
 Sform::add_extender('add_name', '', '<span class="help-block"><span class="float-end" id="countcar_add_name"></span></span>');
 
-Sform::add_field('add_email', adm_translate("E-mail"), $chng_email, 'email', true, 60, '', '');
+Sform::add_field('add_email', __d('two_users', 'E-mail'), $chng_email, 'email', true, 60, '', '');
 Sform::add_extender('add_email', '', '<span class="help-block text-end" id="countcar_add_email"></span>');
 
-Sform::add_field('add_femail', adm_translate("Adresse E-mail masquée"), $chng_femail, 'email', false, 60, '', '');
+Sform::add_field('add_femail', __d('two_users', 'Adresse E-mail masquée'), $chng_femail, 'email', false, 60, '', '');
 Sform::add_extender('add_femail', '', '<span class="help-block"><span class="float-end" id="countcar_add_femail"></span></span>');
 
 if ($op == 'ModifyUser') {
-    Sform::add_checkbox('raz_avatar', adm_translate("Revenir aux avatars standards"), 1, false, false);
+    Sform::add_checkbox('raz_avatar', __d('two_users', 'Revenir aux avatars standards'), 1, false, false);
 }
 
 $access = DB::table('access')->select('access_id', 'access_title')->first();
@@ -82,14 +82,14 @@ if ($access) {
         }
     }
 }
-Sform::add_select('add_level', adm_translate("Niveau de l'Utilisateur"), $tmp_tempo, false, '', false);
+Sform::add_select('add_level', __d('two_users', 'Niveau de l\'Utilisateur'), $tmp_tempo, false, '', false);
 
 // ---- Rôles
 unset($tmp_tempo);
 
 $config = DB::table('')->select('rank1', 'rank2', 'rank3', 'rank4', 'rank5')->first();
 
-$tmp_tempo[0]['en'] = '-> ' . adm_translate("Supprimer") . '/' . adm_translate("Choisir un rôle") . ' <-';
+$tmp_tempo[0]['en'] = '-> ' . __d('two_users', 'Supprimer') . '/' . __d('two_users', 'Choisir un rôle') . ' <-';
 
 if (($chng_rank == '') or ($chng_rank == '0')) {
     $tmp_tempo[0]['selected'] = true;
@@ -132,7 +132,7 @@ if ($chng_rank == 5) {
     $tmp_tempo[5]['selected'] = false;
 }
 
-Sform::add_select('chng_rank', adm_translate("Rôle de l'Utilisateur"), $tmp_tempo, false, '', false);
+Sform::add_select('chng_rank', __d('two_users', 'Rôle de l\'Utilisateur'), $tmp_tempo, false, '', false);
 
 // ---- Groupes
 $les_groupes = explode(',', $groupe);
@@ -162,7 +162,7 @@ if ($nbg > 7) {
     $nbg = 7;
 }
 
-Sform::add_select('add_group', adm_translate("Groupe"), $tmp_groupe, false, $nbg, true);
+Sform::add_select('add_group', __d('two_users', 'Groupe'), $tmp_groupe, false, $nbg, true);
 // ---- Groupes
 
 if ($open_user) { 
@@ -170,14 +170,14 @@ if ($open_user) {
 } else {
     $checked = false;
 }
-Sform::add_checkbox('add_open_user', adm_translate("Autoriser la connexion"), 1, false, $checked);
+Sform::add_checkbox('add_open_user', __d('two_users', 'Autoriser la connexion'), 1, false, $checked);
 
 if ($mns) {
     $checked = true;
 } else {
     $checked = false;
 }
-Sform::add_checkbox('add_mns', adm_translate("Activer son MiniSite"), 1, false, $checked);
+Sform::add_checkbox('add_mns', __d('two_users', 'Activer son MiniSite'), 1, false, $checked);
 
 // LNL
 if ($user_lnl) {
@@ -185,7 +185,7 @@ if ($user_lnl) {
 } else {
     $checked = false;
 }
-Sform::add_checkbox('user_lnl', translate("S'inscrire à la liste de diffusion du site"), 1, false, $checked);
+Sform::add_checkbox('user_lnl', __d('two_users', 'S\'inscrire à la liste de diffusion du site'), 1, false, $checked);
 // LNL
 
 if ($chng_user_viewemail) {
@@ -193,7 +193,7 @@ if ($chng_user_viewemail) {
 } else {
     $checked = false;
 }
-Sform::add_checkbox('add_user_viewemail', adm_translate("Autoriser les autres utilisateurs à voir son adresse E-mail"), 1, false, $checked);
+Sform::add_checkbox('add_user_viewemail', __d('two_users', 'Autoriser les autres utilisateurs à voir son adresse E-mail'), 1, false, $checked);
 
 Sform::add_field('add_url', 'URL', $chng_url, 'url', false, 100, '', '');
 Sform::add_extender('add_url', '', '<span class="help-block text-end" id="countcar_add_url"></span>');
@@ -204,23 +204,23 @@ if ($chng_send_email == 1) {
 }else {
     $checked = false;
 }
-Sform::add_checkbox('add_send_email', adm_translate("M'envoyer un Mel lorsque qu'un Msg Int. arrive"), 1, false, $checked);
+Sform::add_checkbox('add_send_email', __d('two_users', 'M\'envoyer un Mel lorsque qu\'un Msg Int. arrive'), 1, false, $checked);
 
 if ($chng_is_visible == 1) {
     $checked = false;
 } else {
     $checked = true;
 }
-Sform::add_checkbox('add_is_visible', adm_translate("Membre invisible"), 1, false, $checked);
+Sform::add_checkbox('add_is_visible', __d('two_users', 'Membre invisible'), 1, false, $checked);
 // ---- SUBSCRIBE and INVISIBLE
 
-Sform::add_field('add_user_from', adm_translate("Situation géographique"), $chng_user_from, 'text', false, 100, '', '');
+Sform::add_field('add_user_from', __d('two_users', 'Situation géographique'), $chng_user_from, 'text', false, 100, '', '');
 Sform::add_extender('add_user_from', '', '<span class="help-block text-end" id="countcar_add_user_from"></span>');
 
-Sform::add_field('add_user_occ', adm_translate("Activité"), $chng_user_occ, 'text', false, 100, '', '');
+Sform::add_field('add_user_occ', __d('two_users', 'Activité'), $chng_user_occ, 'text', false, 100, '', '');
 Sform::add_extender('add_user_occ', '', '<span class="help-block text-end" id="countcar_add_user_occ"></span>');
 
-Sform::add_field('add_user_intrest', adm_translate("Centres d'intérêt"), $chng_user_intrest, 'text', false, 150, '', '');
+Sform::add_field('add_user_intrest', __d('two_users', 'Centres d\'intérêt'), $chng_user_intrest, 'text', false, 150, '', '');
 Sform::add_extender('add_user_intrest', '', '<span class="help-block text-end" id="countcar_add_user_intrest"></span>');
 
 if ($attach == 1){ 
@@ -228,11 +228,11 @@ if ($attach == 1){
 } else {
     $checked = false;
 }
-Sform::add_checkbox('attach', adm_translate("Afficher signature"), 1, false, $checked);
-Sform::add_field('add_user_sig', adm_translate("Signature"), $chng_user_sig, 'textarea', false, 255, 7, '', '');
+Sform::add_checkbox('attach', __d('two_users', 'Afficher signature'), 1, false, $checked);
+Sform::add_field('add_user_sig', __d('two_users', 'Signature'), $chng_user_sig, 'textarea', false, 255, 7, '', '');
 Sform::add_extender('add_user_sig', '', '<span class="help-block text-end" id="countcar_add_user_sig"></span>');
 
-Sform::add_field('add_bio', adm_translate("Informations supplémentaires"), $chng_bio, 'textarea', false, 255, 7, '', '');
+Sform::add_field('add_bio', __d('two_users', 'Informations supplémentaires'), $chng_bio, 'textarea', false, 255, 7, '', '');
 Sform::add_extender('add_bio', '', '<span class="help-block text-end" id="countcar_add_bio" ></span>');
 
 $requi = '';
@@ -241,12 +241,12 @@ if ($op == "ModifyUser") {
 } else {
     $requi = true;
 }
-Sform::add_field('add_pass', adm_translate("Mot de Passe"), '', 'password', $requi, '40', '', '');
+Sform::add_field('add_pass', __d('two_users', 'Mot de Passe'), '', 'password', $requi, '40', '', '');
 Sform::add_extra('<div class="mb-3 row"><div class="col-sm-8 ms-sm-auto" ><div class="progress" style="height: 0.2rem;"><div id="passwordMeter_cont" class="progress-bar bg-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div></div></div></div>');
 Sform::add_extender('add_pass', '', '<span class="help-block text-end" id="countcar_add_pass"></span>');
 
 if ($op == "ModifyUser") {
-    Sform::add_field('add_pass2', adm_translate("Entrez à nouveau le Mot de Passe") . '&nbsp;<span class="small">' . adm_translate("(seulement pour modifications)") . '</span>', '', 'password', false, 40, '', '');
+    Sform::add_field('add_pass2', __d('two_users', 'Entrez à nouveau le Mot de Passe') . '&nbsp;<span class="small">' . __d('two_users', '(seulement pour modifications)') . '</span>', '', 'password', false, 40, '', '');
     Sform::add_extender('add_pass2', '', '<span class="help-block text-end" id="countcar_add_pass2"></span>');
 }
 
@@ -279,7 +279,7 @@ include('modules/geoloc/config/geoloc.conf');
 Sform::add_extra('
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto" >
-                <button type="submit" class="btn btn-primary">' . translate("Valider") . '</button>
+                <button type="submit" class="btn btn-primary">' . __d('two_users', 'Valider') . '</button>
             </div>
         </div>
         <script type="text/javascript">

@@ -12,7 +12,7 @@ if (! function_exists('searchbox'))
     {
         global $block_title;
 
-        $title = $block_title == '' ? translate("Recherche") : $block_title;
+        $title = $block_title == '' ? __d('two_search', 'Recherche') : $block_title;
 
         $content = '
         <form id="searchblock" action="'. site_url('search.php') .'" method="get">

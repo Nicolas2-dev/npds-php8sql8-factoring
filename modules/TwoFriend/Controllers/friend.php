@@ -54,9 +54,9 @@ function FriendSend(): void
 
     echo '
     <div class="card card-body">
-    <h2><i class="fa fa-at fa-lg text-muted"></i>&nbsp;' . translate("Envoi de l'article à un ami") . '</h2>
+    <h2><i class="fa fa-at fa-lg text-muted"></i>&nbsp;' . __d('two_friend', 'Envoi de l\'article à un ami') . '</h2>
     <hr />
-    <p class="lead">' . translate("Vous allez envoyer cet article") . ' : <strong>' . language::aff_langue($res['title']) . '</strong></p>
+    <p class="lead">' . __d('two_friend', 'Vous allez envoyer cet article') . ' : <strong>' . language::aff_langue($res['title']) . '</strong></p>
     <form id="friendsendstory" action="'. site_url('friend.php') .'" method="post">
         <input type="hidden" name="sid" value="' . $sid . '" />';
 
@@ -70,22 +70,22 @@ function FriendSend(): void
     echo '
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="fname" name="fname" maxlength="100" required="required" />
-            <label for="fname">' . translate("Nom du destinataire") . '</label>
+            <label for="fname">' . __d('two_friend', 'Nom du destinataire') . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_fname"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="fmail" name="fmail" maxlength="254" required="required" />
-            <label for="fmail">' . translate("Email du destinataire") . '</label>
+            <label for="fmail">' . __d('two_friend', 'Email du destinataire') . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_fmail"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="yname" name="yname" value="' . ($user ? $res_user['name'] : '') . '" maxlength="100" required="required" />
-            <label for="yname">' . translate("Votre nom") . '</label>
+            <label for="yname">' . __d('two_friend', 'Votre nom') . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_yname"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="ymail" name="ymail" value="' . ($user ? $res_user['email'] : '') . '" maxlength="254" required="required" />
-            <label for="ymail">' . translate("Votre Email") . '</label>
+            <label for="ymail">' . __d('two_friend', 'Votre Email') . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_ymail"></span></span>
         </div>';
 
@@ -94,7 +94,7 @@ function FriendSend(): void
     echo '
         <input type="hidden" name="archive" value="' . Request::query('archive') . '" />
         <input type="hidden" name="op" value="SendStory" />
-        <button type="submit" class="btn btn-primary" title="' . translate("Envoyer") . '"><i class="fa fa-lg fa-at"></i>&nbsp;' . translate("Envoyer") . '</button>
+        <button type="submit" class="btn btn-primary" title="' . __d('two_friend', 'Envoyer') . '"><i class="fa fa-lg fa-at"></i>&nbsp;' . __d('two_friend', 'Envoyer') . '</button>
     </form>';
 
     $arg1 = '
@@ -148,15 +148,15 @@ function SendStory(): void
                     ->where('topicid', $res_storie['topic'])
                     ->first();
 
-    $subject = html_entity_decode(translate("Article intéressant sur"), ENT_COMPAT | ENT_HTML401, 'utf-8') . Config::get('npds.sitename');
+    $subject = html_entity_decode(__d('two_friend', 'Article intéressant sur'), ENT_COMPAT | ENT_HTML401, 'utf-8') . Config::get('npds.sitename');
 
     $fname = hack::removeHack(Request::input('fname'));
 
     $archive = Request::input('archive');
 
-    $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.") . "\n\n"
-         . language::aff_langue($res_storie['title']) . "\n" . translate("Date :") . " ". $res_storie['time'] ."\n" . translate("Sujet : ") . " " . language::aff_langue($res_topic['topictext']) . "\n\n"
-         . translate("L'article") . " : <a href=\"". site_url('article.php?sid='. $sid .'&amp;archive='. $archive) ."\">"
+    $message = __d('two_friend', 'Bonjour') . " $fname :\n\n" . __d('two_friend', 'Votre ami') . " $yname " . __d('two_friend', 'a trouvé cet article intéressant et a souhaité vous l\'envoyer.') . "\n\n"
+         . language::aff_langue($res_storie['title']) . "\n" . __d('two_friend', 'Date :') . " ". $res_storie['time'] ."\n" . __d('two_friend', 'Sujet : ') . " " . language::aff_langue($res_topic['topictext']) . "\n\n"
+         . __d('two_friend', 'L\'article') . " : <a href=\"". site_url('article.php?sid='. $sid .'&amp;archive='. $archive) ."\">"
          . site_url('article.php?sid='. $sid .'&amp;archive='. $archive) ."</a>\n\n";
     
     $message .= Config::get('signature.message');
@@ -206,9 +206,9 @@ function StorySent(): void
     $fname = urldecode(Request::query('fname'));
 
     if ($fname == '') {
-        echo '<div class="alert alert-danger">' . translate("Erreur : Email invalide") . '</div>';
+        echo '<div class="alert alert-danger">' . __d('two_friend', 'Erreur : Email invalide') . '</div>';
     } else {
-        echo '<div class="alert alert-success">' . translate("L'article") . ' <strong>' . stripslashes($title) . '</strong> ' . translate("a été envoyé à") . '&nbsp;' . $fname . '<br />' . translate("Merci") . '</div>';
+        echo '<div class="alert alert-success">' . __d('two_friend', 'L\'article') . ' <strong>' . stripslashes($title) . '</strong> ' . __d('two_friend', 'a été envoyé à') . '&nbsp;' . $fname . '<br />' . __d('two_friend', 'Merci') . '</div>';
     }
 
     include("themes/default/footer.php");;
@@ -232,34 +232,34 @@ function RecommendSite(): void
 
     echo '
     <div class="card card-body">
-    <h2>' . translate("Recommander ce site à un ami") . '</h2>
+    <h2>' . __d('two_friend', 'Recommander ce site à un ami') . '</h2>
     <hr />
     <form id="friendrecomsite" action="'. site_url('friend.php') .'" method="post">
         <input type="hidden" name="op" value="SendSite" />
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="yname" name="yname" value="' . ($user ? $res_user['name'] : '') . '" required="required" maxlength="100" />
-            <label for="yname">' . translate("Votre nom") . '</label>
+            <label for="yname">' . __d('two_friend', 'Votre nom') . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_yname"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="ymail" name="ymail" value="' . ($user ? $res_user['email'] : '') . '" required="required" maxlength="100" />
-            <label for="ymail">' . translate("Votre Email") . '</label>
+            <label for="ymail">' . __d('two_friend', 'Votre Email') . '</label>
         </div>
         <span class="help-block text-end"><span class="muted" id="countcar_ymail"></span></span>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="fname" name="fname" required="required" maxlength="100" />
-            <label for="fname">' . translate("Nom du destinataire") . '</label>
+            <label for="fname">' . __d('two_friend', 'Nom du destinataire') . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_fname"></span></span>
         </div>
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="fmail" name="fmail" required="required" maxlength="100" />
-            <label for="fmail">' . translate("Email du destinataire") . '</label>
+            <label for="fmail">' . __d('two_friend', 'Email du destinataire') . '</label>
             <span class="help-block text-end"><span class="muted" id="countcar_fmail"></span></span>
         </div>
         ' . spam::Q_spambot() . '
         <div class="mb-3 row">
             <div class="col-sm-8 ms-sm-auto">
-                <button type="submit" class="btn btn-primary"><i class="fa fa-lg fa-at"></i>&nbsp;' . translate("Envoyer") . '</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-lg fa-at"></i>&nbsp;' . __d('two_friend', 'Envoyer') . '</button>
             </div>
         </div>
     </form>';
@@ -304,11 +304,11 @@ function SendSite(): void
     $nuke_url = Config::get('npds.nuke_url');
     $sitename = Config::get('npds.sitename');
 
-    $subject = html_entity_decode(translate("Site à découvrir : "), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
+    $subject = html_entity_decode(__d('two_friend', 'Site à découvrir : '), ENT_COMPAT | ENT_HTML401, 'utf-8') . " $sitename";
 
     $fname = hack::removeHack(Request::input('fname'));
 
-    $message = translate("Bonjour") . " $fname :\n\n" . translate("Votre ami") . " $yname " . translate("a trouvé notre site") . " $sitename " . translate("intéressant et a voulu vous le faire connaître.") . "\n\n$sitename : <a href=\"$nuke_url\">$nuke_url</a>\n\n";
+    $message = __d('two_friend', 'Bonjour') . " $fname :\n\n" . __d('two_friend', 'Votre ami') . " $yname " . __d('two_friend', 'a trouvé notre site') . " $sitename " . __d('two_friend', 'intéressant et a voulu vous le faire connaître.') . "\n\n$sitename : <a href=\"$nuke_url\">$nuke_url</a>\n\n";
     $message .= Config::get('sinature.message');
 
     $fmail = hack::removeHack(Request::input('fmail'));
@@ -351,14 +351,14 @@ function SiteSent(): void
         echo '
             <div class="alert alert-danger lead" role="alert">
                 <i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp;
-                ' . translate("Erreur : Email invalide") . '
+                ' . __d('two_friend', 'Erreur : Email invalide') . '
             </div>';
     } else {
         echo '
         <div class="alert alert-success lead" role="alert">
             <i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp;
-            ' . translate("Nos références ont été envoyées à ") . ' ' . $fname . ', <br />
-            <strong>' . translate("Merci de nous avoir recommandé") . '</strong>
+            ' . __d('two_friend', 'Nos références ont été envoyées à ') . ' ' . $fname . ', <br />
+            <strong>' . __d('two_friend', 'Merci de nous avoir recommandé') . '</strong>
         </div>';
     }
 

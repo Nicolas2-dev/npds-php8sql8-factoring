@@ -190,7 +190,7 @@ function dbSave(): void
 
     @set_time_limit(600);
 
-    $date_jour = date(adm_translate("dateforop"));
+    $date_jour = date(__d('two_core', 'dateforop'));
 
     $date_op = date("mdy");
     $filename = $dbname . "-". $date_op;
@@ -198,14 +198,14 @@ function dbSave(): void
     $tables = DB::list_tables();
 
     if ($tables == 0) {
-        echo "&nbsp;". adm_translate("Aucune table n'a été trouvée") . "\n";
+        echo "&nbsp;". __d('two_core', 'Aucune table n\'a été trouvée') . "\n";
     } else {
         $heure_jour = date("H:i");
         
         $data = "# ========================================================$crlf"
             . "# $crlf"
-            . "# ". adm_translate("Sauvegarde de la base de données") . " : ". $dbname . " $crlf"
-            . "# ". adm_translate("Effectuée le") . " ". $date_jour . " : ". $heure_jour . " ". adm_translate("par") . " ". $aid . " $crlf"
+            . "# ". __d('two_core', 'Sauvegarde de la base de données') . " : ". $dbname . " $crlf"
+            . "# ". __d('two_core', 'Effectuée le') . " ". $date_jour . " : ". $heure_jour . " ". __d('two_core', 'par') . " ". $aid . " $crlf"
             . "# $crlf"
             . "# ========================================================$crlf";
 
@@ -214,13 +214,13 @@ function dbSave(): void
             $data .= "$crlf"
                 . "# --------------------------------------------------------$crlf"
                 . "# $crlf"
-                . "# ". adm_translate("Structure de la table") . " '". $table . "' $crlf"
+                . "# ". __d('two_core', 'Structure de la table') . " '". $table . "' $crlf"
                 . "# $crlf$crlf";
 
             $data .= get_table_def($table)
                 . "$crlf$crlf"
                 . "# $crlf"
-                . "# ". adm_translate("Contenu de la table") . " '". $table . "' $crlf"
+                . "# ". __d('two_core', 'Contenu de la table') . " '". $table . "' $crlf"
                 . "# $crlf$crlf";
 
             $data .= get_table_content($table)
@@ -249,7 +249,7 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
 
     $dbname = Config::get('database.default.database');
 
-    $date_jour = date(adm_translate("dateforop"));
+    $date_jour = date(__d('two_core', 'dateforop'));
 
     $date_op = date("ymd");
     
@@ -258,7 +258,7 @@ function dbSave_tofile(string $repertoire, int $linebyline = 0, int $savemysql_s
     $tables = DB::list_tables();
 
     if ($tables == 0) {
-        echo "&nbsp;". adm_translate("Aucune table n'a été trouvée") . "\n";
+        echo "&nbsp;". __d('two_core', 'Aucune table n\'a été trouvée') . "\n";
     } else {
         if ((!isset($repertoire)) or ($repertoire == "")) {
             $repertoire = ".";
@@ -371,7 +371,7 @@ switch ($op) {
 
             echo "<script type=\"text/javascript\">
                     //<![CDATA[
-                    alert('". html_entity_decode(adm_translate("Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs"), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
+                    alert('". html_entity_decode(__d('two_core', 'Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs'), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
                     //]]>
                     </script>";
 
@@ -381,7 +381,7 @@ switch ($op) {
 
             echo "<script type=\"text/javascript\">
                     //<![CDATA[
-                    alert('". html_entity_decode(adm_translate("Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs"), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
+                    alert('". html_entity_decode(__d('two_core', 'Sauvegarde terminée. Les fichiers sont disponibles dans le répertoire /slogs'), ENT_COMPAT | ENT_HTML401, 'utf-8') . "');
                     //]]>
                     </script>";
 
