@@ -13,5 +13,5 @@ class ThemeOptions extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'two_theme_options_frontend'; }
+    protected static function getFacadeAccessor() { return 'two_theme_options'; }
 }

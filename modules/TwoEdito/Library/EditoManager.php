@@ -137,21 +137,20 @@ class EditoManager
                 $Xcontents = str_replace('!edito-notitle!', '', $Xcontents);
             }
 
-            $ret = false;
-
-            if (function_exists("themedito")) {
-                $ret = $this->theme()->themedito($Xcontents);
+            if (method_exists($theme_class = $this->theme(), 'themedito')) {
+                return $this->theme()->themedito($Xcontents);
             } else {
-                // Note A revoir pour theme option !
-                if (method_exists($this->theme(), 'theme_centre_box')) {
+
+                $theme_option_class = $theme_class->classOptionInstance();
+
+                if (method_exists($theme_option_class, 'theme_centre_box')) {
                     $title = (!$notitle) ? __d('two_edito', 'EDITO') : '';
                     
-                    $this->theme()->theme_centre_box($title, $Xcontents);
-                    $ret = true;
+                    return $theme_option_class->theme_centre_box($title, $Xcontents);
                 }
             }
 
-            if ($ret == false) {
+            if (!empty($Xcontents)) {
                 $edito = '';
                 if (!$notitle) {
                     $edito .= '<span class="edito">'. __d('two_edito', 'EDITO') .'</span>';

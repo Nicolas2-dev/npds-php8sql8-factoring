@@ -411,6 +411,17 @@ abstract class ThemeManager implements ThemeInterface
     }
 
     /**
+     * [getClassOption description]
+     *
+     * @return  [type]  [return description]
+     */
+    public function classOptionInstance()
+    {
+        return app('two_theme_options');
+    }
+
+
+    /**
      * [getName description]
      *
      * @return  [type]  [return description]

@@ -46,7 +46,7 @@ trait ThemeIndexTrait
             } elseif (View::exists('Themes/TwoNews::Partials/News/Index_News')) {
                 $view = View::fetch('Themes/TwoNews::Partials/News/Index_News', compact('notes'));
             } else {
-                echo 'Themes/'.$theme.'::partials/News/Index_News manquant or Themes/TwoNews::Partials/News/Index_News (.php or .tpl) / not find !<br />';
+                echo 'Themes/'.$theme.'::Partials/News/Index_News manquant or Themes/TwoNews::Partials/News/Index_News (.php or .tpl) / not find !<br />';
                 die();
             }
         }

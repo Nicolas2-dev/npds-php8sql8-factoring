@@ -308,4 +308,14 @@ class ThemeOptions
         $this->privMsgs();
     }
 
+    // test Good !
+    // public function theme_centre_box(string $title, string $content): string  
+    // {
+    //     $center_box = 'Center Box Theme Option : ' .$title;
+    //     $center_box .= '<br>' . $content;
+
+    //     return $center_box;
+    // }
+
+
 }

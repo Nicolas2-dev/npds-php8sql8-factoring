@@ -36,14 +36,14 @@ class ThemeServiceProvider extends ServiceProvider
         require $path .DS .'Bootstrap.php';
 
         //
-        $this->app->singleton('two_theme_options_frontend', function ($app) {
+        $this->app->singleton('two_theme_options', function ($app) {
             return ThemeOptions::instance($app, $app['two_user']);
         });
 
         // Register the Facades.
         $loader = AliasLoader::getInstance();
 
-        $loader->alias('two_theme_options_frontend', 'Themes\TwoFrontend\Support\Facades\ThemeOptions');
+        $loader->alias('two_theme_options', 'Themes\TwoFrontend\Support\Facades\ThemeOptions');
     }
 
     /**
@@ -59,7 +59,7 @@ class ThemeServiceProvider extends ServiceProvider
     {
         parent::register();
 
-        return array('two_theme_options_frontend');
+        return array('two_theme_options');
     }
 
 }
