@@ -50,7 +50,7 @@ class EditoManager
 
         if (isset($cookie)) {
 
-            $edito_membre = snake_case($package_path) .'storage' .DS. 'edito_membres' . $this->ext;
+            $edito_membre = $package_path .'storage' .DS. 'edito_membres' . $this->ext;
 
             if ($this->file()->exists($edito_membre)) {
                 if ($this->file()->size($edito_membre) > 0) {
