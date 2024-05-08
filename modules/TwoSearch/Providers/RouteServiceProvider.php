@@ -27,5 +27,21 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot($router);
 
         //
+        $this->registerAssetRoutes();
     }
+
+    /**
+     * Define the asset routes for the application.
+     *
+     * @return void
+     */
+    protected function registerAssetRoutes()
+    {
+        $dispatcher = $this->app['assets.dispatcher'];
+
+        $path = realpath(__DIR__ .'/../');
+
+        require $path .DS .'Routes' .DS .'Assets.php';
+    }
+
 }

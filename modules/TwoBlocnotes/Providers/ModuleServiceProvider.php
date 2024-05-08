@@ -32,7 +32,7 @@ class ModuleServiceProvider extends ServiceProvider
         $this->package('Modules/TwoBlocnotes', 'two_blocnotes', $path);
 
         // Bootstrap the Package.
-        $path = $path .DS .'Bootstrap.php';
+        $bootstrap = $path .DS .'Bootstrap.php';
 
         $this->bootstrapFrom($bootstrap);
 
