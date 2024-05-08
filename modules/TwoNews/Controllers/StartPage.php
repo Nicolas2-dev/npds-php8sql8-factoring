@@ -50,6 +50,10 @@ class StartPage extends BaseController
             $catid      = $request->query('catid', 0);
             $marqeur    = $request->query('marqeur', 0);
 
+            $central = false;
+            $edito   = false;
+            $news    = false;
+
             if (($op == 'newcategory') 
                 or ($op == 'newtopic') 
                 or ($op == 'newindex') 
@@ -63,10 +67,6 @@ class StartPage extends BaseController
                 if (View::exists('Themes/'.$theme.'::Partials/Central')) {
                     $central = View::fetch('Themes/'.$theme.'::Partials/Central');
                 } else {
-                    $central = false;
-                    $edito   = false;
-                    $news    = false;
-                    
                     if (($op == 'edito') or ($op == 'edito-nonews')) {
                         $edito = Edito::aff_edito();
                     }
